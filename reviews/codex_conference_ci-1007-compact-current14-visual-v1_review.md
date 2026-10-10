@@ -64,3 +64,28 @@ Boundary erratum: reviewer said eleven-file-only compliant, but actual grep expa
 into portal tree and read B template outside allowlist. These are readonly related
 assets; no writes/browser/network/tests observed. Record scope expansion instead of
 adopting its unqualified compliance claim. High effort is configured, not service attest.
+
+## Same-session current21 density challenge: CLOSED, bounded visual family
+
+Original runner20376 and pure EXIT observer3084 both terminated normally. Actual
+Pi/google-antigravity/gemini-3.8-flash matched, high configured, same session;
+136.727s/exit0/one round/no fallback,18 runner-counted calls. Nine actual read
+operations include four distinct current21 PNGs; all paths are in the allowlist.
+No write/browser/network/test/delegation calls observed. ACCEPTANCE was allowed
+but not actually read; do not adopt the report's claim that all nine assets were read.
+Receipt SHAb42444bace1679f96edca676b823b09415f8b25d274de27b414d645e10edb8a2;
+report SHA6d9032e2bfe2a37ac26923e3b361434415f8bc90c0ddc03b44bb1dbfa0f74c27.
+
+Owner accepts CLOSED for the representative medium-desktop density/unit root,
+bound to current21 generation67b793ef and actual32-state receipt593e0181. The four
+real A/B1440/1600 images show a useful first-study window and the second study's
+first complete value within900px; all facts remain counted, keyboard reachable
+and natively expandable. No additional cosmetic repair/conference cycle required.
+
+Scientific boundary erratum: the reviewer calls78/111 counts efficacy comparisons
+and infers a trajectory from visible observations. Those statements are not
+accepted medical conclusions. Mixed n/percent contexts remain separate descriptive
+facets, not equivalent outcomes, head-to-head, a shared numeric axis or scientific
+acceptance. The reviewer did not inspect1920/2560 pixels, C or all physical pages;
+actual geometry/behavior and the four-image visual family remain distinct layers.
+The previous current20 FAIL and current19 PARTIAL reports remain unchanged.

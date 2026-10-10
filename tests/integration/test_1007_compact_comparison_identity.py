@@ -292,9 +292,9 @@ def test_shared_css_keeps_folded_identity_readable_and_never_shrinks_type() -> N
     header_block = css[header : css.index("}", header)]
     assert "grid-column: 1 / -1" in header_block, "one header spans its whole run"
     assert "display: none" not in header_block and "font-size" not in header_block
-    time_marker = css.index(".kz-comparison-observation--compact .kz-comparison-fact__time")
+    time_marker = css.index(".kz-comparison-fact__time {")
     time_block = css[time_marker : css.index("}", time_marker)]
-    assert "grid-row: 1" in time_block, "value and visit share one compact line"
+    assert "margin-inline-start: auto" in time_block, "visit remains aligned and can wrap whole"
 
 
 def test_shared_factory_unknown_identity_breaks_a_repeated_run() -> None:
@@ -344,11 +344,11 @@ def test_expanded_compact_context_retains_full_available_width() -> None:
     assert "overflow" not in block and "max-height" not in block
 
 
-def test_medium_desktop_comparison_has_a_three_column_width_budget() -> None:
+def test_medium_desktop_comparison_keeps_a_readable_value_width_budget() -> None:
     css = (ASSETS / "kangzhe-site.css").read_text(encoding="utf-8")
     marker = css.index("@media (min-width: 1400px) and (max-width: 1700px)")
     block = css[marker : css.index("\n}", marker)]
-    assert "minmax(min(100%, 300px), 1fr)" in block
+    assert "minmax(min(100%, 360px), 1fr)" in block
     assert "font-size" not in block and "overflow: hidden" not in block
 
 

@@ -23,3 +23,14 @@ high configured,30 runner-counted tool calls and six unique PNG reads.
 Root reset CLOSED; source clear layering DISPLAY_OK; density PARTIAL/P1 remains.
 Readonly template/tree scope expansion recorded in review, not hidden as compliant.
 No progress polling, slow redispatch or whole-product/medical acceptance.
+
+## Bounded same-session current21 density closure
+
+One round136.727s/exit0/no fallback, runtime model matched/high configured;
+18 runner-counted calls, nine actual read operations/four unique PNGs. Pure EXIT
+observer3084 completed before owner collected original20376; no progress polling.
+Original total120min budget preserved: timeout6717s for this pass, total actual
+model duration618.757s across the three completed passes. No fresh reviewer claim.
+Owner accepts only representative medium-desktop density/unit root CLOSED;
+read-count and clinical-language errata are explicit in the review. No full-site,
+science, browser-host installation or RC acceptance.

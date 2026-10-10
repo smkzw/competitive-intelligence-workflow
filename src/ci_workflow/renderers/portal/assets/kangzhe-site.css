@@ -40,19 +40,24 @@ body[data-kz-design="6.0"] { background: var(--bg); }
 .kz-comparison-fact { width: 100%; text-align: left; font: inherit; }
 #full-study-comparison :is(th, td) { vertical-align: top; }
 .kz-comparison-observations { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); align-items: start; gap: 4px 12px; }
-/* Medium desktop needs multiple studies in view, not a single generous column
- * budget. Long values may wrap naturally; original text and 16px type survive. */
+/* Keep numeric units whole. A native expandable, counted scroll window keeps
+ * dense studies comparable while every observation/source stays reachable. */
 @media (min-width: 1400px) and (max-width: 1700px) {
-  .kz-comparison-observations { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  .kz-comparison-observations { grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); }
 }
+.kz-comparison-observations--dense { max-height: min(28vh, 250px); overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
+.kz-comparison-observations--dense:focus-visible { outline: 3px solid var(--kz-co, #407aaa); outline-offset: 2px; }
+.kz-comparison-window-control { display: flex; align-items: center; gap: 8px; min-height: 40px; cursor: pointer; margin-block: 0 4px; color: var(--text-2); }
+.kz-comparison-window-control input { width: 18px; height: 18px; accent-color: var(--kz-co, #407aaa); }
+.kz-comparison-window-control:has(input:checked) + .kz-comparison-observations--dense { max-height: none; overflow: visible; }
 .kz-comparison-observation { min-width: 0; }
-#full-study-comparison button.kz-comparison-fact { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 0 8px; margin: 0; padding: 4px 6px; }
+#full-study-comparison button.kz-comparison-fact { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 8px; margin: 0; padding: 4px 6px; }
 /* Keep identity, value and original visit on one compact reading plane. Values
  * are never reduced, clipped or hidden to achieve the density. */
 .kz-comparison-fact__main { display: contents; }
-.kz-comparison-fact__identity { grid-column: 1 / -1; font-weight: 600; overflow-wrap: anywhere; }
-.kz-comparison-fact__value { grid-column: 1; font-size: 1.125em; font-variant-numeric: tabular-nums; color: var(--text-1); overflow-wrap: anywhere; }
-.kz-comparison-fact__time { grid-column: 2; grid-row: 2; color: var(--text-2); overflow-wrap: anywhere; }
+.kz-comparison-fact__identity { flex-basis: 100%; font-weight: 600; overflow-wrap: anywhere; }
+.kz-comparison-fact__value { font-size: 1.125em; font-variant-numeric: tabular-nums; color: var(--text-1); word-break: keep-all; overflow-wrap: anywhere; }
+.kz-comparison-fact__time { margin-inline-start: auto; max-width: 100%; color: var(--text-2); overflow-wrap: anywhere; }
 /* Compact identity family: only an exact, explicitly rendered product/arm
  * identity repeated by adjacent facts folds into one visible group header.
  * Every repeated copy keeps its full text for reader trees and page search,
@@ -86,7 +91,6 @@ body[data-kz-design="6.0"] { background: var(--bg); }
   white-space: nowrap;
   border: 0;
 }
-.kz-comparison-observation--compact .kz-comparison-fact__time { grid-row: 1; }
 .kz-comparison-context { margin: 0; }
 .kz-comparison-context > summary { cursor: pointer; color: var(--text-2); }
 .kz-comparison-context > p { margin: 4px 0; overflow-wrap: anywhere; }

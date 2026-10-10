@@ -154,6 +154,25 @@
       }
       var observation = doc.createElement("div"); observation.className = "kz-comparison-observation";
       observation.appendChild(button); list.appendChild(observation);
+      // ponytail: native checkbox + CSS owns the reading window; no paging,
+      // hidden atoms, new state framework or inference about clinical equality.
+      list.__observationCount = (list.__observationCount || 0) + 1;
+      if (list.__observationCount >= 10) {
+        if (!list.__windowLabel) {
+          list.className += " kz-comparison-observations--dense";
+          list.setAttribute("role", "region"); list.setAttribute("tabindex", "0");
+          var control = doc.createElement("label");
+          control.className = "kz-comparison-window-control";
+          var expand = doc.createElement("input"); expand.type = "checkbox";
+          control.appendChild(expand);
+          list.__windowLabel = textNode("span", "", "");
+          control.appendChild(list.__windowLabel); cell.insertBefore(control, list);
+        }
+        list.__windowLabel.textContent = "展开全部 " + list.__observationCount
+          + " 条观察（默认区域可滚动）";
+        list.setAttribute("aria-label", list.__observationCount
+          + "条观察，全部已载入；可在区域内滚动或展开全部");
+      }
       // Only remove adjacent repeated display text, not facts or scientific
       // differences. The factory owns this once for A/B; unknown product
       // labels stay visible. Original labels remain inside each source trigger.

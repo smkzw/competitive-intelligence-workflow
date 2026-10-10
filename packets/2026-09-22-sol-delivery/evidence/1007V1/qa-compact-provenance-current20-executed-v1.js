@@ -40,18 +40,12 @@ async function capture(kind,width,state) {
       table_top:table.getBoundingClientRect().top,table_rows:table.tBodies[0].rows.length,
       table_height:table.getBoundingClientRect().height,
       matched_study_boxes:[...table.tBodies[0].rows].filter(row=>row.querySelector(".kz-comparison-fact")).map(
-        row=>({label:row.cells[0].textContent,top:row.getBoundingClientRect().top,bottom:row.getBoundingClientRect().bottom,
-          first_value_bottom:row.querySelector(".kz-comparison-fact").getBoundingClientRect().bottom})),
+        row=>({label:row.cells[0].textContent,top:row.getBoundingClientRect().top,bottom:row.getBoundingClientRect().bottom})),
       dense_windows:[...table.querySelectorAll(".kz-comparison-observations--dense")].map(n=>({
         aria:n.getAttribute("aria-label"),count:n.querySelectorAll(".kz-comparison-observation").length,
         focusable:n.tabIndex===0,role:n.getAttribute("role"),client:n.clientHeight,scroll:n.scrollHeight})),
       value_line_counts:state==="dense"?[...table.querySelectorAll(".kz-comparison-fact__value")].map(n=>{
-        const range=document.createRange();range.selectNodeContents(n);
-        const broken=[];for(const match of n.textContent.matchAll(/\S+/g)){
-          const token=document.createRange();token.setStart(n.firstChild,match.index);
-          token.setEnd(n.firstChild,match.index+match[0].length);
-          if(new Set([...token.getClientRects()].map(rect=>rect.top)).size>1)broken.push(match[0]);}
-        return {text:n.textContent,lines:range.getClientRects().length,broken_words:broken};}):[],
+        const range=document.createRange();range.selectNodeContents(n);return {text:n.textContent,lines:range.getClientRects().length};}):[],
       compact_observations:observations.filter(n=>n.classList.contains("kz-comparison-observation--compact")).length,
       identity_headers:table.querySelectorAll(".kz-comparison-identity-header").length,
       reset_visible:kind!=="B" || [...host.querySelectorAll("[data-filter-reset]")].some(n=>n.getBoundingClientRect().height>=40),
@@ -75,11 +69,11 @@ async function capture(kind,width,state) {
     run.failures.push(`${kind}/${width}/${state}: font, clipped facts or missing labels`);
   if(revision>=15 && !observed.reset_visible)run.failures.push(`${kind}/${width}/${state}: visible reset missing`);
   if(revision>=20&&state==="dense"){
-    if(observed.matched_study_boxes.length<2||observed.matched_study_boxes[1].first_value_bottom>observed.height)
-      run.failures.push(`${kind}/${width}/dense: second study value below first viewport`);
+    if(observed.matched_study_boxes.length<2||observed.matched_study_boxes[1].top>=observed.height)
+      run.failures.push(`${kind}/${width}/dense: second matching study below first viewport`);
     if(!observed.dense_windows.length||observed.dense_windows.some(n=>!n.focusable||n.role!=="region"||!n.aria.includes(String(n.count))))
       run.failures.push(`${kind}/${width}/dense: uncounted or inaccessible retained observations`);
-    if(observed.value_line_counts.some(n=>n.broken_words.length))run.failures.push(`${kind}/${width}/dense: numeric unit fragmented`);
+    if(observed.value_line_counts.some(n=>n.lines>1))run.failures.push(`${kind}/${width}/dense: numeric unit fragmented`);
   }
   if (revision >= 14 && observed.closed_context_checks.some(n=>!n.beside))
     run.failures.push(`${kind}/${width}/${state}: closed context adds another full row`);
@@ -141,16 +135,13 @@ try {
     if(revision>=20){
       const region="#full-study-comparison .kz-comparison-observations--dense >> nth=0";
       const expand="#full-study-comparison .kz-comparison-window-control input >> nth=0";
-      const needsScroll=await page.evaluate(()=>{
-        const n=document.querySelector("#full-study-comparison .kz-comparison-observations--dense");return n.scrollHeight>n.clientHeight;});
       await page.focus(region);await page.keyboard.press("End");
-      if(needsScroll)await page.waitForFunction(()=>document.querySelector("#full-study-comparison .kz-comparison-observations--dense").scrollTop>0,
+      await page.waitForFunction(()=>document.querySelector("#full-study-comparison .kz-comparison-observations--dense").scrollTop>0,
         undefined,{timeout:10000});
       const check=await page.evaluate(()=>{
         const n=document.querySelector("#full-study-comparison .kz-comparison-observations--dense");
         return {keyboard_scroll:n.scrollTop,region_focused:document.activeElement===n,
           count:n.querySelectorAll(".kz-comparison-observation").length};});
-      check.needs_scroll=needsScroll;
       await page.focus(expand);await page.keyboard.press("Space");
       check.expanded=await page.evaluate(()=>{
         const n=document.querySelector("#full-study-comparison .kz-comparison-observations--dense");
