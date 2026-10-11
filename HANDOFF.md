@@ -1,8 +1,8 @@
 # 唯一接手入口｜1007V1连续实施，非暂停、非RC
 
 唯一当前状态：[STATUS顶节](packets/2026-09-22-sol-delivery/STATUS.md)；最新
-[A空研究行回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-a-unmatched-reading-v1.json)。
-第八批54b53838已push并核远端；本第九批具名提交中。Goal实查active/unbounded。
+[来源阅读与版本定位回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-source-reading-native-replay-v1.json)。
+第九批3c6069cf已push并核远端；本第十批具名提交中。Goal实查active/unbounded。
 
 ## 实际完成与尚未交付
 
@@ -10,7 +10,14 @@
 记录仍匹配。2RED→五文件42PASS1.73s/具名静态；普通A49/1505/16257保持。
 Ego四宽12原生阅读态及同候选4来源/Esc态通过；原16态仪器误计内嵌表FAIL
 保留，只补验主表12态。Owner看1440/2560（工具缩2048），整体REVISE：
-页底英文来源墙/晚于cutoff日期取值/真正多药图矩阵仍待处理。
+真正多药图矩阵仍待处理。此前晚于cutoff的怀疑是缩小截图误读：已重开
+20登记来源，无晚于2026-10-07的日期；历史错误记录原样保留，最新回执纠正。
+第十批A/B/C原生来源收起完成：3RED→五文件32PASS4.20s，普通A49/B104/C16，
+1505/16257/current32保持。Ego四宽24展开/收起态通过；Owner看A1440/B2560/
+C1920，来源区有界接受，整页REVISE（A英文长题及C泛化说明仍待修）。
+E03版本节点定位已终态actualGLM5.3Flash/max790.953s/10工具；worker76PASS、
+Owner39PASS，真实两原源18节点精确回放。只接受定位，不授予历史资格/采用。
+旧v4候选505文件已逐hash归档后移除展开副本，回收348MiB；恢复指针在新回执。
 上一批共同图形中文单位消费、32px透明来源命中区及原始访视排列已修。
 4真RED及最终图排序1真RED→九文件87PASS/5.00s；Ruff/strict1/Node/mirror
 具名检查通过，新全仓门NOT_RUN。v4真实cascade/末端排序FAIL保留；v5
@@ -23,12 +30,13 @@ current32=A30/B32/C30/1505，generation
 ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4。
 本批没有事实采用、新保存或分享；118论文候选仍零采用。完整宇宙/MAH、
 必需论文、同版本修订配置分享、24门户/三宿主/安装恢复/RC继续按W00–W10。
-已终态历史不重跑，不拼接不同候选的PASS。[本批复盘](docs/handoffs/RETROSPECTIVE_20261011_a_unmatched_reading.md)。
+已终态历史不重跑，不拼接不同候选的PASS。[本批复盘](docs/handoffs/RETROSPECTIVE_20261011_source_reading_native_replay.md)。
 
 ## 下一有界动作与在途
 
-1. 本批白名单Git；随后原生版本节点定位、来源区阅读与日期根因，再真正临床
+1. 本批白名单Git；随后A复用专家中文图表阅读、C删除泛化说明，再真正临床
    多药图/表和同候选操作/分享。新宽门NOT_RUN，旧通过范围不扩大。
+   E03 runner78295/事件2809均终态，不再等待。官方PMC索引仅证当前两篇.1。
 2. 真实六事实/两论文版本见证C03 ci-1007-public-version-witness-slice-v1
    runner65749/退出事件6964全部终态，不再等：实际GLM-5.3-Flash/max、
    1162.414s/34工具。请求DeepSeek未形成可用结果，既定备用返回；

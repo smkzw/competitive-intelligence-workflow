@@ -1,5 +1,27 @@
 # 2026-10-11｜C阅读真实切片与来源定义缺口
 
+第十单元终态：[来源/原生节点回执](../../../packets/2026-09-22-sol-delivery/evidence/1007V1/owner-source-reading-native-replay-v1.json)。
+execution方法：Owner模板/来源阅读，E03定位模块与新测试两文件独立写域。
+预检首次因read列表中散文被当路径FAIL未启动，修prompt后预检PASS才派发。
+runner78295/PID35783/退出事件2809全部terminal0，actualGLM5.3Flash/max
+790.953s/10工具；主路未形成可用结果，不冒称DeepSeek执行。worker76PASS，
+Owner39PASS0.47s，两原始JATS18节点精确回放。未知节点/错误路径拒绝，
+history日期未成为public_by，事实采用零。回放配方第一次缺必填role修正后成功。
+A/B/C来源列表原生收起，3RED→32相关PASS4.20s；普通169页/1505/16257/current32
+保持，Ego四宽24态通过，Owner实看三代表PNG，整产品仍REVISE。
+此前截图晚于cutoff怀疑错误：20真实登记源重开没有晚于截止，2016误看2026。
+源值/历史回执不改，登记版本日期标签澄清；下一A长英文题/C套话族修。
+v4候选505文件逐hash归档后回收348MiB，失败可恢复，不触用户/旧工程。
+第九批3c6069cf已push；第十批具名Git中，新宽门NOT_RUN，全W门继续。
+
+## 此前启动记录（已终态，不重新派发/等待）
+
+下一单元execution：原生版本定位E03 ci-1007-native-version-locator-v1；有界
+storage locator及新测试两文件，与Owner模板/来源日期文件不重叠，提供实际
+并行收益；不授予科学采用。当前主线先来源日期/英文墙，保全current32。
+第九批3c6069cf81c77621c2e73bb20113c01f78978ada已push并核远端exact。
+初始化完成非派发；须完整上下文/preflight PASS后真正启动并记录终态身份。
+
 当前第九批owner-a-unmatched-reading-v1.json，54b53838已push/远端核实。
 模式direct execution加既有独立会商整合：A复用原生B披露机制，共同查询与
 浏览器单一Owner，无新科学裁决/新框架；版本有实质科学不确定性，C03终态

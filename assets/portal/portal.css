@@ -981,7 +981,7 @@ input:focus-visible {
   flex: 0 0 auto;
   border-top: 1px solid var(--border);
   background: var(--surface);
-  padding: 24px;
+  padding: 12px 24px;
 }
 
 .portal-source-section__inner {
@@ -989,11 +989,16 @@ input:focus-visible {
   margin: 0 auto;
 }
 
-.portal-source-section h2 {
-  margin: 0 0 10px;
+.portal-source-disclosure > summary {
+  padding-block: 6px;
+  cursor: pointer;
   color: var(--text-1);
   font-size: 16px;
+  font-weight: 600;
 }
+
+.portal-source-disclosure > summary:focus-visible { outline: 3px solid var(--kz-co); outline-offset: 2px; }
+.portal-source-disclosure[open] > summary { margin-bottom: 8px; }
 
 .portal-source-section p,
 .portal-source-section__list {

@@ -60,7 +60,8 @@
 
   <section class="portal-source-section" id="external-sources" aria-labelledby="external-sources-title">
     <div class="portal-source-section__inner">
-      <h2 id="external-sources-title">外部来源</h2>
+      <details class="portal-source-disclosure" data-source-disclosure>
+      <summary id="external-sources-title">来源资料（{{ external_sources|length }}）</summary>
       {% if external_sources %}
       <ul class="portal-source-section__list">
         {% for source in external_sources %}
@@ -68,8 +69,9 @@
         {% endfor %}
       </ul>
       {% else %}
-      <p>本页未提供可公开链接；详细定位保留在数据依据中。</p>
+      <p>暂无来源链接</p>
       {% endif %}
+      </details>
     </div>
   </section>
 

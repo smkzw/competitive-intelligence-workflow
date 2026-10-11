@@ -1,5 +1,6 @@
 """Expert reports expose data, not repeated defensive instruction paragraphs."""
 
+from html.parser import HTMLParser
 from pathlib import Path
 
 import pytest
@@ -16,6 +17,28 @@ BOILERPLATE = (
     "能否同图比较另行判断", "先核对人群、时间与统计口径",
     "不生成唯一最佳方案", "图形不是竞品排名",
 )
+
+
+class SourceDisclosure(HTMLParser):
+    """Inspect the actual production source block, without a DOM framework."""
+
+    def __init__(self):
+        super().__init__()
+        self.disclosures = []
+        self.summaries = []
+        self.links = []
+        self.items = 0
+
+    def handle_starttag(self, tag, attrs):
+        attributes = dict(attrs)
+        if tag == "details" and "data-source-disclosure" in attributes:
+            self.disclosures.append(attributes)
+        if tag == "summary":
+            self.summaries.append(attributes)
+        if tag == "a":
+            self.links.append(attributes.get("href"))
+        if tag == "li":
+            self.items += 1
 
 
 @pytest.mark.parametrize("kind", ["a", "b", "c"])
@@ -40,6 +63,16 @@ def test_normal_renderer_does_not_publish_defensive_copy(kind, tmp_path):
         for phrase in BOILERPLATE:
             assert phrase not in html, (page.name, phrase)
         assert "external-sources" in html
+        source = html.split('id="external-sources"', 1)[1].split("</section>", 1)[0]
+        inspector = SourceDisclosure()
+        inspector.feed(source)
+        assert len(inspector.disclosures) == 1, "Do not default to an English source wall"
+        assert "open" not in inspector.disclosures[0]
+        assert any(item.get("id") == "external-sources-title" for item in inspector.summaries)
+        assert "来源资料" in source
+        # Some legitimate fixtures preserve source titles without public URLs.
+        assert "暂无来源链接" in source or inspector.items
+        assert f"来源资料（{inspector.items}）" in source
     assert data.model_dump_json() == before
 
 

@@ -35,6 +35,59 @@ _JSON_PATH_PART = re.compile(
 )
 _JATS_PATH_PART = re.compile(r"([A-Za-z][A-Za-z0-9_-]*)\[([1-9][0-9]{0,8})\]")
 _JATS_QUOTE_TAGS = frozenset({"p", "td", "th", "fn", "title", "article-title", "label"})
+_NATIVE_WITNESS_ID_TYPES = frozenset({"doi", "pmcid", "pmcid-ver", "pmid"})
+_NATIVE_WITNESS_EVENT_TYPES = frozenset({"pmc-release", "pmc-live", "pmc-last-change"})
+_NATIVE_META_STEPS = (("front", 1), ("article-meta", 1))
+
+
+def _native_witness_kind(steps: list[tuple[str, int]]) -> str | None:
+    """Classify the four declared native metadata witness shapes, else None.
+
+    Only exact step sequences rooted at ``front[1]/article-meta[1]`` qualify:
+    ``article-id[n]``, ``article-version[n]``, ``permissions[1]/
+    copyright-statement[n]`` and ``pub-history[1]/event[n]/date[1]``. History,
+    reference and body look-alikes plus other metadata containers stay
+    rejected; attribute legality is verified on the actual nodes.
+    """
+    if tuple(steps[:2]) != _NATIVE_META_STEPS:
+        return None
+    tail = steps[2:]
+    if len(tail) == 1 and tail[0][0] in {"article-id", "article-version"}:
+        return tail[0][0]
+    if (
+        len(tail) == 2
+        and tail[0] == ("permissions", 1)
+        and tail[1][0] == "copyright-statement"
+    ):
+        return "copyright-statement"
+    if (
+        len(tail) == 3
+        and tail[0] == ("pub-history", 1)
+        and tail[1][0] == "event"
+        and tail[2] == ("date", 1)
+    ):
+        return "event-date"
+    return None
+
+
+def _verify_witness_attributes(
+    kind: str | None, depth: int, total: int, node: ET.Element,
+) -> None:
+    """Reject unrecognized identity/version/event attributes on witness nodes."""
+    if kind is None:
+        return
+    if kind == "article-id" and depth == total - 1:
+        if (node.get("pub-id-type") or "").strip().lower() not in _NATIVE_WITNESS_ID_TYPES:
+            raise SourceDerivationError("JATS身份节点不是已声明的DOI/PMC/PMID标识")
+    elif kind == "article-version" and depth == total - 1:
+        if (node.get("article-version-type") or "").strip() != "pmc-version":
+            raise SourceDerivationError("JATS版本节点缺少声明的pmc-version类型")
+    elif (
+        kind == "event-date"
+        and depth == total - 2
+        and (node.get("event-type") or "").strip() not in _NATIVE_WITNESS_EVENT_TYPES
+    ):
+        raise SourceDerivationError("JATS历史事件不是已声明的发布/上线/变更事件")
 
 
 def _jats_locator_quote(content_text: str, field_path: str | None) -> str:
@@ -42,7 +95,8 @@ def _jats_locator_quote(content_text: str, field_path: str | None) -> str:
 
     Uses existing paragraph normalization and the same bounded entity rejection
     as acquisition. This proves only the selected source text, not the medical
-    interpretation, article identity/date, or adoption eligibility.
+    interpretation, article identity/date, or adoption eligibility; native
+    metadata witness replay likewise proves node text only.
     """
     if field_path is None or not field_path.startswith("/article/") or len(field_path) > 4096:
         raise SourceDerivationError("JATS事实必须有明确的 article 内部索引路径")
@@ -62,7 +116,11 @@ def _jats_locator_quote(content_text: str, field_path: str | None) -> str:
         and steps[-1][0] == "pub-date"
     )
     if steps[-1][0] not in _JATS_QUOTE_TAGS and not is_publication_date:
-        raise SourceDerivationError("JATS事实必须精确到段落、单元格或原始注释")
+        witness_kind = _native_witness_kind(steps)
+        if witness_kind is None:
+            raise SourceDerivationError("JATS事实必须精确到段落、单元格或原始注释")
+    else:
+        witness_kind = None
     raw = content_text.encode("utf-8")
     if not raw or len(raw) > DEFAULT_MAX_BYTES:
         raise SourceDerivationError("JATS来源为空或超出受控字节预算")
@@ -75,11 +133,13 @@ def _jats_locator_quote(content_text: str, field_path: str | None) -> str:
         safety_parser.EntityDeclHandler = reject_entity
         safety_parser.Parse(raw, True)
         node = _article_element(ET.fromstring(raw))
-        for tag, index in steps:
+        total = len(steps)
+        for depth, (tag, index) in enumerate(steps):
             children = [child for child in node if child.tag == tag]
             if index > len(children):
                 raise SourceDerivationError("JATS精确路径不存在；不得改用邻近文本")
             node = children[index - 1]
+            _verify_witness_attributes(witness_kind, depth, total, node)
         result = _paragraph_text(node)
     except (ET.ParseError, expat.ExpatError, RecursionError, LinkedJatsInspectionError) as error:
         raise SourceDerivationError("JATS来源结构不合法或不能唯一定位原文") from error

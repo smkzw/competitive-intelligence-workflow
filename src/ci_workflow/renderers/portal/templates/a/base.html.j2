@@ -75,20 +75,22 @@
 
   <section class="portal-source-section" id="external-sources" aria-labelledby="external-sources-title">
     <div class="portal-source-section__inner">
-      <h2 id="external-sources-title">外部来源</h2>
+      <details class="portal-source-disclosure" data-source-disclosure>
+      <summary id="external-sources-title">来源资料（{{ external_sources|length }}）</summary>
       {% if external_sources %}
       <ul class="portal-source-section__list">
         {% for source in external_sources %}
         <li>
           <span>[{{ loop.index }}]</span>
           {% if source.url %}<a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">{{ source.label }}</a>{% else %}<span>{{ source.label }}（未提供可安全公开的链接）</span>{% endif %}
-          <span>｜来源类型：{{ source.source_type }}｜发布日期：{{ source.published_at }}｜数据截止：{{ source.data_cutoff }}</span>
+          <span>｜来源类型：{{ source.source_type }}｜{% if source.source_type == '临床试验登记' %}登记版本公开日{% else %}发布日期{% endif %}：{{ source.published_at }}｜数据截止：{{ source.data_cutoff }}</span>
         </li>
         {% endfor %}
       </ul>
       {% else %}
       <p>暂无来源链接。</p>
       {% endif %}
+      </details>
     </div>
   </section>
 

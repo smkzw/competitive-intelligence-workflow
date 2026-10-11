@@ -1,6 +1,20 @@
 # 唯一当前状态：1007V1连续实施｜current32阅读体验被用户否决，正在修正，非RC
 
-当前第九批以54b53838已push/远端exact为基线，最新
+当前第十批以3c6069cf已push/远端exact为基线，最新
+[来源阅读/版本定位](evidence/1007V1/owner-source-reading-native-replay-v1.json)：
+3RED→五文件32PASS4.20s；normalA49/B104/C16/1505/16257/current32保持。
+Ego四宽24原生来源态通过；Owner看A1440/B2560/C1920，只接受来源收起，
+整产品仍REVISE，A英文长题/C泛化说明待修。纠正第九批截图误读：重开20
+登记来源均无晚于cutoff日期，NCT00869089为2016-11-02；仅日期标签澄清，
+源字节/历史回执不改。E03 runner78295/事件2809已终态，actualGLM5.3Flash/max
+790.953s/10工具、worker76PASS/Owner39PASS，两原源18节点精确回放；只定位，
+不接受历史资格/事实采用。官方PMC索引证两当前.1版本，不倒证公开时间。
+v4候选505文件验证归档后移除展开副本回收348MiB，恢复命令见回执。
+第十批具名Git中；新宽门NOT_RUN。下一A/C阅读根因→真实多药图表及全W门。
+
+## 前一第九批记录（已push3c6069cf，日期怀疑已被上方实查纠正）
+
+第九批以54b53838已push/远端exact为基线，当时
 [A空行回执](evidence/1007V1/owner-a-unmatched-reading-v1.json)：2RED→五文件
 42PASS1.73s/具名静态，normal A49/1505/16257/current32保持。四宽默认3匹配/
 43可展开/all46，筛选2/2/all4；原生Space展开/收起12态及同候选4来源/Esc通过。
