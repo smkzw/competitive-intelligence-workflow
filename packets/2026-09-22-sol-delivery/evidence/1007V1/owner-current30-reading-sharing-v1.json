@@ -1,0 +1,305 @@
+{
+  "schema_version": "1007-current30-reading-sharing-1",
+  "state": "SCOPED_READING_AND_SAME_CURRENT_SHARING_CLOSED_NOT_RC",
+  "parent_commit": "5e41e72592864d9a0c1dd3ed08807b7588970b8f",
+  "revision": 30,
+  "generation": "8e8572ec10cd1a5eee4a41694deb62dcea91de9ad0e5134bf60cc01ddc74fdaf",
+  "report_revisions": {
+    "A": 30,
+    "B": 30,
+    "C": 30
+  },
+  "facts_unchanged": 1505,
+  "science_user_tables_unchanged": [
+    "fact_versions",
+    "fact_evidence",
+    "evidence_fragments",
+    "source_versions",
+    "source_portal_consumer_bindings",
+    "user_fact_derivations",
+    "user_fact_edit_requests"
+  ],
+  "old_files_unchanged": 14856,
+  "author_assets": {
+    "portal.css": "44631972a978b6bd0f5595df91a130a481e15e2e00939244fe1cb29cc14635a4",
+    "report-b.css": "be9a3a50a87e9882eaeabdb02206e124ea84d2370fa6d5f9becd1644ff110d88",
+    "report-b.js": "22d8bb4855a4a4a9cf64f24352bd7c022764a1a3c3c5b1912222050117c0551a"
+  },
+  "proofs": {
+    "rebuild": {
+      "path": ".artifacts/1007-comparison-reading-current30-v1/verified.json",
+      "sha256": "ca480418fbcba19fd20120bcdcf10221b9fd8afd417f62e281b71dafe2c0c248"
+    },
+    "browser": {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/actual.json",
+      "sha256": "658bfc6051bd321bcbfc23a202ba98b634e85734026c2dc06f0dc231dfb078a5"
+    },
+    "configs": {
+      "path": ".artifacts/1007-current30-config-v1/actual.json",
+      "sha256": "daa78fc30660041701c5bd1abaec879d5bde8ef68811aa79f8e4d89e8d6034c8"
+    },
+    "shares": {
+      "path": ".artifacts/1007-current30-shares-v1/verified.json",
+      "sha256": "71fa371cc820d516d3aa1c80c380bc561248c66c557d6ee3fd97db8124825f4e"
+    },
+    "offline": {
+      "path": ".artifacts/1007-current30-shares-v1/offline-actual-v1.json",
+      "sha256": "408327a99febcf145dea9adf24eae0b1bc2d428db5cab151f88052800a8e36ae"
+    },
+    "quality29": {
+      "path": ".artifacts/1007-current29-quality-gate-v1/result.json",
+      "sha256": "cfd9c5b121efa97c7f4d1377c14948a0d98583eeafef6fe1a3165ebf7539a77d"
+    }
+  },
+  "browser": {
+    "space": 2,
+    "widths": [
+      1440,
+      1600,
+      1920,
+      2560
+    ],
+    "native_states": 12,
+    "failures": 0,
+    "scope": "Real32facts/3studies -> filter2/1 -> restore32/3; full table/frame/query identity, source+Esc actual trigger, expanded context and sparse nested card widths. Not all pages or cross-browser.",
+    "owner_pixels": [
+      "B-panels-1440.png",
+      "B-filtered-1440.png",
+      "B-panels-1600.png",
+      "B-expanded-1920.png",
+      "B-source-1920.png",
+      "B-filtered-2560.png"
+    ],
+    "all_aesthetic": "NOT_ACCEPTED"
+  },
+  "shares": {
+    "production_exports": [
+      {
+        "archive": "current30-A.zip",
+        "archive_sha256": "116e9aa55004ff31118d7d35f55267b9fc07690fa7486c8c94d6dba8199d9e8a",
+        "generation_sha256": "8e8572ec10cd1a5eee4a41694deb62dcea91de9ad0e5134bf60cc01ddc74fdaf",
+        "manifest_sha256": "b83ed7094176b06f28ee3fefc7c192b35160fd8bfb9b66ba312213eee24440aa",
+        "members": 67,
+        "moved_root": "moved-A",
+        "reports": [
+          "A"
+        ]
+      },
+      {
+        "archive": "current30-B.zip",
+        "archive_sha256": "a5281a6b4c9e1d3fa642d73ea96c62e841653911a6e4412ed9627c4cc4cfbed5",
+        "generation_sha256": "8e8572ec10cd1a5eee4a41694deb62dcea91de9ad0e5134bf60cc01ddc74fdaf",
+        "manifest_sha256": "4113182880496e305b1d9c68182bae91ae5c8063519d07f108cf7ae93a7b9e82",
+        "members": 381,
+        "moved_root": "moved-B",
+        "reports": [
+          "B"
+        ]
+      },
+      {
+        "archive": "current30-C.zip",
+        "archive_sha256": "1000715b43fe20fe1b5ff5ce83b2860af01a5121991cef68d1a1a304098ee3d5",
+        "generation_sha256": "8e8572ec10cd1a5eee4a41694deb62dcea91de9ad0e5134bf60cc01ddc74fdaf",
+        "manifest_sha256": "505b540ef488280a0f532916f08319c1cf76a3e7f45cbd3fd39ece8e8eed1a12",
+        "members": 36,
+        "moved_root": "moved-C",
+        "reports": [
+          "C"
+        ]
+      },
+      {
+        "archive": "current30-ABC.zip",
+        "archive_sha256": "80f1b2e16527e9808c0b2116b5ce02964b3a3d03f9c79a2be8ac9b65138ff22c",
+        "generation_sha256": "8e8572ec10cd1a5eee4a41694deb62dcea91de9ad0e5134bf60cc01ddc74fdaf",
+        "manifest_sha256": "b6d892f07a7b91ec746088cbb07c041a698ca5f7e9284f781f557efface67bd9",
+        "members": 480,
+        "moved_root": "moved-ABC",
+        "reports": [
+          "A",
+          "B",
+          "C"
+        ]
+      }
+    ],
+    "offline_entries": [
+      {
+        "tag": "A",
+        "kind": "A",
+        "revision": "30"
+      },
+      {
+        "tag": "B",
+        "kind": "B",
+        "revision": "30"
+      },
+      {
+        "tag": "C",
+        "kind": "C",
+        "revision": "30"
+      },
+      {
+        "tag": "ABC",
+        "kind": "A",
+        "revision": "30"
+      },
+      {
+        "tag": "ABC",
+        "kind": "B",
+        "revision": "30"
+      },
+      {
+        "tag": "ABC",
+        "kind": "C",
+        "revision": "30"
+      }
+    ],
+    "offline_actual_positive_control": true,
+    "offline_negative_control": true,
+    "failures": [],
+    "network_restored": true,
+    "fresh_browser": false,
+    "profile_reused_from_current28": true,
+    "profile_created_for_this_candidate": false,
+    "owner_pixels": [
+      "offline-B-B-default-panels-r30.png",
+      "offline-C-C-r30.png"
+    ],
+    "scope": "Saved same-generation configs and current edited/cleared values, original source access and Escape focus in moved self-contained files; not Skill installation."
+  },
+  "regression": {
+    "root_family": "Shared single-fact auto-column collapse and B descriptive measurement nesting, reuse existing explicit unit display without conversion or clinical grouping.",
+    "red": "7 initial family RED; current29 true four-width FAIL retained; nested-grid1 RED/7 PASS retained.",
+    "green": "31 related PASS1.03s, five named integration files; named Ruff, mirrored source assets and Node syntax. No per-line broad gate.",
+    "quality29": "Six-step source-frozen quality-only PASS: Ruff src/tests/tools; strict286 src/tools;1185 active +20 compatibility +7 layer +legacy lexical. This result does not cover subsequent30 CSS/test bytes and is not scientific/product/RC acceptance."
+  },
+  "historical_failures_retained": [
+    ".artifacts/1007-comparison-reading-current29-qa-v1/actual.json",
+    ".artifacts/1007-owner-source-definition-checks-20261011-v1/nested-scalar-grid-red-v1.xml"
+  ],
+  "images": [
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-expanded-1440.png",
+      "sha256": "8552a616dee99b4a3b5baea58e867941d7012b2fdba84053f09d77b15e93d59f"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-expanded-1600.png",
+      "sha256": "9d60171f6c5395f50ae2f0e846771214673ea52c355255f9d7d170b569984a8f"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-expanded-1920.png",
+      "sha256": "3e502a18683f29d167a20a3ed03372bcfe51b22e851672de5741e45452e049aa"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-expanded-2560.png",
+      "sha256": "51a2ad04e29e291b9b500ca3ae1298ac2982ec23e9fd28e1085180df22939a99"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-filtered-1440.png",
+      "sha256": "74c8449650dafc00c0e4fecb3dc9609774e8df4bbbb7ffae79579f67403c3296"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-filtered-1600.png",
+      "sha256": "db0326bf5a91b98d7863cea9584e9f06ca6cb740ed315e61b681a98f4861b3df"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-filtered-1920.png",
+      "sha256": "9b60b9128e1bd9a733f102b900e1378eac68ef543abf0fef9dbd7c7d055abb87"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-filtered-2560.png",
+      "sha256": "72fbcc433eeb0d5e6b3bc9b6786dbfbc8e9442666d26f0d5943ed9b2382d097a"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-matrix-1440.png",
+      "sha256": "9a7a486078f5a69d0ccc073c282ad6238893ba842bbd5daef212807b4fd4d373"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-matrix-1600.png",
+      "sha256": "22359db15360a462246e4e1ab228e81c7bbf090a72168df6cbb672256f2ac590"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-matrix-1920.png",
+      "sha256": "09e9f0296c08ccaeb1c65a9153131c55b51dcfae1e854ef2e97328ea688aba0e"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-matrix-2560.png",
+      "sha256": "c32b25c6231a2013fa58ff4864d7e21661a213acaa622fd0a79b9a89565ea492"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-panels-1440.png",
+      "sha256": "f49718682a0f1ec42952bfe0d07021cd2576247ad30b89c83a93c2e8f86be233"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-panels-1600.png",
+      "sha256": "d09967482315ca637126d5b55ef96fe5c93d18b5b50c23b8a72e6f152a5e61c4"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-panels-1920.png",
+      "sha256": "ee321531b73d4085d6c4cf364bc60c0dfe2f7e4ffea379580858c2a870016f1a"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-panels-2560.png",
+      "sha256": "bd28ae7eeaf02b5ab05b7fd02d24478fce0cf67517efa85358884095aaebc809"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-source-1440.png",
+      "sha256": "6f6f946f00fd1f83c9199d8e8dd0209353861d7321ba3493c2f8dd920c5c7e02"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-source-1600.png",
+      "sha256": "37eae029b1410774e5f37e9b04b4933cf578f00648ee8d45b8218d90efdb1743"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-source-1920.png",
+      "sha256": "d24eb734cd503e008c0e0099657bf6324922f1f9faf28c303cefdd820992d77d"
+    },
+    {
+      "path": ".artifacts/1007-comparison-reading-current30-qa-v1/B-source-2560.png",
+      "sha256": "eb0aa464f93f8298d59ee0470476790b9bd62007c86feaefd91385bcc71d7b3f"
+    },
+    {
+      "path": ".artifacts/1007-current30-shares-v1/offline-A-A-r30.png",
+      "sha256": "7bf95ab6ab11e2a242f9baa0c728b8743669334ddb9472dded8b64c40683fdfc"
+    },
+    {
+      "path": ".artifacts/1007-current30-shares-v1/offline-ABC-A-r30.png",
+      "sha256": "7bf95ab6ab11e2a242f9baa0c728b8743669334ddb9472dded8b64c40683fdfc"
+    },
+    {
+      "path": ".artifacts/1007-current30-shares-v1/offline-ABC-B-default-panels-r30.png",
+      "sha256": "43f76aacb9503f9c9d9af9a6aef93f121af0cd8adae77d10e53035951b069892"
+    },
+    {
+      "path": ".artifacts/1007-current30-shares-v1/offline-ABC-B-r30.png",
+      "sha256": "5e0663ad02fb42a7be1148f297149e48c117300b3d10ef50eabaae4649657d29"
+    },
+    {
+      "path": ".artifacts/1007-current30-shares-v1/offline-ABC-C-r30.png",
+      "sha256": "33f18b24d2f37d3152ca4e2aa9a51e37ec99b529487e21c673a947f9811eed6a"
+    },
+    {
+      "path": ".artifacts/1007-current30-shares-v1/offline-B-B-default-panels-r30.png",
+      "sha256": "43f76aacb9503f9c9d9af9a6aef93f121af0cd8adae77d10e53035951b069892"
+    },
+    {
+      "path": ".artifacts/1007-current30-shares-v1/offline-B-B-r30.png",
+      "sha256": "beaad3f79803ddf1d3cf04ca9fa5fd488230c479b4bc9adff40c7ead60a18d31"
+    },
+    {
+      "path": ".artifacts/1007-current30-shares-v1/offline-C-C-r30.png",
+      "sha256": "33f18b24d2f37d3152ca4e2aa9a51e37ec99b529487e21c673a947f9811eed6a"
+    }
+  ],
+  "source_recovery": "Local controlled artifacts retained; recipes and proof pointers versioned. Existing captured inputs/project/CAS are prerequisites, not a fresh-checkout self-contained source dataset. Do not replay already committed transactions.",
+  "not_complete": [
+    "full comparison matrix reading/time alignment",
+    "whole-universe/source fresh closure",
+    "publication scientific adoption",
+    "all MAH/group identities",
+    "all physical pages/cross-browser",
+    "24 true portals",
+    "three actual hosts",
+    "fresh-install/recovery/final RC"
+  ],
+  "next": "Owner scoped Git milestone while separate publication118 native-ingestion worker runs; frozen new scientific candidate then independent challenge. Later B-only preview and affected-only normal presentation, no ABC rebuild per CSS edit."
+}

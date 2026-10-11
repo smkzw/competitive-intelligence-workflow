@@ -1,4 +1,36 @@
-# 唯一当前状态：1007V1连续实施｜current27操作链完成，前端修复在实施，非RC
+# 唯一当前状态：1007V1连续实施｜current30阅读与同版分享局部闭合，非RC
+
+最新已push HEAD/origin5e41e725；本批白名单提交待完成，不代表整体交付。
+正常current30=A30/B30/C30/1505，generation8e8572ec10cd1a5eee4a41694deb62dcea91de9ad0e5134bf60cc01ddc74fdaf。
+30纯呈现40348terminal0，1505事实/七科学用户表/14856历史文件exact，proofca480418。
+29真实四宽98450 FAIL保留：后置等优先级规则把内卡压窄，不放宽验收。
+嵌套grid新增1RED→整批31相关PASS1.03s；统一span变量，保持字体/来源/数值语义。
+30四宽28483 terminal0/12态/无FAIL，32/3→2/1→32/3；表格/科学frame/来源/Esc/展开全部实测。
+Owner实看四宽代表像素，proof658bfc60；关闭竖字与卡宽根因，不签全前端审美。
+三个配置原生下载/异视图导入18612terminal0/proofdaa78fc3；四分享59307terminal0/proof71fa371c。
+专用Profile3/space11/p1复用六入口真断网73724terminal0/0FAIL，网络恢复，proof408327a9。
+来源/清除原值/当前估计值/配置绑定同一代；未清缓存、登录或创建第四环境，不称新浏览器。
+Owner看B默认密集与C保存清除状态；详细小回执evidence/1007V1/owner-current30-reading-sharing-v1.json。
+29宽门73564已terminal0/source_set不变，Ruff/strict286/1185活跃/20兼容/7分层/字面旧路径检查。
+该开发门仅冻结29，不覆盖后改30CSS/新测试，更不证明产品/来源/24/宿主/RC。
+Publication118 holding→隔离typed摄取E08已单派38985/PID69111，NOTE_EXIT44280仅等终态；
+旧原文/当前项目只读，仅新配方与隔离目录，科学采用须冻结后独立复核。
+以下28是冻结前版证据，不继承为29通过：
+纯呈现重建terminal0，1505事实/七张科学用户表/13886历史文件不变；proof5d245bb3。
+新几何执行terminal0，actualPi/cursor/default底层模型未知，431.543s/210tools；
+有限CSS产物采用、guard auditPASS，不能称已验证具体模型。Owner合并29PASS。
+实际四宽32/3→2/1→32/3及原生展开/来源/Esc全部12态通过，proof1017a641；
+Owner直接看1440矩阵/密集/稀疏/展开，竖字根因已关，但稀疏留白和小卡重复仍开。
+冻结28九图21359/event77421均terminal0，实际Pi/Gemini3.8flashhigh324.388s/91tools，REVISE。
+三个当前配置原生导出/换视图后导入通过，四份正常分享包/移动/hash通过。
+已授权新专用Profile3/space11/p1无导入/登录/清缓存；六入口真断网91187 terminal0/0fail。
+proof0b35f60e、网络已恢复；Owner实看A/B/C分享像素，但不签新29/全部产品审美。
+相对路径误建已获用户授权，仅该regular/non-symlink且hash一致5380bytes文件移动回英文受控.artifacts；
+无旧目录遍历或历史删除。未来整体旧清理先确认无保留/恢复需要；所有新patch绝对路径。
+来源/完整科学/MAH/Publication/24门户/三宿主/RC未完成，无阶段性暂停。
+最新详细台账evidence/1007V1/current23-owner-operations-v1.json；编号是历史起点。
+
+## 前一批current27（历史；旧在途已由顶节替代）
 
 current27=A27/B27/C23/1505，generation2081a4a976c27f6b01e028be8ff161ec3921aef3402db58273d6a0b3eccee04b。
 TESAE四次正常UI修改/撤销/清除/恢复均终态，最后proof0a8b7481；原值2/

@@ -46,7 +46,8 @@ const sandbox={comparisonQuestion:'',comparisonPage:1,resultQuery:'',rowById:row
  get href(){return url;}},history:{replaceState(_,__,next){url=next;}},
  __CHART_SYNC__:{unplottedValueText(){return '用户清除，待重新核实';},
  replaceGroups(g){currentGroups=g;}}},
- document:{body:{dataset:{}},querySelectorAll(){return [];},getElementById(){return host;},
+ document:{body:{dataset:{}},querySelectorAll(){return [];},
+ getElementById(id){return id==='full-study-comparison'?host:null;},
  createElement(){return new Node();}},
  matches(id,current){return !current.trial||rows[id].trial_id===current.trial;},
  selectedState(){return state;}};

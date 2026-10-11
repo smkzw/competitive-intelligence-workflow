@@ -4,6 +4,15 @@
 
 ## 1007V1 当前增量合同
 
+数值资格与桌面容器分开：B沿用原科学frames/PresentationPlan，描述性研究/
+源测量面板只整理阅读顺序。临床问题/测量/药物/组/统计口径/原单位不能因
+布局相邻而合并。原valueText/显式unit_label_zh供值显示，未知保留源单位，
+不在renderer增加字典或把概率改为百分比。每个原fact/source触发器与完整
+表保持；少量观察的measurement及其内部card必须都消费同一栅格决策，
+不能让父层半行、子层仍四分之一。密集/筛后实屏computed geometry是必要
+证据，源CSS字符串存在不等于cascade正确。无字体压缩、overflow遮事实、
+假点或important叠加；已有科学等价/来源门不改变。
+
 半衰期分类复用共同source classifier，不在A/B renderer补药名字典。源浓度
 half-life/half-lives/t1/2/t½保留PK/PD；临床反应/量表/血小板半衰期不靠关键词
 授予PK。ADA-positive人群限定不等于抗体分析物；明确被测安全class/category

@@ -8,6 +8,22 @@
 .kz-b-comparison-table th, .kz-b-comparison-table td { min-width: 180px; max-width: 420px; padding: 10px 12px; vertical-align: top; text-align: left; border-bottom: 1px solid var(--b-line); overflow-wrap: anywhere; }
 .kz-b-comparison-table th:first-child { width: clamp(180px, 18vw, 280px); min-width: 150px; }
 .kz-b-comparison-table button { display: block; width: 100%; margin-block: 6px; padding: 6px; text-align: left; font: inherit; color: inherit; background: var(--b-soft); border: 1px solid var(--b-line); border-radius: 6px; cursor: pointer; }
+.kz-b-study-panel { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px; grid-column: 1 / -1; min-width: 0; padding: 12px; border: 1px solid var(--b-line); border-radius: var(--b-radius); background: var(--b-surface); }
+.kz-b-study-panel > h3 { grid-column: 1 / -1; margin: 0 0 4px; overflow-wrap: anywhere; }
+.kz-b-study-panel__note { grid-column: 1 / -1; margin: 0; color: var(--b-muted); font-size: 16px; }
+.kz-b-measurement-panel { --b-observation-span: 3; grid-column: 1 / -1; min-width: 0; margin-top: 6px; }
+.kz-b-measurement-panel--compact { --b-observation-span: 6; grid-column: span 6; }
+.kz-b-measurement-panel--compact[data-observation-count="1"] { --b-observation-span: 12; }
+.kz-b-measurement-panel:has(.kz-complete-table[open]) { grid-column: 1 / -1; }
+.kz-b-measurement-panel > h4 { margin: 0 0 6px; font-size: 16px; overflow-wrap: anywhere; }
+.kz-b-measurement-observations { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px; }
+.kz-b-measurement-observations > [data-comparison-compact] { grid-column: span var(--b-observation-span); display: flex; flex-direction: column; gap: 6px; padding: 8px; box-shadow: none; }
+.kz-b-observation-time { margin: 0; font-size: 16px; color: var(--b-muted); overflow-wrap: anywhere; }
+.kz-b-measurement-observations .kz-chart-group__chart--single-fact { grid-template-columns: minmax(0, 1fr) auto; }
+.kz-b-measurement-observations > [data-comparison-compact] > .kz-complete-table { margin: 0; }
+.kz-b-measurement-observations > [data-comparison-compact] > .kz-complete-table > summary { padding: 6px 8px; min-height: 36px; }
+.kz-b-measurement-observations .kz-complete-table > .kz-chart-group__title { position: static; width: auto; height: auto; margin: 8px 0 4px; overflow: visible; clip: auto; white-space: normal; font-size: 16px; }
+.kz-b-measurement-observations .kz-complete-table > .kz-chart-single-fact__context { display: block; margin-top: 8px; }
 @media (min-width: 1200px) {
   .kz-b-site[data-comparison-view="comparison"] .kz-b-main { display: grid; grid-template-columns: minmax(260px, 1fr) minmax(0, 2fr); gap: 8px 12px; align-items: start; }
   .kz-b-site[data-comparison-view="comparison"] .kz-b-main > * { grid-column: 1 / -1; }

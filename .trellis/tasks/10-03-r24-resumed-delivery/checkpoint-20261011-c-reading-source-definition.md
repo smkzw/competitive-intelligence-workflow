@@ -1,6 +1,57 @@
 # 2026-10-11｜C阅读真实切片与来源定义缺口
 
-## 当前节点：current27操作链完成、描述性比较显示实施（非暂停）
+## 当前动作：30实屏与Publication隔离接通（持续，非暂停）
+
+继续execution-plus-conference：Owner负责单一current/用户事实/实际Ego页面；
+有界E08执行将既有118 Publication holding原子接既有typed摄取，仅新隔离目录和
+配方，旧原文/当前项目只读。其不同输入/输出路径提供并行收益，科学采用仍需
+冻结后的独立挑战，不把原三项确认当全文/新候选接受，不重复整篇提取。
+正常30重建40348已terminal0，generation8e8572ec，1505事实不变。
+四宽28483已terminal0/12态/无FAIL，Owner实看1440密集/稀疏、1600密集、
+1920展开/来源及2560稀疏；关闭嵌套card宽度根因，不签全部前端审美。
+31相关PASS1.03s；29原宽门73564terminal0且source_set不变，1185/20/7/strict286/Ruff，
+结论仅冻结29开发范围，不覆盖后续30CSS测试或产品门；29实际FAIL保留。
+相对路径事故经用户明确授权，仅5380bytes/hash一致的本次误放文件移动回英文
+受控.artifacts，未遍历旧工程或删除历史；所有新patch使用绝对路径。
+30三个配置原生下载/异视图导入18612、四包正常分享59307、专用Profile3复用
+六入口断网73724均terminal0/0FAIL，网络恢复，proof408327a9。同generation原源/
+修订/清除/配置/Esc已核；Owner看B默认密集/C当前清除像素，不称新profile或
+全部视觉。小回执owner-current30-reading-sharing-v1.json含28PNGhash/原始证据指针。
+白名单Git/复盘，继续Publication E08原终态及B矩阵/source/MAH/24/hosts，不暂停。
+
+## 最新节点：current29密度族与28离线终态
+
+持续execution-plus-conference。原28单次独立终态324.388s/91tools/实际Pi-Gemini3.8flashhigh，
+REVISE；Owner拒绝N78未核例子和自动共轴，guard reviewgatePASS仅完整记录，不改变裁定。
+28新Profile3/space11/p1六入口移目录/真断网/当前修订与清除/原源/Esc全部终态0、0fail，
+网络恢复，proof0b35f60e；Owner实看三张A/B/C分享像素。无登录、导入、缓存清理。
+源安全密度族7RED0.29s→29PASS1FAIL(测试空白oracle)→测试规范化后30PASS0.91s；原FAIL保留。
+复用已有unit_label/valueText，稀疏两measurement各半行；未改原值、共轴、事实ID/来源/表格。
+正常ABC29 rebuild88262terminal0，generationd257be432fe94b31f6bc047d77162aa64aa59cd24f3b6f4cea56446d7124492b，
+1505/七表/14371旧文件exact，proof8e81c419；Ego2/p1四宽98450正在一次执行。
+相对AddFile误建可能落默认旧根，未read/inventory/cleanup；原生Ask仅请求移出本次新配方，
+正确英文配方绝对路径已建立。不得未经新窄授权触碰旧根，所有后续apply_patch绝对路径。
+下一新29实际像素、同版分享与里程碑一次质量门/白名单Git，来源/MAH/Publication/24/hosts仍开。
+
+## 当前节点：current28正常呈现、真实四宽/配置与分享（持续实施）
+
+沿用execution-plus-conference：共享几何执行已终态并采用，Owner统一版本/
+科学身份和B显示；独立审阅只读冻结九图，不与产品写入争用。
+HEAD/origin5e41e725已push保存/访视修复和详细复盘。原76282/22410均终态0，
+actualPi/cursor/default底层模型未知，431.543s/210tools；完整diff审阅与29相关PASS/
+Ruff/镜像同步；guard auditPASS不等于具体模型、视觉或科学通过。
+正常ABC28命令16074terminal0，所有1505facts/七表/13886历史文件exact；generation
+cef7eb5db8ae56931f6f4cefaf0d2f34aa675ccd1a2f222a1519ab7e84a264da/proof5d245bb3。
+四宽原生32/3→2/1→32/3及表格范围、来源/Esc、展开口径12态terminal0，proof1017a641。
+Owner实际看1440矩阵/密集/稀疏/展开：竖字关闭，横向留白/卡重复仍开，不签全审美。
+当前三个个人配置实际导出、换视图后导入通过；正常CLI四分享包并移动/hash通过。
+新专用Profile3/space11/p1使用既有明确授权，未导入/登录/清缓存，日常资料选择已恢复；
+原生六入口断网91187在执行。新独立28九图审阅60664/21359/event77421已单派，
+只收NOTE_EXIT，无progresspoll/延迟重派。下一收此终态、完成同版离线，再有界密度族/
+新候选与里程碑一次宽门，不逐行测试或让旧PASS拼成28全验收；不重复终态源/save链。
+全科学/MAH/Publication/24/三宿主/恢复/RC仍未完成，Goalactive，不自发暂停。
+
+## 前一批current27（历史；旧在途已由顶节替代）
 
 继续既有execution-plus-conference：已有独立23视觉REVISE，有限几何执行
 与Owner B显示组织分离文件，收益是共享字体/单观察几何与业务面板各自

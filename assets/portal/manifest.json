@@ -6,8 +6,8 @@
  "mirror_policy": "构建前逐字节及 SHA-256 校验；运行时只消费模块作者源。",
  "files": {
   "portal.css": {
-   "sha256": "8c3d73a2f9b990cea71bc5d636de169ca258a7dae72e594246bf37aae5a6f581",
-   "bytes": 70227
+   "sha256": "44631972a978b6bd0f5595df91a130a481e15e2e00939244fe1cb29cc14635a4",
+   "bytes": 70440
   },
   "portal.js": {
    "sha256": "0cc9c23fbacb7f23f86473ca1bee21a8cd6ca8084345ab28c0789c1d52562ba6",
@@ -38,12 +38,12 @@
    "bytes": 9253
   },
   "report-b.js": {
-   "sha256": "2460b16f11757f8f64a406957fb8ac8819a2bcebd83fc654a3cf4e9ad2456ac5",
-   "bytes": 50664
+   "sha256": "22d8bb4855a4a4a9cf64f24352bd7c022764a1a3c3c5b1912222050117c0551a",
+   "bytes": 57236
   },
   "report-b.css": {
-   "sha256": "ada7d773e502be3a2d72e85c6ebdb0e9b1a03956c63bd4ef875f018a9677884a",
-   "bytes": 22953
+   "sha256": "be9a3a50a87e9882eaeabdb02206e124ea84d2370fa6d5f9becd1644ff110d88",
+   "bytes": 24911
   },
   "report-c.js": {
    "sha256": "99d24d611fc1037bb1230d887a1c4124cd12420d04db585c6829e2181f910f33",
