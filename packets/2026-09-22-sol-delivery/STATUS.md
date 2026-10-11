@@ -1,6 +1,41 @@
-# 唯一当前状态：1007V1连续实施｜current32阅读体验被用户否决，正在修正，非RC
+# 唯一当前状态：1007V1连续实施｜current34配置及六离线入口通过，非RC
+
+current34=A33/B34/C33，generation
+eef1a1112645c45fc6a86c26f1a681eb773db84c271241671e6acfda7a0ccc3c。
+普通B-only事务，A/C描述与字节不变；1505事实/八科学表及16544旧报告/快照保全。
+新B普通104页、Ego2/p1四宽真实glyph/清除/修订12态通过；实际按钮connected/回焦。
+owner实看1920清除及1440修订原分辨率PNG，仅回焦接受，不签整页面审美。
+新代ABC原生download/import配置3份通过；四份分享移位、六入口真断网重新执行通过。
+专用Profile3复用，非全新环境；旧current33 FAIL不改。普通线图24点/同query表32记录，
+修订/清除/原值/来源按钮及实际回焦验证。Owner实看1920线图与表，不签整页面审美。
+一次冻结宽开发门85673已terminal0/source-set exact；Ruff/strict287/1210当前302.27s/
+20兼容smoke/7分层/旧路径仅开发通过，不等同全科学、视觉或发布。
+本批[第十五回执](evidence/1007V1/owner-source-adoption-current34-v1.json)及
+[复盘](../../docs/handoffs/RETROSPECTIVE_20261012_source_adoption_current34.md)。
+下一有界动作：论文118正常已接受原子→值角色/组别/来源投影→合法消费者→真多药图表。
+全W00–W10不缩减；Goal继续，无阶段暂停。此前三次检查仪器错误及B真实焦点FAIL保留。
+恢复`.artifacts/1007-b-opener-current34-v1/`，勿重复已终态49285重建。
+
+## current33本批历史现场（不修改失败记录）
+
+current33=A33/B33/C33，generation
+57a09621f6aba52427a86c3fcbafc3e764a9a019c81c06e739bdd2f69b7b1cfd。
+普通presentation-only事务成功；1505事实/三项既有修订/八科学数据表保持，
+旧current32及16059报告/快照文件逐hash不变。可恢复检查点与实际执行recipe：
+`.artifacts/1007-abc-reading-current33-v1/`；不重复重建。下面失败为旧current33候选。
+118论文来源事实/118声明已正常物化接受，报告1505集合仍不变，无论文消费者或共轴。
+正式续接86541/97772/kernel98749已terminal0，actualOMP6.1-sol/high414.603s，
+工具51次；原文三个非阻断差异不调和。恢复source-adoption-v1备份/旧文件pin在.artifacts。
+配置ABC原生download/import通过；四同代分享移位/hash通过；六离线入口走完，
+A/C通过，B值/原值正确但Esc回到旧表行失败。旧分页移除点击按钮根因1RED→15PASS，
+模块修复/镜像已同步，待普通B新候选/实际复验。三仪器失败原样保留，不升格接受。
+下文current32不变/旧在途是各批历史记录，不是当前指针或待收节点。
 
 第十四有界呈现：[数值轴回执](evidence/1007V1/owner-numeric-axis-reading-v1.json)。
+第十四提交db4082033974cd9d07a2bd63ab63d5936b3b0819已push并核远端exact。
+正式issuer81539/87419/97743已terminal2，actualOMP6.1-sol/high；只问重复Trellis
+许可，无工具/判决，未完成不是医学veto。保留原日志，并沿原会话一次窄续接
+PID86541/session97772，原总120分钟余下6250s，核终态前不读pending或轮询。
 数值刻度水平完整，长研究标签不受覆盖；七真RED→23相关PASS1.18s，Node/
 具名Ruff/mirror。普通A49/B104/C16/1505/current32不变，保护报告/快照16059文件
 及当前集合。Ego2/p1四宽同新候选A12/B12真实任务态及16轴态，Owner三PNG实看，

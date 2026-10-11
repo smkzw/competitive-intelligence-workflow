@@ -1362,7 +1362,11 @@
       if (rowId && drawer && typeof drawer.openByRowId === "function") {
         event.preventDefault();
         if (trigger.closest("#full-study-comparison") && window.__CHART_SYNC__) {
-          if (pagedResults) {initialFocus = rowId; renderPagedResults(selectedState());}
+          // The selected comparison already exposes this fact. Rebuilding the
+          // legacy result pager removes its actual opener and scroll position.
+          if (pagedResults && document.body.dataset.comparisonView !== "comparison") {
+            initialFocus = rowId; renderPagedResults(selectedState());
+          }
           window.__CHART_SYNC__.selectByRowId(rowId);
         }
         drawer.openByRowId(rowId, trigger);

@@ -1,0 +1,72 @@
+{
+ "scope": "1007V1 exact publication-source adoption and B actual-opener/current34 sharing milestone",
+ "parent_commit": "db4082033974cd9d07a2bd63ab63d5936b3b0819",
+ "state": "BOUNDED_SOURCE_ADOPTION_INTERACTION_AND_SHARING_PASSED_PRODUCT_REVISE",
+ "method": "execution-plus-conference: independent source issuer; Owner shared presentation/current/browser integrator; no extra platform or repeated full-page review",
+ "source_acceptance": {
+  "facts": 118, "direct_claims": 118,
+  "operation": "accept_reviewed_source_facts; no direct review-state SQL rewrite",
+  "evidence_snapshot": "evidence-snapshot_37d704c94fdfdc3e20c41f8c",
+  "claim_snapshot": "claim-snapshot_bc2e4500e448d4c74f3e383f",
+  "content_digest": "e89dcabb2763a3a486bca2dacacebff5df604dff2e661b230fd44dff0e7575e0",
+  "actual_review": {
+   "host": "OMP", "provider": "openai-codex", "model": "gpt-6.1-sol", "effort": "high",
+   "session": "01a12c04-4f50-7000-941d-3949c86ac60a",
+   "seconds": 414.603, "tools": 51,
+   "first_attempt": "terminal2; redundant Trellis permission question, no tools or verdict; incomplete, not a scientific veto",
+   "recovery": "same original independent session, procedure-only clarification, remaining original120min budget; no pending progress polling",
+   "verdict_sha256": "098e8056b08953c7b969740a0c0121814c4007965923e7b760b3cd2171dd67a0",
+   "receipt_digest": "5b2d07874d412d1957fd8b27a2bef2b9111909b7d21013193f6db4c4c7ea46a8"
+  },
+  "decision_digest": "be21d3520e3eae51155cea8927fd19e2fdf50e305733c4e47813baa3d6c333bc",
+  "verified_sha256": "1bfb7f5198ab4489ec417810b4c8fc75eecd8e7fc5c8b9de0dc30d233a63d73e",
+  "recovery": ".artifacts/1007-publication-object-source-adoption-v1",
+  "scientific_conflicts_preserved": ["LTE phase2a/2b allocation discrepancy", "retreatment exclusion versus safety figure inclusion", "51 AE discontinuations versus44 TEAE discontinuations: distinct scopes"],
+  "portal_consumers_and_numeric_coaxis": "NOT_IMPLEMENTED_BY_SOURCE_ADOPTION"
+ },
+ "opener": {
+  "root_cause": "B comparison primary-table click rerendered the legacy pager before opening evidence, disconnecting the actual clicked button; Escape fell back to another hidden/old table row.",
+  "change": "Do not invoke the background legacy pager in comparison view; keep legacy/non-comparison behavior.",
+  "author": "src/ci_workflow/renderers/portal/assets/report-b.js",
+  "author_sha256": "1706fe24a666238655902cc1c4be9dbbaae1793527e1a7a90a4cdd9cffdbfc75",
+  "test": "tests/integration/test_1007_b_workspace_ui.py",
+  "test_sha256": "c9ad6a99b5f506f6ae14472d7cf2ac24d9f050d4ae2b03ae8df2ac97ecf13b88",
+  "red": {"actual_failures":1,"already_passing":2},
+  "green": {"related_passed":15,"seconds":1.25},
+  "related_command": ".venv/bin/pytest -q tests/integration/test_1007_b_workspace_ui.py tests/integration/test_r24_kangzhe_shared_desktop.py tests/integration/test_r24_reading_isolation.py --tb=short",
+  "named_ruff_node_and_asset_mirror": "PASS",
+  "ordinary_preview": {"pages":104,"active_facts":1505,"protected_files":16544,"source_current_writes":0},
+  "browser": {"space":2,"page":"p1","widths":[1440,1600,1920,2560],"states":12,"failures":0,"tasks":["real longitudinal glyph","cleared source/original","modified source/original","Escape actual connected opener"],"sha256":"6e9a431ba94e4a352bd107b8a24cb2e70917637ffd4bbe1d7019d0eedd88e728"}
+ },
+ "current": {
+  "revision":34,"report_revisions":{"A":33,"B":34,"C":33},
+  "generation":"eef1a1112645c45fc6a86c26f1a681eb773db84c271241671e6acfda7a0ccc3c",
+  "operation":"normal presentation-only B transaction; A/C descriptors and bytes identical",
+  "active_facts":1505,"existing_user_edits":3,"science_tables_unchanged":8,"historical_pinned_files":16544,
+  "verified_sha256":"29a67d6269c232757eac76c130f445f94084c6b1bbb177a16d2963887f6a93d9",
+  "recovery":".artifacts/1007-b-opener-current34-v1; executed-recipe.py and prewrite/return/verified",
+  "native_config": {"actual_downloads_and_distinct_imports":3,"state":"PASS","sha256":"dea72928fc5dc639724aa455b6acd58935ca300bcf35144e1dd1f5b5338946a6"}
+ },
+ "sharing": {
+  "candidate_revision":34,"archives":4,"members":{"A":67,"B":381,"C":36,"ABC":480},
+  "archive_sha256":{"A":"ead32fe05ac9dd6df440721cd3abe74eb7eb9b5431060a31cd89c5227c3eae22","B":"491ce115d85c3ecc3f8b9d1f05a1372d7d7d4a5c01021a8b14dd9432cfbd3217","C":"089ad51daa723f179eea2f9ddf12c135a95056bea26eb5fd08dc9c019d2eba07","ABC":"8eb8c92e3ec17db7201439e46c759f6814e1a3fad929cbee87b2c66aab1794b7"},
+  "export_proof_sha256":"7b4cb339fcbceabfaf8f4b3af51d7eca28b9cf03ca0bb9519bf3c4c4e2749e24",
+  "offline_proof_sha256":"2e5e1a78a235d7a4d44538a8256cecb672f29d53e5657d223a71f65cfc4fe24c",
+  "space":11,"profile":"Profile 3","fresh_browser":false,"dedicated_profile_reused":true,
+  "actual_online_then_offline_fetch_control":true,"network_restored":true,
+  "entries":6,"previous_candidate_pass_reuse":0,"failures":0,"source_current_writes":0,
+  "checks":["saved launcher query","exact report revision33/34/33","moved local files","clear/original/current edit","source opens once and Escape returns to actual button","B24-point annotated57.7 line and32 same-query primary-table observations","no editor absolute URL"],
+  "old_current33_failures":"Preserved; instrument-selector/scroll errors distinguished from four actual B focus failures. No old package promoted to PASS."
+ },
+ "quality": {
+  "one_frozen_milestone":true,"returncode":0,"source_set_unchanged":true,
+  "ruff":"src/tests/tools PASS","strict_mypy_files":287,"current_unit_contract_passed":1210,"current_seconds":302.27,
+  "retained_compat_smoke_passed":20,"layer_audit_passed":7,"legacy_lexical":"PASS",
+  "scope":"development quality only; not full integration/science/visual/hosts/install/recovery/RC",
+  "result_sha256":"1bfca55364b2f030f445d4aca55f01bea327c2cb6fd5b75449c6eb6386dc4925",
+  "log_sha256":"875fd6f5a0d5ea879c15f458aea34632570d878b44d02de9ab9f2a0f62c087c0"
+ },
+ "owner_visual":{"viewed":"offline-ABC-B-default-panels-r34.png at1920","result":"functional annotated line plus primary table confirmed; full-page beauty NOT_ACCEPTED; true multi-drug clinical result comparison still open"},
+ "remaining":["qualified publication consumers and scientific value projections","true multi-drug clinical shared columns/ECharts plus primary table","universe/MAH closure","remaining current edit/undo/recovery coverage","24 portals/three hosts/installation/recovery/RC"],
+ "protection":{"legacy_contact":false,"protected_user_files":5,"unknown_untracked":"preserved","bulk_cleanup":false,"goal":"active; no phase pause or completion"}
+}

@@ -1,54 +1,44 @@
 # 唯一接手入口｜1007V1连续实施，非暂停、非RC
 
 唯一当前状态：[STATUS顶节](packets/2026-09-22-sol-delivery/STATUS.md)。
-最新[第十四有界回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-numeric-axis-reading-v1.json)。
-第十三批基线9cf2b098a4cc63a2ac85f141d96bed41cdb721d4已push且核远端exact；
-后续HEAD以实际Git和回执parent核对，不继承旧终验。
-Goal active/unbounded；无阶段暂停。
+最新[第十五有界回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-source-adoption-current34-v1.json)
+及[复盘](docs/handoffs/RETROSPECTIVE_20261012_source_adoption_current34.md)。
+上一已push提交db4082033974cd9d07a2bd63ab63d5936b3b0819；后续核实际Git及回执parent。
+Goal active/unbounded；全W00–W10继续，不用局部PASS宣布交付。
 
-118条新论文候选已正常追加并逐事实绑定；尚未采用，current32保持。
-正式source-only issuer单次已启动：PID81539/session87419，核事件97743；
-请求既定可用OMP/gpt-6.1-sol/high，实际身份终态核。原生独立会话
-01a12c04-4f50-7000-941d-3949c86ac60a；不读pending、不轮询、不重派。
-准备过程两个操作校验失败原样保留，最终仅补验既有摄取，不重复写入。
+## 当前可恢复事实
 
-## 当前结果与下一安全动作
+current34=A33/B34/C33/1505，三项既有用户修订保持，generation
+eef1a1112645c45fc6a86c26f1a681eb773db84c271241671e6acfda7a0ccc3c。
+普通B-only呈现事务保存，A/C描述与字节不变、八科学表/16544旧文件保持。
+B旧分页移除实际来源按钮的根因1真RED→15相关PASS；普通104页四宽glyph/clear/edit
+12态真实回焦通过。三份原生配置download/import，四分享移位、六新版本真断网入口
+均通过；Profile3专用环境复用非fresh，旧current33 FAIL原样保留。
+一次冻结宽门terminal0/source-set exact，Ruff/strict287/1210当前302.27s/20保留兼容
+smoke/7分层/旧路径，仅开发质量；Owner实看1920折线+主表，完整审美未接受。
 
-- 数值刻度统一水平完整，横条覆盖同族修正；七真RED→23相关PASS1.18s，
-  Node/Ruff/mirror通过。普通A49/B104/C16/1505/current32保持，保护reports/
-  snapshots16059文件及当前集合。Ego同新候选四宽A12/B12任务态+16轴态，
-  真实glyph来源/Esc完成；Owner看三PNG，2560图工具缩2048。仅有界读数通过，
-  整产品REVISE，新宽门NOT_RUN；真多药横比、同代操作/分享未提升接受。
-- A网格不再纵向拉开；B共享轨迹优先、单图不重复缩窄、24访视线280px，
-  真实点/零/来源不改。C首页从资料数量改为来源绑定的随机盲法/终点时间概要，
-  用户修订按当前值进入概要，依据原生收起，原文与全研究横比仍可达。
-- 整族74PASS4.16s、具名Ruff/strict单reportC/mirror通过；普通A49/B104/C16，
-  1505事实/16257持久文件/current32保持。Ego既有2/p1四宽A12/B12/C16有界态
-  通过。原B焦点仪器误判、C不存在REPORT_C接口超时均保留；补验同候选。
-  Owner实看A筛后1920/B密集1920/C首页1920；局部改动接受，整产品仍REVISE。
-- C执行终态实际GLM-5.3-Flash/max982.842s；主路有句柄却报告fallback前无会话，
-  治理解释冲突保留。Owner补用户修订/英文漏出反例并修复，不称worker即接受。
-- 单一独立C03终态actualGrok4.7/high848.481s：两个官方XML对象的服务器日期
-  与准确字节可证明这些字节在截止前可得，不能当首次发表日、更正无影响或
-  全文自动采用。六事实72引用精确匹配，118论文候选仍零采用。
-- PMC验证器5013/62741/42554已terminal0，actualGLM5.3Flash/max1340.017s，
-  Owner三真实合同缺口修复；错误时钟额外假设撤销，原失败保留。
-  两原件逐事实截止证据接通摄取/提交/快照恢复，八文件108PASS3.29s、
-  portable/真实32PASS1.58s、具名静态通过。六holding/recovered一致，0采用。
-  一次冻结宽门75099terminal0/source-set一致：Ruff/strict287/1210当前PASS
-  298.27s/20兼容/7分层/旧路径，仅开发质量，不提升为科学/视觉/发布。
+118论文事实/118直接声明由正式独立OMP6.1-sol/high实际414.603s、51工具核准，
+正常API物化；三个原文差异保留，仅来源层，不混入1505报告集合或授予共轴。
+首轮重复Trellis问题terminal2是未完成；原会话窄续接终态accepted，勿重派或等旧PID。
 
-下一：正式issuer终态验身份/真实判决后正常采用及合法消费者；
-共享数值轴阅读与真正多药临床共享列/ECharts+主表、同一
-当前版编辑/清除/undo/配置/单与联合分享继续；不要再次循环全页会商或旧节点。
-新开发宽门真实通过，但24门户/三宿主/安装恢复/RC未完成，不能继承终验。
+## 下一有界动作与在途
 
-## 恢复保护
+论文已接受原子→值角色/统计形式/明确研究组/原文定位投影→合法消费者→
+真正多药临床共享列、ECharts+可见同query主表。仅材料可达或计数图不充当正向临床横比。
+Owner管理共同身份/消费者/current/browser。一个E03有限执行节点
+`ci-1007-publication-cell-projection-v1`已预检并启动（exec40371，120min）：
+仅publication_components.py和具名测试；pending不读日志/不轮询，实际身份终态核。
+不重提全文、不另造平台、分母/组别不猜测。宇宙/中国MAH/24门户/三宿主/
+fresh-install/恢复/RC与同版剩余操作仍按原计划，不缩减终验。
 
-current32=A30/B32/C30/1505，generation
-ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4。
-所有命令显式英文根；旧中文工程零接触。五用户dirty与未知未跟踪保持，
-不reset/clean/全量add。模块portal/assets唯一作者，根assets镜像；Ego2/p1复用。
-历史原样移至[前一入口](docs/handoffs/HANDOFF_archive_20261012_before_task_geometry.md)，
-不重跑终态，不覆写原hash/FAIL。[本批复盘](docs/handoffs/RETROSPECTIVE_20261012_pmc_fact_availability.md)。
-本次[读数复盘](docs/handoffs/RETROSPECTIVE_20261012_numeric_axis_reading.md)。
+## 只恢复，不重复终态
+
+- `.artifacts/1007-b-opener-current34-v1/`：prewrite、事务返回、verified、实际执行recipe。
+- `.artifacts/1007-publication-object-source-adoption-v1/`：SQLite备份、完整旧文件pin、采用决定。
+- `.artifacts/1007-current34-config-v1/`及`1007-current34-shares-v1/`：原生配置、四包、六入口断网记录。
+- `.artifacts/1007-source-adoption-opener-quality-gate-v1/`：一次冻结source-set和terminal/result。
+- current33及更早失败记录和哈希不改；不重建、重摄取、重采用、重跑已终态宽门。
+- 所有命令显式英文根，旧中文工程零接触；五用户dirty、未知未跟踪保全，不全量add/cleanup。
+- 作者资产只在模块portal/assets，根assets镜像；Ego2/p1和授权专用空间11/p1复用。
+- [前一完整现场归档](docs/handoffs/HANDOFF_archive_20261012_before_current34_milestone.md)
+  为原时点历史，不是当前指针或待收任务，不重写其内容。

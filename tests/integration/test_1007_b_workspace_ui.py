@@ -3,6 +3,8 @@
 import subprocess
 from pathlib import Path
 
+import pytest
+
 
 def test_production_matrix_keeps_shared_cells_clear_states_and_all_facets() -> None:
     root = Path(__file__).resolve().parents[2]
@@ -122,4 +124,46 @@ assert.equal(new URL(url).searchParams.get('cmp'),'aa-unknown'); // keep unresol
 """
     result = subprocess.run(["node", "-e", probe, str(script), str(script.parent / "portal.js")],
                             capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+
+
+@pytest.mark.parametrize("mode", ["comparison", "legacy", "unpaged"])
+def test_evidence_open_preserves_comparison_trigger_not_background_pager(mode: str) -> None:
+    """Execute the real delegated click path, including its destructive legacy pager."""
+    root = Path(__file__).resolve().parents[2]
+    probe = r"""
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const source=fs.readFileSync(process.argv[1],'utf8'),mode=process.argv[2];
+const start=source.indexOf('  function bindEvidenceTriggers(');
+const end=source.indexOf('\n  function ',start+5);
+assert.ok(start>=0&&end>start);
+let click,prevented=0,pages=0,selected=[],opened=[];
+const trigger={isConnected:true,getAttribute(){return 'fact-cleared';},
+ closest(s){return s==='#full-study-comparison'?{}:null;}};
+const sandbox={pagedResults:mode!=='unpaged',initialFocus:'',
+ document:{body:{dataset:{comparisonView:mode==='comparison'?'comparison':'summary'}},
+  addEventListener(name,handler){assert.equal(name,'click');click=handler;}},
+ window:{__CHART_SYNC__:{selectByRowId(id){selected.push(id);}},
+  __EVIDENCE_DRAWER__:{openByRowId(id,element){opened.push({id,element});}}},
+ selectedState(){return {};},renderPagedResults(){pages++;trigger.isConnected=false;}};
+vm.runInNewContext(source.slice(start,end),sandbox);
+sandbox.bindEvidenceTriggers();
+click({target:{closest(){return trigger;}},preventDefault(){prevented++;}});
+assert.equal(prevented,1);assert.equal(selected.join('|'),'fact-cleared');
+assert.equal(opened.length,1);assert.equal(opened[0].id,'fact-cleared');
+assert.equal(opened[0].element,trigger);
+assert.equal(pages,mode==='legacy'?1:0,'comparison click rebuilt its own trigger');
+assert.equal(trigger.isConnected,mode!=='legacy','Esc lost its real comparison opener');
+// Ordinary unknown targets and missing API never open or change a query/page.
+const count=opened.length;
+click({target:{closest(){return null;}}});
+sandbox.window.__EVIDENCE_DRAWER__=null;
+click({target:{closest(){return trigger;}}});
+assert.equal(opened.length,count);assert.equal(pages,mode==='legacy'?1:0);
+"""
+    result = subprocess.run(
+        ["node", "-e", probe,
+         str(root / "src/ci_workflow/renderers/portal/assets/report-b.js"), mode],
+        capture_output=True, text=True,
+    )
     assert result.returncode == 0, result.stderr
