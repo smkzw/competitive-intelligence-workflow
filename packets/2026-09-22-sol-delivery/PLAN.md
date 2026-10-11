@@ -1,5 +1,15 @@
 # 当前执行｜1007V1已恢复，沿用W00–W10
 
+第十三批逐事实来源接线108相关及32portable/真实PASS；六holding/recovered一致，
+current32保持/118采用0。一次冻结宽门75099terminal0/strict287/1210当前/20兼容/
+7分层/Ruff/旧路径仅开发通过。原PMC执行和日期挑战均终态，不重派。
+方法execution-plus-conference：共享来源Owner，正式采用需真实既有issuer。
+718e已push；本批白名单Git后对同原件剩余事实逐项重放并绑定，不再模型全文
+提取；正常独立复核/采用和合法消费者、临床多药ECharts+主表与同当前链接续。
+全部W00–W10不缩减，无阶段暂停。
+
+## 第十二批历史（已push718e425f；下面旧在途终态）
+
 第十二批共享几何/C真实设计摘要终态：74相关PASS，普通A49/B104/C16/current32
 保全，四宽A12/B12/C16有界通过，产品REVISE，不签新宽门/同版操作或发布。
 方法execution-plus-conference：Owner公共资产/浏览器，C Python/template独立执行；

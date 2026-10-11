@@ -1,5 +1,18 @@
 # 唯一当前状态：1007V1连续实施｜current32阅读体验被用户否决，正在修正，非RC
 
+第十三批以718e425f8b364b32d5e2af86a347231b3118e6f2已push且远端exact为基线。
+[来源日期回执](evidence/1007V1/owner-pmc-fact-availability-v1.json)：两原件四资产/
+逐事实证明/摄取/提交/快照恢复接通，108相关及32portable/真实PASS，具名静态。
+一次冻结宽门75099 terminal0/source-set一致/Ruff全src-tests-tools/strict287/
+1210当前PASS298.27s/20兼容/7分层/旧路径，仅开发质量。原PMC执行5013/62741/
+42554终态actualGLM5.3Flash/max1340.017s，不再等待。Owner三合同缺口修复，
+时钟额外假设撤销、失败保留，fallback解释矛盾未闭。六holding/recovered一致，
+原件/旧值/定位不改，current32/1505保持；118候选仍0采用。下一具名Git、同原件
+剩余逐事实绑定、正常独立issuer/采用与合法消费者、真实多药图+表及同当前链。
+Goal active，完整W门继续，无阶段暂停或RC。
+
+## 第十二批历史（已push718e425f；下面旧在途已终态）
+
 第十二批以4bd724039e97dd6305f9d23430f7a709f90c98ba已push为基线。
 [当前回执](evidence/1007V1/owner-task-geometry-c-findings-v1.json)：共享真实轨迹
 几何/A网格/B单图全宽/C来源绑定设计概要完成，整族74PASS4.16s、具名静态通过。

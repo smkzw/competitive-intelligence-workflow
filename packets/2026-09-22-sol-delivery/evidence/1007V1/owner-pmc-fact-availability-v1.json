@@ -1,0 +1,23 @@
+{
+ "schema_version":"1007-bounded-current-checkpoint-1",
+ "parent_code_commit":"718e425f8b364b32d5e2af86a347231b3118e6f2",
+ "status":"continuous implementation; not paused, delivered or RC",
+ "method":"execution-plus-conference; bounded executor, independent dated-object challenge and owner integration; formal medical adoption separate",
+ "execution":{"task":"ci-1007-pmc-object-witness-code-v1","terminal":"runner5013 exit0; observer42554 NOTE_EXIT62741; no redispatch","actual_model":"zcode/GLM-5.3-Flash, observed max,18 model requests","duration_seconds":1340.017,"worker_report_sha256":"479cfcb504793bb6bacdc5947a34b6e4a41d1bb4c05fc970ae91b5e5762514cb","scope":"two new files; no network/Git/current writes","governance_open":"CodeBuddy primary handle contradicts before-session fallback explanation"},
+ "owner_repairs":{"genuine_holes":["HTTP media type","blank extra query","exact query binding"],"rejected_hypothesis":"server Date<=client completion; actual independent clocks differ0.361726/0.212640seconds; not product defect or invented tolerance","media":"actual S3 binary/octet-stream accepted only with safe structural JSON/XML parse","integration":"SourceCapture, per-fact proof, ingestion, submission and existing snapshot restoration","date_semantics":"exact bytes by cutoff, not first/public/acquisition rewrite, correction-unaffected or sibling adoption"},
+ "code_hashes":{
+  "src/ci_workflow/sources/connectors/pmc_object_availability.py":"43b81e7fece825ef5ee255009d50ead182bbf5fb618c48c8cbfbb99904244b28",
+  "tests/unit/test_1007_pmc_object_availability.py":"65fe081555aff72f8d809b421e4a17601910ca1f4349da0c88b3bf2f5fbcb7a1",
+  "src/ci_workflow/application/source_research_service.py":"ddb1d14a8f50634bb5c562d400841a11d04d9ac950a14695e6ddfcb79357b5b9",
+  "src/ci_workflow/application/fresh_research_ingestion.py":"4139585140a12b1ba29627c458fa341bfb1c8a8d31c4a97908624ea253d5bd24",
+  "src/ci_workflow/application/research_package_submission.py":"6835cfef540c5be07738d5bc1b7c70c1d5343c6b63c11a6d39010c1e1bdd309d",
+  "src/ci_workflow/storage/snapshot_store.py":"37348c7737b3427b7b74b211e074b5fe607c8afac4abbb7da0b6dc6c434d2a81",
+  "tests/integration/test_1007_pmc_fact_availability.py":"1bf59309de3f8aabe89493995f40ca8c2d70fcc4c36204bf1ddc0fa1ef2fc757"
+ },
+ "checks":{"related":"eight files108PASS3.29s; portable/real25unit+7integration=32PASS1.58s; synthetic contracts not clinical evidence, absent raw real SKIP","static":"named Ruff and strict five production files passed","wide_quality":{"relative":".artifacts/1007-pmc-object-quality-gate-v1/result.json","sha256":"0f62d652f16a8a706a93abae538e9cd2b6d91cb8341f08cc72735b29b9bfd71d","log_sha256":"2ac6852ec61d21847a861db459f6615bcbc3bfc7f2584cf3341be0226dcd2db1","returncode":0,"source_set_unchanged":true,"actual_scope":"Ruff src/tests/tools; strict287; unit/contract1210PASS298.27s; retained20PASS0.63s; layering7PASS0.27s; lexical legacy","not_implied":"science/browser/all pages/three hosts/install/recovery/RC"}},
+ "real_holding":{"relative":".artifacts/1007-pmc-fact-holding-v1/actual.json","sha256":"e095f25bb7c4ebc7b60b18b4555a386ec85addd2ed608dc59cad4b57f33b9f07","packet_sha256":"009a0d310fa34ce72f2631d298efcfb160d11a493bdd3705f8a8035e3a9fd27e","facts":6,"sources":2,"context_description_corrections":2,"original_value_quote_locator_change":false,"new_url":"bound to actual official object; original packet unchanged","snapshot_id":"evidence-snapshot_f0be6d1620346a82630030ef","snapshot_sha256":"a96ab3db6f4c97c2bc8076422a9dc0218b4ca68050e322b2ae6d1178e9ca9a6e","recovered_same":true,"source_xml_sha256":["5fd741d285b173bf95b175bb797dfb683f16e74e7345986edf16ee9ce79e2d29","49ccbf2b4980ce91d2d31d3532cc8b27afeed01cfe20793da6122b350cd7dbc1"],"recipe":"packets/2026-09-22-sol-delivery/evidence/1007V1/replay-pmc-fact-holding-v1.py","adoptions":0,"product_current_writes":0,"retention":"unique raw/holding/recovered retained locally; no full-text Git, no inferred commercial redistribution"},
+ "current":{"revision":32,"reports":{"A":30,"B":32,"C":30},"active_facts":1505,"generation":"ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4","publication_candidates":118,"new_adoptions":0},
+ "next":"remaining fact-specific object proofs from same two sources, genuine independent scientific issuer/adoption/legal consumers, true multi-drug ECharts+table and same-current task chain; no replay of completed history",
+ "not_done":"publication adoption, true clinical multi-drug comparison, new-current operation/share acceptance, universe/MAH/24portals/three hosts/install/recovery/RC",
+ "preservation":"user five dirty/unknown/legacy untouched; original failures and SHA unchanged"
+}

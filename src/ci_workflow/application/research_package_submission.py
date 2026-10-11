@@ -105,6 +105,15 @@ def _assert_source_bindings(
             raise ResearchPackageSubmissionError("来源绑定：完整结构化定位缺失或不一致")
         if source.text_derivation != capture.text_derivation:
             raise ResearchPackageSubmissionError("来源绑定：原始资产派生回执不一致")
+        if capture.pmc_object_availability is not None:
+            from ci_workflow.application.source_research_service import verify_pmc_source_capture
+
+            if project_root is None:
+                raise ResearchPackageSubmissionError("来源绑定：缺少PMC对象核验工作区")
+            try:
+                verify_pmc_source_capture(project_root, capture, payload.data_cutoff)
+            except ValueError as error:
+                raise ResearchPackageSubmissionError(f"来源绑定：{error}") from error
         if capture.text_derivation is not None:
             from ci_workflow.storage.source_derivation import (
                 SourceDerivationError,

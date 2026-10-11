@@ -24,6 +24,7 @@ from ci_workflow.application.fresh_research_primitives import (
     RouteAttempt,
     SourceCapture,
 )
+from ci_workflow.application.source_research_service import verify_pmc_source_capture
 from ci_workflow.domain.evidence import SourceReceipt
 from ci_workflow.domain.ids import stable_id
 from ci_workflow.sources.connectors.public_pdf_availability import verify_public_pdf_availability
@@ -166,6 +167,8 @@ def ingest_research_evidence(
         # Frozen/model_copy instances are not validation authority. Recheck all
         # supplied current-availability proofs before persisting any lineage.
         SourceCapture.model_validate(capture.model_dump(mode="json"))
+        if capture.pmc_object_availability is not None:
+            verify_pmc_source_capture(project_root, capture, data_cutoff)
         if capture.public_pdf_availability is not None:
             assert capture.text_derivation is not None
             verify_public_pdf_availability(
@@ -631,6 +634,12 @@ def ingest_research_evidence(
             source_entry["availability_receipt_b64"] = b64encode(
                 store.read_bytes(receipt_asset),
             ).decode("ascii")
+        if capture.pmc_object_availability is not None:
+            witness = capture.pmc_object_availability
+            source_entry["pmc_object_assets_b64"] = {
+                name: b64encode(store.read_bytes(getattr(witness, name))).decode("ascii")
+                for name in ("metadata_asset", "metadata_receipt_asset", "xml_receipt_asset")
+            }
         source_closure.append(source_entry)
     source_derivations = [
         item for item in derivations if item["derivation_kind"] == "source_text"

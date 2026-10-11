@@ -45,6 +45,10 @@ from ci_workflow.sources.connectors.linked_jats import (
     _normalized_text,
     inspect_linked_jats_xml,
 )
+from ci_workflow.sources.connectors.pmc_object_availability import (
+    PmcObjectAvailabilityWitness,
+    verify_pmc_object_availability,
+)
 from ci_workflow.sources.connectors.public_pdf_availability import PublicPdfAvailabilityWitness
 from ci_workflow.storage.manifest_store import ArtifactManifest
 from ci_workflow.storage.snapshot_store import (
@@ -116,6 +120,9 @@ class SourceCapture(BaseModel):
         default=None, exclude_if=lambda value: value is None,
     )
     public_pdf_availability: PublicPdfAvailabilityWitness | None = Field(
+        default=None, exclude_if=lambda value: value is None,
+    )
+    pmc_object_availability: PmcObjectAvailabilityWitness | None = Field(
         default=None, exclude_if=lambda value: value is None,
     )
     acquired_at: datetime
@@ -194,7 +201,33 @@ class SourceCapture(BaseModel):
             or proof.receipt_asset is None or proof.observed_available_at > self.acquired_at
         ):
             raise ValueError("官方当前获取见证未绑定该来源原件、URL、回执或采集时刻")
+        object_proof = self.pmc_object_availability
+        if object_proof is not None and (
+            self.media_type not in {"application/xml", "text/xml"}
+            or self.text_derivation is None
+            or object_proof.xml_asset != self.text_derivation.raw_asset
+            or object_proof.xml_last_modified > self.acquired_at
+        ):
+            raise ValueError("PMC对象见证未绑定该来源XML原件或实际获取时刻")
         return self
+
+
+def verify_pmc_source_capture(project_root: Path, capture: SourceCapture, cutoff: datetime) -> None:
+    """Reopen the exact four objects, source URL, acquisition and text derivation."""
+    from ci_workflow.storage.content_store import ContentAddressedStore
+
+    SourceCapture.model_validate(capture.model_dump(mode="json"))
+    witness = capture.pmc_object_availability
+    if witness is None or capture.text_derivation is None:
+        raise ValueError("PMC来源缺少准确对象证明或原文派生")
+    store = ContentAddressedStore(project_root)
+    verify_pmc_object_availability(store, witness, cutoff)
+    receipt = source_json_decoder().decode(store.read_bytes(witness.xml_receipt_asset).decode())
+    if receipt["url"] != capture.url or (
+        datetime.fromisoformat(receipt["response_completed_at"]) > capture.acquired_at
+    ):
+        raise ValueError("PMC实际响应地址或完成时刻未绑定来源")
+    verify_source_text_derivation(project_root, capture.text_derivation, capture.content_text)
 
 
 # 电子出版日只认显式完整声明：旧版 pub-type="epub" 与现代
@@ -3834,8 +3867,9 @@ def fact_version_material_digest(fact: ResearchFact) -> str:
 class FactPublicVersionProof(BaseModel):
     """Declared public-version witnesses for one fact, not a medical conclusion.
 
-    Correction prose is not interpreted. The caller must already have decided
-    ``fact_unaffected`` and pointed at the reviewed source quote.
+    Publication-date witnesses require an explicitly reviewed correction scope.
+    Exact official-object witnesses instead prove pinned pre-cutoff bytes; they
+    do not assert first publication or a whole-version no-correction decision.
     """
 
     model_config = ConfigDict(extra="forbid", frozen=True)
@@ -3843,8 +3877,13 @@ class FactPublicVersionProof(BaseModel):
     fact_id: str = Field(min_length=1)
     fact_material_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     source_content_sha256: dict[str, str] = Field(min_length=1)
-    public_by: DateEvidence
-    public_by_reference: SourceClauseReference
+    public_by: DateEvidence | None = Field(default=None, exclude_if=lambda value: value is None)
+    public_by_reference: SourceClauseReference | None = Field(
+        default=None, exclude_if=lambda value: value is None,
+    )
+    official_object_xml_sha256: str | None = Field(
+        default=None, pattern=r"^[0-9a-f]{64}$", exclude_if=lambda value: value is None,
+    )
     version_references: tuple[SourceClauseReference, ...] = Field(min_length=1, max_length=32)
     correction_state: Literal["fact_unaffected", "fact_changed", "unresolved"]
     correction_references: tuple[SourceClauseReference, ...] = Field(default=(), max_length=32)
@@ -3947,10 +3986,44 @@ def _bind_fact_public_version_proof(
     content_sha = hashlib.sha256(source.content_text.encode("utf-8")).hexdigest()
     if proof.source_content_sha256 != {source.source_id: content_sha}:
         raise ValueError(f"来源字节摘要与事实版本不一致：{fact.fact_id}")
+    if proof.official_object_xml_sha256 is not None:
+        # This path proves pre-cutoff exact bytes, not an inferred publication
+        # date or a whole-version no-correction conclusion. CAS is reopened at
+        # submission/ingestion, and every fact still binds its own material.
+        SourceCapture.model_validate(source.model_dump(mode="json"))
+        object_proof = source.pmc_object_availability
+        if object_proof is None or (
+            object_proof.xml_asset.sha256 != proof.official_object_xml_sha256
+        ):
+            raise ValueError(f"逐事实证明未绑定来源官方XML对象：{fact.fact_id}")
+        if cutoff.tzinfo is None or cutoff.utcoffset() is None or (
+            object_proof.xml_last_modified > cutoff
+        ):
+            raise ValueError(f"官方XML对象晚于截止：{fact.fact_id}")
+        if proof.public_by is not None or proof.public_by_reference is not None:
+            raise ValueError(f"对象可得证据不能被混写成发表日：{fact.fact_id}")
+        version_id = source_version_identity(
+            source.source_id, content_sha, published_at=source.date_evidence("published_at"),
+            effective_at=source.date_evidence("effective_at"),
+            first_disclosed_at=source.date_evidence("first_disclosed_at"),
+            text_derivation=source.text_derivation,
+        )
+        _quote_fragment(source, version_id, fact.locator, fact.original_text, fact.fact_id)
+        context = fact.source_clause_context
+        references = (*proof.version_references, *proof.correction_references,
+                      *(context.continuations if context is not None else ()))
+        for reference in references:
+            if reference.source_id != fact.source_id:
+                raise ValueError(f"对象见证引用未绑定事实来源：{fact.fact_id}")
+            _quote_fragment(source, version_id, reference.locator,
+                            reference.original_text, fact.fact_id)
+        return
     if proof.correction_state != "fact_unaffected":
         raise ValueError(f"更正影响范围未闭合：{fact.fact_id}")
     if not proof.correction_references:
         raise ValueError(f"更正复核引用缺失：{fact.fact_id}")
+    if proof.public_by is None or proof.public_by_reference is None:
+        raise ValueError(f"公开日期与引用证据缺失：{fact.fact_id}")
     if proof.public_by_reference.source_id != fact.source_id:
         raise ValueError(f"公开日引用来源与事实不一致：{fact.fact_id}")
     if proof.public_by.locator != proof.public_by_reference.locator:

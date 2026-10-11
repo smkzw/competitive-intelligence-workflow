@@ -414,7 +414,10 @@ class SnapshotStore:
             _require_fact_context_matches_closure(item)
         _require_current_claim_closure(manifest)
 
-        from ci_workflow.application.source_research_service import SourceCapture
+        from ci_workflow.application.source_research_service import (
+            SourceCapture,
+            verify_pmc_source_capture,
+        )
         from ci_workflow.storage.content_store import (
             ContentAddressedStore,
             ContentIntegrityError,
@@ -470,6 +473,23 @@ class SnapshotStore:
                 verify_public_pdf_availability(
                     self.project_root, proof, capture.url, proof.raw_asset, manifest.data_cutoff,
                 )
+            if capture.pmc_object_availability is not None:
+                witness = capture.pmc_object_availability
+                assets = item.get("pmc_object_assets_b64")
+                names = ("metadata_asset", "metadata_receipt_asset", "xml_receipt_asset")
+                if not isinstance(assets, dict) or set(assets) != set(names):
+                    raise SnapshotIntegrityError("PMC对象闭包缺少准确元数据或响应回执")
+                for name in names:
+                    expected_asset = getattr(witness, name)
+                    if not isinstance(assets[name], str):
+                        raise SnapshotIntegrityError("PMC对象闭包资产编码无效")
+                    restored_asset = content_store.put_bytes(
+                        b64decode(assets[name], validate=True),
+                        media_type=expected_asset.media_type,
+                    )
+                    if restored_asset != expected_asset:
+                        raise SnapshotIntegrityError("PMC对象恢复资产摘要不一致")
+                verify_pmc_source_capture(self.project_root, capture, manifest.data_cutoff)
             version = repository.add_source_version(
                 source_id=capture.source_id,
                 content=capture.content_text.encode("utf-8"),

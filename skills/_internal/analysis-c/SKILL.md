@@ -15,6 +15,9 @@ DesignObservation科学字段及上游source_row_id，不能只摘要source_text
 不能借同源兄弟证明。显示行、display_text和difference_labels_zh不进入
 这个科学摘要；组/期/终点/时间/关系与来源身份变化必须重新核查。
 此绑定不是论文真实内容或更正影响的自动接受；原版本证据仍须精确验证。
+官方PMC准确对象路径绑定official_object_xml_sha256及来源原件/两响应回执，
+不把Last-Modified填进public_by。C仍绑定完整设计材料；SourceCapture仅持有
+见证不使同篇所有设计事实合格，正式来源/报告接受仍走原签发机制。
 
 尚未接受的真实资料先走来源复核，不要求生产者先附接受摘要。Agent调用
 `ci-workflow review prepare-source-c --root <同一项目> --content <项目内纯内容JSON>
