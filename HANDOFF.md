@@ -1,6 +1,6 @@
 # 唯一接手入口｜1007V1连续实施，非暂停、非RC
 
-唯一当前状态：[STATUS顶节](packets/2026-09-22-sol-delivery/STATUS.md)。本批[真实回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-compact-shared-reading-v2.json)与[复盘](docs/handoffs/RETROSPECTIVE_20261011_compact_shared_reading.md)；[原current32链](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-current32-density-provenance-v1.json)保留，不重放。
+唯一当前状态：[STATUS顶节](packets/2026-09-22-sol-delivery/STATUS.md)。最新[稀疏可见回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-sparse-visible-v2.json)与[复盘](docs/handoffs/RETROSPECTIVE_20261011_sparse_visible.md)；[共享阅读前批](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-compact-shared-reading-v2.json)及[原current32链](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-current32-density-provenance-v1.json)保留，不重放。
 
 ## 本批真正完成
 
@@ -12,7 +12,9 @@
 
 ## 紧接实施
 
-整体阅读仍REVISE：筛到两条观察时原始值被折叠。先在既有组织函数完成稀疏结果直接可见，同查询图/表/来源，保留111受试者计数与另一16未解统计，不伪成率或趋势。随后正确共同维度的多药临床正向横比、同版操作/分享。不能以年龄图或单研究折线代替1007V1目标。
+稀疏可见单元已终态：普通sparse-v2 104页/1505事实/current32保持，四文件79PASS、Ruff/Node/mirror通过，Ego四宽0运行失败，Owner实看1440/2560。两条原值直接可见，长英文研究名回完整表；新版本未跑保存/分享/来源点击，不继承旧PASS。上一Owner“111/16”错误已按精确查询纠正为第4周78例/第16周111例，旧回执与失败原样保留；数据未变。闭合details可见性仪器失败另存新qa-v2，不重建同一候选。8128宽门只覆盖22c9源码，不借给此JS变更。
+
+整体产品仍REVISE：下一接通正确共同维度的多药临床矩阵及联动ECharts+同查询完整表，随后同版操作/分享。不能以两数字卡、年龄图或单研究折线替代1007V1目标。
 
 论文事实版本截止门仍16RED、118候选未采用；必需论文/MAH/宇宙/24/宿主/安装恢复按W00–W10继续。原生E01子句柄01a12a5b-444a-7ef1-b953-58f5dd58c4c1已终态，明确admit/spawn gpt-6.1-sol/max；已归档本次执行资料，不再等旧PID。未重派重复全页会商，之前C02独立REVISE保留。
 

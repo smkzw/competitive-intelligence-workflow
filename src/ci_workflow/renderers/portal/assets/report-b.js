@@ -210,13 +210,19 @@
       // Real multi-observation plots remain on the main reading plane.
       if (!cards.length || !cards.every(function (card) { return !!card.dataset.comparisonCompact; })) return;
       var records = document.createElement("details"); records.className = "kz-b-study-records";
+      // A sparse query must not hide all its actual observations. Dense source
+      // records remain auxiliary; do not merge their numeric frames or values.
+      records.open = ordered.length <= 4;
       var summary = document.createElement("summary");
       summary.textContent = "查看原始测量与逐条依据（" + cards.length + "条观察）";
       records.appendChild(summary);
       var original = (workspace.study_labels || {})[key];
       if (original) {
         var title = document.createElement("p"); title.className = "kz-b-study-original-title";
-        title.textContent = original; records.appendChild(title);
+        title.textContent = original;
+        // Sparse current values may be open by default; the full original
+        // registry title remains source context, not a new English headline.
+        cards[0].querySelector(".kz-complete-table").appendChild(title);
       }
       var grid = document.createElement("div"); grid.className = "kz-b-study-records__grid";
       Array.from(panel.children).filter(function (node) {
@@ -395,7 +401,7 @@
       return Object.assign({}, group, {rows: group.rows.filter(function (row) {return !trajectoryIds[row.row_id];})});
     }).filter(function (group) {return group.rows.length;}));
     host.querySelector("[data-comparison-status]").textContent =
-      comparisonGroups.length + "个科学条件分面";
+      comparisonGroups.length + "组结果";
     window.__COMPARISON_QUERY__.recordScope(host, allowed, allColumns, Object.keys(displayed));
     host.dataset.columnIds = JSON.stringify(columns.map(function (column) {return column.id;}));
     if (window.__CHART_SYNC__ && window.__CHART_SYNC__.replaceGroups) {

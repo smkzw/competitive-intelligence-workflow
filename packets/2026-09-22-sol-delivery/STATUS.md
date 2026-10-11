@@ -1,5 +1,11 @@
 # 唯一当前状态：1007V1连续实施｜current32阅读体验被用户否决，正在修正，非RC
 
+最新终态：[稀疏可见v2回执](evidence/1007V1/owner-sparse-visible-v2.json)及[复盘](../../docs/handoffs/RETROSPECTIVE_20261011_sparse_visible.md)。<=4辅助观察直接可见，密集仍可展开；原标题移回完整表。四文件79PASS/Ruff/Node/mirror通过，新宽门未运行，不继承22c9门。普通104页/1505事实/16257文件/current32/source exact，Ego四宽0运行失败，Owner实看1440/2560（后者工具缩2048）。只接受局部可见性/层级，整体仍REVISE；新版本来源点击、保存、配置/分享、A/C与终验NOT_RUN。
+
+纠正旧Owner查询误认：nct04501666当前问题两ID对应第4周78例和第16周111例，另一16不是当前查询；源值未改，旧记录/hash/FAIL不改。闭合details的getClientRects误判已据真实DOM/checkVisibility和截图纠正；同候选仅追加qa-v2。所有本批作业终态，Goal active。下一真正多药临床共同列/图表及同版操作，16RED论文版本/118候选与W00–W10余门不缩减。
+
+以下共享阅读段为上一单元历史，旧“111/16”已由上述事实ID核验纠正，不是当前合同。
+
 当前唯一本批：[共享阅读v2回执](evidence/1007V1/owner-compact-shared-reading-v2.json)及[复盘](../../docs/handoffs/RETROSPECTIVE_20261011_compact_shared_reading.md)。Goal active。E01原生新鲜子节点明确admit/spawn gpt-6.1-sol/max，已终态；三个readonly render/实际QA/补充测量及单次宽门全已终态，不等旧PID。图例按研究消除同名、12身份收为4研究、单图全宽/多图计划、主网格不拉高行、中文年龄单位及页底工程说明已修；科学身份/原值/current/source保持。
 
 正常compact-v2 B104页/1505事实/16257持久文件/current32/genae95ab2d不变；Ego四宽24态零运行失败，另四宽12glyph/4研究及容器全宽实测通过。Owner实看代表图：宽度/拉高空白/标签修正，但筛后两条数值仍收起，整体产品REVISE。2560PNG在工具中缩2048，原2560保留。不借年龄共享图或24访视线签临床多药正向横比；新保存/分享/全页/跨浏览器/24门户/三宿主/RC未验。

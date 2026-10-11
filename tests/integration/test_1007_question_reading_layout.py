@@ -11,6 +11,10 @@ import pytest
     "cross_study_positive",
     "longitudinal",
     "filtered_sparse",
+    "filtered_sparse_zero",
+    "filtered_sparse_clear",
+    "filtered_sparse_longtitle",
+    "filtered_dense_scalars",
     "heading_source_targets",
     "shared_long_source_titles",
     "shared_repeated_studies",
@@ -160,7 +164,7 @@ vm.runInNewContext(slice(source,'organizeComparisonCharts','\n  function ')+'\n'
 function ids(node){const found=[];walk(node,item=>{
  const id=item.getAttribute&&item.getAttribute('data-row-id');
  if(id)found.push(id);});return found.sort();}
-if(which==='filtered_sparse'){
+if(which.startsWith('filtered_')){
  const groups=[];
  for(let i=1;i<=6;i++)groups.push({scientific_group_id:'facet-pruritus',cross_trial:false,rows:[
   row('a-'+i,'NCT04202679',{time:'Week '+i,value:20+i})]});
@@ -168,6 +172,14 @@ if(which==='filtered_sparse'){
   row('b-1','NCT04501666',{time:'Week 16',value:45})]});
  groups.push({scientific_group_id:'facet-pruritus',cross_trial:false,rows:[
   row('b-2','NCT04501666',{time:'Week 24',value:51})]});
+ if(which==='filtered_sparse_zero')rows['b-1'].value=0;
+ if(which==='filtered_sparse_clear')Object.assign(rows['b-2'],
+  {value:null,disclosure_state:'user_cleared',renderable:false,original_value:51});
+ if(which==='filtered_dense_scalars')for(let i=3;i<=6;i++)groups.push({
+  scientific_group_id:'facet-pruritus',cross_trial:false,rows:[
+   row('b-'+i,'NCT04501666',{time:'Week '+i,value:20+i})]});
+ const selectedIds=groups.filter(g=>g.rows[0].trial_id==='NCT04501666')
+  .map(g=>g.rows[0].row_id).sort();
  const before=JSON.stringify(groups);
  sandbox.fullChartGroups=groups;
  sandbox.window.__B_COMPARISON_WORKSPACE__={study_ids:['NCT04202679','NCT04501666'],
@@ -175,7 +187,9 @@ if(which==='filtered_sparse'){
   membership:{row_ids:Object.keys(rows)},columns:[{id:'facet-pruritus',question_id:'pruritus-nrs',
    question_known:true,question_label:QUESTION,title:QUESTION,cells:{
     NCT04202679:groups.filter(g=>g.rows[0].trial_id==='NCT04202679').map(g=>g.rows[0].row_id),
-    NCT04501666:['b-1','b-2']}}]};
+    NCT04501666:selectedIds}}]};
+ if(which==='filtered_sparse_longtitle')
+  sandbox.window.__B_COMPARISON_WORKSPACE__.study_labels.NCT04501666=LONG.repeat(4);
  sandbox.state={trial:'NCT04501666'};
  sandbox.renderComparisonWorkspace(sandbox.state);
  assert.equal(JSON.stringify(groups),before,'filtering must not rewrite scientific frames');
@@ -184,13 +198,21 @@ if(which==='filtered_sparse'){
   'plots belong to the comparison reading, not the overview dump');
  assert.ok(host.children.indexOf(module)<host.children.indexOf(status));
  assert.equal(overview.hidden,true,'unrelated overview dump stays out of the comparison reading');
- assert.equal(status.textContent,'2个科学条件分面');
+ assert.equal(status.textContent,selectedIds.length+'组结果');
  assert.doesNotMatch(status.textContent,/项相关研究|个研究分面|本问题条件分面/);
- assert.deepEqual(ids(module),['b-1','b-2']);
+ assert.deepEqual(ids(module),selectedIds);
  const records=module.querySelector('.kz-b-study-records');
- assert.ok(records&&records.tagName==='DETAILS'&&!records.open,'scalar-only records stay closed');
- assert.equal(records.querySelectorAll('.kz-chart-module__group').length,2);
- assert.equal(sandbox.window.__CHART_GROUPS__.length,2,'status follows the recomputed groups');
+ assert.ok(records&&records.tagName==='DETAILS');
+ assert.equal(records.open,selectedIds.length<=4,
+  'few source observations stay immediately readable; dense auxiliary records stay closed');
+ assert.equal(records.querySelectorAll('.kz-chart-module__group').length,selectedIds.length);
+ const originalTitle=records.querySelector('.kz-b-study-original-title');
+ assert.ok(originalTitle&&originalTitle.parentElement.className==='kz-complete-table',
+  'opening sparse values must not also dump the original English study title');
+ assert.equal(originalTitle.textContent,
+  sandbox.window.__B_COMPARISON_WORKSPACE__.study_labels.NCT04501666);
+ assert.equal(sandbox.window.__CHART_GROUPS__.length,selectedIds.length,
+  'status follows the recomputed groups');
  assert.ok(sandbox.window.__CHART_GROUPS__.every(group=>group.rows.every(item=>item.trial_id==='NCT04501666')));
 }else if(which==='cross_study_positive'||which.startsWith('shared_')){
  const first={scientific_group_id:'frame-shared',numeric_frame:{id:'frame-shared'},cross_trial:true,

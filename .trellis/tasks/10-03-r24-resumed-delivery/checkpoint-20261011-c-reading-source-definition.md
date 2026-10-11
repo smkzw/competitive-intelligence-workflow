@@ -1,5 +1,13 @@
 # 2026-10-11｜C阅读真实切片与来源定义缺口
 
+接续有界单元：Owner直接修既有B稀疏可见性，原因是同一组织器与当前浏览器串行依赖，额外执行/会商无法提供独立写域收益；前一E01及C02已终态，不重复全页审查。22c9ba7e33文件已push并核远端，五用户hash exact。四RED（主层中性分组标签）/五RED（稀疏原标题泄漏）→最终四文件79PASS；稀疏<=4观察直接可见，密集仍辅助折叠，原英文研究名移回既有完整表，不丢原文或事实。
+
+纠正上一单元Owner错误假设：当前所选临床问题的两条真实ID是eff-b6d4e0cb2fff2c4d2ef6/eff-e4be0438910551629263，即第4周78例/第16周111例，不是整页另一未解观察16。旧说明及失败保留不改hash；正常current32同查询未变。sparse-v1 QA按错误16判失败，随后冻结原v2 data重新定位精确ID；不改源数据以通过测试。
+
+普通sparse-v1/v2渲染均终态104页/1505事实/16257文件/current/source不变。新v2四宽图已看到78/111与来源入口，英文原题不再主层显示；QA-v2误用getClientRects将闭合details内有rect的原题当可见。真实截图及当前DOM checkVisibility=false/open=false证实是仪器错误。未重建同一候选，新qa-v3在Ego2/p1已terminal0，四宽0运行失败，证据在新qa-v2目录；Owner实看1440/2560，后者展示缩2048。仅接受稀疏可见/原题层级，整体仍REVISE；无新来源点击/编辑/分享/全页。8128六步宽门只覆盖22c9提交源码，后续此JS改动仅相关回归，不继承全绿门。最新owner-sparse-visible-v2.json，下一真正临床多研究矩阵/图表，Goal保持active。
+
+以下为此前终态历史；旧“下一111/16”明确已纠正，不是当前事实合同。Goal实际查询仍active，不暂停。
+
 当前有界单元 `ci-1007-compact-shared-reading-v1`：execution，Owner管理共享图形系列名称，worker_01仅B作者JS/CSS与阅读测试，写集合分离。guard preflight与E01 native-admit实际PASS，原生新鲜子句柄`01a12a5b-444a-7ef1-b953-58f5dd58c4c1`明确请求gpt-6.1-sol/max已终态；三文件整合，worker11RED/3PASS→14PASS。Owner实际131相关PASS；新实屏五根因RED后150PASS/1测试返回结构错误，修正测试后25PASS。readonly compact-v2 104页/1505事实/16257文件/current32 exact，实际Ego四宽24态0FAIL及4宽12点/4研究/全宽测量PASS。单次开发门8128终态六步PASS，仅质量层，不是产品验收。代码检查中未变更源码。
 
 唯一本批入口owner-compact-shared-reading-v2.json与RETROSPECTIVE_20261011_compact_shared_reading.md；v1目视REVISE，v2过早QA环境FAIL零态保留。单图全宽/行不拉高/中文与页底内部说明已修；Owner代表图实看整体仍REVISE，稀疏两条当前值收起。下一既有组织器稀疏直接可见和图/表/依据，保留计数111及未解统计16不伪共轴；继续真正多药矩阵/同版分享与事实版本门。终态执行资料按guard归档可恢复、五用户hash保持不提交，未删历史。旧pending已关闭，不再等旧PID；Goal active，不暂停。
