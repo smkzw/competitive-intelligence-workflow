@@ -1,5 +1,9 @@
 # 唯一当前状态：1007V1连续实施｜current32阅读体验被用户否决，正在修正，非RC
 
+最新[A/B共同查询回执](evidence/1007V1/owner-ab-shared-question-query-v1.json)：第六批c90bc25f已push/核远端，第七批基于它修共同图组选择与A首屏并排及实际图点回焦。5真RED→66相关PASS；回焦1真RED→九文件58PASS，具名静态/mirror通过。normal v3 A49/B104/1505/16257/current32保持，A四宽12态32→4、24点线、75例原文/定位/网址及Esc通过。1600/1920 actual SVG trigger已断开，回同事实按钮；其余两宽回原path，实际回调证明，旧仪器FAIL保留。B v2/v3全产物hash相同，仅复用v2的24任务态及四宽来源有界结果，不拼新generation整体验收。Owner实看A1440/2560（工具缩2048），整页REVISE：英文单位/顺序/空行空控件下一族修。单次开发门63587已terminal0/source-set不变，整Ruff/strict286/1185活跃PASS290.60s/20兼容/7分层/字面旧路径，log71fb3c97，只签开发质量。118候选0采用，没有新current/保存分享。下一白名单Git，再共享阅读接缝与两篇版本见证及全W门。Goal active；以下全部旧在途仅历史，勿重跑。
+
+## 前一单元现场与历史索引（不作为当前待等/待重跑任务）
+
 当前[描述性图回执](evidence/1007V1/owner-descriptive-question-reading-v1.json)：七文件63相关PASS，具名Ruff/strict单report_b/Node/mirror通过；新整仓门NOT_RUN。普通只读v4 104页/1505/16257/current32不变，Ego四宽24态、图表并排四态、75例glyph来源/Esc四态通过，原24周线/57.7来源及32→2筛选保持。Owner实看1440/2560（工具缩2048），整体仍REVISE，不签完整临床多药率横比/所有页审美或新保存分享。v1四宽几何FAIL、v2两宽FAIL、v3glyph真实FAIL保留；v1/v2严格824文件归档后回收约0.5GB，失败可恢复。E08/C03全部终态，实际不同模型6.1-sol REVISE和Owner原源处置见[上下文回执](evidence/1007V1/owner-pruritus-context-v1.json)。基线7458ab27、本批具名提交中；下一A同查询图/表和原来源，再同候选操作/分享及全W门。Goal active，非暂停/RC；下面旧在途全部仅历史，不重跑。
 
 第五批已push7458ab27/远端exact。E08首轮68147/46250已terminal0，实际Grok4.7-build496.445s；12原上下文/36IDs匹配、12详细绑定exact，24周绑定缺及25非逐字引文使原报告REVISE。一次同会话窄补证8754/PID96226/NOTE_EXIT72182已预检PASS启动，只补这些来源证据，不重分析全宇宙；不读pending/轮询。当前入口根HANDOFF，下一不同模型医学挑战，不直接授予数值许可。以下首轮“在途”仅原时点记录，不再等待旧93117。

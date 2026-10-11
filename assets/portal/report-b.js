@@ -382,47 +382,8 @@
     host.dataset.unmatchedStudyIds = JSON.stringify(unmatchedStudies);
     var unmatchedCount = host.querySelector("[data-comparison-unmatched-count]");
     if (unmatchedCount) unmatchedCount.textContent = String(unmatchedStudies.length);
-    var comparisonGroups = fullChartGroups.filter(function (group) {
-      return columns.some(function (column) {
-        return (column.scientific_facet_ids || [column.id]).indexOf(group.scientific_group_id) !== -1;
-      });
-    }).map(function (group) {
-      // A science facet can contain several descriptive question bindings.
-      // Its identity selects the frame, not extra members outside this table
-      // page's query. Preserve cleared/zero members; never borrow a sibling.
-      return Object.assign({}, group, {rows: group.rows.filter(function (row) {
-        return allowed[row.row_id] && displayed[row.row_id];
-      })});
-    }).filter(function (group) {return group.rows.length;});
-    // Source-qualified within-measure trajectories are a descriptive time view,
-    // not a re-adjudication of the clinical question's numeric science facets.
-    // Use the same current page query as the comparison matrix and complete table.
-    var trajectories = (workspace.longitudinal_groups || []).map(function (group) {
-      var rows = group.rows.filter(function (row) {return allowed[row.row_id] && displayed[row.row_id];});
-      return Object.assign({}, group, {rows: rows});
-    }).filter(function (group) {return group.rows.length > 1;});
-    var trajectoryIds = Object.create(null);
-    trajectories.forEach(function (group) {
-      group.rows.forEach(function (row) {trajectoryIds[row.row_id] = true;});
-      var label = columns.find(function (column) {
-        return (column.row_ids || []).indexOf(group.rows[0].row_id) !== -1;
-      });
-      if (label && label.question_known) group.title_zh = label.question_label;
-    });
-    var descriptive = (workspace.descriptive_groups || []).map(function (group) {
-      return Object.assign({}, group, {rows: group.rows.filter(function (row) {
-        return allowed[row.row_id] && displayed[row.row_id] && !trajectoryIds[row.row_id];
-      })});
-    }).filter(function (group) {return group.rows.length > 1;});
-    var descriptiveIds = Object.create(null);
-    descriptive.forEach(function (group) {
-      group.rows.forEach(function (row) {descriptiveIds[row.row_id] = true;});
-    });
-    comparisonGroups = descriptive.concat(trajectories, comparisonGroups.map(function (group) {
-      return Object.assign({}, group, {rows: group.rows.filter(function (row) {
-        return !trajectoryIds[row.row_id] && !descriptiveIds[row.row_id];
-      })});
-    }).filter(function (group) {return group.rows.length;}));
+    var comparisonGroups = window.__COMPARISON_QUERY__.plotGroups(
+      workspace, fullChartGroups, columns, allowed, displayed);
     host.querySelector("[data-comparison-status]").textContent =
       comparisonGroups.length + "组结果";
     window.__COMPARISON_QUERY__.recordScope(host, allowed, allColumns, Object.keys(displayed));

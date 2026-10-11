@@ -5,6 +5,15 @@
   .kz-a-site[data-comparison-view="comparison"] .kz-a-main > * { grid-column: 1 / -1; }
   .kz-a-site[data-comparison-view="comparison"] .kz-a-main > .kz-a-workspace-bar { grid-column: 1; margin: 0; }
   .kz-a-site[data-comparison-view="comparison"] .kz-a-main > .portal-identity { grid-column: 2; }
+  .kz-a-site #full-study-comparison:not([hidden]) { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 8px 12px; align-items: start; }
+  .kz-a-site #full-study-comparison > .kz-comparison-heading,
+  .kz-a-site #full-study-comparison > .kz-comparison-controls { grid-column: 1 / -1; }
+  .kz-a-site #full-study-comparison > [data-a-comparison-status] { grid-column: 1 / -1; grid-row: 3; margin: 0; }
+  .kz-a-site #full-study-comparison > .kz-a-table-wrap { grid-column: 2; grid-row: 4; margin: 0; min-width: 0; max-height: max(360px, calc(100vh - 380px)); overflow: auto; }
+  .kz-a-site #full-study-comparison > #kz-chart-module { grid-column: 1; grid-row: 4; margin: 0; container-type: inline-size; }
+}
+@container (max-width: 1240px) {
+  .kz-a-site #full-study-comparison .kz-chart-module__group[data-grid-span] { grid-column: 1 / -1; }
 }
 .kz-a-site #full-study-comparison[hidden] { display: none; }
 .kz-a-site #full-study-comparison > .kz-a-table-wrap { margin-top: 8px; }

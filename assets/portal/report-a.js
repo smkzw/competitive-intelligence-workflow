@@ -2106,18 +2106,14 @@
     });
     host.querySelector("[data-a-comparison-prev]").disabled = aComparisonPage <= 1;
     host.querySelector("[data-a-comparison-next]").disabled = aComparisonPage * 4 >= allColumns.length;
-    host.querySelector("[data-a-comparison-status]").textContent = retained + "项研究；条件组 " +
-      aComparisonPage + " / " + (Math.ceil(allColumns.length / 4) || 1) + "；本页 " + Object.keys(displayed).length + " 条事实。当前问题有匹配事实的研究先列，其余相关研究保留。";
+    host.querySelector("[data-a-comparison-status]").textContent = retained + "项研究 · 第" +
+      aComparisonPage + "/" + (Math.ceil(allColumns.length / 4) || 1) + "页 · " +
+      Object.keys(displayed).length + "条结果";
     window.__COMPARISON_QUERY__.recordScope(host, allowed, allColumns, Object.keys(displayed));
     host.dataset.columnIds = JSON.stringify(columns.map(function (column) {return column.id;}));
     if (window.__CHART_SYNC__) {
-      var groups = (window.__A_COMPARISON_GROUPS__ || []).filter(function (group) {
-        return columns.some(function (column) {
-          return (column.scientific_facet_ids || [column.id]).indexOf(group.scientific_group_id) !== -1;
-        });
-      }).map(function (group) {
-        return Object.assign({}, group, {rows: group.rows.filter(function (row) {return allowed[row.row_id];})});
-      }).filter(function (group) {return group.rows.length;});
+      var groups = window.__COMPARISON_QUERY__.plotGroups(workspace,
+        window.__A_COMPARISON_GROUPS__ || [], columns, allowed, displayed);
       window.__CHART_SYNC__.replaceGroups(groups);
     }
     params.set("cmp", select.value); params.set("cmp_page", String(aComparisonPage));
@@ -2126,6 +2122,8 @@
   window.__A_COMPARISON_EVIDENCE__ = function (rowId, trigger) {
     var row = (window.__A_COMPARISON_ROWS__ || {})[rowId];
     if (!row || !trigger || !trigger.setAttribute) return;
+    if (trigger.tabIndex === undefined || trigger.tabIndex < 0) trigger.setAttribute("tabindex", "-1");
+    trigger.setAttribute("data-chart-evidence-open", rowId);
     trigger.setAttribute(row._domain === "efficacy" ? "data-efficacy-row-id" : "data-row-id", row.a_row_id);
     trigger.setAttribute("data-evidence-row-id", row.a_row_id);
     trigger.setAttribute("data-evidence-collection", row._domain);

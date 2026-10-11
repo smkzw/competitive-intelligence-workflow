@@ -1,0 +1,80 @@
+{
+  "schema": "bounded-owner-receipt/v1",
+  "baseline_commit": "c90bc25f3cfe3ee7535b9a3945a95c71b52c0ffe",
+  "unit": "Common A/B physical question query, A paired matrix and original-source focus",
+  "mode": "Direct execution: one shared query/browser owner; prior distinct-model source conference retained, no new medical equivalence judgment",
+  "goal_state": "active",
+  "product_state": "REVISE_NOT_RELEASE_ACCEPTED",
+  "current_preserved": {
+    "revision": 32,
+    "reports": {"A": 30, "B": 32, "C": 30},
+    "generation": "ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4",
+    "facts": 1505,
+    "persistent_files_verified_unchanged": 16257,
+    "fact_source_current_save_share_writes": 0,
+    "publication_candidates": 118,
+    "publication_adoptions": 0
+  },
+  "implementation": [
+    "Existing common query selects frames, source-posted descriptive panels and source-local trajectories for the exact current question/page/filter; A and B share it.",
+    "No scientific identity, frame eligibility, value, unknown, zero, clear or independent measurement changed.",
+    "A preserves original a_row_id and source collection while graphical triggers become focusable and retain graphical fact identity.",
+    "A desktop graph/primary matrix are parallel; full table remains natively scrollable.",
+    "Normal A preview now passes the existing bound public provenance context, rather than fabricating registry citations."
+  ],
+  "related_verification": {
+    "query_family": "5 genuine RED and 1 existing PASS before shared production selection fix",
+    "first_related_batch": "66 PASS /157.19s including adjacent denominator integration",
+    "focus_family": "1 genuine RED before making actual canvas/SVG trigger focusable",
+    "final_related_batch": "9 related files 58 PASS /2.83s; slow denominator cases unchanged and not repeated",
+    "static": "Named Ruff/Node syntax and actual author-mirror validation PASS; no Python production change in this unit",
+    "milestone_gate": "One frozen terminal0 quality-only gate63587; source-set unchanged; Ruff fullsrc/tests/tools, strict286,1185activePASS290.60s,20retainedcompatPASS,7layerPASS,lexical legacy PASS. Not science/browser/install/hosts/RC",
+    "gate_command": "PYTHONPATH=. .venv/bin/python packets/2026-09-22-sol-delivery/evidence/1007V1/run-ab-shared-query-quality-gate-v1.py",
+    "gate_log_sha256": "71fb3c97eca29b4ce31d6e28978d647b3928f920d0dfdbfdad8a6f432cbbe532",
+    "gate_result_sha256": "2526df7fbb7be73fc9f1916a4b46db73910f06b652c3208ccc46fe6e01f5a260",
+    "gate_prewrite_sha256": "efbbe26240730a2b550c4d35fd72158fd397d702bacc85c77ce2771cb48b043a"
+  },
+  "normal_candidate": {
+    "path": ".artifacts/1007-ab-shared-question-preview-v3",
+    "pages": {"A": 49, "B": 104},
+    "actual_sha256": "216caa5b1e0d450b36419f14549a313d43280dbe8331d39d166875b732c8ffa2",
+    "a_portfolio_sha256": "fb847696f3fb964f55c6c51424d4bcc43046dbccefa313315e365ed325005072",
+    "b_full_render_manifest_equals_v2": true,
+    "b_reuse_scope": "All B file hashes exactly equal to v2; bounded v2 B task and source evidence only, not a new joint saved generation or release"
+  },
+  "browser": {
+    "environment": "existing Ego Lite space2/profile1/p1",
+    "widths_css_px": [1440, 1600, 1920, 2560],
+    "a_qa": ".artifacts/1007-ab-shared-question-preview-v3/a-qa-v3/actual.json",
+    "a_qa_sha256": "38f1586d24753e06923287028b8b194d60618c878242a1df7ddf15cd598d098d",
+    "a_states": 12,
+    "a_failures": 0,
+    "a_modes": ["dense", "source", "filtered"],
+    "a_query": "32 IDs exactly match graph and primary table; Nemolizumab filter gives 4 posted counts in one group",
+    "source_values": [75, 78, 103, 111],
+    "original_line_points": 24,
+    "source_atom": "eff-7a82bfadf17f4066f213, value75, outcomeMeasures[2], NCT04501679 actual href",
+    "focus": "1440/2560 return to actual SVG path. 1600/1920 actual event path is disconnected by redraw; return to visible same-fact source button. Instrument captured the real production callback without changing its behavior.",
+    "b_v2_states": 24,
+    "b_v2_task_sha256": "09ec9d6d39c1ed0e7e4130d0b8363a469b1ba40bc79dc016523bd7493ef20ad7",
+    "b_v2_parallel_sha256": "448898470c6f58e5e347e4ebc7a6cd9ab55ec649be1e37d0ea98da8e6b79fa44",
+    "b_v2_glyph_source_sha256": "d9a7ada40bf7e9f0bfa70b39a54212e62cac643c75a5a6d26155110586471318",
+    "owner_viewed": ["A dense1440", "A dense2560"],
+    "pixel_scope": "2560 original retained; tool displayed at2048. Overall REVISE: unmatched A rows, English unit note, chronology and blank graphic controls remain to fix. No all-page aesthetic acceptance."
+  },
+  "failures_retained": [
+    "v1 A1920 graph below3034px despite same32 graph/table IDs; real layout REVISE",
+    "v2 original A QA wrong filter selector, then closed nested native filter; instrumentation failures retained, B terminal scopes unchanged",
+    "v2 A missing public provenance was a preview wiring error; absent line was wrong QA chart_type field, not missing production line",
+    "v2 A actual source-trigger focus loss was a product defect; fixed before new v3",
+    "v3 first A focus QA required a graphical trigger even after replacement; next elementFromPoint approximation recorded a different connected path. Real callback capture proves original-or-same-fact focus without weakening that rule"
+  ],
+  "author_sha256": {
+    "portal.js": "16bd75fb54d8577aad5d4dc1f0774df4b235aec4f171f55b07d951bb170db7a4",
+    "report-a.js": "955f2cd8666925b5559067e9cb039342146fde46cec93f07648c06a8f7181d7e",
+    "report-a.css": "d147bb057d94e81614857ca8094faf514ec8e2019bcef314ae74fcb6b337a12f",
+    "report-b.js": "f7dc4db5702802e7cbf70315880e65207e2ae7a6c7781fd42f427ae4955699e1"
+  },
+  "not_accepted": ["All A/B/C product/science/visual acceptance", "New committed current and edit/config/share journey", "Actual publication version adoption", "Full universe, verified MAH,24portals,3hosts,install,recovery,RC"],
+  "next_bounded_action": "Whitelist Git receipt; then shared chart/matrix reading root and source-specific publication version/correction witnesses. Preserve current32 and terminal source/save/share history; do not restart prior processes."
+}

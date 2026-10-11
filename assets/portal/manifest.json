@@ -10,8 +10,8 @@
    "bytes": 70440
   },
   "portal.js": {
-   "sha256": "908754009f9df476f1ebe6da0996c1a422f78e42c9953ee297ee23f675b52c32",
-   "bytes": 68096
+   "sha256": "16bd75fb54d8577aad5d4dc1f0774df4b235aec4f171f55b07d951bb170db7a4",
+   "bytes": 70314
   },
   "charts.js": {
    "sha256": "959a31eb7dcb9dcc76aef19eb6a1115d57f84b55b8a2bc838e40e0553d372f01",
@@ -30,16 +30,16 @@
    "bytes": 1121883
   },
   "report-a.js": {
-   "sha256": "8fcb66c347d85dfdb78754eb83346c40f5285b0d42c38598c609a05acf3b0801",
-   "bytes": 130526
+   "sha256": "955f2cd8666925b5559067e9cb039342146fde46cec93f07648c06a8f7181d7e",
+   "bytes": 130297
   },
   "report-a.css": {
-   "sha256": "ecbd2cdd7fe4911daeb0f18edd7348cbb40033d7f43d0e1497cfeda7db91c120",
-   "bytes": 9253
+   "sha256": "d147bb057d94e81614857ca8094faf514ec8e2019bcef314ae74fcb6b337a12f",
+   "bytes": 10112
   },
   "report-b.js": {
-   "sha256": "fe73af5879863291573fc2fec59b981ff5843858875ec37c84e44ea6b579bedd",
-   "bytes": 68247
+   "sha256": "f7dc4db5702802e7cbf70315880e65207e2ae7a6c7781fd42f427ae4955699e1",
+   "bytes": 65898
   },
   "report-b.css": {
    "sha256": "b334272689615d30eb12999b9c5468299cdbb806d83134cddb140d6e010c8b00",

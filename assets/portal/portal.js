@@ -228,6 +228,45 @@
         }
         observation.appendChild(details);
       }
+    }, plotGroups: function (workspace, groups, columns, allowed, displayed) {
+      // A/B share the physical query, not a new scientific grouping rule.
+      function visible(row) { return allowed[row.row_id] && displayed[row.row_id]; }
+      function selectRows(group, predicate) {
+        return Object.assign({}, group, {rows: group.rows.filter(predicate)});
+      }
+      var frames = groups.filter(function (group) {
+        return columns.some(function (column) {
+          return (column.scientific_facet_ids || [column.id])
+            .indexOf(group.scientific_group_id) !== -1;
+        });
+      }).map(function (group) {return selectRows(group, visible);})
+        .filter(function (group) {return group.rows.length;});
+      var trajectories = (workspace.longitudinal_groups || []).map(function (group) {
+        return selectRows(group, visible);
+      }).filter(function (group) {return group.rows.length > 1;});
+      var trajectoryIds = Object.create(null);
+      trajectories.forEach(function (group) {
+        group.rows.forEach(function (row) {trajectoryIds[row.row_id] = true;});
+        var label = columns.find(function (column) {
+          return (column.row_ids || []).indexOf(group.rows[0].row_id) !== -1 ||
+            Object.keys(column.cells || {}).some(function (study) {
+              return column.cells[study].indexOf(group.rows[0].row_id) !== -1;
+            });
+        });
+        if (label && label.question_known) group.title_zh = label.question_label;
+      });
+      var descriptive = (workspace.descriptive_groups || []).map(function (group) {
+        return selectRows(group, function (row) {return visible(row) && !trajectoryIds[row.row_id];});
+      }).filter(function (group) {return group.rows.length > 1;});
+      var descriptiveIds = Object.create(null);
+      descriptive.forEach(function (group) {
+        group.rows.forEach(function (row) {descriptiveIds[row.row_id] = true;});
+      });
+      return descriptive.concat(trajectories, frames.map(function (group) {
+        return selectRows(group, function (row) {
+          return !trajectoryIds[row.row_id] && !descriptiveIds[row.row_id];
+        });
+      }).filter(function (group) {return group.rows.length;}));
     }, recordScope: function (host, allowed, columns, displayed) {
       var questionRows = new Set();
       columns.forEach(function (column) {

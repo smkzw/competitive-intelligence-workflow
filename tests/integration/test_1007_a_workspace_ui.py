@@ -3,14 +3,19 @@
 import subprocess
 from pathlib import Path
 
+import pytest
 
-def test_a_matrix_filter_paging_linked_groups_and_fact_buttons():
+
+@pytest.mark.parametrize("case", ("existing", "mixed-question", "off-page", "descriptive",
+                                  "trajectory", "cleared-descriptive"))
+def test_a_matrix_filter_paging_linked_groups_and_fact_buttons(case):
     root = Path(__file__).resolve().parents[2]
     script = root / "src/ci_workflow/renderers/portal/assets/report-a.js"
     probe = r"""
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const source=fs.readFileSync(process.argv[1],'utf8');
 const common=fs.readFileSync(process.argv[2],'utf8');
+const which=process.argv[3];
 const start=source.indexOf('  function renderAComparison(');
 const end=source.indexOf('\n  window.__A_COMPARISON_EVIDENCE__',start);
 assert.ok(start>=0&&end>start);
@@ -62,7 +67,49 @@ if(orderStart>=0){
  sandbox.window.__COMPARISON_QUERY__=sandbox.createComparisonQuestionOrder();
 }
 vm.runInNewContext(source.slice(start,end),sandbox);
+if(which==='mixed-question'){
+ rows.other={...rows.a,row_id:'other',a_row_id:'source-other',value:88};
+ workspace.membership.row_ids.push('other');
+ columns[columns.length-1].cells['trial-a']=['other'];
+ groups[0].rows.push(rows.other);
+}else if(which==='off-page'){
+ groups[0].rows.push(rows.last);
+}else if(which==='descriptive'||which==='cleared-descriptive'){
+ if(which==='cleared-descriptive')Object.assign(rows.b,
+  {value:null,original_value:50,renderable:false,disclosure_state:'user_cleared'});
+ workspace.descriptive_groups=[{scientific_group_id:'descriptive',cross_trial:false,
+  comparison_purpose:'clinical_question_descriptive',rows:[rows.a,rows.b]}];
+}else if(which==='trajectory'){
+ workspace.longitudinal_groups=[{scientific_group_id:'source-line',cross_trial:false,
+  chart_type:'line',comparison_purpose:'within_source_measure_time_axis',rows:[rows.a,rows.b]}];
+}
+const immutable=JSON.stringify({rows,workspace,groups});
 sandbox.renderAComparison();
+if(which!=='existing'){
+ assert.equal(JSON.stringify({rows,workspace,groups}),immutable,'source payload not mutated');
+ const plotted=currentGroups.flatMap(g=>g.rows.map(r=>r.row_id)).sort();
+ const visible=JSON.parse(host.dataset.displayedRowIds).sort();
+ assert.equal(JSON.stringify(plotted),JSON.stringify(visible),
+  'graph is exactly current question/table page');
+ if(which==='descriptive'||which==='cleared-descriptive'){
+  const plot=currentGroups.find(g=>g.comparison_purpose==='clinical_question_descriptive');
+  assert.ok(plot,'A consumes the same source-posted question graph');
+  assert.equal(plot.cross_trial,false,'no new scientific permission');
+  assert.equal(plot.rows.length,2);
+  if(which==='cleared-descriptive'){
+   assert.equal(plot.rows[1].value,null);assert.equal(plot.rows[1].renderable,false);
+   assert.equal(plot.rows[0].value,0);
+  }
+ }else if(which==='trajectory'){
+  const plot=currentGroups.find(g=>g.comparison_purpose==='within_source_measure_time_axis');
+  assert.ok(plot,'A consumes source-local annotated line instead of scalar groups');
+  assert.equal(plot.title_zh,'EASI');assert.equal(plot.chart_type,'line');
+ }
+ sandbox.selected={product:['drug-b']};sandbox.renderAComparison();
+ assert.equal(currentGroups.flatMap(g=>g.rows.map(r=>r.a_row_id)).join(','),'source-b');
+ assert.equal(JSON.stringify({rows,workspace,groups}),immutable);
+ process.exit(0);
+}
 assert.equal(lookup['[data-a-comparison-question]'].value,'easi');
 assert.equal(lookup['[data-a-comparison-question]'].options.length,2);
 assert.equal(new URL(url).searchParams.get('cmp_page'),'1');
@@ -123,12 +170,15 @@ vm.runInNewContext(source.slice(callbackStart,callbackEnd),sandbox);
 const glyph=new Node();sandbox.window.__A_COMPARISON_EVIDENCE__('a',glyph);
 assert.equal(opened,glyph);assert.equal(glyph.attrs['data-evidence-row-id'],'source-a');
 assert.equal(glyph.attrs['data-evidence-collection'],'efficacy');
+assert.equal(glyph.attrs['tabindex'],'-1','canvas/SVG source trigger can receive Esc focus');
+assert.equal(glyph.attrs['data-chart-evidence-open'],'a','retain exact graphical fact identity');
 sandbox.window.__A_COMPARISON_EVIDENCE__('c',glyph);
 assert.equal(glyph.attrs['data-evidence-row-id'],'source-c');
 assert.equal(glyph.attrs['data-evidence-collection'],'safety');
 const prior=JSON.stringify(glyph.attrs);sandbox.window.__A_COMPARISON_EVIDENCE__('missing',glyph);
 assert.equal(JSON.stringify(glyph.attrs),prior); // unknown row does not open a default source
 """
-    result = subprocess.run(["node", "-e", probe, str(script), str(script.parent / "portal.js")],
+    arguments = ["node", "-e", probe, str(script), str(script.parent / "portal.js"), case]
+    result = subprocess.run(arguments,
                             capture_output=True, text=True)
     assert result.returncode == 0, result.stderr
