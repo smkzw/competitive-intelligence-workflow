@@ -175,6 +175,63 @@
     return String((row && (row.arm || row.group)) || "组别未列示");
   }
 
+  function groupedSeriesLabels(group) {
+    // Display qualification only: keep scientific series keys and point IDs.
+    // The full frame survives filtering, so a retained series keeps its name.
+    var rows = group._series_palette_rows || group.rows || [];
+    var labels = Object.create(null);
+    var studies = Object.create(null);
+    var sourceGroups = Object.create(null);
+    var names = Object.create(null);
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      var key = groupedSeriesKey(row);
+      if (!studies[key]) {
+        labels[key] = groupedSeriesLabel(row, key);
+        studies[key] = new Set();
+        sourceGroups[key] = new Set();
+        if (!names[labels[key]]) names[labels[key]] = [];
+        names[labels[key]].push(key);
+      }
+      var trial = String(row.trial_id || "");
+      if (/^nct[0-9]+$/i.test(trial)) trial = trial.toUpperCase();
+      if (!trial) {
+        var registered = String(row._chart_identity_key || "").split("::")[1] || "";
+        trial = /^nct[0-9]+$/i.test(registered) ? registered.toUpperCase()
+          : groupedIdentityLabel(row);
+      }
+      studies[key].add(trial);
+      sourceGroups[key].add(String(row.category_level || row.group_id || row.arm || key));
+    }
+    Object.keys(names).forEach(function (name) {
+      var keys = names[name];
+      if (keys.length < 2) return;
+      var qualified = Object.create(null);
+      keys.forEach(function (key) {
+        var context = Array.from(studies[key]).sort().join("、");
+        labels[key] = name + "（" + context + "）";
+        if (!qualified[labels[key]]) qualified[labels[key]] = [];
+        qualified[labels[key]].push(key);
+      });
+      Object.keys(qualified).forEach(function (label) {
+        if (qualified[label].length < 2) return;
+        var variants = Object.create(null);
+        qualified[label].forEach(function (key) {
+          labels[key] = label + " · " + Array.from(sourceGroups[key]).sort().join("、");
+          if (!variants[labels[key]]) variants[labels[key]] = [];
+          variants[labels[key]].push(key);
+        });
+        Object.keys(variants).forEach(function (variant) {
+          if (variants[variant].length < 2) return;
+          variants[variant].forEach(function (key) {
+            labels[key] = variant + " · " + key.split("\u0001")[0];
+          });
+        });
+      });
+    });
+    return labels;
+  }
+
   function identitySeriesStyle(group, key) {
     // Known clinical roles keep their existing mapping. Other source groups
     // are categorical identities, never inferred treatment/control roles.
@@ -297,7 +354,7 @@
     var rowsByCategory = {};
     var seriesRows = {};
     var seriesOrder = [];
-    var seriesLabels = {};
+    var seriesLabels = groupedSeriesLabels(group);
     var rowIds = collectRowIds(group);
     var unitLabel = "";
     var assignments = groupedCategoryAssignments(group.rows);
@@ -319,10 +376,7 @@
       }
       rowsByCategory[categoryKey][seriesKey] = row;
       seriesRows[seriesKey][categoryKey] = rowsByCategory[categoryKey][seriesKey];
-      if (!seriesLabels[seriesKey]) {
-        seriesLabels[seriesKey] = groupedSeriesLabel(row, seriesKey);
-      }
-      if (!unitLabel && row.unit) unitLabel = String(row.unit);
+      if (!unitLabel) unitLabel = String(row.unit_label_zh || row.unit || "");
     }
     categoryKeys.sort(function (left, right) {
       return String(categoryLabels[left]).localeCompare(String(categoryLabels[right]), "zh-Hans-CN")
@@ -453,7 +507,7 @@
         if (arm && arm !== "组别未列示") category += "\n" + arm;
       }
       categories.push(category);
-      if (!unitLabel && row.unit) unitLabel = row.unit;
+      if (!unitLabel) unitLabel = String(row.unit_label_zh || row.unit || "");
       var v = row.numeric_value != null ? row.numeric_value : row.value;
       seriesData.push({
           value: v,
@@ -1476,11 +1530,7 @@
   function renderIdentityLegend(container, group) {
     var keys = groupedSeriesOrder(group.rows || []);
     if (keys.length < 2) return null;
-    var labels = {};
-    for (var i = 0; i < group.rows.length; i += 1) {
-      var key = groupedSeriesKey(group.rows[i]);
-      if (!labels[key]) labels[key] = groupedSeriesLabel(group.rows[i], key);
-    }
+    var labels = groupedSeriesLabels(group);
     var legend = document.createElement("div");
     legend.className = "kz-chart-legend kz-chart-legend--identity";
     legend.setAttribute("aria-label", "完整组别图例");
@@ -1638,8 +1688,9 @@
       labelLength = assignments.reduce(function (longest, entry) {
         return Math.max(longest, entry.label.length);
       }, 0);
+      var visibleSeriesLabels = groupedSeriesLabels(group);
       labelLength = rows.reduce(function (longest, row) {
-        return Math.max(longest, groupedSeriesLabel(row, groupedSeriesKey(row)).length);
+        return Math.max(longest, visibleSeriesLabels[groupedSeriesKey(row)].length);
       }, labelLength);
     }
     var compactGrouped = assignments && entityCount <= 4 && seriesCount <= 5 &&

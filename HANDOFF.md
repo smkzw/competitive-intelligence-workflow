@@ -1,27 +1,23 @@
 # 唯一接手入口｜1007V1连续实施，非暂停、非RC
 
-唯一当前状态：[STATUS顶节](packets/2026-09-22-sol-delivery/STATUS.md)；[详细可恢复台账](packets/2026-09-22-sol-delivery/evidence/1007V1/current23-owner-operations-v1.json)；[current32精简证据](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-current32-density-provenance-v1.json)；[本批复盘](docs/handoffs/RETROSPECTIVE_20261011_current32.md)。历史暂停[current21](docs/handoffs/PAUSE_HANDOFF_20261010_current21.md)已由用户恢复，历史内容不改。
+唯一当前状态：[STATUS顶节](packets/2026-09-22-sol-delivery/STATUS.md)。本批[真实回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-compact-shared-reading-v2.json)与[复盘](docs/handoffs/RETROSPECTIVE_20261011_compact_shared_reading.md)；[原current32链](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-current32-density-provenance-v1.json)保留，不重放。
 
-## 最新实际结果
+## 本批真正完成
 
-最新用户正式要求见PRD文末2026-10-11裁决：A/B/C删除防御性说教、ECharts图+表、历时曲线+标注持续生效。当前只看[问题阅读v3回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-question-reading-v3.json)和[本批复盘](docs/handoffs/RETROSPECTIVE_20261011_question_reading.md)：首页真实中文问题/当前值、共享运行时自动说教删除、图/表/来源接线已实现；正常104页/1505事实/current32及16257文件保持，四宽24态0运行失败。但Owner目视和实际Gemini3.8flash单C02均REVISE，研究局部BG组身份/同名图例、重复身份墙、稀疏结果与真正横比矩阵未完成。11文件92PASS+身份9PASS；开发宽门实际两步FAIL，最小修复后全Ruff及28覆盖合同PASS，不称全仓新绿门。所有运行已终态，下文旧pending/PID禁止再等。下一实际根因族是系列身份/图例和问题层级，不删不同来源测量来美化，不以基线/单研究线代替多药临床横比。Goal active，无暂停/RC；五用户修改和唯一恢复证据保护。
+同名系列按真实研究显示，12图点/4研究原值与对应关系保持；图例、tooltip、测量计划共用名称。图前身份12次收拢为4研究，完整原组名/来源继续可达。单图使用全宽，多图沿用4/6/8/12列；修主网格分摊剩余高度、中文年龄/单位及内部页底说明。A残留说教缩成实际状态，原来源/守卫不删。用户最新“专家报告不说教、ECharts图+表、历时曲线+标注”持续为PRD合同。
 
-以下为此前现场历史，所有pending/旧PID字样只用于溯源，不是当前执行指令；当前唯一状态始终为STATUS顶节与新回执。
+新普通B只读v2：104页/1505事实/16257持久文件/current32保持，generation ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4。Ego四宽24态0运行失败；四宽补充实测单卡1382/1536/1843/2464px与容器同宽，来源/表/值/筛选保持。Owner看真实1440/2560基线、1440筛后、1920曲线，2560工具缩2048如实记录。
 
-**当前优先已变更**：用户对正常current32截图提出明确阅读否决；STATUS顶节为权威。原几何/运行/分享回执保持，但不等于产品视觉接受。共享导航/B中文主层及重复测量披露修复成族2RED→111相关PASS，正常只读预览104页/1505事实/16257持久文件不变；Ego新预览四宽24态已终态，但Owner阅读判定仍REVISE（首页泛化说明及原始产品标签）。独立C02阅读挑战runner78101/PID95852、kernel事件52958等待终态；冻结代码/预览，不读pending输出。论文E07窄证据44963/event71013已终态，只接受原字节/元数据，不接受全部事实历史资格；16RED事实截止测试未接线。详见[阅读修复回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-reading-hierarchy-preview-v1.json)与[本批阅读复盘](docs/handoffs/RETROSPECTIVE_20261011_reading_correction.md)。不要重跑任何已终态来源/保存链。
+单次开发宽门8128已terminal0：Ruff、strict286、活跃1185、兼容20、分层7、旧路径字面扫描六步通过。相关131PASS；新实屏根因5RED后150PASS/1测试结构错误，纠正测试后25PASS。不是全产品接受；没有新current/保存/分享/全页/24门户/三宿主/RC。
 
-- 批前HEAD/origin59ec68193d6152d3b1423d9c25f66658aa5869f8，五用户改动保留。最新候选32=A30/B32/C30/1505，generationae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4，正常B-only39643terminal0，1505facts/七表/15723历史文件/A+C交付exact，proof8733cfd2。54392宽门terminal0/source-setexact；66982真实四宽16态/B32原生配置通过；B及联合包6817正常export，3603移动四入口真断网/0FAIL/网络恢复，原修订清除来源保持。未继承31B证据，不称新浏览器或完整发布门。
-- B默认3匹配研究而非43空行占屏；全部46可达，未知/零/清除不混淆。筛选面板原生可滚动、16px字体、键盘/最后选项可达。28相关PASS；preview v2键盘仪器四FAIL保留，同源码v3 PageDown28态PASS。当前31四档宽屏16态与B31配置下载/异视图导入通过，来源/Esc实际回焦。
-- B31和联合ABC正常分享与移动目录逐hash核验；专用Profile3/space11复用四入口真断网通过，网络恢复。当前修订、清除/原值和配置保持；不是新环境/全前端/Skill安装验收。A/C单包未改，保留30证据。v1导出旧版本断言失败后复用已成功B，只补联合包，不重跑。
-- Publication原生118候选技术摄取E08已终态；whole118独立C03先REVISE，v5只补混合摘要四方法上下文，同会话针对性复核context-only ACCEPT。118raw/ID与117对象不变，22缺口保留；不是事实采用/历史日期/当前门户接受。follow-up preflightFAIL被Owner误启动，事后只读/身份/来源核验并留流程缺陷，不改历史或冒称治理通过。
-- 用户2026-10-11已明确：论文按具体事实版本截止前公开证据核发表及更正，最早公开日可未知；现行PRD/DESIGN/验收已更新。当前118版本资格未证实，Oct7 cutoff未改，晚取得原文不能倒证。
+## 紧接实施
 
-## 下一条有界动作
+整体阅读仍REVISE：筛到两条观察时原始值被折叠。先在既有组织函数完成稀疏结果直接可见，同查询图/表/来源，保留111受试者计数与另一16未解统计，不伪成率或趋势。随后正确共同维度的多药临床正向横比、同版操作/分享。不能以年龄图或单研究折线代替1007V1目标。
 
-1. 单次开发宽门92617已terminal0/source-set未变，Ruff/strict286/1185活跃/20兼容/7分层/字面旧路径全部通过，非发布门；精简证据/复盘白名单commit及push59ec6819已完成，勿重跑。
-2. E07两轮已terminal0，v1缺14raw；v2六CAS元数据可重开但06:55未来时间拒绝，原件保留。freshC0314726/event96887现terminal0，actualgrok/grok-build/grok-4.7/high770.737s/no fallback，Scoped challenge接受而非临床通过。新owner reconciliation精确acquired_at=null，只保真实runner窗口与原CAS；未核官方PMCflag不作全局否决。118仍未采用，不焊死未决计数；无需重派/重提整篇或等待旧PID。
-3. OwnerBscalar2RED→34PASS，v1实际1440FAIL保留；v2四宽24态通过，原值/时间/表格保持，整组高度减少28–63%。Owner看预览六图、当前1440矩阵与离线1920B；2560工具缩2048如实记录，只接受有界几何/交互。共用chronology6RED→92相关PASS/strict，当前32QA/config/分享/宽门已终态勿重跑。下一最小事实级版本资格门及窄更正/版本证明，然后必需论文/MAH/宇宙/24/宿主/恢复沿W00–W10继续。
+论文事实版本截止门仍16RED、118候选未采用；必需论文/MAH/宇宙/24/宿主/安装恢复按W00–W10继续。原生E01子句柄01a12a5b-444a-7ef1-b953-58f5dd58c4c1已终态，明确admit/spawn gpt-6.1-sol/max；已归档本次执行资料，不再等旧PID。未重派重复全页会商，之前C02独立REVISE保留。
 
-当前editor原33778/PID49138/53802；Ego2/p1实页和专用11/p1离线分享分开。不要等待旧PID或重跑完成的19接受/3989采用/886登记/795刷新/TESAE四次save/旧current/旧分享。只英文工程显式cwd和绝对patch；五用户修改、未知历史和唯一恢复资料保护。旧中文工程不接触；未来整体清理须确认无保留/恢复需要。
+## 保护与历史
 
-[前入口原样归档](docs/handoffs/HANDOFF_archive_20261011_before_current28.md)。全部科学/产品/跨浏览器/24门户/三宿主/安装恢复/RC尚未完成，不输出冻结或最终交付信号；继续实施。
+五用户改动hash保持、未提交；未知未跟踪与原失败/原图/唯一恢复证据保护。仅英文工程显式路径，旧工程不触碰。Ego2/p1用于预览，专用分享环境保留；不清日常缓存或会话历史。Goal active，不形成暂停点，不宣告交付。
+
+[前入口原样归档](docs/handoffs/HANDOFF_archive_20261011_before_compact_shared.md)；历史暂停已由用户恢复，不是当前阻塞。

@@ -1,8 +1,14 @@
 # 2026-10-11｜C阅读真实切片与来源定义缺口
 
+当前有界单元 `ci-1007-compact-shared-reading-v1`：execution，Owner管理共享图形系列名称，worker_01仅B作者JS/CSS与阅读测试，写集合分离。guard preflight与E01 native-admit实际PASS，原生新鲜子句柄`01a12a5b-444a-7ef1-b953-58f5dd58c4c1`明确请求gpt-6.1-sol/max已终态；三文件整合，worker11RED/3PASS→14PASS。Owner实际131相关PASS；新实屏五根因RED后150PASS/1测试返回结构错误，修正测试后25PASS。readonly compact-v2 104页/1505事实/16257文件/current32 exact，实际Ego四宽24态0FAIL及4宽12点/4研究/全宽测量PASS。单次开发门8128终态六步PASS，仅质量层，不是产品验收。代码检查中未变更源码。
+
+唯一本批入口owner-compact-shared-reading-v2.json与RETROSPECTIVE_20261011_compact_shared_reading.md；v1目视REVISE，v2过早QA环境FAIL零态保留。单图全宽/行不拉高/中文与页底内部说明已修；Owner代表图实看整体仍REVISE，稀疏两条当前值收起。下一既有组织器稀疏直接可见和图/表/依据，保留计数111及未解统计16不伪共轴；继续真正多药矩阵/同版分享与事实版本门。终态执行资料按guard归档可恢复、五用户hash保持不提交，未删历史。旧pending已关闭，不再等旧PID；Goal active，不暂停。
+
+纠正上一段根因判断：实际12glyph逐事实/值/研究映射全部正确，未知臂系列键已按来源标签拆分；不是科学分组丢失。两个不同key同叫“对照组”，可见图例与tooltip仍歧义，修显示身份不重分临床组。完整JSON见既有`series-inspection-v1.json`；不能采纳reviewer错误study例子或把局部BG组ID单独当跨研究实体。主层身份重复收拢到研究级，完整各组原始身份仍在现有详情。
+
 唯一当前终态以`owner-question-reading-v3.json`与STATUS顶节为准：全部本批执行/会商/render/QA/开发门已收，不再等下面任何pending/PID。Owner与actualGemini3.8flash/high配置C02均REVISE；十PNG实际image读取核验，371.169s/109tools/no fallback。正常只读104页/1505事实/16257项目文件/current32/source exact；qa-v4四宽24态0运行失败，92相关+9身份PASS。开发门初次Ruff WIP长行与现行C目录文案漂移两FAIL，最小分行/根当前目录同步后全Ruff/完整28合同PASS；不称新整体绿门，不改历史SHA/断言以掩盖漂移。
 
-Reviewer三个建议需Owner裁决：图例歧义/身份墙/表格任务裂开接受；按同单位同臂/同数值删除不同测量实例、固定4/12/24周直接跨研究对齐不采纳。实际共同BG000/BG001跨研究是局部ID复用，必须先修身份映射，不能只给错误系列贴后缀。下一有界成族修复该根因、问题主层身份/稀疏可见结果和真实矩阵；source值/current/share保持，16RED事实日期WIP未采用。现有原始候选/失败/PNG/runner均保留，公开白名单仅安全代码/精简回执/可移植配方，不清理未知历史。Goal active，不暂停。
+Reviewer三个建议需Owner裁决：图例歧义/身份墙/表格任务裂开接受；按同单位同臂/同数值删除不同测量实例、固定4/12/24周直接跨研究对齐不采纳。实际共同BG000/BG001跨研究是局部ID复用；后续逐glyph核验已证明键/值映射正确，同名显示歧义另修。下一有界成族修复图例、问题主层身份/稀疏可见结果和真实矩阵；source值/current/share保持，16RED事实日期WIP未采用。现有原始候选/失败/PNG/runner均保留，公开白名单仅安全代码/精简回执/可移植配方，不清理未知历史。Goal active，不暂停。
 
 以下为现场历史，pending不再代表当前工作；之前误写的“旧目录断言”已更正为两个现行目录文案不同，逐字合同仍保留。
 

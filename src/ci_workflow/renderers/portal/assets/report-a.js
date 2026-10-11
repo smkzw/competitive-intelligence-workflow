@@ -667,14 +667,14 @@
           sourceLink.rel = "noopener noreferrer";
           panel.appendChild(sourceLink);
         } else {
-          panel.appendChild(el("p", "kz-a-insight-note", "本条观察已保留来源原文与精确定位，但本报告未附可点击的同版原文链接；外部原文仍待核。"));
+          panel.appendChild(el("p", "kz-a-insight-note", "暂无来源链接"));
         }
       } else {
-        panel.appendChild(el("p", "kz-a-insight-note", "本条观察的逐事实原文尚未定位；报告级资料不能替代这条观察的依据。"));
+        panel.appendChild(el("p", "kz-a-insight-note", "暂无原文定位"));
       }
     }
     if (!publicSources.length) {
-      if (!selectedRow) panel.appendChild(el("p", "kz-a-insight-note", "此报告没有绑定可核验的具体公共来源；来源类别不能替代出处。"));
+      if (!selectedRow) panel.appendChild(el("p", "kz-a-insight-note", "暂无来源链接"));
       return;
     }
     appendInsightField(fields, "报告级来源数量", publicSources.length);
@@ -1020,7 +1020,7 @@
     });
     var keys = Object.keys(groups);
     if (!keys.length) {
-      host.appendChild(el("div", "kz-empty", "当前筛选没有可安全绘制的疗效图形；未绘制的原始值仍可在完整表中核对。"));
+      host.appendChild(el("div", "kz-empty", "当前筛选无疗效图形"));
       return;
     }
     var observationGrid = el("div", "kz-a-observation-grid");
@@ -1145,7 +1145,7 @@
     disclosure.setAttribute("data-unassigned-count", String(unassigned));
     host.appendChild(disclosure);
     if (!rows.length) {
-      host.appendChild(el("div", "kz-empty", "当前筛选没有可安全绘制的安全性图形；未绘制的原始值仍可在完整表中核对。"));
+      host.appendChild(el("div", "kz-empty", "当前筛选无安全性图形"));
       return;
     }
     var groups = {}, groupOrder = [];
@@ -1744,7 +1744,7 @@
       var collection = rowRef.collection === "efficacy" ? efficacy : rowRef.collection === "safety" ? safety : [];
       var selectedRow = collection.find(function (row) { return row.row_id === rowRef.rowId; });
       if (!selectedRow) {
-        content.appendChild(el("p", "", "当前观察无法定位；请勿据此判断已完成来源核验。"));
+        content.appendChild(el("p", "", "未找到所选观察"));
         return;
       }
       var isEfficacy = rowRef.collection === "efficacy";
@@ -1760,7 +1760,7 @@
           + selectedEdit.current_value + "｜原来源值：" + selectedEdit.original_value));
       }
       if (!selectedRow.source_version_id || !selectedRow.source_field_path || !selectedRow.source_text) {
-        content.appendChild(el("p", "", "逐事实来源尚未核验；报告级来源清单不能替代此观察的原文依据。"));
+        content.appendChild(el("p", "", "暂无原文定位"));
         return;
       }
       content.appendChild(el("p", "", "原文摘录：" + selectedRow.source_text));

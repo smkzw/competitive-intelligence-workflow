@@ -92,7 +92,13 @@ def test_projection_escaping_unknown_dates_and_drift(tmp_path: Path) -> None:
             tmp_path / "drift", public_provenance=public,
         )
     legacy = render_report_a_site(package.report_data, tmp_path / "legacy")
-    assert "未绑定可核验的公共来源谱系" in legacy[0].read_text()
+    # The latest expert-reading decision removes repetitive public disclaimers,
+    # not source absence, unsafe-URL rejection or immutable provenance records.
+    assert "未绑定可核验的公共来源谱系" not in legacy[0].read_text()
+    legacy_data = json.loads(
+        (legacy[0].parent / "data/report.js").read_text().split("=", 1)[1].rstrip(";\n")
+    )
+    assert legacy_data["public_sources"] == []
 
     from ci_workflow.renderers.portal.report_a import (
         ReportALineageBinding,

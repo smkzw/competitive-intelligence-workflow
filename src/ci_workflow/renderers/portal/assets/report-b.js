@@ -86,7 +86,12 @@
       if (!panel) {
         panel = document.createElement("section");
         panel.className = "kz-b-study-panel" + (sharedPlot ? " kz-b-shared-plot" : "");
-        if (sharedPlot) panel.dataset.sharedPlot = "cross-study";
+        if (sharedPlot) {
+          panel.dataset.sharedPlot = "cross-study";
+          // The shared renderer already chose the card's footprint. Move that
+          // footprint to the reading panel, without recalculating its plan.
+          panel.dataset.gridSpan = wrapper.getAttribute("data-grid-span") || "12";
+        }
         else panel.dataset.studyId = sourced ? String(row.trial_id) : "unresolved";
         var title = document.createElement("h3");
         if (sharedPlot) {
@@ -101,13 +106,12 @@
         }
         panel.appendChild(title);
         if (sharedPlot) {
-          var identities = [];
+          var identities = [], identityStudies = [];
           group.rows.forEach(function (entry) {
-            // Stable source identity leads the plot; full registry titles belong
-            // to the existing disclosure, not a concatenated English header.
-            var identity = [entry.product_zh, String(entry.trial_id || "").toUpperCase(), entry.arm]
-              .filter(Boolean).join("｜");
-            if (identity && identities.indexOf(String(identity)) === -1) identities.push(String(identity));
+            var trialId = String(entry.trial_id || "").toUpperCase();
+            if (!trialId || identityStudies.indexOf(trialId) !== -1) return;
+            identityStudies.push(trialId);
+            identities.push([entry.product_zh, trialId].filter(Boolean).join("｜"));
           });
           var identityLine = document.createElement("p");
           identityLine.className = "kz-b-shared-plot__identities";
@@ -175,8 +179,10 @@
         if (sharedPlot) {
           var fullIdentities = [];
           group.rows.forEach(function (entry) {
-            var fullIdentity = entry._chart_identity_label || entry.trial_zh;
-            if (fullIdentity && fullIdentities.indexOf(fullIdentity) === -1) fullIdentities.push(fullIdentity);
+            var armIdentity = [entry.product_zh, entry.trial_id, entry.arm].filter(Boolean).join("｜");
+            [entry._chart_identity_label, entry.trial_zh, armIdentity].forEach(function (identity) {
+              if (identity && fullIdentities.indexOf(identity) === -1) fullIdentities.push(identity);
+            });
           });
           var fullIdentityText = document.createElement("p");
           fullIdentityText.textContent = fullIdentities.join("；");

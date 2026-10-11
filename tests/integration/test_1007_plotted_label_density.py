@@ -35,7 +35,7 @@ for(const group of groups){
  for(const series of option.series)for(const point of series.data){
   if(point._row_id && point.value!==null){
    const row=group.rows.find(r=>r.row_id===point._row_id);
-   assert.equal(series.name,row._chart_series_label,
+   assert.ok(series.name.startsWith(row._chart_series_label),
     'one study group must not inherit another drug label');
   }
  }

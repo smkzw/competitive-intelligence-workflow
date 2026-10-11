@@ -63,12 +63,11 @@
         {% for source in external_sources %}
         <li>
           {% if source.url %}<a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">{{ source.label }}</a>{% else %}<span>{{ source.label }}</span>{% endif %}
-          {% if source.scope %}<span>｜覆盖：{{ source.scope }}</span>{% endif %}
         </li>
         {% endfor %}
       </ul>
       {% else %}
-      <p>本页未提供可公开链接；详细定位保留在数据依据中。</p>
+      <p>暂无来源链接</p>
       {% endif %}
     </div>
   </section>

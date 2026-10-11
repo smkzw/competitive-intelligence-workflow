@@ -1,0 +1,215 @@
+{
+  "schema": "owner-bounded-report-check/v1",
+  "state": "IMPLEMENTED_COMPACT_SHARED_READING_PRODUCT_REVISE",
+  "date": "2026-10-11",
+  "baseline_commit": "f7fe08e90aaec5ac57dfeb9354727cd4b6458ac5",
+  "goal": "ACTIVE_NOT_PAUSED",
+  "candidate": ".artifacts/1007-b-compact-shared-reading-v2",
+  "current_revision": 32,
+  "source_generation": "ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4",
+  "facts": 1505,
+  "physical_pages_rendered": 104,
+  "durable_files_unchanged": 16257,
+  "current_writes": 0,
+  "source_writes": 0,
+  "render_sha256": "0d6fb75ecba69b8e8431288ffb189cc805f6c8abcf65496fd7a4706b2af7fd36",
+  "qa_sha256": "18f40544d780f8d732e4ec35e75afc4a8c423eb96e7137484f634adf29c68df8",
+  "identity_sha256": "1f4d9319ba587c0962313d90d18d433762c979b905242e2b10211c33306e4b77",
+  "recipe": "e2e5a3af4128fc59ef0f9cafa52691ffafb619211013bdf34a377c4e35ab1da4",
+  "builder_sha256": "a1674d93f73852965687cbd0ad754f268a5d27d8f718ccd914b02fd4141a2d74",
+  "author_sha256": {
+    "assets/charts.js": "959a31eb7dcb9dcc76aef19eb6a1115d57f84b55b8a2bc838e40e0553d372f01",
+    "assets/kangzhe-site.css": "d64797987595edb1512a508cc30103da5c55bae750d6ac7aff595a1948467053",
+    "assets/kangzhe-site.js": "bbca876b4788c0f9536fd73191c30885cec945e7b07b8b423307670b41f38c6b",
+    "assets/portal.js": "3857f97ffd9ff6458f3259592a94857b99ffb3dc28eeaccad6899a058e13808f",
+    "assets/report-b.css": "fc145c5754cf0b683b27c1c0ac910157c0b61159470f2fa5c91ab9fca7ac89e4",
+    "assets/report-b.js": "567aacb5e773c09f57ba49efe5244e92acebdd2e0fcaf7693b8fe972135e6546",
+    "report_a.py": "86f682a51feac1585a25ef6636969a5098bebb01bf3b07eaa77d21f3dc97cd67",
+    "report_b.py": "18ea983c6773f3a8f6842df313499abf992512b3dc8e7405a4cc840eead44856",
+    "templates/b/base.html.j2": "5d8b7283e4ba10937e867b4f2cbe9da444565c1f11e5c4c5c2a6b18fc4f67210",
+    "templates/b/page.html.j2": "32ab72fc1102b37ede6ae87b67031e326e0227ca7fb2988dca331238f39eec6e"
+  },
+  "overview_sha256": "195490f130e2bb2594ac915258df59f1bd59b60f730ed6fd87b1fafbe88ec0a5",
+  "geometry": [
+    {
+      "width": 1440,
+      "alignContent": "start",
+      "panelWidth": 1382.40625,
+      "moduleWidth": 1382.40625,
+      "panels": 1,
+      "points": 12,
+      "studies": 4,
+      "labels": [
+        "对照组（NCT04183335、NCT04202679）",
+        "来源组：Nemolizumab",
+        "对照组（NCT04501666、NCT04501679）",
+        "来源组：Dupilumab 300 mg Q2W",
+        "来源组：Total"
+      ]
+    },
+    {
+      "width": 1600,
+      "alignContent": "start",
+      "panelWidth": 1536,
+      "moduleWidth": 1536,
+      "panels": 1,
+      "points": 12,
+      "studies": 4,
+      "labels": [
+        "对照组（NCT04183335、NCT04202679）",
+        "来源组：Nemolizumab",
+        "对照组（NCT04501666、NCT04501679）",
+        "来源组：Dupilumab 300 mg Q2W",
+        "来源组：Total"
+      ]
+    },
+    {
+      "width": 1920,
+      "alignContent": "start",
+      "panelWidth": 1843.203125,
+      "moduleWidth": 1843.203125,
+      "panels": 1,
+      "points": 12,
+      "studies": 4,
+      "labels": [
+        "对照组（NCT04183335、NCT04202679）",
+        "来源组：Nemolizumab",
+        "对照组（NCT04501666、NCT04501679）",
+        "来源组：Dupilumab 300 mg Q2W",
+        "来源组：Total"
+      ]
+    },
+    {
+      "width": 2560,
+      "alignContent": "start",
+      "panelWidth": 2464,
+      "moduleWidth": 2464,
+      "panels": 1,
+      "points": 12,
+      "studies": 4,
+      "labels": [
+        "对照组（NCT04183335、NCT04202679）",
+        "来源组：Nemolizumab",
+        "对照组（NCT04501666、NCT04501679）",
+        "来源组：Dupilumab 300 mg Q2W",
+        "来源组：Total"
+      ]
+    }
+  ],
+  "screenshots": {
+    "B-complete-table-1440.png": "1e1794768b61ee7b807555d0958816e3a4944d6b507eebb60fb330141878a399",
+    "B-complete-table-1600.png": "335c0b130c12f5afe77d3e77eec4d7e80c4555a8decbc4f653da706c0ff74587",
+    "B-complete-table-1920.png": "12e567f19f841e06fa2e05ce215b26876aa2c82af4cc0581b9384dd0c788cb1c",
+    "B-complete-table-2560.png": "1d8dab8c03cdc0792878e12e8e023c27f8b12aa1903939cea6e739926f972b14",
+    "B-dense-1440.png": "0d1890c2aa5bda691de63f5731e1da1e6065b819ce6007b0b3c9227905459913",
+    "B-dense-1600.png": "18d344a6161f5765344a0172eb24392087d250418720309b7025b4c8fe21ae64",
+    "B-dense-1920.png": "914f9976fb3a5065319799c98c2858cd3a6dee1e50f2d12d1d51b20b16729c5a",
+    "B-dense-2560.png": "605cec5d7a8cb2003cf3b134f7df6a3e28cbea4763316c2c12dce2892c0fe323",
+    "B-filtered-sparse-1440.png": "e03be1e1f941c4ff623fef29f71d26b439edb0bf77acf9d66a9c9200a9d85bed",
+    "B-filtered-sparse-1600.png": "00a32eb6ac9d9d111143a3cdc3df329b1a0ba62389ae8a7fa958d8d3039ef0c3",
+    "B-filtered-sparse-1920.png": "100693dfc8520bd3784ee30b54f9a6ce3d0138bfdc92a8c4ba8da38e0c1006d8",
+    "B-filtered-sparse-2560.png": "224c8b3255dd38406bf40de64db57f3ef6f97a3ff5595df9c2af6fef3c03dac7",
+    "B-home-1440.png": "eee8a5223afbb9e948ca2a6666683741b894b17578e25ff6787ebcf4b884b679",
+    "B-home-1600.png": "f612500a97848af79b0eca66b44e7b07e5d401c7e4b9c691f181e4bd32e4dae2",
+    "B-home-1920.png": "b4e2c77a4a0e17fce5f3f86901e660cd85815a8247f9ec667ac14d27414f94ef",
+    "B-home-2560.png": "bbe87d681701ea23dc4d0e7edd48d2a128c4ce6df0110f1de123fabe2bb6d094",
+    "B-shared-baseline-1440.png": "e1f48302906170c98ddbb9d489b8401fdcfee6e77758cf93cb0a1a2728595756",
+    "B-shared-baseline-1600.png": "9b6f4b64203f51650181ec074f8add35410da81ea1bae3c1995b81689a7e366e",
+    "B-shared-baseline-1920.png": "b245fe09b1ac246cf5b70f362eba2e1817001ec671f0cdfd740f8f11cabfb6d2",
+    "B-shared-baseline-2560.png": "79d472c19bf0fdb916af9b7bd7ce26793a54251649ced3cb2c8e455634948bf4",
+    "B-source-1440.png": "f34e9e98e1b417f86ae4ae5bbe26e758a60034544e537987c1b0f2362ef477e8",
+    "B-source-1600.png": "da15a70bf7270d06de0d2a9982393c12e19fa473c6f82b279bd24a5aa53a777f",
+    "B-source-1920.png": "e08b56adcc08881d2a99db992d2ea0eae8df73f9ed6fab3253708ea61c50f30f",
+    "B-source-2560.png": "ed564b3fef5eed1a0b951bcecea38cfb91ce35498e8f563ce11b890da3a69166"
+  },
+  "checks": [
+    {
+      "scope": "Legend identity and related production regression family",
+      "result": "131_PASS",
+      "seconds": 6.53
+    },
+    {
+      "scope": "Actual desktop root family",
+      "result": "5_RED"
+    },
+    {
+      "scope": "Expanded14files",
+      "result": "150_PASS_1_TEST_HARNESS_ERROR",
+      "seconds": 7.45,
+      "detail": "New test treated a production tuple as an object; corrected test shape, no scientific identity change."
+    },
+    {
+      "scope": "Corrected desktop/legend/baseline/expert-copy four files",
+      "result": "25_PASS",
+      "seconds": 1.56
+    },
+    {
+      "scope": "Node syntax charts/report-a/report-b",
+      "result": "PASS"
+    },
+    {
+      "scope": "Full src/tests/tools Ruff",
+      "result": "PASS"
+    },
+    {
+      "scope": "Single milestone tools/gate.sh",
+      "result": "QUALITY_ONLY_PASS_6_STEPS",
+      "detail": "Ruff src/tests/tools PASS; strict src/tools286 files PASS; active unit/contract1185PASS20deselected288.67s; retained compatibility smoke20PASS0.66s; layering7PASS0.22s; lexical legacy scanPASS. Session8128 terminal0, not a release or all-integration/visual gate. No code changes during this gate."
+    },
+    {
+      "scope": "Ego Lite space2/p1 four desktop widths",
+      "result": "24_TASK_RUNTIME_STATES_ZERO_FAILURES",
+      "detail": "Native actual point source57.7, source return/Esc, complete table,32-to2filter,24source visits and four-study baseline. Not final clinical comparison acceptance."
+    },
+    {
+      "scope": "Measured identity/geometry supplement",
+      "result": "4_WIDTHS_ZERO_FAILURES",
+      "detail": "12points/fourstudies per width. Panel equals module available width. All point values/studies preserved; five distinct legend labels, colors stable in production probes."
+    }
+  ],
+  "worker": {
+    "native_child": "01a12a5b-444a-7ef1-b953-58f5dd58c4c1",
+    "admitted_requested_model": "gpt-6.1-sol",
+    "admitted_requested_effort": "max",
+    "status": "COMPLETED_SCOPED_CODE_INTEGRATED",
+    "fallback": null,
+    "backend_identity": "NOT_SEPARATELY_INSPECTED",
+    "duration_seconds": null,
+    "tool_count": null,
+    "red": "11_FAILED_3_PASSED",
+    "green": "14_PASSED",
+    "owner_verification": "Actual three-file diff reviewed, integrated production probes and real browser. Owner further corrected tested CSS/display seams."
+  },
+  "conference": {
+    "new_conference": "NOT_DISPATCHED",
+    "prior_fresh_review": "owner-question-reading-v3.json",
+    "detail": "Prior C02 actual Gemini3.8flash/high REVISE supplies concrete objections; no repeated whole-page review to close objective legend/geometry fixes. No new final independent product/clinical acceptance."
+  },
+  "owner_pixel_observations": [
+    "Direct1440baseline,2560baseline,1440filtered,1920longitudinal;2560image tool resized to2048, original2560PNG retained.",
+    "Single shared graph now uses available desktop width; native age title/unit, unique study-qualified control labels corrected; duplicate12 identities reduced to4study headers. Full arm/source identities remain in existing details.",
+    "OverallREVISE: filtered two observations still hidden in a closed source-record disclosure; clinical multidrug positive matched matrix/home task are not complete. Do not manufacture a curve from count111 and a second unresolved statistic16."
+  ],
+  "retained_failures": [
+    "compact-v1 actual pixels REVISE despite24runtime states0failures; no historical PASS rewrite.",
+    "compact-v2 qa-v4 failed ERR_FILE_NOT_FOUND because Owner started QA before render completed.0states; sequencing/environment failure, not product failure. Recipev3 prechecks render terminal and uses new qa-v5.",
+    "Task recorder copies state before extra identities are attached. Core probes executed but detailed measurements were not persisted there. Separate4width identity-geometry-actual.json supplements the exact same candidate, without replaying the24task chain.",
+    "Review-gate initially lacked generic Boundary/Hermes headings. Added truthful native-only boundary, then gate passed; no Hermes run claimed."
+  ],
+  "acceptance": {
+    "code": "SCOPED_PASS",
+    "geometry": "SINGLE_PANEL_WIDTH_AND_ROW_STRETCH_FIXED",
+    "clinical_equivalence": "NOT_NEW_ACCEPTANCE",
+    "product_visual": "REVISE",
+    "a_c_actual_browser": "NOT_RUN_THIS_CANDIDATE",
+    "current_edit_clear_undo_config_share": "NOT_REPLAYED_OLD_ACCEPTANCE_NOT_INHERITED",
+    "all_physical_pages": "NOT_RUN",
+    "cross_browser": "NOT_RUN",
+    "real24_portals": "NOT_COMPLETE",
+    "three_hosts_fresh_install_recovery": "NOT_COMPLETE",
+    "rc": "NOT_FROZEN"
+  },
+  "next_safe_action": "One sparse-filter visibility family on existing production organizer: show actual current observations/table/source when no main plot is present; preserve unknowns/count/unit/source frames. Then meaningful multi-drug clinical matrix, same-candidate actions/shares; source fact public-version cutoff remains16RED/unadopted118. Do not rerun old source/current/save/share terminal jobs.",
+  "protected_user_files": "Five hashes match prior baseline; not staged. Unknown untracked and sole recovery evidence retained.",
+  "resources": "Two owned normal candidates about280MB each, unique rejected/checked evidence retained. Only terminal execution packet archived by guard after scoped review-gate; no historical deletion."
+}

@@ -1,5 +1,15 @@
 # 唯一当前状态：1007V1连续实施｜current32阅读体验被用户否决，正在修正，非RC
 
+当前唯一本批：[共享阅读v2回执](evidence/1007V1/owner-compact-shared-reading-v2.json)及[复盘](../../docs/handoffs/RETROSPECTIVE_20261011_compact_shared_reading.md)。Goal active。E01原生新鲜子节点明确admit/spawn gpt-6.1-sol/max，已终态；三个readonly render/实际QA/补充测量及单次宽门全已终态，不等旧PID。图例按研究消除同名、12身份收为4研究、单图全宽/多图计划、主网格不拉高行、中文年龄单位及页底工程说明已修；科学身份/原值/current/source保持。
+
+正常compact-v2 B104页/1505事实/16257持久文件/current32/genae95ab2d不变；Ego四宽24态零运行失败，另四宽12glyph/4研究及容器全宽实测通过。Owner实看代表图：宽度/拉高空白/标签修正，但筛后两条数值仍收起，整体产品REVISE。2560PNG在工具中缩2048，原2560保留。不借年龄共享图或24访视线签临床多药正向横比；新保存/分享/全页/跨浏览器/24门户/三宿主/RC未验。
+
+开发门8128单次terminal0，Ruff/strict286/活跃1185PASS288.67s/保留兼容20/分层7/字面旧路径六步PASS，仅开发质量范围。相关131PASS，新实屏5RED后150PASS/1新测试结构错误，修后四文件25PASS。compact-v1真实视觉REVISE及v2过早启动QA的FILE_NOT_FOUND零态失败原样保留；后续仪器先检查render终态，用新qa-v5记录，不重建同字节候选。独立C02意见仍作为输入，不重复派全页审查，不伪造新独立验收。
+
+下一有界实现：现有organizeComparisonCharts补稀疏观察直接可见与同查询图/表/来源；真实111为计数，另一16统计/关系未闭合，不补比例或假曲线。随后真正多药临床矩阵、同版操作与分享，再来源事实版本16RED/118未采用及W00–W10余项。五用户hash保持，未知文件不清；本次终态执行包仅归档可恢复，两个约280MB候选为唯一证据不删。
+
+以下所有段落为此前历史现场，不是当前待等/待重跑任务；上方最新回执及根HANDOFF为唯一恢复入口。
+
 最新接续只用[问题阅读v3精简回执](evidence/1007V1/owner-question-reading-v3.json)与[本批复盘](../../docs/handoffs/RETROSPECTIVE_20261011_question_reading.md)。Goal active；E05/C02/三个普通render/四个QA/开发门全部终态，不再等下文任何旧PID。本批Home中文问题+当前值、真实时间、共享自动说教banner源头移除、同问题图/表入口已实现；正常只读104页/1505事实/16257持久文件/current32/source保持，五用户hash exact。
 
 v3冻结字节的qa-v4四宽24态0运行失败；v1索引错误和v2/v3固定导航遮挡点击失败均保留，v4只增加真实滚动后原生点击，无force click。Owner目视与单C02实际Gemini3.8flash/high配置371.169s均REVISE：共享图的研究局部BG组ID/图例身份、重复身份墙、稀疏筛后可见结果及真正矩阵仍待修。不能用同值/同单位去删不同测量实例，也不能用年龄基线或单研究历时线充当多药临床正向横比。新源/current/edit/share/24/hosts/RC未验。

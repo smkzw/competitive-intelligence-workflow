@@ -9,9 +9,12 @@ ASSETS = ROOT / "src" / "ci_workflow" / "renderers" / "portal" / "assets"
 def test_grouped_bar_legend_uses_the_same_colors_as_the_bars() -> None:
     source = (ASSETS / "charts.js").read_text(encoding="utf-8")
 
-    assert 'var seriesColor = String(key).split(":")[0] === "control"' in source
-    assert "itemStyle: { color: seriesColor }" in source
-    assert "color: seriesColor" in source
+    # Shared source identity styling supersedes the old two-color local variable.
+    # Actual point/legend equality is exercised by the production Node probe in
+    # test_1007_series_legend_identity, including filtered and reordered frames.
+    assert "var seriesStyle = identitySeriesStyle(group, key);" in source
+    assert "var style = identitySeriesStyle(group, keys[j]);" in source
+    assert "swatch.style.backgroundColor = style.color;" in source
 
 
 def test_grouped_bar_category_does_not_repeat_identity_under_the_legend() -> None:
@@ -68,8 +71,11 @@ def test_product_drawer_does_not_label_report_sources_as_product_provenance() ->
 
     assert "var publicSources = data.public_sources || [];" in source
     assert 'appendInsightField(fields, "报告级来源数量", publicSources.length)' in source
-    assert "不代表每份来源都支持当前产品" in source
-    assert "来源类别不能替代出处" in source
+    assert "不代表每份来源都支持当前产品" not in source
+    assert "来源类别不能替代出处" not in source
+    assert "报告级资料不能替代" not in source
+    assert "报告级来源清单不能替代" not in source
+    assert "可安全绘制" not in source
 
 
 def test_a_bubble_number_has_named_product_legend_and_accessible_identity() -> None:
@@ -101,7 +107,7 @@ def test_c_evidence_explanation_does_not_expose_internal_identifiers() -> None:
     assert "observation.row_id" not in explanation
 
 
-def test_b_safety_uses_chinese_event_labels_and_explains_heatmap_color() -> None:
+def test_b_safety_uses_chinese_event_labels_without_expert_lectures() -> None:
     renderer = (
         ROOT / "src" / "ci_workflow" / "renderers" / "portal" / "report_b.py"
     ).read_text(encoding="utf-8")
@@ -125,9 +131,9 @@ def test_b_safety_uses_chinese_event_labels_and_explains_heatmap_color() -> None
         "因治疗期间不良事件停止治疗",
     ):
         assert label in renderer
-    assert "颜色按各图注明的指标与单位呈现" in template
-    assert "事件数、受累人数和比例不可互换" in template
-    assert "不同口径的色阶不可直接比较" in template
+    assert "颜色按各图注明的指标与单位呈现" not in template
+    assert "事件数、受累人数和比例不可互换" not in template
+    assert "不同口径的色阶不可直接比较" not in template
     assert "颜色深浅仅表示同一图内发生率高低" not in template
 
 

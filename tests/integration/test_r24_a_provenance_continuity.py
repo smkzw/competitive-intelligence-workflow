@@ -114,7 +114,7 @@ def test_ordinary_presentation_render_passes_verified_public_sources(
     assert seen[0]["public_provenance"].sources[0].url.endswith("NCT00000001")
 
 
-def test_legal_a_b_save_and_clear_preserve_source_links_and_limitations(
+def test_legal_a_b_save_and_clear_preserve_sources_without_expert_disclaimers(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     original_renderer = edit_fixtures.render_report_a_site
@@ -162,8 +162,10 @@ def test_legal_a_b_save_and_clear_preserve_source_links_and_limitations(
         assert report_js["public_sources"] == expected_sources
         assert report_js["public_sources"][0]["url"].endswith("NCT04558918")
         html = (site / "safety.html").read_text()
-        assert "开发候选，不作临床结论。" in html
-        assert "非医学验收依据" in html
+        assert "开发候选，不作临床结论。" not in html
+        assert "非医学验收依据" not in html
+        assert report_js["public_sources"][0]["limitation"] == "非医学验收依据"
+        assert 'href="https://clinicaltrials.gov/study/NCT04558918"' in html
     assert source_html.read_bytes() == original_bytes
 
 

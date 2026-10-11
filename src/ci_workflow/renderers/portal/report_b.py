@@ -1727,6 +1727,8 @@ def _b_native_label(text: str) -> str | None:
     if not out:
         return out
     out = _NATIVE_LABELS.get(out, out)
+    # Display grammar only; do not replace the source concept or its key.
+    out = re.sub(r"^Age,\s*Continuous$", "年龄（连续变量）", out, flags=re.I)
     out = out.replace("Other events", "其他不良事件")
     # 括号配平提前：纯中文串也可能带孤立括号（B r50 issue-3）
     cleaned_chars = []

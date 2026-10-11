@@ -1,5 +1,6 @@
 """Question-led B comparison reading. Presentation only, not clinical acceptance."""
 
+import re
 import subprocess
 from pathlib import Path
 
@@ -12,6 +13,11 @@ import pytest
     "filtered_sparse",
     "heading_source_targets",
     "shared_long_source_titles",
+    "shared_repeated_studies",
+    "shared_grid_span_4",
+    "shared_grid_span_6",
+    "shared_grid_span_8",
+    "shared_grid_span_12",
 ))
 def test_question_reading_leads_with_scoped_plots_without_merging_frames(case: str) -> None:
     root = Path(__file__).resolve().parents[2]
@@ -73,11 +79,17 @@ function row(id,study,extra){
   _chart_identity_label:(study==='NCT04501666'?'奈莫利珠单抗｜OLYMPIA':'度普利尤单抗｜PRIME2')};
  Object.assign(value,extra||{});rows[id]=value;return value;
 }
-function wrapperFor(group,index){
+function wrapperFor(group,index,span=12){
  const wrapper=new Node();wrapper.className='kz-chart-module__group';
  wrapper.setAttribute('data-group-index',index);
+ // These attributes already belong to the shared renderer's PresentationPlan.
+ wrapper.setAttribute('data-grid-span',span);
+ wrapper.setAttribute('data-observation-count',group.rows.length);
  const title=new Node('h3');title.className='kz-chart-group__title';
  title.textContent=group.title_zh;
+ const context=new Node('p');context.className='kz-chart-group__context';
+ context.textContent='完整源研究、分析集与观察时间';
+ const unit=new Node('p');unit.className='kz-chart-group__unit';unit.textContent='原始单位：%';
  const single=group.rows.length===1;
  const chart=new Node();chart.className='kz-chart-group__chart'+
   (single?' kz-chart-group__chart--single-fact':'');
@@ -97,8 +109,10 @@ function wrapperFor(group,index){
  const summary=new Node('summary');summary.textContent='完整表';details.appendChild(summary);
  const table=new Node('table');table.setAttribute('data-group-index',index);
  details.appendChild(table);
- wrapper.appendChild(title);wrapper.appendChild(chart);wrapper.appendChild(details);
+ wrapper.appendChild(title);wrapper.appendChild(context);wrapper.appendChild(unit);
+ wrapper.appendChild(chart);wrapper.appendChild(details);
  wrapper.__title=title;wrapper.__details=details;wrapper.__buttons=chart.querySelectorAll('button');
+ wrapper.__context=context;wrapper.__unit=unit;wrapper.__chart=chart;wrapper.__table=table;
  return wrapper;
 }
 const module=new Node();module.id='kz-chart-module';
@@ -178,7 +192,7 @@ if(which==='filtered_sparse'){
  assert.equal(records.querySelectorAll('.kz-chart-module__group').length,2);
  assert.equal(sandbox.window.__CHART_GROUPS__.length,2,'status follows the recomputed groups');
  assert.ok(sandbox.window.__CHART_GROUPS__.every(group=>group.rows.every(item=>item.trial_id==='NCT04501666')));
-}else if(which==='cross_study_positive'||which==='shared_long_source_titles'){
+}else if(which==='cross_study_positive'||which.startsWith('shared_')){
  const first={scientific_group_id:'frame-shared',numeric_frame:{id:'frame-shared'},cross_trial:true,
   identity_series:true,title_complete:true,title_zh:LONG,rows:[
    row('shared-a','NCT04202679',{time:'Week 24',value:56}),
@@ -189,15 +203,28 @@ if(which==='filtered_sparse'){
     _chart_identity_label:'度普利尤单抗｜PRIME2',time:'Week 16'}),
    row('other-c','NCT99999999',{product_zh:'另一产品',trial_id:'NCT99999999',
     _chart_identity_label:'另一产品｜OTHER',time:'Week 16'})]};
- const groups=[first,second];const before=JSON.stringify(groups);
+ if(which==='shared_repeated_studies'){
+  const studies=['NCT04202679','NCT04501666','NCT90000001','NCT90000002'];
+  first.rows=studies.flatMap((study,index)=>[0,1,2].map(arm=>row('study-'+index+'-arm-'+arm,
+   study,{trial_id:arm===1?study.toLowerCase():study,value:56,arm:'原始组别'+arm,
+    trial_zh:LONG+'｜登记研究'+index,
+    _chart_identity_label:'完整源身份｜'+study+'｜原始组别'+arm})));
+ }
+ const groups=[first,second];
  if(which==='shared_long_source_titles')groups.forEach(group=>group.rows.forEach(item=>{
   item.trial_zh=LONG.repeat(4);item._chart_identity_label=LONG.repeat(4);
  }));
  const frozen=JSON.stringify(groups);
- const cards=groups.map((group,index)=>wrapperFor(group,index));
+ const span=which.startsWith('shared_grid_span_')?Number(which.split('_').pop()):6;
+ const cards=groups.map((group,index)=>wrapperFor(group,index,span));
+ const sourceButtons=cards.flatMap(card=>card.__buttons);
+ sourceButtons.forEach(button=>button.addEventListener('click',function(){
+  calls.push(button.getAttribute('data-row-id'));
+ }));
+ const listeners=sourceButtons.map(button=>button.listeners.click[0]);
  cards.forEach(card=>module.appendChild(card));
  sandbox.organizeComparisonCharts(groups,{study_labels:{},columns:[{question_known:true,
-  question_label:QUESTION,row_ids:['shared-a','shared-b']},{question_known:true,
+  question_label:QUESTION,row_ids:first.rows.map(item=>item.row_id)},{question_known:true,
   question_label:'皮损IGA达到0/1',row_ids:['other-a','other-c']}]});
  assert.equal(JSON.stringify(groups),frozen,'layout must not merge or rewrite numeric frames');
  assert.equal(module.querySelectorAll('.kz-chart-module__group').length,2);
@@ -207,18 +234,51 @@ if(which==='filtered_sparse'){
  shared.forEach(panel=>{byQuestion[panel.children[0].textContent]=panel;});
  const primary=byQuestion[QUESTION];
  assert.equal(primary.dataset.sharedPlot,'cross-study');
+ assert.equal(primary.dataset.gridSpan,String(span),
+  'the existing PresentationPlan span belongs to the outer plot card');
  assert.notEqual(primary.dataset.studyId,'NCT04202679');
  assert.doesNotMatch(primary.children[0].textContent,/原比较框|NCT04202679|待核/);
  const identities=primary.querySelector('.kz-b-shared-plot__identities');
  assert.ok(identities&&identities.parentElement===primary);
  assert.match(identities.textContent,/度普利尤单抗｜NCT04202679/);
  assert.match(identities.textContent,/奈莫利珠单抗｜NCT04501666/);
+ assert.doesNotMatch(identities.textContent,/真实治疗组|原始组别/,
+  'arm identities belong to the legend and full disclosure, not a repeated study heading');
  assert.doesNotMatch(identities.textContent,/Percentage of Participants/);
  if(which==='shared_long_source_titles')assert.ok(text(cards[0].__details).includes(LONG));
  assert.equal(byQuestion['皮损IGA达到0/1'].dataset.sharedPlot,'cross-study');
  assert.match(byQuestion['皮损IGA达到0/1'].querySelector('.kz-b-shared-plot__identities').textContent,/另一产品｜NCT99999999/);
  assert.doesNotMatch(byQuestion['皮损IGA达到0/1'].querySelector('.kz-b-shared-plot__identities').textContent,/奈莫利珠单抗/);
  assert.equal(cards[0].__title.parentElement.className,'kz-complete-table');
+ cards.forEach(card=>{
+  assert.equal(card.getAttribute('data-grid-span'),String(span),'do not rewrite the shared plan');
+  assert.equal(card.__context.parentElement,card.__details);
+  assert.equal(card.__unit.parentElement,card.__details);
+  assert.ok(module.querySelectorAll('.kz-chart-group__chart').includes(card.__chart));
+  assert.equal(card.__details.querySelector('table'),card.__table,
+   'reuse the complete source table');
+ });
+ assert.deepEqual(ids(module),groups.flatMap(group=>group.rows.map(item=>item.row_id)).sort(),
+  'every original fact target remains reachable, even when values and arms repeat');
+ sourceButtons.forEach((button,index)=>{
+  assert.ok(module.querySelectorAll('button').includes(button));
+  assert.equal(button.listeners.click[0],listeners[index]);
+  button.listeners.click[0]();
+ });
+ assert.deepEqual(calls,sourceButtons.map(button=>button.getAttribute('data-row-id')));
+ if(which==='shared_repeated_studies'){
+  assert.equal(first.rows.length,12);
+  const studies=['NCT04202679','NCT04501666','NCT90000001','NCT90000002'];
+  assert.equal(identities.textContent.split('；').length,studies.length,
+   'twelve facts across four studies need four heading identities');
+  studies.forEach(study=>assert.equal(identities.textContent.split(study).length-1,1));
+  first.rows.forEach(item=>{
+   const disclosure=text(cards[0].__details);
+   assert.ok(disclosure.includes(item._chart_identity_label),'retain the complete source identity');
+   assert.ok(disclosure.includes(item.trial_zh),'retain the original registry title');
+   assert.ok(disclosure.includes(item.arm),'retain every original arm identity');
+  });
+ }
  assert.ok(!module.querySelector('.kz-b-study-records'));
  assert.doesNotMatch(text(module),/不代表|不等于|证据是否充分|边界|限制/);
 }else{
@@ -268,3 +328,26 @@ if(which==='filtered_sparse'){
         capture_output=True, text=True, check=False,
     )
     assert result.returncode == 0, result.stderr
+
+
+@pytest.mark.parametrize("span", (4, 6, 8, 12))
+def test_shared_plot_geometry_places_existing_plan_on_the_outer_card(span: int) -> None:
+    root = Path(__file__).resolve().parents[2]
+    css = (root / "src/ci_workflow/renderers/portal/assets/report-b.css").read_text(
+        encoding="utf-8",
+    )
+    selector = f'.kz-b-shared-plot[data-grid-span="{span}"]' if span < 12 else ".kz-b-study-panel"
+    selectors = {
+        selector: f"grid-column:span{span};" if span < 12 else "grid-column:1/-1;",
+        ".kz-b-shared-plot .kz-b-measurement-observations > .kz-chart-module__group":
+            "grid-column:1/-1;",
+        ".kz-b-shared-plot:has(.kz-complete-table[open])": "grid-column:1/-1;",
+    }
+    for selector, required in selectors.items():
+        match = re.search(re.escape(selector) + r"\s*\{([^}]+)\}", css)
+        assert match is not None, selector
+        block = re.sub(r"\s+", "", match.group(1))
+        assert required in block
+        assert not any(token in block for token in (
+            "font-size", "height:", "overflow:hidden", "ellipsis", "line-clamp", "!important",
+        )), "layout must not shrink, clip or override chart content"
