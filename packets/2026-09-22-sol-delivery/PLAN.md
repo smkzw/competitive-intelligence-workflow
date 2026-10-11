@@ -1,6 +1,6 @@
 # 当前执行｜1007V1已恢复，沿用W00–W10
 
-60228已terminal0六步quality-only（Ruff/strict286/1185活跃/20兼容/7分层/字面旧路径），唯一最新证据owner-primary-matrix-fact-gate-v1.json。本批源/测试/资产已freeze验证，下一有界阶段事实版本公共门复用与B/C接线、真实临床多药共列/联动图+表及同版操作；旧current32来源/保存/配置/分享不重放。以下pending描述是历史，Goal active，整体非RC。
+最新终态owner-query-source-wiring-v1.json：共同A/B历史门与原生JATS日接通，六文件117PASS、strict3/具名Ruff；B图表当前query交集76相关PASS，正常只读104页四宽24态运行通过。源/current32未写，118未采用。下一有界任务复用C已存在的观察→事实转换并绑定完整科学设计材料、真实版本/更正见证，以及真正临床多药共同列/联动ECharts+主表；后续同版操作/分享及完整W门不缩减。60228只绑定上一源码，本批不重复宽门，不重放旧来源/保存/分享；以下pending均历史。Goal active，整体非RC。
 
 本批事实版本A入口已经Owner51相关+生产提交35PASS/独立冻结C03 scoped ACCEPT，真实论文/B/C专属入口尚未验；不再把原16反例列作未实现，也不将118候选直接采用。60228是当前里程碑一次宽门，待真实终态后白名单Git；随后继续同源历史证明/B-C输入及多药临床共同列/联动ECharts+表，同版保存分享和全W门仍必需。只有需要用户新决策才暂停。
 

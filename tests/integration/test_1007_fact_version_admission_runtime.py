@@ -226,6 +226,26 @@ def _late_paper(text: str) -> dict[str, Any]:
     )
 
 
+def test_shared_availability_checks_only_unavailable_facts_and_all_supplied_proofs() -> None:
+    from ci_workflow.application.fresh_research_primitives import (
+        validate_source_or_fact_historical_availability,
+    )
+
+    text = _paper_text()
+    product = _product_fact()
+    sources = [SourceCapture.model_validate(item) for item in [_late_paper(text), _legacy_source()]]
+    facts = [ResearchFact.model_validate(item) for item in [product, _trial_fact()]]
+    before = [source.model_dump(mode="json") for source in sources]
+    validate_source_or_fact_historical_availability(sources, facts, [_proof(text, product)], CUTOFF)
+    assert [source.model_dump(mode="json") for source in sources] == before
+    with pytest.raises(ValueError, match="fact-product"):
+        validate_source_or_fact_historical_availability(sources, facts, [], CUTOFF)
+    forged = _proof(text, product)
+    forged["fact_id"] = "unknown-fact"
+    with pytest.raises(ValueError, match="unknown-fact"):
+        validate_source_or_fact_historical_availability(sources, facts, [forged], CUTOFF)
+
+
 def test_fresh_a_admits_referenced_fact_without_rewriting_disclosure() -> None:
     text = _paper_text()
     product = _product_fact()

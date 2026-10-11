@@ -1,8 +1,8 @@
 # 唯一当前状态：1007V1连续实施｜current32阅读体验被用户否决，正在修正，非RC
 
-最新完整本批终态：[主矩阵/事实版本开发门](evidence/1007V1/owner-primary-matrix-fact-gate-v1.json)。60228已exit0，六步quality-only：Ruff、strict286、活跃1185PASS308.64s、兼容20、分层7、旧路径字面扫描通过。代码/测试/资产保持冻结；规范/指引在开发门期间更新，非冻结安装/发布包门。E03/C03/普通B render/四宽QA/生产submit全部终态，不等待下文任何旧PID或pending。A逐事实版本机械门已实现、独立scoped ACCEPT；真实118零采用，B/C专属资格及真实见证未验。主矩阵default-open已实际四宽24态/Owner核像素，真实多药临床共同图及同版操作/全终验仍待完成。五用户hash exact、未知资料保护，Goal active。本批白名单Git后接续新有界任务，不暂停。
+最新完整本批终态：[查询/来源接线v1](evidence/1007V1/owner-query-source-wiring-v1.json)及[复盘](../../docs/handoffs/RETROSPECTIVE_20261011_query_source_wiring.md)。B生产query交集3RED→76相关PASS；普通只读104页/1505/current32/16257保持，四宽24态0FAIL、Owner1440/2560目视，整体REVISE。共同A/B历史门及原生JATS日期接通，Owner六文件117PASS19.65s、Ruff/strict3通过；两真实日期节点2PASS，事实资格/采用0。B执行11569及NOTE_EXIT18839已terminal0，实际GLM-5.3-Flash:max verified，1017.039s/34tools；fallback解释冲突保留。60228仅为上一冻结源码开发门，本批未跑新整仓门。下一C完整设计材料绑定与真实多药临床共享列/ECharts+表，实际版本更正/同版操作/全W门仍待完成。Goal active，不暂停。
 
-以下均为原时点历史现场；最新状态仅以上六步回执及根HANDOFF，不改原失败/hash、不重跑已终态任务。
+以下均为原时点历史现场；最新状态仅以上查询/来源回执及根HANDOFF，不改原失败/hash、不重跑已终态任务。
 
 最新科学接线终态：[逐事实版本v1](evidence/1007V1/owner-fact-version-admission-v1.json)及[复盘](../../docs/handoffs/RETROSPECTIVE_20261011_fact_version_gate.md)。原16RED已在实际A研究包接通，Owner新增7RED后51相关PASS/strict/Ruff；独立C03实际GLM5.3Flash既定fallback，30PASS并接受冻结源码0d1f8feda的有界实现。正常submit/reopen/旧复核拒绝追加35PASS，源码不改。真实118候选仍零采用，B/C入口、真实日期格式/跨源更正见证仍待验证。E03/C03全终态，不等50525/54891或旧PID；原执行预检FAIL误启动及fallback理由未消歧保留，不称全治理通过。里程碑开发门60228在途，尚未签PASS；前端候选保持原冻结字节。Goal active，无暂停。
 

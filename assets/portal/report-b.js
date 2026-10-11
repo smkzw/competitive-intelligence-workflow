@@ -380,7 +380,12 @@
         return (column.scientific_facet_ids || [column.id]).indexOf(group.scientific_group_id) !== -1;
       });
     }).map(function (group) {
-      return Object.assign({}, group, {rows: group.rows.filter(function (row) {return allowed[row.row_id];})});
+      // A science facet can contain several descriptive question bindings.
+      // Its identity selects the frame, not extra members outside this table
+      // page's query. Preserve cleared/zero members; never borrow a sibling.
+      return Object.assign({}, group, {rows: group.rows.filter(function (row) {
+        return allowed[row.row_id] && displayed[row.row_id];
+      })});
     }).filter(function (group) {return group.rows.length;});
     // Source-qualified within-measure trajectories are a descriptive time view,
     // not a re-adjudication of the clinical question's numeric science facets.

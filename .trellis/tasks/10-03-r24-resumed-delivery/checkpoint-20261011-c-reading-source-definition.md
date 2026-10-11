@@ -430,3 +430,14 @@ E05已terminal0，不再等待runner12082/PID27545或NOTE_EXIT42922：真实Pi/c
 真正目视发现共享图前的原始英文身份墙，成族2RED→修短身份+保留完整身份于同图表披露；11文件92PASS/5.29s。旧强制Film断言迁移至真实mount/dispose行为，旧强制“分析人群不同，不共轴”迁移为不显示套话且原始上下文不改的断言，另9PASS/0.35s。不回退生产呈现讨好旧断言。原v1 QA wrapper索引错误、v2/v3真实点击被固定导航遮挡的失败均保留。两次遮挡后换假设：实际CSS滚动边距存在，控件仍部分在导航后；显式真实滚动至可见后原生点击成功，不force-click、不改DOM状态。v4仅修验收操作，在同一冻结v3目录的qa-v4保存新证据，不再渲染或改原失败。
 
 历史启动记录：render80647/QA94669/门27358/C02当时曾待终态；现全部已收，见顶节精简回执，不再等待或重放。五用户hash exact，日期WIP仍未采用、不入本批。继续当前局部研究/组身份与真实横比根因，不重放旧论文/编辑/分享链。
+# 下一有界批｜eb4948ac已push，连续实施
+
+选择execution：共同历史绑定器由Owner维护，B的独立两文件接线有明确验收且可与Owner真实横比组织工作并行；没有新增临床判断，仅复用上一冻结独立接受规则，不另开同题会商。原E02语义抽取草稿未dispatch，已按有限代码E03重初始化；新prompt实际preflight0/no warnings才启动。公共函数1RED→32相关PASS，旧A摘要/事实级独立门不变；B不继承科学许可。只读current32/五用户dirty/旧根零接触。整仓宽门已60228终态，不为本批重复。
+
+E03 actual session11569/PID76945已启动，hard7200s；不读pending报告、不固定轮询。Owner图表Q泄漏族3RED：同facet不同question不应把兄弟记录带入当前图；最小query intersection修复，第一相关批73PASS/3FAIL系新probe VM跨realm数组原型断言（两侧同ID），保留。改成精确JSON集合比对后76PASS2.56s，原真RED不是仪器错误。作者report-b.js已正常同步镜像，Node2脚本检查PASS；启动时新正常readonly候选query-scope-v1 browser pending记录保留，后续终态见下，不切current、不签临床共轴。
+
+Owner第四批实际终态：普通query-scope-v1只读104页/1505事实/16257持久文件；同字节Ego2/p1四宽24态0FAIL，图/主表32→2/12一致，真实57.7来源/Esc可用。Owner看1440dense及2560筛后（工具缩2048），整体视觉仍REVISE。生产反例3RED→76相关PASS；真实候选2709列无混题facet，故实际浏览器只签邻接回归，不伪称真实混题正例。首次QA错误钉QA结果hash而非配方hash，浏览器前失败保留，修新配方未改旧字节。
+
+共同历史门1RED→32PASS；JATS原生电子日族5RED/6PASS→103相关PASS，具名Ruff/strict两生产文件通过。只重开既有两份XML日期节点，原quote452023/17122025、原源hash保持；2个日期节点PASS，临床事实资格/采用0。无需新依赖或重复全文提取。C已发现既有research_facts_from_c_observations，后续复用并绑定完整DesignObservation材料，不仅source_text。
+
+B执行11569/PID76945与退出事件18839已terminal0；实际ZCode/GLM-5.3-Flash:max请求/响应身份verified，1017.039s/34tools。Owner完整两文件diff/测试审查，合并六文件117PASS19.65s及Ruff/strict3通过；无新宽门或科学采用。primary return0/session与fallback解释不一致保留。完整紧凑回执owner-query-source-wiring-v1.json，下一C完整科学材料历史门/真实版本见证与临床多药图表，不重跑旧PID/源/事务。

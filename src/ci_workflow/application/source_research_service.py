@@ -3865,11 +3865,26 @@ class FactPublicVersionProof(BaseModel):
         return dict(value)
 
 
-def _public_quote_is_exact(evidence: DateEvidence, quote: str) -> bool:
-    """The witness quote must be the public date itself, not a nearby phrase."""
+def _public_quote_is_exact(evidence: DateEvidence, quote: str, source: SourceCapture) -> bool:
+    """Bind literal dates or native electronic-date components, never body prose."""
     value = evidence.value
     if evidence.state != "reported" or value is None:
         return False
+    if source.media_type in {"application/xml", "text/xml"}:
+        # The caller has already replayed the exact quote with bounded XML /
+        # entity rejection. Reuse the existing complete electronic-date rule;
+        # concatenated XML text is not an invented ISO date witness.
+        if evidence.precision != "calendar_day":
+            return False
+        declared = _declared_electronic_publication_day(source.content_text.encode("utf-8"))
+        if declared is None:
+            return False
+        day, ordinal = declared
+        return (
+            evidence.locator.field_path ==
+            f"/article/front[1]/article-meta[1]/pub-date[{ordinal}]"
+            and value == datetime.combine(day, time.min, tzinfo=UTC)
+        )
     if evidence.precision == "calendar_day":
         return quote == f"{value.year:04d}-{value.month:02d}-{value.day:02d}"
     return quote == value.astimezone(UTC).isoformat()
@@ -3951,7 +3966,7 @@ def _bind_fact_public_version_proof(
     )
     if (
         public_fragment.source_version_id != version_id
-        or not _public_quote_is_exact(proof.public_by, public_fragment.original_text)
+        or not _public_quote_is_exact(proof.public_by, public_fragment.original_text, source)
     ):
         raise ValueError(f"公开日与引用日期不一致：{fact.fact_id}")
     if not proof.public_by.is_known_by(cutoff):
@@ -4037,6 +4052,35 @@ def validate_research_historical_availability(
         raise ValueError("事实缺少截止日前已公开的版本证明：" + "、".join(missing))
 
 
+def validate_source_or_fact_historical_availability(
+    sources: Sequence[SourceCapture],
+    facts: Sequence[ResearchFact],
+    proofs: Sequence[FactPublicVersionProof | Mapping[str, Any]],
+    cutoff: datetime,
+) -> None:
+    """Reuse source-date qualification, with a bound proof per unavailable fact."""
+    referenced = {fact.source_id for fact in facts}
+    unavailable_ids = {
+        source.source_id for source in sources if not source.is_available_by(cutoff)
+    }
+    if unavailable_ids - referenced:
+        raise ValueError(_HISTORICAL_SOURCE_VETO)
+    needed = [fact for fact in facts if fact.source_id in unavailable_ids]
+    needed_ids = {fact.fact_id for fact in needed}
+    if not proofs and not needed:
+        return
+    try:
+        parsed = _parsed_fact_public_version_proofs(sources, facts, proofs, cutoff)
+        if needed:
+            supplied = [proof for proof in parsed if proof.fact_id in needed_ids]
+            proved_ids = {proof.fact_id for proof in supplied}
+            missing = [fact.fact_id for fact in needed if fact.fact_id not in proved_ids]
+            if missing:
+                raise ValueError("事实缺少截止日前已公开的版本证明：" + "、".join(missing))
+    except ValueError as error:
+        raise ValueError(f"{_HISTORICAL_SOURCE_VETO}：{error}") from error
+
+
 class FreshAResearchContent(BaseModel):
     """独立复核前可规范化、可摘要的 A 类科学内容。"""
 
@@ -4060,35 +4104,9 @@ class FreshAResearchContent(BaseModel):
 
     def _admit_by_source_or_fact_proof(self) -> None:
         """Source veto remains, except facts that carry their own valid proof."""
-        referenced = {fact.source_id for fact in self.facts}
-        for source in self.sources:
-            if source.is_available_by(self.data_cutoff):
-                continue
-            if source.source_id not in referenced:
-                raise ValueError(_HISTORICAL_SOURCE_VETO)
-        unavailable_ids = {
-            source.source_id
-            for source in self.sources
-            if not source.is_available_by(self.data_cutoff)
-        }
-        needed = [fact for fact in self.facts if fact.source_id in unavailable_ids]
-        needed_ids = {fact.fact_id for fact in needed}
-        supplied = [
-            proof for proof in self.fact_public_version_proofs if proof.fact_id in needed_ids
-        ]
-        if not self.fact_public_version_proofs and not needed:
-            return
-        try:
-            if self.fact_public_version_proofs:
-                verify_fact_public_version_evidence(
-                    self.sources, self.facts, self.fact_public_version_proofs, self.data_cutoff,
-                )
-            if needed:
-                validate_research_historical_availability(
-                    self.sources, needed, supplied, self.data_cutoff,
-                )
-        except ValueError as error:
-            raise ValueError(f"{_HISTORICAL_SOURCE_VETO}：{error}") from error
+        validate_source_or_fact_historical_availability(
+            self.sources, self.facts, self.fact_public_version_proofs, self.data_cutoff,
+        )
 
     @model_validator(mode="after")
     def _content_is_closed(self) -> Self:

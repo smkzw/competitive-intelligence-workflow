@@ -8,6 +8,7 @@
 
 失败关闭合同（v1.3/R2.4）：
 - 适应症/数据截止不一致（来源在截止后首次披露、证据快照摘要或截止不一致）；
+- 截止时点前不可用的来源事实缺少逐事实绑定的公开版本证明；
 - 独立科学复核被拒绝、复核身份与生产者相同或复核摘要与重算摘要不一致；
 - 关键医学语义字段缺失（由 B-v1 GateSpec 逐对象评估失败关闭）；
 - 报告类型不一致（``report_kind`` 只接受 ``B``）。
@@ -31,11 +32,13 @@ from typing import Any, Literal, Self
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from ci_workflow.application.fresh_research_primitives import (
+    FactPublicVersionProof,
     ResearchClaim,
     ResearchFact,
     RouteAttempt,
     ScientificReview,
     SourceCapture,
+    validate_source_or_fact_historical_availability,
 )
 from ci_workflow.domain.enums import FactDisclosureState, FactReviewState, ReportKind
 from ci_workflow.domain.evidence import EvidenceLocator
@@ -461,6 +464,9 @@ class FreshBResearchContent(BaseModel):
     route_attempts: tuple[RouteAttempt, ...] = ()
     facts: tuple[ResearchFact, ...] = Field(min_length=1)
     claims: tuple[ResearchClaim, ...] = Field(min_length=1)
+    fact_public_version_proofs: tuple[FactPublicVersionProof, ...] = Field(
+        default=(), max_length=4096, exclude_if=lambda value: not value,
+    )
     report_data: ReportBPortalData | None = None
 
     @field_validator("project_id", "indication", "report_version", "producer_id")
@@ -785,12 +791,17 @@ def _assert_fact_coverage(content: FreshBResearchContent, source_set: set[str]) 
 
 
 def _assert_sources_within_cutoff(content: FreshBResearchContent) -> None:
-    for source in content.sources:
-        if not source.is_available_by(content.data_cutoff):
-            raise ValueError(
-                "截止日之后或无法证明截止时点前首次披露的来源不得进入当前 B 类快照："
-                f"{source.source_id}"
-            )
+    """复用共享的来源或事实版本历史可用性门。
+
+    来源日期资格失败关闭；截止时点前不可用的来源，仅当其每个事实都携带
+    绑定该事实的公开版本证明时才可进入当前 B 类快照。
+    """
+    validate_source_or_fact_historical_availability(
+        content.sources,
+        content.facts,
+        content.fact_public_version_proofs,
+        content.data_cutoff,
+    )
 
 
 # ── GateSpec 评估：宇宙快照与证据绑定构建 ────────────────────────────────────

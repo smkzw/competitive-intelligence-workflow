@@ -22,6 +22,9 @@ import pytest
     "shared_grid_span_6",
     "shared_grid_span_8",
     "shared_grid_span_12",
+    "mixed_question_facet",
+    "mixed_question_zero",
+    "mixed_question_clear",
 ))
 def test_question_reading_leads_with_scoped_plots_without_merging_frames(case: str) -> None:
     root = Path(__file__).resolve().parents[2]
@@ -214,6 +217,40 @@ if(which.startsWith('filtered_')){
  assert.equal(sandbox.window.__CHART_GROUPS__.length,selectedIds.length,
   'status follows the recomputed groups');
  assert.ok(sandbox.window.__CHART_GROUPS__.every(group=>group.rows.every(item=>item.trial_id==='NCT04501666')));
+}else if(which.startsWith('mixed_question_')){
+ const a=row('known-a','NCT04202679',{value:which==='mixed_question_zero'?0:56});
+ const b=row('known-b','NCT04501666',{value:48});
+ if(which==='mixed_question_clear')Object.assign(b,
+  {value:null,disclosure_state:'user_cleared',renderable:false,original_value:48});
+ const other=row('other-question','NCT90000001',{value:15});
+ // One retained scientific frame may have distinct descriptive question
+ // bindings. Choosing one question must not copy its sibling into the plot.
+ const groups=[{scientific_group_id:'shared-facet',cross_trial:false,rows:[a,b,other]}];
+ const frozen=JSON.stringify(groups);
+ sandbox.fullChartGroups=groups;
+ sandbox.window.__B_COMPARISON_WORKSPACE__={study_ids:Object.keys(rows).map(id=>rows[id].trial_id),
+  study_labels:{},membership:{row_ids:Object.keys(rows)},columns:[{
+   id:'known-column',question_id:'known-question',question_known:true,
+   question_label:QUESTION,title:QUESTION,scientific_facet_ids:['shared-facet'],
+   row_ids:['known-a','known-b'],cells:{NCT04202679:['known-a'],NCT04501666:['known-b']}},
+  {id:'unresolved-column',question_id:'unresolved-question',question_known:false,
+   question_label:'另一测量',title:'另一测量',scientific_facet_ids:['shared-facet'],
+   row_ids:['other-question'],cells:{NCT90000001:['other-question']}}]};
+ sandbox.renderComparisonWorkspace({});
+ assert.equal(JSON.stringify(groups),frozen,
+  'query projection must leave scientific frames unchanged');
+ assert.deepEqual(ids(table),['known-a','known-b']);
+ assert.deepEqual(ids(module),ids(table),
+  'plot and primary matrix must have the same current query');
+ assert.equal(JSON.stringify(sandbox.window.__CHART_GROUPS__.flatMap(g=>g.rows.map(r=>r.row_id)).sort()),
+  JSON.stringify(['known-a','known-b']));
+ // A zero or cleared member remains in the selected query; no row is borrowed
+ // from the next question just because it shares a facet identifier.
+ assert.equal(rows['known-a'].value,which==='mixed_question_zero'?0:56);
+ if(which==='mixed_question_clear')assert.equal(rows['known-b'].disclosure_state,'user_cleared');
+ select.value='unresolved-question';select.listeners.change[0]();
+ assert.deepEqual(ids(table),['other-question']);
+ assert.deepEqual(ids(module),['other-question']);
 }else if(which==='cross_study_positive'||which.startsWith('shared_')){
  const first={scientific_group_id:'frame-shared',numeric_frame:{id:'frame-shared'},cross_trial:true,
   identity_series:true,title_complete:true,title_zh:LONG,rows:[
