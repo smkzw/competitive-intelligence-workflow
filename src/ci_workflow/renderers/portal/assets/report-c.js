@@ -947,21 +947,12 @@
 
     var note = document.createElement("p");
     note.className = "kz-c-criteria-note";
-    note.textContent = designMode
-      ? "按设计要素与研究并列来源条款；同类字段不代表终点、人群或时间窗等价。"
-        + "同一研究内，终点的定义、时间点与完整定义原文只在显式实例身份完整一致时"
-        + "组合为一个终点实例；实例上下文缺失或矛盾时保持独立列示并给出原因，"
-        + "不同研究之间不按序号或标题配对。各观察分别保留，不汇总或取第一条；"
-        + "可检索当前内容与完整原文，并核对来源。检索未命中的同实例事实以上下文"
-        + "标记展示，不计入命中条数。"
-      : "按研究并列各条登记原文，仅作原始记录逐一对照；"
-      + "不按并列位置推断条款等价，序号是各研究登记原文顺序编号，不代表排名或临床可比。"
-      + "点击条款可读全文，来源按钮可核对登记记录。";
+    note.textContent = "按研究检索与对照条款；点击查看全文和来源。";
     if (designMode) {
       var method = document.createElement("details");
       method.className = "kz-c-criteria-method";
       var methodSummary = document.createElement("summary");
-      methodSummary.textContent = "条款组合与检索说明（并列不代表临床等价）";
+      methodSummary.textContent = "条款检索";
       method.appendChild(methodSummary);
       method.appendChild(note);
     } else {
@@ -1246,10 +1237,7 @@
       if (designMode) table.style.minWidth = Math.max(1, shownTrials.length) * 300 + 168 + "px";
       var caption = document.createElement("caption");
       caption.className = "kz-c-criteria-table-caption";
-      caption.textContent = designMode
-        ? "设计要素与完整来源条款（同一研究内实例身份完整一致时组合终点实例；"
-          + "同类字段并列不代表临床等价；编号保留本研究条款顺序）"
-        : "各研究登记原文逐条对照（按各研究登记顺序编号；并列仅为原始记录对照）";
+      caption.textContent = designMode ? "设计要素与来源条款" : "研究条款对照";
       table.appendChild(caption);
       var thead = document.createElement("thead");
       var headRow = document.createElement("tr");

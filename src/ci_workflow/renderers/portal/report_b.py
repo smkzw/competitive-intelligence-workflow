@@ -2739,7 +2739,7 @@ def _project_record(
             )),
         )
     if unassigned_product:
-        warning = "结果组别与产品关联待核；原始值保留，不进入产品间共轴比较"
+        warning = "组别与产品关联待核"
         result["difference_note"] = "；".join(
             item for item in (result["difference_note"], warning) if item
         )
@@ -3094,9 +3094,7 @@ def _synthetic_status_records(
                     "disclosure_state": "not_applicable",
                     "status": "未形成封闭 typed 比较",
                     "reason": (
-                        "当前数据包未形成经验证的试验内疗效—安全性比较；"
-                        "原因需核对对照、人群、统计口径和来源版本，"
-                        "不等于研究未公开结果"
+                        "疗效—安全性配对数据待整理"
                     ),
                 }
             )
@@ -3366,21 +3364,18 @@ def _evidence_view(
     user_edit = data.user_edits.get(row_id)
     if located and user_edit is not None:
         explanation = (
-            "当前数值由用户清除，待重新核实；原始来源值和定位仍可查。"
+            "用户清除，待重新核实。"
             if state == "user_cleared"
-            else "当前数值由用户修订，尚未独立复核；原始来源值和定位仍可查。"
+            else "用户修订。"
         )
     elif located:
         explanation = f"该记录保留来源披露状态：{_state_label(state)}。"
     else:
-        explanation = (
-            "该观察仍可检索；逐事实来源版本、原文和精确定位待核，"
-            "不能作为已验科学结论。"
-        )
+        explanation = "来源定位待核。"
     if located and _text(_first(source, "review_state", default="")) == "candidate":
-        explanation += " 已定位原始来源，但尚未完成独立复核，不能作为已验科学结论。"
+        explanation += " 待复核。"
     if row.get("group_assignment_state") == "unknown":
-        explanation += " 结果组别与产品关联待核；原始值可查，不进入产品间共轴比较。"
+        explanation += " 组别与产品关联待核。"
     report_row = ReportRow.model_construct(
         row_id=row_id,
         fact_id=_source_row_id(source, row_id),
@@ -4045,9 +4040,7 @@ def _dress_membership_groups(
         actual_times = _actual_observation_times(bucket)
         if actual_times:
             title += " · 实际观察时间：" + " / ".join(actual_times)
-        time_note = (("同研究同组的描述性随访，不代表跨研究等价或时间点相同"
-                      if page_id == "longitudinal-results" else
-                      "同框仅表示临床构念兼容，不代表时间点相同")
+        time_note = ("观察时间：" + " / ".join(actual_times)
                      if len(actual_times) > 1 else None)
         # 独立复核 B r39（issue-2）：合并标记按"事实是否发生"判定——
         # 仅当桶内确实合并了多个登记臂（或分组键含未知值且臂缺失）时标注；
@@ -5387,9 +5380,7 @@ def _comparison_workspace(
         prior["actual_times"] = tuple(dict.fromkeys(
             (*prior["actual_times"], *column["actual_times"]),
         ))
-        prior["time_window_note_zh"] = (
-            "同一临床问题下描述性并列；条件差异保留，不代表数值可以共轴。"
-        )
+        prior["time_window_note_zh"] = "观察时间：" + " / ".join(prior["actual_times"])
         # True means at least one constituent facet is already qualified for
         # cross-trial comparison, never that this column union is a frame.
         prior["cross_trial"] = prior["cross_trial"] or column["cross_trial"]
@@ -5651,17 +5642,7 @@ def _render_page_context(
             [
                 {"label": "资料范围", "text": (
                     f"本资料包列示 {len(data.products)} 个产品、"
-                    f"{len(data.all_studies)} 项研究；"
-                    "不能据此认定竞品检索已完整，范围与缺口需结合来源核查。")},
-                {"label": "疗效证据", "text": (
-                    "疗效观察按终点、人群与观察窗分组，与数据表同源；"
-                    "数据依据逐条显示来源定位状态，未定位记录不能视为已验科学结论。")},
-                {"label": "安全性证据", "text": (
-                    "事件数、受累人数和比例按来源口径分别呈现，不互相替代；"
-                    "分母缺失时不补算比例。")},
-                {"label": "阅读边界", "text": (
-                    "相关研究均可保留，数值是否共轴另按人群、终点、时间窗和统计口径判定；"
-                    "描述性对照不等于头对头研究。")},
+                    f"{len(data.all_studies)} 项研究。")},
             ]
             if page_id == "overview" and detail_kind is None
             else None

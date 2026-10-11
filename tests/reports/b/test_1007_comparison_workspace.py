@@ -33,7 +33,8 @@ def test_shared_column_and_unresolved_study_both_remain_in_workspace() -> None:
     reasons = workspace["numeric_eligibility"]["undrawable_reasons"]
     assert reasons["unknown"] == "用户清除，待重新核实"
     assert "None" not in json.dumps(workspace, ensure_ascii=False)
-    assert "不代表时间点相同" in json.dumps(workspace, ensure_ascii=False)
+    assert "观察时间" in json.dumps(workspace, ensure_ascii=False)
+    assert "不代表时间点相同" not in json.dumps(workspace, ensure_ascii=False)
 
 
 def test_duplicate_or_missing_scientific_facet_is_not_silently_dropped() -> None:

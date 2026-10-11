@@ -554,7 +554,6 @@
     if (clauseContext) {
       var shownContextReferences = Object.create(null);
       appendFieldRow(viewFields, "条款适用范围", clauseContext.label_zh, false);
-      appendFieldRow(viewFields, "范围限制", clauseContext.scope_note_zh, false);
       function appendContextReference(reference, prefix) {
         if (shownContextReferences[reference.reference_id]) return;
         shownContextReferences[reference.reference_id] = true;
@@ -660,7 +659,7 @@
       warning.className = "kz-evidence-compare__warning";
       warning.textContent =
         differenceLabels.join("、") +
-        "存在差异；并列用于核对口径，不代表可以直接比较数值。";
+        "差异";
       compareHost.appendChild(warning);
     }
     var table = document.createElement("table");

@@ -1,4 +1,12 @@
-# 唯一当前状态：1007V1连续实施｜current32有界密度/配置/分享/开发门闭合，论文事实版本门未闭合，非RC
+# 唯一当前状态：1007V1连续实施｜current32阅读体验被用户否决，正在修正，非RC
+
+最新用户裁决已写入现行PRD/DESIGN/PLAN/ACCEPTANCE及Trellis记录：专家报告删除防御性套话，横比必须ECharts图+表，历时性数据折线+标注。首批A/B/C模板/共享资源清理已8项新增合同PASS；相关旧文字断言正在按新合同迁移。current32未改，折线替代逐周卡片尚未完成。此前C02 runner78101/事件52958已终态actualgemini-3.8-flash，REVISE确认首页泛化说明/单列留白/slug/卡片根因；后文pending句仅为启动时历史，不再等待。最新呈现源码已在审阅终态后变更，旧预览不替代新验收。
+
+本单元终态：旧文字断言迁移后九文件128PASS/148.47s；C来源页标题进一步改为“来源资料”后普通A/B/C8项合同smoke通过。strict三renderer/具名Ruff通过；正常新B预览104页/1505事实/current保持。Ego1920首页/横比可见套话检查0命中，32查询=32显示事实；Owner实际看横比截图，折线+表重构仍为紧接任务。新回执owner-expert-reading-correction-v1.json；不重跑旧current/事务/分享。不把测试期间19FAIL/109PASS混合树诊断算作冻结门。
+
+用户实际截图已证实：正常B生成/分享中的原始英文长标题、中英串联、逐周按钮重复与首页导航错标，不符合中文报告阅读要求。原几何/功能/分享PASS仅对其真实检查范围有效，不是产品视觉PASS；不改历史回执。当前HEAD af3a572b38e63b644633efd35ad348bc2fb070b2，current32保持。Owner优先处理共享任务导航、中文问题层与单值明细披露；完整事实、科学分面、来源、清除及修订不削减。先成族RED/最小完整修复/相关回归，再同一正常预览四宽实屏与独立阅读审阅，不靠高度阈值放行。
+本批阅读修复成族2RED→111相关PASS；普通只读B预览104页、1505事实与16257持久项目文件保持。Ego新预览四宽24态已终态，流程通过不等于审美通过：Owner实看1440首页与横比，首页泛化说明与原始产品标签仍需修正。独立C02阅读挑战已启动，runner78101/PID95852、kernel退出事件52958；源码/预览冻结，只收真实终态，不读取pending报告或轮询日志。精简证据owner-reading-hierarchy-preview-v1.json、复盘RETROSPECTIVE_20261011_reading_correction.md。未重建current32、保存或分享，未执行新全仓门。
+论文版本执行44963/event71013已终态，actualPi/google-antigravity/gemini-3.8-flash/high，549.752s。Owner重开原响应与回放：字节/元数据可接受，但“检索未见更正=证明具体事实截止日前未变”的科学推断仍REVISE；catalog获取时钟在真实runner窗口内，报告散文另一组时钟不接受，原件均保留。零事实采用、未改cutoff。tests/integration/test_1007_fact_public_version_cutoff.py仍是16 RED未实现WIP，未包含在current32宽门内。
 
 最新终态：66982四档16态/B32原生配置；6817当前B+联合正常分享；3603移目录四入口真断网/0FAIL/网络恢复；54392单次六步quality-only/source-setexact通过。A30/C30未变独立分享不重跑，现有用户修订/清除/来源/Esc保持；Owner看当前1440矩阵与离线1920B，只签有界根因。精简回执owner-current32-density-provenance-v1.json、复盘RETROSPECTIVE_20261011_current32.md。freshC0314726/event96887已terminal0/actualGrok4.7high770.737s；六raw/书目保留，06:55精确时间拒绝，新owner-publication-source-reconciliation-v1.json只保runner窗口。原版本材料不改，未核PMCflag不作一票否决；118当前未采用不是永久未决约束。下一事实级截止资格成族门与窄官方版本证据，不重提全文/旧流程。下段及后文的在途状态为当时记录，已由本段关闭，不再等待旧PID。
 

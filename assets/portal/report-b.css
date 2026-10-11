@@ -20,11 +20,18 @@
 .kz-b-study-panel { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px; grid-column: 1 / -1; min-width: 0; padding: 12px; border: 1px solid var(--b-line); border-radius: var(--b-radius); background: var(--b-surface); }
 .kz-b-study-panel > h3 { grid-column: 1 / -1; margin: 0 0 4px; overflow-wrap: anywhere; }
 .kz-b-study-panel__note { grid-column: 1 / -1; margin: 0; color: var(--b-muted); font-size: 16px; }
+.kz-b-study-records { grid-column: 1 / -1; min-width: 0; }
+.kz-b-study-records > summary { padding: 8px 0; min-height: 36px; font-size: 16px; cursor: pointer; color: var(--b-orange-text); }
+.kz-b-study-original-title { font-size: 16px; line-height: 1.5; overflow-wrap: anywhere; }
+.kz-b-study-records__grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px; }
+.kz-b-measurement-context { margin: 0 0 8px; font-size: 16px; color: var(--b-muted); overflow-wrap: anywhere; }
+.kz-b-summary-observations { grid-column: 1 / -1; min-width: 0; }
+.kz-b-summary-observations > summary { font-size: 16px; padding: 12px; cursor: pointer; color: var(--b-orange-text); }
 .kz-b-measurement-panel { --b-observation-span: 3; grid-column: 1 / -1; min-width: 0; margin-top: 6px; }
 .kz-b-measurement-panel--compact { --b-observation-span: 6; grid-column: span 6; }
 .kz-b-measurement-panel--compact[data-observation-count="1"] { --b-observation-span: 12; }
 .kz-b-measurement-panel:has(.kz-complete-table[open]) { grid-column: 1 / -1; }
-.kz-b-measurement-panel > h4 { margin: 0 0 6px; font-size: 16px; overflow-wrap: anywhere; }
+.kz-b-measurement-panel > h4 { margin: 0 0 6px; font-size: 20px; overflow-wrap: anywhere; }
 .kz-b-measurement-observations { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px; }
 .kz-b-measurement-observations > [data-comparison-compact] { grid-column: span var(--b-observation-span); display: flex; flex-direction: column; gap: 6px; padding: 8px; box-shadow: none; }
 .kz-b-observation-time { margin: 0; font-size: 16px; color: var(--b-muted); overflow-wrap: anywhere; }

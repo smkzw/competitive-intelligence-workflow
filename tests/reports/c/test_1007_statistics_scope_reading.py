@@ -39,12 +39,9 @@ REPORT_DATA = ROOT / "fixtures/positive/c-atopic-dermatitis/inputs/report-data.j
 STATISTICS_PAGE = "sample-analysis-statistics"
 LIMITATIONS_PAGE = "evidence-limitations"
 
-SUMMARY_MARKER = '<p class="kz-c-statistics-scope__summary"'
+SUMMARY_MARKER = '<summary class="kz-c-statistics-scope__summary"'
 DETAILS_MARKER = '<details class="kz-c-statistics-scope">'
-FULLY_EXTRACTED_STATEMENT = (
-    "统计扩展字段均已结构化提取；已核实的样本量不等于完整的统计分析复核；"
-    "未结构化提取不等于来源未公开"
-)
+FULLY_EXTRACTED_STATEMENT = "统计字段已提取。"
 
 
 @pytest.fixture(scope="module")
@@ -76,7 +73,7 @@ def _section(html: str, aria_label: str) -> str:
 
 
 def _scope_section(html: str) -> str:
-    return _section(_main(html), "统计字段覆盖与复核边界")
+    return _section(_main(html), "统计资料")
 
 
 def _scope_details(html: str) -> str:
@@ -97,7 +94,7 @@ def test_limitations_summary_does_not_reuse_nested_drawer_field_grid(
     report: ReportCPortalData, tmp_path: Path,
 ) -> None:
     html = _render_pages(report, tmp_path)[LIMITATIONS_PAGE]
-    section = _section(_main(html), "证据版本与局限")
+    section = _section(_main(html), "来源资料")
     # A field grid is a label/value row, never the collection containing rows.
     assert '<dl class="kz-evidence-field">' not in section
     assert '<dl class="kz-c-evidence-summary">' in section
@@ -116,24 +113,23 @@ def test_statistics_page_leads_with_compact_visible_coverage_summary(
     section = _scope_section(html)
     summary_index = section.find(SUMMARY_MARKER)
     assert summary_index != -1
-    assert summary_index < section.find(DETAILS_MARKER)
+    assert summary_index > section.find(DETAILS_MARKER)
     assert section.find("<h3") == -1  # 紧凑区块不再插入子标题
-    summary = section[summary_index:section.find("</p>", summary_index)]
+    summary = section[summary_index:section.find("</summary>", summary_index)]
 
     scope = _stats_scope(report)
     extracted = len(scope["extracted_fields"])
     placeholder = len(scope["placeholder_fields"])
     unextracted = len(scope["unextracted_fields"])
     assert (extracted, placeholder, unextracted) == (1, 1, 12)
-    extracted_count = "已结构化提取且当前有可核实数据的统计字段 1 个"
-    placeholder_count = "仅有占位状态、不构成当前可核实数据的统计字段 1 个"
-    unextracted_count = "尚未结构化提取或尚未审阅的统计扩展字段 12 个"
+    extracted_count = "1 个有当前值"
+    placeholder_count = "暂无当前值"
+    unextracted_count = "12 个待提取"
     assert extracted_count in summary
-    assert placeholder_count in summary
+    assert placeholder_count in _scope_details(html)
     assert unextracted_count in summary
-    assert "未结构化提取不等于来源未公开" in summary
-    # 摘要必须点出完整标签与逐研究缺口的位置，而不是静默省略。
-    assert "展开" in summary
+    assert "不等于" not in summary
+    assert "字段与来源" in summary
 
 
 def test_visible_summary_keeps_exact_closure_strings_and_full_lists_stay_reachable_in_details(
@@ -146,12 +142,11 @@ def test_visible_summary_keeps_exact_closure_strings_and_full_lists_stay_reachab
     scope = _stats_scope(report)
 
     # 逐字闭合说明仍在首屏可见（只出现一次，不在展开块里重复）。
-    assert scope["protocol_closure_zh"] in visible
-    assert scope["publication_closure_zh"] in visible
-    assert "不等于完整统计分析复核" in visible
-    assert "仍需以研究方案与统计分析计划（Protocol/SAP）正文为准" in details
+    assert scope["protocol_closure_zh"] in details
+    assert scope["publication_closure_zh"] in details
+    assert "不等于完整统计分析复核" not in section
     for closure in (scope["protocol_closure_zh"], scope["publication_closure_zh"]):
-        assert closure not in details
+        assert closure not in visible
 
     # 完整字段标签与缺口字符串只保留在展开块中，且逐条可达。
     for label in scope["extracted_field_labels"]:
@@ -208,10 +203,9 @@ def test_missing_and_user_cleared_fields_are_never_counted_as_extracted(
 
     html = _render_pages(data, tmp_path)[STATISTICS_PAGE]
     summary = _scope_section(html)
-    summary_head = summary[: summary.find(DETAILS_MARKER)]
-    assert "已结构化提取且当前有可核实数据的统计字段 0 个" in summary_head
+    assert "0 个有当前值" in summary
     details = _scope_details(html)
-    assert "仅占位状态（未报告、用户清除、未公开或路径未解析等）" in details
+    assert "暂无当前值" in details
     assert "用户清除" not in "\n".join(
         line for line in details.splitlines() if "已结构化提取且当前有可核实数据" in line
     )
@@ -244,7 +238,7 @@ def test_full_coverage_states_extraction_without_dropping_expandable_completenes
     html = _render_pages(full, tmp_path)[STATISTICS_PAGE]
     section = _scope_section(html)
     summary_head = section[: section.find(DETAILS_MARKER)]
-    assert "统计扩展字段均已结构化提取" in summary_head
+    assert "0 个待提取" in section
     assert "尚未结构化提取或尚未审阅" not in summary_head
     details = _scope_details(html)
     assert FULLY_EXTRACTED_STATEMENT in details
@@ -303,9 +297,9 @@ def test_full_statistical_explanation_is_reachable_without_preceding_the_data(
     details = _scope_details(_render_pages(report, tmp_path / "second")[STATISTICS_PAGE])
     explanation = "分析集、比较方法、效应量、估计目标与伴发事件策略、缺失数据与敏感性"
     assert explanation not in visible, "完整方法词表不应挤在比较数据前面"
-    assert explanation in details
-    assert "不等于完整" in visible
-    assert "Protocol/SAP" in visible
+    assert explanation not in details
+    assert "不等于完整" not in section
+    assert "Protocol/SAP" in details
 
 
 def test_each_complete_field_list_has_one_owner_not_duplicate_paragraph_and_list(

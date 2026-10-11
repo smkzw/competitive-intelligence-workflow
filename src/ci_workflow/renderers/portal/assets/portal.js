@@ -123,6 +123,12 @@
         }
         return left.week - right.week || left.index - right.index;
       }).map(function (item) {return item.id;});
+    }, studyText: function (id, label) {
+      var name = String(label || id);
+      // Use an existing short name, never invent a translated registry title.
+      // The caller retains the complete title in reachable study detail.
+      return name.length <= 60 && (/[\u3400-\u9fff]/.test(name) ||
+        /^[A-Za-z0-9][A-Za-z0-9._+-]*(?:[｜| ]NCT\d{8})?$/.test(name)) ? name : String(id);
     }, valueText: function (row, missingText) {
       if (row.value === null || row.value === undefined) return missingText;
       // A label is not a unit conversion: raw unit/value still govern scientific eligibility.
@@ -143,7 +149,7 @@
         product + (arm && arm !== product ? "｜" + arm : "")));
       main.appendChild(textNode("strong", "kz-comparison-fact__value", value));
       button.appendChild(main);
-      var time = row.time || row.time_window;
+      var time = row.time_label_zh || row.time || row.time_window;
       if (time) button.appendChild(textNode("span", "kz-comparison-fact__time", time));
       // Pair each fact with its own disclosure in a responsive list. This is
       // presentation only; source identity and the trigger's attributes survive.
@@ -190,7 +196,7 @@
         }
         observation.className += " kz-comparison-observation--compact";
       }
-      var notes = [row.difference_note, facet].filter(function (note, index, all) {
+      var notes = [facet].filter(function (note, index, all) {
         return note && all.indexOf(note) === index;
       });
       // Verified source-denominator scope stays in this paired disclosure: the
@@ -209,7 +215,7 @@
       }
       if (notes.length || sourceDenominator) {
         var details = doc.createElement("details"); details.className = "kz-comparison-context";
-        details.appendChild(textNode("summary", "", "条件与限制"));
+        details.appendChild(textNode("summary", "", "研究信息"));
         notes.forEach(function (note) {details.appendChild(textNode("p", "", note));});
         if (sourceDenominator) {
           details.appendChild(textNode("p", "kz-comparison-context__denominator",
@@ -234,6 +240,17 @@
       var mode = comparison ? "comparison" : "summary";
       if (root.body.dataset.comparisonView === mode) return;
       root.body.dataset.comparisonView = mode;
+      root.querySelectorAll(".site-header__nav a[href]").forEach(function (link) {
+        if (link.dataset.summaryCurrent === undefined) {
+          link.dataset.summaryCurrent = link.getAttribute("aria-current") || "false";
+        }
+        var active = comparison ? /[?&]view=comparison(?:&|$)/.test(link.getAttribute("href"))
+          : link.dataset.summaryCurrent === "page";
+        link.setAttribute("aria-current", active ? "page" : "false");
+        link.classList.toggle("site-header__nav-item--active", active);
+        link.classList.toggle("site-nav-group__link--active",
+          active && link.classList.contains("site-nav-group__link"));
+      });
       root.querySelectorAll("[data-comparison-summary-head]").forEach(function (head) {
         head.hidden = comparison;
       });

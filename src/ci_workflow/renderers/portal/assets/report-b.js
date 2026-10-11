@@ -38,6 +38,11 @@
     var wrappers = Array.from(module.querySelectorAll(".kz-chart-module__group"));
     var studies = Object.create(null), measurements = Object.create(null);
     var rowsById = Object.create(null);
+    var questionLabels = Object.create(null);
+    (workspace.columns || []).forEach(function (column) {
+      if (!column.question_known) return;
+      (column.row_ids || []).forEach(function (id) { questionLabels[id] = column.question_label; });
+    });
     groups.forEach(function (group) {
       (group.rows || []).forEach(function (row) { rowsById[row.row_id] = row; });
     });
@@ -70,12 +75,13 @@
         panel = document.createElement("section"); panel.className = "kz-b-study-panel";
         panel.dataset.studyId = sourced ? String(row.trial_id) : "unresolved";
         var title = document.createElement("h3");
-        title.textContent = sourced ? (workspace.study_labels || {})[row.trial_id] || row.trial_id
+        title.textContent = sourced ? window.__COMPARISON_QUERY__.studyText(row.trial_id,
+          (workspace.study_labels || {})[row.trial_id])
           : resolved ? "原比较框｜" + (group.title_zh || "已匹配的研究")
             : "关联待核｜" + (row.trial_id || "研究身份待核");
         panel.appendChild(title);
         var note = document.createElement("p"); note.className = "kz-b-study-panel__note";
-        note.textContent = "按研究与来源测量整理，不新增数值共轴；原比较资格与差异保留。完整口径与原始记录可逐项展开。";
+        note.textContent = "原始测量明细";
         panel.appendChild(note); module.appendChild(panel); studies[studyKey] = panel;
       }
       var measurement = measurements[measureKey];
@@ -83,11 +89,15 @@
         measurement = document.createElement("section"); measurement.className = "kz-b-measurement-panel";
         measurement.dataset.measurePath = String(row.source_measure_path || "");
         var label = document.createElement("h4");
-        label.textContent = [row.display_label_zh || row.original_endpoint || "原始测量",
-          row.product_zh, row.arm === row.product_zh ? "" : row.arm, row.unit_label_zh || row.unit,
-          row.statistical_form_family_label_zh || row.statistic_label_zh || "统计口径见记录"]
-          .filter(Boolean).join("｜");
+        var candidate = questionLabels[row.row_id] || row.clinical_concept_label_zh || row.display_label_zh;
+        label.textContent = candidate && /[\u3400-\u9fff]/.test(candidate) && candidate.length <= 80
+          ? candidate : "测量结果（中文名称待核）";
         measurement.appendChild(label);
+        var identity = document.createElement("p"); identity.className = "kz-b-measurement-context";
+        identity.textContent = [row.product_zh, row.arm === row.product_zh ? "" : row.arm,
+          row.unit_label_zh || row.unit,
+          row.statistical_form_family_label_zh || row.statistic_label_zh].filter(Boolean).join("｜");
+        measurement.appendChild(identity);
         var list = document.createElement("div"); list.className = "kz-b-measurement-observations";
         measurement.appendChild(list); panel.appendChild(measurement); measurements[measureKey] = measurement;
       }
@@ -102,7 +112,7 @@
           window.__COMPARISON_QUERY__.valueText(row, "已披露；原值待核");
         var time = document.createElement("h5"); time.className = "kz-b-observation-time";
         var originalTime = String(row.time || row.visit_or_window || "时间未列示");
-        time.textContent = originalTime.length <= 80 ? originalTime : "观察时间：完整口径内列示";
+        time.textContent = row.time_label_zh || (originalTime.length <= 80 ? originalTime : "观察时间：完整口径内列示");
         wrapper.insertBefore(time, wrapper.firstChild);
         // Move existing nodes instead of recreating facts or source targets.
         var heading = wrapper.querySelector(".kz-chart-group__title");
@@ -127,6 +137,27 @@
           : " kz-b-measurement-panel--scalar-list";
       }
     });
+    Object.keys(studies).forEach(function (key) {
+      var panel = studies[key], cards = Array.from(panel.querySelectorAll(".kz-chart-module__group"));
+      // The primary matrix remains visible. Its single-value source records
+      // are an auxiliary disclosure, not another wall of the same observations.
+      // Real multi-observation plots remain on the main reading plane.
+      if (!cards.length || !cards.every(function (card) { return !!card.dataset.comparisonCompact; })) return;
+      var records = document.createElement("details"); records.className = "kz-b-study-records";
+      var summary = document.createElement("summary");
+      summary.textContent = "查看原始测量与逐条依据（" + cards.length + "条观察）";
+      records.appendChild(summary);
+      var original = (workspace.study_labels || {})[key];
+      if (original) {
+        var title = document.createElement("p"); title.className = "kz-b-study-original-title";
+        title.textContent = original; records.appendChild(title);
+      }
+      var grid = document.createElement("div"); grid.className = "kz-b-study-records__grid";
+      Array.from(panel.children).filter(function (node) {
+        return node.className.split(" ").indexOf("kz-b-measurement-panel") !== -1;
+      }).forEach(function (measure) { grid.appendChild(measure); });
+      records.appendChild(grid); panel.appendChild(records);
+    });
   }
 
   function renderComparisonWorkspace(state) {
@@ -135,6 +166,11 @@
     if (!workspace || !host) return;
     var requested = new URLSearchParams(window.location.search || "").get("view") === "comparison";
     host.hidden = !requested;
+    var visual = document.querySelector("[data-summary-observations]");
+    if (visual && visual.dataset.readingMode !== String(requested)) {
+      visual.open = requested;
+      visual.dataset.readingMode = String(requested);
+    }
     window.__COMPARISON_QUERY__.applyLayout(document, requested);
     if (!requested) return;
     var select = host.querySelector("[data-comparison-column]");
@@ -210,7 +246,7 @@
       (hasQuestionRows ? matchedStudies : unmatchedStudies).push(studyId);
       if (!hasQuestionRows) tr.className = "kz-b-comparison-unmatched";
       label.scope = "row"; label.textContent = studyId === "study-identity-unresolved" ?
-        "研究身份待核" : (workspace.study_labels || {})[studyId] || studyId;
+        "研究身份待核" : window.__COMPARISON_QUERY__.studyText(studyId, (workspace.study_labels || {})[studyId]);
       tr.appendChild(label); retained += 1;
       columns.forEach(function (column) {
         var cell = document.createElement("td");
@@ -227,7 +263,7 @@
             (column.facet_label_by_row || {})[id] : "";
           window.__COMPARISON_QUERY__.factCell(document, cell, item, row, displayedValue, facet);
         });
-        if (!ids.length) cell.textContent = "当前问题无匹配记录，不代表未研究或零结果";
+        if (!ids.length) cell.textContent = "暂无匹配记录";
         tr.appendChild(cell);
       });
       body.appendChild(tr);
@@ -247,7 +283,7 @@
       retained + "项相关研究；本问题匹配" + matchedStudies.length + "项，其余" + unmatchedStudies.length +
       "项可展开；记录列 " + (allColumns.length ? offset + 1 : 0) + "–" + (offset + columns.length) + " / " + allColumns.length +
       "，本页" + Object.keys(displayed).length + "条事实，" + comparisonGroups.length +
-      "个科学条件分面。全部相关研究保留；数值共轴资格另判。";
+      "个研究分面。";
     window.__COMPARISON_QUERY__.recordScope(host, allowed, allColumns, Object.keys(displayed));
     host.dataset.columnIds = JSON.stringify(columns.map(function (column) {return column.id;}));
     if (window.__CHART_SYNC__ && window.__CHART_SYNC__.replaceGroups) {
@@ -617,7 +653,6 @@
         ["y_value", "安全性位置"],
         ["size", "比较规模"],
         ["status", "比较状态"],
-        ["difference_note", "口径提示"],
         ["disclosure_state", "披露状态"]
       ];
     }
@@ -662,7 +697,6 @@
       ["numerator", "原始应答人数"],
       ["denominator", "分析人数"],
       ["unit", "单位"],
-      ["difference_note", "口径提示"],
       ["disclosure_state", "披露状态"]
     ];
   }

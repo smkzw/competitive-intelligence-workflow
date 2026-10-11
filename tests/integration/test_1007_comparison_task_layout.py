@@ -55,9 +55,9 @@ assert.equal(observation.children[0],button);assert.equal(button.className,'kz-c
 assert.equal(button.children[0].children[1].textContent,'0 %');
 assert.equal(button.children[0].children[0].textContent,'<script>literal</script>｜治疗组');
 assert.equal(button.children[1].textContent,'Week24');
-const details=observation.children[1];assert.equal(details.children[0].textContent,'条件与限制');
-assert.equal(details.children[1].textContent,'分母不同，不共轴');
-assert.equal(details.children[2].textContent,'FAS，24周');
+const details=observation.children[1];assert.equal(details.children[0].textContent,'研究信息');
+assert.equal(details.children[1].textContent,'FAS，24周');
+assert.equal(details.children.length,2);
 assert.equal(JSON.stringify(row),frozen);
 const second=new Node();query.factCell(doc,cell,second,{product_zh:'second',value:1},'1 %','');
 assert.equal(cell.children.length,1);assert.equal(list.children.length,2);
@@ -110,6 +110,7 @@ const sandbox={};vm.runInNewContext(source.slice(start,end),sandbox);
 const query=sandbox.createComparisonQuestionOrder();
 const header={hidden:false},filters={open:true,dataset:{}},notes={open:false,dataset:{}};
 const doc={body:{dataset:{}},querySelectorAll(selector){
+ if(selector==='.site-header__nav a[href]')return [];
  return selector==='[data-comparison-summary-head]'?[header]:[filters,notes];
 }};
 query.applyLayout(doc,true);
@@ -121,6 +122,34 @@ query.applyLayout(doc,false);
 assert.equal(header.hidden,false);assert.equal(filters.open,true);assert.equal(notes.open,false);
 filters.open=false;query.applyLayout(doc,true);query.applyLayout(doc,false);
 assert.equal(filters.open,false); // restore actual pre-entry summary state, not hardcoded open
+"""
+    result = subprocess.run(["node", "-e", probe, str(script)], capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+
+
+def test_comparison_navigation_marks_actual_task_and_restores_summary() -> None:
+    script = (Path(__file__).resolve().parents[2]
+              / "src/ci_workflow/renderers/portal/assets/portal.js")
+    probe = r"""
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const source=fs.readFileSync(process.argv[1],'utf8');
+const start=source.indexOf('  function createComparisonQuestionOrder(');
+const end=source.indexOf('\n  window.__COMPARISON_QUERY__',start),sandbox={};
+vm.runInNewContext(source.slice(start,end),sandbox);
+function link(href,current){const classes=new Set(current?['site-header__nav-item--active']:[]);
+ return {dataset:{},attrs:{href,'aria-current':current?'page':'false'},
+ getAttribute(k){return this.attrs[k];},setAttribute(k,v){this.attrs[k]=v;},
+ classList:{toggle(k,on){on?classes.add(k):classes.delete(k);},
+ contains(k){return classes.has(k);}}};}
+const home=link('overview.html',true),compare=link('overview.html?view=comparison',false),
+ chapter=link('efficacy.html',false),all=[compare,home,chapter];
+const doc={body:{dataset:{}},querySelectorAll(s){return s==='.site-header__nav a[href]'?all:[];}};
+const q=sandbox.createComparisonQuestionOrder();q.applyLayout(doc,true);
+assert.equal(home.attrs['aria-current'],'false');assert.equal(compare.attrs['aria-current'],'page');
+assert.equal(home.classList.contains('site-header__nav-item--active'),false);
+assert.equal(compare.classList.contains('site-header__nav-item--active'),true);
+q.applyLayout(doc,false);assert.equal(home.attrs['aria-current'],'page');
+assert.equal(compare.attrs['aria-current'],'false');assert.equal(chapter.attrs['aria-current'],'false');
 """
     result = subprocess.run(["node", "-e", probe, str(script)], capture_output=True, text=True)
     assert result.returncode == 0, result.stderr

@@ -227,7 +227,7 @@ const sandbox={comparisonQuestion:'',comparisonPage:1,resultQuery:'',rowById:row
   location:{get search(){return new URL(url).search;},get href(){return url;}},
   history:{replaceState(_,__,next){url=next;}},
   __CHART_SYNC__:{unplottedValueText(){return '用户清除，待重新核实';},replaceGroups(){}}},
- document:{body:{dataset:{}},querySelectorAll(){return [];},
+ document:{body:{dataset:{}},querySelectorAll(){return [];},querySelector(){return null;},
  getElementById(id){return id==='full-study-comparison'?host:null;},
   createElement(){return new Node();}},
  matches(){return true;},

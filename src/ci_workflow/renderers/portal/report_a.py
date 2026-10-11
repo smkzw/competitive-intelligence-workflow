@@ -1694,6 +1694,7 @@ def _native_unit_zh(unit: str) -> str:
         "number of blood transfusions": "输血次数",
         "packed rbc units per month": "红细胞单位/月",
         "proportion of participants": "受试者比例",
+        "probability of participants": "受试者概率",
         "percentage change": "百分比变化",
         "number of events per 100 patient-years": "每100患者年事件数",
         "hour*microgram/milliliter (h*μg/ml)": "μg/mL·h",
@@ -2305,7 +2306,10 @@ def active_fact_binding_for_a(
 
 def _comparison_display_row(row: dict[str, Any]) -> dict[str, Any]:
     """Label-only copy after scientific grouping; never convert source units/values."""
-    return {**row, "unit_label_zh": _native_unit_zh(str(row.get("unit") or ""))}
+    result = {**row, "unit_label_zh": _native_unit_zh(str(row.get("unit") or ""))}
+    if row.get("time"):
+        result["time_label_zh"] = _native_timepoint_zh(str(row["time"]))
+    return result
 
 
 def _a_comparison_workspace(data: ReportAPortalData) -> tuple[

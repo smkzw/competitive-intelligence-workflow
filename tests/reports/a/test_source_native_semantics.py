@@ -81,6 +81,7 @@ def test_ordinary_efficacy_projection_has_no_guessed_drug_or_population():
     ("Participants", "例", 0),
     ("Events", "次", 0),
     ("proportion of participants", "受试者比例", 0.67),
+    ("probability of participants", "受试者概率", 0.67),
     ("U*day/L/week", "U·天/L/周", 2.5),
     ("unresolved activity/day", "unresolved activity/day", None),
 ])
@@ -125,3 +126,19 @@ def test_scalar_unit_spelling_preserves_prefix_denominator_and_qualifiers(source
     raw = {"row_id": "source-unit", "unit": source, "value": 2.5}
     assert _comparison_display_row(raw) == {**raw, "unit_label_zh": display}
     assert raw["unit"] == source and raw["value"] == 2.5
+
+
+@pytest.mark.parametrize(("original", "shown"), [
+    ("Week 1", "第1周"),
+    ("Baseline, Week 24", "基线、第24周"),
+])
+def test_comparison_time_display_does_not_rewrite_source_or_scientific_window(original, shown):
+    from ci_workflow.renderers.portal.report_a import _comparison_display_row
+
+    raw = {"row_id": "weekly-source", "time": original, "actual_timepoint": 24,
+           "value": 0.67, "unit": "probability of participants", "window": original}
+    projected = _comparison_display_row(raw)
+    assert projected["time_label_zh"] == shown
+    assert projected["unit_label_zh"] == "受试者概率"
+    assert {key: value for key, value in projected.items()
+            if key not in {"time_label_zh", "unit_label_zh"}} == raw

@@ -49,12 +49,6 @@
     <div class="site-header__brand-line" aria-hidden="true"></div>
   </header>
 
-  {% if publication_limitation_zh %}
-  <aside class="publication-limitation" role="note" aria-label="证据限制">
-    <strong>证据限制</strong>
-    <p>{{ publication_limitation_zh }}</p>
-  </aside>
-  {% endif %}
 
   <main class="portal-main kz-b-main" id="main" role="main">
     {{ identity_headers_html }}
@@ -70,7 +64,6 @@
         <li>
           {% if source.url %}<a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">{{ source.label }}</a>{% else %}<span>{{ source.label }}</span>{% endif %}
           {% if source.scope %}<span>｜覆盖：{{ source.scope }}</span>{% endif %}
-          {% if source.limitation %}<span>｜限制：{{ source.limitation }}</span>{% endif %}
         </li>
         {% endfor %}
       </ul>

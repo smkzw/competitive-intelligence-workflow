@@ -1,13 +1,12 @@
 {% extends "base.html.j2" %}{% import "_macros.html.j2" as ui %}
 {% block title %}疗效{% endblock %}{% block heading %}公开疗效观察{% endblock %}
-{% block lead %}按试验、终点、时间点、单位和分析人群分别呈现全部公开观察；保留各剂量和组别，不默认判定跨试验可比。{% endblock %}
+{% block lead %}按产品、终点和观察时间查看疗效结果。{% endblock %}
 {% block content %}
 <section class="kz-a-panel" data-module="efficacy">
   <div class="kz-a-filter-grid">{{ ui.filter_group('product', '产品', products|map(attribute='name')|list) }}{{ ui.filter_group('endpoint', '疗效指标', efficacy|map(attribute='endpoint')|unique|list) }}{{ ui.filter_group('timepoint', '时间点', efficacy|map(attribute='timepoint')|unique|list) }}</div>
   <div data-efficacy-heading>{{ ui.section_head('公开疗效观察', '图只绘制组别—产品关系已确认且数值可绘的观察；折叠表保留全部原值') }}</div>
   {{ ui.chart('efficacy', 'efficacy-full', '按完整观察条件分组的疗效图') }}
   {% if unassigned_efficacy_count %}<p class="kz-a-comparability">本页有 {{ unassigned_efficacy_count }} 条疗效观察的组别—产品关系待核，未绘图；完整表保留原始值。</p>{% endif %}
-  <p class="kz-a-comparability">不同量表、时间点和分析人群分组展示；每组独立刻度，不能按图形长度判断跨试验优劣。</p>
   <details class="kz-complete-table"><summary class="kz-complete-table__summary">展开当前筛选的完整疗效表</summary><div class="kz-a-table-wrap"><table class="kz-a-efficacy-table">
     <thead><tr><th>产品</th><th>试验</th><th>疗效指标</th><th>时间点</th><th>组别</th><th>观察值</th><th>人数</th><th>分析人群</th><th>来源</th></tr></thead>
     <tbody>{% for row in efficacy %}
@@ -24,7 +23,7 @@
 </section>
 {% if additional_observations %}
 <section class="kz-a-panel" data-module="additional-observations">
-  <div class="kz-a-section-head"><div><h2>其他登记观察（{{ additional_observations|length }}）</h2><p>免疫原性、药代/药效学及生物标志物等按各自统计对象保留，不计作临床疗效，也不与疗效共轴。</p></div></div>
+  <div class="kz-a-section-head"><div><h2>免疫原性、药代/药效学与生物标志物（{{ additional_observations|length }}）</h2></div></div>
   <label for="additional-observation-search">在这些观察中搜索</label>
   <input id="additional-observation-search" type="search" data-additional-search placeholder="输入终点、试验号、组别或领域">
   <span data-additional-search-count>共 {{ additional_observations|length }} 条</span>

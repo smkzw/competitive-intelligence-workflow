@@ -9,7 +9,7 @@ import pytest
 
 @pytest.mark.parametrize("case", (
     "dense", "dense_mixed", "sparse", "unresolved", "multi_observation",
-    "cross_study", "typed_units",
+    "cross_study", "typed_units", "raw_english",
 ))
 def test_comparison_panels_preserve_scientific_frames_and_source_targets(case: str) -> None:
     script = (Path(__file__).resolve().parents[2]
@@ -74,6 +74,11 @@ if(which==='dense'||which==='dense_mixed'){
  add('km','NCT04202679','outcome[17]',24,82.3,'%');
  add('nem-1','NCT04501666','outcome[3]',16,56,'participants');
  add('nem-2','NCT04501679','outcome[3]',16,45,'participants');
+}else if(which==='raw_english'){
+ for(let i=1;i<=24;i++)add('weekly-'+i,'NCT04202679','outcome[15]',i,30+i);
+ groups.forEach(g=>{g.rows[0].display_label_zh='Percentage of Participants Achieving '+
+  '>=4 Points Improvement at Weeks 1, 2, 3 and 24';
+  g.rows[0].time_label_zh='第'+g.rows[0].actual_timepoint+'周';});
 }else if(which==='typed_units'){
  add('count','NCT04202679','outcome[15]',4,78,'Participants');
  groups[0].rows[0].unit_label_zh='例';
@@ -94,13 +99,18 @@ if(which==='dense'||which==='dense_mixed'){
 const before=JSON.stringify(groups);
 const sandbox={document:{getElementById(id){return id==='kz-chart-module'?module:null;},
  createElement(tag){return new Node(tag);}},window:{__COMPARISON_QUERY__:{
+ studyText(id,label){return label&&label.length<=60?label:id;},
  observationIds(ids,rows){return ids.slice().sort(
   (a,b)=>rows[a].actual_timepoint-rows[b].actual_timepoint);},
  valueText(row,missing){return row.value==null?missing:
   String(row.value)+(row.unit_label_zh||row.unit?' '+(row.unit_label_zh||row.unit):'');}}},
  Object,Array,String,Number,JSON,Math};
 vm.runInNewContext(source.slice(start,end),sandbox);
-sandbox.organizeComparisonCharts(groups,{study_labels:{NCT04202679:'PRIME2｜NCT04202679'}});
+const workspace={study_labels:{NCT04202679:which==='raw_english'?
+ 'A Study to Assess the Efficacy and Safety of Dupilumab '+
+ 'in Participants With Prurigo Nodularis':'PRIME2｜NCT04202679'},
+ columns:[{question_known:true,question_label:'瘙痒NRS改善≥4分',row_ids:groups.flatMap(g=>g.rows.map(r=>r.row_id))}]};
+sandbox.organizeComparisonCharts(groups,workspace);
 assert.equal(JSON.stringify(groups),before,'layout must not merge or rewrite numeric frames');
 assert.equal(module.querySelectorAll('.kz-chart-module__group').length,groups.length);
 originals.forEach((old,i)=>{
@@ -131,7 +141,18 @@ measures.forEach(m=>{
  assert.equal(m.className.split(' ').includes('kz-b-measurement-panel--scalar-list'),list,
   'only dense scalar observations use compact record rows; never change scientific frames');
 });
-if(which==='dense'||which==='dense_mixed'){
+if(which==='raw_english'){
+ assert.equal(panels[0].children[0].textContent,'NCT04202679',
+  'an untranslated registry title belongs to reachable detail, not the reading headline');
+ assert.equal(measures[0].children[0].textContent,'瘙痒NRS改善≥4分');
+ assert.equal(measures[0].querySelector('.kz-b-observation-time').textContent,'第1周');
+ const records=panels[0].querySelector('.kz-b-study-records');
+ assert.ok(records&&records.tagName==='DETAILS'&&!records.open,
+  'the same 24 source records are reachable but not dumped below the primary matrix');
+ assert.equal(records.querySelectorAll('.kz-chart-module__group').length,24);
+ assert.match(records.querySelector('summary').textContent,/24/);
+ assert.ok(records.querySelector('.kz-b-study-original-title').textContent.includes('A Study'));
+}else if(which==='dense'||which==='dense_mixed'){
  assert.equal(panels.length,3);assert.equal(measures.length,5);
  const weekly=measures.find(n=>n.dataset.measurePath==='outcome[15]');
  assert.equal(weekly.querySelectorAll('.kz-chart-module__group').length,

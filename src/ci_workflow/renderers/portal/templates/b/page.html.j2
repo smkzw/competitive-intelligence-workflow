@@ -11,7 +11,7 @@
 
   {% if overview_conclusions %}
   <details class="kz-comparison-disclosure" data-comparison-disclosure open>
-  <summary>首页核心结论与阅读边界</summary>
+  <summary>研究摘要</summary>
   <section class="kz-b-conclusions" aria-label="核心结论">
     <h2 class="kz-b-conclusions__title">核心结论</h2>
     <ul class="kz-b-conclusions__list">
@@ -94,7 +94,6 @@
     <h1 id="full-study-comparison-heading" class="portal-page-title">全研究横比</h1>
     <p class="kz-comparison-scope">{{ report.indication }}｜观察截止：{{ report.data_cutoff.strftime('%Y-%m-%d') }}</p>
     </div>
-    <p>研究行与共同临床问题列交叉查看；已知差异分列保留，缺口不补零。描述性对照不等于头对头证据。</p>
     <div class="kz-comparison-controls">
     <label>选择比较问题<select data-comparison-column aria-label="选择比较问题"></select></label>
     <button type="button" data-comparison-prev>上一组条件</button>
@@ -102,12 +101,16 @@
     <button type="button" data-filter-reset>清除筛选与检索</button>
     </div>
     <p data-comparison-status aria-live="polite"></p>
-    <label class="kz-b-unmatched-control"><input type="checkbox" data-comparison-unmatched-toggle aria-controls="kz-b-comparison-studies">展开本问题暂无匹配记录的其余研究（<span data-comparison-unmatched-count>0</span>）；不代表未研究或零结果</label>
+    <label class="kz-b-unmatched-control"><input type="checkbox" data-comparison-unmatched-toggle aria-controls="kz-b-comparison-studies">展开本问题暂无匹配记录的其余研究（<span data-comparison-unmatched-count>0</span>）</label>
     <div class="kz-b-comparison-scroll" tabindex="0" aria-label="全研究比较矩阵，可横向滚动">
       <table class="kz-b-comparison-table" data-primary-comparison-table><thead></thead><tbody id="kz-b-comparison-studies"></tbody></table>
     </div>
   </section>
 
+  {% if page.id == "overview" %}
+  <details class="kz-b-summary-observations" data-summary-observations>
+    <summary>完整结果图表与原始观察</summary>
+  {% endif %}
   <section class="kz-b-visual-section" aria-labelledby="visual-heading">
     <div class="kz-b-section-heading">
       <div>
@@ -115,15 +118,12 @@
       </div>
       <p class="kz-b-evidence-hint">点击数值查看数据依据。</p>
     </div>
-    {% if page.id == "safety" %}
-    <p class="kz-b-evidence-hint">若出现热图，颜色按各图注明的指标与单位呈现。事件数、受累人数和比例不可互换；不同口径的色阶不可直接比较，也不构成安全性排序。</p>
-    {% endif %}
     <div id="kz-chart-module" class="kz-chart-module" aria-live="polite"></div>
     {% if page.id == "efficacy-safety-matrix" %}
     {% if matrix_unplotted_trials %}
     <details class="kz-b-matrix-gaps">
       <summary>未进入气泡坐标的相关研究（{{ matrix_unplotted_trials|length }}）</summary>
-      <p>本数据包未形成这些研究可绘制的试验内治疗—对照疗效差；原因需核对来源和统计口径，不能当作零差值。其研究事实仍可在<a href="{{ site_prefix }}efficacy.html">疗效明细</a>查阅。</p>
+      <p>相关研究见<a href="{{ site_prefix }}efficacy.html">疗效明细</a>。</p>
       <ul>{% for name in matrix_unplotted_trials %}<li>{{ name }}</li>{% endfor %}</ul>
     </details>
     {% endif %}
@@ -135,9 +135,10 @@
     </div>
     {% endif %}
     {% if not records or has_domain_empty_state %}
-    <p class="kz-b-page-empty" role="status">{{ empty_state_title }}。本页没有可接受的专属记录，未以其他结果页替代。</p>
+    <p class="kz-b-page-empty" role="status">{{ empty_state_title }}</p>
     {% endif %}
   </section>
+  {% if page.id == "overview" %}</details>{% endif %}
   {% if page.id == "product-trial-profiles" %}
   <section class="kz-b-profile-index" aria-labelledby="profile-index-heading">
     <div class="kz-b-section-heading">

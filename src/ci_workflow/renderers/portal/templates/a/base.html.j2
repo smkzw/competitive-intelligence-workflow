@@ -47,12 +47,6 @@
     <div class="site-header__brand-line" aria-hidden="true"></div>
   </header>
 
-  {% if publication_limitation_zh %}
-  <aside class="publication-limitation" role="note" aria-label="证据限制">
-    <strong>证据限制</strong>
-    <p>{{ publication_limitation_zh }}</p>
-  </aside>
-  {% endif %}
 
   <main class="portal-main kz-a-main" id="main">
     <header class="portal-page-head kz-a-page-head"{% if current == 'clinical-portfolio' %} data-comparison-summary-head{% endif %}>
@@ -89,12 +83,11 @@
           <span>[{{ loop.index }}]</span>
           {% if source.url %}<a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">{{ source.label }}</a>{% else %}<span>{{ source.label }}（未提供可安全公开的链接）</span>{% endif %}
           <span>｜来源类型：{{ source.source_type }}｜发布日期：{{ source.published_at }}｜数据截止：{{ source.data_cutoff }}</span>
-          {% if source.limitation %}<span>｜限制：{{ source.limitation }}</span>{% endif %}
         </li>
         {% endfor %}
       </ul>
       {% else %}
-      <p>此报告未绑定可核验的公共来源谱系；来源类别说明不代表具体出处。</p>
+      <p>暂无来源链接。</p>
       {% endif %}
     </div>
   </section>

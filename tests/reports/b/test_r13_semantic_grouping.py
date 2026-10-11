@@ -377,7 +377,7 @@ def test_unformed_matrix_is_not_called_unpublished_source_result() -> None:
     )
     assert records
     assert all(row["disclosure_state"] == "not_applicable" for row, _ in records)
-    assert all("不等于研究未公开结果" in row["reason"] for row, _ in records)
+    assert all(row["reason"] == "疗效—安全性配对数据待整理" for row, _ in records)
     groups = _groups_for_page("efficacy-safety-matrix", records)
     assert groups[0]["empty_message"] == "当前未形成可绘制的试验内比较"
 
@@ -636,7 +636,7 @@ def test_longitudinal_group_uses_one_series_across_time_bands() -> None:
 
     assert len(groups) == 1
     assert groups[0]["comparison_purpose"] == "within_trial_descriptive_time_axis"
-    assert "不代表跨研究等价" in groups[0]["time_window_note_zh"]
+    assert "观察时间" in groups[0]["time_window_note_zh"]
     assert {row["_chart_type"] for row in groups[0]["rows"]} == {"line"}
     assert {row["_chart_series_key"] for row in groups[0]["rows"]} == {"treatment"}
     assert {row["_chart_time_key"] for row in groups[0]["rows"]} == {

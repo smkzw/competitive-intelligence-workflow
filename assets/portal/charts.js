@@ -1293,7 +1293,6 @@
         return "该指标结果尚未公开";
       }
       var title = stateLabels.join("；");
-      if (stateLabels.indexOf("低于报告阈值") !== -1) title += "，不能视为零";
       return title;
     }
     if (group && group.empty_message) return String(group.empty_message);
@@ -1335,16 +1334,7 @@
     var p1 = document.createElement("p");
     p1.className = "kz-chart-undisclosed__title";
     p1.textContent = undisclosedTitle(group);
-    var p2 = document.createElement("p");
-    p2.className = "kz-chart-undisclosed__hint";
-    var reasons = (group.rows || []).filter(function (row) {
-      return !isRenderable(row) && (row.difference_note || row.reason);
-    }).map(function (row) { return String(row.difference_note || row.reason); });
-    if (group.empty_message) reasons.push(String(group.empty_message));
-    p2.textContent = (reasons.length ? Array.from(new Set(reasons)).join("；") + "。" : "") +
-      "完整记录仍列于下方表格，便于核对来源与口径。";
     status.appendChild(p1);
-    status.appendChild(p2);
     chartDiv.appendChild(status);
   }
 
@@ -1691,27 +1681,6 @@
       encodingNote.className = "kz-chart-group__encoding-note";
       encodingNote.textContent = String(group.size_label_zh);
       container.appendChild(encodingNote);
-    }
-    var statusNotes = [];
-    var seenNotes = {};
-    for (var n = 0; n < group.rows.length; n++) {
-      var noteRow = group.rows[n];
-      if (isRenderable(noteRow)) continue;
-      var reason = String(noteRow.difference_note || noteRow.reason || "").trim();
-      if (!reason) continue;
-      var trial = String(noteRow.trial_zh || noteRow.product_zh || "相关记录");
-      var noteText = trial + "：" + reason;
-      if (!seenNotes[noteText]) {
-        seenNotes[noteText] = true;
-        statusNotes.push(noteText);
-      }
-    }
-    if (statusNotes.length && !group.empty_message) {
-      var statusNote = document.createElement("div");
-      statusNote.className = "kz-chart-group__status-note";
-      statusNote.setAttribute("role", "note");
-      statusNote.textContent = statusNotes.join("；");
-      container.appendChild(statusNote);
     }
 
     var chartDiv = document.createElement("div");

@@ -1439,8 +1439,7 @@ def _evidence_view(
     ]
     extraction_gap_note = (
         "本条为已报告事实，" + "、".join(missing_typed)
-        + f"等结构化字段尚未提取（{_UNSTRUCTURED_EXTRACTION_LABEL_ZH}），"
-        "不代表来源未公开，也不推断跨研究等价；请以逐字原文为准。"
+        + f"等字段待提取（{_UNSTRUCTURED_EXTRACTION_LABEL_ZH}）。"
         if missing_typed and _unstructured_extraction(observation) else ""
     )
     return EvidenceView.model_construct(
@@ -1477,16 +1476,15 @@ def _evidence_view(
         explanation=_evidence_field(
             f"本条信息摘自{source_kind}，"
             f"适用于{_observation_cohort_zh(observation)}；"
-            + ("本条为方案/SAP的设计或分析约定，不代表已观察的临床结果；"
+            + ("方案/SAP条款；"
                if observation.source_role is SourceRole.PROTOCOL_SAP else "")
             +
-            "来源版本、逐字原文与精确位置均已定位，仍不代替医学裁决；"
+            "来源已定位；"
             f"当前值状态为{_state_label(observation.disclosure_state)}。"
             + extraction_gap_note
             if located
             else (
-                "该观察仍可检索；逐事实来源版本、原文和精确定位待核，"
-                "不能作为已验科学结论。"
+                "来源定位待核。"
             )
         ),
         original_text=source_text if located else None,
@@ -2245,15 +2243,14 @@ def _statistics_scope(data: ReportCPortalData) -> dict[str, Any]:
     )
     protocol_closure = (
         f"本包已绑定研究方案与统计分析计划（Protocol/SAP）来源的条款级事实 "
-        f"{protocol_facts} 条；仅凭条款级绑定不能证明全文是否已纳入，"
-        "也不等于完整统计复核。"
+        f"{protocol_facts} 条。"
         if protocol_facts
         else "本包未绑定研究方案与统计分析计划（Protocol/SAP）来源；"
              "本报告未纳入 Protocol/SAP 正文。"
     )
     publication_closure = (
         f"本包已绑定主要试验报告或会议披露来源的条款级事实 {publication_facts} 条；"
-        "出版分支以实际绑定来源为限，不构成完整出版检索。"
+        ""
         if publication_facts
         else f"本包绑定来源为{source_kinds}，未绑定出版或会议披露来源；"
              "出版与结果报告分支未纳入本报告。"
@@ -2349,10 +2346,7 @@ def _render_page_context(
             "fact_count": len(data.observations),
             "source_links": tuple(source_routes),
             "notes": (
-                f"本包实际绑定的来源类型为{source_kinds}（数据截止见上）。"
-                "此处列示实际来源和覆盖范围，不据此宣称全球或中国竞品检索已闭合；"
-                "未提取与未公开应在具体事实中区分，缺失样本量不构成删除研究的理由；"
-                "统计语境按原文保留，不将缺失补成零或推断来源中没有的设计。"
+                f"来源类型：{source_kinds}。"
             ),
         }
     # 核心比较页省略首屏快速筛选，但折叠面板仍保留试验/产品选择。
@@ -2402,11 +2396,6 @@ def _render_page_context(
             {"label": "比较范围", "text": (
                 f"围绕 {n_trials} 项注册试验，从试验设计、人群定义、入选标准、"
                 "终点与随访时间窗等维度并列呈现登记事实。")},
-            {"label": "设计证据", "text": (
-                "设计事实按实际绑定来源保留观察定位；模式与权衡并列展示，不作排名。")},
-            {"label": "阅读边界", "text": (
-                "设计要素差异反映各试验的科学问题不同，不构成优劣判断；"
-                "入排与人群定义以登记原文为准。")},
         ]
     return {
         "report": data,

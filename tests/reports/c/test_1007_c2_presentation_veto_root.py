@@ -95,8 +95,8 @@ def test_unprojected_timeline_never_claims_registry_absence(
     site = tmp_path / "timeline"
     render_report_c_site(data, site, review_candidate=True)
     html = (site / "visit-duration-followup.html").read_text(encoding="utf-8")
-    assert "尚未完成结构化提取或复核" in html
-    assert "未结构化提取不等于来源未公开" in html
+    assert "访视表待提取" in html
+    assert "未结构化提取不等于来源未公开" not in html
     assert "绑定登记来源未公开本组试验" not in html
     assert 'href="treatment-arms.html"' in html
     assert 'href="endpoint-timepoint-matrix.html"' in html
@@ -356,7 +356,7 @@ def test_statistics_document_closure_is_computed_from_bound_source_roles(
     )
     bound_scope = _render_page_context(bound, page=page, catalog=catalog)["statistics_scope"]
     assert "条款级事实 1 条" in bound_scope["protocol_closure_zh"]
-    assert "不能证明全文是否已纳入" in bound_scope["protocol_closure_zh"]
+    assert "不能证明全文是否已纳入" not in bound_scope["protocol_closure_zh"]
 
     publication = seed.model_copy(update={
         "row_id": "c2-root-primary-report",
@@ -372,7 +372,7 @@ def test_statistics_document_closure_is_computed_from_bound_source_roles(
     )["statistics_scope"]
     # 主要试验报告不等于出版检索闭合：只作有界计数声明。
     assert "条款级事实 1 条" in published_scope["publication_closure_zh"]
-    assert "不构成完整出版检索" in published_scope["publication_closure_zh"]
+    assert "不构成完整出版检索" not in published_scope["publication_closure_zh"]
 
 
 def test_statistics_and_limitations_pages_disclose_review_and_document_closure(
@@ -383,10 +383,10 @@ def test_statistics_and_limitations_pages_disclose_review_and_document_closure(
     statistics = (site / f"{_STATISTICS_PAGE}.html").read_text(encoding="utf-8")
     limitations = (site / "evidence-limitations.html").read_text(encoding="utf-8")
     for html in (statistics, limitations):
-        assert "尚未结构化提取" in html
-        assert "不等于完整" in html or "不构成完整" in html
+        assert "待提取" in html
+        assert "不等于完整" not in html and "不构成完整" not in html
         assert "Protocol/SAP" in html
-        assert "未结构化提取不等于来源未公开" in html
+        assert "未结构化提取不等于来源未公开" not in html
         # 不得把未提取写成来源未公开，也不得输出内部 gate 诊断词。
         assert "extension_missing" not in html
         assert "core_satisfied" not in html
@@ -542,5 +542,5 @@ def test_all_placeholder_statistics_do_not_claim_all_extensions_are_extracted(
     site = tmp_path / "all-placeholder"
     render_report_c_site(placeholder_report, site, review_candidate=True)
     limitations = (site / "evidence-limitations.html").read_text(encoding="utf-8")
-    assert "仅有占位状态" in limitations
-    assert "统计扩展字段均已结构化提取" not in limitations
+    assert "暂无当前值" in limitations
+    assert "统计字段已提取。" not in limitations

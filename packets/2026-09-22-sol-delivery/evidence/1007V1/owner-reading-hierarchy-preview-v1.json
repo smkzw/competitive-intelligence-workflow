@@ -1,0 +1,53 @@
+{
+  "schema": "1007-owner-reading-correction/v1",
+  "baseline_commit": "af3a572b38e63b644633efd35ad348bc2fb070b2",
+  "state": "PARTIAL_IMPLEMENTATION_RUNTIME_PASSED_PRODUCT_ACCEPTANCE_OPEN",
+  "trigger": "User rejected the normal current32 B page for English text dumping, repeated records and false home navigation",
+  "current_generation_unchanged": "ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4",
+  "normal_preview": {
+    "path": ".artifacts/1007-b-reading-hierarchy-preview-v1/actual.json",
+    "sha256": "66e201b88cb44827da61250a7c1de466002510d7b396d6195a0d9e8ad68e60ef",
+    "physical_pages": 104,
+    "active_facts_preserved": 1505,
+    "durable_project_files_preserved": 16257,
+    "current_writes": 0,
+    "source_writes": 0
+  },
+  "tests": {
+    "initial": "2 failed,16 passed: raw registry title and incorrect navigation reproduced",
+    "related_first": "110 passed,1 fixture TypeError: fake document lacked querySelector",
+    "related_final": "111 passed in 1.80s; seven named comparison/native-semantics suites",
+    "strict_mypy": "one affected source file passed",
+    "ruff": "six named changed Python files passed after three E501 formatting repairs",
+    "new_full_gate": "NOT_RUN; current32 gate does not cover this change",
+    "fact_public_version_cutoff_test": "Separate16REDWIP; production admission not implemented"
+  },
+  "native_ego": {
+    "space": 2,
+    "page": "p1",
+    "widths": [1440,1600,1920,2560],
+    "v1_failed_evidence": ".artifacts/1007-b-reading-hierarchy-preview-v1/qa/actual.json",
+    "v1_reason": "Instrument opened default age question then expected pruritus records; product unchanged",
+    "v2": ".artifacts/1007-b-reading-hierarchy-preview-v1/qa-v2/actual.json",
+    "v2_sha256": "4bce2c472755d159f318680809a8153586fdf5d5f73b3eb300298230fa54df58",
+    "states": 24,
+    "failures": [],
+    "coverage": "home -> native compare link -> native question selection ->32facts/3studies -> full28source observations ->2facts/1study -> restore -> source -> actualEscfocus",
+    "not_claimed": "freshprofile/allphysicalpages/crossbrowser/config/share/clinical/fullproduct/RC"
+  },
+  "owner_visual": {
+    "actual_images_viewed": ["qa-v2/B-home-1440.png", "qa-v2/B-comparison-1440.png"],
+    "verdict": "REVISE_NOT_FINAL",
+    "remaining": ["Home still contains generic reading instructions rather than a sufficient clinical question summary", "Expanded default quick filter reveals unresolved product slugs", "Cross-study scientific numeric qualification remains distinct from descriptive matrix reachability", "Other pages and A/C affected shared display still require affected validation"]
+  },
+  "independent_review": {
+    "task": "ci-1007-b-reading-hierarchy-challenge-v1",
+    "state": "LAUNCHED_PENDING_NOT_ACCEPTED",
+    "runner_session": 78101,
+    "runner_pid": 95852,
+    "kernel_exit_session": 52958,
+    "route": "C02 live manifest; actual final identity not yet verified",
+    "source_artifact_policy": "Frozen author source/candidate; no pending report polling or latency redispatch"
+  },
+  "delivery": "No current rebuild/adoption/save/share replay. Full1007V1 goal remains active and incomplete."
+}

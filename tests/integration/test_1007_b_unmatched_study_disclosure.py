@@ -10,7 +10,7 @@ def test_empty_study_rows_have_a_named_native_control_not_removed_membership() -
     assert 'type="checkbox" data-comparison-unmatched-toggle' in template
     assert "本问题暂无匹配记录的其余研究" in template
     assert 'data-comparison-unmatched-count' in template
-    assert "不代表未研究或零结果" in template
+    assert "不代表未研究或零结果" not in template
 
 
 def test_native_checked_state_owns_empty_rows_and_matched_facts_never_hidden() -> None:

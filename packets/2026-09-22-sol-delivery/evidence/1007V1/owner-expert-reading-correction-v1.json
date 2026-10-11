@@ -1,0 +1,51 @@
+{
+  "schema": "1007-expert-reading-correction/v1",
+  "baseline_commit": "af3a572b38e63b644633efd35ad348bc2fb070b2",
+  "user_decisions": [
+    "Remove defensive instruction prose from all expert-facing A/B/C report surfaces",
+    "Comparison requires ECharts plus the corresponding table",
+    "Longitudinal data requires line charts and point annotations"
+  ],
+  "implementation": "Shared JS and A/B/C templates cleaned; C source-page title updated; no numeric rules changed",
+  "tests": {
+    "initial": "6 failed/2 passed: three actual asset failures and three wrong fixture paths",
+    "first_new_contract": "8 passed",
+    "migration_diagnostic": "19 failed/109 passed in144.21s; tests changed during run, diagnostic only",
+    "frozen_related_batch": "128 passed in148.47s across nine named suites",
+    "subsequent_c_title_smoke": "8 passed in0.94s",
+    "strict_mypy": "three affected renderer source files passed",
+    "ruff": "named changed Python files passed",
+    "full_repository_gate": "not run for this bounded presentation correction"
+  },
+  "normal_b_preview": {
+    "path": ".artifacts/1007-b-expert-reading-preview-v1/actual.json",
+    "sha256": "a62cff29a895eb470987ebd733df8d1d3278af759604805bf72ef3c5657a1255",
+    "pages": 104,
+    "current_facts": 1505,
+    "current_unchanged": true,
+    "source_writes": 0
+  },
+  "ego": {
+    "space": 2,
+    "page": "p1",
+    "width": 1920,
+    "actual": ".artifacts/1007-b-expert-reading-preview-v1/qa/actual.json",
+    "visible_defensive_copy": [],
+    "comparison_query_count": 32,
+    "comparison_displayed_count": 32,
+    "owner_viewed": "B-comparison-1920.png",
+    "instrument_recovery": "eval top-level await failed before page operation; corrected to async wrapper",
+    "product_status": "graph reconstruction pending; not final layout acceptance"
+  },
+  "independent_review": {
+    "task": "ci-1007-b-reading-hierarchy-challenge-v1",
+    "state": "terminal REVISE of preceding frozen candidate",
+    "actual_model": "google-antigravity/gemini-3.8-flash",
+    "requested_effort": "high",
+    "duration_seconds": 457.119,
+    "session": "01a129ce-2109-7000-b640-8b949d029dba"
+  },
+  "next": "Normal longitudinal ECharts line+annotations+table, then multi-question plots, clinical home and filter labels",
+  "current_generation": "ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4",
+  "delivery": "current32 not replaced; goal continues"
+}

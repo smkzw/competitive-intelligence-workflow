@@ -695,7 +695,6 @@
       list.appendChild(item);
     });
     reportSources.appendChild(list);
-    reportSources.appendChild(el("p", "kz-a-insight-note", "以上是报告级来源集合，不代表每份来源都支持当前产品；行级支持关系请核对本次所选观察。"));
     panel.appendChild(reportSources);
   }
   function setProductInsightTab(tabId, moveFocus) {
@@ -1093,7 +1092,6 @@
     });
     paginateObservations(host, ".kz-a-observation-group", "疗效");
     syncEfficacyCharts(host);
-    host.appendChild(el("p", "kz-a-chart-note", "图中仅保留可安全绘制的观察；单条观察直接列值，多条观察使用组内刻度。未绘制的原始值仍见完整表；图形不代表跨试验可比或排名。"));
   }
   // R24-72 执行切片：安全性数值视图的 facet 由精确事件定义/限定词、
   // 统计基础与单位、分析人群和观察窗共同决定；宽泛的 specific_ae 键或
@@ -1247,7 +1245,7 @@
     syncEfficacyCharts(host);
     host.setAttribute("data-view-digest", rows.map(function (item) { return item.row_id; }).join("|"));
     host.appendChild(el("p", "kz-a-heat-note",
-      "图中仅保留可安全绘制的同口径观察；单条观察直接列值，不生成无比较意义的坐标轴。零值照常绘入，未绘制的原值仍见完整表。组内刻度由同一口径数据决定，比例估计不自动视为0至100%概率刻度；不同试验、观察窗及分母不默认可比，图形不代表头对头结论。"));
+      "完整观察与来源见数据表。"));
   }
   function updateMatrixTable(points) {
     var byProduct = {};
@@ -1776,7 +1774,6 @@
       }
       content.appendChild(el("p", "", "来源：" + rowSource.label + "｜发布日期：" + rowSource.published_at
         + "｜数据截止：" + rowSource.data_cutoff));
-      if (rowSource.limitation) content.appendChild(el("p", "", "限制：" + rowSource.limitation));
       if (rowSource.url) {
         var rowLink = el("a", "", "打开来源原文");
         rowLink.href = rowSource.url;
@@ -1831,7 +1828,7 @@
           return entry.source_version_id === evidence.source_version_id;
         });
         if (source) {
-          var sourceLine = el("p", "", "来源：" + source.label + "。" + source.limitation);
+          var sourceLine = el("p", "", "来源：" + source.label);
           if (source.url) {
             var link = el("a", "", "查看来源");
             link.href = source.url;
@@ -2101,7 +2098,7 @@
           window.__COMPARISON_QUERY__.factCell(document, cell, button, row, value, facet);
           displayed[id] = true;
         });
-        if (!cell.children.length) cell.textContent = "当前问题无匹配事实，不代表零结果";
+        if (!cell.children.length) cell.textContent = "暂无匹配记录";
         tr.appendChild(cell);
       });
       body.appendChild(tr);

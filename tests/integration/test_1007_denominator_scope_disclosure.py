@@ -278,10 +278,9 @@ assert.equal(button.children[0].children[1].textContent,'61.5 %'); // face uncha
 const observation=cell.children[0].children[0];
 assert.equal(observation.children[0],button); // source trigger stays reachable
 const details=observation.children[1];
-assert.equal(details.children[0].textContent,'条件与限制');
-assert.equal(details.children[1].textContent,'分母口径不同');
-assert.equal(details.children[2].textContent,disclosure);
-assert.equal(details.children[2].className,'kz-comparison-context__denominator');
+assert.equal(details.children[0].textContent,'研究信息');
+assert.equal(details.children[1].textContent,disclosure);
+assert.equal(details.children[1].className,'kz-comparison-context__denominator');
 assert.equal(JSON.stringify(row),frozen); // presentation never rewrites the row
 // A user-cleared current value keeps its cleared face; the retained N is source-only.
 const clear=new Node(),clearCell=new Node();
