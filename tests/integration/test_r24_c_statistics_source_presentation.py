@@ -5,6 +5,7 @@ claimed by these fixtures. Each test calls the real renderer/projection.
 """
 
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -147,3 +148,29 @@ def test_actual_source_scope_does_not_invent_china_failure_or_missing_n_exclusio
     assert "中国境内登记路线访问受阻" not in html
     assert "样本量未披露的试验未纳入试验明细" not in html
     assert "仅来自 ClinicalTrials.gov" not in html
+
+
+@pytest.mark.parametrize("page", ("evidence-limitations", "visit-duration-followup"))
+def test_page_context_precedes_complete_limitations_without_duplicate_heading(
+    tmp_path: Path, page: str,
+) -> None:
+    data = _data()
+    if page == "visit-duration-followup":
+        data = data.model_copy(update={"observations": tuple(
+            row.model_copy(update={"assessment_timepoint": None})
+            if row.field in {"visit_schedule", "dosing_regimen"} else row
+            for row in data.observations
+        )})
+    site = tmp_path / "ordinary-c"
+    render_report_c_site(data, site)
+    html = (site / f"{page}.html").read_text()
+    assert html.index("data-c-task-title") < html.index('<section class="kz-c-limitations"')
+    title = re.search(r'<h1[^>]*data-c-task-title[^>]*>(.*?)</h1>', html)
+    assert title is not None
+    assert title.group(1) not in re.findall(r'<h2[^>]*>(.*?)</h2>', html)
+    if page == "evidence-limitations":
+        assert "不据此宣称全球或中国竞品检索已闭合" in html
+        assert "统计复核与文档闭合边界" in html and PDF_URL in html
+    else:
+        assert "时间安排提取与复核边界" in html
+        assert "给药疗程、结局观察窗与完整访视表不能互相替代" in html

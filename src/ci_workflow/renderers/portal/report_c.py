@@ -2293,7 +2293,10 @@ def _render_page_context(
     else:
         observations = _page_observations(data, catalog_page_id)
         title = page.title_zh
-        section_title = page.title_zh
+        section_title = {
+            "evidence-limitations": "来源绑定的设计事实",
+            "visit-duration-followup": "已提取的时间安排与原文",
+        }.get(catalog_page_id, page.title_zh)
         chart_title = page.title_zh
 
     groups = _chart_groups(

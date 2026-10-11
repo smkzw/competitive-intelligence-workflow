@@ -1,6 +1,15 @@
 {% extends "base.html.j2" %}
 
 {% block content %}
+  <header class="portal-page-head kz-c-page-head">
+    <h1 class="portal-page-title" data-c-task-title>{{ page_title }}</h1>
+    <div class="kz-c-page-meta" aria-label="页面范围">
+      <span>适应症：{{ report.indication }}</span>
+      <span>观察截止：{{ cutoff_text }}</span>
+    </div>
+    <p class="kz-c-page-lead" data-c-task-lead data-c-summary-text="{{ lead }}">{{ lead }}</p>
+  </header>
+
 {% if visit_insufficient %}
 <section class="kz-c-limitations" aria-label="证据不足声明">
   <h2>时间安排提取与复核边界</h2>
@@ -10,7 +19,7 @@
 {% endif %}
 {% if evidence_limitations %}
 <section class="kz-c-limitations" aria-label="证据版本与局限">
-  <h2>证据版本与局限</h2>
+  <h2>来源范围与研究覆盖</h2>
   <p>本页声明报告的证据边界；缺失与受阻如实记档，不作推断。</p>
   <dl class="kz-c-evidence-summary">
     <div class="kz-evidence-field"><dt>数据截止</dt><dd>{{ evidence_limitations.data_cutoff }}</dd></div>
@@ -39,15 +48,6 @@
   </ul>
 </section>
 {% endif %}
-  <header class="portal-page-head kz-c-page-head">
-    <h1 class="portal-page-title" data-c-task-title>{{ page_title }}</h1>
-    <div class="kz-c-page-meta" aria-label="页面范围">
-      <span>适应症：{{ report.indication }}</span>
-      <span>观察截止：{{ cutoff_text }}</span>
-    </div>
-    <p class="kz-c-page-lead" data-c-task-lead data-c-summary-text="{{ lead }}">{{ lead }}</p>
-  </header>
-
   {% if catalog_page_id == "sample-analysis-statistics" and statistics_scope %}
   <section class="kz-c-limitations" aria-label="统计字段覆盖与复核边界">
     <h2>统计字段覆盖与复核边界</h2>
