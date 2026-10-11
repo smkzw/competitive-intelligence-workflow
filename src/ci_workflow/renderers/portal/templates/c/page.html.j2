@@ -12,7 +12,7 @@
 <section class="kz-c-limitations" aria-label="证据版本与局限">
   <h2>证据版本与局限</h2>
   <p>本页声明报告的证据边界；缺失与受阻如实记档，不作推断。</p>
-  <dl class="kz-evidence-field">
+  <dl class="kz-c-evidence-summary">
     <div class="kz-evidence-field"><dt>数据截止</dt><dd>{{ evidence_limitations.data_cutoff }}</dd></div>
     <div class="kz-evidence-field"><dt>证据来源</dt><dd>{{ evidence_limitations.source_count }} 个来源绑定</dd></div>
     <div class="kz-evidence-field"><dt>覆盖范围</dt><dd>{{ evidence_limitations.trial_count }} 项试验 · {{ evidence_limitations.product_count }} 个产品 · {{ evidence_limitations.fact_count }} 条设计事实</dd></div>
@@ -51,19 +51,31 @@
   {% if catalog_page_id == "sample-analysis-statistics" and statistics_scope %}
   <section class="kz-c-limitations" aria-label="统计字段覆盖与复核边界">
     <h2>统计字段覆盖与复核边界</h2>
-    {% if statistics_scope.extracted_field_labels %}
-    <p>已结构化提取且当前有可核实数据的统计字段：{{ statistics_scope.extracted_field_labels | join('、') }}；见下方完整表与数据依据。</p>
-    {% endif %}
-    {% if statistics_scope.placeholder_field_labels %}
-    <p>以下统计字段在本报告切片中只有占位状态（未报告、用户清除、未公开或路径未解析等），不构成当前可核实数据：{{ statistics_scope.placeholder_field_labels | join('、') }}。</p>
-    {% endif %}
-    {% if statistics_scope.unextracted_field_labels %}
-    <p>以下统计扩展字段在本报告切片中尚未结构化提取或尚未审阅：{{ statistics_scope.unextracted_field_labels | join('、') }}。未结构化提取不等于来源未公开——登记来源中可查的统计语境（分析窗口、补救治疗策略、缺失处理等）以逐字原文为准，可在 <a href="{{ endpoint_definitions_href }}">终点、定义与时间点</a> 的终点定义说明与本页数据依据中核对；绑定来源入口见页末“外部来源”。</p>
-    {% endif %}
-    {% if statistics_scope.per_trial_gap_zh %}
-    <p>逐研究缺口（下列已提取字段在该试验暂无当前可核实数据）：{{ statistics_scope.per_trial_gap_zh | join('；') }}。</p>
-    {% endif %}
-    <p>已核实的样本量与已提取统计字段不等于完整的统计分析复核：分析集、比较方法、效应量、估计目标与伴发事件策略、缺失数据与敏感性、多重性、样本量依据与统计模型等结论，仍需以研究方案与统计分析计划（Protocol/SAP）正文为准。{{ statistics_scope.protocol_closure_zh }}{{ statistics_scope.publication_closure_zh }}</p>
+    <p class="kz-c-statistics-scope__summary">本页统计字段覆盖：已结构化提取且当前有可核实数据的统计字段 {{ statistics_scope.extracted_field_labels | length }} 个{% if statistics_scope.placeholder_field_labels %}；仅有占位状态、不构成当前可核实数据的统计字段 {{ statistics_scope.placeholder_field_labels | length }} 个{% endif %}{% if statistics_scope.unextracted_field_labels %}；尚未结构化提取或尚未审阅的统计扩展字段 {{ statistics_scope.unextracted_field_labels | length }} 个{% elif not statistics_scope.placeholder_field_labels %}；统计扩展字段均已结构化提取{% endif %}{% if statistics_scope.per_trial_gap_zh %}；存在逐研究缺口 {{ statistics_scope.per_trial_gap_zh | length }} 项{% endif %}。完整字段清单与逐研究缺口见下方展开内容；未结构化提取不等于来源未公开。</p>
+    <p>统计字段提取不等于完整统计分析复核；未报告、用户清除或未解析不计作当前可核实数据。</p>
+    <p>{{ statistics_scope.protocol_closure_zh }}{{ statistics_scope.publication_closure_zh }}</p>
+    <details class="kz-c-statistics-scope">
+      <summary class="kz-c-statistics-scope__summary">完整字段清单与逐研究缺口</summary>
+      <div class="kz-c-statistics-scope__body">
+        {% if statistics_scope.extracted_field_labels %}
+        <p data-scope-field-list="extracted">已结构化提取且当前有可核实数据的统计字段：{{ statistics_scope.extracted_field_labels | join('、') }}；见下方完整表与数据依据。</p>
+        {% else %}
+        <p>当前暂无可核实的统计字段；原文与缺口仍可核对，不推断来源未公开。</p>
+        {% endif %}
+        {% if statistics_scope.placeholder_field_labels %}
+        <p data-scope-field-list="placeholder">以下统计字段在本报告切片中仅占位状态（未报告、用户清除、未公开或路径未解析等），不构成当前可核实数据：{{ statistics_scope.placeholder_field_labels | join('、') }}。</p>
+        {% endif %}
+        {% if statistics_scope.unextracted_field_labels %}
+        <p data-scope-field-list="unextracted">以下统计扩展字段在本报告切片中尚未结构化提取或尚未审阅：{{ statistics_scope.unextracted_field_labels | join('、') }}。未结构化提取不等于来源未公开——登记来源中可查的统计语境（分析窗口、补救治疗策略、缺失处理等）以逐字原文为准，可在 <a href="{{ endpoint_definitions_href }}">终点、定义与时间点</a> 的终点定义说明与本页数据依据中核对；绑定来源入口见页末“外部来源”。</p>
+        {% elif not statistics_scope.placeholder_field_labels %}
+        <p>统计扩展字段均已结构化提取；已核实的样本量不等于完整的统计分析复核；未结构化提取不等于来源未公开。</p>
+        {% endif %}
+        {% if statistics_scope.per_trial_gap_zh %}
+        <p>逐研究缺口（下列已提取字段在该试验暂无当前可核实数据）：{{ statistics_scope.per_trial_gap_zh | join('；') }}。</p>
+        {% endif %}
+        <p>已核实的样本量与已提取统计字段不等于完整的统计分析复核：分析集、比较方法、效应量、估计目标与伴发事件策略、缺失数据与敏感性、多重性、样本量依据与统计模型等结论，仍需以研究方案与统计分析计划（Protocol/SAP）正文为准。</p>
+      </div>
+    </details>
   </section>
   {% endif %}
 

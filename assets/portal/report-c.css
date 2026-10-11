@@ -41,6 +41,69 @@
   max-width: none;
 }
 
+/* A collection of fields must not inherit a single drawer row's two columns. */
+.kz-c-evidence-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0.5rem 0;
+  border: 1px solid var(--kz-c-line);
+  border-radius: var(--radius-sm);
+}
+.kz-c-evidence-summary > .kz-evidence-field {
+  grid-template-columns: 6rem minmax(0, 1fr);
+  min-width: 0;
+  align-items: start;
+  border-bottom: 0;
+}
+.kz-c-evidence-summary > .kz-evidence-field:not(:last-child) {
+  border-right: 1px solid var(--kz-c-line);
+}
+
+/* 统计页阅读层级（ci-1007-c-statistics-reading-v1）：首屏保留紧凑覆盖率
+   摘要与逐字闭合说明，完整字段清单与逐研究缺口放入原生 details；字号维持
+   1rem 地板，不裁切、不做装饰色条，键盘焦点与既有 disclosure 一致。 */
+.kz-c-statistics-scope__summary {
+  margin: 0 0 0.5rem;
+  line-height: 1.6;
+}
+.kz-c-statistics-scope {
+  margin: 0.5rem 0 0.75rem;
+  border: 1px solid var(--kz-c-line);
+  border-radius: 12px;
+  background: var(--kz-c-soft);
+}
+.kz-c-statistics-scope > .kz-c-statistics-scope__summary {
+  display: list-item;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  color: var(--kz-c-ink);
+  font-weight: 600;
+  line-height: 1.6;
+  cursor: pointer;
+}
+.kz-c-statistics-scope > .kz-c-statistics-scope__summary::marker {
+  color: var(--kz-c-muted);
+}
+.kz-c-statistics-scope > .kz-c-statistics-scope__summary:focus-visible {
+  outline: 3px solid var(--kz-c-focus);
+  outline-offset: 2px;
+}
+.kz-c-statistics-scope[open] > .kz-c-statistics-scope__summary {
+  border-bottom: 1px solid var(--kz-c-line);
+}
+.kz-c-statistics-scope__body {
+  padding: 0.75rem 0.9rem 0.9rem;
+  background: #fff;
+  border-radius: 0 0 12px 12px;
+}
+.kz-c-statistics-scope__body > p {
+  margin: 0 0 0.6rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.kz-c-statistics-scope__body > p:last-child {
+  margin-bottom: 0;
+}
 /* FR20: homepage summary stays separate from the actionable comparison entry. */
 .kz-c-comparison-entry {
   display: flex;
