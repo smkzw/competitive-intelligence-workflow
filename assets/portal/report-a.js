@@ -2126,7 +2126,7 @@
     host.dataset.columnIds = JSON.stringify(columns.map(function (column) {return column.id;}));
     if (window.__CHART_SYNC__) {
       var groups = window.__COMPARISON_QUERY__.plotGroups(workspace,
-        window.__A_COMPARISON_GROUPS__ || [], columns, allowed, displayed);
+        window.__A_COMPARISON_GROUPS__ || [], columns, allowed, displayed, rows);
       window.__CHART_SYNC__.replaceGroups(groups);
     }
     params.set("cmp", select.value); params.set("cmp_page", String(aComparisonPage));

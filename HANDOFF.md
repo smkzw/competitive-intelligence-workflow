@@ -1,10 +1,26 @@
 # 唯一接手入口｜1007V1连续实施，非暂停、非RC
 
 唯一当前状态：[STATUS顶节](packets/2026-09-22-sol-delivery/STATUS.md)；最新
-[来源阅读与版本定位回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-source-reading-native-replay-v1.json)。
-第九批3c6069cf已push并核远端；本第十批具名提交中。Goal实查active/unbounded。
+[中文问题与原件回放](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-question-heading-object-replay-v1.json)。
+第十批a3a0ac23830143999bcc52efe3ee4c296e731c30已push/远端exact，第十一批
+具名提交中。Goal实查active/unbounded，无阶段暂停。
 
-## 实际完成与尚未交付
+## 唯一当前单元｜2026-10-12
+
+共同中文问题标题/原有单位投影和C漏网说教句已修：5RED→七文件50PASS，
+普通A49/B104/C16、1505/16257/current32保持。Ego四宽A12+B/C8有界态通过；
+Owner看四代表PNG，标题修正接受，整体REVISE：图卡留白、C资料数量假结论
+及真正临床多药共图仍须实现。一次六步开发门terminal0/source-set exact，
+Ruff/strict286/1185活跃PASS291.94s/20兼容/7分层/旧路径，只签开发质量。
+两官方PMC原件MD5/ETag吻合，服务器对象日期早于cutoff，六事实/72上下文逐字
+匹配。新旧原件hash不同，当前获取不倒写；118仍零采用。
+新独立只读C03 ci-1007-dated-public-object-six-v1预检PASS已启动：runner16062/
+PID52858、kernel退出事件63521，实际模型/effort未终态核，不读pending/轮询。
+下一有界：白名单Git→共享图形几何与C真实设计摘要，收C03终态再最小接入
+逐事实日期原件证明；同版修订配置分享和全W00–W10继续。复盘见
+[本批记录](docs/handoffs/RETROSPECTIVE_20261012_question_heading_object_replay.md)。
+
+## 前一单元记录（第十批已push，不作为当前待提交或待重跑）
 
 本批A默认3匹配/43可展开/all46，筛选2匹配/2可展开/all4；零/清除/列页外
 记录仍匹配。2RED→五文件42PASS1.73s/具名静态；普通A49/1505/16257保持。
@@ -32,7 +48,7 @@ ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4。
 必需论文、同版本修订配置分享、24门户/三宿主/安装恢复/RC继续按W00–W10。
 已终态历史不重跑，不拼接不同候选的PASS。[本批复盘](docs/handoffs/RETROSPECTIVE_20261011_source_reading_native_replay.md)。
 
-## 下一有界动作与在途
+## 前一单元的接续动作（上方当前单元覆盖；旧节点均终态）
 
 1. 本批白名单Git；随后A复用专家中文图表阅读、C删除泛化说明，再真正临床
    多药图/表和同候选操作/分享。新宽门NOT_RUN，旧通过范围不扩大。

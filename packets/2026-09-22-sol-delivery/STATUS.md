@@ -1,5 +1,19 @@
 # 唯一当前状态：1007V1连续实施｜current32阅读体验被用户否决，正在修正，非RC
 
+第十一批以a3a0ac23830143999bcc52efe3ee4c296e731c30已push/远端exact为基线。
+[中文问题/原件回放](evidence/1007V1/owner-question-heading-object-replay-v1.json)：
+5RED→七文件50PASS；普通169页/1505/16257/current32保持，Ego四宽A12+B/C8
+任务/标题态通过。Owner四PNG实看：标题/单位修正接受，整产品REVISE，
+图卡留白/C范围假结论/真正临床多药图表继续。新六步门terminal0，源码集合
+exact/Ruff/strict286/1185活跃PASS291.94s/20兼容/7分层/旧路径，仅质量层。
+两个官方PMC原件实际时钟/MD5/ETag与服务器对象时间保存，六原子72上下文
+逐字回放；118零采用。独立C03 ci-1007-dated-public-object-six-v1预检PASS，
+runner16062/PID52858/kernel事件63521在途，只等终态，不读pending/轮询。
+请求grok4.7/high及既定fallback，实际身份终态核。第十一具名Git中。
+下一共享几何/C真实摘要与六事实版本最小接线，同版操作/全W门继续，Goal active。
+
+## 第十批历史（已pusha3a0ac23；以下旧“Git中/下一”不是当前动作）
+
 当前第十批以3c6069cf已push/远端exact为基线，最新
 [来源阅读/版本定位](evidence/1007V1/owner-source-reading-native-replay-v1.json)：
 3RED→五文件32PASS4.20s；normalA49/B104/C16/1505/16257/current32保持。

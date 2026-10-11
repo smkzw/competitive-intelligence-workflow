@@ -1753,7 +1753,7 @@
     chartDiv.style.maxWidth = "";
     var value = row.display_value != null ? row.display_value
       : row.numeric_value != null ? row.numeric_value : row.value;
-    var unit = String(row.unit || "").trim();
+    var unit = String(row.unit_label_zh || row.unit || "").trim();
     var shown = String(value == null ? "已披露；原值待核" : value);
     if (unit && shown.slice(-unit.length) !== unit) shown += (unit === "%" ? "" : " ") + unit;
     var number = document.createElement("strong");
@@ -1929,7 +1929,11 @@
         : dimensionTitle && dimensionTitle !== "全部指标"
           ? indicatorTitle + "｜" + dimensionTitle
           : indicatorTitle;
-    var headingParts = chartHeadingParts(title.textContent, completeTitle);
+    // The shared query supplies a source-bound question label. Complete source
+    // titles remain with the full table, never stripped from source material.
+    var headingParts = group.reading_title_zh
+      ? {title: String(group.reading_title_zh), context: ""}
+      : chartHeadingParts(title.textContent, completeTitle);
     title.textContent = headingParts.title;
     container.appendChild(title);
     if (headingParts.context) {
@@ -2107,6 +2111,12 @@
     summary.className = "kz-complete-table__summary";
     summary.textContent = "展开完整数据表";
     disclosure.appendChild(summary);
+    if (group.reading_title_zh && group.title_zh && group.title_zh !== group.reading_title_zh) {
+      var originalTitle = document.createElement("p");
+      originalTitle.className = "kz-chart-source-context";
+      originalTitle.textContent = String(group.title_zh);
+      disclosure.appendChild(originalTitle);
+    }
     disclosure.appendChild(table);
     container.appendChild(disclosure);
     return table;

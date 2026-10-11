@@ -6,6 +6,11 @@
 
 ## 1007V1 当前增量合同
 
+共同plotGroups投影可承载已核问题的reading_title_zh，并从既有displayRows
+复制unit_label_zh/time_label_zh，原科学group/row/source材料保持。共享图形
+主标题消费该投影，完整原题留在原生完整表详情；不另建翻译/科学分组路径。
+桌面几何仍须按实际轴/图例和筛后复杂度检查，不以短标题修复签整页审美。
+
 共享图点命中区样式由portal资产单一维护，A/B消费同一几何；报告通用按钮
 最小高度不能改变实际glyph命中区。单位优先已提供的unit_label_zh，未知
 保留原单位，不在renderer加字典。已绑定描述性测量按身份/原时间单位/明确

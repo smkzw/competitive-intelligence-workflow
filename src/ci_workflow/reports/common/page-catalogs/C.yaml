@@ -23,7 +23,7 @@ pages:
     route: /c/overview
     title: 首页
     navigation_group: 总览
-    responsibility: "呈现核心设计格局、关键模式和差异，不只凭适应症给出唯一或最佳设计。"
+    responsibility: "试验设计格局、关键模式与研究间差异。"
     visuals: [设计结构图, 关键差异矩阵, 设计模式矩阵]
     complete_table: true
     filter_profiles: [c-overview]

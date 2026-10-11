@@ -228,7 +228,7 @@
         }
         observation.appendChild(details);
       }
-    }, plotGroups: function (workspace, groups, columns, allowed, displayed) {
+    }, plotGroups: function (workspace, groups, columns, allowed, displayed, displayRows) {
       // A/B share the physical query, not a new scientific grouping rule.
       function visible(row) { return allowed[row.row_id] && displayed[row.row_id]; }
       function selectRows(group, predicate) {
@@ -266,7 +266,25 @@
         return selectRows(group, function (row) {
           return !trajectoryIds[row.row_id] && !descriptiveIds[row.row_id];
         });
-      }).filter(function (group) {return group.rows.length;}));
+      }).filter(function (group) {return group.rows.length;})).map(function (group) {
+        // One question title for A/B, not a new scientific frame or translation.
+        var projected = Object.assign({}, group);
+        var label = columns.find(function (column) {
+          return column.question_known && (column.row_ids || []).some(function (id) {
+            return group.rows.some(function (row) {return row.row_id === id;});
+          });
+        });
+        if (label && String(label.question_label || "").length <= 80) {
+          projected.reading_title_zh = label.question_label;
+        }
+        if (displayRows) projected.rows = group.rows.map(function (row) {
+          var display = displayRows[row.row_id];
+          return display ? Object.assign({}, row, {
+            unit_label_zh: display.unit_label_zh, time_label_zh: display.time_label_zh
+          }) : row;
+        });
+        return projected;
+      });
     }, recordScope: function (host, allowed, columns, displayed) {
       var questionRows = new Set();
       columns.forEach(function (column) {
