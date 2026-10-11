@@ -116,6 +116,16 @@
   }
 
   function withMeta(option, rowIds) {
+    // Numeric ticks are short quantitative labels, not study-name categories.
+    // Keep them horizontal and intact across both orientations and builders.
+    [option.xAxis, option.yAxis].forEach(function (dimension) {
+      (Array.isArray(dimension) ? dimension : [dimension]).forEach(function (axis) {
+        if (!axis || (axis.type !== "value" && axis.type !== "log")) return;
+        axis.axisLabel = Object.assign({}, axis.axisLabel || {}, {rotate: 0});
+        delete axis.axisLabel.width;
+        delete axis.axisLabel.overflow;
+      });
+    });
     option.animation = false;
     option._rowIds = rowIds;
     option._snapshotId = snapshotId;
@@ -579,7 +589,7 @@
       // Keep their full labels and values, orient the value axis horizontally.
       var valueAxis = option.yAxis;
       var categoryAxis = option.xAxis;
-      valueAxis.axisLabel = {fontSize: 16, hideOverlap: true};
+      valueAxis.axisLabel = Object.assign({}, valueAxis.axisLabel, {fontSize: 16, hideOverlap: true});
       valueAxis.nameLocation = "middle";
       valueAxis.nameGap = 28;
       categoryAxis.axisLabel = {fontSize: 16, interval: 0, rotate: 0,

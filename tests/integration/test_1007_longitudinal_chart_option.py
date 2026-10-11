@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import json
 import subprocess
 from pathlib import Path
+
+import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 CHARTS = ROOT / "src/ci_workflow/renderers/portal/assets/charts.js"
@@ -578,5 +581,73 @@ def test_longitudinal_line_option_keeps_visit_distance_and_row_identity() -> Non
         capture_output=True,
         text=True,
         check=False,
+    )
+    assert result.returncode == 0, result.stderr or result.stdout
+
+
+@pytest.mark.parametrize("kind", (
+    "bar", "horizontal_bar", "identity_bar", "line", "forest", "bubble",
+    "scatter_interval", "timeline", "heatmap", "status_matrix",
+))
+def test_numeric_ticks_stay_horizontal_and_unbroken_without_changing_categories(kind: str) -> None:
+    """Run production builders, not source-text assertions or browser acceptance."""
+    setup = PROBE.split("// Unordered actual visits", 1)[0]
+    # Expose the real private dispatcher only inside this isolated VM. These
+    # option tests do not need the unrelated DOM legend/heatmap mount adapters.
+    setup = setup.replace(
+        "vm.runInNewContext(source, {",
+        "vm.runInNewContext(source.replace('window.__PRESENTATION_PLAN__ = presentationPlan;', "
+        "'window.__AXIS_TEST_BUILD__ = buildOption; "
+        "window.__PRESENTATION_PLAN__ = presentationPlan;'), {",
+    )
+    probe = r"""
+const kind = JSON.parse(process.argv[2]);
+const type = kind.endsWith('bar') ? 'bar' : kind;
+const rows = [0, 4, 24].map((time, index) => baseRow({
+  _chart_type: type, row_id: 'axis-' + index, actual_timepoint: time,
+  actual_timepoint_unit: 'week', numeric_value: index * 7.25, value: index * 7.25,
+  display_label_zh: '保留完整研究与方案名称' + index,
+  category: '保留完整研究与方案名称' + index,
+  group_id: 'declared-' + index, time: '第' + time + '周',
+  effect: index * 7.25, center: index * 7.25, ci_lower: 1.5, ci_upper: 20.5,
+  x_value: index * 7.25, y_value: index + 2, size: 50,
+  event: '事件' + index, value_matrix: index, coverage: index / 2, status: '进行中',
+}));
+const group = {title_zh: '数值刻度', rows};
+if (kind === 'horizontal_bar') group.orientation = 'horizontal';
+if (kind === 'identity_bar') {
+  group.identity_series = true;
+  rows.forEach((row, index) => {
+    row._chart_identity_key = 'identity-' + index;
+    row._chart_comparison_context_key = 'context-' + index;
+  });
+}
+const before = JSON.stringify(rows);
+const option = windowRef.__AXIS_TEST_BUILD__(group);
+for (const dimension of ['xAxis', 'yAxis']) {
+  const axes = Array.isArray(option[dimension]) ? option[dimension] : [option[dimension]];
+  for (const axis of axes) {
+    if (!axis || !['value', 'log'].includes(axis.type) || axis.show === false) continue;
+    check(axis.axisLabel && axis.axisLabel.rotate === 0, kind + ' ' + dimension + ' tilted tick');
+    check(!axis.axisLabel.overflow && axis.axisLabel.width == null,
+      kind + ' ' + dimension + ' numeric tick can be split or truncated');
+    check(axis.axisLabel.fontSize >= 16, kind + ' reduced tick type');
+  }
+}
+check(JSON.stringify(rows) === before, kind + ' changed original observations');
+check(option._rowIds.join(',') === 'axis-0,axis-1,axis-2', kind + ' lost source identities');
+if (type === 'line') {
+  check(JSON.stringify(option.series[0].data.map(xOf)) === '[0,4,24]', 'lost real visit spacing');
+  check(option.series[0].data[0].value[1] === 0, 'zero changed');
+}
+if (kind === 'forest' || kind === 'scatter_interval') {
+  check(option.yAxis.axisLabel.rotate === 25, 'category policy was overwritten');
+  check(option.yAxis.data[2] === rows[2].display_label_zh, 'category was shortened');
+}
+if (failures.length) throw new Error(failures.join('\n'));
+"""
+    result = subprocess.run(
+        ["node", "-e", setup + probe, str(CHARTS), json.dumps(kind)],
+        capture_output=True, text=True, check=False,
     )
     assert result.returncode == 0, result.stderr or result.stdout

@@ -1,5 +1,23 @@
 # 唯一当前状态：1007V1连续实施｜current32阅读体验被用户否决，正在修正，非RC
 
+第十四有界呈现：[数值轴回执](evidence/1007V1/owner-numeric-axis-reading-v1.json)。
+数值刻度水平完整，长研究标签不受覆盖；七真RED→23相关PASS1.18s，Node/
+具名Ruff/mirror。普通A49/B104/C16/1505/current32不变，保护报告/快照16059文件
+及当前集合。Ego2/p1四宽同新候选A12/B12真实任务态及16轴态，Owner三PNG实看，
+仅局部读数通过，整产品REVISE、新宽门NOT_RUN。接续下面正式issuer终态核/
+正常采用、合法消费者、真正多药图表及同当前操作/分享；全W终验未完成。
+
+2026-10-12当前：第十三批9cf2b098a4cc63a2ac85f141d96bed41cdb721d4已push/远端exact。
+118论文候选/118直接claims现已正常追加并逐事实绑定，0采用/current32不变。
+准备失败v1空目录恢复保护、v2将合法追加回执误作不可变均原样留存；最后
+仅核既有摄取及原回执前缀，未再次摄取或削弱生产保护。正式source-only
+issuer PID81539/session87419/kernel97743单次运行，既定OMP/gpt-6.1-sol/high；
+实际身份及科学判决终态核，原生fresh会话01a12c04-4f50-7000-941d-3949c86ac60a。
+不读pending/轮询/重派。来源118接受不等于报告/数值比较验收。
+Owner并行共享数值轴阅读根因；之后合法消费者/真正多药横比/同当前操作链。
+
+## 第十三批已完成开发质量（下面旧Git/未绑定表述为原时点记录）
+
 第十三批以718e425f8b364b32d5e2af86a347231b3118e6f2已push且远端exact为基线。
 [来源日期回执](evidence/1007V1/owner-pmc-fact-availability-v1.json)：两原件四资产/
 逐事实证明/摄取/提交/快照恢复接通，108相关及32portable/真实PASS，具名静态。

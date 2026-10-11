@@ -1,0 +1,43 @@
+{
+ "scope": "1007V1 shared numeric tick readability, not full product acceptance",
+ "parent_commit": "9cf2b098a4cc63a2ac85f141d96bed41cdb721d4",
+ "state": "BOUNDED_UI_CHECKS_PASSED_PRODUCT_REVISE",
+ "source": {
+  "author": "src/ci_workflow/renderers/portal/assets/charts.js",
+  "sha256": "071fe392ad24fff5c368556f7f9fca604e1b0803a79081f794052c65d19e1ed9",
+  "tests_sha256": "277cedb8b57c0fff640d83d9c27574482bc42f2e3cf243eb57a4950c1b7423ed",
+  "mirror": "assets/portal/charts.js",
+  "mirror_verified": true
+ },
+ "root_cause": "Shared builders applied category wrapping and rotation to numeric ticks; horizontal-bar branch replaced the normalized label object.",
+ "checks": {
+  "red": {"actual_product_failures": 7, "already_passing": 3, "instrument_failures_not_product_red": 9},
+  "green_command": ".venv/bin/pytest -q tests/integration/test_1007_longitudinal_chart_option.py tests/integration/test_1007_shared_chart_reading.py tests/integration/test_r24_a_safety_echarts.py tests/integration/test_r24_c_shared_presentation_plan.py --tb=short",
+  "green": {"passed": 23, "seconds": 1.18},
+  "named_ruff": "PASS", "node_syntax": "PASS", "asset_mirror": "PASS",
+  "new_wide_gate": "NOT_RUN; the prior source milestone gate does not bind this JS change"
+ },
+ "ordinary_render": {
+  "recipe": "packets/2026-09-22-sol-delivery/evidence/1007V1/render-abc-axis-reading-v1.py",
+  "candidate": ".artifacts/1007-abc-axis-reading-v1",
+  "receipt_sha256": "1c698e69f29695c16134d551c8b404750bf802992823fe6d4443dd9585b8bbf8",
+  "pages": {"A":49,"B":104,"C":16}, "active_facts":1505,
+  "protected_files_unchanged":16059, "protected_scope":["reports","snapshots"],
+  "current_revision":32,
+  "current_generation":"ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4",
+  "current_writes":0, "source_writes":0,
+  "first_attempt":"Missing PYTHONPATH for tools import; no output/ingestion occurred. Normal command rerun with PYTHONPATH=."
+ },
+ "browser": {
+  "engine":"existing Ego Lite space2/profile1/p1",
+  "widths":[1440,1600,1920,2560],
+  "recipe":"packets/2026-09-22-sol-delivery/evidence/1007V1/qa-abc-axis-reading-v1.js",
+  "a_tasks":{"states":12,"failures":0,"receipt_sha256":"237d42c8f6fe00be2fe565fd6ae841b12e74c0310ab2da982ff1fdb9970161f7"},
+  "b_tasks":{"states":12,"failures":0,"receipt_sha256":"4602bedcad1c0508e58ef5d87b60b0866d70ca78d110a816388779dc6397994a"},
+  "numeric_axes":{"states":16,"failures":0,"receipt_sha256":"015b1eb27c6b390e9cad2789a8ccbfdb954818d0959b0c24659b059d558b1813"},
+  "tasks":["same-query main table and ECharts","real 24-week 57.7 source click","real 75-count source click","Escape returns to actual or stable same-fact target","dense to filtered sparse","horizontal unbroken 16px numeric ticks"],
+  "owner_viewed":["a-qa/dense-1920.png","b-qa/filtered-1440.png","b-qa/source-2560.png"],
+  "owner_note":"2560 source screenshot viewer rescaled to2048. Only local tick/readability checks closed; full-page aesthetics and C interaction not accepted by this receipt."
+ },
+ "remaining":["true multi-drug clinical comparison","formal adoption and legal consumers for118 new publication candidates","same-current edit-clear-undo-config-single-and-joint-share-reopen","universe and MAH closure","24 portals, three hosts, installation, recovery, RC"]
+}
