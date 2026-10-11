@@ -1,0 +1,25 @@
+# Codex Execution Review: ci-1007-publication-version-evidence-v1
+
+## Verdict
+
+REVISE for provenance time and clinical qualification; accept only v2 byte reopening/bibliographic fields as scoped evidence. Both execution rounds genuinely terminal, no adoption/current writes. v1 missing-byte history preserved. v2 raw lineage useful but six future acquired_at literals invalid. Fresh independent source challenge now terminal and scoped accepted, not clinical PASS; new owner reconciliation leaves exact time unknown and preserves original bytes. Current118 qualification unresolved, not a permanent required count.
+
+## Worker Outputs
+
+Original worker76969/PID78602/NOTE_EXIT94872 terminal0, actual native Pi/google-antigravity/gemini-3.8-flash, high requested,552.409s, nofallback; session01a1298d-2433-7000-9bb9-5d9718aa7868. Output99f73cb9686301924d8037ac250265656d7bec4d0d26a8ba1fb71c70e57c45ec. v1metadata851d0a9db09a7cf5db6729d521eb7bbacc5ac2e345149aff54c1306ae033f207/checkpoint986efe80dae967a8e01a432e831559982c6c96013de3bb25900d775f2f1707ff preserved. Candidate/source-package unchanged andnotadopted. Generated unknown claims are evidence, not new authority.
+
+## Codex Independent Verification
+
+Owner fully read report and packet verification script, inspected14 receipt records and actual directory: onlymetadata/checkpoint/replay exist, all14 lack response path/CAS/raw binding. The script hashes its own summary and asserts summary verdicts, never reopens response originals or fact-version history; do not rerun circular assertions as validation. Bibliographic DateRevised and converter dates are not fulltext clinical version timestamps. CurrentCrossmark "Document is current"/emptyrelationshiplists cannot prove no correction ever or zero effect on all51/67 facts. Wiley success has no corresponding distinct receipt in listed14; record exact discrepancy instead of fabricate one. Copyright corrected-publication impact remains unresolved, contrary to unconditionalzero claim. Claimed PMC lastmaintenance/version needs precise primary origin; numbers/IDs alone are insufficient.
+Native selected source tools show real retrieval attempts; no inference that every summary claim is fabricated. Runner count234 versus64 unique tool_execution_start events (read6/eval54/web_search2/bash2) noted as instrumentation definitions, not API counts. HTTP/body bytes were not retained for Owner replay, regardless of whether originally downloaded. PMC/Nature fullHTML was obtained during metadata checking; no new fact extraction observed, but subsequent repair prohibits repeated fullbodyfetch.
+Same-handle followup59275/PID81548/NOTE_EXIT51930 terminal0,360.286s, actualPi/google-antigravity/gemini-3.8-flash/highrequested/nativeobserved. Native21 toolstarts versusrunner66, input3498/output6036/cache208577/total218111/reasoning388; nofallback. Output65ebf860e8d86e349afc4ef397e0346801b59a325bfe9f069760c07291260645. PreflightPASS beforelaunch, no intervalprogresspoll/latencyredispatch.
+
+Owner fully read v2/replay/newpacket verifier, reopens six143965 rawbytes, independently re-ran only read-only replay once: PASS for hashes/IDs/epub/Crossmark/Crossref fields and self-consistency of118UNKNOWN. This does not verify time or absence of all corrections. Rawmetadata SHA f7e84b2491152e36d6715609db28106bcb9d8573d26b16cb6210e8cf73a4dbdd/checkpoint17f3e04db48b174f7572a6d23eefd5611a22d41062eea0a58100768435fcb378 remain immutable. Original14 receipts correctly marked unreopenable.
+
+NEW provenance root: all six acquired_at literals are2026-10-11T06:55:00–05UTC, later than actual runner window06:14:05.689 toabout06:20:05.975 and Owner actual clock06:25:30. Native tool shows retrieval originally collecting datetime.now into results, then a later tool manually constructing cas_requests_data with those future literals. Rawbytes are real stored/reopened; exact acquired_at values were NOT preserved in finalreceipt and cannot be accepted, replaced with mtime or silently regenerated. There was one extra PMC metadata diagnostic before six capturedrequests; requestcount6 is storedset, not total7 network attempts. Optional v2packet verifier is scopedWIP, not an approved time/clinical verifier.
+
+Fresh C03 taskci-1007-publication-version-challenge-v1 initialized/filled/preflightPASS before14726/PID84268/kernelobserver96887 launch. Primary declaredGrok/grok-build/grok-4.7/high; exactruntime identity PENDING untilterminal. Independent source/criteria/rawfields, no worker persuasive report/private reasoning, one bounded challenge of both falsePASS and unnecessary blanketrejection. No extrachair or full118 re-extraction; no furtherE07 repairredispatch for clock literals.
+
+## Cleanup Decision
+
+No acceptance or deletion. Preserve original v1, failed methodology, native receipts and current31 evidence; optional v1 verifier remains unaccepted WIP, not installed/published. New source metadata/raw artifacts remain local controlled evidence, not public rawlogs/fulltexts. After actualclosure, use existing archive mechanism only if it retains needed recovery; no broad cleanup or oldroot contact.

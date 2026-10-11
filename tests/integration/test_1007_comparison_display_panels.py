@@ -8,7 +8,8 @@ import pytest
 
 
 @pytest.mark.parametrize("case", (
-    "dense", "sparse", "unresolved", "multi_observation", "cross_study", "typed_units",
+    "dense", "dense_mixed", "sparse", "unresolved", "multi_observation",
+    "cross_study", "typed_units",
 ))
 def test_comparison_panels_preserve_scientific_frames_and_source_targets(case: str) -> None:
     script = (Path(__file__).resolve().parents[2]
@@ -65,8 +66,10 @@ function add(id,study,measure,week,value,unit='percentage of participants',count
  wrapper.appendChild(title);wrapper.appendChild(chart);wrapper.appendChild(details);module.appendChild(wrapper);
  originals.push({wrapper,button,title,context,number,table,details});
 }
-if(which==='dense'){
+if(which==='dense'||which==='dense_mixed'){
  for(let i=1;i<=24;i++)add('weekly-'+i,'NCT04202679','outcome[15]',i,30+i);
+ if(which==='dense_mixed')add('multi','NCT04202679','outcome[15]',25,55,
+  'percentage of participants',2);
  add('landmark','NCT04202679','outcome[16]',24,60);
  add('km','NCT04202679','outcome[17]',24,82.3,'%');
  add('nem-1','NCT04501666','outcome[3]',16,56,'participants');
@@ -124,15 +127,20 @@ measures.forEach(m=>{
  const compact=cards.length<=4&&cards.every(n=>n.dataset.comparisonCompact);
  assert.equal(m.className.split(' ').includes('kz-b-measurement-panel--compact'),compact,
   'few scalar measures may sit beside one another; multi-observation plots keep full geometry');
+ const list=cards.length>4&&cards.every(n=>n.dataset.comparisonCompact);
+ assert.equal(m.className.split(' ').includes('kz-b-measurement-panel--scalar-list'),list,
+  'only dense scalar observations use compact record rows; never change scientific frames');
 });
-if(which==='dense'){
+if(which==='dense'||which==='dense_mixed'){
  assert.equal(panels.length,3);assert.equal(measures.length,5);
  const weekly=measures.find(n=>n.dataset.measurePath==='outcome[15]');
- assert.equal(weekly.querySelectorAll('.kz-chart-module__group').length,24);
+ assert.equal(weekly.querySelectorAll('.kz-chart-module__group').length,
+  which==='dense_mixed'?25:24);
  assert.deepEqual(weekly.querySelectorAll('.kz-b-observation-time').map(n=>n.textContent),
   Array.from({length:24},(_,i)=>'Week '+(i+1)));
  assert.match(panels[0].children[0].textContent,/PRIME2/);
- assert.ok(originals.every(o=>o.title.parentElement===o.details),
+ assert.ok(originals.every((o,i)=>o.title.parentElement===
+  (groups[i].rows.length===1?o.details:o.wrapper)),
   'repeated complete headings are in reachable native disclosure, not dominant card headings');
 }else if(which==='typed_units'){
  assert.equal(panels.length,1);assert.equal(measures.length,3);
@@ -189,3 +197,26 @@ def test_nested_scalar_grid_has_one_span_owner_for_one_few_and_dense_observation
     cards = ".kz-b-measurement-observations > [data-comparison-compact]"
     assert "grid-column:spanvar(--b-observation-span);" in rules[cards]
     assert ".kz-b-measurement-panel--compact .kz-chart-module__group" not in rules
+
+
+def test_dense_scalar_records_use_rows_without_clipping_or_smaller_type() -> None:
+    css = (Path(__file__).resolve().parents[2]
+           / "src/ci_workflow/renderers/portal/assets/report-b.css").read_text()
+    rules = {selector.strip(): re.sub(r"\s+", "", body)
+             for selector, body in re.findall(r"([^{}]+)\{([^{}]*)\}", css)}
+    root = ".kz-b-measurement-panel--scalar-list"
+    grid = rules[root + " > .kz-b-measurement-observations"]
+    record = rules[root + " > .kz-b-measurement-observations > [data-comparison-compact]"]
+    # Native v1 showed 1600/2560 wrapping the typed value beside two controls.
+    # Reserve real label width, not a smaller font or clipped original unit.
+    assert "repeat(auto-fit,minmax(min(100%,540px),1fr))" in grid
+    assert "display:grid;" in record and "grid-column:auto;" in record
+    assert "align-items:center;" in record
+    assert "grid-column:1/-1;" in rules[
+        root + " > .kz-b-measurement-observations > [data-comparison-compact]:has(details[open])"]
+    assert "grid-column:1/-1;" in rules[root + " .kz-complete-table[open]"]
+    for selector, block in rules.items():
+        if root in selector:
+            assert not any(forbidden in block for forbidden in (
+                "!important", "overflow:hidden", "ellipsis", "line-clamp", "font-size:",
+            )), "Dense records must wrap, not shrink or hide fact text"

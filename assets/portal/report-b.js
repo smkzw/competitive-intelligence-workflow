@@ -122,8 +122,9 @@
       measurement.dataset.observationCount = String(cards.length);
       // A few scalar displays may share the desktop row, but never combine
       // their scientific frames or shrink a valid multi-observation plot.
-      if (cards.length <= 4 && cards.every(function (card) { return !!card.dataset.comparisonCompact; })) {
-        measurement.className += " kz-b-measurement-panel--compact";
+      if (cards.every(function (card) { return !!card.dataset.comparisonCompact; })) {
+        measurement.className += cards.length <= 4 ? " kz-b-measurement-panel--compact"
+          : " kz-b-measurement-panel--scalar-list";
       }
     });
   }

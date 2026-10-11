@@ -136,8 +136,12 @@ def ingest_research_evidence(
         raise ResearchIngestionError("科学内容摘要必须是小写 SHA-256")
     if created_at.tzinfo is None or created_at.utcoffset() is None:
         raise ResearchIngestionError("证据快照时间必须包含明确时区")
+    if created_at > datetime.now(created_at.tzinfo):
+        raise ResearchIngestionError("证据快照完成时刻不得在未来")
     if not sources or not facts or not claims:
         raise ResearchIngestionError("研究证据必须包含来源、事实和声明")
+    if any(capture.acquired_at > created_at for capture in sources):
+        raise ResearchIngestionError("来源获取时间不得晚于已完成的证据快照时刻")
     _validate_references(sources, facts, claims)
     ingestion_request_id = request_id or stable_id(
         "research-ingestion-request",

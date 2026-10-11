@@ -1,6 +1,12 @@
-# 唯一当前状态：1007V1连续实施｜current31 B阅读/分享及论文上下文局部闭合，非RC
+# 唯一当前状态：1007V1连续实施｜current32有界密度/配置/分享/开发门闭合，论文事实版本门未闭合，非RC
 
-上批实际push HEAD/origin a667305cff3cbe70258180b6b4a040cc31d4cdb7；本批待白名单递交。
+最新终态：66982四档16态/B32原生配置；6817当前B+联合正常分享；3603移目录四入口真断网/0FAIL/网络恢复；54392单次六步quality-only/source-setexact通过。A30/C30未变独立分享不重跑，现有用户修订/清除/来源/Esc保持；Owner看当前1440矩阵与离线1920B，只签有界根因。精简回执owner-current32-density-provenance-v1.json、复盘RETROSPECTIVE_20261011_current32.md。freshC0314726/event96887已terminal0/actualGrok4.7high770.737s；六raw/书目保留，06:55精确时间拒绝，新owner-publication-source-reconciliation-v1.json只保runner窗口。原版本材料不改，未核PMCflag不作一票否决；118当前未采用不是永久未决约束。下一事实级截止资格成族门与窄官方版本证据，不重提全文/旧流程。下段及后文的在途状态为当时记录，已由本段关闭，不再等待旧PID。
+
+当前32=A30/B32/C30/1505，generationae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4；正常B-only39643terminal0，1505事实/七科学用户表/15723历史文件/A+C交付exact，proof8733cfd2。Bscalar v2普通预览96657terminal0/104pages，57361真实四桌面宽24态0FAIL，24时间/原值/来源/完整表与32查询事实保持，21px值/16px字；单记录46px，整组从旧约897降646.8/646.8/446.8/324.4px。Owner看六真实图，2560显示被工具缩2048，未签全产品审美。当前Ego66982/新单次宽门54392在途；B32配置和分享未完成，不能继承31generation验收。原v1只有1440整组密度FAIL保留。共用摄取chronology6RED→92相关PASS/strict，写前拒绝未来快照/晚于快照的获取，不自动授予历史资格。
+
+以下31结果仍为真实历史，可有界复用未变A/C，不冒充32新B证据。
+
+本批实际push HEAD/origin59ec68193d6152d3b1423d9c25f66658aa5869f8，36项白名单修复/回执/复盘；远端逐HEAD核对，五用户改动未提交。此前a667305c为本批父提交。
 当前31=A30/B31/C30/1505，generation16a5fbb6c99e36b7578ad51280e2fb4b7da23c64cfed27eb73c846974d968dfa。
 正常B-only21919 terminal0，1505事实/七科学用户表/15341历史文件及A/C交付对象exact，proofb87ed586。
 B空行与筛选滚动成族3RED/2RED→28相关PASS；所有46研究保留，默认3匹配/43可展开，
@@ -25,8 +31,11 @@ same-session38068/NOTE_EXIT68120均terminal0，157.893s20tools/context-only ACCE
 实际只读/身份/产物事后核验；流程缺陷如实保留，不签全治理通过，也不回填旧prompt。
 2026-10-11用户Ask已裁决：按所用事实版本的截止前公开证据核发表/更正，最早公开日可未知。
 已落PRD/DESIGN/G03-PV；下载晚于cutoff不能倒证，不改Oct7截止，不直接采用118。
-新E07版本证据限定检索76969/PID78602/NOTE_EXIT94872单派，preflight修正文档与指令引用
-分层后PASS且exit0才launch；请求批准Pi/Gemini3.8flashhigh，实际身份待终态，不轮询/重提全文。
+E07版本检索76969/NOTE_EXIT94872已terminal0，actualPi/Gemini3.8flashhigh请求552.409s，
+Owner REVISE：14哈希回执没有可重开原响应/CAS路径，验证器只断言自身summary；
+全部118历史资格/零更正影响结论未接受。保留v1，不改事实或cutoff。
+同handle补证59275/51930现terminal0，actualGemini3.8flashhigh请求360.286s，六143965bytes原响应/CAS可重开，原14明确不可重开；Owner单次只读replay通过字节/元数据，不是时间/临床资格。六acquired_at被工具手工写成未来06:55，而实际runner06:14–06:20，时间不接受且旧材料保留。freshC0314726/PID84268/event96887预检PASS后单派，只冻结来源/具体事实日期判定，不重提全文/进度轮询/自动采用。
+B单值记录密度族2RED→34相关PASS0.81s，v1普通只读预览104页/1505fact/current31exact；四宽57268实跑24态，1440整组740.8vs897.2未达门而FAIL保留。字体/全部24值时间/来源表格/筛选/回焦保持。540px最小记录宽+3px内边距修复后34相关PASS0.86s，新v2正常预览96657进行中；没有改current或继承旧候选验收。
 来源完整宇宙/MAH/Publication/真正科学正向横比/全部物理页跨浏览器/24门户/三宿主/
 Skill安装恢复/RC仍未完成。Goal沿既有active；无阶段性暂停，不输出总体交付信号。
 

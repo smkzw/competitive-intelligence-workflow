@@ -1,6 +1,18 @@
 # 2026-10-11｜C阅读真实切片与来源定义缺口
 
-## 当前有界单元：31阅读/分享与论文事实版本公开证据
+## 当前有界单元：32密度/分享闭合，下一论文事实版本公开证据
+
+Owner+bounded执行/独立会商：不同来源路径产生上下文并行收益，shared/current保持Owner单一写者。32正常B-only39643terminal0/1505facts七表15723旧文件A+Cexact；66982四宽16态/B32配置、6817B+联合分享、3603四入口移目录真断网/网络恢复、54392六步quality-only/source-setexact全部terminal0。Bscalar34相关PASS，v1真实FAIL不改，新v2四宽24态/28–63%高度改进已Owner代表像素核验。C0314726/event96887terminal0/Grok4.7high770.737s，来源挑战scoped接受，118仍非采用。新reconciliation准确区分unknown精确时间与真实执行窗口，原CAS/旧回执保持；未核官方flag不据推断否决整个PMC。新精简32证据/复盘及白名单Git，随后事实级历史资格反例/最小接线。下面旧在途只作历史，不重跑任何终态。
+
+最新：E07round2原59275/51930terminal0，actualPi/Gemini3.8flashhigh360.286s/native21starts(非API数)，六143965bytes原metadata可重开；六acquired_at却被手工构造成未来06:55而runner06:14–06:20，不接受日期回执，原件/workerPASS历史保留。Owner单次只读replay元数据PASS不等时间/临床资格；owner-publication-version-evidence-v2-audit-v1.json明确拆分。freshC0314726/PID84268/event96887已预检PASS单派，来源/所用事实版本/过度拒绝与误接受挑战，非全118重提或UI复审。
+Owner共用摄取顺序根因6RED1PASS2.24s→七邻接文件92PASS17.93s，Ruff及strict单源码通过：在任何DB/CAS/快照写前拒绝未来created_at和acquired_at晚于完成snapshot，A/B/C相同路径；相等时刻/幂等保持。无live来源采用/旧快照改写，也不授予历史资格。
+Bscalar v1四宽24态仅1440密度FAIL（52px记录，但整组740.8vs897.2），全部值/时间/来源/表格/字体及筛选/回焦保持；原FAIL/截图不重写。最小540px宽/3pxpadding成族完整修复34PASS0.86s；新正常只读v296657terminal0，104pages/1505facts/全部持久文件exact，proof2de79b29。Ego57361仅新v2实屏进行中，current31不变，不能继承旧候选/分享PASS。
+
+Owner并行开启B逐周单值密度族：复用已存在的来源测量面板，只有>4且全为独立single-fact的面板使用紧凑记录行；不合成曲线、不改共同轴/临床frame/原值/时间/来源/表格，不触发事实保存或ABC全重建。先同族RED、一次完整最小修改及邻接回归，再普通B预览/四桌面宽度和筛后稀疏/展开/来源回焦实屏。Ponytail复用原生CSS和原节点；Kangzhe保持16px正文/21px值及来源与键盘功能，以减少重复占屏而非缩字。现current31保留，不继承新预览验收。
+
+本批36文件白名单commit/push59ec68193d6152d3b1423d9c25f66658aa5869f8已完成并核远端，五用户改动exact未提交。当前31/开发门/分享/科学上下文均终态，接续唯一在途E07版本证据，不重跑或自发暂停。
+
+E07原76969/94872现terminal0，actualPi/Google/Gemini3.8flash552.409s；Owner不接受全部118cutoffPASS：14回执均无可重开raw/CAS，脚本只断言自有summary，未知更正范围被冒称0影响、Wiley无单独回执。原v1/hash/报告保留，没采用/改cutoff。已针对性same-session预检PASS后59275/PID81548/event51930单派v2补原始metadata精确定位/失败关闭，不重复全文或14次全量查证；actual新identity待终态。下一只收原终态并重开实证，然后必要科学独立challenge。
 
 模式execution-plus-conference：Owner唯一协调current/事实/源码；E07只收新公开版本metadata与更正材料，其输出路径不重叠，提供实际并行收益；有重大科学版本解释的不确定性再独立挑战，不建立多余chair/全页循环。
 当前31=A30/B31/C30/1505，generation16a5fbb6c99e36b7578ad51280e2fb4b7da23c64cfed27eb73c846974d968dfa，正常B-only21919终态/15341旧文件及七表/A/C交付exact。28相关PASS；v2Control+End四FAIL保留，v3同源PageDown28态通过。当前27107四宽16态、B31原生配置下载/异问题导入恢复通过。31单次宽门92617已terminal0/source-setexact，Ruff/strict286/1185活跃/20兼容/7分层/字面路径通过；下段旧pending为完成前记录，不替代终态。

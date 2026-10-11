@@ -1,6 +1,24 @@
 {
   "state": "CONTINUOUS_IMPLEMENTATION_NOT_RC",
   "latest_current": {
+    "revision": 32,
+    "report_revisions": {
+      "A": 30,
+      "B": 32,
+      "C": 30
+    },
+    "generation": "ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4",
+    "head_before_batch": "59ec68193d6152d3b1423d9c25f66658aa5869f8",
+    "rebuild": "39643 terminal0 B-only,1505facts/seven tables/15723historical/A+C exact;8733cfd2",
+    "receipt": "owner-current32-density-provenance-v1.json",
+    "browser": "66982terminal0/fourwidth16states/nativeB32config;previewv2fourwidth24states/24scalarrecords46px/28–63pct panelreduction/font21/16/valuesframesexact;ownerpreview6images/current1440/offline1920scoped,2560resized2048,notallvisual.",
+    "quality": "54392terminal0/source-setexact/Ruffstrict286/1185active20compat7layer/lexical,qualityonly singlemilestone.",
+    "source": "C0314726/event96887terminal0actualGrok4.7high770.737s,scopedsourcechallengeaccepted/118notadopted;rawsixbibliographyretained/futureclockrejected/newownerreconciliationexactunknown/realrunnerwindow. PMCflagmeaningnotverified.",
+    "chronology": "Sharedproduction root6RED1PASS→92relatedPASS17.93s,strict1/Ruff; reject futurecompleted snapshot or capture after it before persistence. Equality/replay preserved, no live adoption.",
+    "sharing": "6817B381+ABC480hash/configbound;3603fourmovedentriestrueoffline/0FAIL/networkrestored/reusedProfile3notfresh;unchangedA30/C30standalone notreplayed.",
+    "next": "Minimalperfactpublicversioncutoffgate+narrowversion/correctionproof;no full118reextract; Wscientific/universe/MAH/requiredpapers/24/hosts/install/recovery open; no voluntarypause or RC."
+  },
+  "historical_current31": {
     "revision": 31,
     "report_revisions": {
       "A": 30,
@@ -15,7 +33,7 @@
     "sharing": "v1B export terminal success then stale assertionFAIL; recovery68608 reusesB,onlyABCexport; Ego83219 four moved trueoffline0fail networkrestored9f3e9183. ReusedProfile3; unchangedA30/C30 configs andindividual packages scoped retained, not six-entrynewgenerationclaim.",
     "quality": "31 sixstep gate92617 terminal0/source-setexact,Ruff/strict286/1185active/20compat/7layer/lexical,8bcf3f3d,no releaseclaim",
     "publication": "isolated118native E08 terminal technicalonly;freshC03 whole118REVISE, targetedv5same-sessioncontext-onlyACCEPT,22gaps. Followup preflightFAIL premature launch preserved. Usernewfact-versionpublic-bydecision approved, currentdates/adoption stillunproven.",
-    "next": "E07versionmetadata76969/PID78602/NOTE_EXIT94872 onlyterminal,preflightPASS. Owner scopingGit and gate31; fact-levelqualification after provenevidence then originalW universe/MAH/requiredpublication/24/hosts/recovery. No voluntary pause/RC."
+    "next": "E07v2 terminal0 actualGemini360.286s: six raw metadata reopened, but literal future acquisition06:55 versus run06:14–06:20 invalid. Source UNKNOWN, no adoption. FreshC0314726/PID84268/kernel96887 single bounded independent challenge. Owner sharedingestion chronology6RED→92relatedPASS/strict; Bscalarv1actual1440densityFAIL preserved, minimal fix34PASS and normalreadonlyv2previewterminal104pages/1505, newEgo57361 pending. Current31 gate/share/Git complete, do not replay. Next exact source proof/minimalfactgate plus W universe/MAH/requiredpapers/24/hosts/recovery."
   },
   "historical_current30": {
     "revision": 30,
@@ -100,5 +118,5 @@
     "worker": "Original76282/event22410 terminal0. NativePi/cursor/default, underlyingmodelUNKNOWN, effortdefault not model-specific verification;431.543s/210tools/session01a1292e-4672-7000-9d88-352c18a25a98/outputf86b6115. One launch, no fallback/progresspoll. OnlysharedCSS/newtest/compactreceipt. Guard auditPASS afteractualowner review; unknownidentity remains explicit. OwnerRuff/mirror/normal28verified separately.",
     "scope": "Frozen23REVISE remains historical. Actual28 rootfix retained font/rawunits/source reachability; not yet fullaesthetic/clinical/RC. Shared single-fact collapsed-context defect closed, sparsecard resource allocation/repetition remain a bounded follow-up, not scientific coaxis waiver."
   },
-  "next": "Current30 scoped frontend root andsamegeneration config/sharing/offline actual complete; whitelistGit/retrospective while118publication isolated nativeingestion worker38985 pending, NOTE_EXIT44280 onlyterminal. Freeze newscientificcandidate then independent sourcechallenge; improveB matrix/query reading through existing B-only prebuild and affected-only current transaction, not ABC rebuild for everyCSS. Fulluniverse/MAH/publication/24/hosts/recovery remainopen. No28review/29FAIL rewrite or terminaltransaction replay, no voluntarypause/RC. Exactrelativefile recovery userauthorized complete; no broadlegacy cleanup."
+  "next": "Current31/gate/share/Git59ec6819 terminal/protected5 preserved. E07v2 nowterminal; six raw metadata readable but futureclockreject and118clinicalUNKNOWN. FreshsourceC0314726/kernel96887 pending onlyterminal. Sharedchronology6RED→92PASS and Bscalar34PASS normalv2preview104pages, Ego57361 pending, no livecurrentwrite. Close actual newBpixels then B-onlynormalpresentation; minimalfactcutoffguard only with preciseproof, then original universe/MAH/publications/24/hosts/install/recovery. No oldsave/source/share replay, voluntarypause or RC."
 }

@@ -1,0 +1,62 @@
+{
+ "schema": "bounded-owner-source-version-audit/1",
+ "state": "RAW_BIBLIOGRAPHY_REOPENED_RECEIPT_CLOCK_REJECTED_CLINICAL_UNKNOWN",
+ "reviewed_head": "59ec68193d6152d3b1423d9c25f66658aa5869f8",
+ "goal": "active verified, unchanged",
+ "execution": {
+  "task": "ci-1007-publication-version-evidence-v1",
+  "runner_session": 59275,
+  "kernel_observer": 51930,
+  "terminal": 0,
+  "actual_provider_model": "pi/google-antigravity/gemini-3.8-flash",
+  "effort": "high requested and native configured",
+  "same_session": "01a1298d-2433-7000-9bb9-5d9718aa7868",
+  "duration_seconds": 360.286,
+  "runner_tools": 66,
+  "unique_native_tool_starts": 21,
+  "usage": {"input":3498,"output":6036,"cache_read":208577,"total":218111,"reasoning":388},
+  "fallback": null,
+  "report_sha256": "65ebf860e8d86e349afc4ef397e0346801b59a325bfe9f069760c07291260645",
+  "native_receipt_sha256": "0b08973473016f2a46ce3957d9f21be0a4c85e738d5bebadb0759e51313c6472",
+  "launch": "preflightPASS, once, kernelNOTE_EXIT; no progress polling or latency redispatch"
+ },
+ "frozen_inputs": {
+  "candidate_v5": "578fcebd10f55240eeb26c5cb204572561eecb735372a583b391ea00317d49be",
+  "source_package_v1": "6909f03ab9f1c7b08b264ba31078a0dab62849937f5da059f99a72c6ab880e8e",
+  "metadata_v2": "f7e84b2491152e36d6715609db28106bcb9d8573d26b16cb6210e8cf73a4dbdd",
+  "checkpoint_v2": "17f3e04db48b174f7572a6d23eefd5611a22d41062eea0a58100768435fcb378",
+  "replay_v2": "6ef21a479594ed13c903e2d048c26fb0423b498f19775ba2db24df593ff00fdb"
+ },
+ "reopen": {
+  "raw_root": ".artifacts/1007-publication-version-evidence-v2/source-library",
+  "catalog": ".artifacts/1007-publication-version-evidence-v2/metadata-source-set.json",
+  "cas_responses": 6,
+  "raw_bytes": 143965,
+  "network_attempts": "7 including one preliminary PMC diagnostic; six stored requests is not all network attempts",
+  "old_unreopenable_receipts": 14,
+  "owner_command": "uv run python .artifacts/1007-publication-version-evidence-v2/replay.py",
+  "actual_exit": 0,
+  "proven": "raw hashes/lengths/identifiers and parsed publication/Crossmark/Crossref bibliographic fields only",
+  "not_proven": "acquisition clock, complete correction history, clinical fact invariance or historical qualification"
+ },
+ "clock_defect": {
+  "rejected_values": "2026-10-11T06:55:00+00:00 through06:55:05, six literals",
+  "actual_runner_start_unix": 1791699245.689194,
+  "actual_duration_seconds": 360.286,
+  "owner_actual_clock": "2026-10-11 06:25:30 UTC",
+  "primary_origin": "native tool_execution_start(eval): later cas_requests_data construction manually uses future literals despite previous fetch loop datetime.now",
+  "exact_actual_acquired_at": null,
+  "policy": "Do not overwrite v2/old receipt, infer exact time from mtime, backdate, regenerate14 metadata calls or adopt facts. Native runner interval is bounded provenance only."
+ },
+ "clinical": {
+  "facts": 118,
+  "pmid_37142763": 51,
+  "pmid_41405008": 67,
+  "adopted": 0,
+  "cutoff": "2026-10-07T23:59:59.999999+08:00",
+  "first_disclosed_at_fabricated": false,
+  "current_writes": 0,
+  "qualification": "UNKNOWN pending independent specific-fact/version challenge; no total clinical PASS"
+ },
+ "next": "Fresh C03 original14726/kernel96887 onlyterminal; Owner reopens exact fields and separates accepted scope, then minimal fact-level gate. No further E07 timestamp-repair loop or whole118 extraction."
+}

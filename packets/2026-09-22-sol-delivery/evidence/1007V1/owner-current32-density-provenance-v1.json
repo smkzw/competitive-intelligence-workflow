@@ -1,0 +1,131 @@
+{
+ "schema_version": "1007-current32-density-provenance-1",
+ "state": "SCOPED_B_DENSITY_CONFIG_SHARING_QUALITY_CLOSED_PUBLICATION_NOT_ADOPTED_NOT_RC",
+ "parent_commit": "59ec68193d6152d3b1423d9c25f66658aa5869f8",
+ "revision": 32,
+ "report_revisions": {
+  "A": 30,
+  "B": 32,
+  "C": 30
+ },
+ "generation": "ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4",
+ "unchanged": {
+  "facts": 1505,
+  "science_user_tables": 7,
+  "historical_files": 15723,
+  "A_C_deliveries": true
+ },
+ "proofs": {
+  ".artifacts/1007-b-scalar-records-current32-v1/verified.json": {
+   "sha256": "8733cfd21507b156150784fd6bebf0b6c4b0f264411e38eb9c50be1a9636e2e9",
+   "state": "CURRENT32_B_ONLY_COMMITTED_NOT_PRODUCT_OR_SCIENCE_ACCEPTANCE",
+   "failures": null,
+   "source_set_unchanged": null,
+   "returncode": null,
+   "network_restored": null,
+   "states": null
+  },
+  ".artifacts/1007-b-current32-native-qa-v1/actual.json": {
+   "sha256": "6d318280535cf680ddf422a9137ee1920bc78cd1ea8ce9bf2d7fff1a420ea898",
+   "state": "ACTUAL_CURRENT32_B_READING_AND_NATIVE_CONFIG_PASSED_OWNER_PIXELS_PENDING",
+   "failures": [],
+   "source_set_unchanged": null,
+   "returncode": null,
+   "network_restored": null,
+   "states": 16
+  },
+  ".artifacts/1007-current32-shares-v1/verified.json": {
+   "sha256": "a80dc1b04c62300cf2ef6c0ce0213e8c49165315edbee2f557fa3044cc43fb68",
+   "state": "CHANGED_B_AND_JOINT_CURRENT_SHARES_MOVED_HASH_VERIFIED_NOT_BROWSER_ACCEPTED",
+   "failures": null,
+   "source_set_unchanged": null,
+   "returncode": null,
+   "network_restored": null,
+   "states": null
+  },
+  ".artifacts/1007-current32-shares-v1/offline-actual-v1.json": {
+   "sha256": "1641e7be965d7acf489c85dccbd1f92be12eb73c48147c9cfe4ac18c3e12b410",
+   "state": "FOUR_MOVED_OFFLINE_CURRENT32_ENTRIES_DEDICATED_PROFILE_AND_SOURCE_DISCLOSURES_PASSED",
+   "failures": [],
+   "source_set_unchanged": null,
+   "returncode": null,
+   "network_restored": true,
+   "states": null
+  },
+  ".artifacts/1007-current32-quality-gate-v1/result.json": {
+   "sha256": "abf4102224ba6c6379b670e6620255f4567a8581c299f17747ec91bd5871c8c9",
+   "state": "QUALITY_ONLY_PASSED",
+   "failures": null,
+   "source_set_unchanged": true,
+   "returncode": 0,
+   "network_restored": null,
+   "states": null
+  },
+  ".artifacts/1007-b-scalar-records-preview-v2/qa/actual.json": {
+   "sha256": "a4e1527e2b61fdc0e3829884583cbb4f824fe5795ce3cc561080a80107268751",
+   "state": "SCOPED_REAL_B_SCALAR_RECORDS_PASSED_OWNER_PIXELS_PENDING",
+   "failures": [],
+   "source_set_unchanged": null,
+   "returncode": null,
+   "network_restored": null,
+   "states": 24
+  }
+ },
+ "tests": {
+  "density": "2RED then34 relatedPASS; v1 actual1440 densityFAIL retained, minimal complete geometry correction34PASS0.86s",
+  "chronology": "6RED/1PASS then92 relatedPASS17.93s; namedRuff and strict shared source passed",
+  "quality": "Single frozen milestone gate54392 terminal0/Ruff src tests tools/strict286/1185active20compat7layer/lexical-old-path/source_setexact; not release gate"
+ },
+ "density": {
+  "widths": [
+   1440,
+   1600,
+   1920,
+   2560
+  ],
+  "independent_scalar_records": 24,
+  "record_height_px": 46,
+  "panel_heights_px": [
+   646.796875,
+   646.796875,
+   446.796875,
+   324.3984375
+  ],
+  "fonts": "21pxvalue/16pxbody,36pxevidencebutton",
+  "limits": "No new trend or common axis; original statistical frames, values, times, IDs, sources and full tables retained"
+ },
+ "browser": {
+  "current_runner": 66982,
+  "current_states": 16,
+  "current_config": "NativeB32download, distinct question, actual file chooser import restores",
+  "preview_runner": 57361,
+  "preview_states": 24,
+  "owner_pixels": "Sixpreviewimages/current32matched1440/offlineABC-B1920 actually inspected;2560 tool resized2048. Not full-page-family or all physical-page visual/crossbrowser acceptance"
+ },
+ "shares": {
+  "archives": {
+   "B": "032c3528fffe5ba5c4aa9d346332fa5ecc8fbcfd922e5aef59aa49cc60b45c9c",
+   "ABC": "24fef6630e98032f1c389ecbe49e0393d6e96c3055be55dfe155e3ac6c3fb3c6"
+  },
+  "members": {
+   "B": 381,
+   "ABC": 480
+  },
+  "offline_runner": 3603,
+  "entries": 4,
+  "profile": "DedicatedProfile3/space11 reusedfromcurrent28, not a new environment",
+  "config": "B32, unchangedA30/C30 bound",
+  "operations": "Move directories, hash allreportfiles, realNetworkoffline, current useredit -67.5/clearoriginal -48.32 andC151/sourceEsc/config preserved/network restored",
+  "unchanged_A_C_standalone": "Not re-exported or rerun, current30 records remain unchanged"
+ },
+ "publication": {
+  "raw_scope": "Six raw metadata responses/143965bytes reopenable; original14 unreopenable",
+  "exact_capture_clock": "Rejected future06:55 literals, new reconciliation null exactclock with actual runner window; originals unchanged",
+  "fact_qualification": "118pending/0adopted, not permanently required count. earliest public date may remainunknown; cutoffOct7+08 unchanged",
+  "review": "Actualgrok/grok-build/grok-4.7/high fresh770.737s terminal0, report5d42aa7a; scoped challenge accepted, undocumented PMCflag meaning not adopted",
+  "owner_reconciliation": "owner-publication-source-reconciliation-v1.json"
+ },
+ "recovery": "Terminalrebuild/QA/config/shares/gate/C03mustnotreplay. Existing source/current and all historical failures preserved.",
+ "next": "Minimal per-fact public-version cutoff gate and narrow correction/version proof; requiredpapers/MAH/universe/positivecomparisons/24portals/threehosts/install/recovery/RC remain open.",
+ "cleanup": "No unique source/recovery/previews or userhistory deleted; protectedfive excluded fromcommit."
+}

@@ -1,0 +1,105 @@
+{
+ "schema": "publication-source-provenance-reconciliation/1",
+ "state": "RAW_BIBLIOGRAPHY_USABLE_EXACT_CLOCK_UNKNOWN_FACT_QUALIFICATION_PENDING",
+ "original_metadata_sha256": "f7e84b2491152e36d6715609db28106bcb9d8573d26b16cb6210e8cf73a4dbdd",
+ "originals_unchanged": true,
+ "raw_responses": [
+  {
+   "request_id": "req-01-pubmed-efetch-xml-batch",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=37142763,41405008&retmode=xml",
+   "sha256": "06aacf138063853b004175774ac5762ba808bd465c709674db117686f8bb1ae1",
+   "byte_size": 62417,
+   "cas_relative_path": "evidence/raw/sha256/06/06aacf138063853b004175774ac5762ba808bd465c709674db117686f8bb1ae1.bin",
+   "acquired_at": null,
+   "rejected_acquired_at": "2026-10-11T06:55:00+00:00",
+   "raw_root": ".artifacts/1007-publication-version-evidence-v2/source-library"
+  },
+  {
+   "request_id": "req-02-pmc-esummary-batch",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pmc&id=10202800,13308661&retmode=json",
+   "sha256": "81578f0026d887961cd82f5c4accfeac3ab25476f65efeeb770bb8526d71b145",
+   "byte_size": 2911,
+   "cas_relative_path": "evidence/raw/sha256/81/81578f0026d887961cd82f5c4accfeac3ab25476f65efeeb770bb8526d71b145.bin",
+   "acquired_at": null,
+   "rejected_acquired_at": "2026-10-11T06:55:01+00:00",
+   "raw_root": ".artifacts/1007-publication-version-evidence-v2/source-library"
+  },
+  {
+   "request_id": "req-03-crossmark-37142763",
+   "url": "https://crossmark.crossref.org/dialog/?doi=10.1038/s41591-023-02320-9",
+   "sha256": "a2f86fa2abfc2b023f9d5b25d873e49b5b6d3e5521c67c40b6d03be8050e8498",
+   "byte_size": 15918,
+   "cas_relative_path": "evidence/raw/sha256/a2/a2f86fa2abfc2b023f9d5b25d873e49b5b6d3e5521c67c40b6d03be8050e8498.bin",
+   "acquired_at": null,
+   "rejected_acquired_at": "2026-10-11T06:55:02+00:00",
+   "raw_root": ".artifacts/1007-publication-version-evidence-v2/source-library"
+  },
+  {
+   "request_id": "req-04-crossmark-41405008",
+   "url": "https://crossmark.crossref.org/dialog/?doi=10.1111/jdv.70266",
+   "sha256": "5dd49868a68ae571a2d69b45d11b71fc82b3312d8d70a01b9f959ec501464ec5",
+   "byte_size": 14391,
+   "cas_relative_path": "evidence/raw/sha256/5d/5dd49868a68ae571a2d69b45d11b71fc82b3312d8d70a01b9f959ec501464ec5.bin",
+   "acquired_at": null,
+   "rejected_acquired_at": "2026-10-11T06:55:03+00:00",
+   "raw_root": ".artifacts/1007-publication-version-evidence-v2/source-library"
+  },
+  {
+   "request_id": "req-05-crossref-37142763",
+   "url": "https://api.crossref.org/works/10.1038/s41591-023-02320-9",
+   "sha256": "767954c25acdb8a65dd8a409d2ac1ccaea86be8bea6eab4e555c89e3ba71c7b9",
+   "byte_size": 33382,
+   "cas_relative_path": "evidence/raw/sha256/76/767954c25acdb8a65dd8a409d2ac1ccaea86be8bea6eab4e555c89e3ba71c7b9.bin",
+   "acquired_at": null,
+   "rejected_acquired_at": "2026-10-11T06:55:04+00:00",
+   "raw_root": ".artifacts/1007-publication-version-evidence-v2/source-library"
+  },
+  {
+   "request_id": "req-06-crossref-41405008",
+   "url": "https://api.crossref.org/works/10.1111/jdv.70266",
+   "sha256": "19d452ef45fc935132aeb39304a2b0b10ab49f922f67f9d76889630eb2e74361",
+   "byte_size": 14946,
+   "cas_relative_path": "evidence/raw/sha256/19/19d452ef45fc935132aeb39304a2b0b10ab49f922f67f9d76889630eb2e74361.bin",
+   "acquired_at": null,
+   "rejected_acquired_at": "2026-10-11T06:55:05+00:00",
+   "raw_root": ".artifacts/1007-publication-version-evidence-v2/source-library"
+  }
+ ],
+ "clock": {
+  "exact_capture": null,
+  "execution_window_start": "2026-10-11T06:14:05.689194Z",
+  "execution_window_end_derived": "2026-10-11T06:20:05.975194Z",
+  "window_source": "native execution runner start plus360.286s",
+  "fetch_tool": "call_428151",
+  "construction_tool": "call_1046274",
+  "limits": "Window is tool provenance, not precise response timestamp, first disclosure or historical availability; status200 is original self-report, not independently printed HTTP status."
+ },
+ "clinical": {
+  "cutoff": "2026-10-07T23:59:59.999999+08:00",
+  "candidate_sha256": "578fcebd10f55240eeb26c5cb204572561eecb735372a583b391ea00317d49be",
+  "source_sha256": "6909f03ab9f1c7b08b264ba31078a0dab62849937f5da059f99a72c6ab880e8e",
+  "adopted": 0,
+  "qualification_current": "118 pending, not a permanently required count",
+  "papers": {
+   "37142763": {
+    "facts": 51,
+    "reason": "Specific public-version binding and corrected-publication scope unresolved"
+   },
+   "41405008": {
+    "facts": 67,
+    "reason": "Specific public-version binding unresolved; converter stamp is not proof of a clinical correction"
+   }
+  }
+ },
+ "independent_review": {
+  "actual": "grok/grok-build/grok-4.7/high",
+  "duration_seconds": 770.737,
+  "report_sha256": "5d42aa7a18e2ac99984d5a589d4341c53d10a08f67b6261f4875fa48385e2075",
+  "native_sha256": "131bb1270ecffd0e514b57574b13167bb9cade3f62c5450164777ca86c009b6a",
+  "verdict": "Scoped accepted, no clinical/current adoption",
+  "limitations": "PMC is-real-version operational meaning not verified; unavailable policy pages not proof."
+ },
+ "current_writes": 0,
+ "network_refetches": 0,
+ "next": "Bind exact source locator/content/context to specific public version and correction scope; allow per-fact qualification, earliest public date may stayunknown. No fixed unresolved-count gate."
+}
