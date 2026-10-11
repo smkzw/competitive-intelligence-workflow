@@ -22,6 +22,8 @@ Managed by Trellis. Edits outside this block are preserved; edits inside may be 
 
 # Project Rules
 
+- The latest audience-presentation contract is the 2026-10-11 expert-reading section of `packets/2026-09-22-sol-delivery/PRD.md`, with matching DESIGN/PLAN/ACCEPTANCE and task records. It supersedes older defensive-copy requirements: no expert-facing disclaimer walls; real comparison is ECharts plus the corresponding table, and longitudinal data uses annotated lines. Keep source data and internal scientific checks. Do not reintroduce the removed prose during later repairs.
+
 - `docs/specs/competitive-intelligence-workflow-design-v1.3.md` is the approved product contract. The v1.2 design, ZCode review material, historical catalogs, and existing `competitive-intelligence-workflow` Skill are inputs to verify, not authority; where they conflict with v1.3 or the user's later decisions, v1.3 and the later decisions win.
 - Preserve the current dirty tree and unrelated user work. Do not use `git reset`, `git checkout`, `git clean`, or `git add .`, and do not rewrite sealed Task 10.3-10.5 evidence.
 - The v1 product surface is HTML-only: one public Skill, three independent A/B/C multi-page portals, and lightweight Codex/Hermes/OMP adapters. PDF, HTML-PPT, PPTX, scheduled monitoring, CSV/XLSX export, radar charts, and evidence-maturity views must not appear in the install bundle or v1 acceptance surface.

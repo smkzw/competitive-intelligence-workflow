@@ -2711,6 +2711,7 @@ def _project_record(
         "source_domain", "source_metric", "source_param_type", "source_analysis_population",
         "source_value_role", "source_dispersion_type",
         "source_measure_path", "source_measure_definition", "source_clause_context",
+        "source_class_title", "source_category_title",
         "source_denominator_scope_zh", "source_denominator_value", "source_denominator_path",
     ):
         declared = _get(value, field, _MISSING)
@@ -4187,6 +4188,98 @@ def _assert_page_fallback_only_uncovered(
             )
 
 
+def _exact_visit_coordinate(row: Mapping[str, Any]) -> tuple[str, float] | None:
+    """Parse an explicit single visit, never a range or a semantic time band."""
+    raw = _text(row.get("actual_timepoint"))
+    aliases = {"day": "day", "days": "day", "天": "day",
+               "week": "week", "weeks": "week", "周": "week",
+               "month": "month", "months": "month", "个月": "month",
+               "year": "year", "years": "year", "年": "year"}
+    unit = aliases.get(_text(row.get("actual_timepoint_unit")).casefold())
+    number = r"(-?\d+(?:\.\d+)?)"
+    if unit and re.fullmatch(number, raw):
+        return unit, float(raw)
+    match = re.fullmatch(r"(days?|weeks?|months?|years?)\s+" + number, raw, re.I)
+    if match:
+        return aliases[match[1].casefold()], float(match[2])
+    match = re.fullmatch(r"第?" + number + r"\s*(天|周|个月|年)", raw)
+    if match:
+        return aliases[match[2]], float(match[1])
+    return None
+
+
+def _source_longitudinal_groups(
+    records: Sequence[tuple[dict[str, Any], Any]],
+) -> tuple[dict[str, Any], ...]:
+    """Describe one bound source measure/arm over time without co-axis adjudication.
+
+    Explicit source scope and unchanged scientific context establish a trajectory;
+    an unknown treatment/control role does not erase a declared source group ID.
+    Original observations and existing cross-trial facets are not modified.
+    """
+    buckets: dict[tuple[str, ...], list[tuple[dict[str, Any], Any]]] = defaultdict(list)
+    coordinates: dict[str, tuple[str, float]] = {}
+    for row, source in records:
+        coordinate = _exact_visit_coordinate(row)
+        required = ("trial_id", "product_id", "group_id", "source_version_id",
+                    "source_measure_path", "source_measure_definition", "source_param_type", "unit")
+        if (coordinate is None or row.get("_domain") != "efficacy"
+                or source_domain_conflicts(row, "efficacy")
+                or any(semantic_value_is_unknown(row.get(field)) for field in required)):
+            continue
+        scope = _get(row.get("source_clause_context"), "scientific_scope", {})
+        if any(_get(scope, field) != row.get(field)
+               for field in ("source_version_id", "source_measure_path")):
+            continue
+        class_title = _text(row.get("source_class_title"))
+        class_is_visit = class_title and _exact_visit_coordinate({
+            "actual_timepoint": class_title, "actual_timepoint_unit": "",
+        }) == coordinate
+        context_fields = (
+            *required, "arm_detail", "source_analysis_population", "population_context",
+            "semantic_analysis_set", "semantic_analysis_form", "semantic_estimand",
+            "semantic_direction", "semantic_instrument_or_scale", "semantic_denominator",
+            "source_value_role", "source_dispersion_type", "source_category_title",
+            "period", "cohort", "value_basis", "count_basis",
+        )
+        key = (*(_text(row.get(field)) for field in context_fields), coordinate[0],
+               "" if class_is_visit else class_title)
+        buckets[key].append((row, source))
+        coordinates[str(row["row_id"])] = coordinate
+    result: list[dict[str, Any]] = []
+    for key in sorted(buckets):
+        bucket = sorted(buckets[key], key=lambda item: coordinates[str(item[0]["row_id"])][1])
+        visits = [coordinates[str(row["row_id"])] for row, _ in bucket]
+        # Conflicting/repeated coordinates remain in their original graph/table
+        # facets instead of silently selecting one value for a line point.
+        if len(visits) < 2 or len(set(visits)) != len(visits):
+            continue
+        first = bucket[0][0]
+        unit_zh = {"day": "天", "week": "周", "month": "月", "year": "年"}[visits[0][0]]
+        group = _group(
+            _text(first.get("clinical_concept_label_zh"), "历时结果"), bucket,
+            chart_type="line", identity_series=True,
+            x_axis_label_zh=f"观察时间（{unit_zh}）",
+            y_axis_label_zh=_text(_comparison_display_row(first).get("unit_label_zh")),
+        )
+        for row in group["rows"]:
+            unit, value = coordinates[str(row["row_id"])]
+            row.update(_plot_time_value=value, _plot_time_unit=unit,
+                       _chart_time_key=f"{unit}:{value:g}")
+            study = _text(row.get("trial_zh"))
+            if not (re.search(r"[\u3400-\u9fff]", study) and len(study) <= 60):
+                study = _text(row.get("trial_id"))
+                if re.fullmatch(r"nct\d+", study, re.I):
+                    study = study.upper()
+            row["_chart_identity_label"] = "｜".join((
+                _text(row.get("product_zh")), study,
+            ))
+        group.update(title_complete=True, comparison_purpose="within_source_measure_time_axis",
+                     scientific_group_kind="within_source_longitudinal", cross_trial=False)
+        result.append(group)
+    return tuple(result)
+
+
 def _groups_for_page(
     page_id: str,
     records: Sequence[tuple[dict[str, Any], Any]],
@@ -4197,10 +4290,14 @@ def _groups_for_page(
         return ()
     records = _records_with_semantics(records, page_id=page_id)
     if page_id == "longitudinal-results":
+        source_groups = _source_longitudinal_groups(records)
+        source_ids = {str(row["row_id"]) for group in source_groups for row in group["rows"]}
         # A descriptive time axis is not a numeric equivalence column. Never
         # restore the general same-trial bypass in the scientific partition.
         series: dict[tuple[str, ...], list[tuple[dict[str, Any], Any]]] = defaultdict(list)
         for row, source in records:
+            if str(row["row_id"]) in source_ids:
+                continue
             identity = tuple(_text(row.get(key)) for key in
                              ("product_id", "trial_id", "group_id", "arm_role"))
             key = (*identity, *_semantic_group_key(row, include_time=False),
@@ -4210,12 +4307,13 @@ def _groups_for_page(
                     or source_domain_conflicts(row, "efficacy")):
                 key += (_text(row.get("row_id")),)
             series[key].append((row, source))
-        return tuple({**group, "comparison_purpose": "within_trial_descriptive_time_axis"}
+        return (*source_groups, *tuple(
+                     {**group, "comparison_purpose": "within_trial_descriptive_time_axis"}
                      for group in _dress_membership_groups(
                          tuple(tuple(series[key]) for key in sorted(series)),
                          page_id=page_id, domain="efficacy", include_time=False,
                          chart_type="line", semantic_proposals=(),
-                     ))
+                     )))
     if page_id in {"overview", "product-trial-profiles"}:
         by_id = {str(row["row_id"]): row for row, _source in _dedupe_records(records)}
         for proposal in semantic_proposals:
@@ -4571,6 +4669,20 @@ def _filter_value_label_zh(dimension: str, value: Any, label: Any) -> str:
     独立复核第八轮：label 字段本身可能已被上游写入内部键
     （如 population:登记结果人群fullanalysis），不得因其含中文而照抄。
     """
+    if dimension in {"product", "trial"}:
+        # Identity projection is the name owner. This formatter must not throw
+        # away an INN/combination/dose and fall back to its internal lookup slug.
+        identity_label = _text(label, _text(value))
+        if dimension == "product":
+            return identity_label
+        if re.fullmatch(r"nct\d+", identity_label, re.I):
+            return identity_label.upper()
+        if len(identity_label) <= 32 or (
+            len(identity_label) <= 60 and re.search(r"[\u3400-\u9fff]", identity_label)
+        ):
+            return identity_label
+        identifier = _text(value)
+        return identifier.upper() if re.fullmatch(r"nct\d+", identifier, re.I) else identifier
     for candidate in (label, value):
         text = str(candidate or "").strip()
         if not text:
@@ -5397,6 +5509,10 @@ def _comparison_workspace(
         "study_labels": {study: _text((study_labels or {}).get(study), study)
                          for study in sorted(studies)},
         "columns": tuple(columns),
+        "longitudinal_groups": tuple(
+            {**group, "rows": [_comparison_display_row(row) for row in group["rows"]]}
+            for group in _source_longitudinal_groups(records)
+        ),
     }
 
 

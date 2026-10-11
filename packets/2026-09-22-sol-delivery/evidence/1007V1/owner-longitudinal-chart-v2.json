@@ -1,0 +1,40 @@
+{
+  "schema": "owner-bounded-report-check/v1",
+  "state": "DEVELOPMENT_PROGRESS_NOT_PRODUCT_ACCEPTANCE",
+  "date": "2026-10-11",
+  "baseline_commit": "876d77e7097fd00c279c61c7f1a7ce518ed2f926",
+  "baseline_is_not_candidate_source_identity": true,
+  "requirements": "PRD.md#2026-10-11-用户最新产品裁决专家阅读与图表横比",
+  "current_revision": 32,
+  "source_generation": "ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4",
+  "builder_sha256": "a1674d93f73852965687cbd0ad754f268a5d27d8f718ccd914b02fd4141a2d74",
+  "facts": 1505,
+  "physical_pages_rendered": 104,
+  "durable_files_unchanged": 16257,
+  "current_writes": 0,
+  "source_writes": 0,
+  "candidate": ".artifacts/1007-b-longitudinal-preview-v2",
+  "render_actual_sha256": "25e5213215086b5f6a19e5d1a153bc7887111f86dd14d6092e94b476e3448589",
+  "additional_bindings_sha256": "a9d5c8e075edd89a18b595896ca4ca93818763125fdc42b7e51747f890fafcfc",
+  "overview_sha256": "7962695f8d4995ce8a4dd7149105a374961d6211079e11e068252b09d3aad73a",
+  "author_sha256": {
+    "report_b.py": "0188aa375a87f5fb2771a6b3631dce9fdaa0081d15cab74e42e5385a13d74cf6",
+    "assets/charts.js": "5a9e038d8056bdcd1ec44d6e524d8c17ba4d8c545ce18e5d9aaf52b2c5acab48",
+    "assets/report-b.js": "8a9a737c0919140d7879efb6779b1653e22d09e88a305e52f4e02122a38fd43e",
+    "templates/b/page.html.j2": "484a32ee08a79ed7cb2c07a7e8b6e5f61e6fb3c7269597835a51c90bfbd5bf00"
+  },
+  "checks": [
+    {"scope": "source/text-time/filter/comparison/expert-copy nine files before visual repair", "result": "116_PASS", "seconds": 4.15},
+    {"scope": "four affected source-line/shared-option/frame/panel files after visual repair", "result": "32_PASS", "seconds": 1.70},
+    {"scope": "named Ruff; strict single report_b; Node charts syntax; production mirror", "result": "PASS"},
+    {"scope": "Ego space2/p1; normal B selected question; 1440/1600/1920/2560", "result": "16_RUNTIME_STATES_ZERO_FAILURES", "receipt_sha256": "45a3865dfbe834167e2d97b8d3c9445f6347056cb2b6e875166f5f67a9963baf"}
+  ],
+  "verified_runtime_slice": ["24 exact visits on proportional time axis", "24 graph points map to 24 corresponding table rows", "first/last labels", "point57.7 opens exact source", "32-question-row query retained", "filter to2 rows", "short Chinese curve title and y unit in four widths"],
+  "owner_pixel_inspected": ["v1 dense1440/dense2560/filtered1440 REVISE: raw English heading/unit", "v2 curve-local1440/2560 and source1920: heading/unit repaired; source original retained"],
+  "unaccepted": ["whole Home/readability and vertical first screen", "shared multi-study positive numeric comparison", "all physical-page visual coverage", "new candidate independent challenge", "current/save/clear/config/share on this candidate", "24 portals/three hosts/install/recovery/RC"],
+  "worker": {"native_session": "01a129eb-503e-7000-9496-7eaa5972b9aa", "actual_selector": "pi/cursor/default", "underlying_model": "UNVERIFIED", "effort": "UNVERIFIED", "seconds": 971.265, "tool_calls": 152, "returncode": 0, "independent_review": false},
+  "retained_failures": ["initial source17RED", "filter identity6RED", "projected source visit production RED", "worker lint55 long lines", "v1 owner visual REVISE", "v2 heading root RED"],
+  "protected_user_files": "5 hashes unchanged; excluded from staging",
+  "next_safe_action": "Preserve v2 frozen artifacts; improve whole-task overview/query hierarchy and real multi-study graph+table, then a single frozen-artifact independent challenge. Do not replay historical source/current/save/share transactions or old runner handles.",
+  "goal": "ACTIVE_NOT_PAUSED"
+}

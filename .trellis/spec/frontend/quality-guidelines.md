@@ -53,6 +53,17 @@ set in a small machine manifest. Offline fixed CAS is not live recheck/universe
 closure. Only committed current can feed accepted shares, not old HTML+patch.
 Historical C visual prototypes stay distinct from the new C source bridge.
 
+## Expert reading and actual comparison
+
+The 2026-10-11 PRD expert-reading decision supersedes older audience-copy tests.
+Do not reintroduce defensive disclaimers in main pages, details or sources.
+Structured population, estimand, time, units and original quotations stay intact.
+Comparison acceptance requires an actual ECharts plot plus its corresponding
+complete table and source linkage; scalar cards or a folded data dump do not
+replace it. Longitudinal plots use exact recorded visits, distinct point IDs,
+key annotations and gaps for explicit missing/cleared observations. Same-source
+descriptive trajectories do not change adjudicated cross-trial numeric facets.
+
 ## Source-backed descriptive questions
 
 Reuse `SourceQuestionProjection` beside source facts, never inside their science

@@ -279,6 +279,24 @@
     }).map(function (group) {
       return Object.assign({}, group, {rows: group.rows.filter(function (row) {return allowed[row.row_id];})});
     }).filter(function (group) {return group.rows.length;});
+    // Source-qualified within-measure trajectories are a descriptive time view,
+    // not a re-adjudication of the clinical question's numeric science facets.
+    // Use the same current page query as the comparison matrix and complete table.
+    var trajectories = (workspace.longitudinal_groups || []).map(function (group) {
+      var rows = group.rows.filter(function (row) {return allowed[row.row_id] && displayed[row.row_id];});
+      return Object.assign({}, group, {rows: rows});
+    }).filter(function (group) {return group.rows.length > 1;});
+    var trajectoryIds = Object.create(null);
+    trajectories.forEach(function (group) {
+      group.rows.forEach(function (row) {trajectoryIds[row.row_id] = true;});
+      var label = columns.find(function (column) {
+        return (column.row_ids || []).indexOf(group.rows[0].row_id) !== -1;
+      });
+      if (label && label.question_known) group.title_zh = label.question_label;
+    });
+    comparisonGroups = trajectories.concat(comparisonGroups.map(function (group) {
+      return Object.assign({}, group, {rows: group.rows.filter(function (row) {return !trajectoryIds[row.row_id];})});
+    }).filter(function (group) {return group.rows.length;}));
     host.querySelector("[data-comparison-status]").textContent =
       retained + "项相关研究；本问题匹配" + matchedStudies.length + "项，其余" + unmatchedStudies.length +
       "项可展开；记录列 " + (allColumns.length ? offset + 1 : 0) + "–" + (offset + columns.length) + " / " + allColumns.length +

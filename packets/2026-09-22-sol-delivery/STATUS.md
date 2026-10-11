@@ -1,5 +1,11 @@
 # 唯一当前状态：1007V1连续实施｜current32阅读体验被用户否决，正在修正，非RC
 
+最新实际进展见[有界折线回执](evidence/1007V1/owner-longitudinal-chart-v2.json)：v1四宽运行通过但实看英文标题/单位仍REVISE，修复成族RED→四文件32PASS/1.70s；新正常v2重新生成104页/1505事实，四宽16态实际操作0失败。24点比例时间轴、24行同源表、关键点标注、57.7点精确来源、32→2筛选和中文图标题/单位已运行；Owner实看1440/2560图卡及1920来源原文。仅记录本切片修复，不签首页/全研究正向共图/独立挑战/全部页/当前事务/分享/24门户/三宿主或RC。current32、16257持久文件、五用户文件保持。render19792/7851、Ego28514/63505均终态，不再重跑；下一为整体任务层级及真正多研究图+表，冻结后单次独立挑战。Goal active，无暂停。
+
+当前实施基线876d77e7097fd00c279c61c7f1a7ce518ed2f926。专家呈现裁决已进入PRD、匹配设计/计划/验收、AGENTS入口和前端质量规范，后续修复不得恢复说教套话或以数字清单替代横比。普通B同源历时投影、共享折线及过滤身份已接线；Owner真实文本时间坐标反例先RED，完整九文件116PASS/4.15s，JS格式整理后同一生产probe追加1PASS/0.18s。具名Ruff、单report_b strict、Node语法及生产资产镜像校验通过，不是全仓或产品验收。新正常只读候选`.artifacts/1007-b-longitudinal-preview-v1`104页/1505事实/16257持久文件保持，source/current零写入；四宽Ego实际操作在途，尚未视觉接受。
+
+共享执行runner3167/session1607与退出事件30890已终态，不再等待或重派。原codebuddy角色未形成可用输出，runner按既定fallback使用Pi/cursor/default，实际native session为01a129eb-503e-7000-9496-7eaa5972b9aa，971.265s/152工具调用/return0；底层模型及effort未证明，不冒称DeepSeek或独立科学复核。Owner另发现其未消费真实来源投影坐标并修复，也移除并列系列的内部rowID显示、补中文单位与纵轴名。current32、原来源及五用户改动保持。下一收本次Ego终态、实际目视新截图，修正同根失败后才启动冻结版独立挑战；旧pending句是历史。
+
 最新用户裁决已写入现行PRD/DESIGN/PLAN/ACCEPTANCE及Trellis记录：专家报告删除防御性套话，横比必须ECharts图+表，历时性数据折线+标注。首批A/B/C模板/共享资源清理已8项新增合同PASS；相关旧文字断言正在按新合同迁移。current32未改，折线替代逐周卡片尚未完成。此前C02 runner78101/事件52958已终态actualgemini-3.8-flash，REVISE确认首页泛化说明/单列留白/slug/卡片根因；后文pending句仅为启动时历史，不再等待。最新呈现源码已在审阅终态后变更，旧预览不替代新验收。
 
 本单元终态：旧文字断言迁移后九文件128PASS/148.47s；C来源页标题进一步改为“来源资料”后普通A/B/C8项合同smoke通过。strict三renderer/具名Ruff通过；正常新B预览104页/1505事实/current保持。Ego1920首页/横比可见套话检查0命中，32查询=32显示事实；Owner实际看横比截图，折线+表重构仍为紧接任务。新回执owner-expert-reading-correction-v1.json；不重跑旧current/事务/分享。不把测试期间19FAIL/109PASS混合树诊断算作冻结门。

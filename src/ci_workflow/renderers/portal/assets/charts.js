@@ -544,133 +544,368 @@
     return option;
   }
 
-  function groupedLineOption(group) {
-    var timeLabels = {};
-    var timeOrder = {};
-    var seriesRows = {};
-    var seriesOrder = [];
-    var rowIds = collectRowIds(group);
-    for (var i = 0; i < group.rows.length; i++) {
-      var row = group.rows[i];
-      var timeKey = String(row._chart_time_key || row.time || row.display_label_zh || "");
-      if (!timeLabels.hasOwnProperty(timeKey)) {
-        timeLabels[timeKey] = String(
-          row.time_window_band_label_zh || row.time || row.display_label_zh || timeKey
-        );
-        var numericTime = Number(row.actual_timepoint);
-        timeOrder[timeKey] = isFinite(numericTime) ? numericTime : Object.keys(timeOrder).length;
-      }
-      var seriesKey =
-        groupedIdentity(row) + " · " + groupedSeriesKey(row);
-      if (!seriesRows.hasOwnProperty(seriesKey)) {
-        seriesRows[seriesKey] = {
-          label: groupedIdentityLabel(row) + " · " + groupedSeriesLabel(row, groupedSeriesKey(row)),
-          rows: {}
-        };
-        seriesOrder.push(seriesKey);
-      }
-      seriesRows[seriesKey].rows[timeKey] = row;
+  function finiteActualTime(row) {
+    if (!row) return null;
+    // The normal report projection supplies coordinates after checking its source
+    // measurement. Keep the original visit text unchanged in the record/table.
+    if (typeof row._plot_time_value === "number" && Number.isFinite(row._plot_time_value) &&
+        row._plot_time_unit != null && String(row._plot_time_unit) !== "") {
+      return {value: row._plot_time_value, unit: String(row._plot_time_unit)};
     }
-    var times = Object.keys(timeLabels);
-    times.sort(function (left, right) {
-      return timeOrder[left] - timeOrder[right] || left.localeCompare(right);
-    });
-    seriesOrder.sort(function (left, right) { return left.localeCompare(right); });
-    var series = [];
-    for (var s = 0; s < seriesOrder.length; s++) {
-      var descriptor = seriesRows[seriesOrder[s]];
-      var data = [];
-      for (var t = 0; t < times.length; t++) {
-        var rowForPoint = descriptor.rows[times[t]];
-        if (!rowForPoint || !isRenderable(rowForPoint)) {
-          var missing = nullPoint(rowForPoint || { disclosure_state: "not_reported" });
-          if (rowForPoint && rowForPoint.row_id) missing._row_id = String(rowForPoint.row_id);
-          data.push(missing);
-          continue;
-        }
-        data.push({
-          value: rowForPoint.numeric_value != null ? rowForPoint.numeric_value : rowForPoint.value,
-          _row_id: String(rowForPoint.row_id),
-          status: null
-        });
+    if (typeof row.actual_timepoint !== "number" ||
+        !Number.isFinite(row.actual_timepoint) || row.actual_timepoint < 0 ||
+        row.actual_timepoint_unit == null || String(row.actual_timepoint_unit) === "") {
+      return null;
+    }
+    return {value: row.actual_timepoint, unit: String(row.actual_timepoint_unit)};
+  }
+
+  function sharedActualUnit(rows) {
+    if (!rows || !rows.length) return null;
+    var unit = null;
+    for (var i = 0; i < rows.length; i++) {
+      var time = finiteActualTime(rows[i]);
+      if (!time) return null;
+      if (unit == null) unit = time.unit;
+      else if (unit !== time.unit) return null;
+    }
+    return unit;
+  }
+
+  function originalVisitLabel(row) {
+    var fields = ["time_label_zh", "time", "visit", "display_label_zh", "_chart_time_key"];
+    for (var i = 0; i < fields.length; i++) {
+      if (row && row[fields[i]] != null && String(row[fields[i]]) !== "") {
+        return String(row[fields[i]]);
       }
-      series.push({
-        name: descriptor.label,
+    }
+    return "时间点未列示";
+  }
+
+  function visitIdentity(row, numericUnit) {
+    var time = finiteActualTime(row);
+    if (numericUnit && time) {
+      return {key: "n:" + String(time.value), label: formatActualTime(row), x: time.value};
+    }
+    if (time) {
+      return {
+        key: "a:" + String(time.value) + "\u0001" + time.unit,
+        label: formatActualTime(row),
+        x: null
+      };
+    }
+    var label = originalVisitLabel(row);
+    return {key: "l:" + label, label: label, x: null};
+  }
+
+  function longitudinalSeriesIdentity(row, identityAware) {
+    if (identityAware) {
+      var seriesKey = groupedSeriesKey(row);
+      return {
+        key: groupedIdentity(row) + "\u0001" + seriesKey,
+        label: groupedIdentityLabel(row) + " · " + groupedSeriesLabel(row, seriesKey),
+        styleKey: seriesKey
+      };
+    }
+    var key = groupedSeriesKey(row);
+    var supplied = row && (
+      row._chart_series_key || row.arm_role || row.arm || row.group || row.category_level
+    );
+    if (!supplied && key === "unknown") return {key: "trend", label: "趋势", styleKey: "trend"};
+    return {key: key, label: groupedSeriesLabel(row, key), styleKey: key};
+  }
+
+  function availableN(row) {
+    var keys = ["n", "sample_size", "denominator", "n_analyzed", "participant_n"];
+    for (var i = 0; i < keys.length; i++) {
+      var candidate = row ? row[keys[i]] : null;
+      if (typeof candidate === "boolean" || candidate == null || candidate === "") continue;
+      return candidate;
+    }
+    return null;
+  }
+
+  function isSuppliedLandmark(row) {
+    return !!(row && (row.clinical_landmark === true || row.landmark === true));
+  }
+
+  function longitudinalValue(row) {
+    if (!row || !isRenderable(row)) return null;
+    if (row.numeric_value != null && row.numeric_value !== "" &&
+        typeof row.numeric_value !== "boolean") {
+      return row.numeric_value;
+    }
+    if (row.value != null && row.value !== "" && typeof row.value !== "boolean") return row.value;
+    return null;
+  }
+
+  function pointRowId(row) {
+    if (!row || row.row_id == null || row.row_id === "") return null;
+    return String(row.row_id);
+  }
+
+  function longitudinalPoint(row, visit, keyPoint, numericUnit) {
+    var value = longitudinalValue(row);
+    var point = {
+      value: numericUnit ? [visit.x, value] : value,
+      _row_id: pointRowId(row),
+      _time_label: visit.label,
+      _unit: row ? String(row.unit_label_zh || row.unit || "") : "",
+      _n: availableN(row),
+      status: value == null ? ((row && row.disclosure_state) || "not_reported") : null,
+      label: {
+        show: !!(keyPoint && value != null),
+        fontSize: 16,
+        color: "#0F1115",
+        formatter: function (params) {
+          var data = params && params.data ? params.data : {};
+          var shown = data.value;
+          if (Array.isArray(shown)) shown = shown.length > 1 ? shown[1] : shown[0];
+          return shown == null ? "" : String(shown);
+        }
+      }
+    };
+    if (value == null) {
+      point.statusLabel = disclosureLabelZh(point.status);
+      point.itemStyle = {color: "#D1D5DB", opacity: 0.55};
+    }
+    return point;
+  }
+
+  function longitudinalTooltip(params) {
+    var items = Array.isArray(params) ? params : [params];
+    var lines = [];
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i] || {};
+      var data = item.data;
+      if (!data || typeof data !== "object" || Array.isArray(data) || data._alignment) continue;
+      var shown = data.value;
+      if (Array.isArray(shown)) shown = shown.length > 1 ? shown[1] : shown[0];
+      var timeText = data._time_label || item.axisValue || "";
+      var name = item.seriesName ? escapeTooltipHtml(item.seriesName) + "：" : "";
+      var valueText = shown == null ? (data.statusLabel || "") : String(shown);
+      var line = escapeTooltipHtml(timeText);
+      line = line ? line + " " + name + escapeTooltipHtml(valueText) : name + escapeTooltipHtml(valueText);
+      if (shown != null && data._unit) line += " " + escapeTooltipHtml(data._unit);
+      if (data._n != null && data._n !== "") line += " N=" + escapeTooltipHtml(data._n);
+      lines.push(line);
+    }
+    return lines.join("<br>");
+  }
+
+  function buildLongitudinalOption(group) {
+    var rows = group && group.rows ? group.rows : [];
+    var identityAware = usesIdentitySeries(group);
+    var numericUnit = sharedActualUnit(rows);
+    var categories = [];
+    var categoryIndex = {};
+    if (!numericUnit) {
+      for (var c = 0; c < rows.length; c++) {
+        var seenVisit = visitIdentity(rows[c], null);
+        if (!Object.prototype.hasOwnProperty.call(categoryIndex, seenVisit.key)) {
+          categoryIndex[seenVisit.key] = categories.length;
+          categories.push(seenVisit);
+        }
+      }
+    }
+    var buckets = {};
+    var slotOrder = [];
+    var occupied = {};
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      var identity = longitudinalSeriesIdentity(row, identityAware);
+      var visit = visitIdentity(row, numericUnit);
+      var slot = identity.key;
+      var occupyKey = slot + "\u0001" + visit.key;
+      var collided = false;
+      if (Object.prototype.hasOwnProperty.call(occupied, occupyKey)) {
+        // Keep both observations. The suffix is the source row id, not an arm
+        // inferred from array position.
+        collided = true;
+        var suffix = pointRowId(row) || ("retain-" + String(i + 1));
+        slot = identity.key + "\u0001" + suffix;
+        occupyKey = slot + "\u0001" + visit.key;
+        var guard = 2;
+        while (Object.prototype.hasOwnProperty.call(occupied, occupyKey)) {
+          slot = identity.key + "\u0001" + suffix + "-" + String(guard);
+          occupyKey = slot + "\u0001" + visit.key;
+          guard += 1;
+        }
+      }
+      occupied[occupyKey] = true;
+      if (!Object.prototype.hasOwnProperty.call(buckets, slot)) {
+        buckets[slot] = {
+          label: identity.label,
+          styleKey: identity.styleKey,
+          baseKey: identity.key,
+          collided: collided,
+          rowId: pointRowId(row) || "",
+          points: []
+        };
+        slotOrder.push(slot);
+      }
+      buckets[slot].points.push({row: row, visit: visit});
+    }
+    var collidedBase = {};
+    for (var b = 0; b < slotOrder.length; b++) {
+      if (buckets[slotOrder[b]].collided) collidedBase[buckets[slotOrder[b]].baseKey] = true;
+    }
+    slotOrder.sort(function (left, right) {
+      var a = buckets[left];
+      var bkt = buckets[right];
+      var priority = {treatment: 0, control: 1, single_arm: 2, unknown: 3, trend: 4};
+      var ap = priority[String(a.styleKey).split(":")[0]];
+      var bp = priority[String(bkt.styleKey).split(":")[0]];
+      ap = ap === undefined ? 5 : ap;
+      bp = bp === undefined ? 5 : bp;
+      if (ap !== bp) return ap - bp;
+      var style = String(a.styleKey).localeCompare(String(bkt.styleKey));
+      if (style) return style;
+      return String(a.rowId).localeCompare(String(bkt.rowId)) || String(left).localeCompare(String(right));
+    });
+    var series = [];
+    var parallelOrdinal = {};
+    var useArea = slotOrder.length > 0 && slotOrder.length <= 2;
+    for (var s = 0; s < slotOrder.length; s++) {
+      var bucket = buckets[slotOrder[s]];
+      var style = identitySeriesStyle(group, bucket.styleKey);
+      var color = style && style.color ? style.color : "#5470C6";
+      var name = bucket.label;
+      if (collidedBase[bucket.baseKey]) {
+        parallelOrdinal[bucket.baseKey] = (parallelOrdinal[bucket.baseKey] || 0) + 1;
+        name += " · 并列观察" + String(parallelOrdinal[bucket.baseKey]);
+      }
+      var data;
+      if (!numericUnit) {
+        data = [];
+        for (var fill = 0; fill < categories.length; fill++) {
+          data.push({
+            value: null,
+            _row_id: null,
+            _alignment: true,
+            status: null,
+            symbolSize: 0,
+            label: {show: false, fontSize: 16, color: "#0F1115"}
+          });
+        }
+        var own = [];
+        for (var p = 0; p < bucket.points.length; p++) {
+          own.push(categoryIndex[bucket.points[p].visit.key]);
+        }
+        own.sort(function (left, right) { return left - right; });
+        var firstOwn = own.length ? own[0] : -1;
+        var lastOwn = own.length ? own[own.length - 1] : -1;
+        for (var q = 0; q < bucket.points.length; q++) {
+          var spec = bucket.points[q];
+          var index = categoryIndex[spec.visit.key];
+          data[index] = longitudinalPoint(
+            spec.row,
+            spec.visit,
+            index === firstOwn || index === lastOwn || isSuppliedLandmark(spec.row),
+            false
+          );
+        }
+      } else {
+        var ordered = bucket.points.slice().sort(function (left, right) {
+          return left.visit.x - right.visit.x ||
+            String(pointRowId(left.row)).localeCompare(String(pointRowId(right.row)));
+        });
+        data = [];
+        for (var n = 0; n < ordered.length; n++) {
+          data.push(longitudinalPoint(
+            ordered[n].row,
+            ordered[n].visit,
+            n === 0 || n === ordered.length - 1 || isSuppliedLandmark(ordered[n].row),
+            true
+          ));
+        }
+      }
+      var seriesItem = {
+        name: name,
         type: "line",
         data: data,
+        smooth: false,
         connectNulls: false,
         symbol: "circle",
         symbolSize: 9,
-        emphasis: { focus: "series" }
-      });
+        itemStyle: {color: color},
+        lineStyle: {color: color, width: 2},
+        emphasis: {focus: "series"}
+      };
+      if (useArea) seriesItem.areaStyle = {color: color, opacity: 0.12};
+      series.push(seriesItem);
     }
+    var unitLabel = ({week: "周", day: "天", month: "个月", year: "年"})[numericUnit] || numericUnit;
     return withMeta(
       {
-        tooltip: { trigger: "axis" },
+        tooltip: {trigger: "item", formatter: longitudinalTooltip},
         legend: {
           show: series.length > 1,
           data: series.map(function (item) { return item.name; }),
           top: 0,
-          textStyle: { fontSize: 16 }
+          textStyle: {fontSize: 16, color: "#0F1115"}
         },
-        grid: { left: 56, right: 40, top: series.length > 1 ? 58 : 40, bottom: 54, containLabel: true },
-        xAxis: {
-          type: "category",
-          data: times.map(function (key) { return timeLabels[key]; }),
-          name: group.x_axis_label_zh || "时间窗",
+        grid: {
+          left: 56,
+          right: 40,
+          top: series.length > 1 ? 58 : 40,
+          bottom: 54,
+          containLabel: true
+        },
+        xAxis: numericUnit ? {
+          type: "value",
+          name: (group && group.x_axis_label_zh) || unitLabel || "",
           nameLocation: "middle",
           nameGap: 36,
+          nameTextStyle: {fontSize: 16, color: "#0F1115"},
+          scale: true,
+          axisLabel: {fontSize: 16, color: "#0F1115", hideOverlap: true},
+          axisLine: {lineStyle: {color: "#6B7280"}}
+        } : {
+          type: "category",
+          data: categories.map(function (item) { return item.label; }),
+          name: (group && group.x_axis_label_zh) || "时间窗",
+          nameLocation: "middle",
+          nameGap: 36,
+          nameTextStyle: {fontSize: 16, color: "#0F1115"},
           boundaryGap: false,
-          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
+          axisLabel: {
+            fontSize: 16,
+            color: "#0F1115",
+            rotate: 25,
+            hideOverlap: true,
+            width: 100,
+            overflow: "break"
+          }
         },
         yAxis: {
           type: "value",
+          name: (group && group.y_axis_label_zh) || "",
+          nameTextStyle: {fontSize: 16, color: "#0F1115", align: "left"},
           scale: true,
-          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" },
-          min: typeof group.y_axis_min === "number" ? group.y_axis_min : null,
-          max: typeof group.y_axis_max === "number" ? group.y_axis_max : null
+          axisLabel: {
+            fontSize: 16,
+            color: "#0F1115",
+            rotate: 25,
+            hideOverlap: true,
+            width: 100,
+            overflow: "break"
+          },
+          min: group && typeof group.y_axis_min === "number" ? group.y_axis_min : null,
+          max: group && typeof group.y_axis_max === "number" ? group.y_axis_max : null
         },
         series: series
       },
-      rowIds
+      collectRowIds(group || {rows: []})
     );
   }
 
+  function groupedLineOption(group) {
+    return buildLongitudinalOption(group);
+  }
+
   function buildLineOption(group) {
-    if (usesIdentitySeries(group)) return groupedLineOption(group);
-    var times = [];
-    var seriesData = [];
-    var rowIds = collectRowIds(group);
-    for (var i = 0; i < group.rows.length; i++) {
-      var row = group.rows[i];
-      times.push(row.time || row.display_label_zh || "");
-      if (!isRenderable(row)) seriesData.push(nullPoint(row));
-      else {
-        var v = row.numeric_value != null ? row.numeric_value : row.value;
-        seriesData.push({ value: v, status: null });
-      }
-    }
-    return withMeta(
-      {
-        tooltip: { trigger: "axis" },
-        grid: { left: 56, right: 40, top: 40, bottom: 40, containLabel: true },
-        xAxis: {
-          type: "category",
-          data: times,
-          boundaryGap: false,
-          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" }
-        },
-        yAxis: {
-          type: "value",
-          scale: true,
-          axisLabel: { fontSize: 16, rotate: 25, hideOverlap: true, width: 100, overflow: "break" },
-          min: typeof group.y_axis_min === "number" ? group.y_axis_min : null,
-          max: typeof group.y_axis_max === "number" ? group.y_axis_max : null
-        },
-        series: [{ name: "趋势", type: "line", data: seriesData, connectNulls: false }]
-      },
-      rowIds
-    );
+    return buildLongitudinalOption(group);
   }
 
   function buildForestOption(group) {
@@ -1525,12 +1760,11 @@
   }
 
   function formatActualTime(row) {
-    if (!row || typeof row.actual_timepoint !== "number" ||
-        !Number.isFinite(row.actual_timepoint) || row.actual_timepoint < 0 ||
-        row.actual_timepoint_unit == null) return "";
-    var unit = String(row.actual_timepoint_unit);
+    var time = finiteActualTime(row);
+    if (!time) return "";
+    var unit = time.unit;
     var unitLabel = ({ week: "周", day: "天", month: "个月", year: "年" })[unit] || unit;
-    return String(row.actual_timepoint) + " " + unitLabel;
+    return String(time.value) + " " + unitLabel;
   }
 
   function collectActualTimes(rows) {
@@ -1917,6 +2151,44 @@
     }
   }
 
+  function declaredPointId(data) {
+    if (!data || typeof data !== "object" || Array.isArray(data)) return undefined;
+    var keys = ["_row_id", "row_id", "rowId"];
+    var found = false;
+    for (var i = 0; i < keys.length; i++) {
+      if (Object.prototype.hasOwnProperty.call(data, keys[i])) {
+        found = true;
+        var raw = data[keys[i]];
+        if (raw != null && raw !== "") return String(raw);
+      }
+    }
+    return found ? null : undefined;
+  }
+
+  function declaredPointIdFromArray(data) {
+    if (!Array.isArray(data) || data.length < 3) return undefined;
+    var raw = data[2];
+    if (raw && typeof raw === "object") return declaredPointId(raw);
+    if ((typeof raw === "string" || typeof raw === "number") && raw !== "") return String(raw);
+    if (raw == null || raw === "") return null;
+    return undefined;
+  }
+
+  function rowIdFromChartMap(groupIndex, params) {
+    if (!params) return undefined;
+    var map = chartRowMap[groupIndex] || {};
+    var ids = Object.keys(map);
+    for (var i = 0; i < ids.length; i++) {
+      var target = map[ids[i]];
+      if (target && typeof target === "object" &&
+          target.seriesIndex === params.seriesIndex &&
+          target.dataIndex === params.dataIndex) {
+        return ids[i];
+      }
+    }
+    return undefined;
+  }
+
   function rowIndexFromClick(groupIndex, params) {
     var kind = chartTypeByGroup[groupIndex];
     if (
@@ -1934,24 +2206,34 @@
     if (!inst) return;
     inst.off("click");
     inst.on("click", function (params) {
-      var rowIds = chartRowIdsByGroup[groupIndex] || [];
-      var directRowId =
-        params &&
-        params.data &&
-        (params.data._row_id || params.data.row_id || params.data.rowId);
-      var idx = rowIndexFromClick(groupIndex, params);
-      if (directRowId) idx = -1;
-      if (
-        !directRowId &&
-        (typeof idx !== "number" || idx < 0 || idx >= rowIds.length)
-      ) {
-        return;
+      var kind = chartTypeByGroup[groupIndex];
+      var directRowId;
+      if (params && params.data && !Array.isArray(params.data)) {
+        directRowId = declaredPointId(params.data);
+      } else if (kind === "line" && params && Array.isArray(params.data)) {
+        directRowId = declaredPointIdFromArray(params.data);
+      }
+      if (directRowId === undefined && kind === "line" && params && Array.isArray(params.value)) {
+        directRowId = declaredPointIdFromArray(params.value);
+      }
+      if (directRowId === undefined && kind === "line") {
+        directRowId = rowIdFromChartMap(groupIndex, params);
+      }
+      // Explicit null stays null. A numeric [x, y] point uses the series map
+      // rather than the flat row index, which misroutes multi-series lines.
+      if (directRowId === null || (directRowId === undefined && kind === "line")) return;
+      if (directRowId === undefined) {
+        var rowIds = chartRowIdsByGroup[groupIndex] || [];
+        var idx = rowIndexFromClick(groupIndex, params || {});
+        if (typeof idx !== "number" || idx < 0 || idx >= rowIds.length) return;
+        if (rowIds[idx] == null || rowIds[idx] === "") return;
+        directRowId = String(rowIds[idx]);
       }
       var trigger = null;
-      if (params.event && params.event.event && params.event.event.target) {
+      if (params && params.event && params.event.event && params.event.event.target) {
         trigger = params.event.event.target;
       }
-      activateRow(String(directRowId || rowIds[idx]), trigger);
+      activateRow(String(directRowId), trigger);
     });
   }
 
@@ -2277,17 +2559,13 @@
       chartDiv.textContent = "当前组暂无可绘制数值，完整表格仍保留全部记录";
       return;
     }
-    if (usesIdentitySeries(group) && option.series) {
+    if ((usesIdentitySeries(group) || chartTypeByGroup[groupIndex] === "line") && option.series) {
       var groupedMap = {};
       for (var gs = 0; gs < option.series.length; gs++) {
         var points = option.series[gs].data || [];
         for (var gp = 0; gp < points.length; gp++) {
-          var pointRowId =
-            points[gp] &&
-            (points[gp]._row_id || points[gp].row_id || points[gp].rowId);
-          if (pointRowId) {
-            groupedMap[String(pointRowId)] = { seriesIndex: gs, dataIndex: gp };
-          }
+          var pointRowId = declaredPointId(points[gp]);
+          if (pointRowId) groupedMap[pointRowId] = {seriesIndex: gs, dataIndex: gp};
         }
       }
       chartRowMap[groupIndex] = groupedMap;
@@ -2408,6 +2686,7 @@
     disclosureLabel: disclosureLabelZh,
     unplottedValueText: unplottedValueText,
     buildBarOption: buildBarOption,
+    buildLineOption: buildLineOption,
     syncWithFilter: syncChartWithFilter,
     projectVisibleFrame: projectVisibleFrame,
     replaceGroups: function (groups) {
