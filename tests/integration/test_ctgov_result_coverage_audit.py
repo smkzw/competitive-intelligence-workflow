@@ -312,6 +312,11 @@ def test_audit_classifies_unreadable_registry_content_as_a_technical_failure() -
 
 def test_other_num_affected_cannot_be_projected_as_teae() -> None:
     _, report, sources = _fixture()
+    source = _source(sources, "NCT02277743")
+    # Isolate the wrong event type at the actual captured observation window.
+    # A generic control-period label is independently a window mismatch and
+    # must no longer pass the scientific matcher just to test classification.
+    window = json.loads(source.content_text)["resultsSection"]["adverseEventsModule"]["timeFrame"]
     teae_row = SafetyRow(
         row_id="audit-teae-from-other-total",
         product_id="dupilumab",
@@ -323,12 +328,12 @@ def test_other_num_affected_cannot_be_projected_as_teae() -> None:
         numerator=92,
         denominator=229,
         unit="%",
-        time_window="主要对照期",
+        time_window=window,
         disclosure_state="已公开",
     )
     report = report.model_copy(update={"safety": (*report.safety, teae_row)})
 
-    audit = audit_clinicaltrials_result_coverage(report, (_source(sources, "NCT02277743"),))
+    audit = audit_clinicaltrials_result_coverage(report, (source,))
 
     assert any(
         issue.category == "teae"

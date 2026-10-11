@@ -1277,11 +1277,14 @@ def _report_safety_match(row: object, expected: _RegistryResult) -> bool:
         and not _result_arm_matches(expected.arm, str(getattr(row, "arm", "")))
     ):
         return False
+    if (
+        _result_text(getattr(row, "time_window", "")).casefold()
+        != _result_text(expected.observation_timepoint or expected.timepoint).casefold()
+    ):
+        return False
     if expected.endpoint and (
         getattr(row, "source_class_title", None) != (expected.class_title or None)
         or getattr(row, "source_category_title", None) != (expected.category_title or None)
-        or _result_text(getattr(row, "time_window", "")).casefold()
-        != _result_text(expected.observation_timepoint or expected.timepoint).casefold()
     ):
         return False
     value = getattr(row, "value", None)

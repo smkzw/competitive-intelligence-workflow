@@ -449,3 +449,27 @@ def test_atom_boundary_rejects_omission_even_when_parser_emits_empty_definition(
     monkeypatch.setattr(source_research_service, "_iter_adverse_event_results", omitted)
     with pytest.raises(ResearchPackageError, match="定义语境"):
         extract_ctgov_atomic_results(source)
+
+
+@pytest.mark.parametrize("term_key", ["any_sae", "death"])
+@pytest.mark.parametrize("wrong_window", ["Day 1", ""])
+def test_ae_group_count_coverage_rejects_changed_or_missing_window(
+    tmp_path: Path, term_key: str, wrong_window: str,
+) -> None:
+    report, source, facts = _bound_report_and_facts(tmp_path, _study_record(
+        module_description=AE_MODULE_DESCRIPTION, include_tesae=False))
+    assert not audit_clinicaltrials_result_coverage(report, (source,), facts=facts).issues
+    original = next(row for row in report.safety if row.term_key == term_key)
+    assert original.time_window == AE_MODULE_TIMEFRAME
+    modified = original.model_copy(update={"time_window": wrong_window})
+    wrong = report.model_copy(update={"safety": tuple(
+        modified if row.row_id == original.row_id else row for row in report.safety)})
+    rejected = audit_clinicaltrials_result_coverage(wrong, (source,), facts=facts)
+    affected_path = (
+        "resultsSection.adverseEventsModule.eventGroups[0]."
+        + ("seriousNumAffected" if term_key == "any_sae" else "deathsNumAffected")
+    )
+    assert any(
+        issue.status in {"missing", "conflicting"} and issue.source_path == affected_path
+        for issue in rejected.issues
+    ), "The same count at the wrong window must not prove coverage of this source atom"
