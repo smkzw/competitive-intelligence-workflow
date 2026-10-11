@@ -1,5 +1,13 @@
 # 唯一当前状态：1007V1连续实施｜current32阅读体验被用户否决，正在修正，非RC
 
+最新完整本批终态：[主矩阵/事实版本开发门](evidence/1007V1/owner-primary-matrix-fact-gate-v1.json)。60228已exit0，六步quality-only：Ruff、strict286、活跃1185PASS308.64s、兼容20、分层7、旧路径字面扫描通过。代码/测试/资产保持冻结；规范/指引在开发门期间更新，非冻结安装/发布包门。E03/C03/普通B render/四宽QA/生产submit全部终态，不等待下文任何旧PID或pending。A逐事实版本机械门已实现、独立scoped ACCEPT；真实118零采用，B/C专属资格及真实见证未验。主矩阵default-open已实际四宽24态/Owner核像素，真实多药临床共同图及同版操作/全终验仍待完成。五用户hash exact、未知资料保护，Goal active。本批白名单Git后接续新有界任务，不暂停。
+
+以下均为原时点历史现场；最新状态仅以上六步回执及根HANDOFF，不改原失败/hash、不重跑已终态任务。
+
+最新科学接线终态：[逐事实版本v1](evidence/1007V1/owner-fact-version-admission-v1.json)及[复盘](../../docs/handoffs/RETROSPECTIVE_20261011_fact_version_gate.md)。原16RED已在实际A研究包接通，Owner新增7RED后51相关PASS/strict/Ruff；独立C03实际GLM5.3Flash既定fallback，30PASS并接受冻结源码0d1f8feda的有界实现。正常submit/reopen/旧复核拒绝追加35PASS，源码不改。真实118候选仍零采用，B/C入口、真实日期格式/跨源更正见证仍待验证。E03/C03全终态，不等50525/54891或旧PID；原执行预检FAIL误启动及fallback理由未消歧保留，不称全治理通过。里程碑开发门60228在途，尚未签PASS；前端候选保持原冻结字节。Goal active，无暂停。
+
+最新有界终态：[主比较矩阵v1](evidence/1007V1/owner-primary-matrix-v1.json)。真实生产模板三RED→62相关PASS，A邻接12PASS；主表默认可见、辅助表折叠、NCT展示统一。普通只读104页/1505事实/current32/16257文件保持；Ego四宽24态0FAIL，原生折叠重开、32→2主表/查询IDs、24点线和来源57.7/Esc通过。Owner实看1440/1920/2560代表像素，2560工具缩2048。局部可接受，整体REVISE；没有新宽门/current/保存分享/终验。E03事实版本执行在途，不读pending；原16RED与118未采用不提前记通过。接续真正多药临床共同列/图+表，Goal active。下文旧段为历史，不继承至新候选。
+
 最新终态：[稀疏可见v2回执](evidence/1007V1/owner-sparse-visible-v2.json)及[复盘](../../docs/handoffs/RETROSPECTIVE_20261011_sparse_visible.md)。<=4辅助观察直接可见，密集仍可展开；原标题移回完整表。四文件79PASS/Ruff/Node/mirror通过，新宽门未运行，不继承22c9门。普通104页/1505事实/16257文件/current32/source exact，Ego四宽0运行失败，Owner实看1440/2560（后者工具缩2048）。只接受局部可见性/层级，整体仍REVISE；新版本来源点击、保存、配置/分享、A/C与终验NOT_RUN。
 
 纠正旧Owner查询误认：nct04501666当前问题两ID对应第4周78例和第16周111例，另一16不是当前查询；源值未改，旧记录/hash/FAIL不改。闭合details的getClientRects误判已据真实DOM/checkVisibility和截图纠正；同候选仅追加qa-v2。所有本批作业终态，Goal active。下一真正多药临床共同列/图表及同版操作，16RED论文版本/118候选与W00–W10余门不缩减。

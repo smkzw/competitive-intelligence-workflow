@@ -1,5 +1,7 @@
 # 2026-10-11｜C阅读真实切片与来源定义缺口
 
+下一分离单元已启动E03 fact-version-admission-v1：Owner负责共享横比问题标题/主比较表，执行者只写source_research_service及一份邻接测试，无live source/current/事实采用。runner50525/PID62405长等待，启动已确认，不轮询在途输出。治理缺陷：Owner未以预检exit阻断后续启动；实际preflight因“Write exactly one report”不匹配约定输出头FAIL，仍启动了runner。原已发prompt不改写，另存仅修输出头的reviewed-copy供权限/路径复核，不冒称原预检PASS；Owner终态审每个写域/源差异与实际检查，科学资格另独立挑战。未来启动只有预检exit0才构造调用。原16RED不接受、不直接采用118候选。87234ce3已推送核远端，原五用户改动保持。
+
 接续有界单元：Owner直接修既有B稀疏可见性，原因是同一组织器与当前浏览器串行依赖，额外执行/会商无法提供独立写域收益；前一E01及C02已终态，不重复全页审查。22c9ba7e33文件已push并核远端，五用户hash exact。四RED（主层中性分组标签）/五RED（稀疏原标题泄漏）→最终四文件79PASS；稀疏<=4观察直接可见，密集仍辅助折叠，原英文研究名移回既有完整表，不丢原文或事实。
 
 纠正上一单元Owner错误假设：当前所选临床问题的两条真实ID是eff-b6d4e0cb2fff2c4d2ef6/eff-e4be0438910551629263，即第4周78例/第16周111例，不是整页另一未解观察16。旧说明及失败保留不改hash；正常current32同查询未变。sparse-v1 QA按错误16判失败，随后冻结原v2 data重新定位精确ID；不改源数据以通过测试。
@@ -405,6 +407,12 @@ endpoint的结局核时间，错Day1仍不报缺；精确binder已拒绝。来�
 log仅诊断仍保留；两个结果口径分开。现在白名单提交本批，后续合法消费者/
 来源作用域完整组合（不重摄取旧3989）/同版current与报告门继续，非暂停。
 # 最新用户裁决与任务（2026-10-11，持续实施）
+
+当前最新终态：60228六步开发门exit0，Ruff/strict286/活跃1185PASS308.64s/兼容20/分层7/旧路径字面扫描，log2f9c99040ce99276d2f007c4bc36c7653592ef07dd1c2e99ebcc4da55d9e088b。source/tests/assets冻结不变；文档指引期间更新，不作冻结包/发布门。E03/C03全terminal，C03实返GLM5.3Flash/max519.99s/25工具scoped ACCEPT；Source0d1f8feda不改，新增submit/reopen/陈旧复核拒绝仅扩测试35PASS0.73s，test5494a159。两次fixture缺正式publication verdict/扩展集合分别失败，生产合同未放宽。Erdos旧完成句柄已关闭释放并发，不重派旧节点。当前Goal已实际get为active/unbounded，不更改状态；继续主线、白名单Git，非暂停或RC。
+
+E03 runner50525已terminal0，Pi/cursor/default只证明selector、后台模型effort未核；1072.06s/314工具/session01a12a91-9a0d-7000-96a8-38bb55c72543，不再等PID62405。Owner完整diff/实际入口审查，44PASS126.18s；新增7RED揭示论文证明误放非论文来源与定位URL未绑定，最小修正后四文件51PASS127.20s/Ruff/strict单service通过。16RED已接线但118真实候选仍零采用，当前32/首次公开日期/旧快照不改。首批错误文件名NOT_RUN记录。worker最终报告太短、原执行preflightFAIL被错误绕过均留档，不将治理冒称通过。C03 frozen源0d1f8feda/runtimetest77e1d8e已真实preflight0后启动runner54891/PID68587；只一次有界科学/代码挑战，不读pending或轮询，来源解释与真实采用未接受。
+
+Owner前端并行根因组：真实模板将主比较矩阵默认收起，旧组件断言漏模板；NCT显示统一不改身份。三RED→六文件62PASS，A邻接统一后12PASS；Node/具名Ruff/mirror通过，首个mirror调用缺参数错误保留。主矩阵默认open/辅助仍折叠/首页祖先隐藏。普通primary-matrix-v1 104页/1505事实/16257持久文件/current32保持；Ego四宽24态0FAIL，32→2/12查询和主表ID一致、24点真实折线/来源57.7/Esc/原生折叠重开通过。Owner实看1440密集/稀疏、1920来源、2560稀疏（工具缩2048）。只接受局部行为，整体REVISE；没有新宽门/当前保存分享。E03论文事实版本执行尚待终态，不读pending或轮询。
 
 用户要求：全部删除报告读者端防御性“边界/限制/不等于”说明；读者是资深临床专家，不需要反复提醒比较资格和证据充分性。横比必须ECharts图+表；历时数据折线+标注。已同步现行PRD/DESIGN/PLAN/ACCEPTANCE，不另建权威。
 

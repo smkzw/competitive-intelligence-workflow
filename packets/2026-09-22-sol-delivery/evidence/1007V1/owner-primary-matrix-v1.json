@@ -1,0 +1,284 @@
+{
+  "scope": "1007V1 primary comparison matrix visibility and display identity, ordinary readonly B candidate; not delivery",
+  "baseline_commit": "87234ce39b1c0c818095fdc4e53f5d172265bdb0",
+  "current": {
+    "revision": 32,
+    "reports": {
+      "A": 30,
+      "B": 32,
+      "C": 30
+    },
+    "generation": "ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4",
+    "pages": 104,
+    "facts": 1505,
+    "persistent_files": 16257,
+    "unchanged": true
+  },
+  "candidate": ".artifacts/1007-b-primary-matrix-preview-v1",
+  "render_sha256": "850d8ee2b3adf181e9c78e64ea3589afac697d2a3461d05f529da4173c2d45db",
+  "qa_sha256": "42da6a4d8a4c30bfac43bb7251302203702bc8e0089a97158fb8cfa243b87ea1",
+  "overview_sha256": "8f90e5b7048794940af5a319902566426b7850b9da39bce142790414c64762ec",
+  "recipe_sha256": "a1cdbf45ea6bf6f73819a97b28eda7f1a2696b6dd29a7185b67b2c1e569da34a",
+  "builder_sha256": "a1674d93f73852965687cbd0ad754f268a5d27d8f718ccd914b02fd4141a2d74",
+  "author_sha256": {
+    "assets/charts.js": "959a31eb7dcb9dcc76aef19eb6a1115d57f84b55b8a2bc838e40e0553d372f01",
+    "assets/kangzhe-site.css": "d64797987595edb1512a508cc30103da5c55bae750d6ac7aff595a1948467053",
+    "assets/portal.js": "908754009f9df476f1ebe6da0996c1a422f78e42c9953ee297ee23f675b52c32",
+    "assets/report-b.css": "fc145c5754cf0b683b27c1c0ac910157c0b61159470f2fa5c91ab9fca7ac89e4",
+    "assets/report-b.js": "8d4f80d6ca0c47a4c594e68fa8e4d825e7335c154f401dd03d5bebaa97dbdb04",
+    "report_a.py": "86f682a51feac1585a25ef6636969a5098bebb01bf3b07eaa77d21f3dc97cd67",
+    "report_b.py": "18ea983c6773f3a8f6842df313499abf992512b3dc8e7405a4cc840eead44856",
+    "templates/b/page.html.j2": "ee4e22ca79ec7d31bca247f4a240ed4cb68157677d23bf1e8c4a13f21f22ec29"
+  },
+  "tests": {
+    "red": "3 failed; production template and shared identity cases",
+    "related": "62 passed / 2.22s across six files; A adjacent consumer follow-up 12 passed / 0.89s",
+    "syntax": "Node passed",
+    "ruff": "named tests and render recipe passed",
+    "mirror": "passed after correcting missing source_root argument",
+    "wide_gate": "NOT_RUN; prior gate applies only to prior frozen source"
+  },
+  "states": [
+    {
+      "width": 1440,
+      "label": "home",
+      "primaryOpen": true,
+      "primaryVisible": false,
+      "queryCount": 0,
+      "tableCount": 0,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "label": "dense",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 32,
+      "tableCount": 32,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "label": "complete-table",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 32,
+      "tableCount": 32,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "label": "source",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 32,
+      "tableCount": 32,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "label": "filtered-sparse",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 2,
+      "tableCount": 2,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "label": "shared-baseline",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 12,
+      "tableCount": 12,
+      "overflow": false
+    },
+    {
+      "width": 1600,
+      "label": "home",
+      "primaryOpen": true,
+      "primaryVisible": false,
+      "queryCount": 0,
+      "tableCount": 0,
+      "overflow": false
+    },
+    {
+      "width": 1600,
+      "label": "dense",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 32,
+      "tableCount": 32,
+      "overflow": false
+    },
+    {
+      "width": 1600,
+      "label": "complete-table",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 32,
+      "tableCount": 32,
+      "overflow": false
+    },
+    {
+      "width": 1600,
+      "label": "source",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 32,
+      "tableCount": 32,
+      "overflow": false
+    },
+    {
+      "width": 1600,
+      "label": "filtered-sparse",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 2,
+      "tableCount": 2,
+      "overflow": false
+    },
+    {
+      "width": 1600,
+      "label": "shared-baseline",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 12,
+      "tableCount": 12,
+      "overflow": false
+    },
+    {
+      "width": 1920,
+      "label": "home",
+      "primaryOpen": true,
+      "primaryVisible": false,
+      "queryCount": 0,
+      "tableCount": 0,
+      "overflow": false
+    },
+    {
+      "width": 1920,
+      "label": "dense",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 32,
+      "tableCount": 32,
+      "overflow": false
+    },
+    {
+      "width": 1920,
+      "label": "complete-table",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 32,
+      "tableCount": 32,
+      "overflow": false
+    },
+    {
+      "width": 1920,
+      "label": "source",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 32,
+      "tableCount": 32,
+      "overflow": false
+    },
+    {
+      "width": 1920,
+      "label": "filtered-sparse",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 2,
+      "tableCount": 2,
+      "overflow": false
+    },
+    {
+      "width": 1920,
+      "label": "shared-baseline",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 12,
+      "tableCount": 12,
+      "overflow": false
+    },
+    {
+      "width": 2560,
+      "label": "home",
+      "primaryOpen": true,
+      "primaryVisible": false,
+      "queryCount": 0,
+      "tableCount": 0,
+      "overflow": false
+    },
+    {
+      "width": 2560,
+      "label": "dense",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 32,
+      "tableCount": 32,
+      "overflow": false
+    },
+    {
+      "width": 2560,
+      "label": "complete-table",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 32,
+      "tableCount": 32,
+      "overflow": false
+    },
+    {
+      "width": 2560,
+      "label": "source",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 32,
+      "tableCount": 32,
+      "overflow": false
+    },
+    {
+      "width": 2560,
+      "label": "filtered-sparse",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 2,
+      "tableCount": 2,
+      "overflow": false
+    },
+    {
+      "width": 2560,
+      "label": "shared-baseline",
+      "primaryOpen": true,
+      "primaryVisible": true,
+      "queryCount": 12,
+      "tableCount": 12,
+      "overflow": false
+    }
+  ],
+  "failures": [],
+  "owner_pixels": [
+    "qa/B-dense-1440.png",
+    "qa/B-filtered-sparse-1440.png",
+    "qa/B-source-1920.png",
+    "qa/B-filtered-sparse-2560.png"
+  ],
+  "image_display_note": "Original 2560 image retained; inspection tool displayed at 2048.",
+  "acceptance": {
+    "primary_table": "default visible in comparison, same query IDs, native collapse/reopen passed",
+    "source": "57.7 point exact source and Esc passed",
+    "longitudinal": "existing 24-point single-study line and same-source table passed",
+    "multi_study": "12-glyph four-study baseline; not clinical efficacy equivalence",
+    "overall": "REVISE",
+    "not_run": [
+      "new current save/clear/undo/configuration/share",
+      "A/C browser",
+      "all physical pages",
+      "cross browser",
+      "24 portals",
+      "three hosts",
+      "installation/recovery/RC"
+    ]
+  },
+  "next": "Complete genuine multi-drug clinical comparison using existing membership/facet/numeric eligibility; review bounded E03 fact-version admission after terminal."
+}

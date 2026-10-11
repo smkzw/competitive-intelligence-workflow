@@ -124,11 +124,16 @@
         return left.week - right.week || left.index - right.index;
       }).map(function (item) {return item.id;});
     }, studyText: function (id, label) {
-      var name = String(label || id);
+      // Registry display casing is not a new study identity. Local IDs and
+      // proper names keep their own case; complete source labels stay intact.
+      function display(value) { return String(value).replace(/\bnct\d{8}\b/gi, function (nct) {
+        return nct.toUpperCase();
+      }); }
+      var name = display(label || id);
       // Use an existing short name, never invent a translated registry title.
       // The caller retains the complete title in reachable study detail.
       return name.length <= 60 && (/[\u3400-\u9fff]/.test(name) ||
-        /^[A-Za-z0-9][A-Za-z0-9._+-]*(?:[｜| ]NCT\d{8})?$/.test(name)) ? name : String(id);
+        /^[A-Za-z0-9][A-Za-z0-9._+-]*(?:[｜| ]NCT\d{8})?$/.test(name)) ? name : display(id);
     }, valueText: function (row, missingText) {
       if (row.value === null || row.value === undefined) return missingText;
       // A label is not a unit conversion: raw unit/value still govern scientific eligibility.

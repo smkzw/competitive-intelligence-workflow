@@ -2079,7 +2079,8 @@
       });
       if (filtered && !studyRows.length) return;
       var tr = document.createElement("tr"), label = document.createElement("th");
-      label.scope = "row"; label.textContent = (workspace.study_labels || {})[study] || study;
+      label.scope = "row"; label.textContent = window.__COMPARISON_QUERY__.studyText(
+        study, (workspace.study_labels || {})[study]);
       tr.appendChild(label); retained += 1;
       columns.forEach(function (column) {
         var cell = document.createElement("td");

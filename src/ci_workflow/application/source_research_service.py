@@ -29,7 +29,7 @@ from ci_workflow.domain.public_provenance import (
     PublicProvenance,
     PublicSource,
 )
-from ci_workflow.domain.source_clause_context import SourceClauseContext
+from ci_workflow.domain.source_clause_context import SourceClauseContext, SourceClauseReference
 from ci_workflow.renderers.portal.report_a import EfficacyRow, ReportAPortalData, SafetyRow
 from ci_workflow.reports.b.registry_observation import is_safety_domain_endpoint
 from ci_workflow.reports.b.safety_concepts import (
@@ -53,6 +53,7 @@ from ci_workflow.storage.snapshot_store import (
     compute_locked_snapshot,
 )
 from ci_workflow.storage.source_derivation import (
+    SourceDerivationError,
     capture_source_text,
     extract_locator_quote,
     source_json_decoder,
@@ -3817,6 +3818,225 @@ def validate_clinicaltrials_result_coverage(
     return audit
 
 
+_HISTORICAL_SOURCE_VETO = "截止日之后或无法证明截止时点前首次披露的来源不得进入当前快照"
+_SHA256_HEX = re.compile(r"[0-9a-f]{64}")
+_FACT_VERSION_PUBLICATION_TYPES = frozenset({
+    "journal_publication", "peer_reviewed_publication", "peer_reviewed_primary_report",
+    "primary_trial_report",
+})
+
+
+def fact_version_material_digest(fact: ResearchFact) -> str:
+    """Scientific fact bytes. The consumer ``row_ref`` is not version material."""
+    return _digest(fact.model_dump(mode="json", exclude={"row_ref"}))
+
+
+class FactPublicVersionProof(BaseModel):
+    """Declared public-version witnesses for one fact, not a medical conclusion.
+
+    Correction prose is not interpreted. The caller must already have decided
+    ``fact_unaffected`` and pointed at the reviewed source quote.
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    fact_id: str = Field(min_length=1)
+    fact_material_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    source_content_sha256: dict[str, str] = Field(min_length=1)
+    public_by: DateEvidence
+    public_by_reference: SourceClauseReference
+    version_references: tuple[SourceClauseReference, ...] = Field(min_length=1, max_length=32)
+    correction_state: Literal["fact_unaffected", "fact_changed", "unresolved"]
+    correction_references: tuple[SourceClauseReference, ...] = Field(default=(), max_length=32)
+
+    @field_validator("fact_id")
+    @classmethod
+    def _fact_id_is_present(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("事实标识不能为空")
+        return value.strip()
+
+    @field_validator("source_content_sha256")
+    @classmethod
+    def _source_digests_are_bound(cls, value: dict[str, str]) -> dict[str, str]:
+        for source_id, digest in value.items():
+            if not source_id.strip() or _SHA256_HEX.fullmatch(digest) is None:
+                raise ValueError("来源字节摘要必须绑定来源并是小写 SHA-256")
+        return dict(value)
+
+
+def _public_quote_is_exact(evidence: DateEvidence, quote: str) -> bool:
+    """The witness quote must be the public date itself, not a nearby phrase."""
+    value = evidence.value
+    if evidence.state != "reported" or value is None:
+        return False
+    if evidence.precision == "calendar_day":
+        return quote == f"{value.year:04d}-{value.month:02d}-{value.day:02d}"
+    return quote == value.astimezone(UTC).isoformat()
+
+
+def _quote_fragment(
+    source: SourceCapture,
+    version_id: str,
+    locator: EvidenceLocator,
+    declared_quote: str,
+    fact_id: str,
+) -> EvidenceFragmentRecord:
+    """Re-extract one quote into an in-memory fragment. Nothing is stored."""
+    if locator.url is not None and locator.url != source.url:
+        raise ValueError(f"事实公开版本定位URL未绑定实际来源：{fact_id}")
+    try:
+        extracted = extract_locator_quote(
+            source.content_text, media_type=source.media_type, locator=locator,
+        )
+    except SourceDerivationError as error:
+        raise ValueError(f"事实公开版本定位不能重提取：{fact_id}") from error
+    if extracted != declared_quote:
+        raise ValueError(f"定位原文与声明引文不一致：{fact_id}")
+    digest = hashlib.sha256(extracted.encode("utf-8")).hexdigest()
+    locator_json = json.dumps(
+        locator.model_dump(mode="json"), ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+    )
+    fragment = EvidenceFragmentRecord(
+        schema_version="1.0",
+        fragment_id=stable_id("evidence-fragment", version_id, locator_json, digest),
+        source_version_id=version_id,
+        locator=locator,
+        original_text=extracted,
+        content_sha256=digest,
+        created_at=source.acquired_at,
+    )
+    if fragment.content_sha256 != digest or fragment.original_text != declared_quote:
+        raise ValueError(f"证据片段未绑定声明引文：{fact_id}")
+    return fragment
+
+
+def _bind_fact_public_version_proof(
+    sources_by_id: Mapping[str, SourceCapture],
+    fact: ResearchFact,
+    proof: FactPublicVersionProof,
+    cutoff: datetime,
+) -> None:
+    """Bind this fact only. A sibling does not inherit the witness."""
+    source = sources_by_id.get(fact.source_id)
+    if source is None:
+        raise ValueError(f"事实来源不在证明范围内：{fact.fact_id}")
+    if source.source_type not in _FACT_VERSION_PUBLICATION_TYPES:
+        raise ValueError(f"论文版本证明不能替代其他来源的历史资格：{fact.fact_id}")
+    if proof.fact_material_sha256 != fact_version_material_digest(fact):
+        raise ValueError(f"事实版本材料与证明不一致：{fact.fact_id}")
+    content_sha = hashlib.sha256(source.content_text.encode("utf-8")).hexdigest()
+    if proof.source_content_sha256 != {source.source_id: content_sha}:
+        raise ValueError(f"来源字节摘要与事实版本不一致：{fact.fact_id}")
+    if proof.correction_state != "fact_unaffected":
+        raise ValueError(f"更正影响范围未闭合：{fact.fact_id}")
+    if not proof.correction_references:
+        raise ValueError(f"更正复核引用缺失：{fact.fact_id}")
+    if proof.public_by_reference.source_id != fact.source_id:
+        raise ValueError(f"公开日引用来源与事实不一致：{fact.fact_id}")
+    if proof.public_by.locator != proof.public_by_reference.locator:
+        raise ValueError(f"公开日定位与引用不一致：{fact.fact_id}")
+    if proof.public_by.state != "reported" or proof.public_by.value is None:
+        raise ValueError(f"公开日证据未报告日期：{fact.fact_id}")
+    version_id = source_version_identity(
+        source.source_id, content_sha,
+        published_at=source.date_evidence("published_at"),
+        effective_at=source.date_evidence("effective_at"),
+        first_disclosed_at=source.date_evidence("first_disclosed_at"),
+        text_derivation=source.text_derivation,
+    )
+    public_fragment = _quote_fragment(
+        source, version_id, proof.public_by.locator,
+        proof.public_by_reference.original_text, fact.fact_id,
+    )
+    if (
+        public_fragment.source_version_id != version_id
+        or not _public_quote_is_exact(proof.public_by, public_fragment.original_text)
+    ):
+        raise ValueError(f"公开日与引用日期不一致：{fact.fact_id}")
+    if not proof.public_by.is_known_by(cutoff):
+        raise ValueError(f"公开日晚于截止或自然日尚未结束：{fact.fact_id}")
+    fact_fragment = _quote_fragment(
+        source, version_id, fact.locator, fact.original_text, fact.fact_id,
+    )
+    if fact_fragment.source_version_id != version_id:
+        raise ValueError(f"事实原文未绑定来源版本：{fact.fact_id}")
+    for reference in (*proof.version_references, *proof.correction_references):
+        if reference.source_id != fact.source_id:
+            raise ValueError(f"版本见证来源与事实不一致：{fact.fact_id}")
+        witness = _quote_fragment(
+            source, version_id, reference.locator, reference.original_text, fact.fact_id,
+        )
+        if witness.source_version_id != version_id or not witness.fragment_id:
+            raise ValueError(f"版本见证未绑定来源引文：{fact.fact_id}")
+
+
+def _parsed_fact_public_version_proofs(
+    sources: Sequence[SourceCapture],
+    facts: Sequence[ResearchFact],
+    proofs: Sequence[FactPublicVersionProof | Mapping[str, Any]],
+    cutoff: datetime,
+) -> tuple[FactPublicVersionProof, ...]:
+    facts_by_id: dict[str, ResearchFact] = {}
+    for fact in facts:
+        if fact.fact_id in facts_by_id:
+            raise ValueError(f"事实标识重复：{fact.fact_id}")
+        facts_by_id[fact.fact_id] = fact
+    sources_by_id: dict[str, SourceCapture] = {}
+    for source in sources:
+        if source.source_id in sources_by_id:
+            raise ValueError(f"来源标识重复：{source.source_id}")
+        sources_by_id[source.source_id] = source
+    parsed: list[FactPublicVersionProof] = []
+    seen: set[str] = set()
+    for raw in proofs:
+        proof = (
+            raw if isinstance(raw, FactPublicVersionProof)
+            else FactPublicVersionProof.model_validate(raw)
+        )
+        if proof.fact_id in seen:
+            raise ValueError(f"公开版本证明重复：{proof.fact_id}")
+        seen.add(proof.fact_id)
+        matched = facts_by_id.get(proof.fact_id)
+        if matched is None:
+            raise ValueError(f"公开版本证明未绑定事实：{proof.fact_id}")
+        _bind_fact_public_version_proof(sources_by_id, matched, proof, cutoff)
+        parsed.append(proof)
+    return tuple(parsed)
+
+
+def verify_fact_public_version_evidence(
+    sources: Sequence[SourceCapture],
+    facts: Sequence[ResearchFact],
+    proofs: Sequence[FactPublicVersionProof | Mapping[str, Any]],
+    cutoff: datetime,
+) -> None:
+    """Check the supplied witnesses only.
+
+    Holding one fact does not set ``first_disclosed_at`` or make another fact
+    on the same source eligible. This is not independent medical acceptance.
+    """
+    _parsed_fact_public_version_proofs(sources, facts, proofs, cutoff)
+
+
+def validate_research_historical_availability(
+    sources: Sequence[SourceCapture],
+    facts: Sequence[ResearchFact],
+    proofs: Sequence[FactPublicVersionProof | Mapping[str, Any]],
+    cutoff: datetime,
+) -> None:
+    """Require one bound public-version proof for every supplied fact.
+
+    Does not infer a correction from source text, treat acquisition as
+    publication, copy a proof onto a sibling, or rewrite disclosure dates.
+    """
+    proved = _parsed_fact_public_version_proofs(sources, facts, proofs, cutoff)
+    proved_ids = {proof.fact_id for proof in proved}
+    missing = [fact.fact_id for fact in facts if fact.fact_id not in proved_ids]
+    if missing:
+        raise ValueError("事实缺少截止日前已公开的版本证明：" + "、".join(missing))
+
+
 class FreshAResearchContent(BaseModel):
     """独立复核前可规范化、可摘要的 A 类科学内容。"""
 
@@ -3834,6 +4054,41 @@ class FreshAResearchContent(BaseModel):
     facts: tuple[ResearchFact, ...] = Field(min_length=1)
     claims: tuple[ResearchClaim, ...] = Field(min_length=1)
     gate_status: Literal["passed"]
+    fact_public_version_proofs: tuple[FactPublicVersionProof, ...] = Field(
+        default=(), max_length=4096, exclude_if=lambda value: not value,
+    )
+
+    def _admit_by_source_or_fact_proof(self) -> None:
+        """Source veto remains, except facts that carry their own valid proof."""
+        referenced = {fact.source_id for fact in self.facts}
+        for source in self.sources:
+            if source.is_available_by(self.data_cutoff):
+                continue
+            if source.source_id not in referenced:
+                raise ValueError(_HISTORICAL_SOURCE_VETO)
+        unavailable_ids = {
+            source.source_id
+            for source in self.sources
+            if not source.is_available_by(self.data_cutoff)
+        }
+        needed = [fact for fact in self.facts if fact.source_id in unavailable_ids]
+        needed_ids = {fact.fact_id for fact in needed}
+        supplied = [
+            proof for proof in self.fact_public_version_proofs if proof.fact_id in needed_ids
+        ]
+        if not self.fact_public_version_proofs and not needed:
+            return
+        try:
+            if self.fact_public_version_proofs:
+                verify_fact_public_version_evidence(
+                    self.sources, self.facts, self.fact_public_version_proofs, self.data_cutoff,
+                )
+            if needed:
+                validate_research_historical_availability(
+                    self.sources, needed, supplied, self.data_cutoff,
+                )
+        except ValueError as error:
+            raise ValueError(f"{_HISTORICAL_SOURCE_VETO}：{error}") from error
 
     @model_validator(mode="after")
     def _content_is_closed(self) -> Self:
@@ -3848,9 +4103,7 @@ class FreshAResearchContent(BaseModel):
         source_ids = [item.source_id for item in self.sources]
         if len(source_ids) != len(set(source_ids)):
             raise ValueError("来源标识重复")
-        if any(not item.is_available_by(self.data_cutoff)
-               for item in self.sources):
-            raise ValueError("截止日之后或无法证明截止时点前首次披露的来源不得进入当前快照")
+        self._admit_by_source_or_fact_proof()
         source_set = set(source_ids)
         if any(fact.source_id not in source_set for fact in self.facts):
             raise ValueError("事实引用了研究包外来源")

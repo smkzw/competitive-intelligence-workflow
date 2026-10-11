@@ -1,0 +1,26 @@
+{
+  "scope": "Current source/test/asset milestone development quality only, not product release",
+  "baseline_commit": "87234ce39b1c0c818095fdc4e53f5d172265bdb0",
+  "command": "tools/gate.sh",
+  "session": 60228,
+  "exit_code": 0,
+  "log": ".artifacts/1007-fact-version-primary-matrix-gate-v1/gate.log",
+  "log_sha256": "2f9c99040ce99276d2f007c4bc36c7653592ef07dd1c2e99ebcc4da55d9e088b",
+  "results": {
+    "ruff": "PASS src/tests/tools",
+    "mypy": "PASS strict src/tools,286 files",
+    "active": "1185 passed,20 deselected,308.64s",
+    "retained_compatibility": "20 passed,1185 deselected,0.72s; bounded compatibility not release",
+    "layering": "7 passed,0.24s",
+    "legacy": "PASS lexical runtime-dependency scan, legacy root not followed"
+  },
+  "source_frozen_sha256": {
+    "src/ci_workflow/application/source_research_service.py": "0d1f8feda3726f1390bcdebe533a2358287ce4e90b1b0b14419b0ce4dd1613e7",
+    "tests/integration/test_1007_fact_version_admission_runtime.py": "5494a159fd92ff6df32134a7c3df255c409865cedddcd5acdf8d4d73f62e23a3",
+    "src/ci_workflow/renderers/portal/assets/portal.js": "908754009f9df476f1ebe6da0996c1a422f78e42c9953ee297ee23f675b52c32",
+    "src/ci_workflow/renderers/portal/assets/report-a.js": "8fcb66c347d85dfdb78754eb83346c40f5285b0d42c38598c609a05acf3b0801",
+    "src/ci_workflow/renderers/portal/templates/b/page.html.j2": "ee4e22ca79ec7d31bca247f4a240ed4cb68157677d23bf1e8c4a13f21f22ec29"
+  },
+  "documentation_updates_during_gate": "Normative/Skill/review records updated while source/tests/assets remained unchanged; not a frozen installation or release package gate.",
+  "acceptance": "GATE_OK quality-only steps=6; overall product REVISE, Goal active"
+}

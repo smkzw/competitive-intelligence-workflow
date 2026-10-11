@@ -1,0 +1,59 @@
+{
+  "scope": "1007V1 per-used-fact historical publication witnesses; A production entry mechanical acceptance, zero real source adoption",
+  "baseline_commit": "87234ce39b1c0c818095fdc4e53f5d172265bdb0",
+  "source_sha256": "0d1f8feda3726f1390bcdebe533a2358287ce4e90b1b0b14419b0ce4dd1613e7",
+  "original_cutoff_tests_sha256": "7152ef3f1702abb8cec58e31578c764db3773d9da38d67a03e8282ce2351fa7b",
+  "runtime_tests_reviewed_sha256": "77e1d8eb07a8cd99e0fa7c08a58b0e40796d512cdad87b994181a393754ef781",
+  "runtime_tests_with_submission_sha256": "5494a159fd92ff6df32134a7c3df255c409865cedddcd5acdf8d4d73f62e23a3",
+  "execution": {
+    "route": "Pi/cursor/default",
+    "backend_model": "unknown",
+    "effort": "unknown",
+    "duration_seconds": 1072.06,
+    "tools": 314,
+    "session": "01a12a91-9a0d-7000-96a8-38bb55c72543",
+    "report_sha256": "ec6fda97930d8445ebde5450fc751c49c89718fe6ac4498101d1b3fe71ca6bbf",
+    "log_sha256": "0fb39256c16a01509e5a70589f3529890708672dffe225143ae7431d394ad5dd",
+    "status": "terminal0; final report incomplete",
+    "preflight": "original FAIL incorrectly bypassed; posthoc corrected heading PASS is not original PASS"
+  },
+  "owner_verification": {
+    "original_tests": "16 previously RED unchanged; now pass",
+    "first_related": "44 passed /126.18s",
+    "new_counterexamples": "7 failed: nonpublication scope and foreign locator URL",
+    "after_minimal_correction": "51 passed /127.20s four files",
+    "submission": "35 passed /0.73s three files; actual submit/reopen, stale review rejected before persistence, old files unchanged",
+    "static": "Ruff named files and strict service PASS",
+    "development_gate": "60228 pending at creation; append terminal gate evidence separately, not PASS"
+  },
+  "independent": {
+    "actual_returned_route": "ZCode/zcode/GLM-5.3-Flash:max",
+    "duration_seconds": 519.99,
+    "tools": 25,
+    "session": "sess_ac77f251-689f-42fc-b8e4-126b0caa6981",
+    "preflight": "exit0 before dispatch",
+    "tests": "30 passed /0.47s",
+    "verdict": "ACCEPT scoped frozen implementation",
+    "report_sha256": "42273b5d19f4dd9cb9340f4d4f604e25a03cbb0b845b7ac65ba44b465a806c9f",
+    "log_sha256": "91feab57648925c43809bd9875080b0d8de9d791aa2f47e127cdc2ce36842606",
+    "fallback": "Declared after primary no accepted output; primary return0/session vs runner no resumable-session rationale not independently reconciled"
+  },
+  "behavior": {
+    "source_date_backfill": false,
+    "sibling_inheritance": false,
+    "acquisition_as_publication": false,
+    "nonpublication_veto_retained": true,
+    "review_digest_includes_proofs": true,
+    "legacy_empty_proof_omitted": true,
+    "source_current_writes": 0,
+    "real_candidate_adoptions": 0,
+    "real_candidates_unaccepted": 118
+  },
+  "untested": [
+    "B/C specific historical-proof inputs",
+    "real-paper public-version and correction witnesses",
+    "non-ISO raw publication date formats and cross-source witnesses",
+    "new portal/current/24 reports/three hosts/installation/recovery/RC"
+  ],
+  "next": "Use existing source versions and global scientific-review contract for genuine witnesses and B/C input integration; continue actual multi-study clinical graph/table with no synthetic equivalence."
+}
