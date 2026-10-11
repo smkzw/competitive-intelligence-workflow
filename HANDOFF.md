@@ -1,6 +1,6 @@
 # 唯一接手入口｜1007V1连续实施，非暂停、非RC
 
-唯一当前状态：[STATUS顶节](packets/2026-09-22-sol-delivery/STATUS.md)；[本批C材料回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-c-design-material-v1.json)。实施父HEAD9afcf62e（已push）；本批待具名提交时绑定最终HEAD，不把未提交字节称远端代码。Goal已实际get为active/unbounded，用户没有要求暂停。
+唯一当前状态：[STATUS顶节](packets/2026-09-22-sol-delivery/STATUS.md)；[描述性图与并排主表回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-descriptive-question-reading-v1.json)。基线HEAD7458ab27，本批具名提交中；Goal active/unbounded，非暂停。
 
 ## 本批实际完成
 
@@ -10,7 +10,7 @@
 
 ## 未完成与下一条有界任务
 
-真实118论文候选零采用，实际论文版本/更正待验。下一同临床问题多药多研究共同列/联动ECharts+主表，不能靠两数字卡/年龄图/单研究线绕过正向例。E08临床上下文节点已预检PASS实际启动：68147/PID93117，NOTE_EXIT46250，只分析固定十二个完整登记测量，不改源/current/代码，不授予合并许可；等待实际终态，不读pending报告或轮询。应用医学解释前另作合格独立挑战。随后同候选编辑清除同步/配置/分享及全W门。
+真实118论文候选零采用，实际版本/更正待验。E08/C03全部终态，不等旧句柄；独立实际6.1-sol REVISE已按原源处置，原报告保留。描述性同题人数/比例图与主表并排，七文件63相关PASS，普通只读v4 104页/1505/16257保持；Ego四宽24态、并排四态和人数图来源/Esc四态通过。Owner实际看1440/2560；只签局部布局/操作，整体REVISE。v1/v2几何失败和v3不可见glyph失败保留；前两版824文件校验压缩后回收约0.5GB，可恢复。[复盘](docs/handoffs/RETROSPECTIVE_20261011_descriptive_question_reading.md)。下一A同查询图/表及来源联动，然后同候选操作/分享与全W门；不是完整多药响应率横比或发布。
 
 整体产品仍REVISE。current32=A30/B32/C30/1505/genae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4；本批没有新current、实际事实采用、新保存或分享。完整宇宙/MAH/必需论文/24门户/三宿主/安装恢复/RC仍按W00–W10要求，不继承历史PASS。
 

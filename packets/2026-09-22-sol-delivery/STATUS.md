@@ -1,5 +1,9 @@
 # 唯一当前状态：1007V1连续实施｜current32阅读体验被用户否决，正在修正，非RC
 
+当前[描述性图回执](evidence/1007V1/owner-descriptive-question-reading-v1.json)：七文件63相关PASS，具名Ruff/strict单report_b/Node/mirror通过；新整仓门NOT_RUN。普通只读v4 104页/1505/16257/current32不变，Ego四宽24态、图表并排四态、75例glyph来源/Esc四态通过，原24周线/57.7来源及32→2筛选保持。Owner实看1440/2560（工具缩2048），整体仍REVISE，不签完整临床多药率横比/所有页审美或新保存分享。v1四宽几何FAIL、v2两宽FAIL、v3glyph真实FAIL保留；v1/v2严格824文件归档后回收约0.5GB，失败可恢复。E08/C03全部终态，实际不同模型6.1-sol REVISE和Owner原源处置见[上下文回执](evidence/1007V1/owner-pruritus-context-v1.json)。基线7458ab27、本批具名提交中；下一A同查询图/表和原来源，再同候选操作/分享及全W门。Goal active，非暂停/RC；下面旧在途全部仅历史，不重跑。
+
+第五批已push7458ab27/远端exact。E08首轮68147/46250已terminal0，实际Grok4.7-build496.445s；12原上下文/36IDs匹配、12详细绑定exact，24周绑定缺及25非逐字引文使原报告REVISE。一次同会话窄补证8754/PID96226/NOTE_EXIT72182已预检PASS启动，只补这些来源证据，不重分析全宇宙；不读pending/轮询。当前入口根HANDOFF，下一不同模型医学挑战，不直接授予数值许可。以下首轮“在途”仅原时点记录，不再等待旧93117。
+
 最新第五批[C完整材料回执](evidence/1007V1/owner-c-design-material-v1.json)及[复盘](../../docs/handoffs/RETROSPECTIVE_20261011_c_design_material.md)。C完整设计材料历史门已接线，13RED→107相关PASS；独立发现上游source_row_id错误排除，Owner生产有效证明后改ID的真RED后最小修复，六文件112PASS/5.39s、Ruff/strict2；同Grok会话57PASS scoped ACCEPT，原REVISE保留，请求high实际effort未观察。C03旧句柄终态不重跑；一次A/B/C开发门64848已terminal0/source-set不变，Ruff/strict286/1185PASS337.85s/兼容20/分层7/旧路径通过，log0e57cfb5；仅开发质量。新E08固定十二源测量上下文分析68147/PID93117/NOTE_EXIT46250实际启动，预检PASS；只提案，等待真实终态不读pending，医学解释应用前独立复核。current32/源/1505事实保持，118候选未采用，真正临床多药ECharts+表、同版操作/全交付门仍待完成。Goal active，非暂停。
 
 以下均为上一时点历史，当前以本节及根HANDOFF接续，不等待旧PID或重放事务。

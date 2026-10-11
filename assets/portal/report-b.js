@@ -52,6 +52,9 @@
     wrappers.sort(function (a, b) {
       var left = groups[Number(a.getAttribute("data-group-index"))];
       var right = groups[Number(b.getAttribute("data-group-index"))];
+      var leftPriority = left.comparison_purpose === "clinical_question_descriptive" ? 0 : 1;
+      var rightPriority = right.comparison_purpose === "clinical_question_descriptive" ? 0 : 1;
+      if (leftPriority !== rightPriority) return leftPriority - rightPriority;
       return position[left.rows[0].row_id] - position[right.rows[0].row_id];
     });
     wrappers.forEach(function (wrapper) {
@@ -73,7 +76,9 @@
       });
       // Already-qualified cross-study frames stay one plot. Trial ids choose
       // the reading slot only; they do not merge frames or grant a new coaxis.
-      var sharedPlot = group.cross_trial === true && trialIds.length >= 2;
+      var descriptivePlot = group.comparison_purpose === "clinical_question_descriptive"
+        && group.rows.length >= 2;
+      var sharedPlot = (group.cross_trial === true && trialIds.length >= 2) || descriptivePlot;
       var longitudinal = !sharedPlot && (
         group.comparison_purpose === "within_source_measure_time_axis" ||
         group.scientific_group_kind === "within_source_longitudinal");
@@ -87,7 +92,7 @@
         panel = document.createElement("section");
         panel.className = "kz-b-study-panel" + (sharedPlot ? " kz-b-shared-plot" : "");
         if (sharedPlot) {
-          panel.dataset.sharedPlot = "cross-study";
+          panel.dataset.sharedPlot = descriptivePlot ? "source-posted" : "cross-study";
           // The shared renderer already chose the card's footprint. Move that
           // footprint to the reading panel, without recalculating its plan.
           panel.dataset.gridSpan = wrapper.getAttribute("data-grid-span") || "12";
@@ -98,6 +103,7 @@
           var sharedLabel = questionLabels[row.row_id] || "";
           title.textContent = sharedLabel && String(sharedLabel).length <= 80
             ? String(sharedLabel) : "共同临床问题";
+          if (descriptivePlot && group.metric_label_zh) title.textContent += " · " + group.metric_label_zh;
         } else {
           title.textContent = sourced ? window.__COMPARISON_QUERY__.studyText(row.trial_id,
             (workspace.study_labels || {})[row.trial_id])
@@ -140,7 +146,8 @@
           var identity = document.createElement("p"); identity.className = "kz-b-measurement-context";
           identity.textContent = [row.product_zh, row.arm === row.product_zh ? "" : row.arm,
             row.unit_label_zh || row.unit,
-            row.statistical_form_family_label_zh || row.statistic_label_zh].filter(Boolean).join("｜");
+            row.statistical_form_family === "not_reported" ? "" :
+              row.statistical_form_family_label_zh || row.statistic_label_zh].filter(Boolean).join("｜");
           measurement.appendChild(identity);
         }
         var list = document.createElement("div"); list.className = "kz-b-measurement-observations";
@@ -402,8 +409,19 @@
       });
       if (label && label.question_known) group.title_zh = label.question_label;
     });
-    comparisonGroups = trajectories.concat(comparisonGroups.map(function (group) {
-      return Object.assign({}, group, {rows: group.rows.filter(function (row) {return !trajectoryIds[row.row_id];})});
+    var descriptive = (workspace.descriptive_groups || []).map(function (group) {
+      return Object.assign({}, group, {rows: group.rows.filter(function (row) {
+        return allowed[row.row_id] && displayed[row.row_id] && !trajectoryIds[row.row_id];
+      })});
+    }).filter(function (group) {return group.rows.length > 1;});
+    var descriptiveIds = Object.create(null);
+    descriptive.forEach(function (group) {
+      group.rows.forEach(function (row) {descriptiveIds[row.row_id] = true;});
+    });
+    comparisonGroups = descriptive.concat(trajectories, comparisonGroups.map(function (group) {
+      return Object.assign({}, group, {rows: group.rows.filter(function (row) {
+        return !trajectoryIds[row.row_id] && !descriptiveIds[row.row_id];
+      })});
     }).filter(function (group) {return group.rows.length;}));
     host.querySelector("[data-comparison-status]").textContent =
       comparisonGroups.length + "组结果";

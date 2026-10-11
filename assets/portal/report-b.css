@@ -75,6 +75,19 @@ html:has(.kz-b-site) { scroll-padding-top: calc(var(--header-h) + 12px); }
   .kz-b-site[data-comparison-view="comparison"] .kz-b-main > .kz-b-filter-bar { grid-column: 2; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; margin: 0; }
   .kz-b-site[data-comparison-view="comparison"] .kz-b-filter-bar > details { margin: 0; }
   .kz-b-site[data-comparison-view="comparison"] .kz-b-filter-bar > .kz-b-filter-panel[open] { grid-column: 1 / -1; }
+  .kz-b-comparison-workspace:not([hidden]) { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 8px 12px; align-items: start; }
+  .kz-b-comparison-workspace > .kz-comparison-heading,
+  .kz-b-comparison-workspace > .kz-comparison-controls { grid-column: 1 / -1; }
+  .kz-b-comparison-workspace > #kz-chart-module { grid-column: 1; grid-row: 4; margin: 0; container-type: inline-size; }
+  .kz-b-comparison-workspace > [data-comparison-status] { grid-column: 1 / -1; grid-row: 3; margin: 0; }
+  .kz-b-comparison-workspace > .kz-b-comparison-details { grid-column: 2; grid-row: 4; margin: 0; min-width: 0; }
+  .kz-b-comparison-workspace .kz-b-comparison-scroll { max-height: max(360px, calc(100vh - 380px)); overflow: auto; }
+}
+
+/* Fit two readable numeric cards only when the graph column has room for
+   their existing 580px four-category label geometry, not the whole screen. */
+@container (max-width: 1240px) {
+  .kz-b-shared-plot[data-grid-span] { grid-column: 1 / -1; }
 }
 
 :root {

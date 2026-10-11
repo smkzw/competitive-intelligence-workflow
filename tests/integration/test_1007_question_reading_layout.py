@@ -25,6 +25,9 @@ import pytest
     "mixed_question_facet",
     "mixed_question_zero",
     "mixed_question_clear",
+    "descriptive_question",
+    "descriptive_filter",
+    "descriptive_clear",
 ))
 def test_question_reading_leads_with_scoped_plots_without_merging_frames(case: str) -> None:
     root = Path(__file__).resolve().parents[2]
@@ -217,6 +220,46 @@ if(which.startsWith('filtered_')){
  assert.equal(sandbox.window.__CHART_GROUPS__.length,selectedIds.length,
   'status follows the recomputed groups');
  assert.ok(sandbox.window.__CHART_GROUPS__.every(group=>group.rows.every(item=>item.trial_id==='NCT04501666')));
+}else if(which.startsWith('descriptive_')){
+ const a=row('known-a','NCT04202679',{unit:'Participants',value:75});
+ const b=row('known-b','NCT04501666',{unit:'Participants',value:78});
+ if(which==='descriptive_clear')Object.assign(b,
+  {value:null,disclosure_state:'user_cleared',renderable:false,original_value:78});
+ const other=row('other-question','NCT90000001',{value:15});
+ const groups=[a,b,other].map((r,i)=>({scientific_group_id:'facet-'+i,cross_trial:false,rows:[r]}));
+ const descriptive={scientific_group_id:'descriptive-view',cross_trial:false,identity_series:true,
+  comparison_purpose:'clinical_question_descriptive',question_id:'known-question',
+  title_zh:QUESTION+' · 人数',metric_label_zh:'人数',rows:[a,b]};
+ const workspace={study_ids:['NCT04202679','NCT04501666','NCT90000001'],study_labels:{},
+  membership:{row_ids:Object.keys(rows)},descriptive_groups:[descriptive],columns:[{
+   id:'known-column',question_id:'known-question',question_known:true,
+   question_label:QUESTION,title:QUESTION,scientific_facet_ids:['facet-0','facet-1'],
+   row_ids:['known-a','known-b'],cells:{NCT04202679:['known-a'],NCT04501666:['known-b']}},
+  {id:'other-column',question_id:'other-question',question_known:true,
+   question_label:'另一结局',title:'另一结局',scientific_facet_ids:['facet-2'],
+   row_ids:['other-question'],cells:{NCT90000001:['other-question']}}]};
+ const frozen=JSON.stringify({groups,workspace});
+ sandbox.fullChartGroups=groups;sandbox.window.__B_COMPARISON_WORKSPACE__=workspace;
+ if(which==='descriptive_filter')sandbox.state={trial:'NCT04501666'};
+ sandbox.renderComparisonWorkspace(sandbox.state);
+ assert.equal(JSON.stringify({groups,workspace}),frozen);
+ assert.deepEqual(ids(table),ids(module),'same filtered question drives table and graph');
+ const actual=sandbox.window.__CHART_GROUPS__;
+ assert.equal(actual.length,1,'a shared descriptive metric is not two isolated scalar cards');
+ if(which==='descriptive_filter'){
+  assert.equal(actual[0].rows.length,1);
+ }else{
+  assert.equal(actual[0].comparison_purpose,'clinical_question_descriptive');
+  const panel=module.querySelector('.kz-b-shared-plot');
+  assert.ok(panel,'descriptive multi-study plot is primary; no harmonized permission invented');
+  assert.equal(panel.dataset.sharedPlot,'source-posted');
+  assert.equal(panel.children[0].textContent,QUESTION+' · 人数');
+  assert.equal(actual[0].cross_trial,false,'no harmonization invented');
+ }
+ if(which==='descriptive_clear')assert.equal(actual[0].rows[1].value,null);
+ sandbox.state={};
+ select.value='other-question';select.listeners.change[0]();
+ assert.deepEqual(ids(table),['other-question']);assert.deepEqual(ids(module),['other-question']);
 }else if(which.startsWith('mixed_question_')){
  const a=row('known-a','NCT04202679',{value:which==='mixed_question_zero'?0:56});
  const b=row('known-b','NCT04501666',{value:48});

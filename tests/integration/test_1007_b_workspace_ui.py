@@ -108,14 +108,14 @@ sandbox.fullChartGroups=workspace.columns.flatMap(c=>c.scientific_facet_ids.map(
  scientific_group_id:id,rows:[rows[i===0?'a':'b']]})));
 sandbox.renderComparisonWorkspace(state);
 assert.equal(currentGroups.length,2);
-assert.match(lookup['[data-comparison-status]'].textContent,/2个科学条件分面/);
+assert.equal(lookup['[data-comparison-status]'].textContent,'2组结果');
 assert.doesNotMatch(lookup['[data-comparison-status]'].textContent,/本问题条件分面/);
 assert.notEqual(currentGroups[0].scientific_group_id,currentGroups[1].scientific_group_id);
 assert.match(text(lookup.tbody),/FAS，48周/);
 assert.match(text(lookup.tbody),/PPS，24周/);
 state={trial:'trial-b'};sandbox.renderComparisonWorkspace(state);
 assert.equal(currentGroups.length,1);assert.equal(currentGroups[0].rows[0].row_id,'b');
-assert.match(lookup['[data-comparison-status]'].textContent,/1个科学条件分面/);
+assert.equal(lookup['[data-comparison-status]'].textContent,'1组结果');
 lookup['[data-comparison-column]'].value='aa-unknown';
 lookup['[data-comparison-column]'].listeners.change();
 assert.equal(new URL(url).searchParams.get('cmp'),'aa-unknown'); // keep unresolved access

@@ -1,0 +1,100 @@
+{
+  "schema": "bounded-owner-receipt/v1",
+  "baseline_commit": "7458ab27e17a54371c1f1f9fddb06d83e3f68066",
+  "unit": "source-question descriptive graph and paired primary matrix",
+  "mode": "direct execution after distinct-model source conference",
+  "goal_state": "active",
+  "product_state": "REVISE_NOT_RELEASE_ACCEPTED",
+  "normal_candidate": ".artifacts/1007-b-descriptive-question-preview-v4",
+  "unchanged_current": {
+    "reports": {"A": 30, "B": 32, "C": 30},
+    "generation": "ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4",
+    "active_facts": 1505,
+    "persistent_files_verified_unchanged": 16257,
+    "new_current_or_adoption_writes": 0,
+    "publication_candidates": 118,
+    "publication_adoptions": 0
+  },
+  "source_review": {
+    "source_context_sha256": "eb1db1855f75f936dc80f36b4155c509a293c124af81d3de1c6b954829b9a534",
+    "selected_contexts": 12,
+    "distinct_existing_fact_ids": 36,
+    "execution_actual_model": "grok-4.7-build",
+    "conference_actual_provider_model": "Pi/openai-codex/gpt-6.1-sol",
+    "conference_session": "01a12b02-96d7-7000-8dfa-017e436006e6",
+    "conference_seconds": 305.739,
+    "conference_result": "REVISE",
+    "requested_effort": "high",
+    "observed_effort": "NOT_VERIFIED",
+    "owner_dispositions": [
+      "Original proposal and first evidence failures retained; 49 exact scalar/path quotations and 24 weekly bindings verified separately.",
+      "Parent measure already contains 95% CI or SE; production parser already consumes dispersion. Do not invent a parser defect.",
+      "Keep rescue/aggregation/statistical differences as facets; rescue descriptions alone do not prove a different clinical question.",
+      "Keep count, posted percentage, KM estimate and adjusted estimate distinct. No newly derived response rates or medical equivalence permission.",
+      "Keep independently posted measure instances even when visit/value agree. No value-based deduplication."
+    ],
+    "report_sha256": "389f4a53971e197af968c50361f684c139a9b51833560450d968278693cc67c9",
+    "details": "owner-pruritus-context-v1.json"
+  },
+  "tests": {
+    "root_family_red": {"production": 8, "javascript": 2},
+    "instrument_failures": ["Initial fixture omitted required scope_note_zh", "Question-switch fixture retained a trial filter"],
+    "related_pass": 63,
+    "seconds": 2.98,
+    "files": [
+      "tests/integration/test_1007_descriptive_question_charts.py",
+      "tests/integration/test_1007_question_reading_layout.py",
+      "tests/integration/test_1007_source_question_projection.py",
+      "tests/integration/test_1007_primary_matrix_reading.py",
+      "tests/integration/test_1007_a_workspace.py",
+      "tests/integration/test_1007_a_workspace_ui.py",
+      "tests/integration/test_1007_b_workspace_ui.py"
+    ],
+    "ruff": "named changed production, tests and render recipes PASS",
+    "strict_mypy": "report_b.py only PASS",
+    "node_syntax_and_asset_mirror": "PASS",
+    "whole_repository_gate_for_this_ui_revision": "NOT_RUN",
+    "old_contract_migration": "Two expert-facing literal assertions changed from scientific-condition-facet wording to neutral result-group wording; membership/facet/zero/clear/source assertions preserved."
+  },
+  "candidate_versions": [
+    {"version": 1, "task_states": 24, "task_failures": 0, "paired_geometry_failures": 4, "owner_pixel": "REVISE", "recovery_archive": ".artifacts/1007-descriptive-question-recovery-v1/candidate-v1-byte-only.tar.gz"},
+    {"version": 2, "task_states": 24, "task_failures": 0, "paired_geometry_failures": 2, "owner_pixel": "REVISE", "recovery_archive": ".artifacts/1007-descriptive-question-recovery-v1/candidate-v2-byte-only.tar.gz"},
+    {"version": 3, "task_states": 24, "task_failures": 0, "paired_geometry_failures": 0, "new_glyph_source_action": "FAILED_NOT_ACCEPTED: minimum chart width exceeded slot and glyph was outside visible scroller", "expanded_evidence": "RETAINED"},
+    {"version": 4, "task_states": 24, "task_failures": 0, "paired_geometry_states": 4, "paired_geometry_failures": 0, "new_glyph_source_states": 4, "new_glyph_source_failures": 0, "owner_pixel": "BOUNDED_LAYOUT_ACCEPTABLE_WHOLE_PRODUCT_REVISE"}
+  ],
+  "latest_actual_browser": {
+    "browser": "existing Ego Lite space2/profile1/p1",
+    "widths_css_px": [1440, 1600, 1920, 2560],
+    "states_per_width": ["home", "dense", "complete-table", "line-source", "filtered-sparse", "baseline"],
+    "query_fact_ids": 32,
+    "source_posted_count_values": [75, 78, 103, 111],
+    "count_trials": ["NCT04501679", "NCT04501666"],
+    "line_points": 24,
+    "clicked_count_fact": "eff-7a82bfadf17f4066f213",
+    "clicked_count_value": 75,
+    "clicked_count_locator": "outcomeMeasures[2]",
+    "esc_focus_return": "same fact trigger at all four widths",
+    "registry_identity_extra_check": "Owner reopened retained drawer DOM: original-source href https://clinicaltrials.gov/study/NCT04501679 and local trial href trials/nct04501679.html; registry is not present in drawer innerText, so text-only test would not prove identity.",
+    "owner_images_viewed": ["1440 dense", "2560 dense"],
+    "image_display_note": "Original 2560 retained; tool displayed at 2048.",
+    "all_physical_pages_visual_acceptance": "NOT_RUN"
+  },
+  "frozen_sha256": {
+    "report_b.py": "acb9927a0e6b8787e8c55a3df992756619388fe44b26631825f0fbf1a3637da6",
+    "report-b.js": "fe73af5879863291573fc2fec59b981ff5843858875ec37c84e44ea6b579bedd",
+    "report-b.css": "b334272689615d30eb12999b9c5468299cdbb806d83134cddb140d6e010c8b00",
+    "candidate_actual_json": "734575faea77544536a66cae5286142446b8d707f64353ce4df016a2cbc9f6a8",
+    "task_qa_actual_json": "798a1863622d022a1009c6d4c8d4f3f955cf606f643034247be3e337c90a9177",
+    "paired_geometry_actual_json": "448898470c6f58e5e347e4ebc7a6cd9ab55ec649be1e37d0ea98da8e6b79fa44",
+    "source_interaction_json": "d9a7ada40bf7e9f0bfa70b39a54212e62cac643c75a5a6d26155110586471318",
+    "overview_html": "13d6093751504c279baa7ff8b939577ba9b437fab8a4ebd9cce37128896984c5"
+  },
+  "not_accepted": [
+    "Whole A/B/C product visual/scientific acceptance",
+    "True harmonized multi-drug response-rate comparison",
+    "New committed current/edit/clear/config/share journey",
+    "Publication fact-version adoption, full universe and MAH closure",
+    "24 portals, three hosts, installation, recovery and RC"
+  ],
+  "next_bounded_action": "Reuse the same current-query graph selection in A, preserving A row/source links and original scientific eligibility; related root-family tests, then normal candidate/browser verification."
+}

@@ -1,6 +1,16 @@
 # 当前执行｜1007V1已恢复，沿用W00–W10
 
-最新第五批owner-c-design-material-v1.json：C完整设计材料和上游source_row_id绑定已接，独立REVISE后真实反例修复，112相关PASS/Ruff/strict2及同会话57PASS scoped ACCEPT。一次A/B/C接线门64848已terminal0/source-setexact，Ruff/strict286/1185PASS337.85s/兼容20/分层7/旧路径通过，只签开发质量。下一E08固定十二原始测量临床上下文分析已实际启动68147/PID93117，预检PASS，等待OS退出事件46250，不轮询/读pending。只提案、不直接签合并或采用；应用前独立医学挑战，Owner复用现有语义/分面/资格做真正临床多药ECharts+主表。实际版本/更正、同候选操作/分享和完整W门继续。以下旧在途均历史，不重放旧源/事务/已终态PID。Goal active，非RC。
+当前以owner-descriptive-question-reading-v1.json接续：E08/C03全终态，独立
+实际6.1-sol REVISE已按原源处置，不等旧句柄。Owner单一写者接共同查询/UI，
+七文件63相关PASS；普通v4四宽24态/并排四态/人数来源及Esc四态通过，Owner
+实看1440/2560，仅接受局部布局/操作，整体仍REVISE。原独立人数/比例/KM
+分面与24周来源线保留，current/事实/采用零写。v1/v2几何、v3glyph失败保留，
+前两版严格824文件压缩校验后可恢复，回收约0.5GB。下一A消费同一当前查询
+与原事实来源，先同族RED、完整最小改动、一轮相关批，再正常真实候选验；
+同候选操作/分享、真实版本/MAH/宇宙及全W门继续，不拿B切片替代交付。
+以下旧首轮/补证在途全为历史。
+
+最新第五批owner-c-design-material-v1.json已push7458ab27：C完整设计材料和上游source_row_id修复112相关PASS/Ruff/strict2及独立57PASS scoped ACCEPT。一次A/B/C门64848terminal0/source-setexact，Ruff/strict286/1185PASS337.85s/兼容20/分层7/旧路径，只签开发质量。E08首轮68147/46250已终态，实际Grok4.7-build496.445s，12context/36IDs匹配但25非逐字quote和24周详细绑定缺使原报告REVISE。8754/PID96226/NOTE_EXIT72182同会话窄补证已预检PASS，只补这些证据，等待终态不轮询/读pending。之后不同合格模型挑战同问题描述性组织/科学资格，不照抄代码守卫结论；Owner复用现有模型做真正临床多药ECharts+主表。实际版本/更正、同候选操作/分享及全W门继续。Goal active，非RC，不重放历史。
 
 本批事实版本A入口已经Owner51相关+生产提交35PASS/独立冻结C03 scoped ACCEPT，真实论文/B/C专属入口尚未验；不再把原16反例列作未实现，也不将118候选直接采用。60228是当前里程碑一次宽门，待真实终态后白名单Git；随后继续同源历史证明/B-C输入及多药临床共同列/联动ECharts+表，同版保存分享和全W门仍必需。只有需要用户新决策才暂停。
 

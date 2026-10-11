@@ -5345,6 +5345,73 @@ def _question_display_groups(
     return tuple(result)
 
 
+def _source_question_observation_groups(
+    columns: Sequence[Mapping[str, Any]], groups: Sequence[dict[str, Any]],
+    trajectories: Sequence[dict[str, Any]],
+) -> tuple[dict[str, Any], ...]:
+    """Posted observations by bound clinical question and actual metric.
+
+    These are descriptive bar views, not new scientific membership or effect
+    estimates. Each category is one source atom; visits in different measurements
+    are never joined into a trajectory. Existing qualified frames take precedence.
+    """
+    rows = {str(row["row_id"]): row for group in groups for row in group["rows"]}
+    covered = {str(row["row_id"]) for group in trajectories for row in group["rows"]}
+    covered.update(str(row["row_id"]) for group in groups if group.get("cross_trial")
+                   for row in group["rows"])
+    result: list[dict[str, Any]] = []
+    for column in columns:
+        # Only explicit source-bound descriptive questions authorize this view.
+        if not column.get("question_known") or not column.get("question_source_bindings"):
+            continue
+        buckets: dict[tuple[str, ...], list[tuple[dict[str, Any], Any]]] = defaultdict(list)
+        for row_id in column["row_ids"]:
+            row = rows.get(str(row_id))
+            if row is None or str(row_id) in covered:
+                continue
+            required = ("trial_id", "product_id", "group_id", "source_version_id",
+                        "source_measure_path", "source_measure_definition", "source_param_type")
+            projection = row.get("numeric_projection", {})
+            if (not isinstance(projection, Mapping)
+                    or any(semantic_value_is_unknown(row.get(field)) for field in required)
+                    or semantic_value_is_unknown(projection.get("kind"))
+                    or semantic_value_is_unknown(projection.get("plot_unit"))):
+                continue
+            scope = _get(row.get("source_clause_context"), "scientific_scope", {})
+            if any(_get(scope, field) != row.get(field)
+                   for field in ("source_version_id", "source_measure_path")):
+                continue
+            key = tuple(_text(value) for value in (
+                projection["kind"], projection["plot_unit"], row["source_param_type"],
+                row.get("source_value_role"), row.get("statistical_form_family"),
+                row.get("source_dispersion_type"),
+            ))
+            buckets[key].append((row, None))
+        for key in sorted(buckets):
+            bucket = _sorted_bucket(buckets[key])
+            if len(bucket) < 2:
+                continue
+            unit = _text(_comparison_display_row(bucket[0][0]).get("unit_label_zh"), key[1])
+            group = _group(f'{column["question_label"]} · {unit}', bucket,
+                           chart_type="bar", identity_series=True, y_axis_label_zh=unit)
+            for row in group["rows"]:
+                study = _filter_value_label_zh("trial", _text(row.get("trial_id")),
+                                              _text(row.get("trial_id")))
+                row["_chart_identity_label"] = "｜".join(filter(None, (
+                    _text(row.get("product_zh")), study,
+                )))
+                # No array-position pairing or first-wins: even identical values
+                # from independent posted measurements retain separate categories.
+                row["_chart_comparison_context_key"] = str(row["row_id"])
+                row["_chart_comparison_context_label"] = _text(
+                    _comparison_display_row(row).get("time_label_zh"), _text(row.get("time")))
+            group.update(title_complete=True, comparison_purpose="clinical_question_descriptive",
+                         question_id=column["question_id"], metric_label_zh=unit)
+            result.append({**group, "rows": [
+                _comparison_display_row(row) for row in group["rows"]]})
+    return tuple(result)
+
+
 def _comparison_workspace(
     records: Sequence[tuple[dict[str, Any], Any]],
     groups: Sequence[dict[str, Any]],
@@ -5503,6 +5570,10 @@ def _comparison_workspace(
         membership_row_ids=membership.row_ids, drawable_row_ids=tuple(drawable),
         undrawable_reasons=reasons,
     )
+    trajectories = tuple(
+        {**group, "rows": [_comparison_display_row(row) for row in group["rows"]]}
+        for group in _source_longitudinal_groups(records)
+    )
     return {
         "membership": membership.model_dump(mode="json"),
         "facets": facets.model_dump(mode="json"),
@@ -5511,10 +5582,8 @@ def _comparison_workspace(
         "study_labels": {study: _text((study_labels or {}).get(study), study)
                          for study in sorted(studies)},
         "columns": tuple(columns),
-        "longitudinal_groups": tuple(
-            {**group, "rows": [_comparison_display_row(row) for row in group["rows"]]}
-            for group in _source_longitudinal_groups(records)
-        ),
+        "longitudinal_groups": trajectories,
+        "descriptive_groups": _source_question_observation_groups(columns, groups, trajectories),
     }
 
 

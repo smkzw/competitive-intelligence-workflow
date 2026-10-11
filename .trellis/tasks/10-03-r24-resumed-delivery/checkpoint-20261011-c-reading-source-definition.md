@@ -1,5 +1,16 @@
 # 2026-10-11｜C阅读真实切片与来源定义缺口
 
+最新接续：owner-descriptive-question-reading-v1.json，七文件63PASS/strict
+单report_b/Ruff/Node/mirror；v4普通104页/1505/16257/current32保持。四宽
+24态、并排四态、75例来源/Esc四态已终态通过；Owner实看1440/2560仅接受
+局部阅读/操作，整体REVISE。v1四宽几何FAIL/v2两宽FAIL/v3不可见glyph失败
+保留，前两版824文件逐hash验证压缩后回收约0.5GB，可恢复。不签新current/
+事实采用/保存分享/所有页目视/RC。E08/C03全部终态actual6.1-sol REVISE，
+原源95%CI/SE及救援处置保持；high仅请求。方法direct execution，Owner统管
+共同查询和浏览器、已获不同模型来源挑战，不加重复管理/全页审查。下一A
+同查询图+表+原来源，单族RED/完整修改/相关批，再真实候选；继续全W门。
+本批具名提交中。以下全部旧在途均历史，不再等旧PID或重跑终态。
+
 下一分离单元已启动E03 fact-version-admission-v1：Owner负责共享横比问题标题/主比较表，执行者只写source_research_service及一份邻接测试，无live source/current/事实采用。runner50525/PID62405长等待，启动已确认，不轮询在途输出。治理缺陷：Owner未以预检exit阻断后续启动；实际preflight因“Write exactly one report”不匹配约定输出头FAIL，仍启动了runner。原已发prompt不改写，另存仅修输出头的reviewed-copy供权限/路径复核，不冒称原预检PASS；Owner终态审每个写域/源差异与实际检查，科学资格另独立挑战。未来启动只有预检exit0才构造调用。原16RED不接受、不直接采用118候选。87234ce3已推送核远端，原五用户改动保持。
 
 接续有界单元：Owner直接修既有B稀疏可见性，原因是同一组织器与当前浏览器串行依赖，额外执行/会商无法提供独立写域收益；前一E01及C02已终态，不重复全页审查。22c9ba7e33文件已push并核远端，五用户hash exact。四RED（主层中性分组标签）/五RED（稀疏原标题泄漏）→最终四文件79PASS；稀疏<=4观察直接可见，密集仍辅助折叠，原英文研究名移回既有完整表，不丢原文或事实。
@@ -458,3 +469,26 @@ C03两轮全terminal：初次Grok/sessionef785d8f548.854s REVISE，上游source_
 解释涉及不确定判断，应用前须另一合格模型挑战。E08仅上下文提案，不签
 观察对/事实许可，不建立新平台。原source-contexts固定eb1db185，未新GET或
 重复全文提取；现有Grok C03已终态才初始化下一Groknode。尚未dispatch直到预检。
+
+第五批18白名单实际commit/push7458ab27e17a54371c1f1f9fddb06d83e3f68066，
+HEAD/origin/main及ls-remote exact，五用户hash不动。64848终态0/source-set保持，
+Ruff/strict286/1185活跃337.85s/兼容20/分层7/旧路径字面扫描PASS，仅开发质量。
+E08首轮68147/46250已终态0，modelUsage真实grok4.7-build，496.445s/12modelcalls；
+CLI high请求不是实际effort自证，Paseo hook env缺失ignored保留。Owner36IDs与
+12context匹配，12详细绑定exact但24周未给详细绑定、25引文非逐字/拼接，不能
+采纳。原84k报告2900a9ca/proposalc7a85b1f保持，verifier初KeyError缺键保留，
+新诊断显式缺口不记PASS。一次同会话补证8754/PID96226/NOTE_EXIT72182已
+实际预检PASS启动，只修明确25quote/24binding，不重跑全医学分析。之后不同
+模型独立挑战原文和提案；同临床问题不等于代码守卫字符串相同，数值共轴
+仍须科学依据，不把保守程序规则冒称医学结论。不等旧PID/不停Goal。
+
+E08补证8754/72182全terminal0，同session/grok4.7-build189.557s/5modelcalls。
+新补证artifact84c7c6c9，Owner用已有registry locator解析器实查49原标量quote
+及24周fact/version/quote/path/visit，verification671cd8ff，不修改原c7a85b1f/
+2900a9ca。初verify错对象key两次失败保留，实际adopted_observations字段核后
+通过，不当产品FAIL/PASS；避免为修仪器重复模型/医学提取。
+不同模型C03已actualpreflightPASS后runner76637/PID97655/NOTE_EXIT25325启动，
+按实际Grok排除的manifest，CBprimary+声明fallback，实际identity待终态。
+冻结sourcecontext/提案/补证，只审十二个完整原测量和代码科学规则；不读
+worker私链，不改源/current、不签观察对或采用。全部旧93117/96226停止等候，
+只收当前OS退出，不能因pending把全研究横比永久搁置或标PASS。
