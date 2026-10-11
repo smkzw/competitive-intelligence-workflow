@@ -3931,6 +3931,8 @@ def _bind_fact_public_version_proof(
     fact: ResearchFact,
     proof: FactPublicVersionProof,
     cutoff: datetime,
+    *,
+    material_sha256: str | None = None,
 ) -> None:
     """Bind this fact only. A sibling does not inherit the witness."""
     source = sources_by_id.get(fact.source_id)
@@ -3938,7 +3940,9 @@ def _bind_fact_public_version_proof(
         raise ValueError(f"事实来源不在证明范围内：{fact.fact_id}")
     if source.source_type not in _FACT_VERSION_PUBLICATION_TYPES:
         raise ValueError(f"论文版本证明不能替代其他来源的历史资格：{fact.fact_id}")
-    if proof.fact_material_sha256 != fact_version_material_digest(fact):
+    if proof.fact_material_sha256 != (
+        material_sha256 if material_sha256 is not None else fact_version_material_digest(fact)
+    ):
         raise ValueError(f"事实版本材料与证明不一致：{fact.fact_id}")
     content_sha = hashlib.sha256(source.content_text.encode("utf-8")).hexdigest()
     if proof.source_content_sha256 != {source.source_id: content_sha}:
@@ -3991,12 +3995,19 @@ def _parsed_fact_public_version_proofs(
     facts: Sequence[ResearchFact],
     proofs: Sequence[FactPublicVersionProof | Mapping[str, Any]],
     cutoff: datetime,
+    *,
+    material_digests: Mapping[str, str] | None = None,
 ) -> tuple[FactPublicVersionProof, ...]:
     facts_by_id: dict[str, ResearchFact] = {}
     for fact in facts:
         if fact.fact_id in facts_by_id:
             raise ValueError(f"事实标识重复：{fact.fact_id}")
         facts_by_id[fact.fact_id] = fact
+    if material_digests is not None and (
+        set(material_digests) != set(facts_by_id)
+        or any(_SHA256_HEX.fullmatch(value) is None for value in material_digests.values())
+    ):
+        raise ValueError("完整科学材料摘要必须逐项绑定当前事实集合")
     sources_by_id: dict[str, SourceCapture] = {}
     for source in sources:
         if source.source_id in sources_by_id:
@@ -4015,7 +4026,11 @@ def _parsed_fact_public_version_proofs(
         matched = facts_by_id.get(proof.fact_id)
         if matched is None:
             raise ValueError(f"公开版本证明未绑定事实：{proof.fact_id}")
-        _bind_fact_public_version_proof(sources_by_id, matched, proof, cutoff)
+        _bind_fact_public_version_proof(
+            sources_by_id, matched, proof, cutoff,
+            material_sha256=(material_digests[matched.fact_id]
+                             if material_digests is not None else None),
+        )
         parsed.append(proof)
     return tuple(parsed)
 
@@ -4057,6 +4072,8 @@ def validate_source_or_fact_historical_availability(
     facts: Sequence[ResearchFact],
     proofs: Sequence[FactPublicVersionProof | Mapping[str, Any]],
     cutoff: datetime,
+    *,
+    material_digests: Mapping[str, str] | None = None,
 ) -> None:
     """Reuse source-date qualification, with a bound proof per unavailable fact."""
     referenced = {fact.source_id for fact in facts}
@@ -4070,7 +4087,9 @@ def validate_source_or_fact_historical_availability(
     if not proofs and not needed:
         return
     try:
-        parsed = _parsed_fact_public_version_proofs(sources, facts, proofs, cutoff)
+        parsed = _parsed_fact_public_version_proofs(
+            sources, facts, proofs, cutoff, material_digests=material_digests,
+        )
         if needed:
             supplied = [proof for proof in parsed if proof.fact_id in needed_ids]
             proved_ids = {proof.fact_id for proof in supplied}

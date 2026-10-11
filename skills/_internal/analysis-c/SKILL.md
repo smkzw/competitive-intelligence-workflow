@@ -9,6 +9,13 @@ description: 由竞品调研控制图调用的 C 类试验方案设计分析能�
 
 接收已锁定且通过门槛的 C 类快照、登记平台设计字段、方案资料、研究角色和必要统计设计信息。
 
+历史论文使用可选fact_public_version_proofs，复用共同来源门与完整内容独立
+ScientificReview。C证明摘要按生产c_fact_version_material_digest绑定全部
+DesignObservation科学字段及上游source_row_id，不能只摘要source_text，
+不能借同源兄弟证明。显示行、display_text和difference_labels_zh不进入
+这个科学摘要；组/期/终点/时间/关系与来源身份变化必须重新核查。
+此绑定不是论文真实内容或更正影响的自动接受；原版本证据仍须精确验证。
+
 尚未接受的真实资料先走来源复核，不要求生产者先附接受摘要。Agent调用
 `ci-workflow review prepare-source-c --root <同一项目> --content <项目内纯内容JSON>
 --producer-session-id <实际生产会话>`。它摄取原文/定位/版本，登记真实消费者，

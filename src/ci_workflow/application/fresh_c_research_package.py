@@ -45,11 +45,13 @@ from ci_workflow.application.ctgov_c_design_projection import (
 )
 from ci_workflow.application.ctgov_design_atoms import extract_ctgov_protocol_design_atoms
 from ci_workflow.application.fresh_research_primitives import (
+    FactPublicVersionProof,
     ResearchClaim,
     ResearchFact,
     RouteAttempt,
     ScientificReview,
     SourceCapture,
+    validate_source_or_fact_historical_availability,
 )
 from ci_workflow.domain.enums import (
     FactDisclosureState,
@@ -207,6 +209,9 @@ class FreshCResearchContent(BaseModel):
     endpoint_identity_mode: Literal["instance_v1"] = "instance_v1"
     report_data: ReportCPortalData
     sources: tuple[SourceCapture, ...] = Field(min_length=1)
+    fact_public_version_proofs: tuple[FactPublicVersionProof, ...] = Field(
+        default=(), max_length=4096, exclude_if=lambda value: not value,
+    )
     route_attempts: tuple[RouteAttempt, ...] = ()
     claims: tuple[ResearchClaim, ...] = Field(min_length=1)
     trial_designs: tuple[CTrialDesign, ...] = Field(min_length=1)
@@ -273,9 +278,7 @@ class FreshCResearchContent(BaseModel):
             raise FreshCPackageError("研究包与报告数据的报告版本不一致")
         if self.design_paths.indication_id != self.indication_id:
             raise FreshCPackageError("候选设计路径与研究包的适应症标识不一致")
-        if any(not item.is_available_by(self.data_cutoff)
-               for item in self.sources):
-            raise FreshCPackageError("截止日之后或无法证明截止时点前首次披露的来源不得进入当前快照")
+        self._validate_historical_material()
 
         source_ids = {item.source_id for item in self.sources}
         observation_rows = self.report_data.observations
@@ -301,6 +304,26 @@ class FreshCResearchContent(BaseModel):
         self._validate_design_paths()
         self._reject_ranking_metadata()
         return self
+
+    def _validate_historical_material(self) -> None:
+        """Keep old dated-source input intact; prove complete design material when needed."""
+        if not self.fact_public_version_proofs and all(
+            source.is_available_by(self.data_cutoff) for source in self.sources
+        ):
+            return
+        facts = derive_c_research_facts(self)
+        rows = {item.row_id: item for item in self.report_data.observations}
+        material = {
+            fact.fact_id: c_fact_version_material_digest(rows[fact.fact_id], fact)
+            for fact in facts
+        }
+        try:
+            validate_source_or_fact_historical_availability(
+                self.sources, facts, self.fact_public_version_proofs, self.data_cutoff,
+                material_digests=material,
+            )
+        except ValueError as error:
+            raise FreshCPackageError(str(error)) from error
 
     def _validate_intervention_relationships(self) -> None:
         gaps = [
@@ -425,6 +448,20 @@ class FreshCResearchPackage(FreshCResearchContent):
         if self.scientific_review.reviewed_content_digest != self.research_content_digest:
             raise FreshCPackageError("独立科学复核与当前研究内容摘要不一致")
         return self
+
+
+def c_fact_version_material_digest(observation: DesignObservation, fact: ResearchFact) -> str:
+    """Bind the typed design, not just its raw prose; exclude consumer/display IDs.
+
+    Source-row identity is upstream evidence, not consumer chrome. Only used
+    for a public-version witness; existing stored atoms and versions stay intact.
+    """
+    return _digest({
+        "fact": fact.model_dump(mode="json", exclude={"row_ref", "fact_id"}),
+        "design": observation.model_dump(mode="json", exclude={
+            "row_id", "display_text", "difference_labels_zh",
+        }),
+    })
 
 
 def derive_c_research_facts(

@@ -1,6 +1,6 @@
 # 当前执行｜1007V1已恢复，沿用W00–W10
 
-最新终态owner-query-source-wiring-v1.json：共同A/B历史门与原生JATS日接通，六文件117PASS、strict3/具名Ruff；B图表当前query交集76相关PASS，正常只读104页四宽24态运行通过。源/current32未写，118未采用。下一有界任务复用C已存在的观察→事实转换并绑定完整科学设计材料、真实版本/更正见证，以及真正临床多药共同列/联动ECharts+主表；后续同版操作/分享及完整W门不缩减。60228只绑定上一源码，本批不重复宽门，不重放旧来源/保存/分享；以下pending均历史。Goal active，整体非RC。
+最新第五批owner-c-design-material-v1.json：C完整设计材料和上游source_row_id绑定已接，独立REVISE后真实反例修复，112相关PASS/Ruff/strict2及同会话57PASS scoped ACCEPT。一次A/B/C接线门64848已terminal0/source-setexact，Ruff/strict286/1185PASS337.85s/兼容20/分层7/旧路径通过，只签开发质量。下一E08固定十二原始测量临床上下文分析已实际启动68147/PID93117，预检PASS，等待OS退出事件46250，不轮询/读pending。只提案、不直接签合并或采用；应用前独立医学挑战，Owner复用现有语义/分面/资格做真正临床多药ECharts+主表。实际版本/更正、同候选操作/分享和完整W门继续。以下旧在途均历史，不重放旧源/事务/已终态PID。Goal active，非RC。
 
 本批事实版本A入口已经Owner51相关+生产提交35PASS/独立冻结C03 scoped ACCEPT，真实论文/B/C专属入口尚未验；不再把原16反例列作未实现，也不将118候选直接采用。60228是当前里程碑一次宽门，待真实终态后白名单Git；随后继续同源历史证明/B-C输入及多药临床共同列/联动ECharts+表，同版保存分享和全W门仍必需。只有需要用户新决策才暂停。
 

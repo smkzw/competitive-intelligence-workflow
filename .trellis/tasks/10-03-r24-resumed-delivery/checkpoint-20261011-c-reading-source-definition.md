@@ -441,3 +441,20 @@ Owner第四批实际终态：普通query-scope-v1只读104页/1505事实/16257�
 共同历史门1RED→32PASS；JATS原生电子日族5RED/6PASS→103相关PASS，具名Ruff/strict两生产文件通过。只重开既有两份XML日期节点，原quote452023/17122025、原源hash保持；2个日期节点PASS，临床事实资格/采用0。无需新依赖或重复全文提取。C已发现既有research_facts_from_c_observations，后续复用并绑定完整DesignObservation材料，不仅source_text。
 
 B执行11569/PID76945与退出事件18839已terminal0；实际ZCode/GLM-5.3-Flash:max请求/响应身份verified，1017.039s/34tools。Owner完整两文件diff/测试审查，合并六文件117PASS19.65s及Ruff/strict3通过；无新宽门或科学采用。primary return0/session与fallback解释不一致保留。完整紧凑回执owner-query-source-wiring-v1.json，下一C完整科学材料历史门/真实版本见证与临床多药图表，不重跑旧PID/源/事务。
+
+第四批26path白名单已commit/push9afcf62e8daa090d26a7f713ebbaba6cbd11face，远端main exact，五用户hash保持。下一选择direct+conference：C接线与共同摘要扩展共享可变定义由Owner统一，不为小耦合代码另派执行；完整设计材料/排除显示身份的科学守卫是有实质解释风险的新接受对象，冻结后单一fresh审阅。C族13RED→103PASS/4FAIL（新golden遗漏原C canonical newline），保持生产旧摘要规则后修golden，107PASS4.58s；不是实际论文接受。C03初次未链接B执行草稿未dispatch，已force链接并实际排除DeepSeek/GLM两执行模型后再预检启动，禁止pending轮询或重复全页审阅。
+
+C03两轮全terminal：初次Grok/sessionef785d8f548.854s REVISE，上游source_row_id
+不能排除。Owner生产positive-then-tamper真正RED后只修该摘要排除项，完整六
+文件112PASS/5.39s及Ruff/strict2；18C新例含三map拒绝。一次同会话113.35s
+窄复验57PASS/2.18s scoped ACCEPT，请求high但实际effort未观察，原REVISE保留。
+不等81432/74106/66588/32602，不重派全页。不改旧design_evidence_id/原源/快照。
+冻结service1411b1d4/Ccba1a26f/test7fd411a4后，一次A/B/C历史接线里程碑宽门
+64848启动，尚未终态则不宣称全绿。owner-c-design-material-v1.json为精简回执；
+资料声明未改源事实/没有118采用、current32保持。接续真实临床多药图+表。
+
+下一选择execution+later-conference：同临床瘙痒NRS问题十二个独立完整来源
+测量的专业语义解释可有界分工，Owner仍独占公共代码；真正临床等价/分母
+解释涉及不确定判断，应用前须另一合格模型挑战。E08仅上下文提案，不签
+观察对/事实许可，不建立新平台。原source-contexts固定eb1db185，未新GET或
+重复全文提取；现有Grok C03已终态才初始化下一Groknode。尚未dispatch直到预检。

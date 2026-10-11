@@ -1,5 +1,9 @@
 # 唯一当前状态：1007V1连续实施｜current32阅读体验被用户否决，正在修正，非RC
 
+最新第五批[C完整材料回执](evidence/1007V1/owner-c-design-material-v1.json)及[复盘](../../docs/handoffs/RETROSPECTIVE_20261011_c_design_material.md)。C完整设计材料历史门已接线，13RED→107相关PASS；独立发现上游source_row_id错误排除，Owner生产有效证明后改ID的真RED后最小修复，六文件112PASS/5.39s、Ruff/strict2；同Grok会话57PASS scoped ACCEPT，原REVISE保留，请求high实际effort未观察。C03旧句柄终态不重跑；一次A/B/C开发门64848已terminal0/source-set不变，Ruff/strict286/1185PASS337.85s/兼容20/分层7/旧路径通过，log0e57cfb5；仅开发质量。新E08固定十二源测量上下文分析68147/PID93117/NOTE_EXIT46250实际启动，预检PASS；只提案，等待真实终态不读pending，医学解释应用前独立复核。current32/源/1505事实保持，118候选未采用，真正临床多药ECharts+表、同版操作/全交付门仍待完成。Goal active，非暂停。
+
+以下均为上一时点历史，当前以本节及根HANDOFF接续，不等待旧PID或重放事务。
+
 最新完整本批终态：[查询/来源接线v1](evidence/1007V1/owner-query-source-wiring-v1.json)及[复盘](../../docs/handoffs/RETROSPECTIVE_20261011_query_source_wiring.md)。B生产query交集3RED→76相关PASS；普通只读104页/1505/current32/16257保持，四宽24态0FAIL、Owner1440/2560目视，整体REVISE。共同A/B历史门及原生JATS日期接通，Owner六文件117PASS19.65s、Ruff/strict3通过；两真实日期节点2PASS，事实资格/采用0。B执行11569及NOTE_EXIT18839已terminal0，实际GLM-5.3-Flash:max verified，1017.039s/34tools；fallback解释冲突保留。60228仅为上一冻结源码开发门，本批未跑新整仓门。下一C完整设计材料绑定与真实多药临床共享列/ECharts+表，实际版本更正/同版操作/全W门仍待完成。Goal active，不暂停。
 
 以下均为原时点历史现场；最新状态仅以上查询/来源回执及根HANDOFF，不改原失败/hash、不重跑已终态任务。
