@@ -1,0 +1,90 @@
+{
+  "state": "BOUNDED_CURRENT_VALUE_ROOT_ADJACENT_AND_QUALITY_PASSED_SOURCE_RELATION_REVIEW_PENDING",
+  "baseline_commit": "ff374c680df25fcbe76ebc44a0fc088b3ccf7892",
+  "goal_state": "active_no_pause_full_W_continues",
+  "method": "execution-plus-conference: Owner shared production writer; isolated E08 exact source relationship proof parallel, then one fresh independent source challenge; no new acceptance platform or observation signoff",
+  "root_families": [
+    "Original explicitly declared n(%) cell keeps composite raw and null normalized value; current numeric projection reuses exact source parser",
+    "Existing A/B reported_percent shares reported_proportion/participants/% identity, no inferred denominator or count-to-rate conversion",
+    "Append-only current edits reject nonfinite/out-of-range/mismatched raw and normalized values; clear cannot fall back; undo may restore original composite/null",
+    "Opaque source XPath fact identifiers are bounded data; file request resource identifiers retain path guard",
+    "Source-bound user current percent remains in same clinical question graph and table; clear remains in question but cannot plot original value; immutable source and scientific eligibility unchanged"
+  ],
+  "tests": {
+    "current_value_initial_red": {"failed": 9, "already_passed": 16},
+    "stage_extended_red": {"failed": 5, "already_passed": 25},
+    "question_current_red": {"failed": 2, "already_passed": 6},
+    "registration_baseline_replay": {
+      "session": 82462, "terminal_returncode": 1,
+      "genuine_failure": "HEAD production register_a_source_consumers cannot float composite14(18.4)",
+      "timing": "Corrected fixture replayed against HEAD after current repair; not falsely claimed as preimplementation TDD"
+    },
+    "related_current_value": {"passed": 205, "seconds": 8.74, "session": 20733},
+    "final_root_related": {"passed": 145, "seconds": 6.63, "session": 23938},
+    "adjacent": [{"session": 68446, "state": "PASSED", "passed": 39,
+      "seconds": 950.77, "terminal_returncode": 0}, {"session": 64311, "state": "PASSED",
+      "passed": 146, "seconds": 959.56, "terminal_returncode": 0}],
+    "ruff": "PASS: five named production modules and three new tests",
+    "strict_mypy": "PASS: five named production modules",
+    "instruments_preserved": [
+      "Registry fixture first removed required comparison arms, then attempted a ClassVar input; preserve unrelated fixture rows instead. Not product RED.",
+      "A negative basis test changed the first unrelated row; corrected by explicit target row_id. Not product RED.",
+      "One adjacent command used nonexistent test path; no tests ran, not product failure or PASS.",
+      "Introduced staging local variable type collision produced five strict errors, fixed with dedicated variable names.",
+      "First event observer treated initialized PENDING report existence as terminal; actual runner still running, corrected to terminal-content event. No worker restart or acceptance."
+    ]
+  },
+  "source_replay": {
+    "recipe": "packets/2026-09-22-sol-delivery/evidence/1007V1/verify-publication-current-value-owner-v1.py",
+    "recipe_sha256": "0380cb7e9d004131c0f166b44ff633b3ef951281fd7c498a594835d352da14fe",
+    "artifact": ".artifacts/1007-publication-current-value-owner-v1/actual.json",
+    "artifact_sha256": "2017bed7f3f7338abdb9c805b8a701fcf69d53631a45a976cf3e8a3ecf2e9f0e",
+    "source_package_sha256": "e89dcabb2763a3a486bca2dacacebff5df604dff2e661b230fd44dff0e7575e0",
+    "printed_values": [18.4, 60.0, 22.0, 37.2],
+    "original_source_normalized_values": [null, null, null, null],
+    "source_current_writes": 0,
+    "scope": "Accepted real SQL/fragment/version helper only, no real consumer or browser acceptance"
+  },
+  "author_sha256": {
+    "src/ci_workflow/application/portal_consumer_registry.py": "c85be1f8d378468a341b9cd7e2c2a2ed55613bceeef8f1577b041da48bb8a1a7",
+    "src/ci_workflow/application/user_fact_edit.py": "5cabb37575cb0be96b239b55895871b860b25528d3565eba18afb136d60973af",
+    "src/ci_workflow/renderers/portal/active_fact_projection.py": "14b1b80a45c7d8de30f6f81c1314f229caa5478e1efe8efd1220c6a0c5e99f1b",
+    "src/ci_workflow/renderers/portal/report_a.py": "6159a2b73a5705ec4db27c1bc964001afa4f2b86c818f53c9a804ec26bae3462",
+    "src/ci_workflow/renderers/portal/report_b.py": "94c5ecde768c0e77b17607eadae34ef58b3b3df4b6db375ae940a313b0e771d7",
+    "tests/integration/test_1007_publication_current_values.py": "057a424e8af8ca5e173595db2f1cfac87a56d03844e2ea8f902f39d4d1a3c81c",
+    "tests/integration/test_1007_publication_consumer_registration.py": "d45d54fd9a9be008b240523bfd590238d38908cb414c2a7e56c38377d1b91aeb",
+    "tests/integration/test_1007_publication_current_question.py": "ff3e51da190f43b0128c060f13c97042b272ad2e2cfb5066e289476ec73f5c39"
+  },
+  "relationship_execution": {
+    "task": "ci-1007-publication-identity-proof-v1",
+    "session": 72434, "terminal_content_observer": 81337,
+    "state": "TERMINAL_PROPOSED_ONLY", "terminal_returncode": 0,
+    "actual_model": "grok-4.7-build", "requested_route_model": "grok-4.7",
+    "actual_effort": "high", "model_calls": 25, "num_turns": 25,
+    "duration_seconds": 540.323,
+    "session_id": "5726d1d5-5c34-4024-8483-630b2d22bae2",
+    "native_identity_basis": "modelUsage grok-4.7-build; runner command reasoning-effort high",
+    "report_sha256": "da211ef1fec4369b46545dcb54997416fda9d473fb0f9b6261109cf8f0505954",
+    "raw_receipt_sha256": "0e4be3c73815fe06b3320bc38dfa9e0b6758760d426bbe87ec88d650135da1ee",
+    "readonly": true,
+    "proposal_artifact": ".artifacts/1007-publication-identity-proof-v1/proposal.json",
+    "proposal_sha256": "01a5d0b3aee1c441dce82d84e311c845cd40ec0f68a2fda5ba231133556f796b",
+    "fresh_conference_after_freeze": "STARTED_ONCE_PENDING",
+    "review_session": 61865, "review_terminal_observer": 68200,
+    "review_actual_model": "UNVERIFIED_UNTIL_TERMINAL",
+    "review_scope": "Only original XML and frozen proposal JSON; no executor narrative/private reasoning. Grok alias fallback omitted for actual model independence."
+  },
+  "development_gate": {
+    "session": 66640, "state": "QUALITY_ONLY_PASSED", "terminal_returncode": 0,
+    "source_set_unchanged": true,
+    "prewrite_sha256": "e37bd50fcb077f91cff1d6bd31a2ec4c1e557b1c4935176bad49ad239692d332",
+    "log_sha256": "fc0eae1027968076739986eec17a5988291d6603b01b58330ed67d8f30cbeb47",
+    "artifact": ".artifacts/1007-publication-current-values-quality-gate-v1",
+    "scope": "Ruff src/tests/tools; strict src/tools289 files; active unit/contract1267PASS311.73s;20retained compatibility smoke/7layers/legacy references. Frozen quality only, not full integration/science/browser/hosts/install/recovery/RC"
+  },
+  "current": {"revision": 34, "A": 33, "B": 34, "C": 33, "active_facts": 1505,
+    "generation": "eef1a1112645c45fc6a86c26f1a681eb773db84c271241671e6acfda7a0ccc3c"},
+  "preservation": "Five protected tracked user files rehashed exact; unknown files, old current/sources and legacy Chinese root untouched. No reset/checkout/clean/add-all.",
+  "not_run": ["Real publication product and arm relation acceptance", "Real legal source consumers and new current", "Actual graph/table/edit/clear/undo/share/browser on these consumers", "Full24 portals/3hosts/fresh-install/recovery/RC"],
+  "next": "Quality/adjacent complete, do not rerun. Whitelist Git. Fresh original-source relationship challenge61865 remains pending; reuse existing entities and consumer/current contracts after source integration for actual graph-table-source and same-current operations. No pause."
+}

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from pathlib import Path
 from typing import Any, Literal
 
@@ -383,12 +384,64 @@ def write_render_receipt(
 
 def numeric_value(fact: ActiveFact) -> float:
     value: Any = fact.normalized_value
+    if value is None:
+        value = _source_printed_percent(fact)
     if isinstance(value, bool) or value is None:
         raise ValueError(f"事实 {fact.fact_id} 缺少可投影数值")
     try:
-        return float(value)
+        number = float(value)
     except (TypeError, ValueError) as error:
         raise ValueError(f"事实 {fact.fact_id} 的规范值不是数值") from error
+    if not math.isfinite(number):
+        raise ValueError(f"事实 {fact.fact_id} 的当前值必须为有限数值")
+    if (fact.model_extra or {}).get("statistical_form") == "reported_proportion" and not (
+        0 <= number <= 100
+    ):
+        raise ValueError("报告百分比的当前值必须在0–100内")
+    return number
+
+
+def _source_printed_percent(fact: ActiveFact) -> float | None:
+    """Display an explicitly bound percent token without changing the source atom.
+
+    An edited scalar takes precedence in numeric_value; a clear cannot fall back
+    to the original. Undo may restore the original composite with null normalized
+    value, provided its full source text, locator and declared form still match.
+    """
+    extra = fact.model_extra or {}
+    if (extra.get("statistical_form") != "reported_proportion"
+            or extra.get("measure_object") != "participants"
+            or extra.get("unit") != "%" or extra.get("normalized_unit") != "%"
+            or fact.disclosure_state not in {"reported_value", "reported_zero"}
+            or fact.raw_value is None or fact.raw_value != fact.source_quote
+            or extra.get("original_text") != fact.source_quote):
+        return None
+    # Deferred imports reuse the existing parser without a research/portal cycle.
+    from ci_workflow.application.source_research_service import ResearchFact
+    from ci_workflow.domain.evidence import EvidenceLocator
+    from ci_workflow.reports.b.publication_components import publication_value_components
+
+    try:
+        raw = {key: value for key, value in extra.items() if key in ResearchFact.model_fields}
+        raw.update(fact_id=fact.fact_id, field_id=fact.field_id, raw_value=fact.raw_value,
+                   normalized_value=None, disclosure_state=fact.disclosure_state)
+        raw.setdefault("row_ref", "source:" + fact.fact_id)
+        source = ResearchFact.model_validate(raw)
+        locator = EvidenceLocator.model_validate_json(fact.source_locator)
+    except ValueError:
+        return None
+    context = source.result_context
+    if (context is None or context.domain not in {"efficacy", "adverse_events"}
+            or context.source_measure_path != source.locator.field_path
+            or locator != source.locator):
+        return None
+    projection = publication_value_components(source)["projection"]
+    if projection["state"] != "projected":
+        return None
+    count, percent = projection["components"]
+    if fact.disclosure_state == "reported_zero" and (count["value"] or percent["value"]):
+        return None
+    return float(percent["value"])
 
 
 __all__ = [

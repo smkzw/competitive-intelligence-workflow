@@ -46,6 +46,7 @@ from ci_workflow.renderers.portal.active_fact_projection import (
     ActiveFactRevision,
     PortalConsumerNode,
     PortalRenderReceipt,
+    numeric_value,
 )
 from ci_workflow.renderers.portal.report_a import (
     ReportAPortalData,
@@ -244,13 +245,23 @@ class FactTargetIdentity(BaseModel):
     entity_id: str
     field_id: str
 
-    @field_validator("fact_id", "fact_version_id", "entity_id", "field_id")
+    @field_validator("fact_version_id")
     @classmethod
     def _valid_id(cls, value: str) -> str:
         normalized = _text(value)
         if _RESOURCE_ID.fullmatch(normalized) is None:
             raise ValueError("事实目标身份不是合法资源标识")
         return normalized
+
+    @field_validator("fact_id", "entity_id", "field_id")
+    @classmethod
+    def _opaque_source_id(cls, value: str) -> str:
+        # Scientific identifiers are SQLite/JSON data, not filenames. Publication
+        # IDs legitimately contain XPath; request/version resource IDs stay closed.
+        if (not value or value != value.strip() or len(value) > 4096
+                or any(ord(char) < 32 or ord(char) == 127 for char in value)):
+            raise ValueError("来源事实身份必须为有界、无控制字符的完整原标识")
+        return value
 
 
 class FactEdit(BaseModel):
@@ -1430,6 +1441,25 @@ class UserFactEditService:
             context = dict(source["context_payload"])
             changes = command.edits.changes()
             bindings = self._registered_source_bindings(source)
+            printed_percent = (
+                all(binding.statistical_form == "reported_proportion" for binding in bindings)
+                if bindings else context.get("statistical_form") == "reported_proportion"
+            )
+            if printed_percent and changes:
+                if set(changes) - {"raw_value", "normalized_value"}:
+                    raise UserFactSaveError("报告百分比只修订当前百分比，原始人数及组N保持独立")
+                if all(value is not None for value in changes.values()):
+                    if set(changes) != {"raw_value", "normalized_value"}:
+                        raise UserFactSaveError("报告百分比须同时提供当前数值文本及规范值")
+                    try:
+                        printed_raw_number = Decimal(str(changes["raw_value"]).removesuffix("%"))
+                        printed_number = Decimal(str(changes["normalized_value"]))
+                    except InvalidOperation as error:
+                        raise UserFactSaveError("报告百分比须为有限数值") from error
+                    if (not printed_number.is_finite() or not printed_raw_number.is_finite()
+                            or printed_number != printed_raw_number
+                            or not 0 <= printed_number <= 100):
+                        raise UserFactSaveError("报告百分比原值及规范值须一致且在0–100内")
             source_direct_count = bool(bindings) and all(
                 binding.statistical_form == "count"
                 and binding.measure_object == "participants"
@@ -1570,7 +1600,18 @@ class UserFactEditService:
                 f"{context.get('threshold_operator', '')}{context['threshold_value']:g} "
                 f"{context.get('threshold_unit', context.get('unit', ''))}"
             ).strip()
-        if disclosure_state in {"reported_value", "reported_zero"} and (
+        restored_component = False
+        if command.operation == "undo" and raw_value is not None and normalized_value is None:
+            original = self._public_fact(previous)
+            if original.get("statistical_form") == "reported_proportion":
+                try:
+                    numeric_value(ActiveFact.model_validate(original))
+                except ValueError as error:
+                    raise UserFactSaveError("原报告百分比无法由同一来源原文恢复") from error
+                # Keep the original composite and null normalized value. This
+                # restores a display component, not a new scientific normalization.
+                restored_component = True
+        if not restored_component and disclosure_state in {"reported_value", "reported_zero"} and (
             raw_value is None or normalized_value is None
         ):
             raise UserFactSaveError("恢复当前数值必须提供完整数值或有效分子/分母")

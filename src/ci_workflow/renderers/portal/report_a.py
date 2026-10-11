@@ -169,7 +169,9 @@ class EfficacyRow(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
     row_id: str
     source_view_row_id: str | None = Field(default=None, exclude_if=lambda value: value is None)
-    value_basis: Literal["crude_rate", "modeled_estimate", "reported_estimate"] | None = Field(
+    value_basis: Literal[
+        "crude_rate", "modeled_estimate", "reported_estimate", "reported_percent"
+    ] | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
     product_id: str
@@ -219,6 +221,11 @@ class EfficacyRow(BaseModel):
 
     @model_validator(mode="after")
     def _counts_are_complete_and_ordered(self) -> EfficacyRow:
+        if self.value_basis == "reported_percent" and (
+            self.unit != "%" or self.numerator is not None or self.denominator is not None
+            or (self.value is not None and not 0 <= self.value <= 100)
+        ):
+            raise ValueError("来源报告百分比必须独立呈现，不由人数或表头N换算")
         # 独立复核 A r27/r30/r32：登记 denoms（各组受试者数）是真实披露，
         # 允许"仅有分母"（组规模），分子缺失不再是契约违规
         if self.numerator is not None and self.denominator is None:
@@ -2254,6 +2261,8 @@ def validate_active_fact_revision_a(
 
 def _a_statistical_identity(row: SafetyRow | EfficacyRow) -> tuple[str, str]:
     if isinstance(row, EfficacyRow):
+        if row.value_basis == "reported_percent":
+            return "reported_proportion", "participants"
         if row.unit.strip().casefold() in {
             "人", "例", "participants", "number of participants",
         } and row.numerator is not None and row.value == row.numerator:

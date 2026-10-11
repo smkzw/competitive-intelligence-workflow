@@ -5369,7 +5369,7 @@ def _question_display_groups(
                                references[ref], scope, row, key[1])
                                for ref in projection.basis_reference_ids)
                         or (source_domain_conflicts(row, _text(row.get("_domain"), "efficacy"))
-                            and not _publication_component_statistic(row))
+                            and not _publication_current_statistic(row, for_question=True))
                     ):
                         raise ValueError("源作用域或引用不匹配")
                 except (TypeError, ValueError):
@@ -5441,6 +5441,51 @@ def _publication_component_statistic(row: Mapping[str, Any]) -> str:
     return "source_printed_n_percent"
 
 
+def _publication_current_statistic(
+    row: Mapping[str, Any], *, for_question: bool = False,
+) -> str:
+    """Keep an edited source-bound observation in its existing question view."""
+    if "_user_edit" not in row:
+        return _publication_component_statistic(row)
+    from ci_workflow.application.source_research_service import ResearchFact
+    from ci_workflow.reports.b.publication_components import publication_value_components
+    from ci_workflow.reports.common.evidence_view import UserEditDisclosure
+
+    try:
+        fact = ResearchFact.model_validate(row.get("source_fact"))
+        edit = UserEditDisclosure.model_validate(row["_user_edit"])
+        projected = publication_value_components(fact)["projection"]
+        if (projected["state"] != "projected" or edit.fact_id != fact.fact_id
+                or edit.source_version_id != row.get("source_version_id")
+                or edit.source_locator != fact.locator.model_dump(mode="json")
+                or edit.revision < 1):
+            return ""
+        percent = projected["components"][1]["value"]
+        source_row = {**row, "value": percent, "disclosure_state": fact.disclosure_state}
+        if not _publication_component_statistic(source_row):
+            return ""
+        cleared = row.get("disclosure_state") == "user_cleared"
+        if cleared:
+            if (row.get("value") is not None
+                    or edit.status_label_zh != "用户清除，待重新核实"
+                    or edit.current_value != "用户清除，待重新核实"):
+                return ""
+            return "source_bound_current_percent" if for_question else ""
+        if edit.status_label_zh != "用户修订，未独立复核":
+            return ""
+        if edit.operation == "undo" and edit.current_value == fact.raw_value:
+            current = float(percent)
+        else:
+            current = float(edit.current_value.removesuffix("%"))
+        if (not math.isfinite(current) or not 0 <= current <= 100
+                or type(row.get("value")) not in {float, int}
+                or row.get("value") != current):
+            return ""
+    except (KeyError, TypeError, ValueError):
+        return ""
+    return "source_bound_current_percent"
+
+
 def _source_question_observation_groups(
     columns: Sequence[Mapping[str, Any]], groups: Sequence[dict[str, Any]],
     trajectories: Sequence[dict[str, Any]],
@@ -5467,7 +5512,7 @@ def _source_question_observation_groups(
                 continue
             required = ("trial_id", "product_id", "group_id", "source_version_id",
                         "source_measure_path", "source_measure_definition")
-            statistic = (_publication_component_statistic(row)
+            statistic = (_publication_current_statistic(row)
                          if "source_component_projection" in row else row.get("source_param_type"))
             projection = row.get("numeric_projection", {})
             if (not isinstance(projection, Mapping)
@@ -5482,7 +5527,9 @@ def _source_question_observation_groups(
                    for field in ("source_version_id", "source_measure_path")):
                 continue
             key = tuple(_text(value) for value in (
-                projection["kind"], projection["plot_unit"], statistic,
+                projection["kind"], projection["plot_unit"], (
+                    "source_printed_n_percent" if statistic == "source_bound_current_percent"
+                    else statistic),
                 row.get("source_value_role"), row.get("statistical_form_family"),
                 row.get("source_dispersion_type"),
             ))
@@ -5490,7 +5537,8 @@ def _source_question_observation_groups(
             # source view even when the scientific metric is unresolved. Never
             # restore renderability in the original science group/eligibility.
             display = ({**row, "renderable": True}
-                       if statistic == "source_printed_n_percent" else row)
+                       if statistic in {"source_printed_n_percent", "source_bound_current_percent"}
+                       else row)
             buckets[key].append((display, None))
         for key in sorted(buckets):
             bucket = _sorted_bucket(buckets[key], chronological=True)
@@ -6428,6 +6476,8 @@ def _b_source_view_row(
 
 def _b_statistical_identity(row: SafetyRow | EfficacyRow) -> tuple[str, str]:
     if isinstance(row, EfficacyRow):
+        if row.value_basis == "reported_percent":
+            return "reported_proportion", "participants"
         if (
             row.unit.strip().casefold() in {
                 "人", "例", "participants", "number of participants",

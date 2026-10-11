@@ -21,6 +21,7 @@ from ci_workflow.application.source_research_service import (
     ResearchFact,
     ctgov_direct_safety_measure_identity,
 )
+from ci_workflow.domain.evidence import EvidenceLocator
 from ci_workflow.domain.ids import stable_id
 from ci_workflow.renderers.portal.active_fact_projection import (
     ActiveFactBinding,
@@ -38,6 +39,7 @@ from ci_workflow.renderers.portal.report_b import (
     _b_source_view_row,
     active_fact_binding_for_b,
 )
+from ci_workflow.reports.b.publication_components import publication_value_components
 from ci_workflow.reports.b.safety_concepts import (
     describe_measured_safety_concept,
     safety_category_zh,
@@ -64,6 +66,31 @@ class SourceRowContext:
     timepoint: str
     group_title: str
     value_path: str
+
+
+def _direct_source_value(
+    raw_value: object, scientific: dict[str, Any], locator_json: str,
+    quote: str, *, printed_percent: bool,
+) -> tuple[float, int | None]:
+    """Read the explicit printed percent, never derive it from a header N."""
+    if not printed_percent:
+        return float(str(raw_value)), None
+    raw = {key: value for key, value in scientific.items() if key in ResearchFact.model_fields}
+    raw.setdefault("row_ref", "source:" + str(raw.get("fact_id", "")))
+    fact = ResearchFact.model_validate(raw)
+    if (fact.raw_value != raw_value or fact.original_text != quote
+            or fact.locator != EvidenceLocator.model_validate_json(locator_json)
+            or fact.result_context is None
+            or fact.result_context.domain not in {"efficacy", "adverse_events"}
+            or fact.result_context.source_measure_path != fact.locator.field_path):
+        raise ValueError("复合单元格与持久化来源片段不一致")
+    projection = publication_value_components(fact)["projection"]
+    if projection["state"] != "projected":
+        raise ValueError("来源未明确报告人数和百分比复合值")
+    count, percent = projection["components"]
+    if fact.disclosure_state == "reported_zero" and (count["value"] or percent["value"]):
+        raise ValueError("来源零值状态与报告值冲突")
+    return float(percent["value"]), int(count["value"])
 
 
 def register_b_baseline_source_consumers(
@@ -486,7 +513,13 @@ def register_a_source_consumers(
             try:
                 context = json.loads(str(context_json))
                 result = context["result_context"]
-                numeric = float(str(raw_value))
+                printed_percent = (
+                    isinstance(row, EfficacyRow) and row.value_basis == "reported_percent"
+                )
+                numeric, _reported_count = _direct_source_value(
+                    raw_value, context, str(locator_json), str(quote),
+                    printed_percent=printed_percent,
+                )
             except (TypeError, ValueError, KeyError, json.JSONDecodeError) as error:
                 raise PortalConsumerRegistrationError("来源原子不是可直接核验的数值结果") from error
             source_group_title = result.get("group_title")
@@ -672,8 +705,12 @@ def register_b_shared_source_consumers(
             try:
                 b_binding = active_fact_binding_for_b(report, collection_name, row_id)
                 view = _b_source_view_row(report, collection, row_id)
-                context = json.loads(str(source[1]))["result_context"]
-                numeric = float(str(source[0]))
+                scientific = json.loads(str(source[1]))
+                context = scientific["result_context"]
+                numeric, component_count = _direct_source_value(
+                    source[0], scientific, str(source[3]), str(source[4]),
+                    printed_percent=b_binding.statistical_form == "reported_proportion",
+                )
             except (ValueError, TypeError, KeyError, json.JSONDecodeError) as error:
                 raise PortalConsumerRegistrationError("B 来源行缺少可核验数值或来源view") from error
             rows = [row for row in getattr(report, collection) if row.row_id == row_id]
@@ -702,8 +739,18 @@ def register_b_shared_source_consumers(
             measure_matches = (
                 (
                     row.numerator is None
-                    and b_binding.measure_object == "estimate"
-                    and b_binding.statistical_form == "estimate"
+                    and (
+                        (b_binding.measure_object == "estimate"
+                         and b_binding.statistical_form == "estimate")
+                        or (
+                            b_binding.measure_object == "participants"
+                            and b_binding.statistical_form == "reported_proportion"
+                            and row.value_basis == "reported_percent"
+                            and row.denominator is None
+                            and view.get("value_basis") == "reported_percent"
+                            and view.get("reported_count") == component_count
+                        )
+                    )
                 )
                 if reported_measure
                 else False
