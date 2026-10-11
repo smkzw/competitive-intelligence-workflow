@@ -1,5 +1,44 @@
 # 2026-10-11｜C阅读真实切片与来源定义缺口
 
+## 当前有界单元：31阅读/分享与论文事实版本公开证据
+
+模式execution-plus-conference：Owner唯一协调current/事实/源码；E07只收新公开版本metadata与更正材料，其输出路径不重叠，提供实际并行收益；有重大科学版本解释的不确定性再独立挑战，不建立多余chair/全页循环。
+当前31=A30/B31/C30/1505，generation16a5fbb6c99e36b7578ad51280e2fb4b7da23c64cfed27eb73c846974d968dfa，正常B-only21919终态/15341旧文件及七表/A/C交付exact。28相关PASS；v2Control+End四FAIL保留，v3同源PageDown28态通过。当前27107四宽16态、B31原生配置下载/异问题导入恢复通过。31单次宽门92617已terminal0/source-setexact，Ruff/strict286/1185活跃/20兼容/7分层/字面路径通过；下段旧pending为完成前记录，不替代终态。
+31两实际生产包B/ABC移动hash/当前报告revision绑定、专用Profile3复用四入口真断网83219通过，网络恢复；v1旧revision断言FAIL保留，68608仅导缺失ABC，不重放B。Owner看实际矩阵/来源/离线B/C；2560图工具展示缩2048如实记录，不签全部产品审美。31开发门92617单次terminal0/source-setexact，终态证据8bcf3f3d，不继承29门。
+whole118独立C03 actualPi/openai-codex/gpt-6.1-sol/high467.714s93tools REVISE，v5补4方法上下文，118raw/ID及117对象保持，1271引用167独特定位/22缺口；same-session157.893s20tools context-only ACCEPT。无采用/日期/current。第二轮preflightFAIL仍误启动，Owner流程缺陷保留，不补写执行prompt/hash或称治理全绿；后续新launch exit0-gated。
+用户2026-10-11 Ask已批准论文按所用事实版本的截止前公开证据核发表/更正，earliest可未知；已落PRD/DESIGN/ACCEPTANCE。Oct7截止不改、下载不倒证，SourceCapture旧来源门待事实级接通。E0776969/PID78602/event94872一次派发，仅新隔离资料与配方，公开API/官方版本记录、不重提全文/不改生产current。请求Pi/Gemini3.8flashhigh路线，真实模型待终态核；不读取在途或进度轮询。预检先因global指令列进workspace数据输入拒绝，明确指令引用与本地资料区分后PASS才启动，不禁读适用全局规范。
+精简证据owner-current31-reading-sharing-publication-v1.json；实际五用户文件/未知历史保护，旧中文根不碰。无阶段性暂停/RC；下一版本证据→最小资格反例/接线及必需论文/MAH/宇宙/24/宿主终验。以下旧在途均为历史。
+
+## 历史有界单元：B问题无匹配行原生披露
+
+原E08 runner38985/NOTE_EXIT44280现均terminal0：1000.844s/native56calls/
+grok-4.7-build/highflag，无fallback；Owner21保护hash/原快照exact，重开
+163独特引文及118 typed事实/SQL状态：零冲突/错误，仍candidate，不采用/不切current。
+fresh C03只读whole118已单派90934/PID73403/NOTE_EXIT90784，实际路线须终态
+收receipt；峰段同Grok不同transport不作独立意见，改用既有批准末项Pi/
+openai-codex/gpt-6.1-sol:high，记录初始化别名C01→正确C03、均未启动旧角色。
+不提供执行者私人推理/旧定向审阅。日期资格与public-by/earliest-date区分主动挑战。
+
+Owner B筛选同族2RED→28相关PASS1.38s，首次相关批错误文件名导致NOT_RUN，
+非产品失败/非PASS；修的是命令路径。展开筛选用本区全部宽度，420px/42vh
+原生可滚动region，全部按钮/键盘/字体16保留；无overflowhidden或伪零。
+普通B-only预览v2 104页/1505事实/全部持久文件保持；62111terminal0，未切current。
+Ego原2/p1四宽11909一次实际原生验收进行中；已有v1真实FAIL/图均保留。
+
+current30阅读/同版分享与复盘a667305cff3cbe70258180b6b4a040cc31d4cdb7已push，
+远端逐HEAD核对。继续既有Owner+隔离E08执行：B问题矩阵全部相关研究保留
+在DOM与query，只有本问题没有任何列匹配的行原生checkbox折叠；真实0值、
+清除/null有记录的行不折叠。全问题列决定匹配，不让当前分页改变研究类别；
+未知研究事实仍可检索。无需新query状态/配置框架，checkbox与已有观察区
+展开同属暂态阅读。3RED→七相关文件26PASS1.28s，具名Ruff/JS syntax。
+正常B-only普通renderer预览104页，1505当前事实/全部持久文件保持，未切current/
+未编辑事实。四宽checkbox/真实Space键/来源/Esc/筛选22159一次terminal0，20态/0FAIL；
+真实46DOM研究/默认3匹配/原生展开46/Space回3，32事实及科学frame/表格完整。
+Owner已看1440/2560默认矩阵，关闭无匹配43行占屏根因；1920筛选面板展开
+仍过高、空白较大，记录为后续有界布局问题，不签全部审美或借预览证明current。
+worker38985与NOTE_EXIT44280仍仅等终态，不读在途文件；current30不变，待
+worker输入保全核验和新B候选实屏之后才决定正常B-only呈现。
+
 ## 当前动作：30实屏与Publication隔离接通（持续，非暂停）
 
 继续execution-plus-conference：Owner负责单一current/用户事实/实际Ego页面；

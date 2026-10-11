@@ -1,0 +1,218 @@
+{
+  "schema_version": "1007-current31-reading-sharing-publication-1",
+  "state": "SCOPED_B_READING_SHARING_AND_PUBLICATION_CONTEXT_CLOSED_NOT_RC",
+  "parent_commit": "a667305cff3cbe70258180b6b4a040cc31d4cdb7",
+  "revision": 31,
+  "report_revisions": {
+    "A": 30,
+    "B": 31,
+    "C": 30
+  },
+  "generation": "16a5fbb6c99e36b7578ad51280e2fb4b7da23c64cfed27eb73c846974d968dfa",
+  "unchanged": {
+    "facts": 1505,
+    "science_user_tables": 7,
+    "historical_files": 15341,
+    "A_C_report_deliveries": true
+  },
+  "proofs": {
+    "rebuild": {
+      "path": ".artifacts/1007-b-disclosure-current31-v1/verified.json",
+      "sha256": "b87ed58668c9d33485790208f170cc805dce6f58ef0694c0d1188ad4be71997e",
+      "state": "CURRENT31_B_ONLY_COMMITTED_NOT_PRODUCT_OR_SCIENCE_ACCEPTANCE"
+    },
+    "browser": {
+      "path": ".artifacts/1007-b-current31-native-qa-v1/actual.json",
+      "sha256": "98943eb371eef109789445a572216447b7942e223518e6f898700c90c443d910",
+      "state": "ACTUAL_CURRENT31_B_READING_AND_NATIVE_CONFIG_PASSED_OWNER_PIXELS_PENDING"
+    },
+    "shares": {
+      "path": ".artifacts/1007-current31-shares-v1/verified.json",
+      "sha256": "396e416697f37e15867777dd6998c7888553d8ad1fb62aa6684d8815c71e6a1f",
+      "state": "CHANGED_B_AND_JOINT_CURRENT_SHARES_MOVED_HASH_VERIFIED_NOT_BROWSER_ACCEPTED"
+    },
+    "offline": {
+      "path": ".artifacts/1007-current31-shares-v1/offline-actual-v1.json",
+      "sha256": "9f3e91830de2d7b4c50c76ab6765f77990be4a4b448532d0ebd3d877257af885",
+      "state": "FOUR_MOVED_OFFLINE_CURRENT31_ENTRIES_DEDICATED_PROFILE_AND_SOURCE_DISCLOSURES_PASSED"
+    },
+    "context_v5": {
+      "path": ".artifacts/1007-publication-context-v5/verified.json",
+      "sha256": "0b9fb95baaae7b4c41e2a96b690bdb80fa8acf7d7edd07f79be8d91979212beb",
+      "state": "CONTEXT_REPAIRED_HOLDING_NOT_ACCEPTED_OR_CURRENT"
+    },
+    "quality31": {
+      "path": ".artifacts/1007-current31-quality-gate-v1/result.json",
+      "sha256": "8bcf3f3d5c925f2a630f56a5f68ba8734db5c3c1e0864e892f2a7385847762ad",
+      "log_sha256": "aafe583de2ec8515236f44ac53700c1f9de2e176b12046bc0c70551a75c7a463",
+      "returncode": 0,
+      "source_set_unchanged": true,
+      "state": "QUALITY_ONLY_PASSED"
+    }
+  },
+  "screenshots": [
+    {
+      "path": ".artifacts/1007-b-current31-native-qa-v1/B-filtered-1440.png",
+      "sha256": "c3ee86a95867685e85462ba523816fda12f2cbe787efb422b0bd6e460005b647"
+    },
+    {
+      "path": ".artifacts/1007-b-current31-native-qa-v1/B-filtered-1600.png",
+      "sha256": "b8e7731791acb30548b47d7c7e9cb8c90a957088ce532523895d5be9983c7d15"
+    },
+    {
+      "path": ".artifacts/1007-b-current31-native-qa-v1/B-filtered-1920.png",
+      "sha256": "3413150faa2fc68af81cb825867d6894421f8ffb67902937e572caae45537218"
+    },
+    {
+      "path": ".artifacts/1007-b-current31-native-qa-v1/B-filtered-2560.png",
+      "sha256": "4b9abd1c7edcf23d545f4d318542087bc08e0c1fc434b45c6c1ad13c82a6d6f9"
+    },
+    {
+      "path": ".artifacts/1007-b-current31-native-qa-v1/B-matched-1440.png",
+      "sha256": "d87dc867211e69b6abae3994d91b94e7615a71d8b91a707bf0e60f28f0f96a92"
+    },
+    {
+      "path": ".artifacts/1007-b-current31-native-qa-v1/B-matched-1600.png",
+      "sha256": "0f6329cf02907c5ffb95b29f8cf5a5c015bce0474c3ce9517becca7b00891649"
+    },
+    {
+      "path": ".artifacts/1007-b-current31-native-qa-v1/B-matched-1920.png",
+      "sha256": "7b54ddca7376ac26eea9fd82fe004be4cac7ef8763f7f3e721d99e637f5fd707"
+    },
+    {
+      "path": ".artifacts/1007-b-current31-native-qa-v1/B-matched-2560.png",
+      "sha256": "42af24949fcc64ee3c21c88e2e6f8d793d2143a2034630a9b2e2bf2c97d779d4"
+    },
+    {
+      "path": ".artifacts/1007-b-current31-native-qa-v1/B-source-1440.png",
+      "sha256": "f693efb59902f2178f2e7f33738923bfb35edefea6052d578e1b689bdbd80be4"
+    },
+    {
+      "path": ".artifacts/1007-b-current31-native-qa-v1/B-source-1600.png",
+      "sha256": "da9a6a846e61c770bde45e388da261b2088f7e23f7c0066fbd6ae1834d779886"
+    },
+    {
+      "path": ".artifacts/1007-b-current31-native-qa-v1/B-source-1920.png",
+      "sha256": "b0014fef095777ba732f8b93b9897007f9a74ea3225389ca0de4a1fc62aa332c"
+    },
+    {
+      "path": ".artifacts/1007-b-current31-native-qa-v1/B-source-2560.png",
+      "sha256": "7a7afd17337e694d1f30d97e03cca7c7d7120d9cc987733028cdb739545faa79"
+    },
+    {
+      "path": ".artifacts/1007-current31-shares-v1/offline-ABC-A-r31.png",
+      "sha256": "7bf95ab6ab11e2a242f9baa0c728b8743669334ddb9472dded8b64c40683fdfc"
+    },
+    {
+      "path": ".artifacts/1007-current31-shares-v1/offline-ABC-B-default-panels-r31.png",
+      "sha256": "c9606d00ee8b7bd2c6c22f14d394710b9c7d5f0156957d8cd1e0d22d7a4d0d3f"
+    },
+    {
+      "path": ".artifacts/1007-current31-shares-v1/offline-ABC-B-r31.png",
+      "sha256": "4b6e6879ebbfc6f33b9d927afeca23607bc06928e2f57683e0e1d693aef08397"
+    },
+    {
+      "path": ".artifacts/1007-current31-shares-v1/offline-ABC-C-r31.png",
+      "sha256": "33f18b24d2f37d3152ca4e2aa9a51e37ec99b529487e21c673a947f9811eed6a"
+    },
+    {
+      "path": ".artifacts/1007-current31-shares-v1/offline-B-B-default-panels-r31.png",
+      "sha256": "c9606d00ee8b7bd2c6c22f14d394710b9c7d5f0156957d8cd1e0d22d7a4d0d3f"
+    },
+    {
+      "path": ".artifacts/1007-current31-shares-v1/offline-B-B-r31.png",
+      "sha256": "4b6e6879ebbfc6f33b9d927afeca23607bc06928e2f57683e0e1d693aef08397"
+    }
+  ],
+  "assets": {
+    "src/ci_workflow/renderers/portal/assets/report-b.css": "82bb0a16c7ed457e7273add8d8eff57243ca2950781f92d817d4aac745ada4e7",
+    "src/ci_workflow/renderers/portal/assets/report-b.js": "729ac20d4c28e48d014a1d2d47f1611f72c4806b59ff77e7dd1f9c80e25bcb19",
+    "src/ci_workflow/renderers/portal/templates/b/page.html.j2": "455d156cb79d0c6e26f389dc28c8f761b9ce2aef8ebba8f7b9cc6d5836cb597e"
+  },
+  "exports": [
+    {
+      "archive": "current31-B.zip",
+      "archive_sha256": "15d2537c874fa8fac671d2903f78da181e98b82c067f20155c646e78aa93d799",
+      "generation_sha256": "16a5fbb6c99e36b7578ad51280e2fb4b7da23c64cfed27eb73c846974d968dfa",
+      "manifest_sha256": "e4b2d056a63ebd7df019cbd4dc48735aa7e5efad1afcf7754fdd4709288a9b4e",
+      "members": 381,
+      "moved_root": "moved-B",
+      "reports": [
+        "B"
+      ]
+    },
+    {
+      "archive": "current31-ABC.zip",
+      "archive_sha256": "67c9c49f8f714fed839353cfc13029c254c30c3f649fd6263a476416a0ca9f45",
+      "generation_sha256": "16a5fbb6c99e36b7578ad51280e2fb4b7da23c64cfed27eb73c846974d968dfa",
+      "manifest_sha256": "1ede82aee5c35e4984461e73a052044fbd70de141fe652f20da5aba22a51cb6b",
+      "members": 480,
+      "moved_root": "moved-ABC",
+      "reports": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ],
+  "browser": {
+    "widths": [
+      1440,
+      1600,
+      1920,
+      2560
+    ],
+    "states": 16,
+    "failures": 0,
+    "query": "32 facts/3 matched studies,46 total/43 revealable unmatched; real filter2/1 and restore; nativePageDown/source/Escape/config download and distinct import",
+    "owner_pixels": [
+      "B-matched-2560.png (tool display resized2048; source2560 retained)",
+      "B-source-1440.png",
+      "offline-B-B-default-panels-r31.png",
+      "offline-ABC-C-r31.png"
+    ],
+    "all_aesthetic": "NOT_ACCEPTED"
+  },
+  "sharing": {
+    "changed_exports": [
+      "B",
+      "ABC"
+    ],
+    "offline_entries": 4,
+    "failures": 0,
+    "network_restored": true,
+    "profile_reused_from_current28": true,
+    "fresh_browser": false,
+    "unchanged_A_C_individual_packages": "current30 proof retained, not rerun",
+    "config_binding": "actual B31 download + unchanged A30/C30 downloads, each report revision validated"
+  },
+  "publication": {
+    "candidate_v5": "578fcebd10f55240eeb26c5cb204572561eecb735372a583b391ea00317d49be",
+    "facts": 118,
+    "unchanged_full_objects": 117,
+    "changed_context": 1,
+    "references": 1271,
+    "unique_locators": 167,
+    "gaps": 22,
+    "whole_review": "REVISE; original methods missing",
+    "same_session_review": "context-only ACCEPT after exact4continuations; no full re-extraction",
+    "fact_adoption": false,
+    "native_v5_ingestion": false,
+    "historical_eligibility": "NOT_ACCEPTED",
+    "user_decision": "2026-10-11 fact-version public-by evidence; earliest date may be unknown; verify publication/correction scope; acquisition not backdated",
+    "version_research": "E07 single launch76969/PID78602/NOTE_EXIT94872, PENDING, no polling"
+  },
+  "failures_preserved": [
+    "preview v2 Control+End four native scroll FAIL; actualPageDown fixed instrument only, previewv3 same bytes28statesPASS",
+    "share v1 B export succeeded then stale revision30 assertion FAIL; recovery exports only missing ABC, existingB archive hash verified, no replay",
+    "targeted C03 preflightFAIL prematurely launched; actual readonly verified, process defect retained, no formal governancePASS",
+    "v5 copyright node unsupported by clinical extractor; use exact metadata ET proof, not clinical atomic fact; incorrect singlearticle root assumption failed before output"
+  ],
+  "limits": [
+    "not all physical pages/cross-browser",
+    "not complete source/universe/MAH/required publications",
+    "not24portals/threehosts/Skill fresh install/recovery/RC",
+    "controlled local raw artifacts required; compact hashes do not replace accessible sources"
+  ],
+  "next": "Single development gate31 terminal0/source-set unchanged; scoped Git then E07 version-evidence original terminal before minimal fact cutoff wiring."
+}

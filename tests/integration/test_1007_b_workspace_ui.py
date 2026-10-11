@@ -25,7 +25,8 @@ class Node {
 }
 const lookup={};
 ['[data-comparison-column]','[data-comparison-prev]','[data-comparison-next]',
- '[data-comparison-status]','table','thead','tbody'].forEach(k=>lookup[k]=new Node());
+ '[data-comparison-status]','[data-comparison-unmatched-count]',
+ 'table','thead','tbody'].forEach(k=>lookup[k]=new Node());
 const host=new Node();
 const rows={a:{trial_id:'trial-a',value:0,unit:'%',product_zh:'<script>bad</script>',arm:'治疗组'},
  b:{trial_id:'trial-b',value:50,unit:'%',arm:'治疗组'},
@@ -62,6 +63,12 @@ sandbox.renderComparisonWorkspace({});
 assert.equal(lookup['[data-comparison-column]'].value,'efficacy::easi75');
 assert.equal(lookup['[data-comparison-column]'].options.length,2);
 assert.equal(host.hidden,false);assert.equal(lookup.tbody.children.length,4);
+assert.deepEqual(JSON.parse(host.dataset.matchedStudyIds),['trial-a','trial-b','trial-c']);
+assert.deepEqual(JSON.parse(host.dataset.unmatchedStudyIds),['trial-no-results']);
+assert.equal(lookup['[data-comparison-unmatched-count]'].textContent,'1');
+assert.equal(lookup.tbody.children[3].className,'kz-b-comparison-unmatched');
+assert.ok(lookup.tbody.children.slice(0,3).every(n=>n.className!=='kz-b-comparison-unmatched'),
+ 'zero and user-cleared source observations remain matched, not empty or omitted');
 assert.equal(sandbox.document.body.dataset.comparisonView,'comparison');
 assert.equal(lookup.thead.children[0].children.length,5); // four columns plus study
 function text(node){return [node.textContent||'',...node.children.map(text)].join('|');}
@@ -83,9 +90,13 @@ assert.equal(seen.size,9);assert.equal(lookup['[data-comparison-next]'].disabled
 assert.equal(new URL(url).searchParams.get('cmp_page'),'3');
 state={trial:'trial-b'};sandbox.renderComparisonWorkspace(state);
 assert.equal(lookup.tbody.children.length,1);assert.match(text(lookup.tbody),/ARCADIA｜NCT04501666/);
+assert.deepEqual(JSON.parse(host.dataset.matchedStudyIds),['trial-b']);
+assert.deepEqual(JSON.parse(host.dataset.unmatchedStudyIds),[]);
 assert.equal(currentGroups.length,1);assert.equal(currentGroups[0].rows[0].row_id,'b');
 state={trial:'no-match'};sandbox.renderComparisonWorkspace(state);
 assert.equal(lookup.tbody.children.length,0);assert.equal(JSON.parse(host.dataset.queryRowIds).length,0);
+assert.deepEqual(JSON.parse(host.dataset.matchedStudyIds),[]);
+assert.deepEqual(JSON.parse(host.dataset.unmatchedStudyIds),[]);
 state={};sandbox.renderComparisonWorkspace(state);assert.equal(lookup.tbody.children.length,4);
 // Matrix question columns may contain multiple incompatible scientific frames.
 // They must reach their own linked charts, never turn into one invented frame.

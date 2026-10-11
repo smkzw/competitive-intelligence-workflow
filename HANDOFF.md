@@ -1,27 +1,21 @@
 # 唯一接手入口｜1007V1连续实施，非暂停、非RC
 
-当前状态：[STATUS顶节](packets/2026-09-22-sol-delivery/STATUS.md)；详细恢复台账：[当前操作与证据](packets/2026-09-22-sol-delivery/evidence/1007V1/current23-owner-operations-v1.json)。最新历史暂停：[current21暂停交接](docs/handoffs/PAUSE_HANDOFF_20261010_current21.md)，已由用户明确恢复，历史内容不改。
+唯一当前状态：[STATUS顶节](packets/2026-09-22-sol-delivery/STATUS.md)；[详细可恢复台账](packets/2026-09-22-sol-delivery/evidence/1007V1/current23-owner-operations-v1.json)；[current31精简证据](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-current31-reading-sharing-publication-v1.json)。历史暂停[current21](docs/handoffs/PAUSE_HANDOFF_20261010_current21.md)已由用户恢复，历史内容不改。
 
 ## 最新实际结果
 
-- HEAD/origin `5e41e72592864d9a0c1dd3ed08807b7588970b8f`，保存链/时间窗修复与复盘已递交GitHub。
-- 当前30=A30/B30/C30/1505，generation `8e8572ec10cd1a5eee4a41694deb62dcea91de9ad0e5134bf60cc01ddc74fdaf`。正常纯呈现重建40348已终态；事实/七张科学用户表/14856历史文件保持不变，proofca480418。旧28/29及失败保留，不拼成30通过。
-- TESAE原来源2/N77保留；真实修改→撤销→清除→恢复四次UI已完成，不重跑。当前2是用户恢复层，不冒充新的独立科学采纳。
-- 共享几何执行终态，底层模型未知如实记录；Owner合并29相关PASS。实际四宽32事实/3研究→筛后2/1→恢复32/3及展开/来源/Esc共12态完成，proof1017a641。
-- Owner实看28矩阵/密集/稀疏/展开：一字一行根因已关，稀疏横向留白及重复小卡仍须收口，不签全审美。九图审阅21359/NOTE_EXIT77421均终态0，未轮询或重派。
-- 当前三个配置原生下载/换视图后导入通过，四份正常分享包/移动/成员hash通过。专用新Profile3/space11/p1六入口真断网91187 terminal0、零失败、网络恢复，proof0b35f60e；Owner实看A/B/C像素。没有导入、登录、清缓存，不借此签新代码或Skill安装。
-- 独立28审阅已终态REVISE：实际Pi/Gemini3.8flash高努力324.388s/91tools/no fallback；报告c19bddfa。Owner拒绝其未经来源证明的N78示例与自动共轴建议，保留TESAE原N77。密度族7RED→30相关PASS；29四宽98450真实FAIL揭示后置等优先级card规则覆盖。新增一根因RED→31相关PASS，单一span变量修复；30四宽28483 terminal0/12态/零FAIL，proof658bfc60，Owner实看四宽代表像素。仅关闭文字/卡宽根因，不签全部视觉/科学。
-- 冻结29质量门73564 terminal0：Ruff/strict286/1185活跃/20兼容/7分层/旧路径字面检查，source_set不变，proofcfd9c5b1；不覆盖30后改CSS/测试，更不是发布门。30三个配置恢复/四份生产分享/复用Profile3六入口真断网73724均terminal0、0FAIL、网络恢复，proof408327a9；不称新浏览器。精简证据：[current30](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-current30-reading-sharing-v1.json)。
-- 一次新配方相对路径误建落入默认旧目录；用户明确批准后仅核该文件为regular/non-symlink且与英文配方hash完全一致，5380bytes/bbd15bc5，移至英文.artifacts/1007-relative-path-recovery-v1/受控留存。无旧目录遍历或其他读写/删除；正确配方后续全部绝对路径。用户同时批准同类明确误放恢复；旧工程整体清理仍需确认未来无用，不据此立即删除历史。
+- 上批实际HEAD/origin a667305cff3cbe70258180b6b4a040cc31d4cdb7。本批候选31=A30/B31/C30/1505，generation16a5fbb6c99e36b7578ad51280e2fb4b7da23c64cfed27eb73c846974d968dfa。正常B-only已终态，1505事实/七科学用户表/15341历史文件/A和C交付对象不变。
+- B默认3匹配研究而非43空行占屏；全部46可达，未知/零/清除不混淆。筛选面板原生可滚动、16px字体、键盘/最后选项可达。28相关PASS；preview v2键盘仪器四FAIL保留，同源码v3 PageDown28态PASS。当前31四档宽屏16态与B31配置下载/异视图导入通过，来源/Esc实际回焦。
+- B31和联合ABC正常分享与移动目录逐hash核验；专用Profile3/space11复用四入口真断网通过，网络恢复。当前修订、清除/原值和配置保持；不是新环境/全前端/Skill安装验收。A/C单包未改，保留30证据。v1导出旧版本断言失败后复用已成功B，只补联合包，不重跑。
+- Publication原生118候选技术摄取E08已终态；whole118独立C03先REVISE，v5只补混合摘要四方法上下文，同会话针对性复核context-only ACCEPT。118raw/ID与117对象不变，22缺口保留；不是事实采用/历史日期/当前门户接受。follow-up preflightFAIL被Owner误启动，事后只读/身份/来源核验并留流程缺陷，不改历史或冒称治理通过。
+- 用户2026-10-11已明确：论文按具体事实版本截止前公开证据核发表及更正，最早公开日可未知；现行PRD/DESIGN/验收已更新。当前118版本资格未证实，Oct7 cutoff未改，晚取得原文不能倒证。
 
 ## 下一条有界动作
 
-30同代配置/修订/原源/来源回焦已闭合，白名单Git/复盘；并行Publication118 holding→隔离typed摄取有界E08，仅新配方/目录，runner38985/PID69111、NOTE_EXIT44280，只等终态不轮询/重派。科学采用需新的冻结独立复核。下一B矩阵空缺行/时间对齐、来源/MAH/Publication/宇宙/24/三宿主继续，不重跑终态源/save/旧安装/旧分享。
+1. 单次开发宽门92617已terminal0/source-set未变，Ruff/strict286/1185活跃/20兼容/7分层/字面旧路径全部通过，非发布门；精简证据/复盘白名单commit与真实push。
+2. 新E07版本检索已单派76969/PID78602，kernel NOTE_EXIT94872只收终态；Pi/Gemini3.8flashhigh请求路线，实际身份待真实receipt。只新隔离公开metadata/correction资料，不重复全文提取、不改source/current。无进度轮询或延迟重派。
+3. Owner依据具体事实版本证据接通最小截止门成族测试；证据不足事实继续holding，不填首次日期或改cutoff。随后必需论文、身份/中国MAH集团、竞品宇宙、正向比较及24/宿主/恢复按原W00–W10继续。
 
-后续纯B呈现迭代先用现有正常builder验证受影响候选/像素，再正常B-only重建；不为每处样式重建ABC或重复全仓门，不新建执行器。共享几何影响A/C时按真实依赖验收。独立28 REVISE与29 FAIL不改PASS；无总体视觉/RC声明。
+当前editor原33778/PID49138/53802；Ego2/p1实页和专用11/p1离线分享分开。不要等待旧PID或重跑完成的19接受/3989采用/886登记/795刷新/TESAE四次save/旧current/旧分享。只英文工程显式cwd和绝对patch；五用户修改、未知历史和唯一恢复资料保护。旧中文工程不接触；未来整体清理须确认无保留/恢复需要。
 
-当前editor49138/session33778/53802。既有实页空间2/p1与独立分享空间11/p1分开；不要等待或重启旧PID。英文工程唯一可操作根；五项用户变更/未知历史/原生日志/唯一恢复材料保护，旧中文根零接触。
-
-完整竞品宇宙、Publication、MAH/集团、动态状态、科学正向横比、全部页面/跨浏览器、24真实门户、三宿主、安装/恢复及RC仍未全部完成。Goal实查active，继续实施，不自发暂停或输出最终交付信号。
-
-[前入口原样归档](docs/handoffs/HANDOFF_archive_20261011_before_current28.md)；[本批已递交复盘](reviews/ci_1007_current27_save_retrospective_20261011.md)。历史PENDING/旧下一不能替代本入口。
+[前入口原样归档](docs/handoffs/HANDOFF_archive_20261011_before_current28.md)。全部科学/产品/跨浏览器/24门户/三宿主/安装恢复/RC尚未完成，不输出冻结或最终交付信号；继续实施。

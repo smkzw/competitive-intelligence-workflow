@@ -8,6 +8,15 @@
 .kz-b-comparison-table th, .kz-b-comparison-table td { min-width: 180px; max-width: 420px; padding: 10px 12px; vertical-align: top; text-align: left; border-bottom: 1px solid var(--b-line); overflow-wrap: anywhere; }
 .kz-b-comparison-table th:first-child { width: clamp(180px, 18vw, 280px); min-width: 150px; }
 .kz-b-comparison-table button { display: block; width: 100%; margin-block: 6px; padding: 6px; text-align: left; font: inherit; color: inherit; background: var(--b-soft); border: 1px solid var(--b-line); border-radius: 6px; cursor: pointer; }
+.kz-b-unmatched-control { display: flex; align-items: center; gap: 6px; margin-block: 6px; color: var(--b-muted); font-size: 16px; cursor: pointer; }
+.kz-b-unmatched-control input { width: 20px; height: 20px; margin: 0; accent-color: var(--b-orange-text); }
+.kz-b-unmatched-control input:focus-visible { outline: 3px solid var(--b-orange); outline-offset: 2px; }
+/* Native transient reading disclosure, like the existing observation window.
+   Unsupported selectors retain every row; no facts or query IDs are removed. */
+@supports selector(:has(*)) {
+  .kz-b-comparison-unmatched { display: none; }
+  .kz-b-comparison-workspace:has([data-comparison-unmatched-toggle]:checked) .kz-b-comparison-unmatched { display: table-row; }
+}
 .kz-b-study-panel { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px; grid-column: 1 / -1; min-width: 0; padding: 12px; border: 1px solid var(--b-line); border-radius: var(--b-radius); background: var(--b-surface); }
 .kz-b-study-panel > h3 { grid-column: 1 / -1; margin: 0 0 4px; overflow-wrap: anywhere; }
 .kz-b-study-panel__note { grid-column: 1 / -1; margin: 0; color: var(--b-muted); font-size: 16px; }
@@ -30,6 +39,7 @@
   .kz-b-site[data-comparison-view="comparison"] .kz-b-main > [data-comparison-disclosure] { grid-column: 1; margin: 0; }
   .kz-b-site[data-comparison-view="comparison"] .kz-b-main > .kz-b-filter-bar { grid-column: 2; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; margin: 0; }
   .kz-b-site[data-comparison-view="comparison"] .kz-b-filter-bar > details { margin: 0; }
+  .kz-b-site[data-comparison-view="comparison"] .kz-b-filter-bar > .kz-b-filter-panel[open] { grid-column: 1 / -1; }
 }
 
 :root {
@@ -314,6 +324,11 @@ body {
   box-shadow: none;
   gap: 14px;
   padding: 14px;
+  /* Bound the selector, not its contents: all options stay keyboard reachable. */
+  max-height: min(420px, 42vh);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scroll-padding-block: 8px;
 }
 
 .kz-b-personal {

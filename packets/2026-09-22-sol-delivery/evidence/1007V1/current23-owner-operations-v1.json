@@ -1,8 +1,29 @@
 {
   "state": "CONTINUOUS_IMPLEMENTATION_NOT_RC",
   "latest_current": {
+    "revision": 31,
+    "report_revisions": {
+      "A": 30,
+      "B": 31,
+      "C": 30
+    },
+    "generation": "16a5fbb6c99e36b7578ad51280e2fb4b7da23c64cfed27eb73c846974d968dfa",
+    "head_origin_before_batch": "a667305cff3cbe70258180b6b4a040cc31d4cdb7",
+    "receipt": "owner-current31-reading-sharing-publication-v1.json",
+    "rebuild": "21919 terminal0 B-only;1505publicfacts/seven tables/15341historical/A+C exact,b87ed586",
+    "browser": "27107 terminal0,four widths16states/filter2/1 restore32/3/source+Esc/nativeB31config;previewv2ControlEndFAIL retained,same-sourcev3PageDown28PASS",
+    "sharing": "v1B export terminal success then stale assertionFAIL; recovery68608 reusesB,onlyABCexport; Ego83219 four moved trueoffline0fail networkrestored9f3e9183. ReusedProfile3; unchangedA30/C30 configs andindividual packages scoped retained, not six-entrynewgenerationclaim.",
+    "quality": "31 sixstep gate92617 terminal0/source-setexact,Ruff/strict286/1185active/20compat/7layer/lexical,8bcf3f3d,no releaseclaim",
+    "publication": "isolated118native E08 terminal technicalonly;freshC03 whole118REVISE, targetedv5same-sessioncontext-onlyACCEPT,22gaps. Followup preflightFAIL premature launch preserved. Usernewfact-versionpublic-bydecision approved, currentdates/adoption stillunproven.",
+    "next": "E07versionmetadata76969/PID78602/NOTE_EXIT94872 onlyterminal,preflightPASS. Owner scopingGit and gate31; fact-levelqualification after provenevidence then originalW universe/MAH/requiredpublication/24/hosts/recovery. No voluntary pause/RC."
+  },
+  "historical_current30": {
     "revision": 30,
-    "report_revisions": {"A": 30, "B": 30, "C": 30},
+    "report_revisions": {
+      "A": 30,
+      "B": 30,
+      "C": 30
+    },
     "generation": "8e8572ec10cd1a5eee4a41694deb62dcea91de9ad0e5134bf60cc01ddc74fdaf",
     "head_origin_before_batch": "5e41e72592864d9a0c1dd3ed08807b7588970b8f",
     "receipt": "owner-current30-reading-sharing-v1.json",

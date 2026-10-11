@@ -1,34 +1,39 @@
-# 唯一当前状态：1007V1连续实施｜current30阅读与同版分享局部闭合，非RC
+# 唯一当前状态：1007V1连续实施｜current31 B阅读/分享及论文上下文局部闭合，非RC
 
-最新已push HEAD/origin5e41e725；本批白名单提交待完成，不代表整体交付。
-正常current30=A30/B30/C30/1505，generation8e8572ec10cd1a5eee4a41694deb62dcea91de9ad0e5134bf60cc01ddc74fdaf。
-30纯呈现40348terminal0，1505事实/七科学用户表/14856历史文件exact，proofca480418。
-29真实四宽98450 FAIL保留：后置等优先级规则把内卡压窄，不放宽验收。
-嵌套grid新增1RED→整批31相关PASS1.03s；统一span变量，保持字体/来源/数值语义。
-30四宽28483 terminal0/12态/无FAIL，32/3→2/1→32/3；表格/科学frame/来源/Esc/展开全部实测。
-Owner实看四宽代表像素，proof658bfc60；关闭竖字与卡宽根因，不签全前端审美。
-三个配置原生下载/异视图导入18612terminal0/proofdaa78fc3；四分享59307terminal0/proof71fa371c。
-专用Profile3/space11/p1复用六入口真断网73724terminal0/0FAIL，网络恢复，proof408327a9。
-来源/清除原值/当前估计值/配置绑定同一代；未清缓存、登录或创建第四环境，不称新浏览器。
-Owner看B默认密集与C保存清除状态；详细小回执evidence/1007V1/owner-current30-reading-sharing-v1.json。
-29宽门73564已terminal0/source_set不变，Ruff/strict286/1185活跃/20兼容/7分层/字面旧路径检查。
-该开发门仅冻结29，不覆盖后改30CSS/新测试，更不证明产品/来源/24/宿主/RC。
-Publication118 holding→隔离typed摄取E08已单派38985/PID69111，NOTE_EXIT44280仅等终态；
-旧原文/当前项目只读，仅新配方与隔离目录，科学采用须冻结后独立复核。
-以下28是冻结前版证据，不继承为29通过：
-纯呈现重建terminal0，1505事实/七张科学用户表/13886历史文件不变；proof5d245bb3。
-新几何执行terminal0，actualPi/cursor/default底层模型未知，431.543s/210tools；
-有限CSS产物采用、guard auditPASS，不能称已验证具体模型。Owner合并29PASS。
-实际四宽32/3→2/1→32/3及原生展开/来源/Esc全部12态通过，proof1017a641；
-Owner直接看1440矩阵/密集/稀疏/展开，竖字根因已关，但稀疏留白和小卡重复仍开。
-冻结28九图21359/event77421均terminal0，实际Pi/Gemini3.8flashhigh324.388s/91tools，REVISE。
-三个当前配置原生导出/换视图后导入通过，四份正常分享包/移动/hash通过。
-已授权新专用Profile3/space11/p1无导入/登录/清缓存；六入口真断网91187 terminal0/0fail。
-proof0b35f60e、网络已恢复；Owner实看A/B/C分享像素，但不签新29/全部产品审美。
-相对路径误建已获用户授权，仅该regular/non-symlink且hash一致5380bytes文件移动回英文受控.artifacts；
-无旧目录遍历或历史删除。未来整体旧清理先确认无保留/恢复需要；所有新patch绝对路径。
-来源/完整科学/MAH/Publication/24门户/三宿主/RC未完成，无阶段性暂停。
-最新详细台账evidence/1007V1/current23-owner-operations-v1.json；编号是历史起点。
+上批实际push HEAD/origin a667305cff3cbe70258180b6b4a040cc31d4cdb7；本批待白名单递交。
+当前31=A30/B31/C30/1505，generation16a5fbb6c99e36b7578ad51280e2fb4b7da23c64cfed27eb73c846974d968dfa。
+正常B-only21919 terminal0，1505事实/七科学用户表/15341历史文件及A/C交付对象exact，proofb87ed586。
+B空行与筛选滚动成族3RED/2RED→28相关PASS；所有46研究保留，默认3匹配/43可展开，
+真实0/null/清除记录不折叠。筛选region420px/42vh、字体16，原生PageDown与最后选项可达。
+preview v2原Control+End四FAIL保留，v3同源码28态0FAIL；不改产品掩盖仪器失败。
+当前31真实Ego27107 terminal0，四档1440/1600/1920/2560共16态：32/3→2/1→32/3，
+来源/实际Esc回焦/原生B31配置下载及异问题导入恢复。Owner看当前矩阵/来源与离线B/C，
+2560原截图仍保存，工具展示自动缩至2048，不伪称逐原像素全审美。
+B31与联合ABC生产分享终态；v1仅B导出成功后旧revision30断言FAIL，恢复68608只导缺少ABC，
+不重放B。移动后逐文件hash和当前generation/报告各自revision绑定核验。
+Ego83219专用Profile3/space11复用四入口真断网/0FAIL，原修订/清除/来源/Esc/配置保持，
+网络恢复，proof9f3e9183。不称新浏览器；A/C未改独立包保持30证据，不重复全套ABC。
+详细精简新回执：evidence/1007V1/owner-current31-reading-sharing-publication-v1.json。
+开发31六步宽门92617单次terminal0/source-set未变：Ruff、strict286、1185活跃/20兼容/7分层、字面旧路径检查通过；不是来源/产品/宿主/24/RC门。
+
+Publication隔离E08原38985已terminal0/nativegrok-4.7-build56calls1000.844s，技术接受非采用。
+fresh C03 whole118原90934 terminal0，actualPi/openai-codex/gpt-6.1-sol/high/467.714s93tools，
+REVISE指出混合摘要缺OC/救援/缺失方法；v5仅补4精确上下文，118raw/ID及117对象不变，
+1271引用/167独特定位，保留20旧缺口另加版权更正范围与44vs43限制，共22。
+same-session38068/NOTE_EXIT68120均terminal0，157.893s20tools/context-only ACCEPT，
+无新原生摄取、科学采用、历史资格或current。follow-up preflightFAIL仍被Owner误启动：
+实际只读/身份/产物事后核验；流程缺陷如实保留，不签全治理通过，也不回填旧prompt。
+2026-10-11用户Ask已裁决：按所用事实版本的截止前公开证据核发表/更正，最早公开日可未知。
+已落PRD/DESIGN/G03-PV；下载晚于cutoff不能倒证，不改Oct7截止，不直接采用118。
+新E07版本证据限定检索76969/PID78602/NOTE_EXIT94872单派，preflight修正文档与指令引用
+分层后PASS且exit0才launch；请求批准Pi/Gemini3.8flashhigh，实际身份待终态，不轮询/重提全文。
+来源完整宇宙/MAH/Publication/真正科学正向横比/全部物理页跨浏览器/24门户/三宿主/
+Skill安装恢复/RC仍未完成。Goal沿既有active；无阶段性暂停，不输出总体交付信号。
+
+旧28/29/30、失败和原来源/论文/快照均保留，终态save/source/current不重跑。
+旧中文工程不接触；同类误放恢复已获授权，整体清理仍需确认不再有保留/恢复需要。
+所有命令显式英文cwd，所有patch绝对路径，五用户改动及未知历史保护。
+恢复台账evidence/1007V1/current23-owner-operations-v1.json是历史起点编号，不限制当前31。
 
 ## 前一批current27（历史；旧在途已由顶节替代）
 

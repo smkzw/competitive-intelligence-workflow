@@ -191,13 +191,23 @@
       heading.appendChild(th);
     });
     head.appendChild(heading);
-    var retained = 0, displayed = Object.create(null);
+    var retained = 0, displayed = Object.create(null), matchedStudies = [], unmatchedStudies = [];
     window.__COMPARISON_QUERY__.studyIds(workspace.study_ids, columns, allowed).forEach(function (studyId) {
       var hasQueryRows = workspace.membership.row_ids.some(function (id) {
         return allowed[id] && rowById[id] && String(rowById[id].trial_id || "study-identity-unresolved") === studyId;
       });
       if (constrained && !hasQueryRows) return;
       var tr = document.createElement("tr"), label = document.createElement("th");
+      // A row without a selected-question fact is a reachability disclosure,
+      // not evidence of zero or non-publication. Keep the full related set in
+      // the DOM and preserve all matched null/cleared observations. Use all
+      // question columns so pagination cannot reclassify a matching study.
+      var hasQuestionRows = allColumns.some(function (column) {
+        return (column.cells[studyId] || []).some(function (id) { return allowed[id] && rowById[id]; });
+      });
+      tr.dataset.studyId = studyId;
+      (hasQuestionRows ? matchedStudies : unmatchedStudies).push(studyId);
+      if (!hasQuestionRows) tr.className = "kz-b-comparison-unmatched";
       label.scope = "row"; label.textContent = studyId === "study-identity-unresolved" ?
         "研究身份待核" : (workspace.study_labels || {})[studyId] || studyId;
       tr.appendChild(label); retained += 1;
@@ -221,6 +231,10 @@
       });
       body.appendChild(tr);
     });
+    host.dataset.matchedStudyIds = JSON.stringify(matchedStudies);
+    host.dataset.unmatchedStudyIds = JSON.stringify(unmatchedStudies);
+    var unmatchedCount = host.querySelector("[data-comparison-unmatched-count]");
+    if (unmatchedCount) unmatchedCount.textContent = String(unmatchedStudies.length);
     var comparisonGroups = fullChartGroups.filter(function (group) {
       return columns.some(function (column) {
         return (column.scientific_facet_ids || [column.id]).indexOf(group.scientific_group_id) !== -1;
@@ -229,9 +243,10 @@
       return Object.assign({}, group, {rows: group.rows.filter(function (row) {return allowed[row.row_id];})});
     }).filter(function (group) {return group.rows.length;});
     host.querySelector("[data-comparison-status]").textContent =
-      retained + "项研究；记录列 " + (allColumns.length ? offset + 1 : 0) + "–" + (offset + columns.length) + " / " + allColumns.length +
+      retained + "项相关研究；本问题匹配" + matchedStudies.length + "项，其余" + unmatchedStudies.length +
+      "项可展开；记录列 " + (allColumns.length ? offset + 1 : 0) + "–" + (offset + columns.length) + " / " + allColumns.length +
       "，本页" + Object.keys(displayed).length + "条事实，" + comparisonGroups.length +
-      "个科学条件分面。匹配当前问题的研究先列，其余保留；数值共轴资格另判。";
+      "个科学条件分面。全部相关研究保留；数值共轴资格另判。";
     window.__COMPARISON_QUERY__.recordScope(host, allowed, allColumns, Object.keys(displayed));
     host.dataset.columnIds = JSON.stringify(columns.map(function (column) {return column.id;}));
     if (window.__CHART_SYNC__ && window.__CHART_SYNC__.replaceGroups) {
