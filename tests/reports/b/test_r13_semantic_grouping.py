@@ -121,6 +121,30 @@ def test_time_units_convert_to_controlled_clinical_bands() -> None:
     assert around_week["time_window_band"] == "around_week_12"
 
 
+@pytest.mark.parametrize("timepoint", [
+    "Baseline, Week 4", "Baseline, Week 16", "Baseline, Week 24",
+    "Baseline; Week 12", "Screening, Day 28", "基线、第4周", "筛选；第28天",
+])
+def test_baseline_and_followup_visit_list_is_not_baseline(timepoint: str) -> None:
+    """Current23 source windows list baseline AND a later visit, not baseline only."""
+    from ci_workflow.renderers.portal.report_b import _time_band
+
+    band, label = _time_band(timepoint)
+    assert band not in {"baseline", "around_week_12", "around_month_6", "around_day_28"}
+    assert label != "基线"
+    assert any(digit in label for digit in ("4", "12", "16", "24", "28"))
+    assert "基线" in label or "筛选" in label
+
+
+def test_baseline_visit_lists_keep_exact_distinct_identity() -> None:
+    from ci_workflow.renderers.portal.report_b import _time_band
+
+    assert _time_band("Baseline, Week 4")[0] != _time_band("Baseline, Week 16")[0]
+    assert _time_band("Baseline, Week 4")[0] != _time_band("Week 4")[0]
+    assert _time_band("Baseline") == ("baseline", "基线")
+    assert _time_band("Screening") == ("baseline", "基线")
+
+
 def test_safety_keeps_original_event_identity() -> None:
     data = load_report_b_data(PNH_DATA)
     names = {row.id: row.name for row in data.products}

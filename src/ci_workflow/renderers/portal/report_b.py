@@ -965,10 +965,11 @@ def _time_band(value: Any, explicit_unit: Any = None) -> tuple[str, str]:
         r"\blast dose\b", text, re.I,
     ) and re.search(r"\b(?:from|through|until|up to)\b", text, re.I):
         return _unknown_semantic_key("dose_interval", text), _native_timepoint_zh(text)
-    # A baseline-anchored collection window is not the baseline visit. Retain
-    # exact interval identity; nearby single visits still use the time policy.
+    # A baseline-anchored collection window or visit list is not baseline only.
+    # Keep exact source identity; do not infer a single visit or continuous
+    # interval from comma/semicolon-separated measurement timeframes.
     if re.search(r"\bbaseline\b|\bscreening\b|基线|筛选", text, re.I) and re.search(
-        r"\b(?:from|to|through|until|between|and|every)\b|至|到", text, re.I,
+        r"\b(?:from|to|through|until|between|and|every)\b|至|到|[,;、；]", text, re.I,
     ):
         return _unknown_semantic_key("time_interval", text), _native_timepoint_zh(text)
     # 独立复核第三十二轮：EOT 访视（最长暴露 N 周）不是固定评价时点，

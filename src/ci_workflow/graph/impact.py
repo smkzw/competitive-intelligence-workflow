@@ -246,11 +246,13 @@ class ImpactGraph:
                 raise ImpactGraphError(
                     f"影响边端点未登记: {_token(edge.upstream)} -> {_token(edge.downstream)}"
                 )
-        adjacency: dict[ImpactNode, tuple[ImpactNode, ...]] = {}
-        for node in canonical_nodes:
-            adjacency[node] = tuple(
-                edge.downstream for edge in canonical_edges if edge.upstream == node
-            )
+        # Canonical edges already preserve deterministic downstream ordering.
+        # Index once: rescanning all edges per node makes real saves quadratic.
+        adjacency: dict[ImpactNode, list[ImpactNode]] = {
+            node: [] for node in canonical_nodes
+        }
+        for edge in canonical_edges:
+            adjacency[edge.upstream].append(edge.downstream)
         visiting: set[ImpactNode] = set()
         visited: set[ImpactNode] = set()
 

@@ -1,0 +1,52 @@
+{
+  "state": "CONTINUOUS_IMPLEMENTATION_NOT_RC",
+  "frozen_quality": {
+    "head": "631231f927aa9546ed24bebd89cfdc9f68dbcbcf",
+    "session": 80851,
+    "terminal": 0,
+    "sha256": "5fce3c10eb15bd2a3f207da462ef39a2c17811c7b274491ec404fdef656ce64e",
+    "scope": "Six-step quality-only: Ruff src/tests/tools, strict286,1185 unit-contract463.95s,20 retained1.16s,7layer0.34s,lexical legacy scan. Not integration/render/clinical/product/RC, and not subsequent visit-list source change."
+  },
+  "visit_list": {
+    "actual_defect": "Normal current23 B source windows Baseline, Week4/16/24 were labeled baseline in linked chart facet headings; actual source text and bound identities remain preserved.",
+    "red": "7FAIL1PASS0.78s,08d85b9eeff734c31fcdb56f9f1f70d50416a28ce19c8eded03bc7cb4945ca09",
+    "repair": "Existing shared _time_band handles source visit-list punctuation before baseline-only branch; no timepoint inference, new ontology or relaxed coaxis.",
+    "related": "Four files129PASS3.02s,7421ce5cf30cb5df3f6adde1acac25f52c490dc25938a6b2c3107f262bf66298; Ruff two files/strict one sourcePASS",
+    "source_sha256": "490ecf6c964dd0819a4f2331521c6f5de79de87514fae159230fe24af416eab6",
+    "real_new_page": "Actual normal current27/B27 ordinary matrix and8 linked source visit-list headings inspected viaEgo2/p1: Baseline,Week4/12/16/24 retain fullsource list andChinese baseline+visit labels, not baseline-only bucket. Selected32sciencefacets retain separate frame IDs; overall aesthetics stillREVISE, not inherited visualPASS."
+  },
+  "new_editor": {
+    "previous_owned_session": "56286/PID37905/62676 gracefully INT after readonly tasks to load new code; terminal0, no old daemon touched",
+    "current": "Previous11950/PID43008/64582 gracefully INT after committed24/idle, terminal0. Current33778/PID49138/53802 loads completed impact/busy/visit fixes; Ego Profile2/space2/p1 reused, no daily profile or credential capture."
+  },
+  "tesae_ui": {
+    "path": ".artifacts/1007-current23-tesae-ui-v1",
+    "selected_fact": "ctgov-atomic-fact_35c576f0fcfbdfad41e5b900",
+    "science": "Source originalTESAE2/N77/NCT04202679 and36week interval; newly accepted source version with actual A+B safety consumers; no C dependency.",
+    "normal_plan": "UI2→3/undo2/clear/undo2, alltemporary user-layer, source unchanged; beforeDBbackup/all1505 publicfacts/protected hashes kept. Original mean-estimate operation not replayed.",
+    "step1": "TERMINAL0 session23162 and readonly36101: actualrequest browser-6f3a94cf-7d7f-46ff-9744-6868f1c5b870/23→24; source2 temporaryuser3, A24+B24/C23,1505facts; other1504publicdicts/source tables/old files exact. No replay.",
+    "current_generation": "2081a4a976c27f6b01e028be8ff161ec3921aef3402db58273d6a0b3eccee04b",
+    "step1_proof": "78b47f750f605c1561182390b85965ac0da2b9a0e22d0fde3d21749f842519a9",
+    "remaining": "All4 actualUI terminal and readonly proofs. Step2undo24→25/4260,79,390ms/proofbcf535dc; step3clear25→26/27560,76,897ms/proofbdb3d6f9; step4undo26→27/43452,126,999ms/proof0a8b7481. Source2 retained, finalcurrent2/N77. Everyproof1504others/source tables/oldfiles/C23 exact. No replay or clinical acceptance.",
+    "precondition_failure": "Readonly verifier was prematurely invoked before UI-return existed and exited FileNotFoundError without any mutation or proof. It is NOT a product/transaction failure or PASS; run only after actual terminal return.",
+    "runtime": "Read-only live DB via project Python provesstaging; server97.1percentCPU at5min30 healthy. System SQLite -readonly twice rejected open while project interpreter succeeds; environment diagnostic, not database integrity verdict.",
+    "verifier_oracle_failure": "First completed verifier wrongly required source-presentation enum reported_value instead of unchanged Chinese已公开; retained assertion failure. Corrected source/current layer oracle and reran only readonly verifier; no transaction replay.",
+    "ux_gap": "Fixed after step1 terminal: pending busy/repeated actions/selection guard and explicitpostcommit refreshlock.4RED→related22PASS43.11s. ActualUI2/3/4 busytext and3disabled observed before actualreturn, then all3enabled. Realclear26 A/B/source/Esc proof, Ownerpixels step3A+B inspected; cannot inherit to finalnewshare.",
+    "save_performance": "Actual1sec native sample4b763fbc showed ImpactGraph node-times-all-edge richcompare.2RED(8192/524288 comparisons), onepass canonical adjacency preserves allgraphguards/digests/closure; same22relatedPASS,strict2/Ruff4PASS. Source306faafb/5148802a; actual remaining durations79/77/127sec vs previous roughly7min, not controlled benchmark or SLA."
+  },
+  "fresh_independent_reading": {
+    "task": "ci-1007-current23-comparison-reading-v1",
+    "route": "Native verifiedPi/google-antigravity/gemini-3.8-flash,highconfigured,295.701s/62calls/session01a1290d-986e-7000-8de1-ccd70f622193,no fallback",
+    "runner": "40851/session25395 terminal0; NOTE_EXITobserver70240 terminal0; launchonce,no fixedprogresspoll/redispatch",
+    "input": "Actual current23/B22 workspace and six1440/1600/2560 matrix/chart images. Only frozen question/screen reading; no science acceptance or allpage review.",
+    "state": "REVISE: real1440/1600 textcollapse and32single-observation displaytiles; descriptive membership retained, no falsecoaxis. Ownerdirectlyviewed original1440 image. Freshfixedpixels/keyboard NOT_RUN. Reviewgate initiallylegacyHermes-termFAIL, honestclarification→PASS; verdictstillREVISE.",
+    "output_sha256": "5f835d50bae5d969c13d4cf462c384ce1eef1494c0b17f094223566956b7697b",
+    "native_receipt_sha256": "ea2704efac6bf599565bf50bc588fa0d66ff1a24337e892c8a144d5358502b3d"
+  },
+  "display_repair": {
+    "owner": "Production organizeComparisonCharts: descriptive study/source-measure/product/arm panels, same numeric frames/values/DOM source buttons/tables retained, unresolved associations separate. 4RED0.22s→14PASS1harness-failure→27PASS0.91s. Minor test-only formatting afterwards; fullcoherent merged related run pending, realnewcandidatepixels NOT_RUN.",
+    "worker": "ci-1007-single-fact-reading-v1 actually dispatched runner53828/session76282/event22410. Eligiblemanifest primaryPi/cursor/default opaque underlyingmodelUNKNOWN; terminalnativeidentity not yet verified. Only authorportal.css/newgeometrytest, no DB/current/browser/Git. Original7200s NOTE_EXIT only, no progresspoll.",
+    "scope": "Frozen23 visualREVISE remains open pending actual newcandidate. Unit text/font/clinical boundaries/evidence mapping not simplified to force acceptance. No screenshot-only or count-only release."
+  },
+  "next": "Original bounded worker terminal→owner actualdiff/relatedrun/mirror→normal presentation-only current candidate→fourdesktop widths/sourcefocus/filter and samecandidate config/offlineshare. Source/publicfacts27 restored; no saves replayed, no pause orreleaseclaim."
+}

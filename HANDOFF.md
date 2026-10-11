@@ -1,5 +1,66 @@
 # 唯一接手入口｜1007V1已获用户授权恢复连续实施，非RC
 
+## 当前实况｜current27真实操作链完成，前端根因修复实施中，非RC
+
+HEAD/origin631231f9；current27=A27/B27/C23，1505事实，generation
+2081a4a976c27f6b01e028be8ff161ec3921aef3402db58273d6a0b3eccee04b。
+新TESAE正常UI23→24修改、24→25撤销、25→26清除、26→27恢复均终态；
+最后proof0a8b7481，登记原值2和其他1504公开事实、原来源、历史文件精确不变。
+实际忙态三个按钮锁定，完成解锁；后三次耗时79/77/127秒，仅实际任务记录非SLA。
+真实26 A/B来源窗与Esc回焦已验，Owner实看两张原值/清除分层截图；
+A需要正常分页至第2页、B需要展开完整表，首次隐行/导航过早操作失败保留。
+当前拥有的editor49138/session33778/53802，不再等待或重启旧端口。
+独立冻结23视觉审阅REVISE。已实际启动有限执行节点
+ci-1007-single-fact-reading-v1：runner53828/session76282、NOTE_EXIT22410；
+只写共享portal.css与新测试，Owner独立处理B显示面板，不轮询模型进度。
+Owner B显示根因4RED→邻接27PASS0.91s（首次14PASS/1测试环境缺组件失败保留）；
+按研究/来源测量/产品/组整理显示面板，不合并科学分面、数值轴或事实。
+新生产代码/镜像/当前候选/四宽实际像素尚待合并验收，不能借23截图PASS。
+配置/当前单份与联合离线分享、全科学/MAH/Publication/24/三宿主/RC未完成。
+详尽范围与不重跑边界见evidence/1007V1/current23-owner-operations-v1.json。
+持续实施，无阶段性暂停。下一：有限执行原终态，整族合并回归→正常当前呈现重建→实屏任务链。
+
+## 前一批current24记录（历史；旧待执行状态由顶节替代）
+
+HEAD/origin631231f9。完整源scope/正常22/正常C23已终态，均不重跑。
+新TESAE真实UI一次保存23→24已完成，A24/B24/C23/1505，generation
+e689019188cd7e0cab1a5174bf63d5a1e6b16ad200ee6f7bd8bdb537b9fbfa48。
+登记原值2不改，临时用户3；其他1504公开事实/原来源/旧文件精确保持，
+proof78b47f75。A实际图卡/来源窗已读当前3与原2，B实际检索命中1事实3；
+剩余撤销→清除→撤销、当前配置/分享未完成，不能借旧21PASS。
+保存耗时根因是真实ImpactGraph逐节点扫全部边，不是来源接受问题。
+2规模RED+4忙态RED→最小一次索引/按钮与选择锁/明确处理中，22相关PASS
+43.11s、strict2/Ruff4。不弱化同步、冲突、幂等或失败旧current。实屏待续。
+baseline逗号访视列表同族7RED/1PASS→129相关PASS，保留原始区间/资格。
+新独立视觉审阅实际Pi/Gemini3.8flash/high，295.701s/62calls/terminal0，
+原NOTE_EXIT70240只收终态；REVISE真实B逐观察碎片卡及1440/1600竖字。
+Owner实看原1440像素确认，不采纳按研究盲合并坐标；新布局待实现。
+冻结quality80851六步已terminal0，但不覆盖其后两新源码根因或产品发布。
+详尽当前恢复台账：evidence/1007V1/current23-owner-operations-v1.json；
+原step1recipe冻结8bbea07e。下一确认无在途写入后仅重启本次拥有的正常
+editor43008/64582以载入新代码，用remaining-v2配方执行步骤2–4各一次。
+完整科学/MAH/Publication/24/三宿主/全视觉/RC仍未完成；持续实施无暂停。
+
+## 前一批current23记录（历史；旧在途由顶节替代）
+
+HEAD/origin main：631231f927aa9546ed24bebd89cfdc9f68dbcbcf。完整来源执行、
+隔离恢复、A/B登记与当前刷新、C显示重建均已终态，不等待旧PID、不重跑。
+当前23＝A22/B22/C23，1505事实，generation
+345d5b21c76de3f9383a54b80c1705bf0c8febaf042e2d6b0a5ee530b8179e98。
+完整来源4006事实/3589声明；正常A/B各1247合法引用、35临床问题映射保留。
+22刷新新增361（347+14）并保留原1144事实全部公开值/绑定、原用户清除；
+23仅重建C，1505事实及七张科学/用户表不变、12053旧文件逐hash保持。
+来源恢复proof914538f8、A/B隔离proof2d6ae7c5、正常22proofe55554db、
+C23prooff66f1129；完整路径见恢复台账。技术组合不是新的科学接受。
+执行者实际CodeBuddy/deepseek-v4.1-flash，max配置、875.751s/100calls/exit0；
+原prompt缺可解析路由身份头，guard audit仍REVISE。实际原生身份已核，
+不回填历史头、重派或把此元数据缺口算PASS。冻结开发宽门80851待终态。
+新的正常loopback服务session56286/62676已启动；Ego Profile2/space2/p1
+复用验收，不触碰日常profile。下一：这一当前版真实任务链/配置/分享，
+各报告实际revision分别核验；不能借21旧PASS或强制三个revision相等。
+全科学宇宙/Publication/MAH/动态状态/24门户/三宿主/恢复/RC仍未完成。
+持续实施，无暂停。以下旧“当前21/在途/尚未执行/下一”均被本节替代。
+
 最新：时间窗修复a5a96d7cf4e5cabe53ee94a4fde171e5819f0f33已push且远端一致。
 C页面主题现在先于限制说明；重复标题分为来源范围/设计事实，全部边界保留。
 2RED→相邻49PASS/2FAIL（发现第二处事实段标题重复，原失败保留）→完整51PASS

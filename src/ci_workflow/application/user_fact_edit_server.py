@@ -171,6 +171,8 @@ placeholder="写明本次修订的用户依据"></textarea></label>
     revision: envelope.revision,
     facts: envelope.facts,
     selected: null,
+    busy: false,
+    refreshRequired: false,
   };
   function renderReportLinks(links) {
     const nav = document.getElementById('report-links');
@@ -413,6 +415,7 @@ placeholder="写明本次修订的用户依据"></textarea></label>
       choice.appendChild(wiring);
       item.appendChild(choice);
       item.addEventListener('click', function () {
+        if (state.busy || state.refreshRequired) return;
         state.selected = factId;
         renderList(true);
         renderDetail();
@@ -436,6 +439,7 @@ placeholder="写明本次修订的用户依据"></textarea></label>
     basisEl.value = basis === null || basis === undefined ? '' : String(basis);
   }
   async function submit(operation, editsFactory) {
+    if (state.busy || state.refreshRequired) return;
     try {
       const fact = state.selected === null ? null : state.facts[state.selected];
       if (!fact) throw new Error('请先选择事实');
@@ -458,6 +462,12 @@ placeholder="写明本次修订的用户依据"></textarea></label>
         saved_by: 'browser-user',
         saved_at: new Date().toISOString(),
       };
+      state.busy = true;
+      detailEl.setAttribute('aria-busy', 'true');
+      ['save', 'clear', 'undo'].forEach(function (id) {
+        document.getElementById(id).disabled = true;
+      });
+      statusEl.textContent = '处理中：正在保存并同步报告，请不要重复操作。';
       const response = await fetch('/api/save', {
         method: 'POST',
         headers: {
@@ -469,11 +479,9 @@ placeholder="写明本次修订的用户依据"></textarea></label>
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || '保存失败');
       if (data.refresh_required) {
+        state.refreshRequired = true;
         statusEl.textContent = data.message;
         resultEl.textContent = JSON.stringify(data.result, null, 2);
-        ['save', 'clear', 'undo'].forEach(function (id) {
-          document.getElementById(id).disabled = true;
-        });
         return;
       }
       state.revision = data.current_revision === undefined ? data.revision : data.current_revision;
@@ -486,6 +494,12 @@ placeholder="写明本次修订的用户依据"></textarea></label>
     } catch (error) {
       statusEl.textContent = '操作未完成：'
         + String(error && error.message ? error.message : error);
+    } finally {
+      state.busy = false;
+      detailEl.setAttribute('aria-busy', 'false');
+      ['save', 'clear', 'undo'].forEach(function (id) {
+        document.getElementById(id).disabled = state.refreshRequired;
+      });
     }
   }
   searchEl.addEventListener('input', renderList);

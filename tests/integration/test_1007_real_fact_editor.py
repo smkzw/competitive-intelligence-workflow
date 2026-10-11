@@ -527,6 +527,19 @@ def test_editor_fact_choices_are_native_buttons(tmp_path: Path) -> None:
     )
 
 
+@pytest.mark.parametrize("case", ["busy_success", "busy_http", "busy_transport", "busy_refresh"])
+def test_editor_pending_write_locks_actions_and_recovers_correctly(
+    tmp_path: Path, case: str,
+) -> None:
+    root, _ = _project(tmp_path)
+    page = _editor_page(facts=UserFactEditService(root).current_facts(), revision=0,
+                        project_id=PROJECT_ID)
+    facts, script = _scripts(page)
+    assert f"NODE-OK {case}" in _run_node_harness(
+        tmp_path, facts_script=facts, editor_script=script, case=case,
+    )
+
+
 _HOSTILE_FACT: dict[str, Any] = {
     "fact_id": "fact-hostile",
     "fact_version_id": "fact-hostile-v1",
@@ -687,7 +700,7 @@ let responder = function () {
 };
 globalThis.fetch = async function (url, options) {
   fetchLog.push({ url: url, options: options });
-  const reply = responder(url, options, fetchLog.length);
+  const reply = await responder(url, options, fetchLog.length);
   return { ok: reply.ok, status: reply.status, json: async function () { return reply.body; } };
 };
 let serverRevision = envelope.revision;
@@ -1070,7 +1083,54 @@ async function flowNativeChoices() {
     'search input event must not be confused with explicit choice focus restoration');
 }
 
+async function flowPendingWrite() {
+  await selectFact('fact-crude-rate');
+  setValue('input-numerator', '12');
+  setValue('input-denominator', '80');
+  setValue('basis', '保存等待期间不得重复提交或改变选择。');
+  let finish;
+  responder = () => new Promise((resolve, reject) => { finish = { resolve, reject }; });
+  const before = fetchLog.length;
+  const pending = click('save');
+  ok(fetchLog.length === before + 1, 'one pending write');
+  for (const id of ['save', 'clear', 'undo']) {
+    ok(byId(id).disabled, 'pending ' + id + ' must be disabled');
+  }
+  ok(statusText().includes('处理中') && statusText().includes('不要重复'), 'busy feedback');
+  await click('clear');
+  await click('undo');
+  ok(fetchLog.length === before + 1, 'pending duplicate actions must not send requests');
+  await selectFact('fact-c-threshold');
+  ok(fieldValue('接线标识').includes('fact-crude-rate'), 'pending selection stays on target');
+  if (CASE === 'busy_transport') finish.reject(new Error('transport unavailable'));
+  else if (CASE === 'busy_http') {
+    finish.resolve({ ok: false, status: 409, body: { error: '版本冲突' } });
+  } else if (CASE === 'busy_refresh') {
+    finish.resolve({ ok: true, status: 200, body: {
+      refresh_required: true, result: { revision: 1 }, facts: null,
+      message: '已保存，重新打开当前版本，不要重复保存。',
+    } });
+  } else finish.resolve(commit('fact-crude-rate', fact => { fact.normalized_value = '15'; }));
+  await pending;
+  for (const id of ['save', 'clear', 'undo']) {
+    ok(byId(id).disabled === (CASE === 'busy_refresh'), 'correct terminal lock ' + id);
+  }
+  if (CASE === 'busy_http' || CASE === 'busy_transport') {
+    ok(statusText().includes('操作未完成'), 'failure remains explicit');
+    ok(fieldValue('接线标识').includes('fact-crude-rate-v1'), 'failure preserves version');
+  } else if (CASE === 'busy_refresh') {
+    ok(statusText().includes('已保存') && !statusText().includes('操作未完成'),
+      'committed refresh failure is not reported as save failure');
+    await click('save');
+    ok(fetchLog.length === before + 1, 'committed refresh lock blocks repeat saves');
+  } else ok(statusText().includes('revision 1'), 'success advances revision');
+}
+
 const FLOWS = {
+  busy_success: [flowPendingWrite],
+  busy_http: [flowPendingWrite],
+  busy_transport: [flowPendingWrite],
+  busy_refresh: [flowPendingWrite],
   native_choices: [flowNativeChoices],
   base: [
     flowListAndSelection,

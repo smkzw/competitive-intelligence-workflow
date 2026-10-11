@@ -1,65 +1,336 @@
 {
- "schema_version": "1007-owner-scoped-checkpoint-v1",
- "state": "ACTIVE_IMPLEMENTATION_NOT_RC_NOT_COMPLETE",
- "latest_checkpoint": {
-  "pushed_ae_window_commit": "a5a96d7cf4e5cabe53ee94a4fde171e5819f0f33",
-  "c_hierarchy": {"state": "SCOPED_HIERARCHY_READING_PASSED_NOT_CURRENT_OR_FULL_VISUAL", "tests": "2RED; first related49PASS2FAIL preserved, second repeated heading; final51PASS7.25s; strict1/namedRuff", "candidate_sha256": "45218f1558477a9942677d7de7eaef212dbb1ab4546fdaf18399f0144cd72990", "browser_sha256": "46db62df9b010a83da7b1a06f999c268c7f703f055b6a1180fcfc057698e43e0", "pages": 16, "facts": 1144, "protected_files": 11731, "widths": [1440,1600,1920,2560], "behavior": "Fresh actual read/fold/filter/clear/original151/source/Esc/restore and8 hierarchy cases; PASS scoped", "owner_pixels": "Actually inspected limitations1440, visits2560, statistics1600, source1920; hierarchy root closed, full science/all-page/share/hosts/RC not accepted", "new_current": false},
-  "pushed_source_closure_commit": "0ce5616e22086dd6c01e253615e85e4f329ca7ae",
-  "ae_group_window": {"state": "SHARED_COVERAGE_ROOT_FIXED_RELATED_ONLY", "source_sha256": "fabb5e40770a71c91c2a457a1b6d6511f63600c18848f01163f43f268458322e", "red": "4FAIL2.79s", "adjacent": "79PASS1FAIL140.01s; retained old synthetic category-test window mismatch", "contract_migration": "Source original timeFrame instead of generic control-period label; 26PASS13.91s; strict1/namedRuff", "red_xml_sha256": "fa62e71036a76153620b5d67b97d28f2b231a53382bcd4a0a86ea1818a27c5ee", "adjacent_xml_sha256": "043b398f5faddcc32e6ced6237597428d6c6c6b4e117afc0dc70966e23b4b060", "green_xml_sha256": "2c06f4287d8d2dfc3b4e421e29bd2274d4f8784bd4288aa3043faab8beff66f9", "new_wide_gate": "NOT_RUN_NOT_REQUIRED_PER_LINE", "original_source19_acceptance": "Preserved exact original source-only review binding; no re-adoption"},
-  "complete_scope_execution": {"state": "PENDING_COLLECT_TERMINAL_ONLY", "task": "ci-1007-accepted-scope-composition-v1", "runner_pid": 27663, "runner_session": 35424, "event_session": 58809, "hard_wait_seconds": 7200, "actual_model": "VERIFY_AT_TERMINAL_NOT_SELECTOR", "write_scope": "new composition recipe/test and isolated artifact only; live DB/current readonly", "owner_preparation": "prepare-complete-ab-consumers-v4.py Ruff PASS, NOT_RUN; new scope revalidation must preserve old886 declarations plus347 qualified plus14 accepted safety; source19-only scope forbidden"},
-  "source_definition_round4": "TERMINAL: actual Pi/openai-codex/gpt-6.1-sol:high,403.159s,77tools, output dfa4605865f0528f296ecb0280d9f40f5a11e3bf28655b7ece9733175a21f089; source19 scoped ACCEPT, projection REVISE; same reviewer context not fresh opinion",
-  "owner_root_family": "5RED and guard2FAIL12PASS -> fourteen files206PASS145.86s; strict3/namedRuff6 PASS. Time/class/category coverage, independent missing-definition check, candidate-only exact definition enrichment. Denominator branch has no separate positive case yet.",
-  "production_source_hashes": {
-   "source_research_service": "d5724ba6cd8dd321bd33b8b7be179956adf0f96942be70604cc53b113aeac126",
-   "source_fact_acceptance": "a5e3c15075370bc41beba7999150a7e60c55b44bce8ba54ed0fae6378554d664",
-   "build_a_payload": "9fed04ed242fd6d0691b691e815d5f0d243ac32b3b0e2caf16f59be4f9a90535"
+  "schema_version": "1007-owner-scoped-checkpoint-v1",
+  "state": "ACTIVE_IMPLEMENTATION_NOT_RC_NOT_COMPLETE",
+  "current_owner_scope": "current27 A27/B27/C23/1505,4TESAE UI operations terminal/source2 restored/other1504exact. Geometry worker53828/76282/event22410 finite paths; ownerBdisplaypanel root27relatedPASS/newcandidatepixels pending. See current23-owner-operations-v1.json, historical entry23 is filename not current restriction. No replays, pause orRC.",
+  "latest_checkpoint": {
+    "pushed_ae_window_commit": "a5a96d7cf4e5cabe53ee94a4fde171e5819f0f33",
+    "c_hierarchy": {
+      "state": "SCOPED_HIERARCHY_READING_PASSED_NOT_CURRENT_OR_FULL_VISUAL",
+      "tests": "2RED; first related49PASS2FAIL preserved, second repeated heading; final51PASS7.25s; strict1/namedRuff",
+      "candidate_sha256": "45218f1558477a9942677d7de7eaef212dbb1ab4546fdaf18399f0144cd72990",
+      "browser_sha256": "46db62df9b010a83da7b1a06f999c268c7f703f055b6a1180fcfc057698e43e0",
+      "pages": 16,
+      "facts": 1144,
+      "protected_files": 11731,
+      "widths": [
+        1440,
+        1600,
+        1920,
+        2560
+      ],
+      "behavior": "Fresh actual read/fold/filter/clear/original151/source/Esc/restore and8 hierarchy cases; PASS scoped",
+      "owner_pixels": "Actually inspected limitations1440, visits2560, statistics1600, source1920; hierarchy root closed, full science/all-page/share/hosts/RC not accepted",
+      "new_current": false
+    },
+    "pushed_source_closure_commit": "0ce5616e22086dd6c01e253615e85e4f329ca7ae",
+    "ae_group_window": {
+      "state": "SHARED_COVERAGE_ROOT_FIXED_RELATED_ONLY",
+      "source_sha256": "fabb5e40770a71c91c2a457a1b6d6511f63600c18848f01163f43f268458322e",
+      "red": "4FAIL2.79s",
+      "adjacent": "79PASS1FAIL140.01s; retained old synthetic category-test window mismatch",
+      "contract_migration": "Source original timeFrame instead of generic control-period label; 26PASS13.91s; strict1/namedRuff",
+      "red_xml_sha256": "fa62e71036a76153620b5d67b97d28f2b231a53382bcd4a0a86ea1818a27c5ee",
+      "adjacent_xml_sha256": "043b398f5faddcc32e6ced6237597428d6c6c6b4e117afc0dc70966e23b4b060",
+      "green_xml_sha256": "2c06f4287d8d2dfc3b4e421e29bd2274d4f8784bd4288aa3043faab8beff66f9",
+      "new_wide_gate": "NOT_RUN_NOT_REQUIRED_PER_LINE",
+      "original_source19_acceptance": "Preserved exact original source-only review binding; no re-adoption"
+    },
+    "complete_scope_execution": {
+      "state": "TERMINAL_EXIT0_OWNER_ARTIFACT_CHECKED_NOT_ACCEPTANCE",
+      "task": "ci-1007-accepted-scope-composition-v1",
+      "runner_pid": 27663,
+      "runner_session": 35424,
+      "event_session": 58809,
+      "hard_wait_seconds": 7200,
+      "actual_model": "CodeBuddy native init deepseek-v4.1-flash; CLI/runner max configuration",
+      "native_session": "01a128e7-0fc7-7a12-938b-1ada58839278",
+      "seconds": 875.751,
+      "tools": 100,
+      "fallback": false,
+      "scope_sha256": "34b36ccaff333ef4f752403d519ffbc00d88b2320122f18ff97f1b7a66173c39",
+      "recovery_sha256": "914538f8dfc8f63b97b207e724573aa1764763f495e4a9779699da7d7b919c74",
+      "counts": "4006 facts/3589 claims/20 sources; two prior PK versions/sole claims selected out, old history unchanged",
+      "normal_actual_recovery": "Full isolated restore; all4006/3589 live readonly accepted, original restore candidate state preserved; same saved artifact completed after timestamp representation and121 created_at-only metadata differences. No recompose/re-restore/selfsigning.",
+      "owner_checks": "Full affected recipe/test read; namedRuff;7 pure/parent tests0.91s, actual recovery not replayed",
+      "owner_preparation": "Normal isolated1247 A+1247 B registrations passed: old886 revalidated/new347/safety14,35 clinical questions retained,1204 efficacy/65 safety views, live current/database unchanged; proof2d6ae7c5",
+      "current_operation": "TERMINAL normal22 refresh, 361 new already accepted/1505 active; A22/B22 and allold1144 full public values/bindings identical; proofe55554db. C-only normal23 presentation completed, A22/B22/C23/1505; proof f66f1129. Do not replay.",
+      "execution_metadata_audit": "REVISE: original prompt lacks parseable provider/model header; actual manifest/native init/terminal model identity verified. No retroactive header or worker redispatch."
+    },
+    "source_definition_round4": "TERMINAL: actual Pi/openai-codex/gpt-6.1-sol:high,403.159s,77tools, output dfa4605865f0528f296ecb0280d9f40f5a11e3bf28655b7ece9733175a21f089; source19 scoped ACCEPT, projection REVISE; same reviewer context not fresh opinion",
+    "owner_root_family": "5RED and guard2FAIL12PASS -> fourteen files206PASS145.86s; strict3/namedRuff6 PASS. Time/class/category coverage, independent missing-definition check, candidate-only exact definition enrichment. Denominator branch has no separate positive case yet.",
+    "production_source_hashes": {
+      "source_research_service": "d5724ba6cd8dd321bd33b8b7be179956adf0f96942be70604cc53b113aeac126",
+      "source_fact_acceptance": "a5e3c15075370bc41beba7999150a7e60c55b44bce8ba54ed0fae6378554d664",
+      "build_a_payload": "9fed04ed242fd6d0691b691e815d5f0d243ac32b3b0e2caf16f59be4f9a90535"
+    },
+    "normal_ingestion": "Nineteen facts/four sources/nineteen new claims actually normally ingested, immutable evidence-snapshot_f4750ceaf3d5587db9fee2e2; old rows/artifacts/current21 preserved. No acceptance/current switch.",
+    "new_source_epoch": {
+      "epoch": 2,
+      "context_digest": "34932cb7f574473206879ab1c31efeee8704c1ed2f569b9a19c9674825f74fd8",
+      "formal_material": ".artifacts/1007-abc-current-integration-v1/working/project/runs/source-definition-formal-v4/preparation.json",
+      "role": "Exact source only; A21 is unchanged presentation anchor, NOT report acceptance"
+    },
+    "normal_issuer": {
+      "state": "TERMINAL_EXIT0_AUTHENTIC_RECEIPT_VERIFIED",
+      "issuer_pid": 20944,
+      "runner_session": 21369,
+      "terminal_event_session": 95107,
+      "requested_model": "pi/openai-codex/gpt-6.1-sol:high",
+      "actual_native_model": "openai-codex/gpt-6.1-sol",
+      "effort_evidence": "CLI --thinking high and native session high state; no hidden reasoning proof claimed",
+      "session": "01a12888-7dc4-7000-a48d-db6a45b44ef1",
+      "process_seconds": 563.610312,
+      "related_tests": "49PASS37.11s",
+      "receipt_digest": "54d0fbe1c0c3721acb1b712faa6caa3e7fa6725b34b4a6c2700a66c650902577",
+      "verdict_sha256": "0d45d4462e27d83066c5d1ded3afe4bc53e6b11aae336da35355cb2eb1ea8d77",
+      "verification_sha256": "53c2b7c7b51961f138885a6a306f98e73eb0da6e990e32a051b4bfcab291623e",
+      "hard_wait_seconds": 7200,
+      "independence": "Distinct producer, same completed reviewer context; reduced repair independence"
+    },
+    "normal_adoption": {
+      "state": "TERMINAL_NORMAL_ADOPTED_NOT_CURRENT",
+      "facts": 19,
+      "claims": 19,
+      "scope_corrections": 8,
+      "decision_digest": "ad74c289de18bee3a58242bbd1f9bac774b9505c2f5b07784694a79e392a0223",
+      "verified_sha256": "69af318472dbeb9387612288864d923bdd89af4a2573cc24b346c0d835a3b450",
+      "old_scientific_user_conflict_binding_history_preserved": true,
+      "protected_files": 11585
+    },
+    "quality_gate": "Frozen latest gate66571 TERMINAL six-step quality-only PASS: Ruff,strict286,1185 active646.43s,20compat1.96s,7layer0.40s,legacyrefs; log75e0b918a0aa7186c17e8605f976d9f6ea3846c30b9c31261c6ae0e2b5d72825. Earlier GATE_OK mixed-tree diagnostic only; not source/report/visual/release acceptance.",
+    "qualified_consumer_preparation": "347 potential exact accepted-source candidates341efficacy6safety prepared read-only; 2PK reclassified, not lost. Actual10ce816fc580f1ae51e9937159f6d8fbccd0b4b72f84a7f5af2e05fd020638b1. No live registration/current.",
+    "remaining_report_objection": "AE window scoped fixed; current27 TESAE normal4UI chain completed with source2 restored/1504others exact. New presentation candidate/four-widthpixels/config/share and global science/universe/hosts/24/RC unresolved.",
+    "next": "Original finite geometry worker terminal and ownerBpanel integration/relatedbatch/mirror/normalABC28/fourwidthpixels/samecandidate config-offline share. No source/consumer/22/23/save replay, no pause orRC.",
+    "current_bundle": {
+      "revision": 27,
+      "reports": {
+        "A": 27,
+        "B": 27,
+        "C": 23
+      },
+      "facts": 1505,
+      "generation": "2081a4a976c27f6b01e028be8ff161ec3921aef3402db58273d6a0b3eccee04b",
+      "tesae_restoration_proof_sha256": "0a8b7481b70addfe57a81b6a75b4361fbd11981a570aaa8c1e61f57dfb0f1cd1",
+      "source_refresh_proof_sha256": "e55554db371292116db9ed96254775cc3dcbd62e32c0198ff1ca4315de03f832",
+      "c_presentation_proof_sha256": "f66f11299baa50450615ee5373f2e5a73524d569be3a614ca4476e25ef2ee1cd",
+      "preserved_old_files": 12053,
+      "normal_editor": "Owned49138/session33778/53802 and Ego2/p1 current27. Owned43008/11950 stopped idleINT/terminal0; historical20347/65033 untouched."
+    },
+    "current_quality_gate": "Session80851 actual frozenquality-only six steps terminal0/log5fce3c10,1185/20/7/strict286/Ruff/lexical. Not subsequent time/impact/busy/display sources or release acceptance."
   },
-  "normal_ingestion": "Nineteen facts/four sources/nineteen new claims actually normally ingested, immutable evidence-snapshot_f4750ceaf3d5587db9fee2e2; old rows/artifacts/current21 preserved. No acceptance/current switch.",
-  "new_source_epoch": {"epoch": 2, "context_digest": "34932cb7f574473206879ab1c31efeee8704c1ed2f569b9a19c9674825f74fd8", "formal_material": ".artifacts/1007-abc-current-integration-v1/working/project/runs/source-definition-formal-v4/preparation.json", "role": "Exact source only; A21 is unchanged presentation anchor, NOT report acceptance"},
-  "normal_issuer": {"state": "TERMINAL_EXIT0_AUTHENTIC_RECEIPT_VERIFIED", "issuer_pid": 20944, "runner_session": 21369, "terminal_event_session": 95107, "requested_model": "pi/openai-codex/gpt-6.1-sol:high", "actual_native_model": "openai-codex/gpt-6.1-sol", "effort_evidence": "CLI --thinking high and native session high state; no hidden reasoning proof claimed", "session": "01a12888-7dc4-7000-a48d-db6a45b44ef1", "process_seconds": 563.610312, "related_tests": "49PASS37.11s", "receipt_digest": "54d0fbe1c0c3721acb1b712faa6caa3e7fa6725b34b4a6c2700a66c650902577", "verdict_sha256": "0d45d4462e27d83066c5d1ded3afe4bc53e6b11aae336da35355cb2eb1ea8d77", "verification_sha256": "53c2b7c7b51961f138885a6a306f98e73eb0da6e990e32a051b4bfcab291623e", "hard_wait_seconds": 7200, "independence": "Distinct producer, same completed reviewer context; reduced repair independence"},
-  "normal_adoption": {"state": "TERMINAL_NORMAL_ADOPTED_NOT_CURRENT", "facts": 19, "claims": 19, "scope_corrections": 8, "decision_digest": "ad74c289de18bee3a58242bbd1f9bac774b9505c2f5b07784694a79e392a0223", "verified_sha256": "69af318472dbeb9387612288864d923bdd89af4a2573cc24b346c0d835a3b450", "old_scientific_user_conflict_binding_history_preserved": true, "protected_files": 11585},
-  "quality_gate": "Frozen latest gate66571 TERMINAL six-step quality-only PASS: Ruff,strict286,1185 active646.43s,20compat1.96s,7layer0.40s,legacyrefs; log75e0b918a0aa7186c17e8605f976d9f6ea3846c30b9c31261c6ae0e2b5d72825. Earlier GATE_OK mixed-tree diagnostic only; not source/report/visual/release acceptance.",
-  "qualified_consumer_preparation": "347 potential exact accepted-source candidates341efficacy6safety prepared read-only; 2PK reclassified, not lost. Actual10ce816fc580f1ae51e9937159f6d8fbccd0b4b72f84a7f5af2e05fd020638b1. No live registration/current.",
-  "remaining_report_objection": "AE group-window root now fixed under ae_group_window related scope. Complete-scope consumer propagation/current/whole-report gates still unperformed; no release clearance.",
-  "next": "Collect original complete-scope worker terminal only; verify immutable accepted parent composition/recovery; one isolated normal A/B full-scope check before live registration/current. Preserve old bindings, user clears and 35 mappings. No 3989/old886/795/save replay/selfsigned receipt/accepted-sibling definition waiver."
- },
- "historical_sections_notice": "Outside latest_checkpoint, pre-ingestion frozen counts/PENDING/next actions are retained historical version-specific evidence, not current process or acceptance state.",
- "baseline_commit": "ceaad83ac98b495dff350872fca4fef8418fd0cc",
- "pushed_source_milestone": "27b2aaae519a4f1ab515aa8a9b1032ef98319bc5",
- "pushed_c_reading_milestone": "8b6444c6ed4d6ac2c9335c17e605854979605059",
- "mode": "execution-plus-conference: material parallel guard repair plus independent frozen-source scientific and trust challenge; owner alone owns current",
- "resume": {"pause_hashes_matched": 22, "durable_project_files_matched": 11716, "goal_observed": "active", "current_revision": 21, "active_facts": 1144, "current_generation": "67b793ef865d035092fb27dfeaec8ce87cfaa0e97edb3631724eb07d55518310"},
- "source_family": {
-  "changes": ["N locator no double dollar", "source class TESAE distinct from any SAE/ordinary AE", "auxiliary SD/N/population/type paths checked, not mean-only", "source NA explicitly scoped parse failures", "A auxiliary statistic indexed"],
-  "red": "non-vacuous 14 failed/22 passed; first green 5 failed/75 passed exposed raw count and current oracle contracts",
-  "related_green": {"passed": 80, "seconds": 112.11, "scope": "pk_safety_measure_identity/current_coverage_oracle/ctgov_result_coverage_audit/r24_a_builder_contract"},
-  "candidate": {"path": ".artifacts/1007-source-context-candidate-v3", "facts": 19, "sources": 4, "package_sha256": "eed16decbf004cf2c477e1c489b6198cbd5d2ec8d0fe4481bc09084a07c9371e", "payload_sha256": "28b6100dfc585d50bf55f20fc98fc588b451f0452ec84187e75ad7491e633e12", "adoptions": 0, "registrations": 0, "saves": 0, "current_changes": 0, "durable_project_files_unchanged": 11716},
-  "prepare_failure_retained": "First attempt proved locator-only N key nonunique before creating output. Final selection requires unique full statistical context, not first-wins."
- },
- "guard_execution": {
-  "task": "ci-1007-domain-sibling-closure-v2", "status": "TERMINAL_EXECUTION_ONLY",
-  "actual_native_agent": "codebuddy", "actual_native_model": "deepseek-v4.1-flash", "effort": "max", "session_id": "01a1285d-422d-7cc0-988c-97cf629fd25f", "duration_seconds": 532.348,
-  "report_sha256": "e4535f10b42a62f80f33aee4e56e623d2b88c943f3ff537921a3471e88d594d7", "source_sha256": "dff093d47697355d98bc503093c87ad05de82ef0fdb275323afa90ddebb1ecea",
-  "owner_checks": "46 PASS2.95s; named Ruff/strict1 pass. ALL accepted siblings must be in fully validated PK domain members; no general conflict waiver.",
-  "independent_acceptance": "PENDING"
- },
- "conference": {"task": "ci-1007-source-context-and-domain-closure-v3", "status": "TERMINAL_SOURCE_REVISE_NOT_ADOPTED", "requested_route": "zcode/zcode/GLM-5.3-Flash:max", "actual_native_identity": "pi/openai-codex/gpt-6.1-sol:high", "session_id": "01a12888-7dc4-7000-a48d-db6a45b44ef1", "final_continuation_seconds": 257.6, "tools": 38, "output_sha256": "13fb7ba8501864a2843e8591baf291c4e8f17fa4dce48b981eccd03f8b179dbe", "fallback": "Declared fallback; Grok75, Pi requested grok-4.7-high observed cursor/grok-4.7 mismatch; same Pi session continued with authorized gpt-6.1-sol. Requested GLM is not final identity. Reduced continuation independence recorded; model difference from owner not claimed.", "finding": "19 scalar matches, six AE-module source definitions/population missing; A row-bound population/definition omissions. Guard bounded support, actual issuer/current closure unverified.", "checks": "17 guard/36 identity actually executed,72 collected not PASS; owner46/80 distinct named selections", "hard_wait_seconds": 7200, "no_progress_poll_or_redispatch": true, "scope": "19 original-source facts, projection context, exclusive domain correction guard; no whole-page audit or source/current writes"},
- "frontend": {
-  "v4": "Reused frozen normal pages; actual visual REVISE all identity series orange. Harness v3 false filtered FAIL counted hidden cards/rows; original evidence retained.",
-  "identity_family_tests": "one root RED1/5; first batch1/25 exposed test display-label nonunique key; corrected to exact row ids,26 PASS0.87s; no clinical data changed",
-  "v5": {"path": ".artifacts/1007-identity-palette-preview-v5", "manifest_sha256": "08e6c0f6753ae632b8453fae5cdb88d86d5bf9b9fdc206b382b4624e2cf1e72c", "A_pages": 49, "B_pages": 104, "durable_files_unchanged": 11716, "facts": 1144},
-  "v5_browser": {"proof": ".artifacts/1007-identity-palette-preview-v5-fresh-qa-v1/actual.json", "widths": [1440,1600,1920,2560], "scope": "A reachability and B48 dense -> exact singleSD -> source -> Esc real trigger; actual series colors stable on study filter", "behavior": "SCOPED_PASS", "owner_visual": "REVISE: close mean labels visually crowded even with35percent barGap; no full visual acceptance"},
-  "v6": "Ordinary producer and four-width behavior passed, but owner pixels REVISE: label.offset did not move actual ECharts glyph labels. Original results retained; diagnostic label.distance screenshot is not production acceptance.",
-  "v7": {"path": ".artifacts/1007-identity-palette-preview-v7", "manifest_sha256": "a9315b4cd19ba3345f4bae6c4176711f916aa894dea7f068ebfe7d5ae950915b", "browser_proof_sha256": "c10609b10c373d13a963eaff0f08764174d68a677cb8132be504fcb5fee4bda3", "A_pages": 49, "B_pages": 104, "durable_files_unchanged": 11716, "behavior": "SCOPED_PASS four desktop widths dense/filter/single/source/Esc", "owner_pixels": "Actually inspected dense1440/1920, firstfold2560, single1600 and source1920. Source identity colors and near-value labels readable; scoped label repair passes. Remaining card whitespace, complete visual/page families, cross-page categorical stability and C reading not accepted.", "final_js_family": "26 PASS1.03s after supported label.distance production change; no values, source or current modified"}
- },
- "read_only_and_history": {"first_adjacent": "25PASS3FAIL: readonly verify migrated historical DB; two old TESAE unknown contexts correctly rejected by current science. No historical hashes changed to green.", "repair": "Explicit read_only verify skips migrations, mode=ro honors live WAL; rejects missing schema rather than repair. Volatile WAL/SHM coordination distinguished from durable bytes; no immutable=1 stale-read shortcut. Historical frozen reachability is separate from current refusal.", "checks": "60 PASS43.88s related project/source/history/density/UI families; named Ruff/strict3 pass. Historical migration failure retained; new read-only verification does not undo or claim it never happened."},
- "development_gate": {"status": "QUALITY_ONLY_PASSED", "steps": 6, "ruff": "PASS", "strict_mypy": "286 files PASS", "active_tests": "1185 PASS20 deselected285.30s", "retained_compatibility": "20 PASS1185 deselected", "layer7": "PASS", "legacy_references": "PASS", "limits": "Development scope only; not science/browser/report/integration/release acceptance. Gate began before separate C worker changes; final JS distance separately tested26 and browser v7."},
- "c_execution": {"task": "ci-1007-c-statistics-reading-v1", "status": "TERMINAL_OWNER_REVISED_SCOPED_READING_PASS", "actual_native_identity": "codebuddy/deepseek-v4.1-flash:max", "session_id": "01a1287a-e518-7726-9e70-6eaebedf7d9a", "duration_seconds": 393.260, "output_sha256": "3f07e97677e8408029e85c2670b5df08a3de962180af734229c7968d80c1df77", "owner_batches": ["93 PASS5.26s", "real v1 REVISE,3RED/7PASS then96PASS5.80s", "real v2 P1 nested grid widths9-16px despite no overflow;1RED/10PASS then97PASS5.70s"], "instrument": "Original four FAIL kept: guessed endpoint-definitions route wrong. Correct actual endpoint-timepoint-matrix route verified by navigation; no production change to fit instrument.", "v3": {"path": ".artifacts/1007-c-statistics-reading-preview-v3", "pages": 16, "facts": 1144, "durable_files_unchanged": 11716, "manifest_sha256": "0f4687d09635d43a47f6f4e320ab184d5f0abff91fe68080196fc3ffd88c5025", "browser_proof_sha256": "060f414ab50f0273afee417afd8bd7377af220e16e033a0b666c069f1fec69e6", "behavior": "SCOPED_PASS four desktop widths dense/fold/filter/clear/source/Esc/restore; date/coverage327-689px single line16px", "owner_pixels": "Limitations1440/2560, firstfold1600, filtered1440, source1920 actually inspected; scoped reading/native fold/source clear+original151 passes, duplicated limitation title/remaining whitespace/full C/all-page/cross-browser NOT accepted"}, "scope": "C reading only. No source/science/current/save/share/hosts/RC acceptance. Owner controls mirror."},
- "source_definition_execution": {"task": "ci-1007-source-definition-context-v1", "status": "TERMINAL_EXECUTION_OWNER_ROOT_CHECKED_NOT_SCIENTIFIC_ACCEPTANCE", "actual_native_identity": "codebuddy/codebuddy-cli/deepseek-v4.1-flash", "effort_evidence": "CLI --effort max and runner codebuddy_effort; native init verifies model/session, no separate internal effort event", "native_session": "01a1289d-0557-74df-9407-03490fe4031d", "duration_seconds": 1927.177, "tools": 167, "output_sha256": "1a4a0ef4a47264ff21705073f3d383995108d4ae1a8d9555d9419a78acd1b90e", "fallback": false, "timeout": false, "owner_initial": "92 PASS120.60s; strict2/Ruff", "owner_family": "2RED raw-unit fabrication and TEAE alias ->141 PASS142.60s ten named files; strict2/four-file Ruff. AE raw unit absent, schema-origin normalized count explicit; TESAE cannot borrow overall TEAE", "scope": "Exact original AE definitions/population/outcome row-bound context; no live adoption/current, guard still unchanged"},
- "definition_candidate_v4": {"package_sha256": "7deea74f488f879fc7e90130229815535433464e42cc31406e9cf4251d8aca9b", "payload_sha256": "28b6100dfc585d50bf55f20fc98fc588b451f0452ec84187e75ad7491e633e12", "derivation_sha256": "2b54d15a32a16d7a85bc027a1fc2928d24e0244d931d13e74d594ea36bf792ca", "facts": 19, "definition_changes": 6, "unchanged_facts": 13, "sources": 4, "live_project_files_unchanged": 11716, "live_ingestions": 0, "adoptions": 0, "current_changes": 0, "isolated_normal_ingestion": "8 actual conflicts: six definition-less old candidate vs enriched candidate; two old PK accepted vs corrected candidate. No general accepted-sibling waiver justified."},
- "definition_repair_conference": {"state": "SAME_SESSION_TARGETED_ROUND4_PENDING", "role": "evidence_single_object", "route": "pi/openai-codex/gpt-6.1-sol:high", "session": "01a12888-7dc4-7000-a48d-db6a45b44ef1", "runner_pid": 14322, "runner_session": 78275, "exit_event_session": 97645, "hard_wait_seconds": 7200, "prompt": "prompts/conference/ci-1007-source-context-and-domain-closure-v3/evidence_single_object_round4.md", "preflight": "PASS", "actual_identity": "VERIFY_AT_TERMINAL", "independence": "Same completed review context; reduced continuation independence, no new independent model opinion claimed", "frozen_source_files": true},
- "browser": {"old_space": "184 actually unavailable", "user_authorization": "Previously explicit clean dedicated temporary profile/space approval", "profile_id": "Profile 2", "profile_name": "CI 1007 专用临时验收 1011", "space_id": 2, "page": "p1", "no_import_login_or_daily_cache_cleanup": true, "share_new_browser_acceptance": "NOT_RUN_CURRENT_VERSION"},
- "no_rerun": ["3989 adopted/886 registered/795 refresh", "save15-18", "current21 fourshares/sixoffline", "fixed9d9 install", "676 structural visits"],
- "next_safe_action": "Collect original round4 terminal event without progress polling; guard unchanged while frozen review runs. Candidate-only exact definition enrichment needs a narrow rejection/rollback family after actual isolated8-conflict evidence; accepted-sibling domain waiver unchanged. Normal newepoch/issuer/19adoption/exact consumers/newcurrent and same-version UI/share follow, not old3989/886/795/save replay. Scoped source milestone Git only whitelisted source/tests/compact public evidence; frozen19v3 original REVISE never rewritten; no pause/RC.",
- "release_limits": ["all-source/universe/Publication/MAH/dynamic status/unknown relations", "C reading and all-page/cross-browser visual", "current revision edits/config/share/new-browser offline", "three hosts/fresh install/recovery/24 portals/RC"]
+  "historical_sections_notice": "Outside latest_checkpoint, pre-ingestion frozen counts/PENDING/next actions are retained historical version-specific evidence, not current process or acceptance state.",
+  "baseline_commit": "ceaad83ac98b495dff350872fca4fef8418fd0cc",
+  "pushed_source_milestone": "27b2aaae519a4f1ab515aa8a9b1032ef98319bc5",
+  "pushed_c_reading_milestone": "8b6444c6ed4d6ac2c9335c17e605854979605059",
+  "mode": "execution-plus-conference: material parallel guard repair plus independent frozen-source scientific and trust challenge; owner alone owns current",
+  "resume": {
+    "pause_hashes_matched": 22,
+    "durable_project_files_matched": 11716,
+    "goal_observed": "active",
+    "current_revision": 21,
+    "active_facts": 1144,
+    "current_generation": "67b793ef865d035092fb27dfeaec8ce87cfaa0e97edb3631724eb07d55518310"
+  },
+  "source_family": {
+    "changes": [
+      "N locator no double dollar",
+      "source class TESAE distinct from any SAE/ordinary AE",
+      "auxiliary SD/N/population/type paths checked, not mean-only",
+      "source NA explicitly scoped parse failures",
+      "A auxiliary statistic indexed"
+    ],
+    "red": "non-vacuous 14 failed/22 passed; first green 5 failed/75 passed exposed raw count and current oracle contracts",
+    "related_green": {
+      "passed": 80,
+      "seconds": 112.11,
+      "scope": "pk_safety_measure_identity/current_coverage_oracle/ctgov_result_coverage_audit/r24_a_builder_contract"
+    },
+    "candidate": {
+      "path": ".artifacts/1007-source-context-candidate-v3",
+      "facts": 19,
+      "sources": 4,
+      "package_sha256": "eed16decbf004cf2c477e1c489b6198cbd5d2ec8d0fe4481bc09084a07c9371e",
+      "payload_sha256": "28b6100dfc585d50bf55f20fc98fc588b451f0452ec84187e75ad7491e633e12",
+      "adoptions": 0,
+      "registrations": 0,
+      "saves": 0,
+      "current_changes": 0,
+      "durable_project_files_unchanged": 11716
+    },
+    "prepare_failure_retained": "First attempt proved locator-only N key nonunique before creating output. Final selection requires unique full statistical context, not first-wins."
+  },
+  "guard_execution": {
+    "task": "ci-1007-domain-sibling-closure-v2",
+    "status": "TERMINAL_EXECUTION_ONLY",
+    "actual_native_agent": "codebuddy",
+    "actual_native_model": "deepseek-v4.1-flash",
+    "effort": "max",
+    "session_id": "01a1285d-422d-7cc0-988c-97cf629fd25f",
+    "duration_seconds": 532.348,
+    "report_sha256": "e4535f10b42a62f80f33aee4e56e623d2b88c943f3ff537921a3471e88d594d7",
+    "source_sha256": "dff093d47697355d98bc503093c87ad05de82ef0fdb275323afa90ddebb1ecea",
+    "owner_checks": "46 PASS2.95s; named Ruff/strict1 pass. ALL accepted siblings must be in fully validated PK domain members; no general conflict waiver.",
+    "independent_acceptance": "PENDING"
+  },
+  "conference": {
+    "task": "ci-1007-source-context-and-domain-closure-v3",
+    "status": "TERMINAL_SOURCE_REVISE_NOT_ADOPTED",
+    "requested_route": "zcode/zcode/GLM-5.3-Flash:max",
+    "actual_native_identity": "pi/openai-codex/gpt-6.1-sol:high",
+    "session_id": "01a12888-7dc4-7000-a48d-db6a45b44ef1",
+    "final_continuation_seconds": 257.6,
+    "tools": 38,
+    "output_sha256": "13fb7ba8501864a2843e8591baf291c4e8f17fa4dce48b981eccd03f8b179dbe",
+    "fallback": "Declared fallback; Grok75, Pi requested grok-4.7-high observed cursor/grok-4.7 mismatch; same Pi session continued with authorized gpt-6.1-sol. Requested GLM is not final identity. Reduced continuation independence recorded; model difference from owner not claimed.",
+    "finding": "19 scalar matches, six AE-module source definitions/population missing; A row-bound population/definition omissions. Guard bounded support, actual issuer/current closure unverified.",
+    "checks": "17 guard/36 identity actually executed,72 collected not PASS; owner46/80 distinct named selections",
+    "hard_wait_seconds": 7200,
+    "no_progress_poll_or_redispatch": true,
+    "scope": "19 original-source facts, projection context, exclusive domain correction guard; no whole-page audit or source/current writes"
+  },
+  "frontend": {
+    "v4": "Reused frozen normal pages; actual visual REVISE all identity series orange. Harness v3 false filtered FAIL counted hidden cards/rows; original evidence retained.",
+    "identity_family_tests": "one root RED1/5; first batch1/25 exposed test display-label nonunique key; corrected to exact row ids,26 PASS0.87s; no clinical data changed",
+    "v5": {
+      "path": ".artifacts/1007-identity-palette-preview-v5",
+      "manifest_sha256": "08e6c0f6753ae632b8453fae5cdb88d86d5bf9b9fdc206b382b4624e2cf1e72c",
+      "A_pages": 49,
+      "B_pages": 104,
+      "durable_files_unchanged": 11716,
+      "facts": 1144
+    },
+    "v5_browser": {
+      "proof": ".artifacts/1007-identity-palette-preview-v5-fresh-qa-v1/actual.json",
+      "widths": [
+        1440,
+        1600,
+        1920,
+        2560
+      ],
+      "scope": "A reachability and B48 dense -> exact singleSD -> source -> Esc real trigger; actual series colors stable on study filter",
+      "behavior": "SCOPED_PASS",
+      "owner_visual": "REVISE: close mean labels visually crowded even with35percent barGap; no full visual acceptance"
+    },
+    "v6": "Ordinary producer and four-width behavior passed, but owner pixels REVISE: label.offset did not move actual ECharts glyph labels. Original results retained; diagnostic label.distance screenshot is not production acceptance.",
+    "v7": {
+      "path": ".artifacts/1007-identity-palette-preview-v7",
+      "manifest_sha256": "a9315b4cd19ba3345f4bae6c4176711f916aa894dea7f068ebfe7d5ae950915b",
+      "browser_proof_sha256": "c10609b10c373d13a963eaff0f08764174d68a677cb8132be504fcb5fee4bda3",
+      "A_pages": 49,
+      "B_pages": 104,
+      "durable_files_unchanged": 11716,
+      "behavior": "SCOPED_PASS four desktop widths dense/filter/single/source/Esc",
+      "owner_pixels": "Actually inspected dense1440/1920, firstfold2560, single1600 and source1920. Source identity colors and near-value labels readable; scoped label repair passes. Remaining card whitespace, complete visual/page families, cross-page categorical stability and C reading not accepted.",
+      "final_js_family": "26 PASS1.03s after supported label.distance production change; no values, source or current modified"
+    }
+  },
+  "read_only_and_history": {
+    "first_adjacent": "25PASS3FAIL: readonly verify migrated historical DB; two old TESAE unknown contexts correctly rejected by current science. No historical hashes changed to green.",
+    "repair": "Explicit read_only verify skips migrations, mode=ro honors live WAL; rejects missing schema rather than repair. Volatile WAL/SHM coordination distinguished from durable bytes; no immutable=1 stale-read shortcut. Historical frozen reachability is separate from current refusal.",
+    "checks": "60 PASS43.88s related project/source/history/density/UI families; named Ruff/strict3 pass. Historical migration failure retained; new read-only verification does not undo or claim it never happened."
+  },
+  "development_gate": {
+    "status": "QUALITY_ONLY_PASSED",
+    "steps": 6,
+    "ruff": "PASS",
+    "strict_mypy": "286 files PASS",
+    "active_tests": "1185 PASS20 deselected285.30s",
+    "retained_compatibility": "20 PASS1185 deselected",
+    "layer7": "PASS",
+    "legacy_references": "PASS",
+    "limits": "Development scope only; not science/browser/report/integration/release acceptance. Gate began before separate C worker changes; final JS distance separately tested26 and browser v7."
+  },
+  "c_execution": {
+    "task": "ci-1007-c-statistics-reading-v1",
+    "status": "TERMINAL_OWNER_REVISED_SCOPED_READING_PASS",
+    "actual_native_identity": "codebuddy/deepseek-v4.1-flash:max",
+    "session_id": "01a1287a-e518-7726-9e70-6eaebedf7d9a",
+    "duration_seconds": 393.26,
+    "output_sha256": "3f07e97677e8408029e85c2670b5df08a3de962180af734229c7968d80c1df77",
+    "owner_batches": [
+      "93 PASS5.26s",
+      "real v1 REVISE,3RED/7PASS then96PASS5.80s",
+      "real v2 P1 nested grid widths9-16px despite no overflow;1RED/10PASS then97PASS5.70s"
+    ],
+    "instrument": "Original four FAIL kept: guessed endpoint-definitions route wrong. Correct actual endpoint-timepoint-matrix route verified by navigation; no production change to fit instrument.",
+    "v3": {
+      "path": ".artifacts/1007-c-statistics-reading-preview-v3",
+      "pages": 16,
+      "facts": 1144,
+      "durable_files_unchanged": 11716,
+      "manifest_sha256": "0f4687d09635d43a47f6f4e320ab184d5f0abff91fe68080196fc3ffd88c5025",
+      "browser_proof_sha256": "060f414ab50f0273afee417afd8bd7377af220e16e033a0b666c069f1fec69e6",
+      "behavior": "SCOPED_PASS four desktop widths dense/fold/filter/clear/source/Esc/restore; date/coverage327-689px single line16px",
+      "owner_pixels": "Limitations1440/2560, firstfold1600, filtered1440, source1920 actually inspected; scoped reading/native fold/source clear+original151 passes, duplicated limitation title/remaining whitespace/full C/all-page/cross-browser NOT accepted"
+    },
+    "scope": "C reading only. No source/science/current/save/share/hosts/RC acceptance. Owner controls mirror."
+  },
+  "source_definition_execution": {
+    "task": "ci-1007-source-definition-context-v1",
+    "status": "TERMINAL_EXECUTION_OWNER_ROOT_CHECKED_NOT_SCIENTIFIC_ACCEPTANCE",
+    "actual_native_identity": "codebuddy/codebuddy-cli/deepseek-v4.1-flash",
+    "effort_evidence": "CLI --effort max and runner codebuddy_effort; native init verifies model/session, no separate internal effort event",
+    "native_session": "01a1289d-0557-74df-9407-03490fe4031d",
+    "duration_seconds": 1927.177,
+    "tools": 167,
+    "output_sha256": "1a4a0ef4a47264ff21705073f3d383995108d4ae1a8d9555d9419a78acd1b90e",
+    "fallback": false,
+    "timeout": false,
+    "owner_initial": "92 PASS120.60s; strict2/Ruff",
+    "owner_family": "2RED raw-unit fabrication and TEAE alias ->141 PASS142.60s ten named files; strict2/four-file Ruff. AE raw unit absent, schema-origin normalized count explicit; TESAE cannot borrow overall TEAE",
+    "scope": "Exact original AE definitions/population/outcome row-bound context; no live adoption/current, guard still unchanged"
+  },
+  "definition_candidate_v4": {
+    "package_sha256": "7deea74f488f879fc7e90130229815535433464e42cc31406e9cf4251d8aca9b",
+    "payload_sha256": "28b6100dfc585d50bf55f20fc98fc588b451f0452ec84187e75ad7491e633e12",
+    "derivation_sha256": "2b54d15a32a16d7a85bc027a1fc2928d24e0244d931d13e74d594ea36bf792ca",
+    "facts": 19,
+    "definition_changes": 6,
+    "unchanged_facts": 13,
+    "sources": 4,
+    "live_project_files_unchanged": 11716,
+    "live_ingestions": 0,
+    "adoptions": 0,
+    "current_changes": 0,
+    "isolated_normal_ingestion": "8 actual conflicts: six definition-less old candidate vs enriched candidate; two old PK accepted vs corrected candidate. No general accepted-sibling waiver justified."
+  },
+  "definition_repair_conference": {
+    "state": "SAME_SESSION_TARGETED_ROUND4_PENDING",
+    "role": "evidence_single_object",
+    "route": "pi/openai-codex/gpt-6.1-sol:high",
+    "session": "01a12888-7dc4-7000-a48d-db6a45b44ef1",
+    "runner_pid": 14322,
+    "runner_session": 78275,
+    "exit_event_session": 97645,
+    "hard_wait_seconds": 7200,
+    "prompt": "prompts/conference/ci-1007-source-context-and-domain-closure-v3/evidence_single_object_round4.md",
+    "preflight": "PASS",
+    "actual_identity": "VERIFY_AT_TERMINAL",
+    "independence": "Same completed review context; reduced continuation independence, no new independent model opinion claimed",
+    "frozen_source_files": true
+  },
+  "browser": {
+    "old_space": "184 actually unavailable",
+    "user_authorization": "Previously explicit clean dedicated temporary profile/space approval",
+    "profile_id": "Profile 2",
+    "profile_name": "CI 1007 专用临时验收 1011",
+    "space_id": 2,
+    "page": "p1",
+    "no_import_login_or_daily_cache_cleanup": true,
+    "share_new_browser_acceptance": "NOT_RUN_CURRENT_VERSION"
+  },
+  "no_rerun": [
+    "3989 adopted/886 registered/795 refresh",
+    "save15-18",
+    "current21 fourshares/sixoffline",
+    "fixed9d9 install",
+    "676 structural visits"
+  ],
+  "next_safe_action": "Collect original round4 terminal event without progress polling; guard unchanged while frozen review runs. Candidate-only exact definition enrichment needs a narrow rejection/rollback family after actual isolated8-conflict evidence; accepted-sibling domain waiver unchanged. Normal newepoch/issuer/19adoption/exact consumers/newcurrent and same-version UI/share follow, not old3989/886/795/save replay. Scoped source milestone Git only whitelisted source/tests/compact public evidence; frozen19v3 original REVISE never rewritten; no pause/RC.",
+  "release_limits": [
+    "all-source/universe/Publication/MAH/dynamic status/unknown relations",
+    "C reading and all-page/cross-browser visual",
+    "current revision edits/config/share/new-browser offline",
+    "three hosts/fresh install/recovery/24 portals/RC"
+  ]
 }
