@@ -1,0 +1,83 @@
+{
+  "state": "BOUNDED_SOURCE_VIEW_DEVELOPMENT_PASSED_RELEASE_NOT_ACCEPTED",
+  "baseline_commit": "41ca88b8a65aed780eb77f9b29796e5851472d88",
+  "goal_state": "active_unbounded_no_pause",
+  "method": "execution: one isolated pure-adapter worker; Owner owns shared renderer, identities, current and acceptance. Source token/version equalities have decisive checks; no new clinical equivalence or scientific adoption accepted here.",
+  "runtime": {
+    "task": "ci-1007-publication-source-view-v1",
+    "execution_session": 1896,
+    "terminal_returncode": 0,
+    "actual_provider": "zcode-live-bigmodel",
+    "actual_model": "GLM-5.3-Flash",
+    "actual_effort": "max",
+    "verified_response_count": 52,
+    "tool_call_count": 54,
+    "duration_seconds": 802.972,
+    "session_id": "sess_7cc014b1-4b06-4bd8-9d07-9e4f6dc0a612",
+    "raw_receipt_sha256": "e826f138b219bb76a8c8343b14881a32b97d5bb053f0987a0c3476e68d735264",
+    "worker_output_sha256": "9bfd0708d03999dea930dee65c272f2495d6228f54dde31ede99247ab5d08031",
+    "limitations": [
+      "Runner effective header retains requested primary DeepSeek; actual round runtime identity is GLM. Do not claim primary execution.",
+      "Fallback says primary lacked resumable session while attempt has returncode0 and session_id; primary cause not independently established.",
+      "Worker adjacent batch had90PASS1Owner-in-progress fixture FAIL; Owner final combined178PASS closes current scope only.",
+      "Original Node completion transport timed out at300s; worker was not failed/restarted. Local kqueue completion event55854 and worker1896 both terminal0."
+    ]
+  },
+  "root_families": [
+    "Original source fact/context/component/locator/count/version retained by ordinary B projector; exact printed percent can enter source-question descriptive display without an invented registry paramType.",
+    "Science pool/page source guards start from the same canonical rows; repeated guard is idempotent rather than duplicating a note and failing the digest check.",
+    "Owner found adapter missing measure path/definition/population/timepoint, present-null paramType and defensive audience copy;2 genuine failures then corrected full family.",
+    "Explicit-null source scope is not absence:2 genuine failures then reject conflicting declared identity instead of silently retaining null."
+  ],
+  "tests": {
+    "source_question_red": {"failed": 1, "already_passed": 13},
+    "adapter_owner_red": {"failed": 2},
+    "scope_null_red": {"failed": 2, "already_passed": 2},
+    "final_related": {"session": 94030, "passed": 178, "seconds": 2.43},
+    "adjacent_existing_views": {"session": 81316, "passed": 35, "seconds": 90.29},
+    "ruff": "PASS: two production modules, two tests and real-source recipe",
+    "strict_mypy": "PASS: two named production modules",
+    "instruments_or_introduced_regressions_preserved": [
+      "Initial new test context lacked required arm/term, not a product RED.",
+      "Owner introduced a top-level research-service import cycle, corrected with deferred imports; not a preexisting product defect.",
+      "Ordinary fixture metadata assumed project key and omitted required fields; test corrected after reading actual schema.",
+      "Test assumed group chart_type, actual contract stores _chart_type in each row; test corrected against production definition.",
+      "First real-source recipe copied an incomplete hash; guard rejected before output/current write. Exact64-character existing source pin restored; v1 and v2 successful outputs preserved separately."
+    ]
+  },
+  "real_source_replay": {
+    "recipe": "packets/2026-09-22-sol-delivery/evidence/1007V1/verify-publication-source-view-owner-v1.py",
+    "recipe_sha256": "520d880f1edc0d2cd5beec88ddf1f29659af57be24680d61b333059a9d662a66",
+    "artifact": ".artifacts/1007-publication-source-view-owner-v2/actual.json",
+    "artifact_sha256": "dbff5660de71af0b6c2f2493ae0e912eac7dc7b6e5c71f084b01c378d086adfa",
+    "source_package_sha256": "e89dcabb2763a3a486bca2dacacebff5df604dff2e661b230fd44dff0e7575e0",
+    "accepted_facts": 118,
+    "routed_parent_rows": 38,
+    "printed_percent": 34,
+    "parsing_unresolved": 4,
+    "unhandled_originals": 80,
+    "ordinary_source_question_rows": 4,
+    "ordinary_source_question_studies": 2,
+    "source_current_writes": 0,
+    "scientific_raw_normalization_facets_numeric_eligibility_unchanged": true,
+    "unknown_product_not_guessed": true
+  },
+  "author_sha256": {
+    "src/ci_workflow/renderers/portal/report_b.py": "b761b3e6d8b41e0b311e687128c38476cf52283f6c8e055ef078a052ec1d99ad",
+    "src/ci_workflow/reports/b/source_publication.py": "3c5a87505741e800799b557a052bdddab993cc94f9b71a2ce46e3d21f12e5b33",
+    "tests/integration/test_1007_source_question_projection.py": "2c03bde3aad55f5eb822900419f77cf5d46ac6196e4a8a947db01300487e4038",
+    "tests/unit/test_source_publication_view.py": "b6bb37f41134223bab8a9c91e83a100296471dae05ef2e9bbb6b5b7f4967d1fa"
+  },
+  "development_gate": {"session": 20609, "artifact": ".artifacts/1007-publication-source-view-quality-gate-v1", "state": "QUALITY_ONLY_PASSED", "terminal_returncode": 0, "source_set_unchanged": true, "prewrite_sha256": "5fba1b55186d33a72e803ea15044f54fad44f97e6f9dc17ab117a504b626e50f", "log_sha256": "79a1073b3600b603592e23d3109c79b0a3d637c2be276a313d06eef9b25b1be5", "scope": "Ruff src/tests/tools; strict mypy src/tools289 files; active unit/contract1267PASS290.72s; retained compatibility smoke20PASS; layer audit7PASS; legacy references PASS. Not full integration, science, browser, hosts, installation, recovery or RC."},
+  "archive": {
+    "root": "archives/execution/ci-1007-publication-source-view-v1",
+    "prompt_sha256": "8734dcbdfa9352da0a8a552ab781f2ad13e002c2f9a2a4e7877caff062a941cc",
+    "actual_locations": ["prompts/worker_01.md", "runs/worker_01.md", "logs/worker_01_stdout.txt"],
+    "original_cleanup_manifest_preserved": true,
+    "owner_recoverable_moves": "Guard same-basename same-second collision produced nested logs; only this node's three known directories moved to category names, all three original hashes exact. No evidence deleted."
+  },
+  "current": {"revision": 34, "A": 33, "B": 34, "C": 33, "active_facts": 1505, "generation": "eef1a1112645c45fc6a86c26f1a681eb773db84c271241671e6acfda7a0ccc3c"},
+  "preservation": "Five protected tracked user files rehashed exact; old reports/snapshots/current untouched; unknown/untracked files and legacy Chinese root untouched. Noreset/checkout/clean/add-all, no raw archives force-added.",
+  "not_run": ["Real publication product/arm/current consumer registration", "New real clinical multi-drug ECharts and same-query table in browser", "Current revision/edit/clear/fanout/share on these new source consumers", "Full science/visual/24portals/3hosts/fresh-install/recovery/RC"],
+  "next": "Prove source study/product/arm relationships using exact evidence, reuse existing entity/normalization/consumer contracts, then render and inspect actual multi-study clinical graph/table/source before ordinary current transaction and same-generation operation chain. Continue all W00-W10; no pause."
+}

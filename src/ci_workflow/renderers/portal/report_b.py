@@ -2711,6 +2711,8 @@ def _project_record(
     # recomputed and no current value is restored from the source.
     for field in (
         "source_id",
+        "source_fact", "source_fact_version_id", "source_result_context",
+        "source_component_projection", "source_locator", "reported_count",
         "source_domain", "source_metric", "source_param_type", "source_analysis_population",
         "source_value_role", "source_dispersion_type",
         "source_measure_path", "source_measure_definition", "source_clause_context",
@@ -2959,7 +2961,7 @@ def _efficacy_records(
             fallback=f"efficacy-{index + 1}",
         )
         records.append((row, value))
-    return _dedupe_records(records)
+    return _records_with_semantics(_dedupe_records(records), page_id="efficacy")
 
 
 def _safety_records(
@@ -3012,7 +3014,7 @@ def _safety_records(
                 legacy,
             )
         )
-    return _dedupe_records(records)
+    return _records_with_semantics(_dedupe_records(records), page_id="safety")
 
 
 def _state_rows_from_view(
@@ -3526,10 +3528,10 @@ def _records_with_semantics(
             copied["_domain"] = domain
         if source_domain_conflicts(copied, domain):
             copied["renderable"] = False
-            copied["difference_note"] = "；".join(filter(None, (
-                _text(copied.get("difference_note")),
+            copied["difference_note"] = "；".join(dict.fromkeys(filter(None, (
+                *_text(copied.get("difference_note")).split("；"),
                 "来源领域/指标不属于本页数值框，保留原值与来源，待核科学归属",
-            )))
+            ))))
         if ((domain in _CLINICAL_CONCEPT_LOOKUPS or domain == "supporting")
                 and not copied.get("clinical_concept")):
             copied.update(_semantic_projection(copied, source, domain=domain))
@@ -5366,7 +5368,8 @@ def _question_display_groups(
                         or any(not _question_reference_matches_measure(
                                references[ref], scope, row, key[1])
                                for ref in projection.basis_reference_ids)
-                        or source_domain_conflicts(row, _text(row.get("_domain"), "efficacy"))
+                        or (source_domain_conflicts(row, _text(row.get("_domain"), "efficacy"))
+                            and not _publication_component_statistic(row))
                     ):
                         raise ValueError("源作用域或引用不匹配")
                 except (TypeError, ValueError):
@@ -5380,6 +5383,62 @@ def _question_display_groups(
             result.append({**group, "rows": rows, "_source_question": resolved.get(question),
                            "_source_question_reason": reason})
     return tuple(result)
+
+
+def _publication_component_statistic(row: Mapping[str, Any]) -> str:
+    """Verify printed components without fabricating a registry paramType.
+
+    This is a source display check, not acceptance of an association or a
+    scientific numeric frame. Original components and their exact context must
+    agree; a current edit/clear cannot be passed off as a source-printed value.
+    """
+    # The research service also consumes portal models; defer these existing
+    # imports until projection time rather than create a second fact/parser.
+    from ci_workflow.application.source_research_service import ResearchFact
+    from ci_workflow.reports.b.publication_components import publication_value_components
+
+    try:
+        fact = ResearchFact.model_validate(row.get("source_fact"))
+    except ValueError:
+        return ""
+    context, clause = fact.result_context, fact.source_clause_context
+    if (context is None or clause is None or not _text(row.get("source_fact_version_id"))
+            or context.domain != "efficacy" or row.get("_domain") != "efficacy"
+            or context.metric != "unresolved"):
+        return ""
+    projected = publication_value_components(fact)["projection"]
+    if (projected["state"] != "projected"
+            or _canonical_json(projected) != _canonical_json(row.get("source_component_projection"))
+            or row.get("source_result_context") != context.model_dump(mode="json")):
+        return ""
+    count, percent = projected["components"]
+    expected_clause = clause.model_dump(mode="json")
+    if any(key in expected_clause["scientific_scope"]
+           and expected_clause["scientific_scope"][key] != row.get(key)
+           for key in ("source_version_id", "source_measure_path")):
+        return ""
+    expected_clause["scientific_scope"].update(
+        source_version_id=row.get("source_version_id"),
+        source_measure_path=context.source_measure_path,
+    )
+    expected = {
+        "row_id": fact.fact_id, "source_id": fact.source_id,
+        "source_measure_path": context.source_measure_path,
+        "source_measure_definition": context.endpoint,
+        "source_analysis_population": context.analysis_population,
+        "source_domain": context.domain, "source_metric": context.metric,
+        "source_value_role": context.value_role, "group_id": context.group_id,
+        "source_locator": fact.locator.model_dump(mode="json"),
+        "source_clause_context": expected_clause,
+        "reported_count": count["value"], "value": percent["value"], "unit": "%",
+        "numerator": None, "denominator": None, "disclosure_state": fact.disclosure_state,
+    }
+    if (context.source_measure_path != fact.locator.field_path
+            or any(row.get(key) != value for key, value in expected.items())
+            or (fact.disclosure_state == "reported_zero"
+                and (count["value"] != 0 or percent["value"] != 0))):
+        return ""
+    return "source_printed_n_percent"
 
 
 def _source_question_observation_groups(
@@ -5407,10 +5466,14 @@ def _source_question_observation_groups(
             if row is None or str(row_id) in covered:
                 continue
             required = ("trial_id", "product_id", "group_id", "source_version_id",
-                        "source_measure_path", "source_measure_definition", "source_param_type")
+                        "source_measure_path", "source_measure_definition")
+            statistic = (_publication_component_statistic(row)
+                         if "source_component_projection" in row else row.get("source_param_type"))
             projection = row.get("numeric_projection", {})
             if (not isinstance(projection, Mapping)
                     or any(semantic_value_is_unknown(row.get(field)) for field in required)
+                    or semantic_value_is_unknown(statistic)
+                    or projection.get("renderable") is not True
                     or semantic_value_is_unknown(projection.get("kind"))
                     or semantic_value_is_unknown(projection.get("plot_unit"))):
                 continue
@@ -5419,11 +5482,16 @@ def _source_question_observation_groups(
                    for field in ("source_version_id", "source_measure_path")):
                 continue
             key = tuple(_text(value) for value in (
-                projection["kind"], projection["plot_unit"], row["source_param_type"],
+                projection["kind"], projection["plot_unit"], statistic,
                 row.get("source_value_role"), row.get("statistical_form_family"),
                 row.get("source_dispersion_type"),
             ))
-            buckets[key].append((row, None))
+            # A verified printed percentage is observable in this descriptive
+            # source view even when the scientific metric is unresolved. Never
+            # restore renderability in the original science group/eligibility.
+            display = ({**row, "renderable": True}
+                       if statistic == "source_printed_n_percent" else row)
+            buckets[key].append((display, None))
         for key in sorted(buckets):
             bucket = _sorted_bucket(buckets[key], chronological=True)
             if len(bucket) < 2:

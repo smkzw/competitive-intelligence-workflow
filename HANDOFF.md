@@ -1,11 +1,13 @@
 # 唯一接手入口｜1007V1连续实施，非暂停、非RC
 
 唯一当前状态：[STATUS顶节](packets/2026-09-22-sol-delivery/STATUS.md)。
-最新[第十六有界回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-publication-components-v1.json)
+最新第十七来源视图接线开发完成；终态执行资料已归档，当前验证范围见STATUS顶节。
+已完成第十六[回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-publication-components-v1.json)
 及[复盘](docs/handoffs/RETROSPECTIVE_20261012_publication_components.md)。
 既有当前保存/来源采用见第十五owner-source-adoption-current34-v1.json，不重做。
 上一已push提交db4082033974cd9d07a2bd63ab63d5936b3b0819；后续核实际Git及回执parent。
 第十五已push7670b4d94b8b2a8dcba45705d1ee2353a0e03b6d并核远端exact。
+第十六已push41ca88b8a65aed780eb77f9b29796e5851472d88并核远端exact。
 Goal active/unbounded；全W00–W10继续，不用局部PASS宣布交付。
 
 ## 当前可恢复事实
@@ -36,13 +38,25 @@ actual备用ZCode/GLM5.3Flash/max814.126s/57工具/44响应身份已核；runner
 118原子重放34明确拆解/84原文保持，四真实PRIME/PRIME2普通project_record共同问题
 列成立。恢复publication-components-owner-v1/actual.json；未接真实图/表消费者，
 没有数值共轴、浏览器或current35。冻结宽门5044已terminal0/source-set exact：
-Ruff/strict288/1248当前284.82s/20兼容/7分层，仅开发质量，本批具名Git中。
+Ruff/strict288/1248当前284.82s/20兼容/7分层，仅开发质量，本批Git已完成。
 执行资料归档archives/execution/ci-1007-publication-cell-projection-v1的prompts/runs/logs；
 归档器同名目录碰撞已仅移动本节点三目录修正，三原hash exact，原manifest保留。
 旧v2逐对象页面比当前代码的一项FAIL已证明在prechange7670同样存在，登记query
 前后exact；保留旧hash/FAIL，不签新页面、宽门或已迁移测试。先接消费者再验当前候选。
 不重提全文、不另造平台、分母/组别不猜测。宇宙/中国MAH/24门户/三宿主/
 fresh-install/恢复/RC与同版剩余操作仍按原计划，不缩减终验。
+第十七ci-1007-publication-source-view-v1已terminal0，actual授权备用ZCode/GLM5.3Flash/
+max802.972s/54工具/52响应。Owner补适配测量/定义/人群/访视和缺param省略，
+删防御文案，scope显式null拒绝；普通B入口原子/上下文/图表载荷保留，完整池/物理
+页来源守卫统一幂等。178相关PASS2.43s、35邻接PASS90.29s和具名Ruff/strict通过。
+118接受事实按真实SQL/锁定版本只读重放38视图/34百分数/4解析/80未适配，四主要
+终点组成一个中文问题列。产品关联仍unknown，0current/来源写入，未接新的临床
+图/current消费者/修订/browser，不把合成入口当真实交付。恢复owner-v2，不覆写v1。
+节点exec1896及事件55854结束，原node事件300s工具超时不是worker失败；不再等。
+归档三原文件hash exact，原manifest同名碰撞保留，已精确恢复prompts/runs/logs。
+本批一次冻结宽门20609已terminal0/source-set exact：Ruff/strict289/1267当前290.72s/
+20兼容smoke/7分层/旧路径，仅开发质量；勿重复运行。接着真实研究/产品/组别关系与
+合法消费者、真正多药临床图表/同当前操作链；其余全W门继续，不阶段暂停。
 
 ## 只恢复，不重复终态
 
