@@ -25,14 +25,18 @@
 4. 精确绑定集合经 SQLite 真源与内容寻址原文（CAS）重开核验：事实行、主证据
    片段、来源版本、定位重提取与原文引用必须逐字一致；``user_modified``/
    ``rejected``/``superseded`` 行、已有其他已接受版本或无解决的来源冲突
-   一律拒绝。仅对同一不可变登记标量的旧解析器分母范围允许收据绑定修复：
-   当前解析重放必须逐字段一致，旧版本除 denominator_candidates 外完全
-   一致且旧人数原文/组别可重放。原冲突记录不更新；只追加修正决策/台账，
-   不接受真实值、人群、组别或来源争议。新真实复核可以覆盖与既往已接受
-   **完全相同的原子版本**：这些
-   行经逐字节核验后原样复用（科学载荷/标识/来源字节与 review_state 不变，
-   不产生新版本行、不晋升用户修订、不关闭冲突）；声明只有在精确闭合覆盖
-   时才接受，否则保持 candidate 并作为边界报告。
+   一律拒绝。仅对同一不可变登记标量的两类旧解析器偏差允许收据绑定修复：
+   （a）分母范围：当前解析重放必须逐字段一致，旧版本除
+   ``denominator_candidates`` 外完全一致且旧人数原文/组别可重放（旧兄弟须为
+   candidate）；（b）科学领域：旧版本除 ``result_context.domain`` 从
+   ``efficacy`` 到当前重放的 ``pk_pd`` 外完全一致（旧兄弟可为已接受或
+   candidate，历史 accepted 行保留）；域修正只有在已验证的冲突成员关系完整
+   覆盖同一事实的全部已接受兄弟版本时才成立（成员缺失、伪造或只覆盖部分
+   已接受兄弟一律失败关闭）。原冲突记录不更新；只追加修正决策/台账，
+   不接受真实值、人群、组别、任意领域改写或来源争议。新真实复核可以覆盖与
+   既往已接受 **完全相同的原子版本**：这些行经逐字节核验后原样复用（科学载荷/
+   标识/来源字节与 review_state 不变，不产生新版本行、不晋升用户修订、不关闭
+   冲突）；声明只有在精确闭合覆盖时才接受，否则保持 candidate 并作为边界报告。
 5. 物化只把精确绑定集合中仍为 candidate 的行翻转为 ``accepted``（先前已
    接受的精确复用原子不进入物化事务；科学载荷/标识/来源字节不可变，
    review_state 正交）；既有迁移的 ``fact_versions``/``claim_versions``
@@ -594,17 +598,84 @@ def _bind_context(
 # ── SQLite 真源与 CAS 重开核验 ───────────────────────────────────────────────
 
 
+def _exclusive_denominator_scope_repair(
+    *,
+    prior: dict[str, Any],
+    selected: dict[str, Any],
+    selected_without_n: dict[str, Any],
+    group_id: str,
+    capture: SourceCapture,
+) -> bool:
+    """True only when prior differs solely in replayable denominator_candidates."""
+    probe = json.loads(_canonical_json(prior))
+    try:
+        old_n = probe["result_context"].pop("denominator_candidates", [])
+    except (KeyError, TypeError, AttributeError):
+        return False
+    if probe != selected_without_n or old_n == selected["result_context"].get(
+        "denominator_candidates", []
+    ):
+        return False
+    if not old_n:
+        return False
+    for candidate in old_n:
+        quote = extract_locator_quote(
+            capture.content_text,
+            media_type=capture.media_type,
+            locator=EvidenceLocator(
+                document_role="clinical_trial_registry",
+                field_path="$." + candidate["value_path"],
+                url=capture.url,
+            ),
+        )
+        if (
+            candidate["group_id"] != group_id
+            or quote != candidate["raw_value"]
+            or candidate["parsed_value"] != int(quote)
+        ):
+            return False
+    return True
+
+
+def _exclusive_efficacy_to_pk_domain_repair(
+    *,
+    prior: dict[str, Any],
+    selected: dict[str, Any],
+) -> bool:
+    """True only when prior differs solely by domain efficacy → selected pk_pd."""
+    prior_probe = json.loads(_canonical_json(prior))
+    selected_probe = json.loads(_canonical_json(selected))
+    if not isinstance(prior_probe, dict) or not isinstance(selected_probe, dict):
+        return False
+    prior_context = prior_probe.get("result_context")
+    selected_context = selected_probe.get("result_context")
+    if not isinstance(prior_context, dict) or not isinstance(selected_context, dict):
+        return False
+    old_domain = prior_context.pop("domain", None)
+    new_domain = selected_context.pop("domain", None)
+    return (
+        prior_probe == selected_probe
+        and old_domain == "efficacy"
+        and new_domain == "pk_pd"
+    )
+
+
 def _registry_scope_corrections(
     database: sqlite3.Connection,
     item: _ClosureFact,
     receipt_digest: str,
     parsed: dict[str, dict[str, ResearchFact]],
-) -> tuple[RegistryScopeCorrection, ...]:
-    """Only repair a stale N scope from the SAME immutable registry scalar.
+) -> tuple[tuple[RegistryScopeCorrection, ...], frozenset[str]]:
+    """Repair stale parser scope/domain from the SAME immutable registry scalar.
 
-    This runs after normal issuer authorization. Genuine disagreements, prior
-    accepted/user versions, changed source/identity/analysis/value and unreplayed
-    N quotes still fail closed. A visit label alone is never scope evidence.
+    This runs after normal issuer authorization. Genuine disagreements, user/
+    rejected/superseded priors, changed source/identity/analysis/value, unreplayed
+    N quotes and arbitrary domain rewrites still fail closed. A visit label alone
+    is never scope evidence; selected parser output alone never authorizes a
+    sibling. Returns the receipt-bound corrections together with the union of
+    version ids validated as same-scalar domain members: later accepted-sibling
+    reuse must be covered by that validated membership, never by conflict
+    presence or by matching counts.
     """
     from ci_workflow.application.source_research_service import (
         extract_ctgov_atomic_results,
@@ -617,8 +688,8 @@ def _registry_scope_corrections(
         (item.fact.fact_id,),
     ).fetchall()
     if not conflicts:
-        return ()
-    fail = "绑定事实存在未解决的来源冲突：不符合已复核登记分母范围修复"
+        return (), frozenset()
+    fail = "绑定事实存在未解决的来源冲突：不符合已复核登记标量范围/领域修复"
     observation = item.fact.result_context
     if observation is None or observation.value_role != "reported_measure":
         raise SourceFactAcceptanceError(fail)
@@ -636,9 +707,10 @@ def _registry_scope_corrections(
     selected = item.fact.model_dump(mode="json", exclude={"row_ref"})
     if reproduced is None or reproduced.model_dump(mode="json", exclude={"row_ref"}) != selected:
         raise SourceFactAcceptanceError(fail)
-    selected_without_N = json.loads(_canonical_json(selected))
-    selected_without_N["result_context"].pop("denominator_candidates", None)
+    selected_without_n = json.loads(_canonical_json(selected))
+    selected_without_n["result_context"].pop("denominator_candidates", None)
     corrections = []
+    domain_members: set[str] = set()
     for conflict_id, original_note in conflicts:
         try:
             members = json.loads(original_note)["fact_version_ids"]
@@ -646,6 +718,7 @@ def _registry_scope_corrections(
                 raise ValueError("invalid members")
             if item.version_id not in members or len(members) < 2:
                 raise ValueError("selected version absent")
+            repair_kind: Literal["denominator", "domain"] | None = None
             for version_id in members:
                 if version_id == item.version_id:
                     continue
@@ -655,8 +728,8 @@ def _registry_scope_corrections(
                     "FROM fact_versions WHERE fact_id=? AND fact_version_id=?",
                     (item.fact.fact_id, version_id),
                 ).fetchone()
-                if row is None or row[0] != "candidate" or row[1] != item.fragment_id:
-                    raise ValueError("non-candidate or different source scalar")
+                if row is None or row[1] != item.fragment_id:
+                    raise ValueError("missing prior or different source scalar")
                 prior = json.loads(row[3])
                 if (
                     _sha256_text(_canonical_json(prior)) != row[2]
@@ -670,32 +743,42 @@ def _registry_scope_corrections(
                     != version_id
                 ):
                     raise ValueError("prior identity drift")
-                old_N = prior["result_context"].pop("denominator_candidates", [])
-                if prior != selected_without_N or old_N == selected["result_context"].get(
-                    "denominator_candidates", []
+                review_state = str(row[0])
+                if _exclusive_efficacy_to_pk_domain_repair(prior=prior, selected=selected):
+                    if review_state not in {"candidate", "accepted"}:
+                        raise ValueError("non-historical prior state")
+                    member_kind: Literal["denominator", "domain"] = "domain"
+                elif _exclusive_denominator_scope_repair(
+                    prior=prior,
+                    selected=selected,
+                    selected_without_n=selected_without_n,
+                    group_id=observation.group_id,
+                    capture=item.capture,
                 ):
-                    raise ValueError("not exclusively denominator scope")
-                if not old_N:
-                    raise ValueError("missing prior denominator is not this repair")
-                for candidate in old_N:
-                    quote = extract_locator_quote(
-                        item.capture.content_text,
-                        media_type=item.capture.media_type,
-                        locator=EvidenceLocator(
-                            document_role="clinical_trial_registry",
-                            field_path="$." + candidate["value_path"],
-                            url=item.capture.url,
-                        ),
-                    )
-                    if (
-                        candidate["group_id"] != observation.group_id
-                        or quote != candidate["raw_value"]
-                        or candidate["parsed_value"] != int(quote)
-                    ):
-                        raise ValueError("prior N quote/group not replayed")
+                    if review_state != "candidate":
+                        raise ValueError("non-candidate or different source scalar")
+                    member_kind = "denominator"
+                else:
+                    raise ValueError("not exclusively reparable registry scalar drift")
+                if repair_kind is None:
+                    repair_kind = member_kind
+                elif repair_kind != member_kind:
+                    raise ValueError("mixed registry scalar repair modes")
+            if repair_kind is None:
+                raise ValueError("selected version absent")
+            if repair_kind == "domain":
+                # Every member here was validated as an exclusive same-scalar
+                # domain repair against this selected version; only this
+                # validated membership may authorize accepted-sibling reuse.
+                domain_members.update(members)
+            classification = (
+                "same_registry_scalar_parser_domain_correction"
+                if repair_kind == "domain"
+                else "same_registry_scalar_parser_denominator_scope_correction"
+            )
             note = _canonical_json(
                 {
-                    "classification": "same_registry_scalar_parser_denominator_scope_correction",
+                    "classification": classification,
                     "selected_fact_version_id": item.version_id,
                     "receipt_digest": receipt_digest,
                     "source_version_id": item.source_version_id,
@@ -712,7 +795,34 @@ def _registry_scope_corrections(
             )
         except (KeyError, TypeError, ValueError) as error:
             raise SourceFactAcceptanceError(fail) from error
-    return tuple(corrections)
+    return tuple(corrections), frozenset(domain_members)
+
+
+def _domain_correction_authorizes_accepted_sibling(
+    corrections: tuple[RegistryScopeCorrection, ...] | list[RegistryScopeCorrection],
+    selected_fact_version_id: str,
+    accepted_sibling_version_ids: set[str],
+    validated_domain_member_ids: frozenset[str],
+) -> bool:
+    """True only when a domain-classified repair of this selected version covers
+    EVERY accepted sibling through validated conflict membership.
+
+    Membership coverage is the only evidence: conflict presence, matching counts
+    or one covered sibling never authorize uncovered accepted siblings, and
+    candidate-only denominator repairs never authorize any accepted sibling.
+    """
+    if not accepted_sibling_version_ids <= validated_domain_member_ids:
+        return False
+    for correction in corrections:
+        if correction.selected_fact_version_id != selected_fact_version_id:
+            continue
+        try:
+            note = json.loads(correction.resolution_note)
+        except json.JSONDecodeError:
+            continue
+        if note.get("classification") == "same_registry_scalar_parser_domain_correction":
+            return True
+    return False
 
 
 def _verify_bound_facts(
@@ -723,11 +833,12 @@ def _verify_bound_facts(
     context: ScientificQcCurrentContext,
     receipt_digest: str,
 ) -> tuple[tuple[str, ...], tuple[str, ...], tuple[RegistryScopeCorrection, ...]]:
-    """核验精确绑定集合并返回（全部绑定版本, 其中先前已接受的精确复用版本）。
+    """核验精确绑定集合并返回（全部绑定版本, 其中先前已接受的精确复用版本, 来源范围修复）。
 
     新真实复核可以覆盖与既往已接受完全相同的原子版本（逐字节核验后原样
     复用，状态与科学载荷不变）；``user_modified``/``rejected``/``superseded``
-    行、其他已接受兄弟版本与未解决来源冲突仍然失败关闭。
+    行、未解决来源冲突与未被已验证域修正成员关系覆盖的其他已接受兄弟版本
+    仍然失败关闭。
     """
     context_version_ids = {
         version_id for ref in context.source_refs for version_id in ref.fact_version_ids
@@ -786,14 +897,25 @@ def _verify_bound_facts(
                 raise SourceFactAcceptanceError("事实行内容摘要与快照不一致：拒绝接受")
             if str(row[10] or "") != item.scientific_context_json:
                 raise SourceFactAcceptanceError("事实行科学语义上下文与快照不一致：拒绝接受")
-            sibling = database.execute(
-                "SELECT 1 FROM fact_versions WHERE fact_id=? AND fact_version_id<>? "
-                "AND review_state='accepted'",
-                (fact.fact_id, item.version_id),
-            ).fetchone()
-            if sibling is not None:
+            item_corrections, item_domain_members = _registry_scope_corrections(
+                database, item, receipt_digest, parsed
+            )
+            corrections.extend(item_corrections)
+            accepted_siblings = {
+                str(row[0])
+                for row in database.execute(
+                    "SELECT fact_version_id FROM fact_versions WHERE fact_id=? "
+                    "AND fact_version_id<>? AND review_state='accepted'",
+                    (fact.fact_id, item.version_id),
+                ).fetchall()
+            }
+            if accepted_siblings and not _domain_correction_authorizes_accepted_sibling(
+                item_corrections,
+                item.version_id,
+                accepted_siblings,
+                item_domain_members,
+            ):
                 raise SourceFactAcceptanceError("同一逻辑事实已有其他已接受版本：拒绝重复接受")
-            corrections.extend(_registry_scope_corrections(database, item, receipt_digest, parsed))
             primary = database.execute(
                 "SELECT 1 FROM fact_evidence WHERE fact_version_id=? AND fragment_id=? "
                 "AND evidence_role='primary'",

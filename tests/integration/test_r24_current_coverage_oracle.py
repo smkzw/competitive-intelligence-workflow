@@ -28,7 +28,7 @@ from ci_workflow.reports.b.safety_concepts import describe_safety_concept
 ROOT = Path(__file__).resolve().parents[2]
 CONTENT = ROOT / "fixtures/positive/a-atopic-dermatitis/research-content.json"
 
-# Exact SAE -> common_ae move retained by current claim semantics:
+# Exact source-measured TESAE subset retained separately from SAE / common_ae:
 # NCT02277743 outcomeMeasures[19] TESAE is serious_teae_subset, not any_sae.
 NCT02277743_TESAE_MEASURE = (
     "resultsSection.outcomeMeasuresModule.outcomeMeasures[19]"
@@ -86,9 +86,18 @@ def test_old_ad_source_coverage_still_fails_with_study_and_death_visibility() ->
         "nct02277743", "nct03131648", "nct04146363", "nct03985943",
         "nct03349060", "nct03569293", "nct03334396", "nct03745638",
         "nct02118792", "nct05014568", "nct04773587", "nct05131477",
-        "nct05651711", "nct03703102", "nct03809663", "nct03533751",
+        "nct05651711", "nct03703102", "nct03533751",
         "nct04021862",
     }
+    # The frozen source explicitly has three non-numeric dispersion entries.
+    # Current SD parsing retains these as scoped technical failures, not a
+    # false "complete" or inferred zero. Historical source bytes are unchanged.
+    assert {item.trial_id for item in audit.trial_coverage
+            if item.status == "source_parse_failure"} == {"nct03809663"}
+    failures = [item for item in audit.issues if item.status == "parse_failure"]
+    assert len(failures) == 3
+    assert all(item.trial_id == "nct03809663" and item.source_path.endswith(".spread")
+               and "NA" in item.reason_zh for item in failures)
 
 
 def test_ada_and_viga_grade_improvement_remain_non_ae_outcomes() -> None:
@@ -123,12 +132,12 @@ def test_ada_and_viga_grade_improvement_remain_non_ae_outcomes() -> None:
     } == {"outcome"}
 
 
-def test_tesae_outcome_paths_moved_from_sae_to_common_ae_subset() -> None:
-    """Document the exact NCT02277743 path that left the SAE inventory.
+def test_tesae_outcome_paths_preserve_distinct_serious_teae_subset() -> None:
+    """Current production semantics; frozen source and historical receipts stay intact.
 
     Legacy audits counted TESAE under SAE because the title contains
     "Serious Adverse Events". Current semantics keep it as
-    ``serious_teae_subset`` / ``common_ae`` so it cannot overwrite any_sae.
+    ``serious_teae_subset`` / ``tesae`` so it cannot overwrite any_sae or common AE.
     """
     _, _, sources = _fixture()
     source = _source(sources, "NCT02277743")
@@ -140,7 +149,7 @@ def test_tesae_outcome_paths_moved_from_sae_to_common_ae_subset() -> None:
     assert concept.key == "serious_teae_subset"
     assert concept.teae is True
     assert concept.seriousness == "serious"
-    assert _outcome_category(title) == "common_ae"
+    assert _outcome_category(title) == "tesae"
     assert _outcome_category(
         record["resultsSection"]["outcomeMeasuresModule"]["outcomeMeasures"][20]["title"]
     ) == "common_ae"
@@ -163,7 +172,7 @@ def test_tesae_outcome_paths_moved_from_sae_to_common_ae_subset() -> None:
         atom.category
         for atom in atoms
         if (atom.value_locator.field_path or "").startswith(f"$.{NCT02277743_TESAE_MEASURE}")
-    } == {"common_ae"}
+    } == {"tesae"}
     assert {
         atom.category
         for atom in atoms

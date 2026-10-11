@@ -101,6 +101,7 @@ def test_audit_covers_every_registry_trial_and_preserves_secondary_source_status
         "reported_by_secondary_source",
         "registry_results_not_posted",
         "reported_not_projected",
+        "source_parse_failure",
     }
     assert {
         item.trial_id
@@ -110,7 +111,7 @@ def test_audit_covers_every_registry_trial_and_preserves_secondary_source_status
         "nct02277743", "nct03131648", "nct04146363", "nct03985943",
         "nct03349060", "nct03569293", "nct03334396", "nct03745638",
         "nct02118792", "nct05014568", "nct04773587", "nct05131477",
-        "nct05651711", "nct03703102", "nct03809663", "nct03533751",
+        "nct05651711", "nct03703102", "nct03533751",
         "nct04021862",
     }
     secondary = {
@@ -226,7 +227,7 @@ def _independent_registry_inventory(source: SourceCapture) -> Counter[str]:
         title = str(measure.get("title") or "")
         assert title
         category = ("outcome" if index < 18 else "teae" if index == 18
-                    else "common_ae")
+                    else "tesae" if index == 19 else "common_ae")
         for class_item in measure.get("classes", []) or []:
             for category_item in class_item.get("categories", []) or []:
                 for measurement in category_item.get("measurements", []) or []:
@@ -278,13 +279,14 @@ def test_audit_identifies_missing_outcomes_and_each_ae_family() -> None:
     expected = _independent_registry_inventory(source)
 
     assert not audit.passed
-    # TESAE outcomeMeasures[19] moved SAE -> common_ae under serious_teae_subset;
+    # TESAE outcomeMeasures[19] has its own serious_teae_subset category;
     # discontinuation outcomeMeasures[20] remains common_ae, not any_teae/any_sae.
     assert {"outcome", "teae", "sae", "common_ae", "death"} <= set(expected)
     assert expected["aesi"] == 0
     assert audit.inventory_counts["outcome"] == expected["outcome"]
     assert audit.inventory_counts["teae"] == expected["teae"]
     assert audit.inventory_counts["sae"] == expected["sae"]
+    assert audit.inventory_counts["tesae"] == expected["tesae"] == 3
     assert audit.inventory_counts["aesi"] == expected["aesi"]
     assert audit.inventory_counts["common_ae"] == expected["common_ae"]
     assert audit.inventory_counts["death"] == expected["death"]
@@ -493,10 +495,11 @@ def test_explicit_teae_and_aesi_are_separate_from_other_events() -> None:
     audit = audit_clinicaltrials_result_coverage(report, (changed,))
 
     # Explicit group TEAE and AESI markers add their own families; they must not
-    # reclassify the unchanged otherEvents / TESAE-subset common_ae inventory.
+    # reclassify unchanged otherEvents or the separate TESAE-subset inventory.
     assert expected["teae"] == baseline["teae"] + 1
     assert expected["aesi"] == 3
-    assert expected["common_ae"] == baseline["common_ae"] == 27
+    assert expected["common_ae"] == baseline["common_ae"] == 24
+    assert audit.inventory_counts["tesae"] == expected["tesae"] == 3
     assert audit.inventory_counts["teae"] == expected["teae"]
     assert audit.inventory_counts["common_ae"] == expected["common_ae"]
     assert audit.inventory_counts["aesi"] == expected["aesi"]

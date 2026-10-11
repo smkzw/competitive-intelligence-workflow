@@ -175,6 +175,36 @@
     return String((row && (row.arm || row.group)) || "组别未列示");
   }
 
+  function identitySeriesStyle(group, key) {
+    // Known clinical roles keep their existing mapping. Other source groups
+    // are categorical identities, never inferred treatment/control roles.
+    var role = String(key).split(":")[0];
+    if (role === "control" || key === "对照组") return { color: "#407AAA" };
+    if (role === "treatment" || key === "治疗组") return { color: "#FF9900" };
+    var seen = {};
+    var groups = chartGroups.concat([group]);
+    for (var g = 0; g < groups.length; g++) {
+      var rows = groups[g]._series_palette_rows || groups[g].rows || [];
+      for (var r = 0; r < rows.length; r++) {
+        var sourceKey = groupedSeriesKey(rows[r]);
+        var sourceRole = String(sourceKey).split(":")[0];
+        if (sourceRole !== "control" && sourceRole !== "treatment" &&
+            sourceKey !== "对照组" && sourceKey !== "治疗组") seen[sourceKey] = true;
+      }
+    }
+    // One full-page identity universe, independent of order/current filters.
+    // Bundled ECharts categorical colors encode identity, not departments or risk.
+    var palette = ["#5470C6", "#3BA272", "#9A60B4", "#FC8452", "#73C0DE", "#91CC75", "#FAC858"];
+    var index = Object.keys(seen).sort().indexOf(key);
+    var style = { color: palette[Math.max(0, index) % palette.length] };
+    if (index >= palette.length) {
+      style.decal = { symbol: "rect", symbolSize: 1, dashArrayX: [1, 0],
+        dashArrayY: [2 + Math.floor(index / palette.length), 3],
+        rotation: Math.PI / 4, color: "rgba(15,17,21,0.45)" };
+    }
+    return style;
+  }
+
   function groupedSeriesOrder(rows) {
     var seen = {};
     var keys = [];
@@ -303,9 +333,7 @@
     var series = [];
     for (var s = 0; s < seriesOrder.length; s++) {
       var key = seriesOrder[s];
-      var seriesColor = String(key).split(":")[0] === "control" || key === "对照组"
-        ? "#407AAA"
-        : "#FF9900";
+      var seriesStyle = identitySeriesStyle(group, key);
       var data = [];
       for (var c = 0; c < categories.length; c++) {
         var category = categoryKeys[c];
@@ -321,9 +349,7 @@
           value: value,
           _row_id: String(rowForCell.row_id),
           status: null,
-          itemStyle: {
-            color: seriesColor
-          },
+          itemStyle: seriesStyle,
           label: {
             // 独立审阅 R08（UI01）：标签策略按当前显示类别数判定；
             // 原 series[0] 自引用在首系列构建时恒为 undefined，首系列标签被吞
@@ -333,7 +359,11 @@
             color: value < 0 ? "#FFFFFF" : "#0F1115",
             fontSize: 16,
             fontWeight: 600,
-            padding: 2
+            padding: 2,
+            // Five identity slots can put adjacent long values too close even
+            // without geometric overlap. Stagger only positive grouped labels;
+            // the point/axis values and every source reference remain intact.
+            distance: 5 + (value >= 0 && seriesOrder.length > 2 ? (s % 2) * 18 : 0)
           }
         });
       }
@@ -341,8 +371,9 @@
         name: seriesLabels[key] || key,
         type: "bar",
         data: data,
-        itemStyle: { color: seriesColor },
+        itemStyle: seriesStyle,
         barMaxWidth: 54,
+        barGap: "35%",
         labelLayout: { hideOverlap: true },
         emphasis: {
           focus: "series",
@@ -1223,8 +1254,11 @@
       item.className = "kz-chart-legend__item";
       var swatch = document.createElement("span");
       swatch.className = "kz-chart-legend__swatch";
-      swatch.style.background = String(keys[j]).split(":")[0] === "control" || keys[j] === "对照组"
-        ? "#407AAA" : "#FF9900";
+      var style = identitySeriesStyle(group, keys[j]);
+      swatch.style.backgroundColor = style.color;
+      if (style.decal) {
+        swatch.style.backgroundImage = "repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(15,17,21,.45) 3px,rgba(15,17,21,.45) 5px)";
+      }
       item.appendChild(swatch);
       item.appendChild(document.createTextNode(String(labels[keys[j]] || keys[j])));
       legend.appendChild(item);
@@ -2147,6 +2181,7 @@
             filteredGroup[sourceKeys[sk]] = sourceGroup[sourceKeys[sk]];
           }
           filteredGroup.rows = filteredRows;
+          filteredGroup._series_palette_rows = sourceGroup.rows;
           var filteredPlan = presentationPlan(filteredGroup);
           if (wrapper) {
             wrapper.setAttribute("data-grid-span", String(filteredPlan.grid_span));

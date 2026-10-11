@@ -83,7 +83,7 @@ def test_fixed_full_legacy_closure_is_immutable_not_current_semantic_acceptance(
     ],
     ids=["immutable-v1-display", "current-v3-attribution"],
 )
-def test_source_revision_views_preserve_unknown_rows_and_full_b_query(
+def test_historical_source_views_remain_reachable_not_current_semantic_acceptance(
     tmp_path: Path,
     project_relative: str,
     receipt_name: str,
@@ -125,7 +125,15 @@ def test_source_revision_views_preserve_unknown_rows_and_full_b_query(
         byte_size=manifest_path.stat().st_size,
     )
     database_before = sha256((root / "state/project.sqlite").read_bytes()).hexdigest()
-    views = project_b_safety_source_views(root, snapshot, report, versions)
+    # These frozen candidates predate the source-class TESAE correction. The
+    # source row safe-aede81e88758e98ef7e3 has class_title=TESAEs, while the locked
+    # report says term_key=unknown. Current reproduction must refuse that old
+    # semantic context, not patch it in place or credit historical PASS anew.
+    with pytest.raises(PortalConsumerRegistrationError, match="measure_context"):
+        project_b_safety_source_views(root, snapshot, report, versions)
+    # Preserve the separate historical reachability contract using ONLY the
+    # previously locked view bytes. Located means locator, not new acceptance.
+    views = tuple(bound_b.safety_views["facts"])
     assert len(views) == 36
     assert sum(view["group_assignment_state"] == "unknown" for view in views) == unknown_count
     assert {view["row_id"] for view in views} == selected_ids

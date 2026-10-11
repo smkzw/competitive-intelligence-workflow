@@ -1,6 +1,16 @@
 {
   "schema_version": "1007-owner-continuous-checkpoint-1",
-  "state": "USER_REQUESTED_PAUSED_NOT_RC_NOT_COMPLETE",
+  "state": "USER_AUTHORIZED_CONTINUOUS_IMPLEMENTATION_NOT_RC_NOT_COMPLETE",
+  "resume_20261011": {
+    "baseline_commit": "ceaad83ac98b495dff350872fca4fef8418fd0cc",
+    "goal_api": "active_verified",
+    "integrity": "22 pause hashes and 11716 durable project files exact; current21 A21/B21/C9 and1144 facts unchanged",
+    "mode": "execution-plus-conference: distinct source-projection and acceptance-guard paths give material parallelism; frozen source/trust decisions require independent challenge",
+    "executor": "ci-1007-domain-sibling-closure-v2; selected CodeBuddy/deepseek-v4.1-flash:max; one launch exec38133/PID14730; actual identity and acceptance pending",
+    "wait": "NOTE_EXIT observer69812, no progress polling or redispatch",
+    "owner_scope": "N locator, TESAE canonical matching, supporting SD/N/population coverage; reuse existing v4 frontend candidate",
+    "history": "pause_current21 and prior terminal results retained; no completed adoption/registration/refresh/save replay"
+  },
   "baseline_commit": "3889c943d06ca1719509b1f8dc1543dc4a487ce2",
   "mode": "execution-plus-conference: shared source/current owner; independent code repair follow-up and normal source issuer are separate scopes",
   "prior_checkpoint": "evidence/1007V1/owner-dose-source-union-and-refresh-additions-v1.json",

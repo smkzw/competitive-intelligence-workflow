@@ -2587,6 +2587,8 @@ def render_report_a_site(
                 "keywords": [
                     row.row_id, row.trial_id, row.group_title,
                     row.time_window, row.domain, row.raw_value, row.raw_unit,
+                    row.source_param_type, row.source_dispersion_type,
+                    row.raw_dispersion, row.analysis_n, row.analysis_population,
                 ],
             }
             for row in data.additional_observations

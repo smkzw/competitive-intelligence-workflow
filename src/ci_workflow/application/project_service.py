@@ -4,6 +4,7 @@ import json
 import os
 import sqlite3
 import tempfile
+from contextlib import closing
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, cast
@@ -158,7 +159,14 @@ def _load_json_object(path: Path) -> dict[str, Any]:
     return cast(dict[str, Any], value)
 
 
-def verify_project_workspace(root: Path) -> ProjectWorkspaceVerification:
+def verify_project_workspace(
+    root: Path, *, read_only: bool = False,
+) -> ProjectWorkspaceVerification:
+    """Verify a workspace; locked-source readers must explicitly forbid upgrades.
+
+    Existing mutable implementation paths retain migration compatibility.
+    Read-only verification fails on unavailable schema rather than repairing it.
+    """
     project_root = root.expanduser().resolve()
     if not project_root.is_dir():
         raise ProjectWorkspaceError(f"项目目录不存在：{project_root}")
@@ -214,8 +222,14 @@ def verify_project_workspace(root: Path) -> ProjectWorkspaceVerification:
         payload = _load_json_object(project_root / relative)
         _assert_no_absolute_values(payload, location=relative)
     try:
-        apply_migrations(project_root / "state/project.sqlite")
-        with sqlite3.connect(project_root / "state/project.sqlite") as database:
+        database_path = project_root / "state/project.sqlite"
+        if not read_only:
+            apply_migrations(database_path)
+        connection = (
+            sqlite3.connect(database_path.as_uri() + "?mode=ro", uri=True)
+            if read_only else sqlite3.connect(database_path)
+        )
+        with closing(connection), connection as database:
             database.execute("PRAGMA foreign_keys = ON")
             integrity = database.execute("PRAGMA integrity_check").fetchone()
             stored_contract = database.execute(

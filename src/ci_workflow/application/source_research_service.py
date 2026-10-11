@@ -428,7 +428,7 @@ class ResearchResultContext(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     result_key: str
-    category: Literal["outcome", "teae", "sae", "aesi", "common_ae", "death", "baseline"]
+    category: Literal["outcome", "teae", "tesae", "sae", "aesi", "common_ae", "death", "baseline"]
     trial_id: str
     group_id: str
     group_title: str
@@ -658,12 +658,12 @@ class ScientificReview(BaseModel):
 
 
 ClinicalTrialsResultCategory = Literal[
-    "outcome", "teae", "sae", "aesi", "common_ae", "death", "parse_failure", "baseline"
+    "outcome", "teae", "tesae", "sae", "aesi", "common_ae", "death", "parse_failure", "baseline"
 ]
 ClinicalTrialsResultIssueStatus = Literal[
     "missing", "misclassified", "conflicting", "parse_failure"
 ]
-_ParsedOutcomeCategory = Literal["outcome", "teae", "sae", "aesi", "common_ae"]
+_ParsedOutcomeCategory = Literal["outcome", "teae", "tesae", "sae", "aesi", "common_ae"]
 ClinicalTrialsTrialCoverageStatus = Literal[
     "registry_results_projected",
     "reported_by_secondary_source",
@@ -751,7 +751,7 @@ class ClinicalTrialsResultCoverageAudit:
 
 @dataclass(frozen=True)
 class _RegistryResult:
-    category: Literal["outcome", "teae", "sae", "aesi", "common_ae", "death"]
+    category: Literal["outcome", "teae", "tesae", "sae", "aesi", "common_ae", "death"]
     trial_id: str
     source_id: str
     source_path: str
@@ -788,7 +788,7 @@ class CtgovAtomicResult:
     """One registry result with re-extracted numerator/value and denominator atoms."""
 
     result_key: str
-    category: Literal["outcome", "teae", "sae", "aesi", "common_ae", "death"]
+    category: Literal["outcome", "teae", "tesae", "sae", "aesi", "common_ae", "death"]
     trial_id: str
     source_id: str
     group_id: str
@@ -832,6 +832,7 @@ _TEAE_TERMS = frozenset({"任何TEAE", "TEAE", "anyteae", "treatmentemergentadve
 _AESI_TERMS = frozenset({"AESI", "预先界定AESI", "特别关注不良事件"})
 _RESULT_CATEGORY_ZH = {
     "teae": "治疗期间不良事件",
+    "tesae": "严重治疗期间不良事件子集",
     "sae": "严重不良事件",
     "aesi": "特别关注不良事件",
     "common_ae": "常见不良事件",
@@ -1055,6 +1056,8 @@ def _outcome_category(
         return "outcome"
     if selected.key == "any_sae" and selected.polarity == "affirmed":
         return "sae"
+    if selected.key == "serious_teae_subset" and selected.polarity == "affirmed":
+        return "tesae"
     if selected.key == "any_teae" and selected.polarity == "affirmed":
         return "teae"
     if selected.key == "aesi" and selected.polarity == "affirmed":
@@ -1063,7 +1066,7 @@ def _outcome_category(
     # qualification; contextual visit labels are already handled upstream.
     if selected.key in {
         "generic_ae", "specific_ae", "discontinuation_ae", "treatment_related_ae",
-        "grade_3_plus", "serious_teae_subset", "composite_ae",
+        "grade_3_plus", "composite_ae",
         "grade_specific", "severity_specific_teae", "non_serious_teae",
         "absence_sae", "death",
     }:
@@ -1248,9 +1251,9 @@ def _report_safety_match(row: object, expected: _RegistryResult) -> bool:
     if expected.value is None or not isinstance(value, (int, float)):
         return False
     raw_group_count = (
-        expected.category in {"sae", "death"}
-        and expected.source_path.startswith("resultsSection.adverseEventsModule.eventGroups[")
+        expected.numerator is not None
         and getattr(row, "measure_object", None) == "participant_count"
+        and (expected.domain == "adverse_events" or expected.category in {"sae", "death"})
     )
     if raw_group_count:
         return (
@@ -1279,6 +1282,20 @@ def _report_safety_match(row: object, expected: _RegistryResult) -> bool:
 def _report_safety_term_matches(row: object, expected: _RegistryResult) -> bool:
     category = str(getattr(row, "category", ""))
     term = _result_text(getattr(row, "term", ""))
+    if expected.category == "tesae":
+        # TESAE is a source-measured serious treatment-emergent subset, not
+        # ordinary AE, any SAE, or an inferred subset of another measure.
+        concept = describe_measured_safety_concept(
+            expected.endpoint, expected.class_title, expected.category_title)
+        return (
+            concept.key == "serious_teae_subset" and concept.polarity == "affirmed"
+            and category == safety_category_zh(concept.key)
+            and getattr(row, "term_key", None) == concept.key
+            and getattr(row, "polarity", None) == concept.polarity
+            and getattr(row, "seriousness", None) == concept.seriousness
+            and getattr(row, "teae", None) is True
+            and term == expected.term
+        )
     if expected.category == "sae":
         if expected.source_path.endswith(".seriousNumAffected"):
             return (
@@ -3121,7 +3138,9 @@ def _audit_source_record(
     used_efficacy_rows: set[str],
 ) -> dict[str, int]:
     inventory = {
-        category: 0 for category in ("outcome", "teae", "sae", "aesi", "common_ae", "death")
+        category: 0 for category in (
+            "outcome", "teae", "tesae", "sae", "aesi", "common_ae", "death"
+        )
     }
     registry_results: list[_RegistryResult] = []
     for parser, path in (
@@ -3200,6 +3219,43 @@ def _audit_source_record(
                     result_key=result.result_key,
                     reason_zh="非临床疗效/AE 的登记观察缺少唯一的同领域原值记录；不得改列疗效",
                 )
+            else:
+                row = matching[0]
+                spread_path = f"$.{result.dispersion_path}" if result.dispersion_path else None
+                spread_quote = (
+                    extract_locator_quote(source.content_text, media_type=source.media_type,
+                        locator=EvidenceLocator(document_role="clinical_trial_registry",
+                                                field_path=spread_path, url=source.url))
+                    if spread_path else None
+                )
+                analysis_n = ctgov_participant_denominator(
+                    result.denominator_candidates, param_type=result.source_param_type)
+                expected_context = {
+                    "raw_value_type": result.raw_value_type,
+                    "class_title": result.class_title,
+                    "category_title": result.category_title,
+                    "group_title": result.group_title,
+                    "source_param_type": result.source_param_type or None,
+                    "source_dispersion_type": result.source_dispersion_type or None,
+                    "raw_dispersion": spread_quote,
+                    "dispersion_source_path": spread_path,
+                    "analysis_population": result.analysis_population or None,
+                    "analysis_n": analysis_n.parsed_value if analysis_n else None,
+                    "analysis_n_source_path": (
+                        "$." + analysis_n.value_path if analysis_n else None),
+                }
+                changed = [key for key, value in expected_context.items()
+                           if getattr(row, key) != value]
+                if changed:
+                    _result_issue(
+                        issues=issues, category="outcome", status="conflicting",
+                        trial_id=trial_id, source_id=source.source_id,
+                        source_path=result.source_path, result_key=result.result_key,
+                        reason_zh=(f"{result.group_id} 非疗效登记观察的原始统计语境缺失或变更："
+                                   + "、".join(changed)
+                                   + "；均值存在不能代替标准差、分析人数及人群的完整来源"),
+                        report_row_ids=(row.row_id,),
+                    )
             continue
         if result.category == "outcome" and not is_safety_domain_endpoint(result.endpoint):
             exact = [
@@ -3440,7 +3496,7 @@ def audit_clinicaltrials_result_coverage(
     registry_projection_issues_by_trial: dict[str, set[str]] = {}
     inventory_counts = {
         category: 0 for category in (
-            "outcome", "teae", "sae", "aesi", "common_ae", "death", "parse_failure"
+            "outcome", "teae", "tesae", "sae", "aesi", "common_ae", "death", "parse_failure"
         )
     }
     used_efficacy_rows: set[str] = set()

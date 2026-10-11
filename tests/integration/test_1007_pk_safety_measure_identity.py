@@ -10,15 +10,17 @@ from typing import Any
 import pytest
 
 from ci_workflow.application.source_research_service import (
+    audit_clinicaltrials_result_coverage,
     classify_source_outcome,
     extract_ctgov_atomic_results,
     research_facts_from_ctgov_atom,
     source_capture_from_ctgov_study,
 )
-from ci_workflow.domain.evidence import CtgovRecordSelector
+from ci_workflow.domain.evidence import CtgovRecordSelector, EvidenceLocator
+from ci_workflow.renderers.portal.report_a import ReportAPortalData
 from ci_workflow.reports.b.safety_concepts import describe_safety_concept
 from ci_workflow.sources.connectors.ctgov_fetch import DerivedCtgovStudy
-from ci_workflow.storage.source_derivation import capture_source_text
+from ci_workflow.storage.source_derivation import capture_source_text, extract_locator_quote
 from tests.integration.test_r24_a_builder_contract import _build, _study
 
 
@@ -129,3 +131,71 @@ def test_generic_builder_preserves_supporting_pk_statistics(tmp_path: Path) -> N
     assert all(r["dispersion_source_path"].endswith(".spread") for r in rows)
     assert all(r["analysis_population"] == "Healthy volunteers with evaluable PK samples"
                for r in rows)
+
+
+def _report(tmp_path: Path, measure: dict[str, Any]) -> ReportAPortalData:
+    study = _study("NCT05405985", 192, "ACTUAL", [
+        {"name": "Studydrug", "type": "DRUG", "armGroupLabels": ["Drug arm"]}])
+    study["resultsSection"] = {"outcomeMeasuresModule": {"outcomeMeasures": [measure]}}
+    return ReportAPortalData.model_validate(_build(tmp_path, [study]))
+
+
+def test_analysis_n_locator_reextracts_the_exact_group_count(tmp_path: Path) -> None:
+    source = _capture(tmp_path, _measure())
+    report = _report(tmp_path, _measure())
+    for row in report.additional_observations:
+        assert row.analysis_n_source_path and not row.analysis_n_source_path.startswith("$.$.")
+        quote = extract_locator_quote(source.content_text, media_type=source.media_type,
+            locator=EvidenceLocator(document_role="clinical_trial_registry",
+                                    field_path=row.analysis_n_source_path, url=source.url))
+        assert int(quote) == row.analysis_n
+    assert not audit_clinicaltrials_result_coverage(report, (source,)).issues
+
+
+@pytest.mark.parametrize(("field", "wrong"), [
+    ("raw_dispersion", None), ("raw_dispersion", "5.92"),
+    ("dispersion_source_path", "$.wrong.spread"),
+    ("analysis_n", None), ("analysis_n", 96),
+    ("analysis_n_source_path", "$.wrong.count"),
+    ("analysis_population", None), ("analysis_population", "Patients with PN"),
+    ("source_param_type", "MEDIAN"), ("source_dispersion_type", "STANDARD_ERROR"),
+    ("raw_value_type", "float"), ("class_title", "ADA-positive participants"),
+])
+def test_coverage_rejects_lost_or_changed_supporting_context(
+    tmp_path: Path, field: str, wrong: Any,
+) -> None:
+    source = _capture(tmp_path, _measure())
+    report = _report(tmp_path, _measure())
+    assert not audit_clinicaltrials_result_coverage(report, (source,)).issues
+    first, peer = report.additional_observations
+    changed = report.model_copy(update={"additional_observations": (
+        first.model_copy(update={field: wrong}), peer)})
+    audit = audit_clinicaltrials_result_coverage(changed, (source,))
+    assert audit.issues, f"Lost/changed {field} must not be accepted as complete"
+    assert all(issue.status == "conflicting" for issue in audit.issues)
+    assert all("OG000" in issue.reason_zh for issue in audit.issues)
+
+
+def test_tesae_child_has_distinct_category_and_matches_real_builder_row(tmp_path: Path) -> None:
+    measure = {
+        "title": "Number of Participants With Adverse Events", "timeFrame": "Week 24",
+        "paramType": "COUNT_OF_PARTICIPANTS", "unitOfMeasure": "Participants",
+        "groups": [{"id": "OG001", "title": "Drug arm"}],
+        "denoms": [{"units": "Participants", "counts": [{"groupId": "OG001", "value": "77"}]}],
+        "classes": [{"title": "TESAEs", "categories": [{"measurements": [
+            {"groupId": "OG001", "value": "2"}]}]}],
+    }
+    source = _capture(tmp_path, measure)
+    atoms, issues = extract_ctgov_atomic_results(source)
+    assert not issues and len(atoms) == 1
+    assert atoms[0].category == "tesae"
+    assert all(f.field_id.startswith("ctgov.tesae.")
+               for f in research_facts_from_ctgov_atom(atoms[0]))
+    report = _report(tmp_path, measure)
+    assert report.safety[0].term_key == "serious_teae_subset"
+    assert report.safety[0].category == "严重TEAE子集（登记）"
+    assert not audit_clinicaltrials_result_coverage(report, (source,)).issues
+    misleading = report.model_copy(update={"safety": (
+        report.safety[0].model_copy(update={
+            "category": "常见不良事件", "term_key": "generic_ae"}),)})
+    assert audit_clinicaltrials_result_coverage(misleading, (source,)).issues

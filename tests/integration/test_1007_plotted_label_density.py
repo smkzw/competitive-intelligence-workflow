@@ -104,3 +104,45 @@ def test_statistic_is_preserved_when_it_is_not_an_exact_existing_suffix() -> Non
         "statistical_form_family_label_zh": "标准差",
     }
     assert _group_title(row, domain="baseline").endswith(" · 标准差")
+
+
+@pytest.mark.skipif(not REAL.is_file(), reason="bound normal preview chart payload absent")
+def test_source_identity_styles_are_distinct_and_stable_after_filter_and_reorder() -> None:
+    script = r"""
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const groups=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
+const sandbox={window:{__CHART_GROUPS__:groups},
+ document:{readyState:'loading',addEventListener(){}}};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),sandbox);
+const api=sandbox.window.__CHART_SYNC__;
+const styles=g=>Object.fromEntries(api.buildBarOption(g).series.flatMap(s=>s.data
+ .filter(p=>p._row_id && p.value!==null).map(p=>[p._row_id,s.itemStyle.color])));
+for(const group of groups){
+ const original=JSON.stringify(group),full=styles(group),ids=Object.keys(full);
+ assert.ok(new Set(Object.values(full)).size>1,
+  'different source identities must not all be orange');
+ const keys=new Set(group.rows.map(r=>r._chart_series_key+'\u0001'+r._chart_series_label));
+ assert.equal(new Set(Object.values(full)).size,keys.size,
+  'real five source identities must be distinguishable');
+ const reordered=styles({...group,rows:[...group.rows].reverse()});
+ for(const id of ids) assert.equal(reordered[id],full[id]);
+ for(const row of group.rows){
+  const filtered=styles({...group,rows:[row]});
+  assert.equal(filtered[row.row_id],full[row.row_id],
+   'filtering must not recolor a source identity or imply a new clinical role');
+ }
+ for(const series of api.buildBarOption(group).series){
+  assert.ok(parseFloat(series.barGap)>=30,'adjacent numeric labels need a visible gap');
+  for(const point of series.data)if(point.value!==null)
+   {assert.equal(point.itemStyle.color,series.itemStyle.color);
+    assert.ok([5,23].includes(point.label.distance),
+     'close grouped values require supported staggered label distance');}
+ }
+ assert.equal(JSON.stringify(group),original,'styling never edits clinical data');
+}
+"""
+    result = subprocess.run(
+        ["node", "-e", script, str(CHARTS), str(REAL)],
+        capture_output=True, text=True, check=False,
+    )
+    assert result.returncode == 0, result.stderr

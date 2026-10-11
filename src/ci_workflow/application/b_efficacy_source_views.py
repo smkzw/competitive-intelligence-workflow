@@ -214,7 +214,7 @@ def project_b_efficacy_source_views(
     if not row_versions or len(set(row_versions.values())) != len(row_versions):
         raise BEfficacySourceViewError("B 疗效来源视图缺少唯一的来源数值原子")
     snapshot = SnapshotStore(project_root).read(evidence_snapshot)
-    contract = verify_project_workspace(project_root).contract
+    contract = verify_project_workspace(project_root, read_only=True).contract
     if (
         snapshot["project_id"] != contract.project_id
         or snapshot["contract_version"] != contract.contract_version

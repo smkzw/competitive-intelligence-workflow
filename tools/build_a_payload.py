@@ -951,7 +951,7 @@ def main() -> None:
                                         or "") or None,
                                     "analysis_n": analysis_n.parsed_value if analysis_n else None,
                                     "analysis_n_source_path": (
-                                        "$." + analysis_n.value_path if analysis_n else None),
+                                        analysis_n.value_path if analysis_n else None),
                                 })
                                 ROW_SOURCE_MAP.append({
                                     "domain": "additional_observations",
