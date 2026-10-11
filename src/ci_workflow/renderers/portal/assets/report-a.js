@@ -2072,16 +2072,25 @@
       heading.appendChild(th);
     });
     head.appendChild(heading);
-    var displayed = Object.create(null), filtered = Object.keys(selected).length > 0, retained = 0;
+    var displayed = Object.create(null), filtered = Object.keys(selected).length > 0;
+    var matchedStudies = [], unmatchedStudies = [];
     window.__COMPARISON_QUERY__.studyIds(workspace.study_ids, columns, allowed).forEach(function (study) {
       var studyRows = Object.keys(rows).filter(function (id) {
         return rows[id].trial_id === study && allowed[id];
       });
       if (filtered && !studyRows.length) return;
       var tr = document.createElement("tr"), label = document.createElement("th");
+      // Classify against the entire selected question, not its physical page.
+      // Null/cleared and zero-valued source records still qualify as records.
+      var hasQuestionRows = allColumns.some(function (column) {
+        return (column.cells[study] || []).some(function (id) { return allowed[id] && rows[id]; });
+      });
+      tr.dataset.studyId = study;
+      (hasQuestionRows ? matchedStudies : unmatchedStudies).push(study);
+      if (!hasQuestionRows) tr.className = "kz-a-comparison-unmatched";
       label.scope = "row"; label.textContent = window.__COMPARISON_QUERY__.studyText(
         study, (workspace.study_labels || {})[study]);
-      tr.appendChild(label); retained += 1;
+      tr.appendChild(label);
       columns.forEach(function (column) {
         var cell = document.createElement("td");
         window.__COMPARISON_QUERY__.observationIds(
@@ -2104,9 +2113,13 @@
       });
       body.appendChild(tr);
     });
+    host.dataset.matchedStudyIds = JSON.stringify(matchedStudies);
+    host.dataset.unmatchedStudyIds = JSON.stringify(unmatchedStudies);
+    var unmatchedCount = host.querySelector("[data-comparison-unmatched-count]");
+    if (unmatchedCount) unmatchedCount.textContent = String(unmatchedStudies.length);
     host.querySelector("[data-a-comparison-prev]").disabled = aComparisonPage <= 1;
     host.querySelector("[data-a-comparison-next]").disabled = aComparisonPage * 4 >= allColumns.length;
-    host.querySelector("[data-a-comparison-status]").textContent = retained + "项研究 · 第" +
+    host.querySelector("[data-a-comparison-status]").textContent = matchedStudies.length + "项匹配研究 · 第" +
       aComparisonPage + "/" + (Math.ceil(allColumns.length / 4) || 1) + "页 · " +
       Object.keys(displayed).length + "条结果";
     window.__COMPARISON_QUERY__.recordScope(host, allowed, allColumns, Object.keys(displayed));

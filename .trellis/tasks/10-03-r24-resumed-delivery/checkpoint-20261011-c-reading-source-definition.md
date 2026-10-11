@@ -1,5 +1,18 @@
 # 2026-10-11｜C阅读真实切片与来源定义缺口
 
+当前第九批owner-a-unmatched-reading-v1.json，54b53838已push/远端核实。
+模式direct execution加既有独立会商整合：A复用原生B披露机制，共同查询与
+浏览器单一Owner，无新科学裁决/新框架；版本有实质科学不确定性，C03终态
+actualGLM5.3Flash/max1162.414s/34工具，不再等65749/6964或重派。
+A2RED→五文件42PASS1.73s，normalA49/1505/16257/current32保持，Ego四宽
+默认3/43/all46与筛选2/2/all4，原生键盘12态及4来源回焦通过；原16态嵌套
+table统计误差FAIL保留，只补验主表12态。Owner看1440/2560整体REVISE，
+来源英文墙/晚于cutoff日期取值/真正多药矩阵待修。118零采用，source/current/
+save/share零写，宽门NOT_RUN。本批具名Git后原生版本定位/来源阅读和日期，
+同候选操作分享/全W门继续。不重跑历史或自行暂停。
+
+## 历史第八单元（已push54b53838；不是当前待提交或待等待）
+
 唯一当前第八批owner-shared-chart-reading-v1.json，37678ef0已push/核远端。
 模式execution-plus-conference：Owner共同资产/查询/浏览器单一写者；独立
 六事实/两论文公开版本见证有实质科学不确定性，C03只读并行，预检PASS，

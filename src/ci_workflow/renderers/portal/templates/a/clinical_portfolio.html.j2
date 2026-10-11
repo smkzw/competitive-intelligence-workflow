@@ -24,7 +24,8 @@
     </div>
     <p data-a-comparison-status aria-live="polite"></p>
     <div class="kz-a-table-wrap" tabindex="0" aria-label="全研究横比矩阵，可横向滚动">
-      <table data-a-comparison-table data-primary-comparison-table><thead></thead><tbody></tbody></table>
+      <label class="kz-a-unmatched-control"><input type="checkbox" data-comparison-unmatched-toggle aria-controls="kz-a-comparison-studies">展开本问题暂无匹配记录的其余研究（<span data-comparison-unmatched-count>0</span>）</label>
+      <table id="kz-a-comparison-studies" data-a-comparison-table data-primary-comparison-table><thead></thead><tbody></tbody></table>
     </div>
     <div id="kz-chart-module" aria-label="当前比较问题联动图"></div>
   </section>

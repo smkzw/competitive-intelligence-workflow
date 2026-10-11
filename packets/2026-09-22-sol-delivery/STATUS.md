@@ -1,6 +1,19 @@
 # 唯一当前状态：1007V1连续实施｜current32阅读体验被用户否决，正在修正，非RC
 
-当前第八批以37678ef0已push/远端exact为基线，最新
+当前第九批以54b53838已push/远端exact为基线，最新
+[A空行回执](evidence/1007V1/owner-a-unmatched-reading-v1.json)：2RED→五文件
+42PASS1.73s/具名静态，normal A49/1505/16257/current32保持。四宽默认3匹配/
+43可展开/all46，筛选2/2/all4；原生Space展开/收起12态及同候选4来源/Esc通过。
+原16态嵌套表误计FAIL保留，仅补主表12态。Owner看1440/2560（缩2048），
+整体REVISE，来源英文墙与晚于cutoff日期取值、真正多药矩阵仍待修。
+六事实会商65749/6964已终态actualGLM-5.3-Flash/max1162.414s/34工具，
+[Owner处置](evidence/1007V1/owner-public-version-witness-slice-v1.json)：元数据
+核实、原生locator缺口明确；不自动采用118。下一原生版本定位/来源日期和
+阅读修复，同候选保存配置分享及全W门继续。第九批具名Git中，无新宽门。
+
+## 前一第八批记录（已push54b53838，旧在途仅历史）
+
+第八批以37678ef0已push/远端exact为基线，当时
 [共享阅读回执](evidence/1007V1/owner-shared-chart-reading-v1.json)。共同英文
 单位重复、图点空控件/cascade及真实访视末端次序修复；4真RED+实际图1真RED
 →九文件87PASS5.00s/具名Ruff/strict1/Node/mirror。普通v5 A49/B104、1505/

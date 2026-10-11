@@ -1,0 +1,15 @@
+{
+ "schema":"bounded-owner-receipt/v1",
+ "baseline_commit":"54b5383864e9498e709ea205705a781fc0437242",
+ "mode":"Owner direct execution: shared query and browser have one writer; native B disclosure reused without new framework or scientific judgment",
+ "goal_state":"active_verified",
+ "product_state":"REVISE_NOT_RELEASE_ACCEPTED",
+ "implementation":["A defaults to selected-question matching studies, with a native checkbox exposing every other retained study","Classification uses all selected-question columns, not the physical page; zero, cleared and off-page records remain matched","Native CSS checked state controls presentation only; unsupported selectors retain every study"],
+ "verification":{"root_red":2,"related":"Five files42PASS1.73s","static":"Named Ruff, Node syntax, author/mirror and whitespace checks PASS","new_wide_gate":"NOT_RUN"},
+ "candidate":{"path":".artifacts/1007-a-unmatched-reading-v1","actual_sha256":"8cf5c2d131e37d57c1206de7ef253bdd86eed1b2e80b69043a2559daf5188f76","pages":{"A":49},"facts":1505,"persistent_files_verified_unchanged":16257,"source_current_save_share_writes":0,"current_revision":32,"generation":"ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4","unchanged_B_C":"Not rerendered or newly accepted"},
+ "browser":{"environment":"Existing EgoLite space2/profile1/p1","widths_css_px":[1440,1600,1920,2560],"native_reading_states":12,"native_receipt_sha256":"a85b084dc0ed45b996c49a5cf4f21aa1cb22e26157c46a8ed97bfb6b5baadcfc","source_focus_states":4,"source_receipt_path":"a-qa/actual.json","source_receipt_sha256":"5c674c2a52dbb0b1d8cb36022f4500d3fcbc967d294d9c913d19c91be353713a","scope":"Default3matched/43expandable/all46retained; native Space expand and collapse preserve query; filter2matched/2expandable/all4retained;32-to4 fact IDs, original24point line, real75 locator/source and Esc focus","owner_pixels":["dense1440","filtered2560"],"pixel_scope":"Actual2560 retained, tool display resized2048; only empty-row disclosure accepted. Sources still form an English wall, dates later than cutoff need tracing, overall graph hierarchy and full product remain REVISE"},
+ "failures_retained":["Initial render launch omitted PYTHONPATH and stopped at import before candidate creation; corrected environment only","Original browser instrument selected nested observation-table tbody rows as study rows; all46studies and correct3/43classification were present. Four source/focus scopes passed. Original16state FAIL retained; recovery counted only direct primary-table rows and replayed only12native reading states on unchanged candidate"],
+ "author_sha256":{"report-a.js":"7ab2c9b4b828b402821be0f7984a634db9cd7f8bb10f679f30e259dcdc220155","report-a.css":"567fab6e3101688c4b24987b1a42c72bca78e490d2420940c176f644e149d0d5","templates/a/clinical_portfolio.html.j2":"e57b0d244e7826ac1646c7f4d7b8b75a140ac449567d61f349f5b7c298ecdbeb"},
+ "publication_adoptions":0,
+ "next":"Source reading/date root and narrow native version locator wiring; real used-version qualification, multi-drug clinical graph/table, same-version operations/sharing and full W00-W10 remain open"
+}

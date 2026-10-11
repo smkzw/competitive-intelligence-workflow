@@ -7,7 +7,7 @@ import pytest
 
 
 @pytest.mark.parametrize("case", ("existing", "mixed-question", "off-page", "descriptive",
-                                  "trajectory", "cleared-descriptive"))
+                                  "trajectory", "cleared-descriptive", "unmatched"))
 def test_a_matrix_filter_paging_linked_groups_and_fact_buttons(case):
     root = Path(__file__).resolve().parents[2]
     script = root / "src/ci_workflow/renderers/portal/assets/report-a.js"
@@ -85,6 +85,23 @@ if(which==='mixed-question'){
 }
 const immutable=JSON.stringify({rows,workspace,groups});
 sandbox.renderAComparison();
+if(which==='unmatched'){
+ assert.equal(JSON.stringify(JSON.parse(host.dataset.matchedStudyIds)),
+  JSON.stringify(['trial-a','trial-b','trial-c']),
+  'zero, cleared and off-page facts remain matched studies');
+ assert.equal(JSON.stringify(JSON.parse(host.dataset.unmatchedStudyIds)),
+  JSON.stringify(['trial-empty']),'empty research is reachable, not a default blank wall');
+ assert.equal(lookup.tbody.children.length,4,'no research removed from the complete set');
+ assert.equal(lookup.tbody.children[3].className,'kz-a-comparison-unmatched');
+ lookup['[data-a-comparison-next]'].listeners.click();
+ assert.equal(JSON.parse(host.dataset.matchedStudyIds).length,3,
+  'a selected question is not reclassified by the current column page');
+ sandbox.selected={product:['drug-c']};sandbox.renderAComparison();
+ assert.equal(JSON.stringify(JSON.parse(host.dataset.matchedStudyIds)),JSON.stringify(['trial-c']));
+ assert.equal(JSON.parse(host.dataset.unmatchedStudyIds).length,0);
+ assert.equal(JSON.stringify({rows,workspace,groups}),immutable,'source membership unchanged');
+ process.exit(0);
+}
 if(which!=='existing'){
  assert.equal(JSON.stringify({rows,workspace,groups}),immutable,'source payload not mutated');
  const plotted=currentGroups.flatMap(g=>g.rows.map(r=>r.row_id)).sort();

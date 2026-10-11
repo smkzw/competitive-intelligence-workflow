@@ -39,3 +39,13 @@ def test_expanded_filters_use_available_desktop_width_and_bounded_native_height(
     assert "overflow-y: auto" in rules
     assert "scrollbar-gutter: stable" in rules
     assert "overflow: hidden" not in rules
+
+
+def test_a_uses_the_same_native_reachability_contract_for_empty_research():
+    template = (ROOT / "templates/a/clinical_portfolio.html.j2").read_text()
+    css = (ROOT / "assets/report-a.css").read_text()
+    assert 'type="checkbox" data-comparison-unmatched-toggle' in template
+    assert 'data-comparison-unmatched-count' in template
+    assert ".kz-a-comparison-unmatched { display: none; }" in css
+    assert ":has([data-comparison-unmatched-toggle]:checked)" in css
+    assert ".kz-a-comparison-unmatched { display: table-row; }" in css
