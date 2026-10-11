@@ -135,6 +135,7 @@ const orderEnd=common.indexOf('\n  window.__COMPARISON_QUERY__',orderStart);
 vm.runInNewContext(common.slice(orderStart,orderEnd),sandbox);
 sandbox.window.__COMPARISON_QUERY__=sandbox.createComparisonQuestionOrder();
 vm.runInNewContext(source.slice(start,end),sandbox);
+const frozenRows=JSON.stringify(rows);
 sandbox.renderAComparison();
 function text(n){return [n.textContent||'',...n.children.map(text)].join('|');}
 function walk(n,visit){visit(n);for(const child of n.children)walk(child,visit);}
@@ -164,8 +165,10 @@ buttons.forEach(b=>{assert.equal(b.attrs['data-evidence-collection'],'efficacy')
  assert.ok('data-open-evidence' in b.attrs,'source trigger survives compaction');});
 const allText=text(list);
 ['12.5 %','18 %','20.1 %','9.9 %','11.1 %','7.7 %','Week 100','Week 104',
- '分析人群不同，不共轴',identityOne,identityTwo,'纳武利尤单抗']
+ identityOne,identityTwo,'纳武利尤单抗']
  .forEach(s=>assert.ok(allText.includes(s),s));
+assert.ok(!allText.includes('分析人群不同，不共轴'),'expert-facing lecture stays out');
+assert.equal(JSON.stringify(rows),frozenRows,'scientific context remains unmodified');
 assert.ok(text(list.children[2]).includes(identityOne),
  'the folded copy stays complete inside its own fact');
 assert.ok(text(list.children[6]).includes(identityTwo),
@@ -237,6 +240,7 @@ const orderEnd=common.indexOf('\n  window.__COMPARISON_QUERY__',orderStart);
 vm.runInNewContext(common.slice(orderStart,orderEnd),sandbox);
 sandbox.window.__COMPARISON_QUERY__=sandbox.createComparisonQuestionOrder();
 vm.runInNewContext(source.slice(start,end),sandbox);
+const frozenRows=JSON.stringify(rows);
 sandbox.renderComparisonWorkspace({});
 function text(n){return [n.textContent||'',...n.children.map(text)].join('|');}
 function walk(n,visit){visit(n);for(const child of n.children)walk(child,visit);}
@@ -266,8 +270,10 @@ buttons.forEach(b=>{assert.equal(b.attrs['data-row-id'],b.attrs['data-evidence-o
  'source trigger survives compaction');});
 const allText=text(list);
 ['12.5 %','18 %','20.1 %','9.9 %','11.1 %','7.7 %','Week 100','Week 104',
- '分析人群不同，不共轴',identityOne,identityTwo,'纳武利尤单抗']
+ identityOne,identityTwo,'纳武利尤单抗']
  .forEach(s=>assert.ok(allText.includes(s),s));
+assert.ok(!allText.includes('分析人群不同，不共轴'),'expert-facing lecture stays out');
+assert.equal(JSON.stringify(rows),frozenRows,'scientific context remains unmodified');
 assert.ok(text(list.children[2]).includes(identityOne),
  'the folded copy stays complete inside its own fact');
 assert.ok(text(list.children[6]).includes(identityTwo),

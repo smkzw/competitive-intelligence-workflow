@@ -1107,14 +1107,31 @@ def _native_timepoint_zh(value: str) -> str:
             f"至末次给药后{dose_interval.group('after')}天"
             f"（最长{approximate}{dose_interval.group('duration')}天）"
         )
+    imp_interval = re.fullmatch(
+        r"from (?:the )?first IMP administration to (?:the )?last IMP administration "
+        r"\+ (?P<after>[\d.]+) (?P<after_unit>years?|months?|weeks?|days?) "
+        r"\(i\.e\., up to (?P<duration>[\d.]+) "
+        r"(?P<duration_unit>years?|months?|weeks?|days?)\)\.?",
+        text, re.I,
+    )
+    if imp_interval:
+        units = {"year": "年", "month": "个月", "week": "周", "day": "天"}
+        after_unit = units[imp_interval.group("after_unit").casefold().rstrip("s")]
+        duration_unit = units[imp_interval.group("duration_unit").casefold().rstrip("s")]
+        return (
+            f"首次研究药物给药至末次给药后{imp_interval.group('after')}{after_unit}"
+            f"（最长{imp_interval.group('duration')}{duration_unit}）"
+        )
     anchored = re.fullmatch(
         r"(?:from\s+)?baseline(?P<dose>\s+\(after first dose\))?\s+"
-        r"(?:to|through|until)\s+(?:the\s+)?end of study\s*"
+        r"(?:up to|to|through|until)\s+(?:the\s+)?end of "
+        r"(?P<end>study|treatment)(?:\s+period)?\s*"
         r"(?:\((?P<count>[\d.]+)\s*(?P<unit>years?|months?|weeks?|days?)\))?\.?",
         text, re.I,
     )
     if anchored:
-        label = "基线" + ("（首次给药后）" if anchored.group("dose") else "") + "至研究结束"
+        ending = "治疗期结束" if anchored.group("end").casefold() == "treatment" else "研究结束"
+        label = "基线" + ("（首次给药后）" if anchored.group("dose") else "") + "至" + ending
         if anchored.group("count"):
             unit = anchored.group("unit").casefold().rstrip("s")
             unit_label = {"year": "年", "month": "个月", "week": "周", "day": "天"}[unit]

@@ -9,18 +9,25 @@
     </div>
   </header>
 
-  {% if overview_conclusions %}
-  <details class="kz-comparison-disclosure" data-comparison-disclosure open>
-  <summary>研究摘要</summary>
-  <section class="kz-b-conclusions" aria-label="核心结论">
-    <h2 class="kz-b-conclusions__title">核心结论</h2>
-    <ul class="kz-b-conclusions__list">
-      {% for item in overview_conclusions %}
-      <li class="kz-b-conclusions__item"><strong>{{ item.label }}</strong><span>{{ item.text }}</span></li>
+  {% if overview_findings %}
+  <section class="kz-b-findings" data-comparison-summary-head aria-label="临床问题与结果摘要">
+    <h2>临床问题与结果摘要</h2>
+    <div class="kz-b-findings__grid">
+      {% for item in overview_findings %}
+      <details class="kz-b-finding"{% if loop.first %} open{% endif %}>
+        <summary><strong>{{ item.label }}</strong><span>{{ item.study_count }}项研究 · {{ item.observation_count }}条观察</span></summary>
+        <ul>
+          {% for observation in item.observations %}
+          <li><span class="kz-b-finding__identity">{{ observation.product }} · {{ observation.study }}{% if observation.arm and observation.arm != observation.product %} · {{ observation.arm }}{% endif %}</span>
+            <span class="kz-b-finding__values">{% for point in observation.points %}{% if not loop.first %}<span aria-hidden="true"> → </span>{% endif %}<button type="button" data-evidence-open="{{ point.row_id }}" data-row-id="{{ point.row_id }}">{{ point.time }} <strong>{{ point.value_text }}</strong></button>{% endfor %}</span>
+          </li>
+          {% endfor %}
+        </ul>
+        <a href="{{ site_prefix }}overview.html?view=comparison&amp;cmp={{ item.question_id|urlencode }}">查看本问题的全研究图表</a>
+      </details>
       {% endfor %}
-    </ul>
+    </div>
   </section>
-  </details>
   {% endif %}
 
   <div class="kz-b-filter-bar">

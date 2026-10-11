@@ -50,8 +50,11 @@ def test_kangzhe_site_uses_one_source_of_geometry_and_no_network_runtime() -> No
     js = (assets / "kangzhe-site.js").read_text()
     assert "--portal-gutter" in css and "--portal-card-padding" in css
     assert "!important" not in css
-    assert "global_procedural_optical_field" in js
-    assert "KZMotion.Film" in js and "dispose" in js and "pageshow" in js
+    # Current expert-reading contract: motion adapts real report content; no
+    # mandatory decorative narrative is allowed to occupy the report header.
+    assert "KZMotion.mountPage" in js and "dispose" in js and "pageshow" in js
+    assert "new window.KZMotion.Film" not in js
+    assert 'head.appendChild(root)' not in js
     for forbidden in ("fetch(", "XMLHttpRequest", "https://", "innerHTML"):
         assert forbidden not in js
 

@@ -4,7 +4,7 @@
 
 ## 最新实际结果
 
-最新用户正式要求见PRD文末2026-10-11裁决及Trellis顶级记录：A/B/C删除防御性说教，横比ECharts图+表，历时曲线+标注，持续约束后续任务。新[有界折线回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-longitudinal-chart-v2.json)记录普通v2的104页/1505事实只读重建、四宽16态0失败及实际目视。24访视比例轴/对应表/关键标注/点来源已接通，v1英文标题失败保留，新v2标题/单位修复；不签首页、真正多研究数值共图、独立挑战、current/save/share或RC。源/current/五用户修改保持，Goal active。下一实际任务为全任务层级与多研究图表，冻结后单次独立挑战，不重放终态运行。
+最新用户正式要求见PRD文末2026-10-11裁决：A/B/C删除防御性说教、ECharts图+表、历时曲线+标注持续生效。当前只看[问题阅读v3回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-question-reading-v3.json)和[本批复盘](docs/handoffs/RETROSPECTIVE_20261011_question_reading.md)：首页真实中文问题/当前值、共享运行时自动说教删除、图/表/来源接线已实现；正常104页/1505事实/current32及16257文件保持，四宽24态0运行失败。但Owner目视和实际Gemini3.8flash单C02均REVISE，研究局部BG组身份/同名图例、重复身份墙、稀疏结果与真正横比矩阵未完成。11文件92PASS+身份9PASS；开发宽门实际两步FAIL，最小修复后全Ruff及28覆盖合同PASS，不称全仓新绿门。所有运行已终态，下文旧pending/PID禁止再等。下一实际根因族是系列身份/图例和问题层级，不删不同来源测量来美化，不以基线/单研究线代替多药临床横比。Goal active，无暂停/RC；五用户修改和唯一恢复证据保护。
 
 以下为此前现场历史，所有pending/旧PID字样只用于溯源，不是当前执行指令；当前唯一状态始终为STATUS顶节与新回执。
 

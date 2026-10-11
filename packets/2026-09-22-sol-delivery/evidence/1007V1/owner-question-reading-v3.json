@@ -1,0 +1,97 @@
+{
+  "schema": "owner-bounded-report-check/v1",
+  "state": "IMPLEMENTED_READING_REVISE_NOT_DELIVERY",
+  "date": "2026-10-11",
+  "baseline_commit": "e13960f54311b29da85b0fc5107f6c21b7a281d6",
+  "goal": "ACTIVE_NOT_PAUSED",
+  "contract": "PRD.md#2026-10-11-用户最新产品裁决专家阅读与图表横比",
+  "current_revision": 32,
+  "source_generation": "ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4",
+  "builder_sha256": "a1674d93f73852965687cbd0ad754f268a5d27d8f718ccd914b02fd4141a2d74",
+  "candidate": ".artifacts/1007-b-question-reading-preview-v3",
+  "facts": 1505,
+  "physical_pages_rendered": 104,
+  "durable_files_unchanged": 16257,
+  "source_writes": 0,
+  "current_writes": 0,
+  "render_recipe_sha256": "9884d7472848f606cbd07a3dd9ce268378dc9fb1031a17c0087ebfebc7c7e879",
+  "render_actual_sha256": "2ce472b85822ba676a1bb13fde52892fa45c7c3aae88d30320ec687b874f42d0",
+  "overview_sha256": "13f2c557501fc233e504808f7032447a82b891e51d8583d0c7d5a659654207ab",
+  "qa_actual": "qa-v4/actual.json",
+  "qa_actual_sha256": "80af8e7aef88ffd3ad186a714ec6657a1b58d79915d1a1288599ce43cba63f8a",
+  "author_sha256": {
+    "assets/charts.js": "5a9e038d8056bdcd1ec44d6e524d8c17ba4d8c545ce18e5d9aaf52b2c5acab48",
+    "assets/kangzhe-site.css": "d64797987595edb1512a508cc30103da5c55bae750d6ac7aff595a1948467053",
+    "assets/kangzhe-site.js": "bbca876b4788c0f9536fd73191c30885cec945e7b07b8b423307670b41f38c6b",
+    "assets/portal.js": "3857f97ffd9ff6458f3259592a94857b99ffb3dc28eeaccad6899a058e13808f",
+    "assets/report-b.css": "9a172206ed5efa4ba2bfcc1ba3cff0b1be4f00566bfa07a895a196fd8d60d160",
+    "assets/report-b.js": "936569425f97c468d182d5629883775bfad991367f747cd23ce87e33f3568c0d",
+    "report_a.py": "86f682a51feac1585a25ef6636969a5098bebb01bf3b07eaa77d21f3dc97cd67",
+    "report_b.py": "bf62c149895b6ee6052f18f62a41451ac69e5cbe301a37beaf00234d976cdfef",
+    "templates/b/page.html.j2": "32ab72fc1102b37ede6ae87b67031e326e0227ca7fb2988dca331238f39eec6e"
+  },
+  "checks": [
+    {"scope": "Home/current values/source-time six files", "result": "98_PASS", "seconds": 17.15},
+    {"scope": "Owner execution integration seven files", "result": "69_PASS", "seconds": 2.65},
+    {"scope": "Final reading/runtime/normal ABC copy/longitudinal eleven files", "result": "92_PASS", "seconds": 5.29},
+    {"scope": "Migrated expert-copy A/B identity family; context preserved", "result": "9_PASS", "seconds": 0.35},
+    {"scope": "Single milestone tools/gate.sh", "result": "FAILED_2_STEPS", "detail": "Ruff: one untracked preexisting cutoff WIP long line; active:1184PASS/1FAIL/20deselected in507.79s, C catalog root/package wording drift. Strict286PASS, compatibility20PASS, layering7PASS, lexical legacy PASS. No monolithic green claim."},
+    {"scope": "After minimal repair: full src/tests/tools Ruff and complete coverage contract file", "result": "RUFF_PASS_28_CONTRACT_PASS", "seconds": 0.54, "detail": "Only split one WIP line without assertion change; preserve WIP/untracked. Sync current root C wording to current packaged contract, retain exact-byte test and all history. Did not rerun entire507s suite for two wording/format changes."},
+    {"scope": "Ego space2/p1 four desktop widths, home/dense/table/source/filter/baseline", "result": "24_RUNTIME_STATES_ZERO_FAILURES", "detail": "qa-v4 uses native scroll-to-visible then native click. Same frozen v3 bytes; no forced clicks or source/current mutations. Not aesthetic acceptance."}
+  ],
+  "retained_attempts": [
+    "v1 three1440 states then instrument used chart index rather than wrapper index; FAILED_NOT_ACCEPTED",
+    "v1 Owner actual pixels REVISE: adapter injected defensive banner",
+    "v2 and v3 sixteen states then native toolbar click intercepted by sticky header; FAILED_NOT_ACCEPTED",
+    "After two repeated failures, actual inspection proved control partially covered despite scroll margins; real scroll-to-center and native click worked. qa-v4 repaired user-action sequencing only.",
+    "Root test families: Home5RED, source-time3RED, shared-adapter1realRED plus3mock-harness errors, shared raw-identity2RED; lint errors repaired without suppressions",
+    "Old mandatory Film and defensive warning assertions retired only after replacement runtime/context-preservation tests; historical receipts/hashes unchanged"
+  ],
+  "owner_pixel_observations": [
+    "v3 home2560 (tool resized2048), dense1440, filtered1440, baseline1920 directly viewed",
+    "Home native clinical questions/current values and line24 visits improved; no injected defensive banner",
+    "REVISE: sparse-filter facts hidden in disclosure; baseline repeated identities and half-row chart; underlying series BG000/BG001 reused across source-local studies with ambiguous legend. No global aesthetic or efficacy acceptance."
+  ],
+  "actual_series_inspection": {
+    "receipt": "series-inspection-v1.json",
+    "state": "FACT_VALUE_STUDY_MAPPING_PASSED_LEGEND_REVISE",
+    "facts": 12,
+    "errors": 0,
+    "detail": "Actual ECharts option has five role series. Every glyph keeps its exact fact/value and correct study category. Review's example that46.7 lies underNCT04183335 is rejected: actual row/category isNCT04202679. Duplicate control legend remains a genuine reading defect, not demonstrated numerical misbinding. Do not blindly namespace all series or claim a source correction based on this image misreading."
+  },
+  "worker": {
+    "native_session": "01a12a1f-f885-7000-9200-a5dd34b9eb95",
+    "actual_selector": "pi/cursor/default",
+    "underlying_model": "UNVERIFIED",
+    "effort": "UNVERIFIED",
+    "seconds": 752.489,
+    "tool_calls": 368,
+    "returncode": 0
+  },
+  "conference": {
+    "native_session": "01a12a43-c0ad-7000-a5d4-fe7f09fda9db",
+    "actual_model": "google-antigravity/gemini-3.8-flash",
+    "configured_effort": "high",
+    "seconds": 371.169,
+    "tool_calls": 109,
+    "returncode": 0,
+    "fallback": null,
+    "pixel_access": "Ten PNG reads returned actual image content with isError=false; required seven images included",
+    "independence": "Fresh context and route; executor underlying model unknown, so underlying-model independence unproven",
+    "advisory": "REVISE",
+    "owner_arbitration": "Accept actual legend ambiguity/identity clutter/dense-table task gap. Reject the review's46.7 wrong-study example using actual12-glyph mapping; no numerical misbinding proved. Reject value/unit/arm-only dedup or fixed landmark cross-study alignment: different measurement instances/statistical forms must not silently merge. Preserve existing role-series grouping; derive clear legend labels from actual study/arm coverage, not guessed role equivalence."
+  },
+  "png_sha256": {
+    "B-home-1440.png": "eee8a5223afbb9e948ca2a6666683741b894b17578e25ff6787ebcf4b884b679",
+    "B-home-2560.png": "bbe87d681701ea23dc4d0e7edd48d2a128c4ce6df0110f1de123fabe2bb6d094",
+    "B-dense-1440.png": "0d1890c2aa5bda691de63f5731e1da1e6065b819ce6007b0b3c9227905459913",
+    "B-dense-2560.png": "605cec5d7a8cb2003cf3b134f7df6a3e28cbea4763316c2c12dce2892c0fe323",
+    "B-filtered-sparse-1440.png": "284e478929ab11e1e488e01f59ed95a3088525ae4070fa42e679e426826d394d",
+    "B-source-1920.png": "edbed68e403b3ca5b820597c80481fe8dbf92278d633f167d5a03ad652adcf7a",
+    "B-shared-baseline-1920.png": "286bbddf98461ed33a47606a8a31c6d290324547f54a91a7d1815ea9a5e10f54"
+  },
+  "unaccepted": ["true multi-drug clinical numerical comparison", "all physical-page and cross-browser product visual coverage", "current edit/clear/config/share on this new presentation", "source/MAH/universe/Publication fact-cutoff closure", "24 real portals/three hosts/installation/recovery/RC"],
+  "protected_user_files": "Five baseline hashes exact; excluded from staging",
+  "cleanup": "Only routine temporary fixture directories were removed. Preserve all unique failed candidates, raw receipts, source bytes, unknown history and recovery assets. Public repository receives whitelisted code/tests/compact receipts/portable recipes, no personal paths or raw runner traces.",
+  "next_safe_action": "Close this implementation batch with whitelist Git; then one root-cause family for source-local study/arm series identity, unique factual legend and compact shared-question reading. Do not change source values/coaxis or hide different measurement instances to make a prettier graph; do not repeat prior extraction/save/share or terminal runner handles."
+}

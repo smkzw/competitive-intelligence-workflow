@@ -13,6 +13,8 @@ BOILERPLATE = (
     "阅读边界", "证据限制", "条件与限制", "不等于", "不代表临床",
     "不代表数值可以共轴", "不构成完整", "不能作为已验科学结论",
     "描述性对照不等于头对头", "数值共轴资格另判",
+    "能否同图比较另行判断", "先核对人群、时间与统计口径",
+    "不生成唯一最佳方案", "图形不是竞品排名",
 )
 
 
@@ -43,6 +45,7 @@ def test_normal_renderer_does_not_publish_defensive_copy(kind, tmp_path):
 
 @pytest.mark.parametrize("asset", [
     "portal.js", "report-a.js", "report-b.js", "report-c.js", "evidence-drawer.js",
+    "kangzhe-site.js",
 ])
 def test_shared_asset_copy_has_no_defensive_boilerplate(asset):
     source = (ROOT / "src/ci_workflow/renderers/portal/assets" / asset).read_text()

@@ -1,4 +1,20 @@
 /* B 类门户视觉层：只扩展共享门户 token，不引入远程字体或组件。 */
+html:has(.kz-b-site) { scroll-padding-top: calc(var(--header-h) + 12px); }
+.kz-b-filter-summary { scroll-margin-top: calc(var(--header-h) + 12px); }
+.kz-b-findings { min-width: 0; margin-block: 8px; }
+.kz-b-findings > h2 { margin: 0 0 8px; }
+.kz-b-findings__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; align-items: start; }
+.kz-b-finding { min-width: 0; padding: 10px 12px; border: 1px solid var(--b-line); border-radius: var(--b-radius); background: var(--b-surface); }
+.kz-b-finding[open] { grid-column: 1 / -1; }
+.kz-b-finding > summary { cursor: pointer; font-size: 16px; overflow-wrap: anywhere; }
+.kz-b-finding > summary > span { display: block; color: var(--b-muted); margin-top: 4px; }
+.kz-b-finding ul { list-style: none; margin: 8px 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.kz-b-finding li { min-width: 0; padding-block: 6px; border-bottom: 1px solid var(--b-line); overflow-wrap: anywhere; }
+.kz-b-finding__identity, .kz-b-finding__values { display: block; font-size: 16px; }
+.kz-b-finding__identity { color: var(--b-muted); margin-bottom: 4px; }
+.kz-b-finding button { padding: 3px 6px; font: inherit; color: inherit; background: var(--b-soft); border: 1px solid var(--b-line); border-radius: 4px; cursor: pointer; }
+.kz-b-finding a { font-size: 16px; color: var(--b-orange-text); }
+.kz-b-finding :is(button, a):focus-visible { outline: 3px solid var(--b-orange); outline-offset: 2px; }
 .kz-b-comparison-workspace { margin-block: var(--portal-section-gap, 16px); }
 .kz-b-comparison-workspace[hidden] { display: none; }
 .kz-b-comparison-workspace h1 { margin: 0 0 8px; }
@@ -20,6 +36,7 @@
 .kz-b-study-panel { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px; grid-column: 1 / -1; min-width: 0; padding: 12px; border: 1px solid var(--b-line); border-radius: var(--b-radius); background: var(--b-surface); }
 .kz-b-study-panel > h3 { grid-column: 1 / -1; margin: 0 0 4px; overflow-wrap: anywhere; }
 .kz-b-study-panel__note { grid-column: 1 / -1; margin: 0; color: var(--b-muted); font-size: 16px; }
+.kz-b-shared-plot__identities { grid-column: 1 / -1; min-width: 0; margin: 0; color: var(--b-muted); font-size: 16px; overflow-wrap: anywhere; }
 .kz-b-study-records { grid-column: 1 / -1; min-width: 0; }
 .kz-b-study-records > summary { padding: 8px 0; min-height: 36px; font-size: 16px; cursor: pointer; color: var(--b-orange-text); }
 .kz-b-study-original-title { font-size: 16px; line-height: 1.5; overflow-wrap: anywhere; }

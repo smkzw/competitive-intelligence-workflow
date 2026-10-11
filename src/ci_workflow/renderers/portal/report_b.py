@@ -5516,6 +5516,70 @@ def _comparison_workspace(
     }
 
 
+def _overview_findings(
+    workspace: Mapping[str, Any], groups: Sequence[Mapping[str, Any]],
+) -> tuple[dict[str, Any], ...]:
+    """Quote current values by known clinical question; do not infer conclusions.
+
+    Only a source-qualified trajectory may replace its visit list with linked
+    first/last observations. All other observations remain individually linked.
+    Complete query membership still lives in the comparison graph and table.
+    """
+    rows = {str(row["row_id"]): row for group in groups for row in group["rows"]}
+    findings: list[dict[str, Any]] = []
+
+    def point(row: Mapping[str, Any]) -> dict[str, str]:
+        shown = _comparison_display_row(dict(row))
+        state = _text(row.get("disclosure_state"))
+        value = row.get("value")
+        text = (_state_label(state) if state == "user_cleared" or value is None
+                else " ".join(item for item in (str(value), shown["unit_label_zh"]) if item))
+        return {"row_id": str(row["row_id"]), "value_text": text,
+                "time": _text(shown.get("time_label_zh"), _text(row.get("time")))}
+
+    for column in workspace.get("columns", ()):
+        label = str(column["question_label"])
+        if (not column["question_known"] or not re.search(r"[\u3400-\u9fff]", label)
+                or str(column["question_id"]).split("::", 1)[0] not in {"efficacy", "safety"}):
+            continue
+        ids = set(column["row_ids"])
+        covered: set[str] = set()
+        observations: list[dict[str, Any]] = []
+
+        def observation(selected: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+            first = selected[0]
+            trial = _text(first.get("trial_id"))
+            return {
+                "product": _text(first.get("product_zh"), _text(first.get("product_id"))),
+                "study": _filter_value_label_zh("trial", trial,
+                                               workspace["study_labels"].get(trial, trial)),
+                "arm": _text(first.get("arm")),
+                "points": tuple(point(row) for row in selected),
+            }
+
+        for trajectory in workspace.get("longitudinal_groups", ()):
+            series = trajectory["rows"]
+            # Never summarize a partially matched trajectory under another question.
+            if not series or not all(str(row["row_id"]) in ids for row in series):
+                continue
+            observations.append(observation((series[0], series[-1])))
+            covered.update(str(row["row_id"]) for row in series)
+        for row_id in column["row_ids"]:
+            if row_id not in covered and row_id in rows:
+                observations.append(observation((rows[row_id],)))
+        if observations:
+            findings.append({
+                "label": label, "question_id": column["question_id"],
+                "study_count": len(column["cells"]), "observation_count": len(ids),
+                "observations": tuple(observations),
+            })
+    # This is question navigation, not a product/effect-size ranking.
+    return tuple(sorted(findings, key=lambda item: (
+        str(item["question_id"]).split("::", 1)[0] != "efficacy",
+        -item["study_count"], item["label"],
+    )))
+
+
 def _comparison_query_inventory(workspace: Mapping[str, Any]) -> dict[str, int]:
     """Compact cmp/cmp_page inventory derived from the real workspace columns."""
     counts: dict[str, int] = {}
@@ -5754,15 +5818,9 @@ def _render_page_context(
         "report": data,
         "report_version": data.report_version,
         "report_title": f"{data.indication}临床试验结果比较",
-        "overview_conclusions": (
-            [
-                {"label": "资料范围", "text": (
-                    f"本资料包列示 {len(data.products)} 个产品、"
-                    f"{len(data.all_studies)} 项研究。")},
-            ]
-            if page_id == "overview" and detail_kind is None
-            else None
-        ),
+        "overview_conclusions": None,
+        "overview_findings": (_overview_findings(comparison_workspace, groups)
+                              if page_id == "overview" and detail_kind is None else ()),
         "page_title": title,
         "page_id": page.id,
         "page": page,
