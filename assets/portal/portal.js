@@ -228,6 +228,10 @@
         }
         observation.appendChild(details);
       }
+    }, plotPriority: function (group) {
+      return group.comparison_purpose === "within_source_measure_time_axis" ||
+        group.scientific_group_kind === "within_source_longitudinal" ? -1
+        : group.comparison_purpose === "clinical_question_descriptive" ? 0 : 1;
     }, plotGroups: function (workspace, groups, columns, allowed, displayed, displayRows) {
       // A/B share the physical query, not a new scientific grouping rule.
       function visible(row) { return allowed[row.row_id] && displayed[row.row_id]; }
@@ -262,7 +266,9 @@
       descriptive.forEach(function (group) {
         group.rows.forEach(function (row) {descriptiveIds[row.row_id] = true;});
       });
-      return descriptive.concat(trajectories, frames.map(function (group) {
+      // Eligible source timecourses answer the clinical question before the
+      // adjacent scalar/count panels; this is reading order, not a drug rank.
+      return trajectories.concat(descriptive, frames.map(function (group) {
         return selectRows(group, function (row) {
           return !trajectoryIds[row.row_id] && !descriptiveIds[row.row_id];
         });

@@ -56,6 +56,7 @@ html:has(.kz-b-site) { scroll-padding-top: calc(var(--header-h) + 12px); }
 .kz-b-measurement-panel > h4 { margin: 0 0 6px; font-size: 20px; overflow-wrap: anywhere; }
 .kz-b-measurement-observations { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px; }
 .kz-b-shared-plot .kz-b-measurement-observations > .kz-chart-module__group { grid-column: 1 / -1; }
+.kz-b-measurement-observations > .kz-chart-module__group:only-child { grid-column: 1 / -1; }
 .kz-b-measurement-observations > [data-comparison-compact] { grid-column: span var(--b-observation-span); display: flex; flex-direction: column; gap: 6px; padding: 8px; box-shadow: none; }
 .kz-b-observation-time { margin: 0; font-size: 16px; color: var(--b-muted); overflow-wrap: anywhere; }
 .kz-b-measurement-observations .kz-chart-group__chart--single-fact { grid-template-columns: minmax(0, 1fr) auto; }

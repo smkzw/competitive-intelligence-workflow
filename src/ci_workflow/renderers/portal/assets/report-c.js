@@ -567,7 +567,7 @@
       }
       var lead = document.querySelector("[data-c-task-lead]");
       if (lead) lead.textContent = active
-        ? "检索设计条款、选择研究并列核对；已知差异与未解项保留，不把并列描述当成临床等价。"
+        ? "检索设计条款，选择研究并列对照。"
         : lead.getAttribute("data-c-summary-text") || "";
       var copy = document.querySelector(".kz-c-comparison-entry__copy");
       if (copy) copy.hidden = active;

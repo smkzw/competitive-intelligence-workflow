@@ -72,12 +72,19 @@
   </section>
   {% endif %}
 
-  {% if overview_conclusions %}
-  <section class="kz-b-conclusions" aria-label="核心结论" data-c-summary-only>
-    <h2 class="kz-b-conclusions__title">核心结论</h2>
+  {% if overview_design_findings %}
+  <section class="kz-b-conclusions" aria-label="设计概要" data-c-summary-only>
+    <h2 class="kz-b-conclusions__title">设计概要</h2>
     <ul class="kz-b-conclusions__list">
-      {% for item in overview_conclusions %}
-      <li class="kz-b-conclusions__item"><strong>{{ item.label }}</strong><span>{{ item.text }}</span></li>
+      {% for item in overview_design_findings %}
+      <li class="kz-b-conclusions__item">
+        <strong>{{ item.label }}</strong>
+        <span>{{ item.text }}</span>
+        {% if item.user_modified %}<span class="kz-c-user-modified">用户修订</span>{% endif %}
+        <details><summary>研究与依据（{{ item.row_ids|length }}）</summary>
+          {% for row_id in item.row_ids %}<button type="button" class="kz-c-evidence-button" data-evidence-open="{{ row_id }}" data-row-id="{{ row_id }}" aria-label="查看{{ item.source_labels[row_id] }}{{ item.label }}的数据依据">{{ item.source_labels[row_id] }}</button> {% endfor %}
+        </details>
+      </li>
       {% endfor %}
     </ul>
   </section>

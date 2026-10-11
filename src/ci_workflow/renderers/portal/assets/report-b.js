@@ -52,8 +52,8 @@
     wrappers.sort(function (a, b) {
       var left = groups[Number(a.getAttribute("data-group-index"))];
       var right = groups[Number(b.getAttribute("data-group-index"))];
-      var leftPriority = left.comparison_purpose === "clinical_question_descriptive" ? 0 : 1;
-      var rightPriority = right.comparison_purpose === "clinical_question_descriptive" ? 0 : 1;
+      var leftPriority = window.__COMPARISON_QUERY__.plotPriority(left);
+      var rightPriority = window.__COMPARISON_QUERY__.plotPriority(right);
       if (leftPriority !== rightPriority) return leftPriority - rightPriority;
       return position[left.rows[0].row_id] - position[right.rows[0].row_id];
     });

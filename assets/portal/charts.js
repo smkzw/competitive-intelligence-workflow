@@ -1697,16 +1697,37 @@
         return Math.max(longest, visibleSeriesLabels[groupedSeriesKey(row)].length);
       }, labelLength);
     }
+    var trajectoryOption = kind === "line" && !singleFact
+      ? buildLongitudinalOption(group) : null;
+    if (trajectoryOption) {
+      // Repeated visits are glyphs, not new studies. Count the actual series,
+      // including collision-preserved parallel observations, without merging.
+      entityCount = new Set(rows.map(function (row) {
+        return longitudinalSeriesIdentity(row, usesIdentitySeries(group)).key;
+      })).size;
+      seriesCount = trajectoryOption.series.length;
+      labelLength = (trajectoryOption.xAxis.data || []).reduce(function (longest, label) {
+        return Math.max(longest, String(label).length);
+      }, String(trajectoryOption.xAxis.name || "").length);
+      if (trajectoryOption.legend.show) labelLength = trajectoryOption.series.reduce(
+        function (longest, series) { return Math.max(longest, String(series.name).length); },
+        labelLength);
+    }
+    var compactTrajectory = trajectoryOption && seriesCount <= 2 &&
+      rows.length <= 48 && labelLength <= 56;
     var compactGrouped = assignments && entityCount <= 4 && seriesCount <= 5 &&
       plotted.length <= 16 && labelLength <= 48;
     var span = singleFact ? labelLength > 48 ? 6 : 4
+      : compactTrajectory ? plotted.length <= 8 ? 6 : 8
       : compactMatrix ? 6
         : compactGrouped ? 6
           : assignments && entityCount <= 6 && seriesCount <= 6 &&
               plotted.length <= 24 && labelLength <= 56 ? 8
         : simpleNumeric && plotted.length <= 5 && labelLength <= 32 ? 6
           : simpleNumeric && plotted.length <= 8 && labelLength <= 56 ? 8 : 12;
-    var height = singleFact ? 0 : kind === "heatmap" || kind === "status_matrix"
+    var height = singleFact ? 0 : compactTrajectory ? plotted.length <= 2 ? 196
+      : plotted.length <= 8 ? 224 : seriesCount <= 1 ? 280 : 308
+      : kind === "heatmap" || kind === "status_matrix"
       ? compactMatrix ? (rows.length <= 1 ? 160 : 184)
         : Math.min(420, Math.max(260, 140 + rows.length * 28))
       : plotted.length <= 1 ? 168

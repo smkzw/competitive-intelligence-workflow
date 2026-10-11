@@ -10,6 +10,7 @@ import pytest
 @pytest.mark.parametrize("case", (
     "cross_study_positive",
     "longitudinal",
+    "trajectory_before_scalars",
     "filtered_sparse",
     "filtered_sparse_zero",
     "filtered_sparse_clear",
@@ -170,7 +171,23 @@ vm.runInNewContext(slice(source,'organizeComparisonCharts','\n  function ')+'\n'
 function ids(node){const found=[];walk(node,item=>{
  const id=item.getAttribute&&item.getAttribute('data-row-id');
  if(id)found.push(id);});return found.sort();}
-if(which.startsWith('filtered_')){
+if(which==='trajectory_before_scalars'){
+ const timeline={comparison_purpose:'within_source_measure_time_axis',
+  scientific_group_kind:'within_source_longitudinal',rows:[
+   row('week1','NCT04202679',{time:'Week 1',value:1.3}),
+   row('week24','NCT04202679',{time:'Week 24',value:57.7})]};
+ const counts={comparison_purpose:'clinical_question_descriptive',rows:[
+  row('count1','NCT04501666',{unit:'Participants',value:78}),
+  row('count2','NCT04501679',{unit:'Participants',value:75})]};
+ const groups=[counts,timeline],before=JSON.stringify(groups);
+ groups.forEach((g,i)=>module.appendChild(wrapperFor(g,i)));
+ sandbox.organizeComparisonCharts(groups,{study_labels:{},columns:[{question_known:true,
+  question_label:QUESTION,row_ids:Object.keys(rows)}]});
+ assert.equal(module.querySelector('.kz-b-study-panel').dataset.studyId,'NCT04202679',
+  'B wrapper must not undo the common timecourse-first reading order');
+ assert.deepEqual(ids(module),Object.keys(rows).sort(),'every source target retained');
+ assert.equal(JSON.stringify(groups),before,'reading order does not change scientific frames');
+}else if(which.startsWith('filtered_')){
  const groups=[];
  for(let i=1;i<=6;i++)groups.push({scientific_group_id:'facet-pruritus',cross_trial:false,rows:[
   row('a-'+i,'NCT04202679',{time:'Week '+i,value:20+i})]});

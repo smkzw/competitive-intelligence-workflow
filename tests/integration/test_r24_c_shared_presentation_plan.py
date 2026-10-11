@@ -74,6 +74,7 @@ const win={__C_PAGE_ID__:'visit-duration-followup',__CHART_GROUPS__:[{rows}],
  location:{search:'',hash:''},setTimeout(){},echarts:{init(){initialized++;
  return {dispose(){disposed++;},setOption(){},on(){},resize(){resized++;}};}}};
 const doc={readyState:'loading',addEventListener(){},createElement(){return new Element();},
+ querySelector(){return null;},
  getElementById(id){return id==='kz-c-chart-visuals'?host:null;},
  querySelectorAll(selector){return selector.includes('kz-chart-table__row')
  ?table.map((e,i)=>{e.style.display=i<visible?'':'none';return e;}):[];}};

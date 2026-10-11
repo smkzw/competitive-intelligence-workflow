@@ -888,6 +888,30 @@ def _registry_timeframe_zh(text: str) -> str | None:
     return None
 
 
+_ARM_DESIGN_LABELS_ZH: dict[str, str] = {
+    "allocation=RANDOMIZED": "随机分配",
+    "allocation=NON_RANDOMIZED": "非随机分配",
+    "interventionModel=PARALLEL": "平行分组",
+    "interventionModel=CROSSOVER": "交叉设计",
+    "interventionModel=SEQUENTIAL": "序贯设计",
+    "interventionModel=SINGLE_GROUP": "单组设计",
+    "masking=NONE": "开放标签",
+    "masking=SINGLE": "单盲",
+    "masking=DOUBLE": "双盲",
+    "masking=TRIPLE": "三盲",
+    "masking=QUADRUPLE": "四盲",
+}
+
+
+def _arm_design_parts_zh(text: str) -> tuple[str, ...]:
+    """登记设计要素的确定性中文短语；未映射片段逐字保留，不做推断。"""
+    return tuple(
+        _ARM_DESIGN_LABELS_ZH.get(part.strip(), part.strip())
+        for part in text.split(";")
+        if part.strip()
+    )
+
+
 def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
     def _tp_disp(tp: str | None) -> str:
         if not tp:
@@ -974,25 +998,7 @@ def _value_text(data: ReportCPortalData, observation: DesignObservation) -> str:
     ):
         return "未公开"
     if observation.field == "arm_randomization_blinding":
-        design_labels = {
-            "allocation=RANDOMIZED": "随机分配",
-            "allocation=NON_RANDOMIZED": "非随机分配",
-            "interventionModel=PARALLEL": "平行分组",
-            "interventionModel=CROSSOVER": "交叉设计",
-            "interventionModel=SEQUENTIAL": "序贯设计",
-            "interventionModel=SINGLE_GROUP": "单组设计",
-            "masking=NONE": "开放标签",
-            "masking=SINGLE": "单盲",
-            "masking=DOUBLE": "双盲",
-            "masking=TRIPLE": "三盲",
-            "masking=QUADRUPLE": "四盲",
-        }
-        design_parts = [
-            design_labels.get(part.strip(), part.strip())
-            for part in text.split(";")
-            if part.strip()
-        ]
-        text = "；".join(design_parts)
+        text = "；".join(_arm_design_parts_zh(text))
     if text:
         return text
     parts = [
@@ -2270,6 +2276,169 @@ def _statistics_scope(data: ReportCPortalData) -> dict[str, Any]:
     }
 
 
+def _summary_usable_observations(
+    observations: Sequence[DesignObservation],
+) -> tuple[DesignObservation, ...]:
+    """只有当前有值的观察进入概要；用户修订只读显式当前投影。
+
+    已报告零值、未报告、未公开、冲突或被用户清除的记录不构成设计安排，
+    不得为概要贡献任何正向结论；原始来源仍留在完整表与证据抽屉中。
+    """
+    return tuple(
+        observation
+        for observation in observations
+        if observation.disclosure_state is FactDisclosureState.REPORTED_VALUE
+        and (not _user_current_state(observation) or bool(_text(observation.display_text)))
+    )
+
+
+def _assessment_window_zh(observation: DesignObservation) -> str:
+    """评估时间窗沿用既有中文转写链；无确定性短语时返回空串，不进概要。"""
+    timepoint = _text(
+        observation.display_text if _user_current_state(observation)
+        else observation.assessment_timepoint
+    )
+    registry = _registry_timeframe_zh(timepoint)
+    if registry:
+        return registry
+    native = _native_timepoint_zh(timepoint)
+    if native and native != "登记时间窗（详见登记来源）":
+        return native
+    return "" if _user_current_state(observation) else (
+        _registry_timeframe_zh(_text(observation.source_text)) or ""
+    )
+
+
+def _overview_blinding_finding(
+    data: ReportCPortalData,
+    observations: Sequence[DesignObservation],
+) -> dict[str, Any] | None:
+    """来源绑定的随机/盲法架构概要：共同安排与真实差异并列，不排名。"""
+    rows = tuple(
+        observation for observation in observations
+        if observation.field == "arm_randomization_blinding"
+    )
+    if not rows:
+        return None
+    trial_ids = tuple(dict.fromkeys(row.trial_id for row in rows))
+    parts_by_trial: dict[str, tuple[str, ...]] = {}
+    for trial_id in trial_ids:
+        parts: list[str] = []
+        for row in rows:
+            if row.trial_id != trial_id:
+                continue
+            text = row.display_text if _user_current_state(row) else (
+                row.display_text or row.source_text
+            )
+            for part in _arm_design_parts_zh(_text(text)):
+                if part not in _ARM_DESIGN_LABELS_ZH.values():
+                    continue  # Unreviewed tokens remain verbatim in the existing detail view.
+                if part not in parts:
+                    parts.append(part)
+        parts_by_trial[trial_id] = tuple(parts)
+    common = [
+        part for part in parts_by_trial[trial_ids[0]]
+        if all(part in parts_by_trial[trial_id] for trial_id in trial_ids)
+    ]
+    covers_all_trials = set(trial_ids) == {trial.id for trial in data.trials}
+    head = ""
+    if common:
+        phrase = "、".join(common)
+        head = (
+            f"各试验均为{phrase}"
+            if covers_all_trials
+            else f"{'、'.join(_trial_display(data, item) for item in trial_ids)}：均为{phrase}"
+        )
+    differing: list[str] = []
+    seen = set(common)
+    for trial_id in trial_ids:
+        for part in parts_by_trial[trial_id]:
+            if part in seen:
+                continue
+            seen.add(part)
+            members = "、".join(
+                _trial_display(data, other) for other in trial_ids
+                if part in parts_by_trial[other]
+            )
+            differing.append(f"{part}（{members}）")
+    segments = [segment for segment in (head, "、".join(differing)) if segment]
+    if not segments:
+        return None
+    return {
+        "label": _field_label("arm_randomization_blinding"),
+        "text": "；其中：".join(segments) + "。",
+        "row_ids": tuple(row.row_id for row in rows),
+        "source_labels": {row.row_id: _trial_display(data, row.trial_id) for row in rows},
+        "user_modified": any(_user_current_state(row) for row in rows),
+    }
+
+
+def _overview_window_finding(
+    data: ReportCPortalData,
+    observations: Sequence[DesignObservation],
+) -> dict[str, Any] | None:
+    """来源绑定的主要终点评估时间窗概要；无确定转写的研究不冒充时间窗。"""
+    windows_by_trial: dict[str, list[str]] = {}
+    row_ids: list[str] = []
+    for observation in observations:
+        if observation.field != "primary_endpoint_timepoint":
+            continue
+        window = _assessment_window_zh(observation)
+        if not window:
+            continue
+        row_ids.append(observation.row_id)
+        trial_windows = windows_by_trial.setdefault(observation.trial_id, [])
+        if window not in trial_windows:
+            trial_windows.append(window)
+    if not windows_by_trial:
+        return None
+    trials_by_window: dict[str, list[str]] = {}
+    for trial_id, windows in windows_by_trial.items():
+        for window in windows:
+            trials_by_window.setdefault(window, []).append(trial_id)
+    covers_all_trials = set(windows_by_trial) == {trial.id for trial in data.trials}
+    if len(trials_by_window) == 1 and covers_all_trials:
+        text = f"各项试验的主要终点评估时间均为{next(iter(trials_by_window))}。"
+    else:
+        groups = "、".join(
+            f"{window}（{'、'.join(_trial_display(data, item) for item in members)}）"
+            for window, members in trials_by_window.items()
+        )
+        text = f"主要终点评估时间：{groups}。"
+    return {
+        "label": _field_label("primary_endpoint_timepoint"),
+        "text": text,
+        "row_ids": tuple(row_ids),
+        "source_labels": {
+            row.row_id: _trial_display(data, row.trial_id)
+            for row in observations if row.row_id in row_ids
+        },
+        "user_modified": any(
+            _user_current_state(row) for row in observations if row.row_id in row_ids
+        ),
+    }
+
+
+def _overview_design_findings(
+    data: ReportCPortalData,
+    observations: Sequence[DesignObservation],
+) -> tuple[dict[str, Any], ...]:
+    """首页设计概要：来源绑定的实际设计发现，不是采集计数。
+
+    只分组随机/盲法架构与主要终点评估时间窗；清除、零值、未公开与无法
+    确定性转写的记录不进入概要，原文与状态仍由完整表和证据抽屉承载。
+    """
+    usable = _summary_usable_observations(observations)
+    return tuple(
+        finding
+        for finding in (
+            _overview_blinding_finding(data, usable),
+            _overview_window_finding(data, usable),
+        )
+        if finding is not None
+    )
+
+
 def _render_page_context(
     data: ReportCPortalData,
     *,
@@ -2389,14 +2558,11 @@ def _render_page_context(
         "numeric_eligibility": workspace["numeric_eligibility"].model_dump(mode="json"),
         "columns": workspace["columns"],
     })
-    overview_conclusions = None
-    if catalog_page_id == "overview" and trial is None:
-        n_trials = len({obs.trial_id for obs in observations if obs.trial_id})
-        overview_conclusions = [
-            {"label": "比较范围", "text": (
-                f"围绕 {n_trials} 项注册试验，从试验设计、人群定义、入选标准、"
-                "终点与随访时间窗等维度并列呈现登记事实。")},
-        ]
+    overview_design_findings = (
+        _overview_design_findings(data, observations)
+        if catalog_page_id == "overview" and trial is None
+        else None
+    )
     return {
         "report": data,
         "evidence_limitations": evidence_limitations,
@@ -2408,7 +2574,7 @@ def _render_page_context(
         "visit_insufficient": visit_insufficient,
         "report_title": f"{data.indication}临床试验设计比较",
         "page_title": title,
-        "overview_conclusions": overview_conclusions,
+        "overview_design_findings": overview_design_findings,
         "page_id": page_id if trial is None else f"trial-{trial.id}",
         "catalog_page_id": catalog_page_id,
         "page": page,

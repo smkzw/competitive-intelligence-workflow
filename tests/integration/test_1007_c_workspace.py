@@ -591,8 +591,8 @@ def test_overview_summary_and_comparison_entry_are_distinct_renderer_tasks(
     report_c.render_report_c_site(data, site)
     overview = (site / "overview.html").read_text(encoding="utf-8")
 
-    assert "核心结论" in overview
-    assert "比较范围" in overview
+    assert "设计概要" in overview
+    assert "比较范围" not in overview
     assert re.search(r'href="[^"]*overview\.html\?view=comparison"', overview)
     assert "全研究横比" in overview
     assert "data-c-enter-comparison" in overview
