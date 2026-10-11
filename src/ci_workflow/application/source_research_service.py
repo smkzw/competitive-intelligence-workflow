@@ -439,7 +439,15 @@ class ResearchResultContext(BaseModel):
     value_role: Literal[
         "reported_measure", "participant_count", "affected_count", "denominator", "dispersion"
     ]
-    source_unit: str
+    source_unit: str = Field(
+        description=(
+            "来源单位。计数类角色（participant_count/affected_count/denominator）为归一化"
+            "中文显示单位“人”，不是来源原文；来源原文单位保留在同一来源原子的 raw_unit "
+            "与行级来源派生的 raw_unit 中；AE模块无单位原文时 raw_unit 保持空，"
+            "人数含义来自登记计数字段定义，不能伪称来源逐字单位。"
+            "reported_measure/dispersion 角色保留来源原文单位。"
+        ),
+    )
     domain: ObservationDomain = "unresolved"
     metric: str = "unresolved"
     source_measure_path: str | None = None
@@ -447,6 +455,12 @@ class ResearchResultContext(BaseModel):
     source_dispersion_type: str | None = None
     raw_value_type: str | None = None
     analysis_population: str | None = None
+    source_definition: str | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
+    source_definition_path: str | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
     group_description: str | None = Field(default=None, exclude_if=lambda value: value is None)
     denominator_candidates: tuple[RegistryDenominatorCandidate, ...] = ()
     class_title: str | None = Field(default=None, exclude_if=lambda value: value is None)
@@ -780,6 +794,8 @@ class _RegistryResult:
     source_dispersion_type: str = ""
     raw_value_type: str = ""
     analysis_population: str = ""
+    source_definition: str = ""
+    source_definition_path: str = ""
     denominator_candidates: tuple[RegistryDenominatorCandidate, ...] = ()
 
 
@@ -816,6 +832,8 @@ class CtgovAtomicResult:
     source_dispersion_type: str = ""
     raw_value_type: str = ""
     analysis_population: str = ""
+    source_definition: str = ""
+    source_definition_path: str = ""
     denominator_candidates: tuple[RegistryDenominatorCandidate, ...] = ()
     dispersion_locator: EvidenceLocator | None = None
     dispersion_quote: str | None = None
@@ -1198,6 +1216,20 @@ def _source_bound_row_ids(
     return fact_sources.get(f"{prefix}:{row_id}") == source_id
 
 
+def _result_fact_row_path(field_path: str | None) -> str:
+    """Map one bound fact locator to the registry result's row-matching path.
+
+    Current-pipeline facts point at the exact value node (``…value`` /
+    ``…numAffected``); extraction keeps the measurement or stats node as the
+    result's row path. Historical facts already used the row path. Coverage
+    matching must not depend on which convention produced the fact.
+    """
+    normalized = (field_path or "").removeprefix("$.")
+    if normalized.endswith(".value") or normalized.endswith(".numAffected"):
+        return normalized[: normalized.rfind(".")]
+    return normalized
+
+
 def _report_outcome_match(
     row: object,
     expected: _RegistryResult,
@@ -1243,6 +1275,13 @@ def _report_safety_match(row: object, expected: _RegistryResult) -> bool:
     if (
         str(getattr(row, "arm", "")) != expected.group_title
         and not _result_arm_matches(expected.arm, str(getattr(row, "arm", "")))
+    ):
+        return False
+    if expected.endpoint and (
+        getattr(row, "source_class_title", None) != (expected.class_title or None)
+        or getattr(row, "source_category_title", None) != (expected.category_title or None)
+        or _result_text(getattr(row, "time_window", "")).casefold()
+        != _result_text(expected.observation_timepoint or expected.timepoint).casefold()
     ):
         return False
     value = getattr(row, "value", None)
@@ -1314,7 +1353,19 @@ def _report_safety_term_matches(row: object, expected: _RegistryResult) -> bool:
             and getattr(row, "term_key", None) == "death"
         )
     if expected.category == "teae":
-        return category == "治疗期间不良事件" and (
+        # Display wording is not scientific identity. New ordinary-builder
+        # rows must preserve the measured concept; legacy rows retain their
+        # explicit category/term path without inventing subset equivalence.
+        typed_key = getattr(row, "term_key", None)
+        if typed_key is not None and (
+            typed_key != "any_teae"
+            or getattr(row, "polarity", "affirmed") != "affirmed"
+            or getattr(row, "seriousness", "unspecified") == "serious"
+        ):
+            return False
+        return category in {
+            "治疗期间不良事件", safety_category_zh("any_teae")
+        } and (
             term == expected.term
             or (expected.term == "任何TEAE" and term in _TEAE_TERMS)
         )
@@ -1754,6 +1805,13 @@ def _iter_adverse_event_results(
         return results
     module = _mapping_at(raw_module, "resultsSection.adverseEventsModule")
     event_timeframe = _result_text(module.get("timeFrame"))
+    # 模块级定义原文必须原样保留：adverseEventsModule 没有人群字段，其
+    # description 同时承载事件定义/安全人群说明。不得用其他结局的
+    # populationDescription 替代，也不得把模块定义灌入结局人群字段。
+    module_definition = _result_text(module.get("description"))
+    module_definition_path = (
+        "resultsSection.adverseEventsModule.description" if module_definition else ""
+    )
     raw_groups = module.get("eventGroups", [])
     groups = _list_at(raw_groups, "resultsSection.adverseEventsModule.eventGroups")
     group_info: dict[str, tuple[str, str]] = {}
@@ -1860,6 +1918,9 @@ def _iter_adverse_event_results(
                         domain="adverse_events", metric="affected_count",
                         source_measure_path=path,
                         raw_value_type=type(affected).__name__,
+                        raw_unit="",
+                        source_definition=module_definition,
+                        source_definition_path=module_definition_path,
                         denominator_candidates=candidates,
                     )
                 )
@@ -2008,6 +2069,9 @@ def _iter_adverse_event_results(
                         domain="adverse_events", metric="affected_count",
                         source_measure_path=path,
                         raw_value_type=type(stat["numAffected"]).__name__,
+                        raw_unit="",
+                        source_definition=module_definition,
+                        source_definition_path=module_definition_path,
                         denominator_candidates=candidates,
                     )
                     results.append(result)
@@ -2035,6 +2099,9 @@ def _iter_adverse_event_results(
                                 domain="adverse_events", metric="affected_count",
                                 source_measure_path=path,
                                 raw_value_type=type(stat["numAffected"]).__name__,
+                                raw_unit="",
+                                source_definition=module_definition,
+                                source_definition_path=module_definition_path,
                                 denominator_candidates=candidates,
                             )
                         )
@@ -2078,6 +2145,17 @@ def extract_ctgov_atomic_results(
             return (), ()
         raise ResearchPackageError("登记未明确声明无结果却缺少 resultsSection，需重取核查")
     issues: list[ClinicalTrialsResultCoverageIssue] = []
+    results_section = record.get("resultsSection")
+    ae_module = (
+        results_section.get("adverseEventsModule")
+        if isinstance(results_section, Mapping) else None
+    )
+    expected_ae_definition = (
+        _result_text(ae_module.get("description")) if isinstance(ae_module, Mapping) else ""
+    )
+    expected_ae_definition_path = (
+        "resultsSection.adverseEventsModule.description" if expected_ae_definition else ""
+    )
     parsed = [
         *_iter_outcome_results(
             record=record, trial_id=trial_id, source_id=source.source_id, issues=issues
@@ -2135,6 +2213,30 @@ def extract_ctgov_atomic_results(
                     raise ValueError("分母与已解析结果不一致")
             except ValueError as error:
                 raise ResearchPackageError("登记结果分母不能按精确路径复核") from error
+        # 模块级定义语境必须带原始定位可复核：来源提供了定义文本时，任何
+        # 解析遗漏或改写都不得进入原子；缺失则保持缺失，不得编造。
+        if result.value_path.startswith("resultsSection.adverseEventsModule.") and (
+            result.source_definition != expected_ae_definition
+            or result.source_definition_path != expected_ae_definition_path
+        ):
+            raise ResearchPackageError("登记结果定义语境被解析器遗漏或改写")
+        if result.source_definition:
+            if not result.source_definition_path:
+                raise ResearchPackageError("登记结果定义语境缺少来源精确路径")
+            definition_locator = EvidenceLocator(
+                document_role="clinical_trial_registry",
+                field_path=f"$.{result.source_definition_path}",
+                url=source.url,
+            )
+            try:
+                definition_quote = extract_locator_quote(
+                    source.content_text, media_type=source.media_type,
+                    locator=definition_locator,
+                )
+            except (TypeError, ValueError) as error:
+                raise ResearchPackageError("登记结果定义语境不能按精确路径复核") from error
+            if _result_text(definition_quote) != result.source_definition:
+                raise ResearchPackageError("登记结果定义语境与已解析来源不一致")
         atoms.append(CtgovAtomicResult(
             result_key=result.result_key, category=result.category,
             trial_id=result.trial_id, source_id=result.source_id,
@@ -2157,6 +2259,8 @@ def extract_ctgov_atomic_results(
             source_dispersion_type=result.source_dispersion_type,
             raw_value_type=result.raw_value_type,
             analysis_population=result.analysis_population,
+            source_definition=result.source_definition,
+            source_definition_path=result.source_definition_path,
             denominator_candidates=result.denominator_candidates,
             dispersion_locator=dispersion_locator,
             dispersion_quote=dispersion_quote,
@@ -2215,6 +2319,8 @@ def research_facts_from_ctgov_atom(
             source_dispersion_type=atom.source_dispersion_type or None,
             raw_value_type=atom.raw_value_type or None,
             analysis_population=atom.analysis_population or None,
+            source_definition=atom.source_definition or None,
+            source_definition_path=atom.source_definition_path or None,
             denominator_candidates=atom.denominator_candidates,
         )
         return ResearchFact(
@@ -3134,6 +3240,7 @@ def _audit_source_record(
     report_data: ReportAPortalData,
     fact_sources: Mapping[str, str] | None,
     fact_paths: Mapping[str, str] | None,
+    fact_contexts: Mapping[str, ResearchResultContext | None] | None = None,
     issues: list[ClinicalTrialsResultCoverageIssue],
     used_efficacy_rows: set[str],
 ) -> dict[str, int]:
@@ -3316,6 +3423,36 @@ def _audit_source_record(
                     "但报告没有对应安全性行"
                 ),
             )
+        elif fact_contexts is not None:
+            # 来源提供的人群/定义原文必须随行级来源语境完整到达：匹配到行后
+            # 再检查绑定事实是否遗漏或改写了这些语境，遗漏不得视为通过。
+            matched_row = matches[0]
+            fact_context = fact_contexts.get(f"safety:{matched_row.row_id}")
+            expected_context = {
+                "analysis_population": result.analysis_population or None,
+                "source_definition": result.source_definition or None,
+                "source_definition_path": result.source_definition_path or None,
+            }
+            changed = [
+                key for key, expected in expected_context.items()
+                if getattr(fact_context, key, None) != expected
+            ]
+            if changed:
+                _result_issue(
+                    issues=issues,
+                    category=result.category,
+                    status="conflicting",
+                    trial_id=trial_id,
+                    source_id=source.source_id,
+                    source_path=result.source_path,
+                    result_key=result.result_key,
+                    reason_zh=(
+                        f"{result.group_id} 的安全性行缺少或改写了来源人群/定义语境："
+                        + "、".join(changed)
+                        + "；不得用类目标签、其他结局人群或归一化计数单位替代来源原文"
+                    ),
+                    report_row_ids=(matched_row.row_id,),
+                )
     registry_has_explicit_teae = any(result.category == "teae" for result in registry_results)
     registry_has_explicit_aesi = any(result.category == "aesi" for result in registry_results)
     other_ae_aggregates = [
@@ -3487,7 +3624,10 @@ def audit_clinicaltrials_result_coverage(
                 report_trial_ids[nct.casefold()] = trial.id
     fact_sources = None if facts is None else {fact.row_ref: fact.source_id for fact in facts}
     fact_paths = None if facts is None else {
-        fact.row_ref: fact.locator.field_path or "" for fact in facts
+        fact.row_ref: _result_fact_row_path(fact.locator.field_path) for fact in facts
+    }
+    fact_contexts = None if facts is None else {
+        fact.row_ref: fact.result_context for fact in facts
     }
     issues: list[ClinicalTrialsResultCoverageIssue] = []
     registry_source_ids_by_trial: dict[str, set[str]] = {}
@@ -3545,6 +3685,7 @@ def audit_clinicaltrials_result_coverage(
             report_data=report_data,
             fact_sources=fact_sources,
             fact_paths=fact_paths,
+            fact_contexts=fact_contexts,
             issues=issues,
             used_efficacy_rows=used_efficacy_rows,
         )

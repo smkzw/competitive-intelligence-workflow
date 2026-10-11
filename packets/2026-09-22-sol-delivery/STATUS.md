@@ -1,5 +1,24 @@
 # 唯一当前状态：1007V1恢复连续实施｜current21不变，非RC
 
+最新执行锚点：已push8b6444c6。Source-definition E03真实终态1927.177s，
+实际CodeBuddy/deepseek-v4.1-flash，CLI配置max；不是在途。Owner核原源
+修无单位伪原文及TEAE别名两成族RED，十文件141PASS142.60s/两源strict/
+具名Ruff通过。19v4包7deea74f只六定义/定位新增，其余13事实和四源不变。
+隔离SQLite正常摄取19产生8open冲突（六旧candidate定义+两旧accepted PK）。
+原C03 round4已终态0，actualPi/gpt-6.1-sol:high/403.159s；19来源范围ACCEPT，
+覆盖时间/类别及原子缺定义仍REVISE。Owner5RED→十四文件206PASS145.86s，
+strict三源/具名Ruff通过；窄candidate-only定义补全守卫、原子独立核源及
+覆盖上下文已修。正常A2 issuer终态0，actualnative openai-codex/gpt-6.1-sol/
+high配置，同C03修复上下文独立性降低；49相关PASS37.11s、原源对抗核验。
+源19+声明19 accepted，回执54d0fbe1；普通采用decision ad74c289/8精确修正
+已实际完成，历史源/用户/冲突/绑定保持，current21/1144未切换。
+冻结最新六步quality-only全绿1185活跃646.43s/20兼容/7分层/strict286/Ruff/
+旧路径；旧mixed-tree仅诊断。旧进程全终态，不等不重派。347潜在合格
+消费者只读准备完成；AE组计数coverage漏时间窗仍开（精确binder拒绝），
+不是整份报告或RC通过。下一精确接入和同版current/UI/config/share。
+
+## 本日较早记录（历史，旧在途/下一由顶节替代）
+
 2026-10-11用户恢复实施，Goal active；最新已push27b2aaae。22暂停hash/11716持久文件核验，current21/1144/generation67b793ef不变。唯一详细台账evidence/1007V1/owner-resume-source-and-identity-20261011-v1.json。
 
 来源C03已经终态REVISE：最终实证Pi/openai-codex/gpt-6.1-sol:high、声明fallback同会话续接，非请求GLM。19标量匹配不能掩盖六AE原定义/人群及A投影语境漏保留。v3包eed16decbf仍冻结、零采用；新source-definition有界执行已派27268/event81587，owner不修改两worker源文件、不进度轮询/重派。修复后需新候选、独立原源复核、正常issuer及精确消费者；禁止自签或回写旧接受。

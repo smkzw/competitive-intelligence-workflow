@@ -899,6 +899,15 @@ def main() -> None:
                                 "class_title": source_class_title,
                                 "category_title": cat_title,
                                 "display_population": population,
+                                # 结局人群原文（analysis population）：类目标签
+                                # 只是展示人群，不得替代来源人群定义。
+                                "analysis_population": (
+                                    str(
+                                        measure.get("populationDescription")
+                                        or measure.get("analysisPopulationDescription")
+                                        or ""
+                                    ).strip() or None
+                                ),
                                 "group_id": group_id,
                                 "group_title": group_title,
                                 "timepoint": row_time_frame,
@@ -1097,6 +1106,10 @@ def main() -> None:
             events = ae_module.get("eventGroups") or []
             # Missing labels belong in presentation, not the exact source identity.
             ae_time_window = str(ae_module.get("timeFrame") or "").strip()
+            # 模块级 AE 定义/人群原文（无则保持缺失）：它随原始路径进入行级
+            # 来源派生；不得用其他结局的人群描述或类目标签替代。
+            ae_module_description = str(ae_module.get("description") or "").strip()
+            ae_definition_path = "$.resultsSection.adverseEventsModule.description"
             for group_index, group in enumerate(events):
                 arm_title = str(group.get("title") or "登记组别未提供")
                 row_product_id, assignment_state = _linked_product_for_group(
@@ -1166,10 +1179,19 @@ def main() -> None:
                         "value_path": source_path,
                         "raw_value": affected,
                         "raw_value_type": type(affected).__name__,
-                        "raw_unit": "participants",
+                        "raw_unit": None,
+                        "normalized_unit": "participants",
+                        "unit_origin": "registry_count_field_semantics",
                         "outcome_title": term,
                         "class_title": None,
                         "category_title": None,
+                        # AE 模块没有独立人群字段；人群/事件定义随定义原文
+                        # （source_definition）保留，不得与结局人群混用。
+                        "analysis_population": None,
+                        "source_definition": ae_module_description or None,
+                        "source_definition_path": (
+                            ae_definition_path if ae_module_description else None
+                        ),
                         "group_id": str(group.get("id") or ""),
                         "group_title": arm_title,
                         "timepoint": ae_time_window,

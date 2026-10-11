@@ -1,6 +1,22 @@
 # 唯一接手入口｜1007V1已获用户授权恢复连续实施，非RC
 
+最新增量：C阅读批次8b6444c6已push。原C03 round4已终态0，actual
+Pi/openai-codex/gpt-6.1-sol:high/403.159s；19原源范围ACCEPT，覆盖漏校验
+时间/类别与原子边界缺定义仍REVISE。Owner集中5RED→十四文件206PASS
+145.86s，strict三源/具名Ruff通过；candidate-only六AE定义补全守卫已接通，
+不放宽已接受兄弟。旧v3/v4冻结材料与原FAIL保留。当前21/1144不切换。
+正常A2 issuer已终态0：native实际openai-codex/gpt-6.1-sol、high配置/会话
+绑定已核，源19+声明19 accepted，回执54d0fbe1；真实普通采用已完成，
+decision ad74c289/8精确来源补全或领域修正，旧材料/current21保持。
+最终冻结源码六步quality-only全绿，1185活跃646.43s/20兼容/7分层/Ruff/
+strict286/旧路径；旧mixed-tree全绿只诊断。旧执行/会商/issuer均终态，
+不再等待或重派。报告AE组计数错误时间窗coverage漏检仍开（精确binder
+已拒绝），源19接受不等于整份报告。347合格潜在消费者只读准备完成，
+下一精确接入/同版current、UI及分享，不重跑旧源采用/登记/save链。
+
 当前状态：[STATUS顶节](packets/2026-09-22-sol-delivery/STATUS.md)；最新历史暂停及恢复步骤：[暂停交接](docs/handoffs/PAUSE_HANDOFF_20261010_current21.md)；机器历史锚点：[pause JSON](packets/2026-09-22-sol-delivery/evidence/1007V1/pause-20261010-current21.json)。2026-10-11用户已明确恢复实施，Goal API实查active；历史暂停证据不改写。
+
+## 本日较早记录（历史，旧“在途/下一”由顶节替代）
 
 - 恢复基线ceaad83ac98b495dff350872fca4fef8418fd0cc；22项暂停hash及11716持久项目文件已逐项核对，current21/1144不变。沿用既有Trellis任务，成族修复，不重跑已完成事务。
 - 最新恢复台账：[20261011有界根因与实屏记录](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-resume-source-and-identity-20261011-v1.json)。本轮execution-plus-conference，单一来源owner；原C03终态REVISE，新source-definition执行在途，未签科学接受。

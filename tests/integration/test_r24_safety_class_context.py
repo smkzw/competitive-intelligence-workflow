@@ -228,7 +228,7 @@ def test_source_atom_category_uses_explicit_class_of_composite_measure() -> None
         "and Serious TEAEs"
     )
     assert _outcome_category(title, "Participants with TEAEs") == "teae"
-    assert _outcome_category(title, "Participants with Serious TEAEs") == "common_ae"
+    assert _outcome_category(title, "Participants with Serious TEAEs") == "tesae"
     # Without a class-specific measurement, the composite cannot be called an SAE rate.
     assert _outcome_category(title) == "outcome"
 
@@ -255,7 +255,7 @@ def test_source_atom_category_uses_explicit_class_of_composite_measure() -> None
     assert len(issues) == 2
     assert all(issue.status == "missing" and "分母缺失" in issue.reason_zh for issue in issues)
     assert [(result.category, result.value) for result in results] == [
-        ("teae", 12.0), ("common_ae", 3.0),
+        ("teae", 12.0), ("tesae", 3.0),
     ]
 
 

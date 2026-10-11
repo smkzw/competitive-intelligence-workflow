@@ -660,6 +660,27 @@ def _exclusive_efficacy_to_pk_domain_repair(
     )
 
 
+def _exclusive_source_definition_enrichment(
+    *, prior: dict[str, Any], selected: dict[str, Any],
+) -> bool:
+    """Absent source definition only; caller independently replays selected context."""
+    old = json.loads(_canonical_json(prior))
+    new = json.loads(_canonical_json(selected))
+    old_context, new_context = old.get("result_context"), new.get("result_context")
+    if not isinstance(old_context, dict) or not isinstance(new_context, dict):
+        return False
+    old_text = old_context.pop("source_definition", None)
+    old_path = old_context.pop("source_definition_path", None)
+    new_text = new_context.pop("source_definition", None)
+    new_path = new_context.pop("source_definition_path", None)
+    return (
+        old_text is None and old_path is None
+        and isinstance(new_text, str) and bool(new_text.strip())
+        and new_path == "resultsSection.adverseEventsModule.description"
+        and old == new
+    )
+
+
 def _registry_scope_corrections(
     database: sqlite3.Connection,
     item: _ClosureFact,
@@ -691,7 +712,16 @@ def _registry_scope_corrections(
         return (), frozenset()
     fail = "绑定事实存在未解决的来源冲突：不符合已复核登记标量范围/领域修复"
     observation = item.fact.result_context
-    if observation is None or observation.value_role != "reported_measure":
+    definition_scope = bool(
+        observation is not None
+        and observation.value_role in {"affected_count", "denominator"}
+        and observation.domain == "adverse_events"
+        and (observation.source_measure_path or "").startswith(
+            "resultsSection.adverseEventsModule.")
+    )
+    if observation is None or (
+        observation.value_role != "reported_measure" and not definition_scope
+    ):
         raise SourceFactAcceptanceError(fail)
     if item.source_version_id not in parsed:
         try:
@@ -718,7 +748,7 @@ def _registry_scope_corrections(
                 raise ValueError("invalid members")
             if item.version_id not in members or len(members) < 2:
                 raise ValueError("selected version absent")
-            repair_kind: Literal["denominator", "domain"] | None = None
+            repair_kind: Literal["denominator", "domain", "definition"] | None = None
             for version_id in members:
                 if version_id == item.version_id:
                     continue
@@ -744,16 +774,26 @@ def _registry_scope_corrections(
                 ):
                     raise ValueError("prior identity drift")
                 review_state = str(row[0])
-                if _exclusive_efficacy_to_pk_domain_repair(prior=prior, selected=selected):
+                if definition_scope and _exclusive_source_definition_enrichment(
+                    prior=prior, selected=selected,
+                ):
+                    if review_state != "candidate":
+                        raise ValueError("definition enrichment cannot waive an accepted prior")
+                    member_kind: Literal["denominator", "domain", "definition"] = "definition"
+                elif observation.value_role == "reported_measure" and (
+                    _exclusive_efficacy_to_pk_domain_repair(prior=prior, selected=selected)
+                ):
                     if review_state not in {"candidate", "accepted"}:
                         raise ValueError("non-historical prior state")
-                    member_kind: Literal["denominator", "domain"] = "domain"
-                elif _exclusive_denominator_scope_repair(
-                    prior=prior,
-                    selected=selected,
-                    selected_without_n=selected_without_n,
-                    group_id=observation.group_id,
-                    capture=item.capture,
+                    member_kind = "domain"
+                elif observation.value_role == "reported_measure" and (
+                    _exclusive_denominator_scope_repair(
+                        prior=prior,
+                        selected=selected,
+                        selected_without_n=selected_without_n,
+                        group_id=observation.group_id,
+                        capture=item.capture,
+                    )
                 ):
                     if review_state != "candidate":
                         raise ValueError("non-candidate or different source scalar")
@@ -771,11 +811,11 @@ def _registry_scope_corrections(
                 # domain repair against this selected version; only this
                 # validated membership may authorize accepted-sibling reuse.
                 domain_members.update(members)
-            classification = (
-                "same_registry_scalar_parser_domain_correction"
-                if repair_kind == "domain"
-                else "same_registry_scalar_parser_denominator_scope_correction"
-            )
+            classification = {
+                "domain": "same_registry_scalar_parser_domain_correction",
+                "denominator": "same_registry_scalar_parser_denominator_scope_correction",
+                "definition": "same_registry_scalar_source_definition_enrichment",
+            }[repair_kind]
             note = _canonical_json(
                 {
                     "classification": classification,

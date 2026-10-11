@@ -1,5 +1,16 @@
 # 当前执行｜1007V1已恢复，沿用W00–W10
 
+最新有界顺序：round4终态，来源19范围ACCEPT/投影REVISE；owner成族根因
+修复5RED/guard2FAIL→十四文件206PASS145.86s/strict三源/具名Ruff。
+窄candidate-only原源定义补全不授权accepted兄弟。19已正常候选摄取，A2
+来源纪元/context34932cb7发布，当前21/1144不切换。正常issuer20944已终态0，
+回执54d0fbe1/源19+声明19接受；普通采用ad74c289/8精确修正完成，独立修复
+上下文降低已记录。最终冻结宽门66571六步quality-only通过，mixed-tree旧
+全绿只诊断。347合格潜在消费者已只读准备；之后合法
+精确消费者/统一current→同版实屏修订/配置/分享/新浏览器；不是旧链重跑。
+
+## 本日较早排程（历史，由顶节接续）
+
 2026-10-11恢复授权已核：先完成同族来源定位/安全语义/辅助统计覆盖及accepted兄弟集合闭包，分别执行相关回归；冻结之后独立来源挑战与正式issuer，不自签、不篡改旧接受。并行复用v4前端预览做受影响实屏/C阅读/fresh独立分享。成族修改与里程碑宽门分开，不逐行全仓测试。当前状态见STATUS；下面暂停说明只作为历史恢复清单。
 
 恢复序列/禁止重跑清单见[最新暂停交接](../../docs/handoffs/PAUSE_HANDOFF_20261010_current21.md)和STATUS。来源/root/只读/图形已push27b2aaae，旧事务勿重跑。C03终态REVISE（实际Pi/gpt-6.1-sol:high声明fallback，非请求GLM）：19标量匹配但六AE原定义和A人群语境漏保留；19v3仍不采用。新有界source-definition执行负责两生产文件+一个反例族，owner继续独立C页面，不串行阻塞。C阅读393.260s终态，owner93→3RED→96，真实局限页9–16px嵌套网格1RED→97PASS；普通C16v3四宽fold/筛选/清除/原文/Esc/布局和选定实屏通过，仅限阅读根因。候选0f4687d0/浏览器060f414a，重复标题/留白、全部页/跨浏览器和当前分享仍开。源码新候选及原源上下文独立复核后才正常issuer/采用/精确消费者，不借用旧PASS。下面所有旧“当前/下一/PENDING/Ask未答”均历史。
@@ -355,3 +366,19 @@ owner混合字典补缺，56相关/静态范围通过。此小族不再逐次宽
 规范、精简证据、受控清单进Git；大产物可恢复指针，不无差别提交/清理。旧中文根零接触、旧Task10.3–10.5/hash不改；退役另需达标及再次批准。既有Goal/五新增/0923桌面/0924科学及编辑需求保留于PRD/DESIGN/ACCEPTANCE。
 
 [旧PLAN原件](archive/pre-1007V1/PLAN.md)只作历史处置索引，不是当前在途清单。
+# 最新有界执行顺序｜2026-10-11来源闭包
+
+1. 已完成：原round4终态收取；原源19范围通过但投影REVISE。Owner集中根因
+   5RED/guard2FAIL→十四文件206PASS145.86s；不增加审批或新平台。
+2. 已完成：19正常candidate摄取、旧行/快照/current21保护；正常A2来源纪元
+   context34932cb7已发布，A21仅呈现锚点，非新报告验收。
+3. 已完成：单次正常issuer20944终态0，实际native openai-codex/gpt-6.1-sol，
+   CLIhigh/session绑定与49相关PASS及原源对抗实际核验。正常19采用ad74c289，
+   8精确修正，旧current不切换；六步冻结quality-only通过而非完整发布。
+4. 下一：精确合法消费者再
+   current重建。同版前端/config/edit/clear/sync/share/offline，而非旧链重跑。
+5. 后续仍按1007V1全量科学/MAH/Publication/动态/未知关系、全页视觉/跨浏览器、
+   三宿主/安装/恢复/24门户收口；无自发阶段暂停，未满足不能宣布RC。
+
+本节补全有界顺序；本日更早在途/下一记录为历史，以顶节及STATUS/
+机器latest_checkpoint为准。
