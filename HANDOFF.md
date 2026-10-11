@@ -1,8 +1,11 @@
 # 唯一接手入口｜1007V1连续实施，非暂停、非RC
 
 唯一当前状态：[STATUS顶节](packets/2026-09-22-sol-delivery/STATUS.md)。
-最新第十八明确百分比当前值/共享登记/问题图根因在实施；验证及在途见STATUS顶节。
-第十七已push ff374c680df25fcbe76ebc44a0fc088b3ccf7892并核远端exact，终态不重跑。
+最新第十九真实论文消费者/原文坐标根因在实施；验证及在途见STATUS顶节。
+第十八已push 8e1ef05d486a2d99d52759524f1ce637f4a6e037并核远端exact，终态不重跑。
+P1四主要单元格普通A/B生成v5，current34不切换；141相关PASS3.11s及具名静态。
+独立关系会商61865已终态scoped ACCEPT，不再等待；新主要论文原子提取74401
+及终态事件19140在途，不读pending/轮询/重派。浏览器、宽门按STATUS实际终态记录。
 已完成第十六[回执](packets/2026-09-22-sol-delivery/evidence/1007V1/owner-publication-components-v1.json)
 及[复盘](docs/handoffs/RETROSPECTIVE_20261012_publication_components.md)。
 既有当前保存/来源采用见第十五owner-source-adoption-current34-v1.json，不重做。
@@ -27,6 +30,11 @@ smoke/7分层/旧路径，仅开发质量；Owner实看1920折线+主表，完�
 首轮重复Trellis问题terminal2是未完成；原会话窄续接终态accepted，勿重派或等旧PID。
 
 ## 下一有界动作与在途
+
+当前只续第十九：v5四档宽屏图/主表/原文/实际Esc；新主要论文冻结候选→原文
+核验及必要fresh科学复核→真正多药问题图/表；再同当前编辑/清除/undo/配置分享。
+旧中文工程零接触，原current34/1505科学事实和历史不改。以下第十六/十七为历史，
+其“未接消费者”只对当时成立，P1新A/B各4消费者已接通，不重跑历史节点。
 
 论文已接受原子→值角色/统计形式/明确研究组/原文定位投影→合法消费者→
 真正多药临床共享列、ECharts+可见同query主表。仅材料可达或计数图不充当正向临床横比。

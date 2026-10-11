@@ -1,5 +1,40 @@
 # 唯一当前状态：1007V1连续实施｜current34配置及六离线入口通过，非RC
 
+第十九根因包完成、连续接续中：第十八8e1ef05d486a2d99d52759524f1ce637f4a6e037已push/远端exact。
+最新[真实来源回执](evidence/1007V1/owner-publication-real-source-context-v1.json)及
+[复盘](../../docs/handoffs/RETROSPECTIVE_20261012_publication_real_source_context.md)。
+独立C03 61865及事件68200已terminal0，actual ZCode/GLM-5.3-Flash/max，803.102s/
+27tools；四原子、论文研究名/表头及有声明范围的关系证明scoped ACCEPT。Owner沿用
+已接受事实上下文作消费者投影，不持久化来源版本依赖的8新实体/9关系，不猜NCT。
+current34和原科学表保持；真实4论文原子现在有合法A+B各4消费者，普通门户A/B
+生成完成。恢复real-consumers-v3/actual.json；v1覆盖模式full、v2大写route的仪器失败
+保留。v3小写slug是可逆显示别名，不新增物理研究；新候选快照不覆盖旧绑定。
+真实接入暴露A可选监管/公司/专利/历史强制非空根因：9真RED+4原有PASS后最小
+修复，73相关PASS2.54s，不制造空模块占位事实。公开论文XPath被错误当成本机路径
+并过滤精确原文，共同根因4RED→141相关PASS3.11s，具名Ruff/strict两文件。
+六旧测试仅读inline的仪器失败只迁移decoder，临床断言不变。v4实际来源误报保留，
+v5普通入口四宽A/B、32glyph原文/Esc及B四筛选态终态；20实际截图，Owner三图实看。
+有界功能通过，整审美REVISE：重复倾斜研究标签、筛选展开留白仍待改善。密集全页
+和新消费者编辑不签PASS。新冻结宽门79424已terminal0/source-set exact，strict289/
+1294当前294.61s/20兼容smoke/7分层/旧路径，仅开发质量，勿重复第十八或本门。
+E08主要论文获取22781/事件22248已terminal0，actualnativegrok-4.7-build/high24calls/
+24turns733.397s。NCBI原生XML metadata-only/DOI403不是全文不存在。Owner通过Ego
+普通PMC页面获取有正文/3表的article DOM，sha965ca56244defa8efa620baedbb250446bdac80ca93a00d0e597c8c26e48553a；
+这是去脚本的渲染DOM，不冒充原HTTP字节，也不倒证历史公开日，不进行科学采用。
+E08 ci-1007-nemolizumab-primary-atoms-v1 74401/事件19140已terminal0，actualnative
+Grok4.7-build/high36calls1163.285s。四百分数58.4/16.7/26.3/7.3，3源/18原子/22声明
+模型及12精确offset Owner核通过，只是候选。intra-line定位不兼容现有整行重放、
+结果context与日期角色未接；不造span DSL，不把下载日/模型信心当历史公开证明。
+fresh C03 ci-1007-nemolizumab-primary-review-v1单次17575/事件8392在途，实际runtime
+终态核，原件+科学上下文/版本资格窄审，不读执行叙事，所有Grok别名从备用排除。
+最小当前操作分支v1备份SQL带committed selector而未带旧generation，正常生产拒绝；
+83363 terminal1，无原项目写入或save，不删selector绕过。保留失败，下一用现有
+manifest恢复实际accepted科学闭包及合法消费者，避免复制整套旧交付史或造新平台。
+下一有界动作：两论文真来源消费者→图/主表/来源实屏→普通同版编辑、清除、undo、
+合法同步/分享；原current34和全W00–W10终验保留，不阶段暂停/RC。
+
+## 第十八原时点记录（Git及C03已终态，以顶节为准）
+
 第十八在实施：17th已push且远端exact为ff374c680df25fcbe76ebc44a0fc088b3ccf7892。
 明确论文n(%)的当前投影/A+B登记/编辑清除undo及同问题图接通生产路径，不新建
 解析器/科学版本或补分母。当前值205相关PASS8.74s、问题图2真RED后最终145相关

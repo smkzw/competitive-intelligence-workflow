@@ -1,0 +1,185 @@
+{
+  "state": "BOUNDED_REAL_SOURCE_CONSUMER_AND_COORDINATE_ROOT_PASSED_NOT_RELEASED",
+  "baseline_commit": "8e1ef05d486a2d99d52759524f1ce637f4a6e037",
+  "goal_state": "active_full_W00_W10_continues_no_pause",
+  "method": "execution-plus-conference: Owner shared production/current/browser writer; finite source extraction in isolated owned directory; one fresh source review, not per-observation or full-page loop",
+  "production_roots": [
+    "Optional A regulatory/company/patent/history sections accept actual omission/empty collections, not fabricated rows; source closure/release gates unchanged",
+    "Indexed public article leaf field_path with validated external URL remains an XML coordinate, not a local path; local path and weak locator guards remain",
+    "Current B regression helper consumes actual external shared-payloads; all scientific assertions retained"
+  ],
+  "tests": {
+    "optional_A": {
+      "genuine_RED": 9,
+      "already_PASS": 4,
+      "related_PASS": 73,
+      "seconds": 2.54
+    },
+    "xml_coordinates": {
+      "genuine_RED": 4,
+      "already_PASS": 10,
+      "final_related_PASS": 141,
+      "seconds": 3.11,
+      "session": 55435
+    },
+    "static": {
+      "ruff": "PASS: two production and new test",
+      "strict_mypy": "PASS: two production files"
+    },
+    "instruments": [
+      "Six historical current B tests assumed inline payload; decoder only migrated, no assertion weakening",
+      "New synthetic source-question fixture had non-body XPath; replaced with existing realistic publication fixture, no guard loosening",
+      "One nonexistent current-question test path produced no tests; final actual path executed",
+      "Source-context v4 preserved actual erroneous unverified drawer; v5 fresh ordinary render after root fix",
+      "Isolated current-chain v1 copied full SQLite selector but not old committed generation; production correctly rejected initialization. No full-source/current writes. Do not clear copied selector or retry blindly"
+    ]
+  },
+  "real_consumers": {
+    "recipe_digest_note": "v3 receipt pins executed pre-format recipe; final recipe was formatted only after terminal completion. Retain receipt digest as historical, do not claim final formatted file had that execution hash or replay existing output.",
+    "artifact": ".artifacts/1007-publication-real-consumers-v3/actual.json",
+    "sha256": "d791ade5aba119c8a2de46ab95936e4d5677bf0b6fc7bb3d6f4666e129a9921c",
+    "A": 4,
+    "B": 4,
+    "printed_values": [
+      18.4,
+      60,
+      22,
+      37.2
+    ],
+    "scientific_normalized_values": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "source_snapshot": "evidence-snapshot_233e6ac690da50727babb48a",
+    "snapshot_sha256": "a47309c3fcf77d2852b7cbb192a9bf23d52abfb7a311e967262cd982d2b58a3d",
+    "scope": "Two source-scoped study labels, one drug, exact accepted original facts. No guessed NCT/global entity mapping or numeric coaxis adoption."
+  },
+  "render": {
+    "artifact": ".artifacts/1007-publication-source-context-v5/actual.json",
+    "sha256": "cc37e9239caafaccc57ae3bad80d228adbb705c9e5b98eb7bd8819fbed9a0fbf",
+    "source_code_sha256": {
+      "src/ci_workflow/renderers/portal/report_a.py": "9d239d20b5720831c94b0412fb1cd75d4124ec1a75c4e0e385579b48304be533",
+      "src/ci_workflow/reports/common/evidence_view.py": "e43c15f630deffc88a0df6ce9d49f522ca5cd8e74e0cbe82a83039fde6a24fa9"
+    },
+    "browser": {
+      "widths": [
+        1440,
+        1600,
+        1920,
+        2560
+      ],
+      "height": 1080,
+      "space": 2,
+      "scope": "A+B ordinary comparison/table, all 32 glyph-source opens and exact Esc focus; B four filtered states; 20 actual screenshots",
+      "receipt_sha256": {
+        "1440": "d24cbe3342203e0fcfa2054a0f3b8697f60fac1677cff7f49d7adebd377d06c0",
+        "1600": "11c31f92c1bd4dd52ff7455ce578899f2bc6e73d810c13b27cbfc0f04ef7f77f",
+        "1920": "0ccc1e481958da94e7533b72e7b614f3c318973527c448763021030fc406f496",
+        "2560": "ddee54beb50000d2e06937cd70b32c205b04f8984598252b6a95b4413db0c975"
+      },
+      "owner_viewed": [
+        "B-1920-comparison.png",
+        "A-1440-source.png",
+        "B-2560-filtered.png"
+      ],
+      "full_aesthetic": "REVISE: duplicate rotated study labels; open filter leaves wide unused region. Scope checks do not accept full aesthetics",
+      "dense_all_physical_pages": "NOT_RUN"
+    }
+  },
+  "identity_review": {
+    "session": 61865,
+    "event": 68200,
+    "terminal_returncode": 0,
+    "actual_model": "GLM-5.3-Flash",
+    "actual_adapter": "ZCode",
+    "effort": "max",
+    "seconds": 803.102,
+    "tools": 27,
+    "report_sha256": "9d076f50d9d29c2b80d1a1b939a7c38118a03588d503ba65fa29a9b06954a6f1",
+    "raw_sha256": "b84b5518f9170bcc6f0c6857253de0da99151a6dc4fb0014ef33083fac9eb877",
+    "owner_disposition": "Scoped ACCEPT original four cells/source labels/context for presentation; 8 version-dependent proposed entities/9 relations not persisted, whole-regimen single-fragment overclaim not accepted"
+  },
+  "nemolizumab": {
+    "capture": {
+      "session": 22781,
+      "event": 22248,
+      "terminal_returncode": 0,
+      "actual_model": "grok-4.7-build",
+      "effort": "high",
+      "calls": 24,
+      "seconds": 733.397,
+      "source": "Official native NCBI metadata; PMC native file metadata-only, DOI403 not paper absence"
+    },
+    "official_browser": {
+      "artifact": ".artifacts/1007-nemolizumab-primary-browser-capture-v1",
+      "article_dom_sha256": "965ca56244defa8efa620baedbb250446bdac80ca93a00d0e597c8c26e48553a",
+      "bytes": 142869,
+      "tables": 3,
+      "native_HTTP_bytes": false,
+      "historical_availability_not_inferred": true
+    },
+    "extraction": {
+      "session": 74401,
+      "event": 19140,
+      "terminal_returncode": 0,
+      "actual_model": "grok-4.7-build",
+      "effort": "high",
+      "model_calls": 36,
+      "seconds": 1163.285,
+      "native_session": "0a8f274e-86a8-4655-9f3a-a09ee34c5cec",
+      "raw_sha256": "69c91267361b86ef3ab2705495c1cf00168addf78de84040efbc335d564a28e0",
+      "package_sha256": "5d33d72953d9c53ceb35af3f9914eaa99c87f23fa96c94b0a2761c1e83cd711c",
+      "model_and_owner_quote_checks": {
+        "sources": 3,
+        "facts": 18,
+        "claims": 22,
+        "exact_source_offsets": 12
+      },
+      "percent_tokens": [
+        "58.4%",
+        "16.7%",
+        "26.3%",
+        "7.3%"
+      ],
+      "state": "CANDIDATE_ONLY_NOT_INGESTED",
+      "gaps": "Intra-line token locator not supported by existing whole-line replay; source result_context absent and date roles unset. Reuse actual paragraph/typed context or native abstract, no mandatory span DSL/new platform"
+    },
+    "fresh_review": {
+      "task": "ci-1007-nemolizumab-primary-review-v1",
+      "session": 17575,
+      "event": 8392,
+      "state": "PENDING_ACTUAL_RUNTIME_UNVERIFIED",
+      "purpose": "Four endpoint contexts and fact-version cutoff proof; originals only, no executor narrative; all Grok transports excluded",
+      "hard_wait_seconds": 7200
+    }
+  },
+  "development_gate": {
+    "artifact": ".artifacts/1007-publication-source-context-quality-gate-v1",
+    "session": 79424,
+    "terminal_returncode": 0,
+    "state": "QUALITY_ONLY_PASSED",
+    "source_set_unchanged": true,
+    "prewrite_sha256": "178a1c633c4d7415e4ae4e5cca76522fdd43c282bf1c0e615b974df3d618c08c",
+    "log_sha256": "a7e6b6c625a8c61481606293ebeefc0f8140ae13e26057e3c542f54170dfa2da",
+    "scope": "Ruff src/tests/tools, strict src/tools289;1294 unit/contract294.61s;20 retained compatibility smoke;7layer/legacy checks. Not full integration/science/browser/hosts/install/recovery/RC"
+  },
+  "current": {
+    "revision": 34,
+    "A": 33,
+    "B": 34,
+    "C": 33,
+    "facts": 1505,
+    "generation": "eef1a1112645c45fc6a86c26f1a681eb773db84c271241671e6acfda7a0ccc3c",
+    "changed": false
+  },
+  "preservation": "Five protected tracked user files rehashed exact; unknown untracked and old evidence/legacy root untouched. No reset/checkout/clean/add-all. Original sources and scientific eight tables unchanged.",
+  "next": "Whitelist Git; keep fresh source review pending without polling; recover minimal source operation branch through existing manifest restoration rather than stripping copied delivery state, then actual same-version edit/clear/undo/shared A+B/config/share. Continue true multi-drug graph/table and remaining complete W00-W10.",
+  "not_run": [
+    "New real publication current save/clear/undo/config/share",
+    "New primary fact adoption/cutoff acceptance/multi-drug grouping",
+    "All physical-page density/aesthetic/cross-browser gates",
+    "24 portals/3hosts/fresh-install/recovery/RC"
+  ]
+}

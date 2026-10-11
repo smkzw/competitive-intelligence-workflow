@@ -418,10 +418,12 @@ class ReportAPortalData(BaseModel):
     efficacy: tuple[EfficacyRow, ...] = ()
     safety: tuple[SafetyRow, ...] = ()
     additional_observations: tuple[AdditionalObservationRow, ...] = ()
-    regulatory: tuple[RegulatoryRow, ...] = Field(min_length=1)
-    companies: tuple[CompanyRow, ...] = Field(min_length=1)
-    patents: tuple[PatentRow, ...] = Field(min_length=1)
-    history: tuple[HistoryRow, ...] = Field(min_length=1)
+    # Source planning/closure accepts completeness. The renderer must not force
+    # fabricated rows in optional sections when their sources have no records.
+    regulatory: tuple[RegulatoryRow, ...] = ()
+    companies: tuple[CompanyRow, ...] = ()
+    patents: tuple[PatentRow, ...] = ()
+    history: tuple[HistoryRow, ...] = ()
     sources: tuple[SourceRow, ...] = Field(min_length=1)
     user_edits: dict[str, UserEditDisclosure] = Field(default_factory=dict)
     # Reuse the evidence-room source views, omitted on historical A payloads.

@@ -48,6 +48,7 @@ from pydantic import (
 
 from ci_workflow.domain.enums import FactDisclosureState, ReportKind
 from ci_workflow.domain.evidence import EvidenceLocator
+from ci_workflow.domain.public_provenance import public_source_url
 from ci_workflow.domain.source_clause_context import SourceClauseContext
 from ci_workflow.reports.common.page_registry import PageRegistry
 from ci_workflow.reports.common.view_state import ReportRow
@@ -192,6 +193,24 @@ _LOCATOR_STRING_FIELDS: tuple[str, ...] = (
 )
 _LOCATOR_VISIBLE_FIELDS: tuple[str, ...] = ("document_role", *_LOCATOR_STRING_FIELDS, "page")
 
+# This is a coordinate namespace, not source verification or acceptance. Only
+# indexed public article leaves can be exempted in field_path; other absolute
+# strings retain the filesystem guard, including table/row/url fields.
+_PUBLIC_ARTICLE_LEAF_RE = re.compile(
+    r"^/article(?:\[1\])?/(?:front|body|back)\[1\]"
+    r"(?:/[a-z][a-z0-9-]*\[[1-9][0-9]*\])*"
+    r"/(?:p|td|th|fn|title|label|article-title|article-version|pub-date|"
+    r"copyright-statement|license-p)\[[1-9][0-9]*\]$"
+)
+
+
+def _locator_field_is_local(locator: EvidenceLocator, name: str, value: str) -> bool:
+    if (name == "field_path" and len(value) <= 4096
+            and _PUBLIC_ARTICLE_LEAF_RE.fullmatch(value)
+            and locator.url is not None and public_source_url(locator.url) is not None):
+        return False
+    return is_local_path_shape(value)
+
 
 def is_local_path_shape(value: str) -> bool:
     """判断定位文本是否为本机路径形状（绝对、家目录、UNC、盘符、file:、相对）。"""
@@ -237,7 +256,7 @@ def locator_local_path_fields(locator: EvidenceLocator) -> tuple[str, ...]:
     dirty: list[str] = []
     for name in _LOCATOR_STRING_FIELDS:
         value = getattr(locator, name)
-        if isinstance(value, str) and is_local_path_shape(value):
+        if isinstance(value, str) and _locator_field_is_local(locator, name, value):
             dirty.append(name)
     return tuple(dirty)
 
@@ -261,7 +280,7 @@ def clean_evidence_locator(candidate: object) -> EvidenceLocator | None:
         value = getattr(locator, name)
         if value is None:
             continue
-        if isinstance(value, str) and is_local_path_shape(value):
+        if isinstance(value, str) and _locator_field_is_local(locator, name, value):
             continue
         visible[name] = value
     visible_anchor_names = (*LOCATOR_ANCHOR_FIELDS, "field_path", "heading", "url")

@@ -1,23 +1,27 @@
-# R24 resumed delivery: C bridge, safety review and Kangzhe desktop
+# 1007V1 continuous delivery checkpoint
 
 ## Goal
 
-Resume authorized W00-W10; shared owner coordinates current source and Kangzhe 6.0 portal adaptation, bounded C implementation and independent frozen safety review.
+Complete authorized W00–W10 under the current packet and 1007V1. One shared owner coordinates source identity, real question comparisons, edits and committed-current sharing; use current Kangzhe Design function-first. This checkpoint is not a second product authority.
 
 ## Requirements
 
-- Resume W00–W10 under the existing packet PRD/DESIGN and 0924V1 decisions; this task is an implementation checkpoint, not a second product authority.
-- English repo only; preserve history/dirty tree, no old Chinese repo contact. Actual HEAD c129a575; Goal active, user resumed 2026-10-03.
+- Follow current packet PRD/DESIGN, 1007V1 and later user decisions. A/B/C independent/equal, real shared facts, no default ranking or medical annotation.
+- English repo only; preserve history/dirty tree, no old Chinese repo contact. HEAD/status are verified live and recorded in STATUS, not fixed to this task's creation commit. Goal active; no phase pause.
 - C real protocol atoms must reach existing report observations without guessing identity or accepting unresolved evidence.
 - Independent challenge of frozen R24-62 safety semantics precedes scientific closure.
-- Shared A/B/C desktop presentation aligns latest Kangzhe Design 6.0 with real fact/graph/table/evidence consistency, dense geometry, role typography, accessible state and sources.
+- Shared A/B/C desktop presentation uses current Kangzhe Design, four widths1440/1600/1920/2560, real ECharts+same-query visible table+sources, dense geometry and semantic typography. Chinese questions replace English source walls; original text remains reachable in evidence.
+- No generic defensive boundary/limitation/not-equal lectures for expert readers. Keep genuine source/value/clear states and internal science guards.
+- Optional absent regulator/company/patent/history data does not require fabricated rows. Source planning/closure and final release completeness are distinct from renderer admission.
+- Execution nodes use finite allowed paths; independent source/identity challenges use frozen originals and fresh context. Group root-cause RED and related regression batches; run wide gate at milestones only.
 
 ## Acceptance Criteria
 
-- [ ] Bounded C adapter production batch RED/GREEN and source-preserving mapping/gap evidence.
-- [ ] Actual independent safety review receipt and owner dispositions; unresolved evidence stays unresolved.
+- [ ] Real accepted sources reach legal A/B/C consumers and question graphs without changing original scientific identity or deriving missing values.
+- [ ] Actual independent scientific/identity review receipts and owner dispositions for new material judgments; incomplete checks stay unresolved.
 - [ ] One real full-page Kangzhe candidate before expansion, then affected browser geometry/interaction at four desktop widths.
-- [ ] Current source/asset/candidate hashes and exact quality/science/browser limitations in STATUS; continue remaining W packages without ceremonial pause.
+- [ ] Same-current edits/clear/undo/legal fanout/config/single+joint offline share,24portals/3hosts/install/recovery verified before RC; continue without ceremonial pause.
+- [ ] Current source/asset/candidate hashes and exact quality/science/browser scope in STATUS; no reuse of old candidate PASS for changed artifacts.
 
 ## Notes
 

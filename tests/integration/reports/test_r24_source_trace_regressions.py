@@ -33,6 +33,7 @@ from ci_workflow.reports.common.evidence_view import (
     validate_evidence_view_payload,
 )
 from ci_workflow.reports.common.view_state import derive_row_id
+from tests.integration.reports.test_b_report_portal import _page_json_assignment
 
 ROOT = Path(__file__).resolve().parents[3]
 B_FIXTURE = ROOT / "fixtures/synthetic/a-complete/inputs/report-data.json"
@@ -62,10 +63,7 @@ def _render_b_site(tmp_path: Path, payload: dict[str, Any]) -> Path:
 
 
 def _views_by_row(site: Path, relative: str) -> dict[str, dict[str, Any]]:
-    html = (site / relative).read_text(encoding="utf-8")
-    match = re.search(r"window\.__EVIDENCE_VIEWS__\s*=\s*", html)
-    assert match is not None, relative
-    views, _ = json.JSONDecoder().raw_decode(html[match.end() :].lstrip())
+    views = _page_json_assignment(site, relative, "__EVIDENCE_VIEWS__")
     assert isinstance(views, list) and views, relative
     return {view["row"]["row_id"]: view for view in views}
 
