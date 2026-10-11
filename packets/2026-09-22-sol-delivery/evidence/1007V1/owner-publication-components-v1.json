@@ -1,0 +1,78 @@
+{
+ "scope": "1007V1 shared ordinary publication question binding and exact source component projection",
+ "parent_commit": "7670b4d94b8b2a8dcba45705d1ee2353a0e03b6d",
+ "state": "BOUNDED_PRODUCTION_FUNCTIONS_VERIFIED_FULL_PRODUCT_REVISE",
+ "method": "execution: single bounded two-file parser worker plus Owner shared source-question path; prior independent source acceptance preserved; no new per-observation review workflow",
+ "author_sha256": {
+  "src/ci_workflow/renderers/portal/report_b.py": "71c51b590a681b977546ab626515897df9918c773c515bc6ef51a5f4233f8c53",
+  "src/ci_workflow/reports/b/publication_components.py": "dd14c9caca0e2b81d1c3912a56fa82277563fdbd533b8e4b0ae59548cf8588be",
+  "tests/integration/test_1007_source_question_projection.py": "1c40bd0dbe2d30675fc9436f254709fbd55dcb09b1775515623f817c36700813",
+  "tests/unit/test_publication_components.py": "5916e58e6e8bde361b9cc45c345790098085245753f70155d1ad30e451cc9361"
+ },
+ "question_binding": {
+  "root_cause": "JSON-only question-reference predicate rejected exact same-row JATS labels; a test directly mutating projected rows initially masked source_id loss at the ordinary projector",
+  "repair": "Explicit indexed same-source same-table-row XML label; preserve source_id through the shared ordinary projector used by A/B",
+  "ordinary_input_red": {"failed":3,"already_passing":2},
+  "related_green": {"passed":91,"seconds":3.61},
+  "negative_families": ["other row","other table","foreign source","parent traversal","missing row-label declaration","another reference"],
+  "invariants": ["all observations retained","no scientific digest mutation","facets unchanged","numeric eligibility unchanged"],
+  "ordinary_synthetic_A_B_render": "PASS; renderer behavior only, not real clinical or browser acceptance"
+ },
+ "components": {
+  "parser_contract": "Only explicit reported_measure/composite_count_and_percent/n (%) values; exact printed count and percent with original_text spans; no header-N recalculation",
+  "unit_family_passed":38,
+  "actual_accepted_source_replay": {"facts":118,"projected":34,"unresolved":84,"unresolved_composites":4},
+  "ordinary_real_source_question_replay": {"rows":4,"studies":2,"shared_question_columns":1,"source_science_and_current_writes":0},
+  "real_replay_recipe": "evidence/1007V1/verify-publication-components-owner-v1.py",
+  "real_replay_recipe_sha256": "10d372dd1a8ab1651f311d9ada5a70397b4d7e19937648cef138c00a97962638",
+  "real_replay_recovery": ".artifacts/1007-publication-components-owner-v1/actual.json",
+  "real_replay_sha256": "547435e86f7ec8ad9c1ef64c2e6b152ba2e6d3e3c72517c45db862fed2ebe9af",
+  "source_package_sha256": "e89dcabb2763a3a486bca2dacacebff5df604dff2e661b230fd44dff0e7575e0"
+ },
+ "execution": {
+  "task": "ci-1007-publication-cell-projection-v1",
+  "terminal_returncode":0,
+  "requested": {"provider":"codebuddy-cli","model":"deepseek-v4.1-flash","effort":"max"},
+  "actual": {"host":"ZCode","provider":"zcode-live-bigmodel","model":"GLM-5.3-Flash","effort":"max","verified_response_requests":44,"seconds":814.126,"tool_calls":57},
+  "session":"sess_c9a6926c-6dde-4805-8886-5bce5f0c8aab",
+  "output_sha256":"f8da0f5df43cc737560d0e697a1967fcd10d523ef1f432af18aa14df51790617",
+  "raw_receipt_sha256":"d8d3a7a82447c59e0c8216c9b0c7ec470345b340350ae055046902b236fffc88",
+  "identity_caveat":"runner effective header retains primary request; actual terminal round verifies the authorized fallback. Primary failure cause is not independently established; do not claim DeepSeek performed the implementation.",
+  "acceptance":"Owner read both files and reran production tests plus exact accepted package; bounded helper only",
+  "archive":"archives/execution/ci-1007-publication-cell-projection-v1",
+  "archive_recovery":"prompts/worker_01.md; runs/worker_01.md; logs/worker_01_stdout.txt",
+  "archive_fix":"Existing cleanup runner reused task basenames and collided within one second; Owner normalized only these three generated directories after checking all original hashes. Original cleanup_manifest retained, no evidence deleted.",
+  "pending_progress_polls":0
+ },
+ "owner_batch": {
+  "command":".venv/bin/python -m pytest -q tests/unit/test_publication_components.py tests/integration/test_1007_pmc_fact_availability.py tests/reports/b/test_source_baseline_view.py tests/integration/test_1007_source_question_projection.py tests/integration/test_1007_b_workspace_ui.py tests/reports/b/test_r13_semantic_grouping.py tests/reports/b/test_semantic_grouping_proposals.py --tb=short",
+  "passed":147,"seconds":3.18,"returncode":0,
+  "named_ruff":"PASS for two production and two test files",
+  "named_strict_mypy":"PASS two production files"
+ },
+ "historical_mismatch": {
+  "old_failed_test":"test_real_same_source_question_in_ordinary_a_and_b_keeps_science_and_all_instances",
+  "classification":"PREEXISTING_FROZEN_ARTIFACT_VERSUS_CURRENT_CODE_MISMATCH",
+  "prechange_commit":"7670b4d94b8b2a8dcba45705d1ee2353a0e03b6d",
+  "prechange_and_current_registry_workspace_equal":true,
+  "historical_hashes_and_fail_preserved":true,
+  "proof":".artifacts/1007-publication-question-binding-v1/actual.json",
+  "proof_sha256":"ff0959d7592e0178aee6f433e3c45932dd88105ca07f3e176ff458003037de87",
+  "replacement_current_candidate_acceptance":"NOT_RUN"
+ },
+ "quality": {
+  "state":"QUALITY_ONLY_PASSED","returncode":0,"source_set_unchanged":true,
+  "scope":"Ruff src/tests/tools; strict src/tools; current unit/contract plus bounded retained smoke/layer audit/legacy lexical guard; not full integration/science/browser/hosts/install/recovery/RC",
+  "strict_mypy_files":288,"current_unit_contract_passed":1248,"current_seconds":284.82,
+  "retained_smoke_passed":20,"layer_audit_passed":7,"legacy_lexical":"PASS",
+  "recovery":".artifacts/1007-publication-components-quality-gate-v1",
+  "result_sha256":"75c029bccef6b4ffb2a58580ccab15fbeb1993e21bdeb933b08d46b5cfbb955f",
+  "prewrite_sha256":"40e99afdd26a3af84eac12907a179e014970a8fcf6030b8480ebac1ad123b08e",
+  "log_sha256":"8c9062d0056dc09012cec1bc6dd556e9d9984f68ca3128449e6a93836cc4a7e3",
+  "old_quality_reused":false
+ },
+ "current": {"revision":34,"reports":{"A":33,"B":34,"C":33},"active_facts":1505,"generation":"eef1a1112645c45fc6a86c26f1a681eb773db84c271241671e6acfda7a0ccc3c","source_or_current_writes":0},
+ "not_accepted": ["real publication numeric portal consumers","new numeric coaxis or clinical multi-drug positive","new browser/aesthetic/edit/share acceptance","universe/MAH/24 portals/three hosts/installation/recovery/RC"],
+ "next":"Existing snapshot and fact-version identities to source-bound ordinary A/B value consumers, ECharts plus visible same-query table, followed by normal current transactions and same-version interaction/share verification",
+ "protection":{"legacy_contact":false,"protected_user_files":5,"unknown_untracked":"preserved","bulk_cleanup":false,"goal":"active; no phase pause or completion"}
+}

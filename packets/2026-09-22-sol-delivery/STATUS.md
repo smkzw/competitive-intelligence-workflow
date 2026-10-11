@@ -1,5 +1,19 @@
 # 唯一当前状态：1007V1连续实施｜current34配置及六离线入口通过，非RC
 
+第十五提交7670b4d94b8b2a8dcba45705d1ee2353a0e03b6d已push/远端exact。
+第十六共同论文路径：XML同行行标题守卫及普通投影遗漏source_id已修；真实入口
+3RED/2原有PASS后同族91PASS，Owner连同解析器/邻接一批147PASS3.18s，具名Ruff/
+strict两文件通过。118原子只读重放34明确n(%)拆解/84原文保留；四个真实PRIME/PRIME2
+单元格正常project_record→共同问题列通过，原事实hash/科学分面/数值资格不变。
+current34仍不变；真实论文图/表消费者、浏览器及修订尚未接入，不记产品通过。
+E03 exec40371及事件2354已terminal0；实际授权备用ZCode/GLM5.3Flash/max，814.126s/
+57工具/44次响应身份核实。runner头effective仍标主路，与actual轮次不一致；保留
+原回执，不声称DeepSeek执行或臆断备用原因。新宽开发门5044已terminal0、source-set
+exact：Ruff/strict288/1248当前284.82s/20兼容smoke/7分层/旧路径，仅开发质量。
+第十六[回执](evidence/1007V1/owner-publication-components-v1.json)和
+[复盘](../../docs/handoffs/RETROSPECTIVE_20261012_publication_components.md)；历史v2
+逐对象FAIL修改前已存在，保留旧hash/FAIL。原执行资料已按原hash可恢复归档，勿再等待。
+
 current34=A33/B34/C33，generation
 eef1a1112645c45fc6a86c26f1a681eb773db84c271241671e6acfda7a0ccc3c。
 普通B-only事务，A/C描述与字节不变；1505事实/八科学表及16544旧报告/快照保全。

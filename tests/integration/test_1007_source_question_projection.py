@@ -160,10 +160,11 @@ def test_source_condition_notes_reach_existing_cell_labels_without_changing_face
 
 
 @pytest.mark.parametrize("kind", ["A", "B"])
-def test_ordinary_portal_consumes_separate_question_metadata(kind, tmp_path):
+@pytest.mark.parametrize("source_format", ["json", "xml"])
+def test_ordinary_portal_consumes_separate_question_metadata(kind, source_format, tmp_path):
     root = Path(__file__).resolve().parents[2]
     raw = json.loads((root / "fixtures/synthetic/a-complete/inputs/report-data.json").read_text())
-    _records, _groups, projections = _inputs()
+    _records, _groups, projections = _xml_inputs() if source_format == "xml" else _inputs()
     facts = []
     for index, native in enumerate((raw["efficacy"][0], raw["efficacy"][2])):
         facts.append({**native, **{key: value for key, value in _records[index][1].items()
@@ -197,3 +198,72 @@ def test_ordinary_portal_consumes_separate_question_metadata(kind, tmp_path):
     assert {b["source_version_id"] for b in column["question_source_bindings"]} == {
         "source-v0", "source-v1"}
     assert data.model_dump_json() == before
+
+
+def _xml_inputs():
+    records, _, projections = _inputs()
+    projected = []
+    for index, (_row, source) in enumerate(records):
+        parent = f"/article/body[1]/sec[1]/table-wrap[1]/table[1]/tbody[1]/tr[{index + 1}]"
+        cell, label = parent + "/td[2]", parent + "/td[1]"
+        reference = SourceClauseReference(
+            reference_id=f"xml-row-{index}", source_id=f"paper-{index}",
+            label_zh="行标签与时间点", original_text=f"Response at week {16 + index}",
+            locator={"document_role": "primary_results_publication", "field_path": label,
+                     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC00000000/"},
+        )
+        context = SourceClauseContext(label_zh="论文表格原文", scope_note_zh="原始行列定位",
+            scientific_scope={"source_version_id": f"source-v{index}",
+                "source_measure_path": cell, "row_label_path": label},
+            continuations=(reference,))
+        source.update(source_id=f"paper-{index}", source_measure_path=cell,
+                      source_clause_context=context.model_dump(mode="json"))
+        row = report_b._project_record(source, domain="efficacy", names={}, trial_names={},
+                                       fallback=f"row-{index}")
+        projected.append(({**row, "_domain": "efficacy"}, source))
+        projections[index].update(source_measure_path=cell,
+                                 basis_reference_ids=[reference.reference_id])
+    return projected, report_b._groups_for_page("efficacy", projected), projections
+
+
+def test_exact_publication_sibling_label_can_share_question_without_granting_coaxis():
+    records, groups, projections = _xml_inputs()
+    before = deepcopy((records, groups))
+    original = _workspace(records, groups, [])
+    result = _workspace(records, groups, projections)
+    assert len(result["columns"]) == 1
+    assert result["columns"][0]["question_known"]
+    assert result["columns"][0]["cells"] == {"trial-0": ["row-0"], "trial-1": ["row-1"]}
+    for axis in ("membership", "facets", "numeric_eligibility"):
+        assert result[axis] == original[axis]
+    assert (records, groups) == before
+
+
+@pytest.mark.parametrize("fault", ["different_row", "different_table", "foreign_source",
+                                  "parent_traversal", "no_label_scope", "other_reference"])
+def test_publication_question_rejects_unbound_label_but_keeps_every_observation(fault):
+    records, _, projections = _xml_inputs()
+    row = records[1][0]
+    context = row["source_clause_context"]
+    label = context["scientific_scope"]["row_label_path"]
+    reference = context["continuations"][0]
+    if fault == "different_row":
+        label = label.replace("tr[2]", "tr[3]")
+    elif fault == "different_table":
+        label = label.replace("table[1]", "table[2]")
+    elif fault == "parent_traversal":
+        label = label.replace("/td[1]", "/../tr[2]/td[1]")
+    elif fault == "foreign_source":
+        reference["source_id"] = "another-paper"
+    elif fault == "no_label_scope":
+        context["scientific_scope"].pop("row_label_path")
+    else:
+        reference["locator"]["field_path"] = label.replace("td[1]", "td[3]")
+    if fault in {"different_row", "different_table", "parent_traversal"}:
+        context["scientific_scope"]["row_label_path"] = label
+        reference["locator"]["field_path"] = label
+    groups = report_b._groups_for_page("efficacy", records)
+    result = _workspace(records, groups, projections)
+    assert len(result["columns"]) == 2
+    assert set(result["membership"]["row_ids"]) == {"row-0", "row-1"}
+    assert any(not column["question_known"] for column in result["columns"])

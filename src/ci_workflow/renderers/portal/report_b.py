@@ -27,7 +27,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from ci_workflow.domain.enums import FactDisclosureState, ReportKind
 from ci_workflow.domain.evidence import EvidenceLocator
 from ci_workflow.domain.ids import stable_id
-from ci_workflow.domain.source_clause_context import SourceClauseContext
+from ci_workflow.domain.source_clause_context import SourceClauseContext, SourceClauseReference
 from ci_workflow.qc.browser import route_to_site_path, site_directory_digest
 from ci_workflow.reports.b.concept_catalog import SAFETY_CONCEPTS
 from ci_workflow.reports.b.portal_science import (
@@ -2710,6 +2710,7 @@ def _project_record(
     # pool rows never carry these keys, so their scientific row digest is not
     # recomputed and no current value is restored from the source.
     for field in (
+        "source_id",
         "source_domain", "source_metric", "source_param_type", "source_analysis_population",
         "source_value_role", "source_dispersion_type",
         "source_measure_path", "source_measure_definition", "source_clause_context",
@@ -5295,6 +5296,30 @@ def semantic_review_buckets_for(
     return tuple(tuple(grouped[key]) for key in sorted(grouped))
 
 
+def _question_reference_matches_measure(
+    reference: SourceClauseReference, scope: Mapping[str, Any],
+    row: Mapping[str, Any], measure: str,
+) -> bool:
+    """Registry descendants or an explicitly bound same-row publication label.
+
+    A table caption, nearby cell or another study's label is not the measurement
+    definition. This permits descriptive question membership, never numeric axes.
+    """
+    anchor = reference.locator.field_path or ""
+    if not measure.startswith("/article/"):
+        return anchor.startswith(f"$.{measure}.")
+    label = scope.get("row_label_path")
+    if not isinstance(label, str) or anchor != label or not row.get("source_id"):
+        return False
+    cell = r"/article(?:/[A-Za-z_][\w.-]*\[[1-9]\d*\])*/tr\[[1-9]\d*\]/(?:td|th)\[[1-9]\d*\]"
+    return bool(
+        reference.source_id == row["source_id"]
+        and re.fullmatch(cell, measure) and re.fullmatch(cell, label)
+        and measure.rsplit("/", 1)[0] == label.rsplit("/", 1)[0]
+        and measure != label
+    )
+
+
 def _question_display_groups(
     groups: Sequence[dict[str, Any]], projections: Sequence[Any],
 ) -> tuple[dict[str, Any], ...]:
@@ -5338,8 +5363,8 @@ def _question_display_groups(
                         or (scope.get("source_version_id"), scope.get("source_measure_path")) != key
                         or len(references) != len(context.continuations)
                         or not set(projection.basis_reference_ids) <= set(references)
-                        or any(not str(references[ref].locator.field_path or "").startswith(
-                               f"$.{key[1]}.")
+                        or any(not _question_reference_matches_measure(
+                               references[ref], scope, row, key[1])
                                for ref in projection.basis_reference_ids)
                         or source_domain_conflicts(row, _text(row.get("_domain"), "efficacy"))
                     ):
