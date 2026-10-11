@@ -3908,8 +3908,11 @@ def _semantic_group_key(
 
 def _sorted_bucket(
     bucket: Sequence[tuple[dict[str, Any], Any]],
+    *, chronological: bool = False,
 ) -> tuple[tuple[dict[str, Any], Any], ...]:
-    def key(item: tuple[dict[str, Any], Any]) -> tuple[str, ...]:
+    def key(item: tuple[dict[str, Any], Any]) -> tuple[
+        tuple[str, ...], tuple[int, str, float], tuple[str, ...],
+    ]:
         row = item[0]
         arm_role = _text(row.get("arm_role"), "unknown")
         arm_priority = {
@@ -3918,16 +3921,25 @@ def _sorted_bucket(
             "single_arm": "2",
             "unknown": "3",
         }.get(arm_role, "9")
-        return (
+        visit_order = (0, "", 0.0)
+        if chronological:
+            # Presentation order only: a baseline-to-visit summary stays an
+            # independent measurement, never a newly qualified trajectory.
+            raw = _text(row.get("actual_timepoint"), _text(row.get("time")))
+            visit = re.sub(r"^Baseline,\s*", "", raw, flags=re.I)
+            coordinate = _exact_visit_coordinate({**row, "actual_timepoint": visit})
+            visit_order = (0, *coordinate) if coordinate else (1, "", 0.0)
+        return ((
             _text(row.get("product_id")),
             _text(row.get("trial_id")),
             arm_priority,
             arm_role,
             _text(row.get("group_id")),
+        ), visit_order, (
             _text(row.get("time_window_band"), _text(row.get("time"))),
             _text(row.get("actual_timepoint")),
             _text(row.get("row_id")),
-        )
+        ))
 
     return tuple(sorted(bucket, key=key))
 
@@ -5388,7 +5400,7 @@ def _source_question_observation_groups(
             ))
             buckets[key].append((row, None))
         for key in sorted(buckets):
-            bucket = _sorted_bucket(buckets[key])
+            bucket = _sorted_bucket(buckets[key], chronological=True)
             if len(bucket) < 2:
                 continue
             unit = _text(_comparison_display_row(bucket[0][0]).get("unit_label_zh"), key[1])

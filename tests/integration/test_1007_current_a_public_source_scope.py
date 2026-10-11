@@ -98,7 +98,9 @@ def test_ordinary_current_builder_projects_actual_new_snapshot_not_old_context(
         section = page.read_text().split('id="external-sources"', 1)[1].split("</section>", 1)[0]
         assert "https://clinicaltrials.gov/study/NCT00000001" in section
         assert "未绑定可核验的公共来源谱系" not in section
-        assert "非科学或发布验收" in page.read_text()
+        # Expert-facing reports omit process disclaimers; source binding and
+        # immutable history remain verified above/below, not through boilerplate.
+        assert "非科学或发布验收" not in page.read_text()
     assert {p: (root / previous.site_relative_path / p).read_bytes()
             for p in previous.file_hashes} == original
 

@@ -1,0 +1,72 @@
+{
+ "schema": "bounded-owner-receipt/v1",
+ "baseline_commit": "37678ef06ed10f0f0a473f5e0b0ddfa250806217",
+ "mode": "Owner shared-asset execution; one independent six-fact publication witness conference running in a disjoint read-only scope",
+ "goal_state": "active_verified",
+ "product_state": "REVISE_NOT_RELEASE_ACCEPTED",
+ "implementation": [
+  "Bar unit note consumes existing unit_label_zh with raw-unit fallback; no dictionary or guessed scientific conversion",
+  "Source-hit CSS belongs to common portal assets, with relative chart geometry and explicit32px component minimum height; no B-only style owner",
+  "Descriptive posted measurement ordering uses exact visits within identity/unit; source atoms, ranges, unknowns and strict longitudinal qualification are unchanged",
+  "Actual grouped ECharts categories preserve that descriptive projection order instead of lexical week16-before4 sorting",
+  "Two old process-disclaimer expectations migrated to the approved expert-reading contract; source continuity/corruption and immutable-history checks retained"
+ ],
+ "verification": {
+  "red": "4 true RED after correcting missing bar mock geometry; later actual-category order1 true RED after correcting a nonexistent mock variable",
+  "related_first": "84PASS/2FAIL5.07s: only old defensive-copy assertions failed",
+  "related_final": "Nine related files87PASS5.00s",
+  "static": "Named Ruff, report_b strict1, charts Node syntax, actual author-mirror and named diff whitespace PASS",
+  "new_wide_gate": "NOT_RUN; preceding63587 belongs to preceding frozen source, not this revision"
+ },
+ "candidate": {
+  "path": ".artifacts/1007-ab-shared-chart-reading-v5",
+  "actual_sha256": "ca2e1a7f22ad0fdd867bf4a286538bae0a7705a5b7c59dcceec444025761d049",
+  "pages": {"A":49,"B":104},
+  "facts":1505,
+  "persistent_files_verified_unchanged":16257,
+  "source_current_save_share_writes":0,
+  "current_revision":32,
+  "report_revisions":{"A":30,"B":32,"C":30},
+  "generation":"ae95ab2d09b15076b59b4ab594b476dd0da1df8e177bc573eae8c6e51eb97fb4",
+  "publication_adoptions":0
+ },
+ "browser": {
+  "environment":"Existing EgoLite space2/profile1/p1",
+  "widths_css_px":[1440,1600,1920,2560],
+  "b_task_states":24,
+  "b_task_sha256":"96f6b2ffd4b6de78c38755a16a28eefb2fc9130e3850cf4792e794925f1f4620",
+  "b_pair_states":4,
+  "b_pair_sha256":"448898470c6f58e5e347e4ebc7a6cd9ab55ec649be1e37d0ea98da8e6b79fa44",
+  "b_glyph_source_states":4,
+  "b_glyph_source_sha256":"d9a7ada40bf7e9f0bfa70b39a54212e62cac643c75a5a6d26155110586471318",
+  "a_task_states":12,
+  "a_task_sha256":"2981370f521ef06d3c563916fa8daeb34c8a402467e1cce3f88e84b57a91c70c",
+  "shared_consumption_states":8,
+  "shared_consumption_sha256":"ae688204197a6b2e3873b8a052d11ad66aa23b96bde0628fb230bbab020a7dda",
+  "failures_in_final_scopes":0,
+  "scope":"Actual posted ECharts order, Chinese supplied unit,32px transparent source targets; exact current graph/table IDs,32-to4 A/32-to2 B, original24-point line, actual75/57.7 sources and Esc focus",
+  "owner_pixels":["v5 A1440", "v5 B2560"],
+  "pixel_scope":"2560 original retained; tool display resized2048. Bounded corrections only; wholeproduct REVISE, A default unmatched rows and graph task hierarchy still open"
+ },
+ "failures_retained":[
+  "v4 normal candidate: real A target min-height40 overrode32, actual chart categories lexical despite correct Python rows",
+  "v5 normal candidate source/filter/focus suites PASS; extra style instrument compared32.0000305 to exact32 and failed. Actual computed CSS32px/no transform verified; only this8-state section reran with0.01px tolerance, no product or candidate changes",
+  "Initial v4 launcher pinned a result digest as recipe digest; rejected before output/current writes, corrected against actual unchanged Git recipe",
+  "Future A unmatched-reading two RED remain unstaged in their separate tests; not claimed as closed by87PASS"
+ ],
+ "author_sha256": {
+  "charts.js":"6b3fe807252e6b817f539e9029faadfe372d9394029998f7d3db458e20bce8b3",
+  "portal.css":"df162d387386c3c60dc2f14a0d0258523f9c9efeb60ebbb530975146f6f7f65d",
+  "report-b.css":"989cc14a1e9347db5ed8f1704551cf65986c6365d662cc3764d7eac4f6bf3a7c",
+  "report_b.py":"a541e3ba708fcf9bd9eeeae9fee7651b686eba29ad0495c4dac39cac1e4e9368"
+ },
+ "source_conference": {
+  "task":"ci-1007-public-version-witness-slice-v1",
+  "frozen_packet_sha256":"a5cb55ffb40a1fbdcaa2298c1b18259d5ff93f3fbecbb657043f4d7d9c0822a5",
+  "facts":6,"papers":2,"preflight":"PASS",
+  "requested_route":"codebuddy-cli/deepseek-v4.1-flash:max; actual model/effort await terminal receipt",
+  "runner_session":65749,"note_exit_session":6964,
+  "state_at_this_receipt":"RUNNING_NOT_ACCEPTED; no pending report read, no progress polling or redispatch"
+ },
+ "next":"Whitelist Git; A unmatched native reachability root; collect actual C03 terminal before source/version implementation; same-version saved task chain and full W00-W10 continue"
+}

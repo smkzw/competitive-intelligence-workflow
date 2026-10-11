@@ -1,5 +1,18 @@
 # 唯一当前状态：1007V1连续实施｜current32阅读体验被用户否决，正在修正，非RC
 
+当前第八批以37678ef0已push/远端exact为基线，最新
+[共享阅读回执](evidence/1007V1/owner-shared-chart-reading-v1.json)。共同英文
+单位重复、图点空控件/cascade及真实访视末端次序修复；4真RED+实际图1真RED
+→九文件87PASS5.00s/具名Ruff/strict1/Node/mirror。普通v5 A49/B104、1505/
+16257/current32保持。四宽B24任务态/4并排/4来源态、A12态、共同8消费态
+终态通过；v4真FAIL和v5浮点仪器FAIL保留，只补验8态。Owner实看v5A1440/
+B2560（工具缩2048），整体REVISE。未新宽门/current/采用/保存/分享。
+第八批具名Git中，下一A默认空行可展开（两RED独立WIP）。六事实/两论文
+版本见证C03预检PASS实际启动65749/退出6964，只等终态不读pending/轮询，
+实际模型待核。Goal实查active。全W门继续；下述第七批及更早均历史。
+
+## 前一第七批记录（已push37678ef0，不等旧终态/不重跑）
+
 最新[A/B共同查询回执](evidence/1007V1/owner-ab-shared-question-query-v1.json)：第六批c90bc25f已push/核远端，第七批基于它修共同图组选择与A首屏并排及实际图点回焦。5真RED→66相关PASS；回焦1真RED→九文件58PASS，具名静态/mirror通过。normal v3 A49/B104/1505/16257/current32保持，A四宽12态32→4、24点线、75例原文/定位/网址及Esc通过。1600/1920 actual SVG trigger已断开，回同事实按钮；其余两宽回原path，实际回调证明，旧仪器FAIL保留。B v2/v3全产物hash相同，仅复用v2的24任务态及四宽来源有界结果，不拼新generation整体验收。Owner实看A1440/2560（工具缩2048），整页REVISE：英文单位/顺序/空行空控件下一族修。单次开发门63587已terminal0/source-set不变，整Ruff/strict286/1185活跃PASS290.60s/20兼容/7分层/字面旧路径，log71fb3c97，只签开发质量。118候选0采用，没有新current/保存分享。下一白名单Git，再共享阅读接缝与两篇版本见证及全W门。Goal active；以下全部旧在途仅历史，勿重跑。
 
 ## 前一单元现场与历史索引（不作为当前待等/待重跑任务）

@@ -1,5 +1,16 @@
 # 当前执行｜1007V1已恢复，沿用W00–W10
 
+第八批实际阶段：共同图形阅读消费/末端次序/命中区完成，87相关PASS、
+normalv5 A49/B104/1505/16257保持，Ego四宽有界状态终态通过；整体REVISE。
+最新owner-shared-chart-reading-v1.json，基线37678ef0已push，第八批Git中。
+模式execution-plus-conference：Owner独占共享UI/查询/浏览器，六事实两论文
+C03只读独立版本见证与之并行，预检PASS/65749+6964，等待真正终态不轮询。
+下一A默认匹配/可展开其余研究（两RED独立WIP），随后同候选保存配置分享；
+来源证明/采用、MAH/宇宙及24/三宿主/安装恢复/RC继续，不以切片代交付。
+下面旧排程均历史；第七批实际已push37678ef0，无需再等或重跑旧宽门。
+
+## 历史：第七批排程（已实施并push）
+
 当前接续owner-ab-shared-question-query-v1.json，第六批c90bc25f已push。
 第七批Owner单一共同查询/浏览器写者，不增框架或重复全页审阅。5真RED后
 66相关PASS，实际图点焦点1RED后九文件58PASS。normal v3 A49/B104、

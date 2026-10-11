@@ -1,5 +1,18 @@
 # 2026-10-11｜C阅读真实切片与来源定义缺口
 
+唯一当前第八批owner-shared-chart-reading-v1.json，37678ef0已push/核远端。
+模式execution-plus-conference：Owner共同资产/查询/浏览器单一写者；独立
+六事实/两论文公开版本见证有实质科学不确定性，C03只读并行，预检PASS，
+runner65749/退出6964真实启动，实际模型/effort终态才核；无pending阅读/轮询。
+共享单位/32px透明命中区/描述性访视排序及末端ECharts消费修复，4RED+1RED
+→九文件87PASS5.00s/具名静态通过。普通v5 A49/B104/1505/16257/current32保持，
+四宽B24+4并排+4来源，A12，共同8态终态有界PASS；原v4真缺陷与v5浮点
+仪器FAIL保留，仅补8态。Owner看A1440/B2560，整体仍REVISE；新宽门NOT_RUN。
+具名Git中；下一A默认空行原生披露两RED WIP，未冒充已过，不重放历史。
+118候选0采用、source/current/save/share零写，Goal实查active/unbounded。
+
+## 历史第七单元（已push37678ef0；不是当前待提交或待等待）
+
 第七单元以owner-ab-shared-question-query-v1.json接续，第六批c90bc25f已push。
 模式direct execution：共享query/浏览器需单一Owner，已有不同模型医学挑战，
 本批不裁决新医学等价、不加多余管理/全页会商。5RED→66相关PASS；图点

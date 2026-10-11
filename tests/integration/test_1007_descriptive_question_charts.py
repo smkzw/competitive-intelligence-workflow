@@ -109,3 +109,35 @@ def test_zero_and_current_clear_retained_without_restoring_source_value():
     assert rows["row-0-16"]["value"] is None
     assert rows["row-0-16"]["renderable"] is False
     assert "row-0-16" in actual["numeric_eligibility"]["undrawable_reasons"]
+
+
+@pytest.mark.parametrize("prefix", ("", "Baseline, "))
+def test_descriptive_visits_use_real_order_not_lexical_week_16_before_4(prefix):
+    records, projections = inputs()
+    for row, _ in records:
+        visit = 4 if row["row_id"].endswith("-4") else 16
+        row.update(time=f"{prefix}Week {visit}", actual_timepoint=f"{prefix}Week {visit}")
+    before = deepcopy(records)
+    forward = workspace(records, projections)["descriptive_groups"][0]
+    reversed_group = workspace(list(reversed(records)), projections)["descriptive_groups"][0]
+    expected = ["row-0-4", "row-0-16", "row-1-4", "row-1-16"]
+    assert [r["row_id"] for r in forward["rows"]] == expected
+    assert [r["row_id"] for r in reversed_group["rows"]] == expected
+    assert forward["cross_trial"] is False
+    assert records == before
+
+
+def test_presentation_visit_order_does_not_convert_units_or_qualify_ranges():
+    times = ("Baseline, Week 16", "Week 4 to Week 16", "Month 2", "Baseline, Week 4",
+             "Not reported")
+    records = [({"row_id": str(i), "product_id": "drug", "trial_id": "study",
+                 "group_id": "group", "time": time, "actual_timepoint": time}, None)
+               for i, time in enumerate(times)]
+    before = deepcopy(records)
+    ordered = report_b._sorted_bucket(records, chronological=True)
+    assert [row["time"] for row, _ in ordered] == [
+        "Month 2", "Baseline, Week 4", "Baseline, Week 16", "Not reported",
+        "Week 4 to Week 16"]
+    assert report_b._exact_visit_coordinate(records[0][0]) is None
+    assert report_b._exact_visit_coordinate(records[1][0]) is None
+    assert records == before

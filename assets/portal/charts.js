@@ -378,10 +378,14 @@
       seriesRows[seriesKey][categoryKey] = rowsByCategory[categoryKey][seriesKey];
       if (!unitLabel) unitLabel = String(row.unit_label_zh || row.unit || "");
     }
-    categoryKeys.sort(function (left, right) {
-      return String(categoryLabels[left]).localeCompare(String(categoryLabels[right]), "zh-Hans-CN")
-        || left.localeCompare(right);
-    });
+    // The source-bound descriptive projection already orders explicit visits.
+    // Lexical labels would reorder week 16 before week 4 at this last consumer.
+    if (group.comparison_purpose !== "clinical_question_descriptive") {
+      categoryKeys.sort(function (left, right) {
+        return String(categoryLabels[left]).localeCompare(String(categoryLabels[right]), "zh-Hans-CN")
+          || left.localeCompare(right);
+      });
+    }
     categories = categoryKeys.map(function (key) { return categoryLabels[key]; });
     seriesOrder = groupedSeriesOrder(group.rows);
     var series = [];
@@ -1938,7 +1942,7 @@
     if (resolvedType === "bar") {
       var units = [];
       for (var un = 0; un < group.rows.length; un += 1) {
-        var unit = String(group.rows[un].unit || "").trim();
+        var unit = String(group.rows[un].unit_label_zh || group.rows[un].unit || "").trim();
         if (unit && units.indexOf(unit) === -1) units.push(unit);
       }
       if (units.length === 1 && units[0].length > 18) {

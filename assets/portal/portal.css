@@ -1658,9 +1658,29 @@ input:focus-visible {
 }
 
 .kz-chart-group__chart {
+  position: relative;
   width: 100%;
   height: 340px;
   margin-bottom: 16px;
+}
+
+.kz-chart-group__chart .kz-chart-evidence-hit {
+  position: absolute;
+  z-index: 8;
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.kz-chart-evidence-hit:focus-visible {
+  outline: 3px solid #0f1115;
+  outline-offset: 2px;
+  background: rgba(255, 153, 0, 0.14);
 }
 .kz-chart-group__chart.kz-chart-group__chart--single-fact {
   display: grid;

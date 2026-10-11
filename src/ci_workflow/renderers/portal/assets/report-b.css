@@ -648,24 +648,6 @@ body {
   overflow: hidden;
 }
 
-.kz-chart-evidence-hit {
-  position: absolute;
-  z-index: 8;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  cursor: pointer;
-}
-
-.kz-chart-evidence-hit:focus-visible {
-  outline: 3px solid #0f1115;
-  outline-offset: 2px;
-  background: rgba(255, 153, 0, 0.14);
-}
-
 .kz-chart-group__chart > div,
 .kz-chart-group__chart svg,
 .kz-chart-group__chart canvas {
