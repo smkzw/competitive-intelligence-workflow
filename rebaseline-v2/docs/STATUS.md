@@ -5,12 +5,12 @@
 ## 当前合同与入口
 - 权威：01_PRD、02_ARCHITECTURE、03_PLAN、04_AGENT_RULES；Trellis为根 .trellis/tasks/10-23-rebaseline-v2-m1。历史在该任务和Git，不将旧根HANDOFF当当前暂停指令。
 - 仅实施英文工程的rebaseline-v2；单用户独立Web服务/内嵌9 Skills/HTML A/B/C。v1宿主包、编辑/分享/24门户合同不带入v2，历史和未知脏树保留，旧中文工程零接触。
-- 包SHA256：5cad486b8b2ac7aea50fc074d9f223353d72d951f01f9d97677351d6d808a4c6；分支codex/rebaseline-v2-m1。阅读节点77c48a241c4ccf334ddb4f3a73ea3c954af51657、终点节点4b5e6468b1e84e90c71739cd80bdfe28b3d261a8均已push并核远端exact；v2代码无遗留未提交改动。
+- 包SHA256：5cad486b8b2ac7aea50fc074d9f223353d72d951f01f9d97677351d6d808a4c6；分支codex/rebaseline-v2-m1。阅读77c48a24、终点4b5e6468及最新运行/搜索安全代码2cbab03927fbe22cc2212f3fa4105862cfec0992均已push/核远端exact；v2代码无遗留未提交改动。
 - 用户模型顺序cms-router/glm-5.3-flash → DGX/deepseek → DGX/qwen；凭据只由注册配置进入子进程环境，无全局服务/路由改动。
 
 ## 本节点完成及证据
 - 本次运行恢复/搜索安全节点：4个输出恢复RED、worker凭据泄漏行为反例与owner9个检索状态RED后修复；相关71PASS、全v2 **341PASS/2.00s**、Ruff/JS/sh/600-80门通过，现有弃用警告1项。worker实际CodeBuddy/deepseek-v4.1-flash/max/165.156s/38tools/no fallback，owner已验收有限代码，非医学/浏览器会商。
-- 只有finish_reason=length才同模型同输入扩大一次预算，8192→16384上限；不接受截断JSON，不改effort，不永久增大后续预算，失败后既定备用顺序不变。两次用量安全留痕，不保存推理正文；新真实运行尚待启动，不冒充实际通过。
+- 只有finish_reason=length才同模型同输入扩大一次预算，8192→16384上限；不接受截断JSON，不改effort，不永久增大后续预算，失败后既定备用顺序不变。两次用量安全留痕，不保存推理正文；新真实运行已启动但未返回，不冒充实际通过。
 - 搜索HTTP/传输/JSON错误不再把凭据URL或服务原文回显；HTTP200错误/损坏结果不判无竞品。SerpApi文档明确的Success+Fully empty仍是合法空结果；中国site备用blocked/failed有独立覆盖行。测试全离线，搜索提供方仍未配置。
 - 次要终点根因3生产RED：解析缺完整定义、同字段last-wins、主要/次要及不同定义误合组。统一集合投影，完整定义/时间/事实引用保留；同名不同定义与主要/次要分开，不以字符串相近擅自认定医学等价。
 - R4固定77容器来源重建：284研究/6580事实，580主要+2876次要全部进入C和摘要规划；2488非空次要定义补回，其他科学字段0变化。46份采用来源hash逐项核对，旧R3源/事实/HTML不改。
@@ -22,7 +22,9 @@
 - 新阅读候选ciw-data/browser-m1/c-reading-r4-01/C.html：SHA2e965c9604eb3d810f1a558bf998f552ccd80ac7cb4a25ea8e81ea2f71286c28，12283219字节；284研究/282样本点/5明确零值。普通生产renderer生成，只读源DB；receipt绑定当前源码/模板/资产hash。不是创新竞品宇宙或模型报告验收。
 - 康哲仅融合6.1.3/KZ6-1007-A08阅读层级、中文/字体、图表规则，不加装饰动画/框架；尚未获得真实屏幕视觉接受。新HTML较大，后续须实屏观察加载/折叠/检索响应，不用隐藏事实换性能。
 
-## 真实运行：已终态，不要再等旧句柄
+## 当前真实运行及旧终态
+- 新隔离R4 analysis_C已实际启动：project prj_f21d0823b44a/run run_a37cd8cba43b/句柄97920，scope=stage/pipeline_acceptance=NOT_RUN。完整151任务含580主要/2876次要；未返回，禁止定期轮询/重派/延迟杀。只等该句柄终态；旧42007不可再等。
+- 源码固定ciw-data/runtime-code/2cbab03927fbe22cc2212f3fa4105862cfec0992/rebaseline-v2；115归档文件逐字比对、ECharts固定hash、实际import/Skill路径断言通过。源R4只读SQLite备份完整/6580事实，46不可变CAS blob校验后hardlink复用，避免重复存全文。新数据ciw-data/model-stage-r4/data；原R4/R3及旧运行不改。runtime.json及启动脚本SHA62001df7b7c65e5cf67be8ed9e8155c184ce0355ac7cd0c4bd3602ceaeae1c2b保留；只把两条必要注册连接传子进程环境，无凭据文件/全局变更。
 - 隔离analysis_C：project prj_2f42f9210053 / run run_0e7b5e4a65fc / attempt0002已failed，42007正常返回，不再等待或重启。scope=stage/pipeline_acceptance=NOT_RUN。28合格缓存批/22非空/130要点，31有效模型事件=DeepSeek13+Qwen18；无新报告文件。失败GLM502、DeepSeek/Qwen输出8192耗尽。原回执SHA9e1ef51d10f79d5fc6be3795f4e14ef9483c443c1d005190b703ac29391acb53，owner审计ciw-data/model-stage-r3/attempt-0002-owner-audit.json。
 - 已冻结运行源码91e8399c102948a9cfe2c6ba495096fd5ce90ad0，ciw-data/runtime-code/同SHA/rebaseline-v2；111归档文件对Git逐字核、ECharts固定hash、导入/Skill路径核对，61项开始/结束hash另记。SQLite备份before-attempt-0002-91e8399c.sqlite3完整。
 - 该终态进程使用旧62任务投影，不含次要终点修复；61源码hash开始/结束完全相同，28批输出schema/当前verified引用核验通过，但不能提升为新C/M1全验收。有效model事件用量396104 total tokens不含失败请求，不能冒充完整成本。原冻结树/数据库/回执保持不变。
@@ -46,7 +48,7 @@
 
 ## 下一安全动作与复盘
 1. 本次两代码节点白名单提交/push及远端exact已完成；继续保留全部v1脏树和原始来源，不提交CAS/数据库/原文，不再重跑已完成固定来源重建。
-2. 旧阶段终态审计已完成；下一真实验证冻结新代码，隔离复制R4完整源数据/原子集合，按151任务运行analysis_C与正常renderer，明确stage/非全流水线，不再无限单主路探针。按来源/代码/Skill键失效，不盲借旧62任务摘要。
+2. 新R4真实阶段已启动；原冻结旧阶段审计已完成，不再重跑。新句柄终态后核结构化输出/所有分包与引用、源码hash及正常renderer；仍是stage而非全流水线，不盲借旧62任务摘要或旧视觉。
 3. Ego授权后复用一个专用空间验当前R4；先真实加载/检索/折叠与四宽，再验模型摘要和论文修订。等待不阻塞可独立的来源/产品工作。
 - 最重要教训：来源库存在不等于消费完整，必须核对测量实例集合；不以测试总数、HTTP200、固定数量相等或旧截图替代临床/实屏验收。
 - 每个根因族一次RED、一批完整修复、相关回归，提交前一次全v2；不用逐标签三路会商或新造流程平台。当前Goal active，无损历史保留，不是暂停或交付完成。
