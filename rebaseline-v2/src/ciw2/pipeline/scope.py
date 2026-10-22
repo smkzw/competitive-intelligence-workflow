@@ -6,11 +6,13 @@ import json
 from pathlib import Path
 from typing import Any
 
+from ciw2.domain.identity import CODE_HASH as IDENTITY_CODE_HASH
+from ciw2.domain.identity import literal_names, name_key, name_owners
 from ciw2.domain.models import ScopeResult
 from ciw2.harness.agent import HARNESS_RULES
 from ciw2.pipeline.context import RunContext
 
-CODE_HASH = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+CODE_HASH = hashlib.sha256(Path(__file__).read_bytes() + IDENTITY_CODE_HASH.encode()).hexdigest()
 TASK_CHARS = 60000
 BATCH_SIZE = 30
 
@@ -44,18 +46,13 @@ def _tasks(base: dict[str, Any], drugs: list[dict[str, Any]]) -> list[dict[str, 
     return batches
 
 
-def _names(candidate: dict[str, Any]) -> set[str]:
-    return {name.strip().casefold() for name in
-            [candidate['name'], candidate['name_zh'], *candidate['aliases']] if name and name.strip()}
-
-
 def _resolve(result: ScopeResult, candidates: list[dict[str, Any]], ambiguous_names: set[str]) -> dict[str, Any]:
     by_id = {item['entity_id']: item for item in candidates}
     matched: dict[str, list[Any]] = {eid: [] for eid in by_id}
     invalid, issues = set(), []
     for decision in result.decisions:
-        name = decision.drug.strip().casefold()
-        ids = [eid for eid, item in by_id.items() if name in _names(item)]
+        name = name_key(decision.drug)
+        ids = [eid for eid, item in by_id.items() if name in literal_names(item)]
         if decision.entity_id is not None:
             eid = decision.entity_id
             if eid not in by_id or eid not in ids:
@@ -107,10 +104,7 @@ def _review_batch(rc: RunContext, task: dict[str, Any], sources: list[dict[str, 
 
 def review_scope(rc: RunContext, indication: str) -> dict[str, Any]:
     drugs = rc.db.entities(rc.project_id, 'drug')
-    owners: dict[str, set[str]] = {}
-    for drug in drugs:
-        for name in _names(drug):
-            owners.setdefault(name, set()).add(drug['id'])
+    owners = name_owners(drugs)
     base = {'indication': indication, 'focus': rc.project['focus'],
             'ambiguous_names': sorted(name for name, ids in owners.items() if len(ids) > 1), 'coverage': rc.db.query(
         'SELECT route_id, region, status, SUM(hits) hits, COUNT(*) n FROM coverage '

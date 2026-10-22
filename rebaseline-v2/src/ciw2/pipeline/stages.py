@@ -14,6 +14,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from ciw2.domain.identity import literal_names, name_key, name_owners, possible_trial_relation
 from ciw2.domain.models import AnalysisResult, ExtractionResult, IntakeResult, UniverseResult
 from ciw2.domain.tiers import tier_of
 from ciw2.harness.agent import HARNESS_RULES
@@ -32,10 +33,6 @@ class Stage:
     fn: Callable[[RunContext], dict[str, Any]]
     reports: frozenset[str] = frozenset({"A", "B", "C"})  # 哪些报告需要本阶段
     blocking: bool = True    # 失败是否终止运行（非阻断阶段失败会记录并继续）
-
-
-def _norm(s: str | None) -> str:
-    return re.sub(r"[^a-z0-9\u4e00-\u9fff]+", "", (s or "").lower())
 
 
 # ------------------------------------------------------------------ intake
@@ -107,11 +104,12 @@ def scoped_drugs(rc: RunContext) -> list[dict[str, Any]]:
 
 
 # ------------------------------------------------------------------ trial evidence (code)
-def _matches(drug: dict[str, Any], interventions: list[dict[str, Any]]) -> bool:
-    keys = {_norm(x) for x in [drug["name"], *drug["aliases"]] if len(_norm(x)) >= 4}
+def _matches(drug: dict[str, Any], interventions: list[dict[str, Any]],
+             ambiguous_names: set[str] | frozenset[str] = frozenset()) -> bool:
+    keys = literal_names(drug) - ambiguous_names
     for iv in interventions:
         names = [iv.get("name"), *(iv.get("other_names") or [])]
-        if any(k in _norm(n) for n in names for k in keys):
+        if keys & {name_key(name) for name in names if name_key(name)}:
             return True
     return False
 
@@ -121,7 +119,9 @@ def trial_evidence(rc: RunContext) -> dict[str, Any]:
     ctx = rc.tool_ctx()
     cond = it.get("indication_en") or rc.project["indication"]
     max_trials = int(rc.cache.get("max_trials_per_drug", 15))
-    linked, ingested, errors = 0, 0, []
+    linked, ingested, pending_links, errors = 0, 0, 0, []
+    owners = name_owners(rc.db.entities(rc.project_id, 'drug'))
+    ambiguous = {name for name, ids in owners.items() if len(ids) > 1}
     for d in scoped_drugs(rc):
         try:
             rows = ctgov.search(ctx, condition=cond, intervention=d["name"], max_results=50)
@@ -136,7 +136,17 @@ def trial_evidence(rc: RunContext) -> dict[str, Any]:
         candidates = {r["nct"]: r for r in rows}
         for t in known.values():
             candidates.setdefault(t["name"], {"nct": t["name"], **t["attrs"]})
-        hits = [r for r in candidates.values() if _matches(d, r.get("interventions") or [])]
+        hits = [r for r in candidates.values() if _matches(d, r.get("interventions") or [], ambiguous)]
+        confirmed = {r['nct'] for r in hits}
+        for row in candidates.values():
+            if row['nct'] in confirmed or not possible_trial_relation(d, row.get('interventions') or []):
+                continue
+            trial_id, _ = rc.db.upsert_entity(rc.project_id, 'trial', row['nct'],
+                attrs={k: value for k, value in row.items() if k != 'nct'}, route_id='trial:identity-candidate')
+            rc.db.link(rc.project_id, d['id'], 'drug-trial-candidate', trial_id,
+                attrs={'identity_status': 'pending', 'reason': 'label_variant_or_shared_alias',
+                       'intervention_names': [iv.get('name') for iv in row.get('interventions') or []]})
+            pending_links += 1
         hits.sort(key=lambda r: (r.get("phase") or "", r.get("start_date") or ""), reverse=True)
         for r in hits[:max_trials]:
             try:
@@ -144,10 +154,17 @@ def trial_evidence(rc: RunContext) -> dict[str, Any]:
             except Exception as exc:  # noqa: BLE001 - 单个试验失败不丢其他试验
                 errors.append(f"{r['nct']}: {exc}")
                 continue
-            rc.db.link(rc.project_id, d["id"], "drug-trial", info["entity_id"])
+            rc.db.link(rc.project_id, d["id"], "drug-trial", info["entity_id"],
+                       attrs={'identity_status': 'literal_match'})
+            if rc.db.one("SELECT 1 FROM links WHERE project_id=? AND src=? AND rel='drug-trial-candidate' AND dst=?",
+                         (rc.project_id, d['id'], info['entity_id'])):
+                rc.db.link(rc.project_id, d['id'], 'drug-trial-candidate', info['entity_id'],
+                           attrs={'identity_status': 'resolved_literal_match'})
             linked += 1
             ingested += int(info["facts_added"] > 0)
-    return {"linked": linked, "ingested": ingested, "errors": errors}
+    return {"linked": linked, "ingested": ingested, "errors": errors,
+            'pending_identity_links': pending_links,
+            'identity_ambiguities': [{'name': name, 'entity_ids': sorted(owners[name])} for name in sorted(ambiguous)]}
 
 
 def drug_trials(rc: RunContext, drug_id: str) -> list[dict[str, Any]]:
@@ -210,10 +227,10 @@ def _entity_for(rc: RunContext, name: str, drug: str) -> str:
     if re.fullmatch(r"CTR\d{8}", n.upper()):
         return rc.db.upsert_entity(rc.project_id, "trial", n.upper(), attrs={"registry": "chinadrugtrials"},
                                    route_id="extract")[0]
-    for d in rc.db.entities(rc.project_id, "drug"):
-        if _norm(n) in {_norm(d["name"]), *map(_norm, d["aliases"])}:
-            return d["id"]
-    return rc.db.upsert_entity(rc.project_id, "drug", drug, route_id="extract")[0]
+    matches = [d['id'] for d in rc.db.entities(rc.project_id) if name_key(n) in literal_names(d)]
+    if len(matches) == 1:
+        return matches[0]
+    raise ValueError('抽取实体无法唯一关联已发现实体；不按父药物或相似拼写猜测归属')
 
 
 def cross_check(llm: Any, fact: dict[str, Any]) -> bool | None:
@@ -235,9 +252,16 @@ def verify(rc: RunContext) -> dict[str, Any]:
     model = getattr(rc.llm, "model", "llm")
     stats = {"verified": 0, "unverified": 0, "conflict": 0, "unknown": 0}
     reasons: dict[str, int] = {}
+    identity_issues = []
     for stage in ("extract_results", "extract_design"):
         out = rc.db.stage_output(rc.run_id, stage) or {}
         for f in out.get("facts", []):
+            try:
+                entity_id = _entity_for(rc, f['entity'], f['drug'])
+            except ValueError as exc:
+                identity_issues.append({'entity': f['entity'], 'drug': f['drug'], 'field': f['field'],
+                                        'reason': str(exc)})
+                continue  # Original fact remains in the extraction stage for recovery.
             tier = tier_of(f["field"])
             src = source_by_url(ctx, f["source_url"])
             status, start, end, reason = "unverified", None, None, ""
@@ -254,7 +278,6 @@ def verify(rc: RunContext) -> dict[str, Any]:
                     agree = cross_check(rc.check_llm, f)
                     if agree is False:
                         status, reason = "conflict", "二次核对模型不同意"
-            entity_id = _entity_for(rc, f['entity'], f['drug'])
             supersedes = f.get('supersedes')
             if supersedes:
                 old = next((v for v in rc.db.current_facts(rc.project_id, entity_id)
@@ -276,7 +299,8 @@ def verify(rc: RunContext) -> dict[str, Any]:
                             "quote_start": start, "quote_end": end,
                             "context": {**ctxt, "source_url": f["source_url"], "verify_note": reason},
                             "extracted_by": f"llm:{f.get('extraction_model', model)}", 'supersedes': supersedes})
-    return {"stats": stats, "reasons": reasons}
+    return {"stats": stats, "reasons": reasons, 'identity_issues': identity_issues,
+            'unresolved_entities': len(identity_issues)}
 
 
 # ------------------------------------------------------------------ analysis + render

@@ -36,6 +36,7 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 - `projects` `runs` `stages` `agent_steps`：运行与留痕。
 - `sources`：每次抓取（URL、原始字节 digest、纯文本 digest）。**抽取只能引用本项目已读取的来源**。
 - `entities`（drug/company/trial/target，含别名、发现路线、纳排）+ `links`（drug-trial / drug-company / drug-target）。
+- `domain/identity.py`只做大小写/空白形式归一及字面名称/已知别名匹配，保留标点，不推断药学等同。scope、trial_evidence和verify复用；scope缓存绑定该规则源码hash。明确且唯一的试验关联用drug-trial；宽检索/共享别名保留drug-trial-candidate（pending及原干预名），沿用links不增表。后来字面关系确认时保留候选记录并标resolved_literal_match；不是自动解决剂型/组合药学语义。
 - `facts`：追加式；`supersedes` 指向被取代的版本；`tier` `status` `quote` `quote_start/end` `context`（组/时间点/人群/统计对象/分母/终点）。
 - `coverage`：每条检索路线的状态（ok/failed/blocked）、命中、新增实体。
 - 发现工具逐批保存登记原名与药物—试验关系，最终模型提交失败不抹掉已读来源；不据此推断创新属性或监管身份。
@@ -46,6 +47,7 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 2. LLM 抽取：必须给 `source_url` + 逐字 `quote`；verify 阶段检查 来源已读取 → 片段在原文中 → 数值在片段中。
 3. critical 且通过 → 可选 `CIW_LLM_CHECK_MODEL` 二次核对（只回答 YES/NO），不同意 → conflict。
 4. 门户：未核实/冲突的 critical 字段只进表格（红色标记），不进图表数值轴。
+5. verify的实体写回必须唯一关联本项目既有实体或明确登记号；未知/共享别名不默认落到父药物。原抽取事实不删除，阶段输出identity_issues/unresolved_entities；其余正常事实继续核验。候选关联和身份问题不代表科学验收通过。
 
 ## 4. DSH（内嵌最小 Skill Harness）
 - Skill = `skills/<name>/SKILL.md`：frontmatter（name/description/tools/output/max_steps）+ 正文（工作说明）。
