@@ -164,3 +164,22 @@ def test_harness_distinguishes_new_fact_extraction_from_existing_fact_summary():
 
     assert '新抽取的事实' in HARNESS_RULES and '已有已核实事实' in HARNESS_RULES
     assert 'fact_refs' in HARNESS_RULES
+
+
+def test_long_task_is_retained_in_cas_not_invalid_truncated_json(settings):
+    import json
+
+    from ciw2.store.cas import CAS
+    from ciw2.store.db import DB
+
+    settings.ensure_dirs()
+    db, cas = DB(settings.db_path), CAS(settings.cas_dir)
+    pid = db.create_project('完整输入', ['C'])
+    rid = db.create_run(pid)
+    skill = parse_skill('---\nname: summary\ndescription: d\ntools: []\noutput: ScopeResult\n---\n正文')
+    task = {'definition': '完整定义及AND/OR关系' * 2000}
+    run_skill(skill, task, ScriptedLLM([call('submit_result', decisions=[])]), _registry(),
+              ToolContext(db=db, cas=cas, run_id=rid))
+    record = json.loads(db.one("SELECT content FROM agent_steps WHERE role='task'")['content'])
+    assert record['kind'] == 'agent_step_payload'
+    assert json.loads(cas.get_text(record['digest'])) == task

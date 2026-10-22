@@ -19,7 +19,7 @@ from ciw2.harness.tools import RESULT_PAGE_TOOL, ToolContext, ToolRegistry
 
 HARNESS_RULES = """你是临床试验竞品调研平台中的一个工作单元（Skill）。通用规则：
 1. 只依据已提供的项目资料及工具获取的信息；不要凭记忆编造药物、试验、数值、日期或公司关系。
-2. 新抽取的事实必须按输出合同给出来源 URL 和逐字复制的原文片段（quote），找不到就记录 gaps，不要猜。已有已核实事实的摘要只按合同引用 fact_refs，不要求重取来源或重复提交原文；不要给摘要添加合同没有的字段。
+2. 新抽取的事实按当前输出合同提供来源；合同包含 source_url/quote 时必须给 URL 和逐字原文，缺失就记录 gaps，不猜测。候选发现按 evidence_urls 留来源。已有已核实事实的摘要只按合同引用 fact_refs，不重取来源或重复原文；任何工作单元都不添加合同没有的字段。
 3. 未知就是未知：不要把缺失写成 0、无、未发生。事件次数与受试者人数分开。
 4. 药物中文名只用来源中已出现的正式中文名；没有就留空，禁止音译。
 5. 工具返回 error 时如实处理：换一种查询重试，仍失败就记录为失败路线，不当作“无结果”。
@@ -54,6 +54,10 @@ def run_skill(skill: Skill, task: dict[str, Any], llm: LLM, registry: ToolRegist
 
     def log(step: int, role: str, content: Any) -> None:
         if ctx.db is not None:
+            text = content if isinstance(content, str) else json.dumps(content, ensure_ascii=False)
+            if len(text) > 20000 and ctx.cas is not None:
+                content = {'kind': 'agent_step_payload', 'digest': ctx.cas.put(text.encode('utf-8')),
+                           'chars': len(text), 'format': 'text' if isinstance(content, str) else 'json'}
             ctx.db.log_step(ctx.run_id, ctx.stage, skill.name, step, role, content)
 
     log(0, "task", task)
@@ -82,7 +86,7 @@ def run_skill(skill: Skill, task: dict[str, Any], llm: LLM, registry: ToolRegist
         for call in reply.tool_calls:
             result_text, final = _dispatch(call, skill, {} if remaining == 1 else tool_by_name, ctx)
             messages.append({"role": "tool", "tool_call_id": call.id, "content": result_text})
-            log(step, f"tool:{call.name}", result_text[:4000])
+            log(step, f"tool:{call.name}", result_text)
             if final is not None:
                 return final
     raise AgentBudgetExceeded(f"Skill {skill.name} 在 {budget} 步内未提交合格结果")

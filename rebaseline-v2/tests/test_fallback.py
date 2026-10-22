@@ -56,6 +56,8 @@ def test_service_uses_only_explicit_ordered_fallback_environment(settings, monke
     main, check = default_llms(replace(settings, llm_model='glm-5.3-flash', llm_fallbacks=config))
     assert [r.model for r in main.routes] == ['glm-5.3-flash', 'deepseek', 'qwen']
     assert check is None
+    assert main.routes[0]._client.timeout.read == 300
+    assert main.routes[0].max_retries == 1
     for route_client in main.routes:
         route_client._client.close()
 

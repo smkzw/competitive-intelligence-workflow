@@ -29,14 +29,22 @@ def saved_task(db_path: Path, run_id: str) -> dict:
     if row is None:
         raise ValueError('No saved analysis-c task for the requested run')
     try:
-        return json.loads(row[0])
+        task = json.loads(row[0])
     except json.JSONDecodeError:
         # Historical log_step capped JSON at 20k. Reconstruct from the frozen
         # source candidate, requiring the entire retained prefix to match.
         task = current_task(db_path, run_id)
         if not json.dumps(task, ensure_ascii=False).startswith(row[0]):
             raise ValueError('Frozen task reconstruction differs from the recorded input') from None
-        return task
+    if task.get('kind') == 'agent_step_payload':
+        digest = task.get('digest', '')
+        if task.get('format') != 'json' or len(digest) != 64 or any(c not in '0123456789abcdef' for c in digest):
+            raise ValueError('Invalid saved-task payload reference')
+        raw = (db_path.parent / 'cas' / digest[:2] / digest).read_bytes()
+        if hashlib.sha256(raw).hexdigest() != digest:
+            raise ValueError('Saved-task payload hash mismatch')
+        task = json.loads(raw)
+    return task
 
 
 def current_task(db_path: Path, run_id: str) -> dict:

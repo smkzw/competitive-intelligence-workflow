@@ -26,7 +26,8 @@ def default_llms(s: Settings) -> tuple[LLM, LLM | None]:
     import json
     import os
 
-    main = OpenAICompatLLM(s.llm_base_url, s.llm_api_key, s.llm_model)
+    # Observed GLM nonstreaming completion took145s;120s cancelled healthy work.
+    main = OpenAICompatLLM(s.llm_base_url, s.llm_api_key, s.llm_model, timeout_s=300)
     routes: list[LLM] = [main]
     try:
         fallbacks = json.loads(s.llm_fallbacks)
@@ -38,7 +39,9 @@ def default_llms(s: Settings) -> tuple[LLM, LLM | None]:
                 timeout_s=float(route.get('timeout_s', 120))))
     except (ValueError, KeyError, TypeError) as exc:
         raise LLMError('备用模型配置不完整或格式不正确') from exc
-    check = OpenAICompatLLM(s.llm_base_url, s.llm_api_key, s.llm_check_model) if s.llm_check_model else None
+    if len(routes) > 1:
+        main.max_retries = 1  # Use the explicitly configured backup instead of3 cancelled copies.
+    check = OpenAICompatLLM(s.llm_base_url, s.llm_api_key, s.llm_check_model, timeout_s=300) if s.llm_check_model else None
     return FallbackLLM(routes) if len(routes) > 1 else main, check
 
 

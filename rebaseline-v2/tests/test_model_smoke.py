@@ -67,3 +67,25 @@ def test_saved_task_recovers_only_matching_truncated_json_from_frozen_data(setti
     svc.db.execute('UPDATE projects SET focus=? WHERE id=?', ('changed input', pid))
     with pytest.raises(ValueError, match='reconstruction differs'):
         smoke['saved_task'](settings.db_path, rid)
+
+
+@pytest.mark.parametrize('corrupt', [False, True])
+def test_saved_task_reads_verified_cas_pointer_without_replanning(settings, smoke, corrupt):
+    from ciw2.harness.agent import run_skill
+    from ciw2.harness.llm import LLMReply, ScriptedLLM, ToolCall
+    from ciw2.service import Service
+
+    svc = Service(settings)
+    pid = svc.create_project('完整恢复', ['C'])
+    rid = svc.db.create_run(pid)
+    ctx = svc.context(pid, rid).tool_ctx()
+    task = {'data': {'definition': '完整医学定义' * 5000}, 'verified_fact_ids': []}
+    model = ScriptedLLM([LLMReply(tool_calls=[ToolCall('done', 'submit_result', {'report': 'C', 'findings': []})])])
+    run_skill(svc.skills['analysis-c'], task, model, svc.context(pid, rid).registry, ctx)
+    pointer = json.loads(svc.db.one("SELECT content FROM agent_steps WHERE role='task'")['content'])
+    if corrupt:
+        svc.cas._path(pointer['digest']).write_bytes(b'simulated corruption')
+        with pytest.raises(ValueError, match='hash mismatch'):
+            smoke['saved_task'](settings.db_path, rid)
+    else:
+        assert smoke['saved_task'](settings.db_path, rid) == task
