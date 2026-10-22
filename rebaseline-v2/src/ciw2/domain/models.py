@@ -61,6 +61,7 @@ class UniverseResult(Strict):
 
 
 class ScopeDecision(Strict):
+    entity_id: str | None = Field(default=None, description='当前候选ID；与药物原名或已知别名一致')
     drug: str
     in_scope: bool | None
     reason: str

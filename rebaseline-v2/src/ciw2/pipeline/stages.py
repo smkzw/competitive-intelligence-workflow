@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from ciw2.domain.models import AnalysisResult, ExtractionResult, IntakeResult, ScopeResult, UniverseResult
+from ciw2.domain.models import AnalysisResult, ExtractionResult, IntakeResult, UniverseResult
 from ciw2.domain.tiers import tier_of
 from ciw2.harness.agent import HARNESS_RULES
 from ciw2.pipeline.context import RunContext
@@ -97,27 +97,8 @@ def _universe(region: str) -> Callable[[RunContext], dict[str, Any]]:
 
 # ------------------------------------------------------------------ scope / coverage review
 def coverage_review(rc: RunContext) -> dict[str, Any]:
-    drugs = rc.db.entities(rc.project_id, "drug")
-    cov = rc.db.query("SELECT route_id, region, status, SUM(hits) hits, COUNT(*) n FROM coverage "
-                      "WHERE run_id=? GROUP BY route_id, region, status", (rc.run_id,))
-    res: ScopeResult = rc.skill("coverage-review", {
-        "indication": _intake(rc)["indication"], "focus": rc.project["focus"],
-        "candidates": [{"name": d["name"], "name_zh": d["name_zh"], "aliases": d["aliases"],
-                        "attrs": d["attrs"], "found_by": d["found_by"]} for d in drugs],
-        "coverage": cov})
-    by_name = {_norm(d["name"]): d for d in drugs}
-    for d in drugs:
-        for a in d["aliases"]:
-            by_name.setdefault(_norm(a), d)
-    applied = 0
-    for dec in res.decisions:
-        d = by_name.get(_norm(dec.drug))
-        if d:
-            rc.db.set_scope(d["id"], dec.in_scope, dec.reason)
-            applied += 1
-    return {"decisions": applied, "in_scope": sum(1 for x in res.decisions if x.in_scope),
-            "excluded": sum(1 for x in res.decisions if x.in_scope is False),
-            "pending": sum(1 for x in res.decisions if x.in_scope is None)}
+    from ciw2.pipeline.scope import review_scope
+    return review_scope(rc, _intake(rc)["indication"])
 
 
 def scoped_drugs(rc: RunContext) -> list[dict[str, Any]]:

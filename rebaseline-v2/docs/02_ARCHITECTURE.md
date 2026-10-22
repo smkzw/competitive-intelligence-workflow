@@ -21,7 +21,7 @@
 | intake | Skill | ABC | 是 | 标准适应症、英文名、同义词、关注点 |
 | universe_china | Skill | ABC | 否 | 中国必跑路线 + 反向扩展 |
 | universe_global | Skill | ABC | 否 | CT.gov / FDA / PubMed / 会议 |
-| coverage_review | Skill | ABC | 是 | 别名归并、纳入/排除/待定 |
+| coverage_review | Skill | ABC | 是 | 全量候选分批纳排；明确ID写回，不擅自合并实体 |
 | trial_evidence | 代码 | ABC | 是 | 按药物检索 CT.gov，干预名匹配后入库设计/结果/AE 事实 |
 | extract_results | Skill | B | 否 | 论文/会议/FDA 结果抽取（逐字引用） |
 | extract_design | Skill | C | 否 | 中国登记/论文方法学设计抽取 |
@@ -56,6 +56,7 @@
 - 只有思考信息、没有可用正文/工具结果，或必需提交未履行，属于协议未完成：立即记录并仅走已配置备用，不把它当作正常回复耗尽整个工作单元。错误回执保留类别、实际模型与可用用量，不记录服务原始错误正文或凭据。
 - 大数据摘要先建立全部完整记录的预算内任务，再执行；无固定Top-N。多批要点超预算时继续有界归并，输出至多6条；不收敛即明确失败。完整门户数据不裁剪。
 - 分批复用沿用 stages 表的内部内容键，不增建任务平台/数据库。键绑定实际输入/事实ID、代码、规则、Skill、schema及指定模型；只缓存类型/引用合格结果，不冒充专业审阅。角色为 cache 的记录与真实 model/model_error 分开。
+- `pipeline/scope.py` 在调用前规划所有完整候选批次（≤30项/≤60000字符），共享别名歧义按全项目集合判断而非批次碰巧命中。显式ID须在当前批且名称匹配；旧名称式结论只按全项目唯一的字面名称/别名兼容，不删除标点。重复、缺项、错绑均待核。无绑定问题的批次沿用stages内容键恢复，另绑定项目来源集合id/digest/text_digest；来源变化保守失效，正常null结论可复用。逐批事务写回，不重做已完成未变批次，不建新表。
 - 新增 Skill：写 SKILL.md + （必要时）在 `domain/models.py` 增加输出模型 + 在 stages 中接入。
 
 ## 5. 中国来源现状（实测）
