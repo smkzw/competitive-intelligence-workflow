@@ -25,7 +25,8 @@ def test_backup_order_is_explicit_and_switch_is_recorded():
     client = FallbackLLM([primary, deepseek, qwen])
     result = client.chat([{'role': 'user', 'content': 'test'}])
     assert client.model == 'deepseek'
-    assert result.raw['_ciw_route'] == {'index': 1, 'model': 'deepseek', 'previous_failures': ['glm-5.3-flash']}
+    assert result.raw['_ciw_route'] == {'index': 1, 'model': 'deepseek', 'previous_failures': ['glm-5.3-flash'],
+        'failure_details': [{'requested_model': 'glm-5.3-flash', 'error_type': 'LLMError'}]}
     assert len(primary.calls) == len(deepseek.calls) == 1 and not qwen.calls
     client.chat([{'role': 'user', 'content': 'continue'}])
     assert len(primary.calls) == 1 and len(deepseek.calls) == 2

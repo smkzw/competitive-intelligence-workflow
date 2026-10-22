@@ -208,7 +208,8 @@ class DB:
         if existing is None:
             self.execute("INSERT INTO stages VALUES (?,?,?,?,?,?,?)",
                          (run_id, name, status, out, error,
-                          now() if status == "running" else None, None))
+                          now() if status == "running" else None,
+                          now() if status in {"succeeded", "failed", "skipped"} else None))
         else:
             finished = now() if status in {"succeeded", "failed", "skipped"} else None
             self.execute(

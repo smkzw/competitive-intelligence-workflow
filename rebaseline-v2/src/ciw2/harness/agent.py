@@ -13,7 +13,7 @@ from typing import Any
 
 from pydantic import BaseModel, ValidationError
 
-from ciw2.harness.llm import LLM, ToolCall
+from ciw2.harness.llm import LLM, LLMError, ToolCall
 from ciw2.harness.skills import Skill
 from ciw2.harness.tools import RESULT_PAGE_TOOL, ToolContext, ToolRegistry
 
@@ -63,10 +63,17 @@ def run_skill(skill: Skill, task: dict[str, Any], llm: LLM, registry: ToolRegist
             messages.append({'role': 'user', 'content': f'本工作单元剩余 {remaining} 次模型交互。请及时使用 submit_result 提交已有证据支持的结果，未完成项如实保留，禁止补造。'})
         # A final response is still schema/source checked. Do not spend the
         # reserved submission interaction starting another source query.
-        reply = llm.chat(messages, schemas[-1:] if remaining == 1 else schemas)
+        try:
+            reply = llm.chat(messages, schemas[-1:] if remaining == 1 else schemas)
+        except LLMError as exc:
+            log(step, 'model_error', {'requested_model': llm.model, 'error_type': type(exc).__name__,
+                                     'metadata': getattr(exc, 'metadata', {}),
+                                     'route_failures': getattr(llm, 'failure_details', [])})
+            raise
         if reply.raw:
             log(step, 'model', {'requested_model': llm.model, 'actual_model': reply.raw.get('model'),
-                                'usage': reply.raw.get('usage'), 'route': reply.raw.get('_ciw_route')})
+                                'usage': reply.raw.get('usage'), 'route': reply.raw.get('_ciw_route'),
+                                'finish_reason': (reply.raw.get('choices') or [{}])[0].get('finish_reason')})
         messages.append(reply.as_message())
         log(step, "assistant", reply.as_message())
         if not reply.tool_calls:

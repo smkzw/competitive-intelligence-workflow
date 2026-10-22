@@ -53,6 +53,12 @@ class LLMIdentityError(LLMError):
     pass
 
 
+class LLMProtocolError(LLMError):
+    def __init__(self, message: str, metadata: dict[str, Any] | None = None) -> None:
+        super().__init__(message)
+        self.metadata = metadata or {}
+
+
 class OpenAICompatLLM:
     def __init__(self, base_url: str, api_key: str, model: str, timeout_s: float = 120.0,
                  max_retries: int = 3, temperature: float = 0.1, max_output_tokens: int = 8192) -> None:
@@ -78,27 +84,54 @@ class OpenAICompatLLM:
             try:
                 r = self._client.post(f"{self.base_url}/chat/completions", json=body)
                 if r.status_code in (429, 500, 502, 503, 504):
-                    raise LLMError(f"HTTP {r.status_code}: {r.text[:200]}")
+                    raise LLMError(f"HTTP {r.status_code}")
                 r.raise_for_status()
-                reply = _parse_reply(r.json())
+                try:
+                    data = r.json()
+                except ValueError as exc:
+                    raise LLMProtocolError('模型服务未返回有效JSON') from exc
+                reply = _parse_reply(data)
                 actual = str(reply.raw.get('model') or '').casefold().rsplit('/', 1)[-1]
                 requested = self.model.casefold().rsplit('/', 1)[-1]
                 matches = actual.startswith(requested) if requested in {'deepseek', 'qwen'} else actual == requested
                 if not actual or not matches:
                     raise LLMIdentityError('实际响应模型身份缺失或与指定模型不一致')
+                required = isinstance(body.get('tool_choice'), dict)
+                valid_submit = len(reply.tool_calls) == 1 and reply.tool_calls[0].name == 'submit_result' and (
+                    isinstance(reply.tool_calls[0].arguments, dict) and '__invalid_json__' not in reply.tool_calls[0].arguments)
+                if (not reply.content.strip() and not reply.tool_calls) or (required and not valid_submit):
+                    usage = data.get('usage') if isinstance(data.get('usage'), dict) else {}
+                    raise LLMProtocolError('模型未返回可用正文或所要求的结构化提交', {
+                        'actual_model': reply.raw['model'], 'finish_reason': data['choices'][0].get('finish_reason'),
+                        'usage': {key: value for key, value in usage.items()
+                                  if key in {'prompt_tokens', 'completion_tokens', 'total_tokens'} and isinstance(value, int)}})
                 return reply
-            except LLMIdentityError:
+            except (LLMIdentityError, LLMProtocolError):
                 raise
             except (httpx.HTTPError, LLMError) as exc:
                 last = exc
-                time.sleep(2 ** attempt)
-        raise LLMError(f"LLM 调用失败：{last}")
+                if attempt + 1 < self.max_retries:
+                    time.sleep(2 ** attempt)
+        reason = str(last) if isinstance(last, LLMError) else type(last).__name__
+        if isinstance(last, httpx.HTTPStatusError):
+            reason = f'HTTP {last.response.status_code}'
+        raise LLMError(f"LLM 调用失败：{reason}")
 
 
 def _parse_reply(data: dict[str, Any]) -> LLMReply:
-    msg = data["choices"][0]["message"]
+    try:
+        msg = data["choices"][0]["message"]
+    except (KeyError, IndexError, TypeError) as exc:
+        raise LLMProtocolError('模型响应缺少choices/message') from exc
+    if not isinstance(msg, dict) or (msg.get('content') is not None and not isinstance(msg['content'], str)):
+        raise LLMProtocolError('模型正文结构不兼容')
+    raw_calls = msg.get('tool_calls') or []
+    if not isinstance(raw_calls, list):
+        raise LLMProtocolError('模型工具调用结构不兼容')
     calls = []
-    for c in msg.get("tool_calls") or []:
+    for c in raw_calls:
+        if not isinstance(c, dict) or not isinstance(c.get('function'), dict) or not isinstance(c['function'].get('name'), str):
+            raise LLMProtocolError('模型工具调用缺少函数名')
         raw_args = c["function"].get("arguments") or "{}"
         try:
             args = json.loads(raw_args) if isinstance(raw_args, str) else raw_args

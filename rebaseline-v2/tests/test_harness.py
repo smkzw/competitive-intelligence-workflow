@@ -103,3 +103,22 @@ def test_last_interaction_exposes_only_submission_not_more_research():
             return call('echo', text='more research')
 
     assert run_skill(SKILL, {}, SubmitOnOnlyTool(), _registry(), ToolContext(), max_steps=2).decisions == []
+
+
+def test_failed_provider_response_is_recorded_without_being_a_valid_model_call(settings):
+    from ciw2.harness.llm import LLMProtocolError
+    from ciw2.store.db import DB
+
+    settings.ensure_dirs()
+    db = DB(settings.db_path)
+    pid = db.create_project('协议失败', ['C'])
+    rid = db.create_run(pid)
+
+    def unavailable(messages):
+        raise LLMProtocolError('no usable response', {'actual_model': 'test', 'usage': {'completion_tokens': 10}})
+
+    with pytest.raises(LLMProtocolError):
+        run_skill(SKILL, {}, ScriptedLLM(unavailable), _registry(), ToolContext(db=db, run_id=rid))
+    assert db.one("SELECT count(*) n FROM agent_steps WHERE run_id=? AND role='model'", (rid,))['n'] == 0
+    row = db.one("SELECT content FROM agent_steps WHERE run_id=? AND role='model_error'", (rid,))
+    assert row and 'completion_tokens' in row['content']

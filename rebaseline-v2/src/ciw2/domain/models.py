@@ -99,4 +99,4 @@ class Finding(Strict):
 
 class AnalysisResult(Strict):
     report: Literal["A", "B", "C"]
-    findings: list[Finding]
+    findings: list[Finding] = Field(max_length=6)

@@ -6,18 +6,24 @@ intake → universe_china → universe_global → coverage_review(scope) → tri
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from collections.abc import Callable
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 from ciw2.domain.models import AnalysisResult, ExtractionResult, IntakeResult, ScopeResult, UniverseResult
 from ciw2.domain.tiers import tier_of
+from ciw2.harness.agent import HARNESS_RULES
 from ciw2.pipeline.context import RunContext
 from ciw2.sources import ctgov
 from ciw2.sources.http import source_by_url, source_text
 from ciw2.verify.quote import check_quote
+
+ANALYSIS_CODE_HASH = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+ANALYSIS_TASK_CHARS = 60000
 
 
 @dataclass(frozen=True)
@@ -299,25 +305,132 @@ def _analysis(report: str) -> Callable[[RunContext], dict[str, Any]]:
         data = report_data(rc.db, rc.project_id, report)
         if not any(data.get(key) for key in ('rows', 'results', 'safety', 'analyses')):
             return {'report': report, 'findings': []}
-        res: AnalysisResult = rc.skill(f"analysis-{report.lower()}", {
-            "indication": _intake(rc)["indication"], "focus": rc.project["focus"],
-            "data": _compact(data),
-            'verified_fact_ids': [fact['id'] for fact in rc.db.current_facts(rc.project_id)
-                                  if fact['status'] == 'verified']})
-        return res.model_dump()
+        verified = {f['id'] for f in rc.db.current_facts(rc.project_id) if f['status'] == 'verified'}
+        core = _compact(data)
+        base = {'indication': _intake(rc)['indication'], 'focus': rc.project['focus'],
+                'cutoff_date': rc.project['cutoff_date'],
+                'overview': {key: len(value) for key, value in core.items() if isinstance(value, list)}}
+        tasks = _analysis_tasks(core, base, verified)
+        findings = []
+        for task in tasks:
+            res = _analysis_call(rc, report, task)
+            findings.extend(f.model_dump() for f in res.findings)
+        if len(tasks) <= 1 or not findings:
+            return {'report': report, 'findings': findings}
+        return _analysis_merge(rc, report, findings, base, verified)
     return run
 
 
-def _compact(data: dict[str, Any], limit: int = 60000) -> dict[str, Any]:
-    """给分析 Skill 的数据：去掉图表配置，限制体积。"""
-    slim = {k: v for k, v in data.items() if k not in {"charts"}}
-    text = json.dumps(slim, ensure_ascii=False, default=str)
-    if len(text) > limit:
-        slim = {**slim, "_truncated": True}
-        for k in ("rows", "safety", "results"):
-            if isinstance(slim.get(k), list):
-                slim[k] = slim[k][:150]
-    return slim
+def _compact(data: Any) -> Any:
+    """Remove duplicate display evidence, never shorten a clinical definition.
+
+    Full source text stays in the report/store. Endpoint definitions, complete
+    threshold rules, population, units, time and statistical context stay here.
+    """
+    if isinstance(data, list):
+        return [_compact(item) for item in data]
+    if not isinstance(data, dict):
+        return data
+    out = {}
+    for key, value in data.items():
+        if key in {'charts', 'endpoint_groups', 'eligibility_criteria', 'quote'}:
+            continue
+        if key == 'sources':
+            out[key] = {field: [{k: ref[k] for k in ('fact_id', 'status') if k in ref} for ref in refs]
+                        for field, refs in value.items()}
+        elif key == 'value' and 'fact_id' in data and isinstance(value, dict) and all(
+                name in data and data[name] == item for name, item in value.items()):
+            continue  # The same primary endpoint is already present as named fields.
+        else:
+            out[key] = _compact(value)
+    return out
+
+
+def _analysis_refs(data: Any) -> set[str]:
+    if isinstance(data, list):
+        return set().union(*(_analysis_refs(item) for item in data)) if data else set()
+    if isinstance(data, dict):
+        refs = {value for key, value in data.items() if key in {'id', 'fact_id'} and isinstance(value, str)}
+        refs.update(ref for ref in data.get('fact_refs', []) if isinstance(ref, str))
+        for value in data.values():
+            refs.update(_analysis_refs(value))
+        return refs
+    return set()
+
+
+def _analysis_budget(task: dict[str, Any]) -> None:
+    if len(json.dumps(task, ensure_ascii=False, default=str)) > ANALYSIS_TASK_CHARS:
+        raise ValueError('摘要输入超过整包预算；保留完整记录，不截断临床定义或伪装全量总结')
+
+
+def _analysis_tasks(data: dict[str, Any], base: dict[str, Any], verified: set[str]) -> list[dict[str, Any]]:
+    """Plan every complete record before calling a model; no fixed Top-N."""
+    arrays = {key: value for key, value in data.items() if isinstance(value, list)}
+    fixed = {key: value for key, value in data.items() if key not in arrays}
+
+    def task(payload: dict[str, Any]) -> dict[str, Any]:
+        return {**base, 'mode': 'batch', 'data': payload,
+                'verified_fact_ids': sorted(_analysis_refs(payload) & verified)}
+
+    pending = {**fixed, **{key: [] for key in arrays}}
+    _analysis_budget(task(pending))
+    tasks = []
+    for key, records in arrays.items():
+        for record in records:
+            pending[key].append(record)
+            candidate = task(pending)
+            if len(json.dumps(candidate, ensure_ascii=False, default=str)) <= ANALYSIS_TASK_CHARS:
+                continue
+            pending[key].pop()
+            if any(pending[key] for key in arrays):
+                tasks.append(task(pending))
+            pending = {**fixed, **{name: [] for name in arrays}}
+            pending[key].append(record)
+            _analysis_budget(task(pending))
+    if any(pending[key] for key in arrays) or not tasks:
+        tasks.append(task(pending))
+    return tasks
+
+
+def _analysis_call(rc: RunContext, report: str, task: dict[str, Any]) -> AnalysisResult:
+    skill = rc.skills[f'analysis-{report.lower()}']
+    signature = {'task': task, 'code': ANALYSIS_CODE_HASH, 'rules': HARNESS_RULES,
+                 'skill': skill.body, 'schema': AnalysisResult.model_json_schema(),
+                 'model': rc.settings.llm_model}
+    digest = hashlib.sha256(json.dumps(signature, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+    key = f'analysis_{report}:{task["mode"]}:{digest}'
+    cached = rc.db.stage_output(rc.run_id, key)
+    if cached is not None:
+        result = AnalysisResult.model_validate(cached)
+        rc.db.log_step(rc.run_id, rc.stage, skill.name, 0, 'cache', {'reused_stage': key})
+    else:
+        result = rc.skill(skill.name, task)
+    if result.report != report:
+        raise ValueError('摘要返回的报告类型与任务不一致')
+    result = result.model_copy(update={'findings': [f for f in result.findings
+        if f.fact_refs and set(f.fact_refs) <= set(task['verified_fact_ids'])]})
+    if cached is None:
+        rc.db.set_stage(rc.run_id, key, 'succeeded', output=result.model_dump())
+    return result
+
+
+def _analysis_merge(rc: RunContext, report: str, findings: list[dict[str, Any]],
+                    base: dict[str, Any], verified: set[str]) -> dict[str, Any]:
+    while findings:
+        synthesis = {**base, 'mode': 'synthesis', 'data': {'candidate_findings': findings},
+                     'verified_fact_ids': sorted({ref for f in findings for ref in f['fact_refs']})}
+        if len(json.dumps(synthesis, ensure_ascii=False)) <= ANALYSIS_TASK_CHARS:
+            result = _analysis_call(rc, report, synthesis)
+            return result.model_dump()
+        packets = _analysis_tasks({'candidate_findings': findings}, base, verified)
+        merged = []
+        for packet in packets:
+            packet['mode'] = 'synthesis'
+            merged.extend(f.model_dump() for f in _analysis_call(rc, report, packet).findings)
+        if len(json.dumps(merged, ensure_ascii=False)) >= len(json.dumps(findings, ensure_ascii=False)):
+            raise ValueError('摘要输入归并未收敛，保留已完成结果供恢复')
+        findings = merged
+    return {'report': report, 'findings': []}
 
 
 def render(rc: RunContext) -> dict[str, Any]:

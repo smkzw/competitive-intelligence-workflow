@@ -13,6 +13,7 @@ class FallbackLLM:
         self.routes = routes
         self.index = 0
         self.failures: list[str] = []
+        self.failure_details: list[dict[str, Any]] = []
 
     @property
     def model(self) -> str:
@@ -23,13 +24,16 @@ class FallbackLLM:
             route = self.routes[self.index]
             try:
                 reply = route.chat(messages, tools)
-            except LLMError:
+            except LLMError as exc:
                 self.failures.append(route.model)
+                self.failure_details.append({'requested_model': route.model, 'error_type': type(exc).__name__,
+                                             **getattr(exc, 'metadata', {})})
                 if self.index + 1 == len(self.routes):
                     raise
                 self.index += 1
                 continue
             reply.raw = {**reply.raw, '_ciw_route': {
-                'index': self.index, 'model': route.model, 'previous_failures': list(self.failures)}}
+                'index': self.index, 'model': route.model, 'previous_failures': list(self.failures),
+                'failure_details': list(self.failure_details)}}
             return reply
         raise LLMError('All configured model routes are unavailable')

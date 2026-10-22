@@ -58,11 +58,14 @@ def main() -> None:
         files[str(path.relative_to(service.settings.data_dir))] = hashlib.sha256(path.read_bytes()).hexdigest()
     identity = service.db.query("SELECT content FROM agent_steps WHERE run_id=? AND role='model' AND id>? ORDER BY id",
                                (run_id, first_step))
+    errors = service.db.query("SELECT content FROM agent_steps WHERE run_id=? AND role='model_error' AND id>? ORDER BY id",
+                             (run_id, first_step))
     result = {**initial, 'state': 'REAL_PIPELINE_RETURNED_NOT_VISUAL_OR_SCIENTIFIC_ACCEPTANCE',
               'run_status': run['status'], 'stages': stages, 'rows': {r: len(v) for r, v in rows.items()},
               'facts': len(service.db.current_facts(project)), 'files': files,
               'source_hashes_end': source_hashes(Path.cwd()),
-              'model_calls': [json.loads(x['content']) for x in identity]}
+              'model_calls': [json.loads(x['content']) for x in identity],
+              'model_errors': [json.loads(x['content']) for x in errors]}
     marker.write_text(json.dumps(result, ensure_ascii=False, indent=2))
     print(json.dumps({k: result[k] for k in ('project_id', 'run_id', 'run_status', 'rows', 'facts')},
                      ensure_ascii=False), flush=True)
