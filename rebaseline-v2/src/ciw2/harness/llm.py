@@ -46,7 +46,9 @@ class LLM(Protocol):
 
 
 class LLMError(RuntimeError):
-    pass
+    def __init__(self, message: str, metadata: dict[str, Any] | None = None) -> None:
+        super().__init__(message)
+        self.metadata = metadata or {}
 
 
 class LLMIdentityError(LLMError):
@@ -54,9 +56,7 @@ class LLMIdentityError(LLMError):
 
 
 class LLMProtocolError(LLMError):
-    def __init__(self, message: str, metadata: dict[str, Any] | None = None) -> None:
-        super().__init__(message)
-        self.metadata = metadata or {}
+    pass
 
 
 class OpenAICompatLLM:
@@ -80,11 +80,11 @@ class OpenAICompatLLM:
                                    if len(tools) == 1 and tools[0]['function']['name'] == 'submit_result'
                                    else 'auto')
         last: Exception | None = None
+        attempts = 0
         for attempt in range(self.max_retries):
+            attempts += 1
             try:
                 r = self._client.post(f"{self.base_url}/chat/completions", json=body)
-                if r.status_code in (429, 500, 502, 503, 504):
-                    raise LLMError(f"HTTP {r.status_code}")
                 r.raise_for_status()
                 try:
                     data = r.json()
@@ -115,7 +115,10 @@ class OpenAICompatLLM:
         reason = str(last) if isinstance(last, LLMError) else type(last).__name__
         if isinstance(last, httpx.HTTPStatusError):
             reason = f'HTTP {last.response.status_code}'
-        raise LLMError(f"LLM 调用失败：{reason}")
+        metadata = {'transport_error': type(last).__name__, 'attempts': attempts}
+        if isinstance(last, httpx.HTTPStatusError):
+            metadata['http_status'] = last.response.status_code
+        raise LLMError(f"LLM 调用失败：{reason}", metadata)
 
 
 def _parse_reply(data: dict[str, Any]) -> LLMReply:

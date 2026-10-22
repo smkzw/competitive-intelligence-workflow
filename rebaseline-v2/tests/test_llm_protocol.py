@@ -76,3 +76,28 @@ def test_http_failure_keeps_status_but_not_provider_body_or_credentials(monkeypa
         assert waits == []
     finally:
         client._client.close()
+
+
+@pytest.mark.parametrize('failure', [429, 401, 'timeout'])
+def test_all_route_failures_retain_safe_transport_diagnostics(failure, monkeypatch):
+    monkeypatch.setattr('ciw2.harness.llm.time.sleep', lambda _: None)
+
+    def respond(request):
+        if failure == 'timeout':
+            raise httpx.ReadTimeout('synthetic-private-key', request=request)
+        return httpx.Response(failure, text='synthetic-private-key')
+
+    primary = OpenAICompatLLM('http://localhost:1/v1', 'synthetic-private-key', 'test', max_retries=1)
+    primary._client.close()
+    primary._client = httpx.Client(transport=httpx.MockTransport(respond))
+    client = FallbackLLM([primary])
+    try:
+        with pytest.raises(LLMError):
+            client.chat([])
+        detail = client.failure_details[0]
+        assert detail['transport_error'] == ('ReadTimeout' if failure == 'timeout' else 'HTTPStatusError')
+        assert detail['attempts'] == 1
+        assert detail.get('http_status') == (None if failure == 'timeout' else failure)
+        assert 'synthetic-private-key' not in json.dumps(detail)
+    finally:
+        primary._client.close()

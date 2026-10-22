@@ -35,13 +35,15 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 
 ## 2. 数据模型（store/db.py）
 - `projects` `runs` `stages` `agent_steps`：运行与留痕。
-- `sources`：每次抓取（URL、原始字节 digest、纯文本 digest）。**抽取只能引用本项目已读取的来源**。
+- `sources`：按项目/URL/原始字节digest复用内容版本，保留首次存储时间。每次网络核查、缓存复用、导入另在agent_steps记录source_observation；只有network_checked含network_checked_at及实际HTTP状态。**抽取只能引用本项目已读取的来源**。
 - `entities`（drug/company/trial/target，含别名、发现路线、纳排）+ `links`（drug-trial / drug-company / drug-target）。
 - `domain/identity.py`只做大小写/空白形式归一及字面名称/已知别名匹配，保留标点，不推断药学等同。scope、trial_evidence和verify复用；scope缓存绑定该规则源码hash。明确且唯一的试验关联用drug-trial；宽检索/共享别名保留drug-trial-candidate（pending及原干预名），沿用links不增表。后来字面关系确认时保留候选记录并标resolved_literal_match；不是自动解决剂型/组合药学语义。
 - `facts`：追加式；`supersedes` 指向被取代的版本；`tier` `status` `quote` `quote_start/end` `context`（组/时间点/人群/统计对象/分母/终点）。
 - `coverage`：每条检索路线的状态（ok/failed/blocked）、命中、新增实体。
 - 发现工具逐批保存登记原名与药物—试验关系，最终模型提交失败不抹掉已读来源；不据此推断创新属性或监管身份。
 - 同一RunContext的相同GET复用已抓CAS字节；新上下文再次调用fetch时不沿用旧HTTP缓存。已完成单元的恢复回执是固定来源复用，不声称发生新HTTP核查；新调研run不沿用上次单元回执。工具结果授权仍限定当前Skill。
+- CT.gov代码事实按来源ID+解析器及其语义/分级代码hash形成snapshot；事实context保留stamp，links的ctgov-current仅作同项目/研究的可变当前指针（不是临床关系推断）。全量解析/源hash及登记号核对后，一个DB.tx完成实体元数据、事实、指针和append-only source_activation回执；失败完整回滚并记录source_rejection。源/事实不删改，普通登记版本不生成supersedes或科学撤回。current_facts仅按指针过滤code:ctgov；无指针的旧项目保持原读取行为，论文/LLM事实独立。
+- 沿用links而不是把指针混进entities.attrs，是owner的最小实现选择；共同读取在DB中，其他消费者不各自解释。source_by_url优先采用最新网络/导入观察，不把缓存读取变成新鲜度；无观察的历史来源继续旧排序兼容。M5仍须完成历史资格、旧源延迟重放策略及跨来源消费冲突，不由当前指针自动解决。
 
 ## 3. 信任模型
 1. 代码解析的结构化注册数据（CT.gov）：`extracted_by=code:ctgov`，按 JSON 路径直接取值 → verified。
@@ -56,9 +58,11 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 - 模型只能调白名单工具；工具异常以 `{"status":"tool_failed"}` 回给模型（不当作无结果）。
 - 输出只能通过 `submit_result`，Pydantic 校验失败把错误回给模型重试；预算耗尽抛 `AgentBudgetExceeded`。
 - 最后两次交互提示剩余预算；最后一次只开放 submit_result 并请求该函数，不再无限追加检索。即使强制提交，结构/来源校验仍照常。
+- 无检索工具的Skill从首步仅开放submit_result并要求该函数；不存在可分页结果时不凭空提供read_tool_result。真正使用检索工具的Skill继续保留长结果读取及末步提交。
 - 模型按明确环境配置顺序备用；错误或缺失的实际模型身份拒绝采用，返回的真实模型与使用量留痕，不用请求名冒充响应身份。
 - 只有思考信息、没有可用正文/工具结果，或必需提交未履行，属于协议未完成：立即记录并仅走已配置备用，不把它当作正常回复耗尽整个工作单元。错误回执保留类别、实际模型与可用用量，不记录服务原始错误正文或凭据。
 - 大数据摘要先建立全部完整记录的预算内任务，再执行；无固定Top-N。多批要点超预算时继续有界归并，输出至多6条；不收敛即明确失败。完整门户数据不裁剪。
+- 真实58775字符输入在主模型120秒超时后，摘要改为≤24000字符完整记录包，并移除fact_id已能定位的重复URL/来源ID/locator，不移除临床定义。284研究当前规划62批/最大23959字符，最长完整记录20242字符；这是输入规划，不是模型或医学验收。
 - 分批复用沿用 stages 表的内部内容键，不增建任务平台/数据库。键绑定实际输入/事实ID、代码、规则、Skill、schema及指定模型；只缓存类型/引用合格结果，不冒充专业审阅。角色为 cache 的记录与真实 model/model_error 分开。
 - `pipeline/scope.py` 在调用前规划所有完整候选批次（≤30项/≤60000字符），共享别名歧义按全项目集合判断而非批次碰巧命中。显式ID须在当前批且名称匹配；旧名称式结论只按全项目唯一的字面名称/别名兼容，不删除标点。重复、缺项、错绑均待核。无绑定问题的批次沿用stages内容键恢复，另绑定项目来源集合id/digest/text_digest；来源变化保守失效，正常null结论可复用。逐批事务写回，不重做已完成未变批次，不建新表。
 - `pipeline/extraction.py`以完整研究及其全部事实引用规划输入，`read_project_fact`返回当前项目完整值/上下文并复用长结果分页。`queries.py`仅共享项目读取，`recovery.py`仅复用现有stages来源绑定回执，不增执行平台或表。输入、提取器/工具实现、Skill、schema、模型及已读取/引用来源版本改变时重做对应单元；来源包括无输出事实时已读取的资料。引用URL同秒新版本按rowid稳定择新，未知/跨项目来源不借用。

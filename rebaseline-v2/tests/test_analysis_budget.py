@@ -141,3 +141,24 @@ def test_criterion_logic_and_value_are_not_stripped_with_duplicate_evidence():
     criterion = {'fact_id': 'fct_criterion', 'section': 'exclusion', 'measure': 'BSA',
                  'operator': '>', 'value': 80, 'unit': '%', 'rule_text': 'BSA > 80% OR active infection'}
     assert _compact({'eligibility_thresholds': [criterion]})['eligibility_thresholds'] == [criterion]
+
+
+def test_summary_keeps_complete_endpoint_but_not_duplicate_source_transport_metadata():
+    from ciw2.pipeline.stages import _compact
+
+    endpoint = {'fact_id': 'fct_endpoint', 'measure': 'Complete endpoint', 'description': 'Full definition',
+                'time_frame': 'Week 24', 'population': 'ITT', 'status': 'verified',
+                'source_id': 'src_original', 'url': 'https://example.org/long-source', 'locator': 'path[0]'}
+    projected = _compact(endpoint)
+    assert projected == {k: v for k, v in endpoint.items() if k not in {'source_id', 'url', 'locator'}}
+
+
+def test_summary_uses_smaller_complete_record_batches_after_actual_large_input_timeout(settings, monkeypatch):
+    from ciw2.pipeline.stages import ANALYSIS_TASK_CHARS
+
+    assert ANALYSIS_TASK_CHARS == 24000
+    rc, calls, data = setup_analysis(settings, monkeypatch, count=80)
+    _analysis('C')(rc)
+    assert all(len(json.dumps(task, ensure_ascii=False)) <= 24000 for task in calls)
+    assert [r['trial'] for task in calls if task['mode'] == 'batch' for r in task['data']['rows']] == [
+        r['trial'] for r in data['rows']]

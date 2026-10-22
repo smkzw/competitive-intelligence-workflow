@@ -313,9 +313,14 @@ class DB:
         return fid
 
     def current_facts(self, project_id: str, entity_id: str | None = None) -> list[dict[str, Any]]:
-        """未被后续版本取代的事实。"""
+        """Current registry document plus independent facts; immutable legacy stays readable."""
         sql = ("SELECT * FROM facts f WHERE project_id=? AND NOT EXISTS "
-               "(SELECT 1 FROM facts g WHERE g.supersedes=f.id)")
+               "(SELECT 1 FROM facts g WHERE g.project_id=f.project_id AND g.supersedes=f.id) AND ("
+               "f.extracted_by<>'code:ctgov' OR NOT EXISTS (SELECT 1 FROM links l "
+               "WHERE l.project_id=f.project_id AND l.src=f.entity_id AND l.rel='ctgov-current') OR EXISTS ("
+               "SELECT 1 FROM links l WHERE l.project_id=f.project_id AND l.src=f.entity_id "
+               "AND l.rel='ctgov-current' AND l.dst=f.source_id "
+               "AND json_extract(l.attrs,'$.snapshot')=json_extract(f.context,'$.source_snapshot')))")
         params: list[Any] = [project_id]
         if entity_id:
             sql += " AND entity_id=?"

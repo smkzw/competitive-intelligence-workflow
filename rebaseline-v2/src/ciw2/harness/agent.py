@@ -43,7 +43,7 @@ def _submit_tool(output: type[BaseModel] | None) -> dict[str, Any]:
 
 def run_skill(skill: Skill, task: dict[str, Any], llm: LLM, registry: ToolRegistry,
               ctx: ToolContext, max_steps: int | None = None) -> BaseModel | dict[str, Any]:
-    tools = registry.subset(skill.tools) + [RESULT_PAGE_TOOL]
+    tools = registry.subset(skill.tools) + [RESULT_PAGE_TOOL] if skill.tools else []
     tool_by_name = {t.name: t for t in tools}
     schemas = [t.schema() for t in tools] + [_submit_tool(skill.output)]
     budget = min(max_steps or skill.max_steps, skill.max_steps)

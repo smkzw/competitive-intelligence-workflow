@@ -27,7 +27,7 @@ from ciw2.sources.http import source_by_url, source_text
 from ciw2.verify.quote import check_quote
 
 ANALYSIS_CODE_HASH = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
-ANALYSIS_TASK_CHARS = 60000
+ANALYSIS_TASK_CHARS = 24000
 CTGOV_CODE_HASH = hashlib.sha256(Path(ctgov.__file__).read_bytes()).hexdigest()
 
 
@@ -317,6 +317,8 @@ def _compact(data: Any) -> Any:
     for key, value in data.items():
         if key in {'charts', 'endpoint_groups', 'eligibility_criteria', 'quote'}:
             continue
+        if 'fact_id' in data and key in {'source_id', 'url', 'locator'}:
+            continue  # Stable fact_id resolves original provenance; not clinical definition.
         if key == 'sources':
             out[key] = {field: [{k: ref[k] for k in ('fact_id', 'status') if k in ref} for ref in refs]
                         for field, refs in value.items()}

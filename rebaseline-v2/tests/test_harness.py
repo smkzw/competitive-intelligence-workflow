@@ -122,3 +122,18 @@ def test_failed_provider_response_is_recorded_without_being_a_valid_model_call(s
     assert db.one("SELECT count(*) n FROM agent_steps WHERE run_id=? AND role='model'", (rid,))['n'] == 0
     row = db.one("SELECT content FROM agent_steps WHERE run_id=? AND role='model_error'", (rid,))
     assert row and 'completion_tokens' in row['content']
+
+
+def test_no_research_tools_means_submit_is_required_from_first_interaction():
+    no_tools = parse_skill('---\nname: summary\ndescription: d\ntools: []\noutput: ScopeResult\nmax_steps: 4\n---\n正文')
+    calls = []
+
+    class InspectTools:
+        model = 'test'
+
+        def chat(self, messages, tools=None):
+            calls.append([tool['function']['name'] for tool in tools])
+            return call('submit_result', decisions=[])
+
+    assert run_skill(no_tools, {}, InspectTools(), _registry(), ToolContext()).decisions == []
+    assert calls == [['submit_result']]

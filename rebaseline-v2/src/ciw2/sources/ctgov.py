@@ -7,8 +7,11 @@
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import re
+import sqlite3
+from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, Field
@@ -21,6 +24,9 @@ from ciw2.sources.http import fetch
 API = "https://clinicaltrials.gov/api/v2/studies"
 STUDY_URL = "https://clinicaltrials.gov/study/{nct}"
 NCT_RE = re.compile(r"^NCT\d{8}$")
+EXTRACTOR_VERSION = hashlib.sha256(b''.join(path.read_bytes() for path in (
+    Path(__file__), Path(__file__).parents[1] / 'domain/semantics.py',
+    Path(__file__).parents[1] / 'domain/tiers.py'))).hexdigest()
 
 _PHASE = {
     ("EARLY_PHASE1",): "phase1", ("PHASE1",): "phase1", ("PHASE1", "PHASE2"): "phase1_2",
@@ -220,21 +226,57 @@ def get_study(ctx: ToolContext | None, nct: str) -> tuple[dict[str, Any], str | 
 
 
 def ingest_trial(ctx: ToolContext, nct: str, route_id: str = "ctgov:get") -> dict[str, Any]:
-    """抓取单个试验并写入实体 + 事实（代码抽取）。返回解析摘要。"""
-    study, sid = get_study(ctx, nct)
+    """Activate one complete registry document atomically, not per-path last-wins."""
+    sid = None
+    try:
+        study, sid = get_study(ctx, nct)
+        return _activate_trial(ctx, nct, study, sid, route_id)
+    except Exception as exc:
+        try:
+            ctx.db.log_step(ctx.run_id, ctx.stage, 'ctgov', 0, 'source_rejection',
+                            {'nct': nct, 'source_id': sid, 'reason_type': type(exc).__name__})
+        except sqlite3.Error:
+            pass  # Preserve original ingestion error even if the DB cannot record it.
+        raise
+
+
+def _activate_trial(ctx: ToolContext, nct: str, study: dict[str, Any], sid: str | None,
+                    route_id: str) -> dict[str, Any]:
     s = parse_study(study)
-    eid, _ = ctx.db.upsert_entity(ctx.project_id, "trial", s["nct"], attrs=_trial_attrs(s), route_id=route_id)
-    existing = {(f["field"], json.dumps(f["context"].get("json_path")), json.dumps(f["context"].get("group_id")))
-                for f in ctx.db.current_facts(ctx.project_id, eid) if f["extracted_by"] == "code:ctgov"}
-    n = 0
-    for fact in all_facts(study):
-        key = (fact["field"], json.dumps(fact["context"].get("json_path")),
-               json.dumps(fact["context"].get("group_id")))
-        if key in existing:
-            continue
-        ctx.db.add_fact({**fact, "project_id": ctx.project_id, "entity_id": eid, "source_id": sid})
-        n += 1
-    return {**_trial_attrs(s), "entity_id": eid, "facts_added": n}
+    if s['nct'] != nct or not NCT_RE.fullmatch(nct):
+        raise ValueError('请求与来源NCT登记号不一致，未采用事实')
+    source = ctx.db.one('SELECT * FROM sources WHERE project_id=? AND id=? AND kind=?',
+                        (ctx.project_id, sid, 'ctgov'))
+    raw = ctx.cas.get(source['digest']) if source else None
+    if source is None or hashlib.sha256(raw).hexdigest() != source['digest'] or json.loads(raw) != study:
+        raise ValueError('CT.gov来源版本未登记或与实际解析字节不一致')
+    facts = all_facts(study)  # All parsing must finish before any visible data changes.
+    snapshot = hashlib.sha256(f'{sid}:{EXTRACTOR_VERSION}'.encode()).hexdigest()
+    added = 0
+    with ctx.db.tx():
+        eid, _ = ctx.db.upsert_entity(ctx.project_id, 'trial', nct, attrs=_trial_attrs(s), route_id=route_id)
+        active = ctx.db.one("SELECT dst,attrs FROM links WHERE project_id=? AND src=? AND rel='ctgov-current'",
+                            (ctx.project_id, eid))
+        previous = json.loads(active['attrs']) if active else None
+        if previous is None or previous.get('snapshot') != snapshot:
+            for fact in facts:
+                ctx.db.add_fact({**fact, 'project_id': ctx.project_id, 'entity_id': eid, 'source_id': sid,
+                    'context': {**fact['context'], 'source_snapshot': snapshot}})
+                added += 1
+            attrs = {'snapshot': snapshot, 'source_id': sid, 'source_digest': source['digest'],
+                     'extractor_version': EXTRACTOR_VERSION, 'fact_count': added,
+                     'input_protocol_modules': sorted(study.get('protocolSection', {})),
+                     'input_result_modules': sorted(study.get('resultsSection', {})),
+                     'parser_families': ['design', 'trial', 'status', 'result', 'safety'],
+                     'declared_update_date': _g(study, 'protocolSection', 'statusModule',
+                                                'lastUpdatePostDateStruct', 'date')}
+            ctx.db.execute("DELETE FROM links WHERE project_id=? AND src=? AND rel='ctgov-current'",
+                           (ctx.project_id, eid))  # Mutable pointer only; source/fact history is untouched.
+            ctx.db.link(ctx.project_id, eid, 'ctgov-current', sid, attrs=attrs)
+            ctx.db.log_step(ctx.run_id, ctx.stage, 'ctgov', 0, 'source_activation',
+                            {'entity_id': eid, 'previous': previous, 'current': attrs,
+                             'reason': 'registry_snapshot', 'scientific_retraction': False})
+    return {**_trial_attrs(s), 'entity_id': eid, 'facts_added': added}
 
 
 def _trial_attrs(s: dict[str, Any]) -> dict[str, Any]:
