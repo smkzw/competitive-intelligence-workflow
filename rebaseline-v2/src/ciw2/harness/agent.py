@@ -18,8 +18,8 @@ from ciw2.harness.skills import Skill
 from ciw2.harness.tools import RESULT_PAGE_TOOL, ToolContext, ToolRegistry
 
 HARNESS_RULES = """你是临床试验竞品调研平台中的一个工作单元（Skill）。通用规则：
-1. 只使用提供的工具获取信息；不要凭记忆编造药物、试验、数值、日期或公司关系。
-2. 每个事实都要给出来源 URL 和逐字复制的原文片段（quote）。找不到就写进 gaps，不要猜。
+1. 只依据已提供的项目资料及工具获取的信息；不要凭记忆编造药物、试验、数值、日期或公司关系。
+2. 新抽取的事实必须按输出合同给出来源 URL 和逐字复制的原文片段（quote），找不到就记录 gaps，不要猜。已有已核实事实的摘要只按合同引用 fact_refs，不要求重取来源或重复提交原文；不要给摘要添加合同没有的字段。
 3. 未知就是未知：不要把缺失写成 0、无、未发生。事件次数与受试者人数分开。
 4. 药物中文名只用来源中已出现的正式中文名；没有就留空，禁止音译。
 5. 工具返回 error 时如实处理：换一种查询重试，仍失败就记录为失败路线，不当作“无结果”。
@@ -75,7 +75,7 @@ def run_skill(skill: Skill, task: dict[str, Any], llm: LLM, registry: ToolRegist
                                 'usage': reply.raw.get('usage'), 'route': reply.raw.get('_ciw_route'),
                                 'finish_reason': (reply.raw.get('choices') or [{}])[0].get('finish_reason')})
         messages.append(reply.as_message())
-        log(step, "assistant", reply.as_message())
+        log(step, "assistant", reply.as_message(include_reasoning=False))
         if not reply.tool_calls:
             messages.append({"role": "user", "content": "请继续使用工具，完成后调用 submit_result。"})
             continue
@@ -96,7 +96,7 @@ def _dispatch(call: ToolCall, skill: Skill, tools: dict[str, Any], ctx: ToolCont
         try:
             return "已提交", skill.output.model_validate(call.arguments)
         except ValidationError as exc:
-            detail = json.dumps(exc.errors(include_url=False), ensure_ascii=False, default=str)
+            detail = json.dumps(exc.errors(include_url=False, include_input=False), ensure_ascii=False, default=str)
             return f"结果不符合 schema，请修正后重新 submit_result：{detail[:3000]}", None
     tool = tools.get(call.name)
     if tool is None:

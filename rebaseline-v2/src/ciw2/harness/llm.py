@@ -28,8 +28,12 @@ class LLMReply:
     tool_calls: list[ToolCall] = field(default_factory=list)
     raw: dict[str, Any] = field(default_factory=dict)
 
-    def as_message(self) -> dict[str, Any]:
+    def as_message(self, *, include_reasoning: bool = True) -> dict[str, Any]:
         msg: dict[str, Any] = {"role": "assistant", "content": self.content or ""}
+        raw_message = (self.raw.get('choices') or [{}])[0].get('message') or {}
+        reasoning = raw_message.get('reasoning_content')
+        if include_reasoning and isinstance(reasoning, str) and reasoning:
+            msg['reasoning_content'] = reasoning  # Provider-required, in-memory continuation only.
         if self.tool_calls:
             msg["tool_calls"] = [
                 {"id": c.id, "type": "function",
@@ -99,10 +103,16 @@ class OpenAICompatLLM:
                 required = isinstance(body.get('tool_choice'), dict)
                 valid_submit = len(reply.tool_calls) == 1 and reply.tool_calls[0].name == 'submit_result' and (
                     isinstance(reply.tool_calls[0].arguments, dict) and '__invalid_json__' not in reply.tool_calls[0].arguments)
+                fields = tools[0]['function']['parameters'].get('required', []) if required else []
+                missing = [key for key in fields if not valid_submit or key not in reply.tool_calls[0].arguments]
+                valid_submit = valid_submit and not missing
                 if (not reply.content.strip() and not reply.tool_calls) or (required and not valid_submit):
                     usage = data.get('usage') if isinstance(data.get('usage'), dict) else {}
+                    reasoning = data['choices'][0]['message'].get('reasoning_content')
                     raise LLMProtocolError('模型未返回可用正文或所要求的结构化提交', {
                         'actual_model': reply.raw['model'], 'finish_reason': data['choices'][0].get('finish_reason'),
+                        'missing_required': missing,
+                        'reasoning_chars': len(reasoning) if isinstance(reasoning, str) else 0,
                         'usage': {key: value for key, value in usage.items()
                                   if key in {'prompt_tokens', 'completion_tokens', 'total_tokens'} and isinstance(value, int)}})
                 return reply

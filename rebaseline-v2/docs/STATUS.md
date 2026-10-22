@@ -15,7 +15,7 @@
 - C 现在有 ECharts 样本量与期别图、完整设计表、终点/时间点分组、原文展开及明确量表阈值；不是医学语义标准化的替代。
 - 长工具结果首轮 2 FAIL；CAS 分页逐字恢复、只抓一次、当前工作单元授权读取；无 CAS 明确报错，不截掉尾部。
 - 论文规范地址与抓取地址不一致首轮 1 FAIL；追加规范地址来源记录，原始字节与实际获取 URL 均保留。
-- 当前全v2 209PASS/1.78s，完整src/tests/scripts Ruff、生产JS/fetch_assets.sh语法及600行/80行源码门通过（既定create_app路由例外）；只覆盖v2，不借用旧v1门。TestClient弃用警告1项保留。真实模型、来源/界面验收另记，不由测试数量替代。
+- 当前全v2 212PASS/1.93s，完整src/tests/scripts Ruff、生产JS/fetch_assets.sh语法及600行/80行源码门通过（既定create_app路由例外）；只覆盖v2，不借用旧v1门。TestClient弃用警告1项保留。真实模型、来源/界面验收另记，不由测试数量替代。
 - 真实模型连通：cms-router 请求 glm-5.3-flash，HTTP200，响应 actual_model=glm-5.3-flash，返回 OK；非 ScriptedLLM。
 - Ego Lite 空间47已打开普通 C 门户；1920CSS px实屏核对零事实负向页面，0空图、0设计行，删除模型生成的工程说明墙。截图本地 `ciw-data/browser-m1/empty-after-summary-fix-1920.png`；不充当正向图表或完整视觉验收。
 - 无业务数据不调总结模型；总结只展示引用当前已核实事实的条目。PRD及 A/B/C Skills 同步禁止大段防御性/工程说明，不改变原始事实和字段状态。
@@ -69,6 +69,8 @@
 - 隔离生产阶段scope=stage/pipeline_acceptance=NOT_RUN，R3只读backup至`ciw-data/model-stage-r3/data`并核46源blob；未改原DB。project `prj_2f42f9210053`/run `run_0e7b5e4a65fc`首次analysis_C已终态failed：最终实际Qwen3.8-Flash-Next，prompt24511/completion8192/finish=length，无合格正文/提交，无新文件；284行/6580事实是既有源数据。源hash前后相同，原attempt0001回执保留，不再等87975。
 - 主GLM小型必需submit探针实际成功（369+61tokens）；原58775字符/14研究输入独立诊断ReadTimeout/120.005s，回执`ciw-data/model-primary-large-probe-01/receipt.json`，无fallback、无DB写入。旧日志20k截断导致首次重读失败且0网络调用；从冻结源重建并核全部保留前缀后才诊断。新smoke_model只作协议探针，不冒充全研究。
 - 故障回执现保留安全transport_error/HTTP状态/尝试数；429/401/ReadTimeout三反例先FAIL后修，密钥/服务原文不入记录。旧模型失败回执不补写猜测原因。
+- 同输入600秒单次探针已终态：实际GLM在144.583s返回，prompt7611/completion8192；仅submit_result空对象，缺report/findings，不是成功报告。只读网关该次200/144547ms；reasoning正文未复制，仅保留19437字符计数及结构错误元数据。原120秒超时原因已证实包含客户端截止，不是“不支持工具”。
+- 新协议根因3RED后修：空必需提交即失败；工具会话按官方要求仅内存回传reasoning、不记assistant日志；共同规则区分新事实URL/quote和已有核实事实摘要fact_refs，避免摘要合同冲突。相关49PASS；官方GLM5.3/Flash强制thinking，不用关闭参数或静默换模型来绕过。新提示/协议的真实运行尚待验证。
 - 真实6580事实查询重复全表扫描；新增supersedes索引，VM预算反例由FAIL转14项邻接PASS。同一副本实测6.3048s→0.0105s，全部事实SHA256前后同为 `7d90a7572b43ddfb5420e10bb1073aac17e8a3e3e270f5cde1c21a9954ad5c48`；只证明该查询，不冒充整个页面加速600倍，不改原组件。
 - Ego空间47现已消失，库存核对无本项目空间；原生Ask待用户选择是否创建替代空间。正向四宽/键盘验收 NOT_RUN，不转用其他任务空间、不清缓存；旧1920负向截图只对应此前范围。
 - M2 中国召回金标准尚无；M3–M6 未验收。包内附带旧截图只作参考，不当本次证据。
@@ -84,4 +86,4 @@
 - 当前仅沿用康哲配色/中文层级/宽屏和真实图表规则，功能优先；未新增动画引擎，不宣称完整康哲视觉验收。
 - ECharts统一固定6.1.0及SHA256；已核对官方CDN与本机字节一致，下载/本机复制同一合同，不再混用5.5.1；Apache-2.0保留。
 - 两个执行节点已guard归档，原报告/提示/日志保留。源版本会商首轮工具不能读兄弟目录，只作推断；同模型/同会话恢复后成功读11份冻结代码/规范/真实夹具，路由及实际usage均CodeBuddy/deepseek-v4.1-flash/max，无fallback。owner采纳快照原子采用/观察分离，未机械采纳无证据的同日期隔离或标量一律优先登记；沿用links而非attrs是最小实现选择。无新表/平台，无独立医学/审美接受结论。
-- 34bcfd3c已push并核远端exact；下一安全动作：本节点提交门、白名单提交/推送后，先用更小完整输入及首步submit跑有界GLM实际探针，再恢复R3隔离完整analysis_C。保持用户指定GLM→DeepSeek→Qwen顺序，原失败/来源保留，不盲重跑旧研究循环。浏览器替代空间原生Ask仍待答；正向四宽、M1完整研究及M2–M6不因开发门通过被签收。
+- af18f195已push/核远端exact。79387和7824均已终态，不再等待旧句柄；失败回执各自保留。下一步提交本次提示/协议修复，再用相同完整小批和有界主GLM探针验证合格提交；不重复旧120秒取消，不改全局服务或产品默认超时。其后才恢复完整隔离analysis_C。指定GLM→DeepSeek→Qwen不变，浏览器Ask待答，完整研究/四宽/M2–M6未签收。

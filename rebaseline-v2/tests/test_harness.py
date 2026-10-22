@@ -137,3 +137,30 @@ def test_no_research_tools_means_submit_is_required_from_first_interaction():
 
     assert run_skill(no_tools, {}, InspectTools(), _registry(), ToolContext()).decisions == []
     assert calls == [['submit_result']]
+
+
+def test_reasoning_returned_to_provider_tool_loop_but_not_persisted_as_assistant_log(settings):
+    import json
+
+    from ciw2.store.db import DB
+
+    settings.ensure_dirs()
+    db = DB(settings.db_path)
+    pid = db.create_project('协议测试', ['C'])
+    rid = db.create_run(pid)
+    reasoning = 'synthetic-private-provider-reasoning'
+    reply = call('echo', text='source')
+    reply.raw = {'model': 'test', 'choices': [{'message': {'reasoning_content': reasoning}}]}
+    llm = ScriptedLLM([reply, call('submit_result', decisions=[])])
+    run_skill(SKILL, {}, llm, _registry(), ToolContext(db=db, run_id=rid))
+    assistant = next(m for m in llm.calls[-1] if m['role'] == 'assistant')
+    assert assistant['reasoning_content'] == reasoning
+    logs = db.query('SELECT content FROM agent_steps')
+    assert reasoning not in json.dumps(logs)
+
+
+def test_harness_distinguishes_new_fact_extraction_from_existing_fact_summary():
+    from ciw2.harness.agent import HARNESS_RULES
+
+    assert '新抽取的事实' in HARNESS_RULES and '已有已核实事实' in HARNESS_RULES
+    assert 'fact_refs' in HARNESS_RULES

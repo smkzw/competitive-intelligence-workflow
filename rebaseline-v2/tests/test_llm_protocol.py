@@ -101,3 +101,25 @@ def test_all_route_failures_retain_safe_transport_diagnostics(failure, monkeypat
         assert 'synthetic-private-key' not in json.dumps(detail)
     finally:
         primary._client.close()
+
+
+def test_empty_required_submission_is_protocol_failure_not_a_usable_tool_call():
+    from ciw2.harness.llm import LLMProtocolError
+
+    client = OpenAICompatLLM('http://localhost:1', 'synthetic', 'glm-5.3-flash', max_retries=1)
+    client._client.close()
+    client._client = httpx.Client(transport=httpx.MockTransport(lambda request: httpx.Response(200, json={
+        'model': 'glm-5.3-flash', 'choices': [{'finish_reason': 'tool_calls', 'message': {
+            'reasoning_content': 'synthetic-private-provider-reasoning', 'tool_calls': [
+                {'function': {'name': 'submit_result', 'arguments': '{}'}}]}}],
+        'usage': {'completion_tokens': 8192}})))
+    tools = [{'type': 'function', 'function': {'name': 'submit_result', 'parameters': {
+        'type': 'object', 'required': ['report', 'findings']}}}]
+    try:
+        with pytest.raises(LLMProtocolError) as caught:
+            client.chat([], tools)
+        assert caught.value.metadata['missing_required'] == ['report', 'findings']
+        assert caught.value.metadata['reasoning_chars'] == len('synthetic-private-provider-reasoning')
+        assert 'synthetic-private-provider-reasoning' not in json.dumps(caught.value.metadata)
+    finally:
+        client._client.close()

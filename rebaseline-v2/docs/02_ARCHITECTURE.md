@@ -55,11 +55,14 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 ## 4. DSH（内嵌最小 Skill Harness）
 - Skill = `skills/<name>/SKILL.md`：frontmatter（name/description/tools/output/max_steps）+ 正文（工作说明）。
 - System prompt = Harness 通用规则 + Skill 正文；User = 任务 JSON。
+- 新抽取事实需要source_url/quote；已有已核实事实的摘要只按Finding合同引用fact_refs，不强迫重新抓取原文或添加schema没有的字段。共同规则不能与摘要输入/输出互相冲突。
 - 模型只能调白名单工具；工具异常以 `{"status":"tool_failed"}` 回给模型（不当作无结果）。
 - 输出只能通过 `submit_result`，Pydantic 校验失败把错误回给模型重试；预算耗尽抛 `AgentBudgetExceeded`。
 - 最后两次交互提示剩余预算；最后一次只开放 submit_result 并请求该函数，不再无限追加检索。即使强制提交，结构/来源校验仍照常。
 - 无检索工具的Skill从首步仅开放submit_result并要求该函数；不存在可分页结果时不凭空提供read_tool_result。真正使用检索工具的Skill继续保留长结果读取及末步提交。
 - 模型按明确环境配置顺序备用；错误或缺失的实际模型身份拒绝采用，返回的真实模型与使用量留痕，不用请求名冒充响应身份。
+- 按[GLM官方工具协议](https://docs.z.ai/guides/capabilities/thinking-mode)，reasoning_content只在内存中随同一工具会话续接，assistant持久日志/回执不保存该正文。官方明确GLM-5.3/Flash强制thinking，本轮不尝试不受支持的关闭参数，不改指定模型或effort。
+- 必需submit_result不只检查函数名/JSON可解析；缺少该工具schema的顶层required字段也属协议未完成，回执仅存缺失字段名、reasoning字符数及安全用量，不把空对象交付。其余完整Pydantic校验仍在harness；错误反馈不重复输入原文。
 - 只有思考信息、没有可用正文/工具结果，或必需提交未履行，属于协议未完成：立即记录并仅走已配置备用，不把它当作正常回复耗尽整个工作单元。错误回执保留类别、实际模型与可用用量，不记录服务原始错误正文或凭据。
 - 大数据摘要先建立全部完整记录的预算内任务，再执行；无固定Top-N。多批要点超预算时继续有界归并，输出至多6条；不收敛即明确失败。完整门户数据不裁剪。
 - 真实58775字符输入在主模型120秒超时后，摘要改为≤24000字符完整记录包，并移除fact_id已能定位的重复URL/来源ID/locator，不移除临床定义。284研究当前规划62批/最大23959字符，最长完整记录20242字符；这是输入规划，不是模型或医学验收。
