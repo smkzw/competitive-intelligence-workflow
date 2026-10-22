@@ -9,6 +9,9 @@
 - 用户模型顺序cms-router/glm-5.3-flash → DGX/deepseek → DGX/qwen；凭据只由注册配置进入子进程环境，无全局服务/路由改动。
 
 ## 本节点完成及证据
+- 本次运行恢复/搜索安全节点：4个输出恢复RED、worker凭据泄漏行为反例与owner9个检索状态RED后修复；相关71PASS、全v2 **341PASS/2.00s**、Ruff/JS/sh/600-80门通过，现有弃用警告1项。worker实际CodeBuddy/deepseek-v4.1-flash/max/165.156s/38tools/no fallback，owner已验收有限代码，非医学/浏览器会商。
+- 只有finish_reason=length才同模型同输入扩大一次预算，8192→16384上限；不接受截断JSON，不改effort，不永久增大后续预算，失败后既定备用顺序不变。两次用量安全留痕，不保存推理正文；新真实运行尚待启动，不冒充实际通过。
+- 搜索HTTP/传输/JSON错误不再把凭据URL或服务原文回显；HTTP200错误/损坏结果不判无竞品。SerpApi文档明确的Success+Fully empty仍是合法空结果；中国site备用blocked/failed有独立覆盖行。测试全离线，搜索提供方仍未配置。
 - 次要终点根因3生产RED：解析缺完整定义、同字段last-wins、主要/次要及不同定义误合组。统一集合投影，完整定义/时间/事实引用保留；同名不同定义与主要/次要分开，不以字符串相近擅自认定医学等价。
 - R4固定77容器来源重建：284研究/6580事实，580主要+2876次要全部进入C和摘要规划；2488非空次要定义补回，其他科学字段0变化。46份采用来源hash逐项核对，旧R3源/事实/HTML不改。
 - 回执ciw-data/design-source-replay-r4/secondary-projection-audit.json：原JSON定位逐项核对次要定义，C投影/摘要各测量实例及共享研究上下文无遗漏；critical864=862match+2unknown/0mismatch。
@@ -19,10 +22,10 @@
 - 新阅读候选ciw-data/browser-m1/c-reading-r4-01/C.html：SHA2e965c9604eb3d810f1a558bf998f552ccd80ac7cb4a25ea8e81ea2f71286c28，12283219字节；284研究/282样本点/5明确零值。普通生产renderer生成，只读源DB；receipt绑定当前源码/模板/资产hash。不是创新竞品宇宙或模型报告验收。
 - 康哲仅融合6.1.3/KZ6-1007-A08阅读层级、中文/字体、图表规则，不加装饰动画/框架；尚未获得真实屏幕视觉接受。新HTML较大，后续须实屏观察加载/折叠/检索响应，不用隐藏事实换性能。
 
-## 在运行：不要盲重跑
-- 隔离analysis_C：project prj_2f42f9210053 / run run_0e7b5e4a65fc / attempt0002；句柄42007最后观察仍运行，无终态。scope=stage，pipeline_acceptance=NOT_RUN。
+## 真实运行：已终态，不要再等旧句柄
+- 隔离analysis_C：project prj_2f42f9210053 / run run_0e7b5e4a65fc / attempt0002已failed，42007正常返回，不再等待或重启。scope=stage/pipeline_acceptance=NOT_RUN。28合格缓存批/22非空/130要点，31有效模型事件=DeepSeek13+Qwen18；无新报告文件。失败GLM502、DeepSeek/Qwen输出8192耗尽。原回执SHA9e1ef51d10f79d5fc6be3795f4e14ef9483c443c1d005190b703ac29391acb53，owner审计ciw-data/model-stage-r3/attempt-0002-owner-audit.json。
 - 已冻结运行源码91e8399c102948a9cfe2c6ba495096fd5ce90ad0，ciw-data/runtime-code/同SHA/rebaseline-v2；111归档文件对Git逐字核、ECharts固定hash、导入/Skill路径核对，61项开始/结束hash另记。SQLite备份before-attempt-0002-91e8399c.sqlite3完整。
-- 该进程使用旧62任务投影，不含本次次要终点修复；即使成功也只能按实际阶段签收，不提升为新C/M1全验收。不要修改冻结树、热换代码、定期轮询、因延迟杀/重派。
+- 该终态进程使用旧62任务投影，不含次要终点修复；61源码hash开始/结束完全相同，28批输出schema/当前verified引用核验通过，但不能提升为新C/M1全验收。有效model事件用量396104 total tokens不含失败请求，不能冒充完整成本。原冻结树/数据库/回执保持不变。
 - 主模型真实曾144.583s返回空必需submit；产品主请求300s，显式备用时主路只试1次，DGX显式1800s。无备用保留3次；不伪造模型/effort。
 - 原生产run_524b14044e4e三次恢复和隔离attempt0001均已终态failed；原回执不覆盖，不等待73175/87975等旧句柄。各次用过GLM/DeepSeek/Qwen，但不据此声称有合格报告。
 
@@ -43,7 +46,7 @@
 
 ## 下一安全动作与复盘
 1. 本次两代码节点白名单提交/push及远端exact已完成；继续保留全部v1脏树和原始来源，不提交CAS/数据库/原文，不再重跑已完成固定来源重建。
-2. 冻结旧阶段真正终态后核实际模型、结构化输出/引用、已完单元、61源码hash及渲染，保留阶段限定结论。新候选按来源/代码/Skill键失效，不盲借旧62任务摘要。
+2. 旧阶段终态审计已完成；下一真实验证冻结新代码，隔离复制R4完整源数据/原子集合，按151任务运行analysis_C与正常renderer，明确stage/非全流水线，不再无限单主路探针。按来源/代码/Skill键失效，不盲借旧62任务摘要。
 3. Ego授权后复用一个专用空间验当前R4；先真实加载/检索/折叠与四宽，再验模型摘要和论文修订。等待不阻塞可独立的来源/产品工作。
 - 最重要教训：来源库存在不等于消费完整，必须核对测量实例集合；不以测试总数、HTTP200、固定数量相等或旧截图替代临床/实屏验收。
 - 每个根因族一次RED、一批完整修复、相关回归，提交前一次全v2；不用逐标签三路会商或新造流程平台。当前Goal active，无损历史保留，不是暂停或交付完成。

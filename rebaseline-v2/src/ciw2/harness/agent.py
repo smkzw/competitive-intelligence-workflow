@@ -77,7 +77,8 @@ def run_skill(skill: Skill, task: dict[str, Any], llm: LLM, registry: ToolRegist
         if reply.raw:
             log(step, 'model', {'requested_model': llm.model, 'actual_model': reply.raw.get('model'),
                                 'usage': reply.raw.get('usage'), 'route': reply.raw.get('_ciw_route'),
-                                'finish_reason': (reply.raw.get('choices') or [{}])[0].get('finish_reason')})
+                                'finish_reason': (reply.raw.get('choices') or [{}])[0].get('finish_reason'),
+                                'output_recovery': reply.raw.get('_ciw_output_recovery')})
         messages.append(reply.as_message())
         log(step, "assistant", reply.as_message(include_reasoning=False))
         if not reply.tool_calls:

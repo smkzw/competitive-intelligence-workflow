@@ -76,8 +76,26 @@ class OpenAICompatLLM:
         self._client = httpx.Client(timeout=timeout_s, headers={"Authorization": f"Bearer {api_key}"})
 
     def chat(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]] | None = None) -> LLMReply:
+        try:
+            return self._chat_once(messages, tools, self.max_output_tokens)
+        except LLMProtocolError as first:
+            budget = min(self.max_output_tokens * 2, 16384)
+            if first.metadata.get('finish_reason') != 'length' or budget <= self.max_output_tokens:
+                raise
+            recovery = {'from_tokens': self.max_output_tokens, 'to_tokens': budget,
+                        'previous_error': first.metadata}
+        try:
+            reply = self._chat_once(messages, tools, budget)
+        except LLMError as exc:
+            exc.metadata = {**exc.metadata, 'output_recovery': recovery}
+            raise
+        reply.raw = {**reply.raw, '_ciw_output_recovery': recovery}
+        return reply
+
+    def _chat_once(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]] | None,
+                   token_budget: int) -> LLMReply:
         body: dict[str, Any] = {"model": self.model, "messages": messages, "temperature": self.temperature,
-                                'max_tokens': self.max_output_tokens}
+                                'max_tokens': token_budget}
         if tools:
             body["tools"] = tools
             body["tool_choice"] = ({'type': 'function', 'function': {'name': 'submit_result'}}
@@ -106,11 +124,13 @@ class OpenAICompatLLM:
                 fields = tools[0]['function']['parameters'].get('required', []) if required else []
                 missing = [key for key in fields if not valid_submit or key not in reply.tool_calls[0].arguments]
                 valid_submit = valid_submit and not missing
-                if (not reply.content.strip() and not reply.tool_calls) or (required and not valid_submit):
+                if (data['choices'][0].get('finish_reason') == 'length'
+                        or (not reply.content.strip() and not reply.tool_calls) or (required and not valid_submit)):
                     usage = data.get('usage') if isinstance(data.get('usage'), dict) else {}
                     reasoning = data['choices'][0]['message'].get('reasoning_content')
                     raise LLMProtocolError('模型未返回可用正文或所要求的结构化提交', {
                         'actual_model': reply.raw['model'], 'finish_reason': data['choices'][0].get('finish_reason'),
+                        'max_output_tokens': token_budget,
                         'missing_required': missing,
                         'reasoning_chars': len(reasoning) if isinstance(reasoning, str) else 0,
                         'usage': {key: value for key, value in usage.items()

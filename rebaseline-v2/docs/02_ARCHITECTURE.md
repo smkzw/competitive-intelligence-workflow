@@ -64,6 +64,7 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 - 模型按明确环境配置顺序备用；错误或缺失的实际模型身份拒绝采用，返回的真实模型与使用量留痕，不用请求名冒充响应身份。
 - 按[GLM官方工具协议](https://docs.z.ai/guides/capabilities/thinking-mode)，reasoning_content只在内存中随同一工具会话续接，assistant持久日志/回执不保存该正文。官方明确GLM-5.3/Flash强制thinking，本轮不尝试不受支持的关闭参数，不改指定模型或effort。
 - 必需submit_result不只检查函数名/JSON可解析；缺少该工具schema的顶层required字段也属协议未完成，回执仅存缺失字段名、reasoning字符数及安全用量，不把空对象交付。其余完整Pydantic校验仍在harness；错误反馈不重复输入原文。
+- finish_reason=length一律不接受；同输入、同模型最多一次增加输出预算至min(原预算×2,16384)。非length/身份不符不触发扩容，不改全局模型参数或effort，后续调用仍从原预算开始。output_recovery仅记录预算、前次安全错误/用量；成功model事件或最终model_error均保留，reasoning正文不入库。只在相同模型上恢复，不把新增请求冒充新模型意见。
 - 真实主模型曾在144.583s返回，产品主请求改为300s而非120s；显式配置备用时主路仅尝试一次，然后按用户顺序切换，避免三次取消同样慢请求。独立无备用保留3次策略，DGX仍用显式路由时限，不改全局服务/effort。
 - harness任务/assistant/工具记录超过20k时先写现有CAS，agent_steps只记有效JSON指针（digest/format/字符数），不截成破损JSON；assistant先排除reasoning正文。诊断读取验证CAS摘要，旧截断日志仅在固定数据重建及原前缀吻合时兼容，不重写历史。
 - 只有思考信息、没有可用正文/工具结果，或必需提交未履行，属于协议未完成：立即记录并仅走已配置备用，不把它当作正常回复耗尽整个工作单元。错误回执保留类别、实际模型与可用用量，不记录服务原始错误正文或凭据。
@@ -77,6 +78,7 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 - 新增 Skill：写 SKILL.md + （必要时）在 `domain/models.py` 增加输出模型 + 在 stages 中接入。
 
 ## 5. 中国来源现状（实测）
+- 搜索响应先核验JSON对象、结果数组/条目及错误状态；无可核验集合不判0。SerpApi只有文档明确的Success+Fully empty为空成功例外（可含error）；见[官方状态合同](https://serpapi.com/api-status-and-error-codes)。请求失败只保留状态码/异常类别；site备用检索的blocked/failed单独记账，来源未接通不借安全测试算通过。
 - 药物临床试验登记与信息公示平台：对 httpx 返回 HTTP 202 + JS 挑战页 → 记 `blocked`，退回 `site:` 全网搜索。
 - CDE/NMPA：前端渲染为主 → 同上。M2 实现 Playwright 适配器（真实浏览器、限速、缓存）。
 - CT.gov `query.locn=China` 可用（PNH 实测 52 条）。

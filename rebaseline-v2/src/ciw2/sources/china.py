@@ -14,7 +14,7 @@ from pydantic import BaseModel, Field
 
 from ciw2.harness.tools import REGISTRY, ToolContext
 from ciw2.sources.http import FetchError, fetch
-from ciw2.sources.websearch import SearchBlocked, web_search
+from ciw2.sources.websearch import SearchBlocked, SearchFailed, web_search
 
 REGISTRIES = {
     "chinadrugtrials": {"site": "chinadrugtrials.org.cn", "label": "药物临床试验登记与信息公示平台",
@@ -69,7 +69,13 @@ def _china(ctx: ToolContext, a: ChinaArgs) -> Any:
             rows = web_search(ctx.settings, f"site:{reg['site']} {a.query}", 10)
             mode = "site_search"
         except SearchBlocked as exc:
+            if ctx.db and ctx.run_id:
+                ctx.db.log_coverage(ctx.run_id, f'{a.route_id}:site', 'china', a.query, 'blocked', note=str(exc))
             return {"mode": "blocked", "registry": reg["label"], "error": f"{blocked}；且 {exc}"}
+        except SearchFailed as exc:
+            if ctx.db and ctx.run_id:
+                ctx.db.log_coverage(ctx.run_id, f'{a.route_id}:site', 'china', a.query, 'failed', note=str(exc))
+            raise
         if ctx.db and ctx.run_id:
             ctx.db.log_coverage(ctx.run_id, f"{a.route_id}:site", "china", a.query, "ok", hits=len(rows))
     return {"mode": mode, "registry": reg["label"], "count": len(rows), "results": rows}
