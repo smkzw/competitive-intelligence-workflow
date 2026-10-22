@@ -243,8 +243,15 @@ def _trial_attrs(s: dict[str, Any]) -> dict[str, Any]:
 
 
 def search(ctx: ToolContext | None, *, condition: str = "", term: str = "", intervention: str = "",
-           location: str = "", max_results: int = 100) -> list[dict[str, Any]]:
-    params: dict[str, Any] = {"pageSize": min(max_results, 100), "countTotal": "true"}
+           location: str = "", max_results: int | None = None) -> list[dict[str, Any]]:
+    """检索 CT.gov：None 翻完所有游标页，正整数为显式上限；重复游标或空页带游标显式失败。"""
+    if max_results is not None:
+        if isinstance(max_results, bool) or not isinstance(max_results, int):
+            raise TypeError(f"max_results 必须是正整数或 None，收到 {max_results!r}")
+        if max_results <= 0:
+            raise ValueError(f"max_results 必须是正整数或 None，收到 {max_results!r}")
+    params: dict[str, Any] = {"pageSize": 100 if max_results is None else min(max_results, 100),
+                              "countTotal": "true"}
     if condition:
         params["query.cond"] = condition
     if term:
@@ -254,17 +261,39 @@ def search(ctx: ToolContext | None, *, condition: str = "", term: str = "", inte
     if location:
         params["query.locn"] = location
     out: list[dict[str, Any]] = []
-    token = None
-    while len(out) < max_results:
+    seen_nct: set[str] = set()
+    seen_tokens: set[str] = set()
+    token: str | None = None
+    while True:
         if token:
+            seen_tokens.add(token)
             params["pageToken"] = token
-        f = fetch(ctx, API, kind="ctgov", params=params, title=f"search {params}")
-        data = f.json()
-        out += [parse_study(s) for s in data.get("studies", [])]
+        data = fetch(ctx, API, kind="ctgov", params=params, title=f"search {params}").json()
+        studies = data.get("studies") or []
+        if not studies:
+            if data.get("nextPageToken"):
+                raise RuntimeError("ClinicalTrials.gov 分页返回空页但仍有下一页游标，拒绝返回不完整结果")
+            break
+        before = len(out)
+        for study in studies:
+            row = parse_study(study)
+            nct = row.get("nct")
+            if not isinstance(nct, str) or not NCT_RE.fullmatch(nct):
+                raise RuntimeError('ClinicalTrials.gov 返回缺失或无效登记号，拒绝计作有效研究')
+            if nct in seen_nct:
+                continue
+            seen_nct.add(nct)
+            out.append(row)
+            if max_results is not None and len(out) >= max_results:
+                return out
         token = data.get("nextPageToken")
         if not token:
             break
-    return out[:max_results]
+        if len(out) == before:
+            raise RuntimeError('ClinicalTrials.gov 分页未新增研究但仍有下一页，拒绝虚假进度')
+        if token in seen_tokens:
+            raise RuntimeError(f"ClinicalTrials.gov 分页游标重复（{token}），拒绝返回不完整结果")
+    return out
 
 
 # ------------------------------------------------------------------ 工具
@@ -273,7 +302,8 @@ class SearchArgs(BaseModel):
     term: str = Field(default="", description="其他关键词，如靶点、药物代号")
     intervention: str = Field(default="", description="干预措施/药物名，对应 query.intr")
     location: str = Field(default="", description="地点，如 China")
-    max_results: int = Field(default=100, ge=1, le=500)
+    max_results: int | None = Field(default=None, ge=1, le=500, strict=True,
+                                   description='留空或null遍历全部来源页；正整数仅为明确检索预算')
     route_id: str = Field(description="检索路线 ID，如 global:ctgov:condition")
     region: str = Field(default="global", description="china | global")
 
@@ -321,7 +351,8 @@ def _ctgov_search(ctx: ToolContext, a: SearchArgs) -> Any:
             entry['other_names'] = sorted(set(entry['other_names']) | set(item.get('other_names') or []))
             if study['nct'] not in entry['trials']:
                 entry['trials'].append(study['nct'])
-    return {'count': len(rows), 'interventions': list(interventions.values()),
+    return {'count': len(rows), 'collection_scope': 'full' if a.max_results is None else 'explicit_bounded',
+            'requested_limit': a.max_results, 'interventions': list(interventions.values()),
             'sponsors': sorted({s['sponsor'] for s in rows if s.get('sponsor')}),
             'studies': [{'nct': s['nct'], 'phase': s['phase'], 'china_site': s['china_site']}
                         for s in rows],

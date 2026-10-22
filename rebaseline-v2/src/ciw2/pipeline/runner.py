@@ -6,7 +6,7 @@ import traceback
 from typing import Any
 
 from ciw2.harness.agent import AgentBudgetExceeded
-from ciw2.pipeline.context import RunContext
+from ciw2.pipeline.context import IncompleteWork, RunContext
 from ciw2.pipeline.stages import STAGES, Stage
 
 
@@ -29,6 +29,7 @@ def execute(rc: RunContext) -> str:
     for stage in plan[restart:]:
         rc.db.set_stage(rc.run_id, stage.name, 'pending')
     soft_failures: list[str] = []
+    unfinished_work = False
     for st in plan:
         if st.name in done:
             continue
@@ -40,12 +41,14 @@ def execute(rc: RunContext) -> str:
         except Exception as exc:  # noqa: BLE001 - 阶段边界统一记录
             msg = f"{type(exc).__name__}: {exc}"
             detail = msg if isinstance(exc, AgentBudgetExceeded) else msg + "\n" + traceback.format_exc()[-3000:]
-            rc.db.set_stage(rc.run_id, st.name, "failed", error=detail)
+            rc.db.set_stage(rc.run_id, st.name, "failed", error=detail,
+                            output=exc.output if isinstance(exc, IncompleteWork) else None)
+            unfinished_work |= isinstance(exc, IncompleteWork)
             if st.blocking:
                 rc.db.set_run(rc.run_id, "failed", error=f"阶段 {st.name} 失败：{msg}")
                 return "failed"
             soft_failures.append(st.name)
-    status = "succeeded"
+    status = 'failed' if unfinished_work else 'succeeded'
     rc.db.set_run(rc.run_id, status, error=("非阻断阶段失败：" + ", ".join(soft_failures)) if soft_failures else None)
     return status
 

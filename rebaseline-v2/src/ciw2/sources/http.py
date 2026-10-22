@@ -90,6 +90,13 @@ def to_text(content: bytes, content_type: str) -> str:
     return raw
 
 
+def _observe(ctx: ToolContext | None, source_id: str | None) -> None:
+    if ctx is not None and source_id:
+        if ctx.extra is None:
+            ctx.extra = {}
+        ctx.extra.setdefault('source_ids_read', set()).add(source_id)
+
+
 def fetch(ctx: ToolContext | None, url: str, *, kind: str, params: dict[str, Any] | None = None,
           title: str = "", retries: int = 2, register: bool = True,
           client: httpx.Client | None = None) -> Fetched:
@@ -99,6 +106,7 @@ def fetch(ctx: ToolContext | None, url: str, *, kind: str, params: dict[str, Any
     if cache is not None and key in cache:
         source = ctx.db.one('SELECT * FROM sources WHERE id=?', (cache[key],))
         if source:
+            _observe(ctx, source['id'])
             return Fetched(source['id'], source['url'], 200, ctx.cas.get(source['digest']),
                            ctx.cas.get_text(source['text_digest']), json.loads(source['meta']).get('content_type', ''))
     timeout = getattr(getattr(ctx, "settings", None), "http_timeout_s", 30.0)
@@ -124,6 +132,7 @@ def fetch(ctx: ToolContext | None, url: str, *, kind: str, params: dict[str, Any
                                             text_digest=tdigest, meta={"content_type": ctype})
                     if cache is not None:
                         cache[key] = sid
+                _observe(ctx, sid)
                 return Fetched(sid, public_url(str(resp.url)), resp.status_code, resp.content, text, ctype)
             except httpx.HTTPError as exc:
                 last = exc
@@ -142,17 +151,23 @@ def register_text(ctx: ToolContext, *, kind: str, url: str, text: str, title: st
         return None
     digest = ctx.cas.put(raw if raw is not None else text.encode("utf-8"))
     tdigest = ctx.cas.put(text.encode("utf-8"))
-    return ctx.db.add_source(ctx.project_id, kind, public_url(url), digest, title=title, text_digest=tdigest,
-                             meta=meta or {})
+    sid = ctx.db.add_source(ctx.project_id, kind, public_url(url), digest, title=title, text_digest=tdigest,
+                            meta=meta or {})
+    _observe(ctx, sid)
+    return sid
 
 
 def source_text(ctx: ToolContext, source_id: str) -> str | None:
-    row = ctx.db.one("SELECT text_digest FROM sources WHERE id=?", (source_id,))
+    row = ctx.db.one("SELECT text_digest FROM sources WHERE id=? AND project_id=?", (source_id, ctx.project_id))
     if not row or not row["text_digest"]:
         return None
+    _observe(ctx, source_id)
     return ctx.cas.get_text(row["text_digest"])
 
 
 def source_by_url(ctx: ToolContext, url: str) -> dict[str, Any] | None:
-    return ctx.db.one("SELECT * FROM sources WHERE project_id=? AND url=? ORDER BY fetched_at DESC",
-                      (ctx.project_id, url))
+    row = ctx.db.one("SELECT * FROM sources WHERE project_id=? AND url=? ORDER BY fetched_at DESC, rowid DESC",
+                     (ctx.project_id, public_url(url)))
+    if row:
+        _observe(ctx, row['id'])
+    return row

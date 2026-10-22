@@ -17,7 +17,7 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("--reports", default="A", help="如 A,B,C")
     r.add_argument("--request", default="")
     r.add_argument("--focus", default="")
-    r.add_argument("--max-drugs", type=int, default=30)
+    r.add_argument("--max-drugs", type=int, default=None, help="可选执行预算；留空处理全部药物，未处理项保留供恢复")
     sub.add_parser("skills", help="校验并列出 Skill")
     a = ap.parse_args(argv)
 
@@ -43,7 +43,8 @@ def main(argv: list[str] | None = None) -> int:
     rid = svc.start_run(pid, background=False, max_drugs=a.max_drugs)
     print(json.dumps({"project_id": pid, "run_id": rid, "run": svc.db.one("SELECT * FROM runs WHERE id=?", (rid,))},
                      ensure_ascii=False, indent=2))
-    return 0
+    run = svc.db.one('SELECT status,error FROM runs WHERE id=?', (rid,))
+    return 0 if run['status'] == 'succeeded' and not run['error'] else 1
 
 
 if __name__ == "__main__":

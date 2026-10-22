@@ -13,6 +13,18 @@ from ciw2.store.cas import CAS
 from ciw2.store.db import DB
 
 
+class IncompleteWork(RuntimeError):
+    def __init__(self, message: str, output: dict[str, Any]) -> None:
+        super().__init__(message)
+        self.output = output
+
+
+def work_limit(value: Any) -> int | None:
+    if value is not None and (type(value) is not int or value < 1):
+        raise ValueError('执行预算必须为正整数或留空；预算不是研究范围')
+    return value
+
+
 @dataclass
 class RunContext:
     db: DB
@@ -39,5 +51,9 @@ class RunContext:
                            extra={'fetch_cache': self.cache.setdefault('fetch_cache', {})})
 
     def skill(self, name: str, task: dict[str, Any]) -> Any:
-        return run_skill(self.skills[name], task, self.llm, self.registry, self.tool_ctx(),
-                         max_steps=self.settings.max_agent_steps)
+        ctx = self.tool_ctx()
+        try:
+            return run_skill(self.skills[name], task, self.llm, self.registry, ctx,
+                             max_steps=self.settings.max_agent_steps)
+        finally:
+            self.cache['last_skill_source_ids'] = sorted((ctx.extra or {}).get('source_ids_read', set()))

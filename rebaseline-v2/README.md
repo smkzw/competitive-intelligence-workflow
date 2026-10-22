@@ -17,13 +17,16 @@ ciw2 serve                            # http://127.0.0.1:8765
 # 或命令行：ciw2 run --indication 特应性皮炎 --reports A,C
 ```
 
+常规执行处理全部候选、完整来源页和匹配研究。`--max-drugs N`仅限制本批执行量；未完清单与已完成单元保留，可在项目页从失败处继续，命令退出码不会把未完成写成成功。
+长设计原文按需完整读取，模型任务按完整研究分批，原始资料不截断。恢复复用同一运行的既有来源版本；重新调研应创建新运行。
+
 ## 目录
 ```
 docs/        00_REVIEW 01_PRD 02_ARCHITECTURE 03_PLAN 04_AGENT_RULES 05_PORTING_MAP 06_START_PROMPT STATUS
 skills/      9 个 SKILL.md（判断类工作）
 src/ciw2/    config store domain verify harness sources pipeline render web service cli
 tests/       离线测试 + 小夹具
-scripts/     fetch_assets.sh
+scripts/     fetch_assets.sh、smoke_live.py、run_live.py、replay_design_sources.py
 ```
 
 ## 报告
@@ -32,3 +35,5 @@ scripts/     fetch_assets.sh
 - **C 试验设计先例**：期别、样本量、随机/设盲、分组、主要终点与时间点、年龄、中国站点。
 
 开发规则见 `docs/04_AGENT_RULES.md`；当前状态见 `docs/STATUS.md`。
+
+开发者可使用 `python scripts/smoke_live.py --complete-ctgov "Atopic Dermatitis" NEW_OUTPUT_DIR` 隔离核对完整登记分页及官方总数，保留来源哈希与回执，不调用模型或改动已有报告。输出目录必须是新的；该检查不代替报告验收。

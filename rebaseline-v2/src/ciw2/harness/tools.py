@@ -113,3 +113,21 @@ class ToolRegistry:
 
 # 全局默认注册表；sources/*.py 在 import 时把工具注册到这里。
 REGISTRY = ToolRegistry()
+
+
+class ReadFactArgs(BaseModel):
+    fact_id: str = Field(min_length=1)
+
+
+@REGISTRY.register('read_project_fact', '读取本项目当前事实完整值、科学上下文与来源；长结果可继续分页。', ReadFactArgs)
+def read_project_fact(ctx: ToolContext, args: ReadFactArgs) -> Any:
+    if ctx.db is None or not ctx.project_id:
+        return {'status': 'tool_failed', 'error': '缺少当前项目'}
+    fact = next((fact for fact in ctx.db.current_facts(ctx.project_id) if fact['id'] == args.fact_id), None)
+    if fact is None:
+        return {'status': 'tool_failed', 'error': '该事实不属于本项目当前事实集合'}
+    if ctx.extra is None:
+        ctx.extra = {}
+    if fact['source_id']:
+        ctx.extra.setdefault('source_ids_read', set()).add(fact['source_id'])
+    return {'status': 'ok', 'fact': fact}

@@ -15,16 +15,20 @@ from pathlib import Path
 from typing import Any
 
 from ciw2.domain.identity import literal_names, name_key, name_owners, possible_trial_relation
-from ciw2.domain.models import AnalysisResult, ExtractionResult, IntakeResult, UniverseResult
+from ciw2.domain.models import AnalysisResult, IntakeResult, UniverseResult
 from ciw2.domain.tiers import tier_of
 from ciw2.harness.agent import HARNESS_RULES
-from ciw2.pipeline.context import RunContext
+from ciw2.pipeline.context import IncompleteWork, RunContext, work_limit
+from ciw2.pipeline.queries import drug_trials, scoped_drugs
+from ciw2.pipeline.queries import intake_data as _intake
+from ciw2.pipeline.recovery import fingerprint, get_unit, put_unit
 from ciw2.sources import ctgov
 from ciw2.sources.http import source_by_url, source_text
 from ciw2.verify.quote import check_quote
 
 ANALYSIS_CODE_HASH = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 ANALYSIS_TASK_CHARS = 60000
+CTGOV_CODE_HASH = hashlib.sha256(Path(ctgov.__file__).read_bytes()).hexdigest()
 
 
 @dataclass(frozen=True)
@@ -45,11 +49,6 @@ def intake(rc: RunContext) -> dict[str, Any]:
     rc.db.execute("UPDATE projects SET indication_aliases=?, focus=? WHERE id=?",
                   (json.dumps(aliases, ensure_ascii=False), p["focus"] or res.focus, rc.project_id))
     return res.model_dump()
-
-
-def _intake(rc: RunContext) -> dict[str, Any]:
-    return rc.db.stage_output(rc.run_id, "intake") or {"indication": rc.project["indication"],
-                                                       "indication_en": "", "aliases": []}
 
 
 # ------------------------------------------------------------------ universe
@@ -98,11 +97,6 @@ def coverage_review(rc: RunContext) -> dict[str, Any]:
     return review_scope(rc, _intake(rc)["indication"])
 
 
-def scoped_drugs(rc: RunContext) -> list[dict[str, Any]]:
-    """纳入 + 待定（待定在平台上标注，不静默丢弃）。"""
-    return [d for d in rc.db.entities(rc.project_id, "drug") if d["in_scope"] != 0]
-
-
 # ------------------------------------------------------------------ trial evidence (code)
 def _matches(drug: dict[str, Any], interventions: list[dict[str, Any]],
              ambiguous_names: set[str] | frozenset[str] = frozenset()) -> bool:
@@ -118,20 +112,22 @@ def trial_evidence(rc: RunContext) -> dict[str, Any]:
     it = _intake(rc)
     ctx = rc.tool_ctx()
     cond = it.get("indication_en") or rc.project["indication"]
-    max_trials = int(rc.cache.get("max_trials_per_drug", 15))
+    max_trials = work_limit(rc.cache.get('max_trials_per_drug'))
     linked, ingested, pending_links, errors = 0, 0, 0, []
+    pending = []
     owners = name_owners(rc.db.entities(rc.project_id, 'drug'))
     ambiguous = {name for name, ids in owners.items() if len(ids) > 1}
     for d in scoped_drugs(rc):
         try:
-            rows = ctgov.search(ctx, condition=cond, intervention=d["name"], max_results=50)
+            rows = ctgov.search(ctx, condition=cond, intervention=d["name"], max_results=None)
             rc.db.log_coverage(rc.run_id, "trial:ctgov:intervention", "global", f"{cond} × {d['name']}",
                                "ok", hits=len(rows))
         except Exception as exc:  # noqa: BLE001 - 独立来源边界记录失败并继续其他路线
             rc.db.log_coverage(rc.run_id, "trial:ctgov:intervention", "global", f"{cond} × {d['name']}",
                                "failed", note=str(exc)[:300])
             errors.append(f"{d['name']}: {exc}")
-            continue
+            pending.append({'drug_id': d['id'], 'nct': None, 'reason': 'source_search_failed'})
+            rows = []
         known = {t["name"]: t for t in rc.db.entities(rc.project_id, "trial")}
         candidates = {r["nct"]: r for r in rows}
         for t in known.values():
@@ -147,12 +143,23 @@ def trial_evidence(rc: RunContext) -> dict[str, Any]:
                 attrs={'identity_status': 'pending', 'reason': 'label_variant_or_shared_alias',
                        'intervention_names': [iv.get('name') for iv in row.get('interventions') or []]})
             pending_links += 1
-        hits.sort(key=lambda r: (r.get("phase") or "", r.get("start_date") or ""), reverse=True)
-        for r in hits[:max_trials]:
+        hits.sort(key=lambda r: (r.get("phase") or "", r.get("start_date") or "", r['nct']), reverse=True)
+        started = 0
+        for r in hits:
+            key = f'trial_ingestion:{CTGOV_CODE_HASH}:{r["nct"]}:{fingerprint(r)}'
+            info = get_unit(rc, key)
+            if info is None and max_trials is not None and started >= max_trials:
+                pending.append({'drug_id': d['id'], 'nct': r['nct'], 'reason': 'execution_budget'})
+                continue
             try:
-                info = ctgov.ingest_trial(ctx, r["nct"], route_id="trial:ctgov:intervention")
+                if info is None:
+                    started += 1
+                    info = ctgov.ingest_trial(ctx, r['nct'], route_id='trial:ctgov:intervention')
+                    put_unit(rc, key, info, urls=[f'{ctgov.API}/{r["nct"]}'])
+                    ingested += int(info['facts_added'] > 0)
             except Exception as exc:  # noqa: BLE001 - 单个试验失败不丢其他试验
                 errors.append(f"{r['nct']}: {exc}")
+                pending.append({'drug_id': d['id'], 'nct': r['nct'], 'reason': 'source_ingestion_failed'})
                 continue
             rc.db.link(rc.project_id, d["id"], "drug-trial", info["entity_id"],
                        attrs={'identity_status': 'literal_match'})
@@ -161,50 +168,20 @@ def trial_evidence(rc: RunContext) -> dict[str, Any]:
                 rc.db.link(rc.project_id, d['id'], 'drug-trial-candidate', info['entity_id'],
                            attrs={'identity_status': 'resolved_literal_match'})
             linked += 1
-            ingested += int(info["facts_added"] > 0)
-    return {"linked": linked, "ingested": ingested, "errors": errors,
+    output = {"linked": linked, "ingested": ingested, "errors": errors, 'pending_trials': pending,
             'pending_identity_links': pending_links,
             'identity_ambiguities': [{'name': name, 'entity_ids': sorted(owners[name])} for name in sorted(ambiguous)]}
-
-
-def drug_trials(rc: RunContext, drug_id: str) -> list[dict[str, Any]]:
-    ids = {r["dst"] for r in rc.db.query(
-        "SELECT dst FROM links WHERE project_id=? AND src=? AND rel='drug-trial'", (rc.project_id, drug_id))}
-    return [t for t in rc.db.entities(rc.project_id, "trial") if t["id"] in ids]
+    if pending:
+        raise IncompleteWork(f'试验资料未完成：{len(pending)}个待处理单元', output)
+    return output
 
 
 # ------------------------------------------------------------------ LLM extraction
 def _extract(skill: str, extra: Callable[[RunContext, dict[str, Any]], dict[str, Any]]) -> Callable[
         [RunContext], dict[str, Any]]:
     def run(rc: RunContext) -> dict[str, Any]:
-        it = _intake(rc)
-        facts, gaps, errors = [], [], []
-        limit = int(rc.cache.get("max_drugs", 30))
-        for d in scoped_drugs(rc)[:limit]:
-            trials = drug_trials(rc, d["id"])
-            task = {"indication": it["indication"], "indication_en": it.get("indication_en"),
-                    "focus": rc.project["focus"],
-                    "drug": {"name": d["name"], "name_zh": d["name_zh"], "aliases": d["aliases"]},
-                    "known_trials": [{"nct": t["name"], "title": t["attrs"].get("title"),
-                                      "phase": t["attrs"].get("phase"),
-                                      "has_results": t["attrs"].get("has_results")} for t in trials],
-                    **extra(rc, d)}
-            if skill == 'extract-design':
-                trial_ids = {t['id'] for t in trials}
-                task['existing_design_facts'] = [
-                    {k: f[k] for k in ('id', 'entity_id', 'field', 'value', 'source_id', 'status')}
-                    for f in rc.db.current_facts(rc.project_id)
-                    if f['entity_id'] in trial_ids and f['field'].startswith('design.')]
-            try:
-                res: ExtractionResult = rc.skill(skill, task)
-            except Exception as exc:  # noqa: BLE001 - 保留单药错误供恢复
-                errors.append(f"{d['name']}: {type(exc).__name__}: {exc}")
-                continue
-            facts += [{**f.model_dump(), "drug": d["name"], 'extraction_model': rc.llm.model} for f in res.facts]
-            gaps += [f"{d['name']}: {g}" for g in res.gaps]
-        if errors and not facts:
-            raise RuntimeError("全部药物抽取失败：" + "; ".join(errors[:5]))
-        return {"facts": facts, "gaps": gaps, "errors": errors}
+        from ciw2.pipeline.extraction import extract_drugs
+        return extract_drugs(rc, skill, extra)
     return run
 
 
