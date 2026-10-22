@@ -26,9 +26,16 @@ elements['tbl-c'] = table;
 let input;
 const filter = {value:'',getAttribute:()=> 'tbl-c',addEventListener:(_,fn)=>{input=fn;}};
 const echarts = {init(node){ const chart = {options:[],resize(){},dispose(){},setOption(o){this.options.push(o);}}; charts[node.id]=chart;return chart;}};
-const document = {getElementById:id=>elements[id],querySelectorAll:s=>s==='input[data-filter]'?[filter]:[]};
-vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window:{echarts,addEventListener(){}},echarts,ResizeObserver:class{observe(){} disconnect(){}},Set,Math,Array,JSON});
+const document = {documentElement:{},getElementById:id=>elements[id],querySelectorAll:s=>s==='input[data-filter]'?[filter]:[]};
+const window = {echarts,addEventListener(){},matchMedia:()=>({matches:true}),getComputedStyle:()=>({getPropertyValue:k=>k==='--report-font-body'?'18px':'ExampleFont'})};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window,echarts,ResizeObserver:class{observe(){} disconnect(){}},Set,Math,Array,JSON});
 const initial = charts['chart-size'].options[0];
+assert.ok(initial.textStyle.fontSize>=16);
+assert.equal(initial.textStyle.fontSize,18);
+assert.equal(initial.textStyle.fontFamily,'ExampleFont');
+assert.equal(initial.animation,false);
+assert.ok(initial.xAxis.axisLabel.fontSize>=16 && initial.yAxis.axisLabel.fontSize>=16);
+assert.ok(initial.series[0].label.fontSize>=16);
 assert.equal(initial.series[0].data.length,40);
 assert.ok(initial.dataZoom.some(z=>z.type==='slider' && z.yAxisIndex===0));
 assert.ok(initial.dataZoom[0].endValue < 40);
@@ -44,6 +51,29 @@ assert.equal(elements['chart-size'].closest().hidden,true);
 filter.value='';input();
 assert.equal(charts['chart-size'].options.at(-1).series[0].data.length,40);
 assert.equal(elements['chart-phase-pie'].closest().hidden,false);
+'''
+    result = subprocess.run([node, '-e', script, str(source)], capture_output=True, text=True, check=False)
+    assert result.returncode == 0, result.stderr
+
+
+def test_chart_source_labels_are_safe_text_and_missing_library_has_no_internal_path():
+    node = shutil.which('node')
+    if not node:
+        pytest.skip('Node unavailable: production JS behavior not run')
+    source = Path(__file__).resolve().parents[1] / 'src/ciw2/render/static/portal.js'
+    script = r'''
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
+const heat={id:'chart-heat',innerHTML:''};
+const payload={heat:{x:['I期'],y:['<img src=x onerror=alert(1)>'],data:[[0,0,1]]}};
+const document={getElementById:id=>id==='charts'?{textContent:JSON.stringify(payload)}:id==='chart-heat'?heat:null,querySelectorAll:()=>[]};
+let option;
+const echarts={init:()=>({setOption:o=>option=o,resize(){},dispose(){}})};
+const env={document,window:{echarts,addEventListener(){}},echarts,ResizeObserver:class{observe(){} disconnect(){}}};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),env);
+const tooltip=option.tooltip.formatter({value:[0,0,1]});
+assert.ok(!tooltip.includes('<img') && tooltip.includes('&lt;img'));
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window:{addEventListener(){}}});
+assert.ok(heat.innerHTML.includes('数据表') && !heat.innerHTML.includes('scripts/'));
 '''
     result = subprocess.run([node, '-e', script, str(source)], capture_output=True, text=True, check=False)
     assert result.returncode == 0, result.stderr

@@ -121,3 +121,86 @@ def test_summary_requires_current_verified_fact_references(design_project):
     html = render_report(*design_project[:2], 'C', findings=findings)
     assert '可追溯的医学要点' in html
     assert all(title not in html for title in ('无引用的说明', '引用不存在', '尚未核实结论'))
+
+
+def test_c_chinese_display_preserves_full_design_and_source_data(design_project):
+    from html.parser import HTMLParser
+
+    add_fact(design_project, 'design.sample_size', 0, enrollment_type='ESTIMATED')
+    for field, value in [('status.trial', 'COMPLETED'), ('design.allocation', 'RANDOMIZED'),
+                         ('design.masking', 'DOUBLE'), ('design.eligibility.age', {'min': '0 Years', 'max': '18.50 Years'}),
+                         ('design.arms', [{'label': 'Original arm', 'type': 'EXPERIMENTAL',
+                            'description': 'Complete original dose schedule', 'interventions': ['DRUG: Original compound']}])]:
+        add_fact(design_project, field, value)
+    before = json.dumps(data_c(*design_project[:2]), sort_keys=True)
+    html = render_report(*design_project[:2], 'C')
+
+    class Text(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.parts = []
+
+        def handle_data(self, data):
+            self.parts.append(data)
+
+    parser = Text()
+    parser.feed(html)
+    text = ''.join(parser.parts)
+    for expected in ('已完成', '随机分组', '双盲', '试验组', '0岁', '18.50岁', '计划',
+                     'Complete original dose schedule', 'DRUG: Original compound'):
+        assert expected in text
+    assert 'COMPLETED' not in text and 'RANDOMIZED' not in text and 'DOUBLE' not in text
+    assert json.dumps(data_c(*design_project[:2]), sort_keys=True) == before
+
+
+def test_c_comparison_groups_seven_reading_columns_and_keeps_whole_or_clause(design_project):
+    import re
+
+    add_fact(design_project, 'design.sample_size', 100)
+    add_fact(design_project, 'design.eligibility.criteria', 'Inclusion Criteria:\nEASI >= 16 OR IGA >= 3')
+    html = render_report(*design_project[:2], 'C')
+    header = html.split('id="tbl-c"', 1)[1].split('</thead>', 1)[0]
+    assert len(re.findall(r'<th(?:>|\s)', header)) == 7
+    assert 'class="eligibility-key"' in html
+    key_rules = html.split('class="eligibility-key"', 1)[1].split('</details>', 1)[0]
+    assert key_rules.count('EASI &gt;= 16 OR IGA &gt;= 3') == 1
+    assert '完整入排与依据' in html and 'https://example.org/source' in html
+
+
+def test_report_first_screen_uses_clinical_counts_not_duplicate_engineering_kpis(design_project):
+    db, pid = design_project[:2]
+    rid = db.create_run(pid)
+    db.log_coverage(rid, 'global:test-source', 'global', 'public query', 'ok', hits=5)
+    add_fact(design_project, 'design.sample_size', 100)
+    html = render_report(db, pid, 'C')
+    kpis = html.split('class="kpis"', 1)[1].split('</div>', 1)[0]
+    assert '检索路线成功' not in kpis
+    assert '试验设计' in kpis and 'global:test-source' in html
+    assert '关注点：未指定' not in html
+
+
+def test_report_reading_roles_do_not_use_tiny_fonts():
+    import re
+    from pathlib import Path
+
+    css = (Path(__file__).resolve().parents[1] / 'src/ciw2/render/static/kangzhe.css').read_text()
+    sizes = [float(x) for x in re.findall(r'font-size:\s*(\d+(?:\.\d+)?)px', css)]
+    assert sizes and min(sizes) >= 16
+    assert '--report-font-body:16px' in css
+
+
+def test_c_expanded_definition_is_complete_and_identical_criteria_not_repeated(design_project):
+    from markupsafe import escape
+
+    definition = 'Complete endpoint definition: baseline assessment AND threshold, without truncation.'
+    add_fact(design_project, 'design.primary_endpoint', {
+        'measure': 'Original endpoint', 'description': definition, 'time_frame': 'Week 16'})
+    db, pid, trial, source = design_project
+    criteria = 'Inclusion Criteria:\nEASI >= 16 OR IGA >= 3'
+    fid = db.add_fact({'project_id': pid, 'entity_id': trial, 'field': 'design.eligibility.criteria',
+        'value': criteria, 'quote': criteria, 'tier': 'standard', 'status': 'verified',
+        'source_id': source, 'extracted_by': 'code:test'})
+    html = render_report(db, pid, 'C')
+    assert definition in html
+    assert html.count(str(escape(criteria))) == 1
+    assert f'data-fact-id="{fid}"' in html and 'https://example.org/source' in html

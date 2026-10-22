@@ -14,6 +14,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from ciw2.domain.availability import require_supported_cutoff
 from ciw2.domain.semantics import parse_timepoint
+from ciw2.render.labels import age_label, registry_label
 from ciw2.store.db import DB
 
 HERE = Path(__file__).resolve().parent
@@ -29,6 +30,8 @@ REPORT_ZH = {"A": "A · 竞争格局", "B": "B · 疗效与安全性", "C": "C �
 _env = Environment(loader=FileSystemLoader(str(HERE / "templates")), autoescape=select_autoescape(["html"]))
 _env.filters["phase"] = lambda p: PHASE_ZH.get(p or "unknown", p)
 _env.filters["status"] = lambda s: STATUS_ZH.get(s, s)
+_env.filters['registry_label'] = registry_label
+_env.filters['age_label'] = age_label
 
 
 def _trial_drugs(db: DB, pid: str) -> dict[str, list[str]]:
