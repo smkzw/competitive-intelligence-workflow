@@ -34,12 +34,16 @@ def main() -> None:
     service = Service(get_settings())
     project = args.project or service.create_project(args.indication, args.reports.split(','), focus=args.focus)
     run_id = args.resume_run or service.db.create_run(project)
+    first_step = service.db.one('SELECT COALESCE(MAX(id),0) id FROM agent_steps WHERE run_id=?', (run_id,))['id']
     root = service.settings.data_dir / 'receipts'
     root.mkdir(exist_ok=True)
     attempt = len(list(root.glob(f'{run_id}*.json'))) + 1
     marker = root / f'{run_id}-attempt-{attempt:04d}.json'
     initial = {'project_id': project, 'run_id': run_id, 'requested_model': service.settings.llm_model,
                'state': 'STARTED_REAL_PIPELINE_NOT_ACCEPTED',
+               'start_step_id': first_step,
+               'runtime_settings': {'max_agent_steps': service.settings.max_agent_steps,
+                                    'search_provider': service.settings.websearch_provider},
                'source_hashes': source_hashes(Path.cwd())}
     with marker.open('x') as stream:
         stream.write(json.dumps(initial, ensure_ascii=False, indent=2))
@@ -52,7 +56,8 @@ def main() -> None:
     files = {}
     for path in (service.settings.portals_dir / project).glob('*.html'):
         files[str(path.relative_to(service.settings.data_dir))] = hashlib.sha256(path.read_bytes()).hexdigest()
-    identity = service.db.query("SELECT content FROM agent_steps WHERE run_id=? AND role='model'", (run_id,))
+    identity = service.db.query("SELECT content FROM agent_steps WHERE run_id=? AND role='model' AND id>? ORDER BY id",
+                               (run_id, first_step))
     result = {**initial, 'state': 'REAL_PIPELINE_RETURNED_NOT_VISUAL_OR_SCIENTIFIC_ACCEPTANCE',
               'run_status': run['status'], 'stages': stages, 'rows': {r: len(v) for r, v in rows.items()},
               'facts': len(service.db.current_facts(project)), 'files': files,

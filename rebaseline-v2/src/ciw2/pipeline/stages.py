@@ -297,9 +297,13 @@ def _analysis(report: str) -> Callable[[RunContext], dict[str, Any]]:
     def run(rc: RunContext) -> dict[str, Any]:
         from ciw2.render.portal import report_data
         data = report_data(rc.db, rc.project_id, report)
+        if not any(data.get(key) for key in ('rows', 'results', 'safety', 'analyses')):
+            return {'report': report, 'findings': []}
         res: AnalysisResult = rc.skill(f"analysis-{report.lower()}", {
             "indication": _intake(rc)["indication"], "focus": rc.project["focus"],
-            "data": _compact(data)})
+            "data": _compact(data),
+            'verified_fact_ids': [fact['id'] for fact in rc.db.current_facts(rc.project_id)
+                                  if fact['status'] == 'verified']})
         return res.model_dump()
     return run
 

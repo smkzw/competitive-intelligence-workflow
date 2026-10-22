@@ -95,3 +95,29 @@ def test_phase_counts_do_not_use_unverified_phase(design_project):
     data = data_c(*design_project[:2])
     assert data['rows'][0]['phase'] == 'phase3'
     assert data['charts']['phase'] == []
+
+
+def test_thresholds_keep_inclusion_exclusion_and_whole_rule(design_project):
+    text = 'Inclusion Criteria:\nEASI >= 16 and IGA >= 3\nExclusion Criteria:\nBSA > 80%'
+    add_fact(design_project, 'design.eligibility.criteria', text)
+    terms = data_c(*design_project[:2])['rows'][0]['eligibility_thresholds']
+    assert [(t['measure'], t['section']) for t in terms] == [
+        ('EASI', 'inclusion'), ('IGA', 'inclusion'), ('BSA', 'exclusion')]
+    assert terms[0]['rule_text'] == 'EASI >= 16 and IGA >= 3'
+
+
+def test_empty_report_does_not_publish_model_process_explanations(design_project):
+    findings = {'findings': [{'title': '输入 data.rows 为空', 'bullets': ['本工作单元不能核实，不作为设计依据'], 'fact_refs': []}]}
+    html = render_report(*design_project[:2], 'C', findings=findings)
+    assert 'data.rows' not in html and '本工作单元' not in html
+    assert '尚未取得试验设计资料' in html
+
+
+def test_summary_requires_current_verified_fact_references(design_project):
+    verified = add_fact(design_project, 'design.sample_size', 100)
+    unverified = add_fact(design_project, 'design.phase', 'phase3', 'unverified')
+    findings = {'findings': [{'title': title, 'bullets': ['描述'], 'fact_refs': refs} for title, refs in (
+        ('可追溯的医学要点', [verified]), ('无引用的说明', []), ('引用不存在', ['missing']), ('尚未核实结论', [unverified]))]}
+    html = render_report(*design_project[:2], 'C', findings=findings)
+    assert '可追溯的医学要点' in html
+    assert all(title not in html for title in ('无引用的说明', '引用不存在', '尚未核实结论'))

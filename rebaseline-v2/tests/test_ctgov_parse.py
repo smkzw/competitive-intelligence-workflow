@@ -1,6 +1,6 @@
 import copy
 
-from ciw2.sources.ctgov import ae_facts, all_facts, map_phase, parse_study, result_facts, stat_type_of
+from ciw2.sources.ctgov import ae_facts, all_facts, design_facts, map_phase, parse_study, result_facts, stat_type_of
 
 
 def test_parse_design(study):
@@ -53,3 +53,9 @@ def test_all_facts_nonempty(study):
     fields = {f["field"] for f in all_facts(study)}
     assert {"design.sample_size", "design.primary_endpoint", "result.primary.value", "safety.sae.any",
             "safety.sae.term"} <= fields
+
+
+def test_absent_enrollment_has_no_literal_none_quote(study):
+    study['protocolSection']['designModule'].pop('enrollmentInfo', None)
+    fact = next(f for f in design_facts(parse_study(study)) if f['field'] == 'design.sample_size')
+    assert fact['value'] is None and fact['status'] == 'unknown' and fact['quote'] is None

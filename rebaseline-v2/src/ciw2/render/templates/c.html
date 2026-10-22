@@ -28,7 +28,7 @@
 <td>{% for e in r.primary_endpoints %}<details data-fact-id="{{ e.fact_id }}"><summary>主要终点 {{ loop.index }}{% if e.time_frame %}<span class="tag stat">{{ e.time_frame }}</span>{% endif %}</summary>
 <div>{{ e.measure }}</div>{{ evidence([e]) }}</details>{% endfor %}</td>
 <td>{% if r.eligibility_age %}{{ r.eligibility_age.min or '—' }} ~ {{ r.eligibility_age.max or '—' }}{% endif %}
-{% for t in r.eligibility_thresholds %}<div>{{ t.measure }} {{ t.operator }} {{ t.value }}{{ t.unit or '' }}</div>{% endfor %}
+{% for t in r.eligibility_thresholds %}<div><span class="muted">{{ {'inclusion':'入选','exclusion':'排除','unspecified':'原条款'}[t.section] }}</span> {{ t.measure }} {{ t.operator }} {{ t.value }}{{ t.unit or '' }}</div>{% endfor %}
 {{ evidence(r.sources.get('eligibility_age', [])) }}</td>
 <td>{{ '是' if r.china_site else ('否' if r.china_site is defined and r.china_site is not none else '—') }}</td>
 <td><details><summary>完整入排与依据</summary>{% if r.eligibility_criteria %}<pre class="criteria">{{ r.eligibility_criteria }}</pre>{% endif %}

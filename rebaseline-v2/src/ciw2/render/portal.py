@@ -182,6 +182,10 @@ def render_report(db: DB, pid: str, report: str, *, findings: dict[str, Any] | N
     if project is None:
         raise KeyError(pid)
     data = report_data(db, pid, report)
+    has_data = any(data.get(key) for key in ('rows', 'results', 'safety', 'analyses'))
+    verified_ids = {fact['id'] for fact in db.current_facts(pid) if fact['status'] == 'verified'}
+    summaries = [finding for finding in (findings or {}).get('findings', [])
+                 if has_data and finding.get('fact_refs') and set(finding['fact_refs']) <= verified_ids]
     assets = None
     if inline:
         assets = {"css": (STATIC / "kangzhe.css").read_text(encoding="utf-8"),
@@ -190,6 +194,6 @@ def render_report(db: DB, pid: str, report: str, *, findings: dict[str, Any] | N
                   if (STATIC / "echarts.min.js").exists() else ""}
     tpl = _env.get_template(f"{report.lower()}.html")
     return tpl.render(project=project, report=report, report_title=REPORT_ZH[report], data=data,
-                      findings=(findings or {}).get("findings", []), coverage=_coverage(db, pid),
+                      findings=summaries, coverage=_coverage(db, pid),
                       charts_json=data.get("charts", {}),
                       static=static_prefix, assets=assets, reports=project["reports"], phase_zh=PHASE_ZH)

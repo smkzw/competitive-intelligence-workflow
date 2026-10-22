@@ -109,6 +109,7 @@ CREATE TABLE IF NOT EXISTS facts (
   created_at TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS ix_facts_entity ON facts(project_id, entity_id, field);
+CREATE INDEX IF NOT EXISTS ix_facts_supersedes ON facts(supersedes);
 CREATE TABLE IF NOT EXISTS coverage (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   run_id TEXT NOT NULL,

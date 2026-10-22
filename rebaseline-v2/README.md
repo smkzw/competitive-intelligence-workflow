@@ -8,8 +8,8 @@
 cd rebaseline-v2
 python -m venv .venv && . .venv/bin/activate
 pip install -e '.[dev]'
-bash scripts/fetch_assets.sh          # ECharts（不入库）
-pytest -q                             # 31 passed
+bash scripts/fetch_assets.sh          # ECharts 6.1.0，固定SHA256验证（Apache-2.0，不入库）
+pytest -q                             # 当前验证范围和结果见 docs/STATUS.md
 cp .env.example .env && $EDITOR .env  # 填 LLM / 搜索密钥
 set -a && . ./.env && set +a
 ciw2 skills                           # 校验 Skill 与工具

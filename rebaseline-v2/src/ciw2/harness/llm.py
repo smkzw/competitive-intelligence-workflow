@@ -49,6 +49,10 @@ class LLMError(RuntimeError):
     pass
 
 
+class LLMIdentityError(LLMError):
+    pass
+
+
 class OpenAICompatLLM:
     def __init__(self, base_url: str, api_key: str, model: str, timeout_s: float = 120.0,
                  max_retries: int = 3, temperature: float = 0.1, max_output_tokens: int = 8192) -> None:
@@ -66,7 +70,9 @@ class OpenAICompatLLM:
                                 'max_tokens': self.max_output_tokens}
         if tools:
             body["tools"] = tools
-            body["tool_choice"] = "auto"
+            body["tool_choice"] = ({'type': 'function', 'function': {'name': 'submit_result'}}
+                                   if len(tools) == 1 and tools[0]['function']['name'] == 'submit_result'
+                                   else 'auto')
         last: Exception | None = None
         for attempt in range(self.max_retries):
             try:
@@ -74,7 +80,15 @@ class OpenAICompatLLM:
                 if r.status_code in (429, 500, 502, 503, 504):
                     raise LLMError(f"HTTP {r.status_code}: {r.text[:200]}")
                 r.raise_for_status()
-                return _parse_reply(r.json())
+                reply = _parse_reply(r.json())
+                actual = str(reply.raw.get('model') or '').casefold().rsplit('/', 1)[-1]
+                requested = self.model.casefold().rsplit('/', 1)[-1]
+                matches = actual.startswith(requested) if requested in {'deepseek', 'qwen'} else actual == requested
+                if not actual or not matches:
+                    raise LLMIdentityError('实际响应模型身份缺失或与指定模型不一致')
+                return reply
+            except LLMIdentityError:
+                raise
             except (httpx.HTTPError, LLMError) as exc:
                 last = exc
                 time.sleep(2 ** attempt)

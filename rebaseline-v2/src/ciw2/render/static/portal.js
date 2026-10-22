@@ -18,6 +18,14 @@
   }
   var dataNode = el("charts");
   var D = dataNode ? JSON.parse(dataNode.textContent || "{}") : {};
+  function designZoom(count) {
+    var end = Math.max(0, Math.min(count - 1, 17));
+    return [{ type: "slider", yAxisIndex: 0, right: 0, width: 16,
+      show: count > 18, startValue: 0, endValue: end, filterMode: "filter" },
+      { type: "inside", yAxisIndex: 0, startValue: 0, endValue: end,
+        filterMode: "filter", zoomOnMouseWheel: false, moveOnMouseWheel: true }];
+  }
+  function designPanelHeight(count) { return Math.max(200, Math.min(504, count * 24 + 72)); }
   if (D.heat) {
     chart("chart-heat", {
       tooltip: { formatter: function (p) { return D.heat.y[p.value[1]] + " · " + D.heat.x[p.value[0]] + "：" + p.value[2] + " 个药物"; } },
@@ -44,12 +52,13 @@
     });
   });
   if (D.size) {
-    var designHeight = Math.max(200, Math.min(540, D.size.labels.length * 24 + 72));
+    var designHeight = designPanelHeight(D.size.labels.length);
     ["chart-size", "chart-phase-pie"].forEach(function (id) {
       if (el(id)) el(id).style.height = designHeight + "px";
     });
     chart("chart-size", {
-      tooltip: { trigger: "axis" }, grid: { left: 130, right: 50, top: 24, bottom: 30 },
+      tooltip: { trigger: "axis" }, grid: { left: 130, right: 70, top: 24, bottom: 30 },
+      dataZoom: designZoom(D.size.labels.length),
       yAxis: { type: "category", data: D.size.labels, inverse: true }, xAxis: { type: "value", name: "样本量" },
       series: [{ type: "bar", data: D.size.values, barMaxWidth: 22,
         label: { show: true, position: "right" } }]
@@ -72,11 +81,14 @@
     var visible = Array.from(table.querySelectorAll("tbody tr")).filter(function (tr) { return tr.style.display !== "none"; });
     var selected = new Set(visible.map(function (tr) { return tr.dataset.trial; }));
     var indices = D.size.labels.map(function (label, index) { return selected.has(label) ? index : -1; }).filter(function (i) { return i >= 0; });
+    ["chart-size", "chart-phase-pie"].forEach(function (id) {
+      if (el(id)) el(id).style.height = designPanelHeight(indices.length || visible.length) + "px";
+    });
     if (instances["chart-size"]) {
       var node = el("chart-size");
-      node.style.height = Math.max(180, Math.min(540, indices.length * 24 + 72)) + "px";
       node.closest(".card").hidden = !indices.length;
       instances["chart-size"].setOption({ yAxis: { data: indices.map(function (i) { return D.size.labels[i]; }) },
+        dataZoom: designZoom(indices.length),
         series: [{ data: indices.map(function (i) { return D.size.values[i]; }) }] });
     }
     var phases = {};
@@ -84,7 +96,7 @@
       if (tr.dataset.phaseStatus === "verified") phases[tr.dataset.phase] = (phases[tr.dataset.phase] || 0) + 1;
     });
     if (instances["chart-phase-pie"]) {
-      el("chart-phase-pie").closest(".card").hidden = !visible.length;
+      el("chart-phase-pie").closest(".card").hidden = !Object.keys(phases).length;
       instances["chart-phase-pie"].setOption({ series: [{ data: Object.keys(phases).map(function (name) { return { name: name, value: phases[name] }; }) }] });
     }
     if (el("design-count")) el("design-count").textContent = visible.length + " / " + table.querySelectorAll("tbody tr").length + " 项研究";

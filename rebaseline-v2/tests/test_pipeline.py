@@ -85,3 +85,23 @@ def test_resume_failed_discovery_invalidates_empty_downstream_results(settings, 
     assert len(report_data(svc.db, pid, 'C')['rows']) == 1
     assert svc.db.one("SELECT COUNT(*) n FROM agent_steps WHERE run_id=? AND skill='intake' AND role='task'",
                       (rid,))['n'] == 1
+
+
+def test_resumed_run_does_not_display_previous_downstream_success(settings, monkeypatch):
+    from ciw2.pipeline import runner
+    from ciw2.pipeline.stages import Stage
+
+    svc = _svc(settings)
+    pid = svc.create_project('重试', ['C'])
+    rid = svc.db.create_run(pid)
+    svc.db.set_stage(rid, 'upstream', 'failed', error='old failure')
+    svc.db.set_stage(rid, 'downstream', 'succeeded', output={'obsolete': True})
+
+    def upstream(rc):
+        state = rc.db.one('SELECT status FROM stages WHERE run_id=? AND name=?', (rid, 'downstream'))
+        assert state['status'] == 'pending'
+        assert rc.db.stage_output(rid, 'downstream') is None
+        return {}
+
+    monkeypatch.setattr(runner, 'STAGES', [Stage('upstream', upstream), Stage('downstream', lambda rc: {})])
+    assert runner.execute(svc.context(pid, rid)) == 'succeeded'

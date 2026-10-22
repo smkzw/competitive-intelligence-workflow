@@ -77,3 +77,52 @@ def test_llm_output_is_bounded_and_actual_model_is_retained():
     llm._client.close()
     assert reply.raw['model'] == 'test-model'
     assert 0 < seen[0]['max_tokens'] <= 8192
+
+
+def test_default_primary_matches_current_user_choice(monkeypatch, tmp_path):
+    from ciw2.config import Settings
+    monkeypatch.delenv('CIW_LLM_BASE_URL', raising=False)
+    monkeypatch.delenv('CIW_LLM_MODEL', raising=False)
+    settings = Settings(data_dir=tmp_path)
+    assert settings.llm_model == 'glm-5.3-flash'
+    assert settings.llm_base_url == 'http://127.0.0.1:20128/v1'
+
+
+@pytest.mark.parametrize(('requested', 'actual', 'ok'), [
+    ('glm-5.3-flash', 'unrequested-model', False),
+    ('glm-5.3-flash', None, False),
+    ('deepseek', 'DeepSeek-V4.1-Flash-TF', True),
+    ('qwen', 'Qwen3.8-27B', True),
+])
+def test_response_model_identity_cannot_silently_change(requested, actual, ok):
+    def respond(request):
+        return httpx.Response(200, json={'model': actual, 'choices': [{'message': {'content': 'ok'}}]})
+    client = OpenAICompatLLM('http://localhost:1/v1', 'synthetic', requested, max_retries=1)
+    client._client.close()
+    client._client = httpx.Client(transport=httpx.MockTransport(respond))
+    try:
+        if ok:
+            assert client.chat([]).raw['model'] == actual
+        else:
+            with pytest.raises(LLMError, match='模型身份'):
+                client.chat([])
+    finally:
+        client._client.close()
+
+
+def test_submit_only_interaction_requests_required_function():
+    seen = []
+
+    def respond(request):
+        seen.append(json.loads(request.content))
+        return httpx.Response(200, json={'model': 'test', 'choices': [{'message': {
+            'tool_calls': [{'id': 'finish', 'function': {'name': 'submit_result', 'arguments': '{}'}}]}}]})
+
+    client = OpenAICompatLLM('http://localhost:1/v1', 'synthetic', 'test', max_retries=1)
+    client._client.close()
+    client._client = httpx.Client(transport=httpx.MockTransport(respond))
+    try:
+        client.chat([], [{'type': 'function', 'function': {'name': 'submit_result', 'parameters': {}}}])
+        assert seen[0]['tool_choice'] == {'type': 'function', 'function': {'name': 'submit_result'}}
+    finally:
+        client._client.close()

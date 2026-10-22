@@ -80,3 +80,26 @@ def test_repo_skills_load_and_tools_exist(settings):
             "extract-design", "analysis-a", "analysis-b", "analysis-c"} <= set(skills)
     for s in skills.values():
         REGISTRY.subset(s.tools)
+def test_harness_warns_before_budget_end_so_model_can_submit():
+    def responder(messages):
+        remaining = any(m['role'] == 'user' and '剩余 1 次' in m.get('content', '') for m in messages)
+        if remaining:
+            return call('submit_result', decisions=[])
+        return call('echo', text='read')
+
+    llm = ScriptedLLM(responder)
+    result = run_skill(SKILL, {}, llm, _registry(), ToolContext(), max_steps=2)
+    assert result.decisions == [] and len(llm.calls) == 2
+
+
+def test_last_interaction_exposes_only_submission_not_more_research():
+    class SubmitOnOnlyTool:
+        model = 'test'
+
+        def chat(self, messages, tools=None):
+            names = [t['function']['name'] for t in tools]
+            if names == ['submit_result']:
+                return call('submit_result', decisions=[])
+            return call('echo', text='more research')
+
+    assert run_skill(SKILL, {}, SubmitOnOnlyTool(), _registry(), ToolContext(), max_steps=2).decisions == []

@@ -26,6 +26,8 @@ def execute(rc: RunContext) -> str:
     # A recovered upstream changes downstream inputs, including an earlier empty
     # "success". Keep completed stages only before the first failed dependency.
     done &= {stage.name for stage in plan[:restart]}
+    for stage in plan[restart:]:
+        rc.db.set_stage(rc.run_id, stage.name, 'pending')
     soft_failures: list[str] = []
     for st in plan:
         if st.name in done:

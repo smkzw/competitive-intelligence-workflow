@@ -35,7 +35,8 @@ class RunContext:
 
     def tool_ctx(self) -> ToolContext:
         return ToolContext(db=self.db, cas=self.cas, settings=self.settings, project_id=self.project_id,
-                           run_id=self.run_id, stage=self.stage)
+                           run_id=self.run_id, stage=self.stage,
+                           extra={'fetch_cache': self.cache.setdefault('fetch_cache', {})})
 
     def skill(self, name: str, task: dict[str, Any]) -> Any:
         return run_skill(self.skills[name], task, self.llm, self.registry, self.tool_ctx(),

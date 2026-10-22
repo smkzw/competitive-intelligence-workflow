@@ -13,9 +13,19 @@ from ciw2.store.db import DB
 def thresholds(criteria: str) -> list[dict[str, Any]]:
     """Only copy explicit named-scale inequalities; no inferred clinical criteria."""
     pattern = r'\b(EASI|IGA|SCORAD|BSA|PP[- ]?NRS|WI[- ]?NRS|NRS)\s*(>=|<=|≥|≤|>|<|=)\s*(\d+(?:\.\d+)?)\s*(%)?'
-    return [{'measure': m[1].upper(), 'operator': m[2].replace('≥', '>=').replace('≤', '<='),
-             'value': float(m[3]), 'unit': m[4] or None, 'quote': m[0]}
-            for m in re.finditer(pattern, criteria, re.IGNORECASE)]
+    headers = [(m.end(), 'inclusion' if m[1].lower().startswith(('inclusion', '入')) else 'exclusion')
+               for m in re.finditer(r'^\s*(?:key\s+)?(inclusion\s+criteria|exclusion\s+criteria|入选标准|排除标准)\s*[:：]?',
+                                    criteria, re.IGNORECASE | re.MULTILINE)]
+    result = []
+    for match in re.finditer(pattern, criteria, re.IGNORECASE):
+        section = next((role for end, role in reversed(headers) if end <= match.start()), 'unspecified')
+        start = criteria.rfind('\n', 0, match.start()) + 1
+        end = criteria.find('\n', match.end())
+        rule = criteria[start:end if end >= 0 else len(criteria)].strip()
+        result.append({'measure': match[1].upper(), 'operator': match[2].replace('≥', '>=').replace('≤', '<='),
+                       'value': float(match[3]), 'unit': match[4] or None, 'quote': match[0],
+                       'section': section, 'rule_text': rule})
+    return result
 
 
 def source_ref(fact: dict[str, Any], sources: dict[str, dict[str, Any]]) -> dict[str, Any]:

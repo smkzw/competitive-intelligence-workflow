@@ -4,12 +4,14 @@
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import time
 from dataclasses import dataclass
 from html.parser import HTMLParser
 from typing import Any, ClassVar
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import httpx
 
@@ -20,6 +22,22 @@ UA = "ciw2/0.1 (clinical competitive-intelligence; single-user research tool)"
 
 class FetchError(RuntimeError):
     pass
+
+
+def public_url(url: str) -> str:
+    """Keep source identity parameters, never authentication material."""
+    parsed = urlsplit(url)
+    host = parsed.hostname or ''
+    if ':' in host:
+        host = f'[{host}]'
+    if parsed.port is not None:
+        host += f':{parsed.port}'
+    public_cursor = parsed.hostname == 'clinicaltrials.gov' and parsed.path.rstrip('/') == '/api/v2/studies'
+    query = [(key, value) for key, value in parse_qsl(parsed.query, keep_blank_values=True)
+             if (public_cursor and key == 'pageToken') or (
+                 key.lower() not in {'key', 'auth', 'authorization'} and not any(
+                     marker in key.lower() for marker in ('token', 'password', 'signature', 'credential', 'api_key', 'apikey')))]
+    return urlunsplit((parsed.scheme, host, parsed.path, urlencode(query), ''))
 
 
 @dataclass
@@ -75,6 +93,14 @@ def to_text(content: bytes, content_type: str) -> str:
 def fetch(ctx: ToolContext | None, url: str, *, kind: str, params: dict[str, Any] | None = None,
           title: str = "", retries: int = 2, register: bool = True,
           client: httpx.Client | None = None) -> Fetched:
+    cache = (ctx.extra or {}).get('fetch_cache') if ctx and register and ctx.db and ctx.cas else None
+    request_url = httpx.URL(url) if params is None else httpx.URL(url, params=params)
+    key = (getattr(ctx, 'project_id', None), kind, hashlib.sha256(str(request_url).encode()).hexdigest())
+    if cache is not None and key in cache:
+        source = ctx.db.one('SELECT * FROM sources WHERE id=?', (cache[key],))
+        if source:
+            return Fetched(source['id'], source['url'], 200, ctx.cas.get(source['digest']),
+                           ctx.cas.get_text(source['text_digest']), json.loads(source['meta']).get('content_type', ''))
     timeout = getattr(getattr(ctx, "settings", None), "http_timeout_s", 30.0)
     last: Exception | None = None
     own = client is None
@@ -87,21 +113,23 @@ def fetch(ctx: ToolContext | None, url: str, *, kind: str, params: dict[str, Any
                     time.sleep(1.5 * (attempt + 1))
                     continue
                 if resp.status_code >= 400:
-                    raise FetchError(f"HTTP {resp.status_code} {resp.url}")
+                    raise FetchError(f"HTTP {resp.status_code} {public_url(str(resp.url))}")
                 ctype = resp.headers.get("content-type", "")
                 text = to_text(resp.content, ctype)
                 sid = None
                 if register and ctx is not None and ctx.db is not None and ctx.cas is not None:
                     digest = ctx.cas.put(resp.content)
                     tdigest = ctx.cas.put(text.encode("utf-8"))
-                    sid = ctx.db.add_source(ctx.project_id, kind, str(resp.url), digest, title=title,
+                    sid = ctx.db.add_source(ctx.project_id, kind, public_url(str(resp.url)), digest, title=title,
                                             text_digest=tdigest, meta={"content_type": ctype})
-                return Fetched(sid, str(resp.url), resp.status_code, resp.content, text, ctype)
+                    if cache is not None:
+                        cache[key] = sid
+                return Fetched(sid, public_url(str(resp.url)), resp.status_code, resp.content, text, ctype)
             except httpx.HTTPError as exc:
                 last = exc
                 if attempt < retries:
                     time.sleep(1.5 * (attempt + 1))
-        raise FetchError(f"{type(last).__name__}: {last} ({url})")
+        raise FetchError(f"{type(last).__name__}: network request failed ({public_url(url)})")
     finally:
         if own:
             client.close()
@@ -114,7 +142,7 @@ def register_text(ctx: ToolContext, *, kind: str, url: str, text: str, title: st
         return None
     digest = ctx.cas.put(raw if raw is not None else text.encode("utf-8"))
     tdigest = ctx.cas.put(text.encode("utf-8"))
-    return ctx.db.add_source(ctx.project_id, kind, url, digest, title=title, text_digest=tdigest,
+    return ctx.db.add_source(ctx.project_id, kind, public_url(url), digest, title=title, text_digest=tdigest,
                              meta=meta or {})
 
 

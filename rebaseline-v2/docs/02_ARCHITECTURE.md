@@ -29,7 +29,7 @@
 | analysis_A/B/C | Skill | 各自 | 否 | 中文要点（不新增事实） |
 | render | 代码 | ABC | 是 | 写门户快照；平台也实时渲染 |
 
-可恢复：同一 run 重跑时跳过 `succeeded` 阶段。非阻断阶段失败 → 记录并继续（运行状态 succeeded + 错误说明）。
+可恢复：同一 run 从最早失败阶段重新计算依赖分支，之前成功的前置阶段不重跑；待重算下游立即置 pending，不能沿用上轮空成功。非阻断阶段失败 → 记录并继续（运行状态 succeeded + 错误说明）；这不是产品验收信号。
 
 ## 2. 数据模型（store/db.py）
 - `projects` `runs` `stages` `agent_steps`：运行与留痕。
@@ -37,6 +37,8 @@
 - `entities`（drug/company/trial/target，含别名、发现路线、纳排）+ `links`（drug-trial / drug-company / drug-target）。
 - `facts`：追加式；`supersedes` 指向被取代的版本；`tier` `status` `quote` `quote_start/end` `context`（组/时间点/人群/统计对象/分母/终点）。
 - `coverage`：每条检索路线的状态（ok/failed/blocked）、命中、新增实体。
+- 发现工具逐批保存登记原名与药物—试验关系，最终模型提交失败不抹掉已读来源；不据此推断创新属性或监管身份。
+- 同一 RunContext 的相同 GET 复用已抓 CAS 字节，新的运行/恢复上下文重新核查网络；不会把历史缓存当作本次核查。工具结果访问授权仍限定当前 Skill。
 
 ## 3. 信任模型
 1. 代码解析的结构化注册数据（CT.gov）：`extracted_by=code:ctgov`，按 JSON 路径直接取值 → verified。
@@ -49,6 +51,8 @@
 - System prompt = Harness 通用规则 + Skill 正文；User = 任务 JSON。
 - 模型只能调白名单工具；工具异常以 `{"status":"tool_failed"}` 回给模型（不当作无结果）。
 - 输出只能通过 `submit_result`，Pydantic 校验失败把错误回给模型重试；预算耗尽抛 `AgentBudgetExceeded`。
+- 最后两次交互提示剩余预算；最后一次只开放 submit_result 并请求该函数，不再无限追加检索。即使强制提交，结构/来源校验仍照常。
+- 模型按明确环境配置顺序备用；错误或缺失的实际模型身份拒绝采用，返回的真实模型与使用量留痕，不用请求名冒充响应身份。
 - 新增 Skill：写 SKILL.md + （必要时）在 `domain/models.py` 增加输出模型 + 在 stages 中接入。
 
 ## 5. 中国来源现状（实测）

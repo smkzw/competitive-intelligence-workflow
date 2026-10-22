@@ -22,3 +22,24 @@ def test_entity_merge_and_fact_supersede(tmp_path):
                  "tier": "critical", "status": "verified", "extracted_by": "code:ctgov", "supersedes": f1})
     cur = db.current_facts(pid)
     assert [f["value"] for f in cur] == [941]
+
+
+def test_current_facts_lookup_is_bounded_not_quadratic(tmp_path):
+    db = DB(tmp_path / 'facts.sqlite3')
+    pid = db.create_project('设计资料', ['C'])
+    eid, _ = db.upsert_entity(pid, 'trial', 'study')
+    for value in range(1000):
+        db.add_fact({'project_id': pid, 'entity_id': eid, 'field': 'design.sample_size',
+                     'value': value, 'tier': 'critical', 'status': 'verified', 'extracted_by': 'code:test'})
+    ticks = {'count': 0}
+
+    def budget():
+        ticks['count'] += 1
+        return int(ticks['count'] > 200)
+
+    # SQLite VM work, not a wall-clock threshold or machine-speed assumption.
+    db._conn.set_progress_handler(budget, 1000)
+    try:
+        assert len(db.current_facts(pid)) == 1000
+    finally:
+        db._conn.set_progress_handler(None, 0)

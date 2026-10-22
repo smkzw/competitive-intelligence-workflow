@@ -95,7 +95,7 @@ def _fact(field: str, value: Any, *, quote: str | None = None, path: str = "", *
 
 def design_facts(s: dict[str, Any]) -> list[dict[str, Any]]:
     out = [
-        _fact("design.sample_size", s["enrollment"], quote=str(s["enrollment"]),
+        _fact("design.sample_size", s["enrollment"], quote=None if s["enrollment"] is None else str(s["enrollment"]),
               path="designModule.enrollmentInfo.count", enrollment_type=s["enrollment_type"]),
         _fact("design.phase", s["phase"], path="designModule.phases", raw=s["phases"]),
         _fact("design.allocation", s["allocation"], path="designModule.designInfo.allocation"),
@@ -293,9 +293,23 @@ def _ctgov_search(ctx: ToolContext, a: SearchArgs) -> Any:
     new = 0
     if ctx.db:
         for s in rows:
-            _, is_new = ctx.db.upsert_entity(ctx.project_id, "trial", s["nct"], attrs=_trial_attrs(s),
-                                             route_id=a.route_id)
+            trial_id, is_new = ctx.db.upsert_entity(ctx.project_id, "trial", s["nct"], attrs=_trial_attrs(s),
+                                                    route_id=a.route_id)
             new += int(is_new)
+            if ctx.stage in {'universe_china', 'universe_global'}:
+                for intervention in s['interventions']:
+                    raw = (intervention.get('name') or '').strip()
+                    if intervention.get('type') not in {'DRUG', 'BIOLOGICAL'} or not raw or raw.casefold() in {'placebo', '安慰剂'}:
+                        continue
+                    # Registry occurrence is a provisional candidate, not a claim
+                    # of innovation, approval, MAH, target or group assignment.
+                    name = raw.casefold() if raw.isalpha() and raw.isascii() else raw
+                    drug_id, drug_new = ctx.db.upsert_entity(ctx.project_id, 'drug', name,
+                        aliases=[raw] if raw != name else [], route_id=a.route_id,
+                        attrs={'discovery_method': 'registry_intervention',
+                               'evidence_urls': [STUDY_URL.format(nct=s['nct'])]})
+                    ctx.db.link(ctx.project_id, drug_id, 'drug-trial', trial_id)
+                    new += int(drug_new)
         if ctx.run_id:
             ctx.db.log_coverage(ctx.run_id, a.route_id, a.region, q, "ok", hits=len(rows), new_entities=new)
     interventions: dict[tuple[str, str], dict[str, Any]] = {}

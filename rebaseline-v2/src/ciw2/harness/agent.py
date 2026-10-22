@@ -46,11 +46,11 @@ def run_skill(skill: Skill, task: dict[str, Any], llm: LLM, registry: ToolRegist
     tools = registry.subset(skill.tools) + [RESULT_PAGE_TOOL]
     tool_by_name = {t.name: t for t in tools}
     schemas = [t.schema() for t in tools] + [_submit_tool(skill.output)]
+    budget = min(max_steps or skill.max_steps, skill.max_steps)
     messages: list[dict[str, Any]] = [
-        {"role": "system", "content": f"{HARNESS_RULES}\n\n# Skill：{skill.name}\n{skill.body}"},
+        {"role": "system", "content": f"{HARNESS_RULES}\n本次最多 {budget} 次模型交互，预留最后一次提交已核实结果。\n\n# Skill：{skill.name}\n{skill.body}"},
         {"role": "user", "content": json.dumps(task, ensure_ascii=False)},
     ]
-    budget = min(max_steps or skill.max_steps, skill.max_steps)
 
     def log(step: int, role: str, content: Any) -> None:
         if ctx.db is not None:
@@ -58,7 +58,12 @@ def run_skill(skill: Skill, task: dict[str, Any], llm: LLM, registry: ToolRegist
 
     log(0, "task", task)
     for step in range(1, budget + 1):
-        reply = llm.chat(messages, schemas)
+        remaining = budget - step + 1
+        if remaining <= 2:
+            messages.append({'role': 'user', 'content': f'本工作单元剩余 {remaining} 次模型交互。请及时使用 submit_result 提交已有证据支持的结果，未完成项如实保留，禁止补造。'})
+        # A final response is still schema/source checked. Do not spend the
+        # reserved submission interaction starting another source query.
+        reply = llm.chat(messages, schemas[-1:] if remaining == 1 else schemas)
         if reply.raw:
             log(step, 'model', {'requested_model': llm.model, 'actual_model': reply.raw.get('model'),
                                 'usage': reply.raw.get('usage'), 'route': reply.raw.get('_ciw_route')})
@@ -68,7 +73,7 @@ def run_skill(skill: Skill, task: dict[str, Any], llm: LLM, registry: ToolRegist
             messages.append({"role": "user", "content": "请继续使用工具，完成后调用 submit_result。"})
             continue
         for call in reply.tool_calls:
-            result_text, final = _dispatch(call, skill, tool_by_name, ctx)
+            result_text, final = _dispatch(call, skill, {} if remaining == 1 else tool_by_name, ctx)
             messages.append({"role": "tool", "tool_call_id": call.id, "content": result_text})
             log(step, f"tool:{call.name}", result_text[:4000])
             if final is not None:

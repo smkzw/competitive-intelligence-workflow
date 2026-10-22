@@ -20,9 +20,9 @@ class Settings:
         )
     )
     # OpenAI 兼容接口：DeepSeek / GLM / Qwen / OpenAI 等均可。
-    llm_base_url: str = field(default_factory=lambda: _env("CIW_LLM_BASE_URL", "https://api.deepseek.com/v1"))
+    llm_base_url: str = field(default_factory=lambda: _env("CIW_LLM_BASE_URL", "http://127.0.0.1:20128/v1"))
     llm_api_key: str = field(default_factory=lambda: _env("CIW_LLM_API_KEY"), repr=False)
-    llm_model: str = field(default_factory=lambda: _env("CIW_LLM_MODEL", "deepseek-chat"))
+    llm_model: str = field(default_factory=lambda: _env("CIW_LLM_MODEL", "glm-5.3-flash"))
     llm_fallbacks: str = field(default_factory=lambda: _env('CIW_LLM_FALLBACKS', '[]'))
     # 关键字段二次核对使用的模型（可与主模型相同；留空则只做确定性原文核验）。
     llm_check_model: str = field(default_factory=lambda: _env("CIW_LLM_CHECK_MODEL"))
