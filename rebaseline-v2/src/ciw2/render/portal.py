@@ -12,6 +12,7 @@ from typing import Any
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from ciw2.domain.availability import require_supported_cutoff
 from ciw2.domain.semantics import parse_timepoint
 from ciw2.store.db import DB
 
@@ -173,6 +174,10 @@ BUILDERS = {"A": data_a, "B": data_b, "C": data_c}
 
 
 def report_data(db: DB, pid: str, report: str) -> dict[str, Any]:
+    project = db.project(pid)
+    if project is None:
+        raise KeyError(pid)
+    require_supported_cutoff(project['cutoff_date'])
     return BUILDERS[report](db, pid)
 
 

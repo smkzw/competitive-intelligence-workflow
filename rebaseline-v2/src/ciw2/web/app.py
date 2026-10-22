@@ -12,9 +12,10 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
 from ciw2.config import Settings, get_settings
+from ciw2.domain.availability import HistoricalReportUnavailable
 from ciw2.pipeline.runner import stage_table
 from ciw2.render.portal import STATIC, render_report
-from ciw2.service import LLMFactory, Service, default_llms
+from ciw2.service import LLMFactory, RunRequestError, Service, default_llms
 
 HERE = Path(__file__).resolve().parent
 
@@ -36,6 +37,11 @@ def create_app(settings: Settings | None = None, llm_factory: LLMFactory = defau
     app.mount("/static", StaticFiles(directory=str(STATIC)), name="static")
     tpl = Jinja2Templates(directory=str(HERE / "templates"))
     token = os.environ.get("CIW_ACCESS_TOKEN", "").strip()
+
+    @app.exception_handler(HistoricalReportUnavailable)
+    @app.exception_handler(RunRequestError)
+    async def _unavailable(request: Request, exc: ValueError) -> JSONResponse:
+        return JSONResponse({'detail': str(exc)}, status_code=409)
 
     @app.middleware("http")
     async def _auth(request: Request, call_next: Any) -> Any:

@@ -6,6 +6,7 @@ from typing import Any
 
 import ciw2.sources  # noqa: F401  注册全部工具
 from ciw2.config import Settings
+from ciw2.domain.availability import HistoricalReportUnavailable, require_supported_cutoff
 from ciw2.harness.fallback import FallbackLLM
 from ciw2.harness.llm import LLM, LLMError, OpenAICompatLLM
 from ciw2.harness.skills import load_skills
@@ -15,6 +16,10 @@ from ciw2.store.cas import CAS
 from ciw2.store.db import DB
 
 LLMFactory = Callable[[Settings], tuple[LLM, LLM | None]]
+
+
+class RunRequestError(ValueError):
+    pass
 
 
 def default_llms(s: Settings) -> tuple[LLM, LLM | None]:
@@ -58,7 +63,21 @@ class Service:
 
     def start_run(self, project_id: str, *, resume_run: str | None = None, background: bool = True,
                   **cache: Any) -> str:
+        project = self.db.project(project_id)
+        if project is None:
+            raise RunRequestError('项目不存在')
+        if resume_run:
+            previous = self.db.one('SELECT project_id FROM runs WHERE id=?', (resume_run,))
+            if previous is None:
+                raise RunRequestError('运行不存在')
+            if previous['project_id'] != project_id:
+                raise RunRequestError('该运行不属于当前项目')
         run_id = resume_run or self.db.create_run(project_id)
+        try:
+            require_supported_cutoff(project['cutoff_date'])
+        except HistoricalReportUnavailable as exc:
+            self.db.set_run(run_id, 'failed', error=str(exc))
+            return run_id
         try:
             rc = self.context(project_id, run_id, **cache)
         except LLMError as exc:   # 配置缺失：运行直接失败并给出原因，而不是 500
