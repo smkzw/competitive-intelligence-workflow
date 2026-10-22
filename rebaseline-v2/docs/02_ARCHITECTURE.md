@@ -63,6 +63,7 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 - `pipeline/scope.py` 在调用前规划所有完整候选批次（≤30项/≤60000字符），共享别名歧义按全项目集合判断而非批次碰巧命中。显式ID须在当前批且名称匹配；旧名称式结论只按全项目唯一的字面名称/别名兼容，不删除标点。重复、缺项、错绑均待核。无绑定问题的批次沿用stages内容键恢复，另绑定项目来源集合id/digest/text_digest；来源变化保守失效，正常null结论可复用。逐批事务写回，不重做已完成未变批次，不建新表。
 - `pipeline/extraction.py`以完整研究及其全部事实引用规划输入，`read_project_fact`返回当前项目完整值/上下文并复用长结果分页。`queries.py`仅共享项目读取，`recovery.py`仅复用现有stages来源绑定回执，不增执行平台或表。输入、提取器/工具实现、Skill、schema、模型及已读取/引用来源版本改变时重做对应单元；来源包括无输出事实时已读取的资料。引用URL同秒新版本按rowid稳定择新，未知/跨项目来源不借用。
 - ctgov.search及模型工具默认完整游标；正整数是显式检索预算，输出标full/explicit_bounded。去重保留源序，缺失登记号、循环游标和无新增页明确失败。试验摄取/抽取默认无静默15/30上限，显式工作预算保留pending_trials/pending_drug_ids/pending_units；完成单位同run来源版本复用，不冒充新模型调用或刷新。源变化后的科学事实投影另需M5完成，不能由回执缓存替代。
+- 开发入口run_live.py支持对已有隔离候选的`--only-stage`验证，直接调用同一生产Stage；analysis成功后调用同一renderer。回执scope=stage、pipeline_acceptance=NOT_RUN，与完整研究模式分开；记录实际模型/用量、开始结束源hash及运行脚本hash。该运行成功不自动满足M1或发布门，禁止覆盖原项目/冻结输入来做阶段试验。
 - 新增 Skill：写 SKILL.md + （必要时）在 `domain/models.py` 增加输出模型 + 在 stages 中接入。
 
 ## 5. 中国来源现状（实测）

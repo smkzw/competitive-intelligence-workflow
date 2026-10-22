@@ -1,5 +1,7 @@
 import copy
 
+import pytest
+
 from ciw2.sources.ctgov import ae_facts, all_facts, design_facts, map_phase, parse_study, result_facts, stat_type_of
 
 
@@ -59,3 +61,21 @@ def test_absent_enrollment_has_no_literal_none_quote(study):
     study['protocolSection']['designModule'].pop('enrollmentInfo', None)
     fact = next(f for f in design_facts(parse_study(study)) if f['field'] == 'design.sample_size')
     assert fact['value'] is None and fact['status'] == 'unknown' and fact['quote'] is None
+
+
+@pytest.mark.parametrize('locations,expected', [
+    (None, None), ([], None), ([{'city': 'Undisclosed'}], None),
+    ([{'country': 'United States'}], False), ([{'country': 'China'}], True),
+])
+def test_unreported_countries_do_not_prove_absence_of_china_sites(study, locations, expected):
+    if locations is None:
+        study['protocolSection'].pop('contactsLocationsModule', None)
+    else:
+        study['protocolSection']['contactsLocationsModule'] = {'locations': locations}
+    parsed = parse_study(study)
+    assert parsed['china_site'] is expected
+    facts = {fact['field']: fact for fact in design_facts(parsed)}
+    assert facts['trial.china_site']['status'] == ('unknown' if expected is None else 'verified')
+    if expected is None:
+        assert parsed['countries'] is None
+        assert facts['trial.countries']['value'] is None and facts['trial.countries']['status'] == 'unknown'

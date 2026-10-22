@@ -76,8 +76,9 @@ def parse_study(study: dict[str, Any]) -> dict[str, Any]:
              "interventions": a.get("interventionNames") or []}
             for a in arms_mod.get("armGroups", [])
         ],
-        "countries": countries,
-        "china_site": any(c in {"China", "Hong Kong", "Taiwan", "Macao", "Macau"} for c in countries),
+        "countries": countries or None,
+        "china_site": any(c in {"China", "Hong Kong", "Taiwan", "Macao", "Macau"} for c in countries)
+                      if countries else None,
         "primary_outcomes": _g(ps, "outcomesModule", "primaryOutcomes", default=[]),
         "secondary_outcomes": _g(ps, "outcomesModule", "secondaryOutcomes", default=[]),
         "eligibility": {"min_age": elig.get("minimumAge"), "max_age": elig.get("maximumAge"),

@@ -37,3 +37,4 @@ scripts/     fetch_assets.sh、smoke_live.py、run_live.py、replay_design_sourc
 开发规则见 `docs/04_AGENT_RULES.md`；当前状态见 `docs/STATUS.md`。
 
 开发者可使用 `python scripts/smoke_live.py --complete-ctgov "Atopic Dermatitis" NEW_OUTPUT_DIR` 隔离核对完整登记分页及官方总数，保留来源哈希与回执，不调用模型或改动已有报告。输出目录必须是新的；该检查不代替报告验收。
+已有冻结来源的隔离副本可用 `python scripts/run_live.py --indication 特应性皮炎 --project PREPARED_PROJECT_ID --only-stage analysis_C` 验证同一生产分析及渲染阶段。须将CIW_DATA_DIR指向副本；回执会明确单阶段，不作为完整研究或发布通过。

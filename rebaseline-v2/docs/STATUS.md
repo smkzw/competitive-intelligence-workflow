@@ -15,7 +15,7 @@
 - C 现在有 ECharts 样本量与期别图、完整设计表、终点/时间点分组、原文展开及明确量表阈值；不是医学语义标准化的替代。
 - 长工具结果首轮 2 FAIL；CAS 分页逐字恢复、只抓一次、当前工作单元授权读取；无 CAS 明确报错，不截掉尾部。
 - 论文规范地址与抓取地址不一致首轮 1 FAIL；追加规范地址来源记录，原始字节与实际获取 URL 均保留。
-- 当前全 v2：183 PASS/1.75s（终态复盘提示词纠偏后复验）；完整 src/tests/scripts Ruff、生产JS和fetch_assets.sh语法通过；源码无>600行文件或>80行函数（既定create_app路由注册例外）。只覆盖v2，不借用旧v1门。FastAPI/Starlette TestClient弃用警告1项保留。
+- 当前全 v2：190 PASS/1.71s；完整src/tests/scripts Ruff、生产JS和fetch_assets.sh语法通过；源码/运行脚本无>600行文件或>80行函数（既定create_app路由注册例外）。只覆盖v2，不借用旧v1门；TestClient弃用警告1项保留。
 - 真实模型连通：cms-router 请求 glm-5.3-flash，HTTP200，响应 actual_model=glm-5.3-flash，返回 OK；非 ScriptedLLM。
 - Ego Lite 空间47已打开普通 C 门户；1920CSS px实屏核对零事实负向页面，0空图、0设计行，删除模型生成的工程说明墙。截图本地 `ciw-data/browser-m1/empty-after-summary-fix-1920.png`；不充当正向图表或完整视觉验收。
 - 无业务数据不调总结模型；总结只展示引用当前已核实事实的条目。PRD及 A/B/C Skills 同步禁止大段防御性/工程说明，不改变原始事实和字段状态。
@@ -65,6 +65,8 @@
 - 分页worker请求CodeBuddy/deepseek-v4.1-flash/max，runner终态0/112.468s/27工具调用，无fallback，CLI运行modelUsage也报告deepseek-v4.1-flash。原15分页例11RED/4PASS后15PASS，owner补无效ID/无新增页/模型默认完整5RED后关闭，最终20PASS。没有追加独立医学会商。
 - 独立DGX DeepSeek小型工具探针 ReadTimeout，不能据此判定其工具能力通过或不支持；没有重启DGX/改路由，也没有观察到Qwen真实生成。
 - 发现“未知N原文被写成None字符串”，生产解析器真RED后修正为无quote，23项相关回归通过；旧组件/旧回执不改写。
+- 实际源核查发现7项未公开国家信息却china_site=false；3RED/2既有正例后修复为国家/中国站点均unknown，5地理情形与37项邻接通过。固定77来源完整重建R3：284研究/6580事实、864critical=862match+2unknown/0mismatch；与R2逐原子比较仅14项国家/站点值与状态改变，所有critical不变。R2HTML/原源不改；R3HTML `8b43b91011cd1e8e005c5b477a4da99a782d5eecc7842bc4d15fccccc89dfd13`。
+- 新运行脚本支持隔离已有project的单生产阶段验证，scope=stage/pipeline_acceptance=NOT_RUN/独立状态，记录脚本与前后源码hash。入口1RED后修复，4入口例及26项邻接通过。R3已SQLite只读backup到 `ciw-data/model-stage-r3/data`，46源blob按hash核对并hardlink，未复制凭据或改原DB；候选project `prj_2f42f9210053`，待真实analysis_C模型运行，不是完整研究通过。
 - 真实6580事实查询重复全表扫描；新增supersedes索引，VM预算反例由FAIL转14项邻接PASS。同一副本实测6.3048s→0.0105s，全部事实SHA256前后同为 `7d90a7572b43ddfb5420e10bb1073aac17e8a3e3e270f5cde1c21a9954ad5c48`；只证明该查询，不冒充整个页面加速600倍，不改原组件。
 - Ego空间47现已消失，库存核对无本项目空间；原生Ask待用户选择是否创建替代空间。正向四宽/键盘验收 NOT_RUN，不转用其他任务空间、不清缓存；旧1920负向截图只对应此前范围。
 - M2 中国召回金标准尚无；M3–M6 未验收。包内附带旧截图只作参考，不当本次证据。
@@ -80,4 +82,4 @@
 - 当前仅沿用康哲配色/中文层级/宽屏和真实图表规则，功能优先；未新增动画引擎，不宣称完整康哲视觉验收。
 - ECharts统一固定6.1.0及SHA256；已核对官方CDN与本机字节一致，下载/本机复制同一合同，不再混用5.5.1；Apache-2.0保留。
 - 两个执行节点已guard归档至 `ciw-data/archives/execution/ciw2-m1-cas-design-replay` 和 `ciw2-m1-complete-workset`，原报告/提示/日志保留；本轮audit/review gate通过（旧校验器要求Hermes字样，明确记录“未派Hermes”，未伪造角色）。v2资料214MB（真实1787研究来源约50MB）、环境52MB，保留唯一原文/恢复证据，未清理旧工程或原生会话。
-- 9bd4deced68c22ef89f05c1bab12cbc99cb8f2ab已push并核远端exact；随后终态审计发现global Skill仍写固定300，已清除相冲突提示并随本次记录提交、183PASS复验。下一安全动作：新代码有界真实模型阶段验证及来源版本根因；恢复前备份原项目/原receipt并审计查询缓存影响，保留成功前置/来源，不盲跑旧12步循环。界面仍待原生Ask替代空间选择，不将284行组件代替端到端通过。
+- 9bd4dece及942471a6已push并核远端exact；global Skill固定300提示已清除。下一安全动作：冻结本次190门源码后按指定GLM→DGX顺序运行R3隔离analysis_C，开始后不改加载产品字节；同阶段新回执不替代M1。随后源版本根因及原项目依赖恢复，备份原失败/来源、不盲跑旧循环。界面仍待原生Ask替代空间选择。
