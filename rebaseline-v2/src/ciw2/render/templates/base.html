@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ project.indication }} · {{ report_title }}</title>
+{% if assets %}<style>{{ assets.css | safe }}</style>{% else %}<link rel="stylesheet" href="{{ static }}/kangzhe.css">{% endif %}
+</head>
+<body>
+<header class="top">
+  <span class="brand">临床竞品调研</span>
+  <nav>
+    {% for r in reports %}<a href="{{ r }}" class="{{ 'on' if r == report }}">{{ {'A':'A 竞争格局','B':'B 疗效安全','C':'C 设计先例'}[r] }}</a>{% endfor %}
+  </nav>
+  <span class="sub">{{ project.indication }}{% if project.cutoff_date %} · 截止 {{ project.cutoff_date }}{% endif %}</span>
+</header>
+<main>
+  <h1>{{ project.indication }} · {{ report_title }}</h1>
+  <p class="sub">关注点：{{ project.focus or '未指定' }}</p>
+
+  <div class="kpis">
+    {% for region, st in coverage.regions.items() %}
+    <div class="kpi"><b>{{ st.get('ok', 0) }}<span> / {{ st.values() | sum }}</span></b>
+      <span>{{ '中国' if region == 'china' else '全球' }}检索路线成功
+      {% if st.get('blocked') %}· <span class="warn">{{ st.blocked }} 条被拦截</span>{% endif %}
+      {% if st.get('failed') %}· <span class="warn">{{ st.failed }} 条失败</span>{% endif %}</span></div>
+    {% endfor %}
+    {% block kpis %}{% endblock %}
+  </div>
+
+  {% if findings %}
+  <h2>要点</h2>
+  {% for f in findings %}
+  <div class="finding"><h3>{{ f.title }}</h3><ul>{% for b in f.bullets %}<li>{{ b }}</li>{% endfor %}</ul></div>
+  {% endfor %}
+  {% endif %}
+
+  {% block content %}{% endblock %}
+
+  <h2>检索覆盖</h2>
+  <details class="card"><summary>{{ coverage.routes | length }} 条路线记录</summary>
+  <table><thead><tr><th>区域</th><th>路线</th><th>状态</th><th>次数</th><th>命中</th><th>新增实体</th></tr></thead><tbody>
+  {% for r in coverage.routes %}<tr><td>{{ '中国' if r.region == 'china' else '全球' }}</td><td>{{ r.route_id }}</td>
+  <td><span class="badge {{ 'verified' if r.status == 'ok' else 'unverified' }}">{{ r.status }}</span></td>
+  <td>{{ r.n }}</td><td>{{ r.hits or 0 }}</td><td>{{ r.new or 0 }}</td></tr>{% endfor %}
+  </tbody></table></details>
+</main>
+<script id="charts" type="application/json">{{ charts_json | tojson }}</script>
+{% if assets %}<script>{{ assets.echarts | safe }}</script><script>{{ assets.js | safe }}</script>
+{% else %}<script src="{{ static }}/echarts.min.js"></script><script src="{{ static }}/portal.js"></script>{% endif %}
+</body>
+</html>

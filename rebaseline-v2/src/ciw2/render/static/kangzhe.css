@@ -1,0 +1,53 @@
+/* 康哲设计 tokens（移植自 v1 contracts/kangzhe/v6-site/tokens/tokens.json 与 portal.css） */
+:root{
+  --brand:#FF9900; --brand-2:#FFCC00; --ink:#0F1115; --body:#404040; --muted:#64676B;
+  --risk:#C00000; --canvas:#FBFCFD; --bg:#F8F9FA; --surface:#FFFFFF; --border:#E5E7EB;
+  --th:#F79646; --radius:14px;
+  --med:#FF9900; --med-bg:#FBE3D6; --ops:#407AAA; --ops-bg:#DCE6F2;
+  --stat:#587B3B; --stat-bg:#DCE9C8; --pv:#A85F34; --pv-bg:#FCF5E6;
+  --font:"Microsoft YaHei","微软雅黑","PingFang SC","Noto Sans CJK SC",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--body);font:14px/1.6 var(--font)}
+a{color:var(--ops)} a:hover{color:var(--brand)}
+header.top{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;
+  align-items:center;gap:24px;position:sticky;top:0;z-index:10}
+header.top .brand{font-weight:700;color:var(--ink);font-size:16px}
+header.top nav a{margin-right:16px;text-decoration:none;color:var(--muted);font-weight:600}
+header.top nav a.on{color:var(--ink);border-bottom:2px solid var(--brand);padding-bottom:4px}
+main{width:100%;margin:0 auto;padding:16px 24px 40px}
+h1{color:var(--ink);font-size:24px;margin:4px 0 4px} h2{color:var(--ink);font-size:18px;margin:28px 0 12px}
+.sub{color:var(--muted);font-size:13px}
+.card{background:rgba(255,255,255,.94);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;margin:10px 0;box-shadow:0 2px 10px #0f111508}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px}
+.grid>.card{grid-column:span 6;min-width:0}
+.grid>.design-size{grid-column:span 8}.grid>.design-phase{grid-column:span 4}
+.kpis{display:flex;gap:14px;flex-wrap:wrap}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 18px;min-width:150px}
+.kpi b{display:block;font-size:22px;color:var(--ink)} .kpi span{color:var(--muted);font-size:12px}
+.finding{padding:8px 14px;margin:10px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
+.finding h3{margin:0 0 4px;font-size:15px;color:var(--ink)} .finding ul{margin:4px 0 0 18px;padding:0}
+table{border-collapse:collapse;width:100%;background:var(--surface);font-size:13px}
+th{background:var(--th);color:var(--ink);text-align:left;padding:8px 10px;white-space:nowrap;position:sticky;top:0}
+td{border-bottom:1px solid var(--border);padding:7px 10px;vertical-align:top}
+tr:hover td{background:#FFF8EE}
+.tag{display:inline-block;border-radius:999px;padding:0 8px;font-size:12px;margin:1px 2px;background:var(--ops-bg);color:var(--ops)}
+.tag.med{background:var(--med-bg);color:#A35F00} .tag.stat{background:var(--stat-bg);color:var(--stat)}
+.badge{font-size:12px;border-radius:6px;padding:1px 6px;white-space:nowrap}
+.badge.verified{background:var(--stat-bg);color:var(--stat)}
+.badge.unverified,.badge.conflict{background:#FDE7E7;color:var(--risk);font-weight:600}
+.badge.unknown{background:#EEE;color:var(--muted)}
+.chart{height:360px} .chart.sm{height:300px}
+.filter{width:320px;padding:7px 12px;border:1px solid var(--border);border-radius:10px;font:inherit}
+.warn{color:var(--risk)} .muted{color:var(--muted)}
+details summary{cursor:pointer;color:var(--muted)} .quote{font-size:12px;color:var(--muted);max-width:420px}
+form.new input,form.new textarea,form.new select{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:10px;font:inherit;margin:4px 0 10px}
+button,.btn{background:var(--brand);color:var(--ink);border:0;border-radius:10px;padding:8px 18px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
+button.secondary{background:var(--ops)}
+.table-card{overflow:auto;padding:0;max-width:100%}
+details summary{font-weight:500}.evidence{margin:3px 0}
+.evidence blockquote{margin:6px 0;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--body)}
+.criteria{white-space:pre-wrap;font:inherit;max-width:70ch}
+.endpoint-entry{display:inline-block;margin:3px 12px 3px 0}
+:focus-visible{outline:2px solid var(--ops);outline-offset:3px}
+button.secondary{color:#fff}

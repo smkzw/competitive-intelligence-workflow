@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.env
+ciw-data/
+src/ciw2/render/static/echarts.min.js
+*.sqlite3
+*.pdf

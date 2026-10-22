@@ -1,0 +1,694 @@
+{
+ "protocolSection": {
+  "identificationModule": {
+   "nctId": "NCT03985943",
+   "orgStudyIdInfo": {
+    "id": "RD.06.SPR.118161"
+   },
+   "organization": {
+    "fullName": "Galderma R&D",
+    "class": "INDUSTRY"
+   },
+   "briefTitle": "Efficacy and Safety of Nemolizumab in Subjects With Moderate-to-Severe Atopic Dermatitis",
+   "officialTitle": "A Randomized, Double-Blind, Placebo-Controlled Study to Assess the Efficacy and Safety of Nemolizumab in Subjects With Moderate-to-Severe Atopic Dermatitis"
+  },
+  "statusModule": {
+   "statusVerifiedDate": "2024-08",
+   "overallStatus": "COMPLETED",
+   "expandedAccessInfo": {
+    "hasExpandedAccess": false
+   },
+   "startDateStruct": {
+    "date": "2019-06-27",
+    "type": "ACTUAL"
+   },
+   "primaryCompletionDateStruct": {
+    "date": "2021-12-29",
+    "type": "ACTUAL"
+   },
+   "completionDateStruct": {
+    "date": "2022-08-11",
+    "type": "ACTUAL"
+   },
+   "studyFirstSubmitDate": "2019-06-11",
+   "studyFirstSubmitQcDate": "2019-06-11",
+   "studyFirstPostDateStruct": {
+    "date": "2019-06-14",
+    "type": "ACTUAL"
+   },
+   "resultsFirstSubmitDate": "2024-06-21",
+   "resultsFirstSubmitQcDate": "2024-08-09",
+   "resultsFirstPostDateStruct": {
+    "date": "2024-08-14",
+    "type": "ACTUAL"
+   },
+   "lastUpdateSubmitDate": "2024-08-09",
+   "lastUpdatePostDateStruct": {
+    "date": "2024-08-14",
+    "type": "ACTUAL"
+   }
+  },
+  "sponsorCollaboratorsModule": {
+   "responsibleParty": {
+    "type": "SPONSOR"
+   },
+   "leadSponsor": {
+    "name": "Galderma R&D",
+    "class": "INDUSTRY"
+   }
+  },
+  "conditionsModule": {
+   "conditions": [
+    "Moderate-to-Severe Atopic Dermatitis"
+   ],
+   "keywords": [
+    "CD14152",
+    "Nemolizumab",
+    "Atopic Dermatitis"
+   ]
+  },
+  "designModule": {
+   "studyType": "INTERVENTIONAL",
+   "phases": [
+    "PHASE3"
+   ],
+   "designInfo": {
+    "allocation": "RANDOMIZED",
+    "interventionModel": "PARALLEL",
+    "primaryPurpose": "TREATMENT",
+    "maskingInfo": {
+     "masking": "QUADRUPLE",
+     "maskingDescription": "Treatment",
+     "whoMasked": [
+      "PARTICIPANT",
+      "CARE_PROVIDER",
+      "INVESTIGATOR",
+      "OUTCOMES_ASSESSOR"
+     ]
+    }
+   },
+   "enrollmentInfo": {
+    "count": 941,
+    "type": "ACTUAL"
+   }
+  },
+  "armsInterventionsModule": {
+   "armGroups": [
+    {
+     "label": "Placebo",
+     "type": "PLACEBO_COMPARATOR",
+     "description": "Placebo",
+     "interventionNames": [
+      "Drug: Placebo"
+     ]
+    },
+    {
+     "label": "Nemolizumab",
+     "type": "EXPERIMENTAL",
+     "description": "Nemolizumab Active",
+     "interventionNames": [
+      "Drug: Nemolizumab"
+     ]
+    }
+   ],
+   "interventions": [
+    {
+     "type": "DRUG",
+     "name": "Placebo",
+     "description": "Placebo",
+     "armGroupLabels": [
+      "Placebo"
+     ]
+    },
+    {
+     "type": "DRUG",
+     "name": "Nemolizumab",
+     "description": "Nemolizumab",
+     "armGroupLabels": [
+      "Nemolizumab"
+     ],
+     "otherNames": [
+      "CD14152"
+     ]
+    }
+   ]
+  },
+  "outcomesModule": {
+   "primaryOutcomes": [
+    {
+     "measure": "Percentage of Participants With an Investigator's Global Assessment (IGA) Success (IGA of 0 or 1 and a More Than Equal to [>=] 2-point Reduction): Intent-To-Treat (ITT) Population",
+     "description": "IGA success was defined as an IGA score of 0 (clear) or 1 (almost clear) and at least a 2-grade improvement from baseline to Week 16. The IGA is a 5-point scale ranging from 0 (clear) to 4 (severe) used by the Investigator or trained designee to evaluate the global severity of atopic dermatitis (AD) and the clinical response to treatment. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data at Week 16 were considered non-responders.",
+     "timeFrame": "Week 16"
+    },
+    {
+     "measure": "Percentage of Participants With an Investigator's Global Assessment (IGA) Success (IGA of 0 or 1 and a >= 2-point Reduction): Severe Pruritus Population",
+     "description": "IGA success was defined as an IGA score of 0 (clear) or 1 (almost clear) and at least a 2-grade improvement from baseline to Week 16. The IGA is a 5-point scale ranging from 0 (clear) to 4 (severe) used by the Investigator or trained designee to evaluate the global severity of AD and the clinical response to treatment. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered a treatment failure. Participants with missing data at Week 16 were considered non-responders.",
+     "timeFrame": "Week 16"
+    },
+    {
+     "measure": "Percentage of Participants With >=75% Improvement in Eczema Area and Severity Index (EASI-75) at Week 16: ITT Population",
+     "description": "EASI-75 was defined as \\>=75 percent(%) improvement in EASI from baseline to Week 16. EASI evaluates severity of participants AD based on severity of AD clinical signs and % of body surface area (BSA) affected. Severity of clinical signs of AD(erythema, induration/papulation, excoriation and lichenification)scored separately for each of 4 body regions (head \\& neck, upper limbs, trunk \\& lower limbs on 4-point scale: 0= absent; 1= mild; 2= moderate; 3= severe. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data at Week 16 were considered non-responders. EASI total score is composite score ranging from 0 to 72. Higher scores represent greater severity of AD.",
+     "timeFrame": "Week 16"
+    },
+    {
+     "measure": "Percentage of Participants With >=75% Improvement in Eczema Area and Severity Index (EASI-75) at 16: Severe Pruritus Population",
+     "description": "EASI-75 was defined as \\>=75 percent(%) improvement in EASI from baseline to Week 16. EASI evaluates severity of participants AD based on severity of AD clinical signs and % of body surface area (BSA) affected. Severity of clinical signs of AD (erythema, induration/papulation, excoriation and lichenification)scored separately for each of 4 body regions (head \\& neck, upper limbs, trunk \\& lower limbs on 4-point scale: 0= absent; 1= mild; 2= moderate; 3= severe. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data at Week 16 were considered non-responders. EASI total score is composite score ranging from 0 to 72. Higher scores represent greater severity of AD.",
+     "timeFrame": "Week 16"
+    }
+   ],
+   "secondaryOutcomes": [
+    {
+     "measure": "Percentage of Participants With Improvement of >=4 Points in Weekly Average Peak Pruritus Numeric Rating Scale (PP NRS) at Week 16: ITT Population",
+     "description": "The PP NRS is a scale that was used by the participants to report the intensity of their pruritus (itch) during the last 24 hours on a scale of 0 to 10, with 0 being 'no itch' and 10 being the 'worst itch imaginable'. Weekly average PP NRS score was calculated using 7 consecutive days diary data and set to missing if less than 4 days data available. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure.",
+     "timeFrame": "Week 16"
+    },
+    {
+     "measure": "Percentage of Participants With Improvement of >=4 Points in Weekly Average Peak Pruritus Numeric Rating Scale (PP NRS) at Week 16: Severe Pruritus Population",
+     "description": "The PP NRS is a scale that was used by the participants to report the intensity of their pruritus (itch) during the last 24 hours on a scale of 0 to 10, with 0 being 'no itch' and 10 being the 'worst itch imaginable'. Weekly average PP NRS score was calculated using 7 consecutive days diary data and set to missing if less than 4 days data available. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure.",
+     "timeFrame": "Week 16"
+    },
+    {
+     "measure": "Percentage of Participants With <2 Points in Weekly Average PP NRS at Week 16: ITT Population",
+     "description": "The PP NRS is a scale that was used by the participants to report the intensity of their pruritus (itch) during the last 24 hours on a scale of 0 to 10, with 0 being 'no itch' and 10 being the 'worst itch imaginable'. Weekly average PP NRS score was calculated using 7 consecutive days diary data and set to missing if less than 4 days data available. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data were considered non-responders.",
+     "timeFrame": "Week 16"
+    },
+    {
+     "measure": "Percentage of Participants With <2 Points in Weekly Average PP NRS at Week 16: Severe Pruritus Population",
+     "description": "The PP NRS is a scale that was used by the participants to report the intensity of their pruritus (itch) during the last 24 hours on a scale of 0 to 10, with 0 being 'no itch' and 10 being the 'worst itch imaginable'. Weekly average PP NRS score was calculated using 7 consecutive days diary data and set to missing if less than 4 days data available. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data were considered non-responders.",
+     "timeFrame": "Week 16"
+    },
+    {
+     "measure": "Percentage of Participants With an Improvement of Sleep Disturbance Numeric Rating Scale (SD NRS) >=4 at Week 16: ITT Population",
+     "description": "The sleep disturbance NRS is a scale used by the participants to report the degree of their sleep loss related to AD. Participants were asked the following question in their local language: how would you rate your sleep last night? On a scale of 0 to 10, with 0 being 'no sleep loss related to signs/symptoms of AD' and 10 being 'I cannot sleep at all due to the signs/symptoms of AD'. Weekly average SD NRS score was calculated using 7 consecutive days diary data and set to missing if less than 4 days data available. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data were considered non-responders.",
+     "timeFrame": "Week 16"
+    },
+    {
+     "measure": "Percentage of Participants With an Improvement of Sleep Disturbance Numeric Rating Scale (SD NRS) >=4 at Week 16: Severe Pruritus Population",
+     "description": "The sleep disturbance NRS is a scale used by the participants to report the degree of their sleep loss related to AD. Participants were asked the following question in their local language: how would you rate your sleep last night? On a scale of 0 to 10, with 0 being 'no sleep loss related to signs/symptoms of AD' and 10 being 'I cannot sleep at all due to the signs/symptoms of AD'. Weekly average SD NRS score was calculated using 7 consecutive days diary data and set to missing if less than 4 days data available. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data were considered non-responders.",
+     "timeFrame": "Week 16"
+    },
+    {
+     "measure": "Percentage of Participants With Improvement of >=4 Points in Weekly Average Peak Pruritus Numeric Rating Scale (PP NRS) at Week 4: ITT Population",
+     "description": "The PP NRS is a scale that was used by the participants to report the intensity of their pruritus (itch) during the last 24 hours on a scale of 0 to 10, with 0 being 'no itch' and 10 being the 'worst itch imaginable'. Weekly average PP NRS score was calculated using 7 consecutive days diary data and set to missing if less than 4 days data available. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data were considered non-responders.",
+     "timeFrame": "Week 4"
+    },
+    {
+     "measure": "Percentage of Participants With Improvement of >=4 Points in Weekly Average Peak Pruritus Numeric Rating Scale (PP NRS) at Week 4: Severe Pruritus Population",
+     "description": "The PP NRS is a scale that was used by the participants to report the intensity of their pruritus (itch) during the last 24 hours on a scale of 0 to 10, with 0 being 'no itch' and 10 being the 'worst itch imaginable'. Weekly average PP NRS score was calculated using 7 consecutive days diary data and set to missing if less than 4 days data available. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data were considered non-responders.",
+     "timeFrame": "Week 4"
+    },
+    {
+     "measure": "Percentage of Participants With Peak Pruritus Numeric Rating Scale (PP NRS) <2 at Week 4: ITT Population",
+     "description": "The PP NRS is a scale that was used by the participants to report the intensity of their pruritus (itch) during the last 24 hours on a scale of 0 to 10, with 0 being 'no itch' and 10 being the 'worst itch imaginable'. Weekly average PP NRS score was calculated using 7 consecutive days diary data and set to missing if less than 4 days data available. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data were considered non-responders.",
+     "timeFrame": "Week 4"
+    },
+    {
+     "measure": "Percentage of Participants With Peak Pruritus Numeric Rating Scale (PP NRS) <2 at Week 4: Severe Pruritus Population",
+     "description": "The PP NRS is a scale that was used by the participants to report the intensity of their pruritus (itch) during the last 24 hours on a scale of 0 to 10, with 0 being 'no itch' and 10 being the 'worst itch imaginable'. Weekly average PP NRS score was calculated using 7 consecutive days diary data and set to missing if less than 4 days data available. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data were considered non-responders.",
+     "timeFrame": "Week 4"
+    },
+    {
+     "measure": "Percentage of Participants With Improvement of >=4 Points in Weekly Average Peak Pruritus Numeric Rating Scale (PP NRS) at Week 2: ITT Population",
+     "description": "The PP NRS is a scale that was used by the participants to report the intensity of their pruritus (itch) during the last 24 hours on a scale of 0 to 10, with 0 being 'no itch' and 10 being the 'worst itch imaginable'. Weekly average PP NRS score was calculated using 7 consecutive days diary data and set to missing if less than 4 days data available. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data were considered non-responders.",
+     "timeFrame": "Week 2"
+    },
+    {
+     "measure": "Percentage of Participants With Improvement of >=4 Points in Weekly Average Peak Pruritus Numeric Rating Scale (PP NRS) at Week 2: Severe Pruritus Population",
+     "description": "The PP NRS is a scale that was used by the participants to report the intensity of their pruritus (itch) during the last 24 hours on a scale of 0 to 10, with 0 being 'no itch' and 10 being the 'worst itch imaginable'. Weekly average PP NRS score was calculated using 7 consecutive days diary data and set to missing if less than 4 days data available. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data were considered non-responders.",
+     "timeFrame": "Week 2"
+    },
+    {
+     "measure": "Percentage of Participants With Improvement of >=4 Points in Weekly Average Peak Pruritus Numeric Rating Scale (PP NRS) at Week 1: ITT Population",
+     "description": "The PP NRS is a scale that was used by the participants to report the intensity of their pruritus (itch) during the last 24 hours on a scale of 0 to 10, with 0 being 'no itch' and 10 being the 'worst itch imaginable'. Weekly average PP NRS score was calculated using 7 consecutive days diary data and set to missing if less than 4 days data available. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data were considered non-responders.",
+     "timeFrame": "Week 1"
+    },
+    {
+     "measure": "Percentage of Participants With Improvement of >=4 Points in Weekly Average Peak Pruritus Numeric Rating Scale (PP NRS) at Week 1: Severe Pruritus Population",
+     "description": "The PP NRS is a scale that was used by the participants to report the intensity of their pruritus (itch) during the last 24 hours on a scale of 0 to 10, with 0 being 'no itch' and 10 being the 'worst itch imaginable'. Weekly average PP NRS score was calculated using 7 consecutive days diary data and set to missing if less than 4 days data available. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data were considered non-responders.",
+     "timeFrame": "Week 1"
+    }
+   ]
+  },
+  "eligibilityModule": {
+   "eligibilityCriteria": "Key Inclusion Criteria:\n\n* Male or female subjects aged greater than and equal to (\\>=) 12 years at the screening visit.\n* Chronic atopic dermatitis (according to American Academy of Dermatology Consensus Criteria) that has been present for at least 2 years before the screening visit.\n* Eczema Area and Severity Index (EASI) score \\>=16 at the screening and baseline visits.\n* Investigator Global Assessment (IGA) score \\>= 3 (scale of 0 to 4) at the screening and baseline visits.\n* AD involvement \\>= 10 percent (%) of body surface area (BSA) at screening and baseline visits.\n* Peak Pruritus Numerical Rating Scale (PPNRS) score of at least 4.0 at the screening and baseline visit.\n* Documented recent history of inadequate response to topical medications (topical corticosteroids \\[TCS\\] with or without Topical calcineurin inhibitors \\[TCI\\]).\n* Female subjects of childbearing potential (that is, fertile, following menarche and until becoming postmenopausal unless permanently sterile) must agree either to be strictly abstinent throughout the study and for 12 weeks after the last study drug injection, or to use an adequate and approved method of contraception throughout the study and for 12 weeks after the last study drug injection.\n\nKey Exclusion Criteria:\n\n* Body weight (\\<) 30 kilograms (kg).\n* Exacerbation of asthma requiring hospitalization in the preceding 12 months. Uncontrolled asthma in the preceding 3 months.\n* Cutaneous infection within 1 week before the baseline visit, any infection requiring treatment with oral or parenteral antibiotics, antivirals, antiparasitics or antifungals within 2 weeks before the baseline visit, or any confirmed or suspected coronavirus disease (COVID)-19 infection within 2 weeks before the screening or baseline visit.\n* Pregnant women, breastfeeding women, or women planning a pregnancy during the clinical study.\n\nNote: Subjects with chronic, stable use of prophylactic treatment for recurrent herpes viral infection can be included in this clinical study.\n\n* History of hypersensitivity (including anaphylaxis) to an immunoglobulin product (plasma-derived or recombinant, example, monoclonal antibody) or to any of the study drug excipients.\n* Any clinically significant issue, based on investigator judgement.",
+   "healthyVolunteers": false,
+   "sex": "ALL",
+   "minimumAge": "12 Years",
+   "stdAges": [
+    "CHILD",
+    "ADULT",
+    "OLDER_ADULT"
+   ]
+  },
+  "contactsLocationsModule": {
+   "locations": [
+    {
+     "country": "United States",
+     "city": "North Little Rock"
+    },
+    {
+     "country": "United States",
+     "city": "Cerritos"
+    },
+    {
+     "country": "United States",
+     "city": "Fountain Valley"
+    },
+    {
+     "country": "United States",
+     "city": "Fullerton"
+    },
+    {
+     "country": "United States",
+     "city": "Lomita"
+    },
+    {
+     "country": "United States",
+     "city": "Los Angeles"
+    }
+   ]
+  }
+ },
+ "resultsSection": {
+  "outcomeMeasuresModule": {
+   "outcomeMeasures": [
+    {
+     "type": "PRIMARY",
+     "title": "Percentage of Participants With an Investigator's Global Assessment (IGA) Success (IGA of 0 or 1 and a More Than Equal to [>=] 2-point Reduction): Intent-To-Treat (ITT) Population",
+     "description": "IGA success was defined as an IGA score of 0 (clear) or 1 (almost clear) and at least a 2-grade improvement from baseline to Week 16. The IGA is a 5-point scale ranging from 0 (clear) to 4 (severe) used by the Investigator or trained designee to evaluate the global severity of atopic dermatitis (AD) and the clinical response to treatment. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered treatment failure. Participants with missing data at Week 16 were considered non-responders.",
+     "populationDescription": "The ITT population consisted of all randomized participants. Data was planned to be collected and analyzed for Initial Treatment Period.",
+     "reportingStatus": "POSTED",
+     "paramType": "NUMBER",
+     "unitOfMeasure": "percentage of participants",
+     "timeFrame": "Week 16",
+     "groups": [
+      {
+       "id": "OG000",
+       "title": "Initial Treatment Period (Baseline - Week 16 Predose): Placebo",
+       "description": "Participants received placebo via 2 SC injections at Day 1, thereafter, Q4W at Weeks 4, 8, and 12 by a single SC injection during Initial Treatment Period."
+      },
+      {
+       "id": "OG001",
+       "title": "Initial Treatment Period (Baseline - Week 16 Predose): Nemolizumab 30 mg",
+       "description": "Participants received nemolizumab 30 mg via 2 SC injections at Day 1, thereafter, Q4W at Weeks 4, 8, and 12 by a single SC injection during Initial Treatment Period."
+      }
+     ],
+     "denoms": [
+      {
+       "units": "Participants",
+       "counts": [
+        {
+         "groupId": "OG000",
+         "value": "321"
+        },
+        {
+         "groupId": "OG001",
+         "value": "620"
+        }
+       ]
+      }
+     ],
+     "classes": [
+      {
+       "categories": [
+        {
+         "measurements": [
+          {
+           "groupId": "OG000",
+           "value": "24.6"
+          },
+          {
+           "groupId": "OG001",
+           "value": "35.6"
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "analyses": [
+      {
+       "groupIds": [
+        "OG000",
+        "OG001"
+       ],
+       "groupDescription": "A hierarchical testing procedure was used to control the overall type I error. Testing was performed sequentially in order the outcome measures were reported and continued when the test for the preceding outcome measure was statistically significant at two-sided 2.5% significance level.",
+       "nonInferiorityType": "OTHER",
+       "pValue": "0.0003",
+       "pValueComment": "Strata-adjusted p-values were calculated from Cochran-Mantel-Haenszel test adjusting randomized stratification variables (IGA severity \\[3=moderate, 4=severe\\] and PP NRS \\[\\>=7, \\<7\\]).",
+       "statisticalMethod": "Cochran-Mantel-Haenszel",
+       "paramType": "Strata-adjusted percentage difference",
+       "paramValue": "11.5",
+       "ciPctValue": "97.5",
+       "ciNumSides": "TWO_SIDED",
+       "ciLowerLimit": "4.7",
+       "ciUpperLimit": "18.3"
+      }
+     ]
+    },
+    {
+     "type": "PRIMARY",
+     "title": "Percentage of Participants With an Investigator's Global Assessment (IGA) Success (IGA of 0 or 1 and a >= 2-point Reduction): Severe Pruritus Population",
+     "description": "IGA success was defined as an IGA score of 0 (clear) or 1 (almost clear) and at least a 2-grade improvement from baseline to Week 16. The IGA is a 5-point scale ranging from 0 (clear) to 4 (severe) used by the Investigator or trained designee to evaluate the global severity of AD and the clinical response to treatment. If a participant received any rescue therapy, the data after receipt of rescue therapy was considered a treatment failure. Participants with missing data at Week 16 were considered non-responders.",
+     "populationDescription": "Severe pruritus population consisted of all randomized participants with a baseline PP NRS \\>=7. Data was planned to be collected and analyzed for Initial Treatment Period.",
+     "reportingStatus": "POSTED",
+     "paramType": "NUMBER",
+     "unitOfMeasure": "percentage of participants",
+     "timeFrame": "Week 16",
+     "groups": [
+      {
+       "id": "OG000",
+       "title": "Initial Treatment Period (Baseline - Week 16 Predose): Placebo",
+       "description": "Participants received placebo via 2 SC injections at Day 1, thereafter, Q4W at Weeks 4, 8, and 12 by a single SC injection during Initial Treatment Period."
+      },
+      {
+       "id": "OG001",
+       "title": "Initial Treatment Period (Baseline - Week 16 Predose): Nemolizumab 30 mg",
+       "description": "Participants received nemolizumab 30 mg via 2 SC injections at Day 1, thereafter, Q4W at Weeks 4, 8, and 12 by a single SC injection during Initial Treatment Period."
+      }
+     ],
+     "denoms": [
+      {
+       "units": "Participants",
+       "counts": [
+        {
+         "groupId": "OG000",
+         "value": "210"
+        },
+        {
+         "groupId": "OG001",
+         "value": "406"
+        }
+       ]
+      }
+     ],
+     "classes": [
+      {
+       "categories": [
+        {
+         "measurements": [
+          {
+           "groupId": "OG000",
+           "value": "21.4"
+          },
+          {
+           "groupId": "OG001",
+           "value": "35.5"
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "analyses": [
+      {
+       "groupIds": [
+        "OG000",
+        "OG001"
+       ],
+       "groupDescription": "A hierarchical testing procedure was used to control the overall type I error. Testing was performed sequentially in order the outcome measures were reported and continued when the test for the preceding outcome measure was statistically significant at two-sided 2.5% significance level.",
+       "nonInferiorityType": "OTHER",
+       "pValue": "0.0002",
+       "pValueComment": "Strata-adjusted p-values were calculated from Cochran-Mantel-Haenszel test adjusting randomized stratification variables (IGA severity \\[3=moderate, 4=severe\\]).",
+       "statisticalMethod": "Cochran-Mantel-Haenszel",
+       "paramType": "Strata-adjusted percentage difference",
+       "paramValue": "14.3",
+       "ciPctValue": "97.5",
+       "ciNumSides": "TWO_SIDED",
+       "ciLowerLimit": "6.1",
+       "ciUpperLimit": "22.5"
+      }
+     ]
+    }
+   ]
+  },
+  "adverseEventsModule": {
+   "frequencyThreshold": "5",
+   "timeFrame": "Initial Treatment Period: From baseline to Week 16 pre-dose; Maintenance Period: From end of Initial Treatment Period (i.e., Week 16) to Week 48",
+   "description": "The SP comprised all participants who received at least 1 dose of study drug.",
+   "eventGroups": [
+    {
+     "id": "EG000",
+     "title": "Initial Treatment Period (Baseline - Week 16 Predose): Placebo",
+     "description": "Participants received placebo via 2 SC injections at Day 1, thereafter, Q4W at Weeks 4, 8, and 12 by a single SC injection during Initial Treatment Period.",
+     "deathsNumAffected": 0,
+     "deathsNumAtRisk": 321,
+     "seriousNumAffected": 4,
+     "seriousNumAtRisk": 321,
+     "otherNumAffected": 67,
+     "otherNumAtRisk": 321
+    },
+    {
+     "id": "EG001",
+     "title": "Initial Treatment Period (Baseline - Week 16 Predose): Nemolizumab 30 mg",
+     "description": "Participants received nemolizumab 30 milligrams (mg) via 2 SC injections at Day 1, thereafter, Q4W at Weeks 4, 8, and 12 by a single SC injection during Initial Treatment Period.",
+     "deathsNumAffected": 0,
+     "deathsNumAtRisk": 616,
+     "seriousNumAffected": 6,
+     "seriousNumAtRisk": 616,
+     "otherNumAffected": 144,
+     "otherNumAtRisk": 616
+    },
+    {
+     "id": "EG002",
+     "title": "Maintenance Period (Week 16-Week 48): Nemolizumab 30 mg Q4W to Q4W",
+     "description": "Participants who received nemolizumab, Q4W during Initial Treatment Period and were clinical responders (defined as participants with an IGA of 0 (clear) or 1 (almost clear) or a \\>=75% improvement in EASI from Baseline) at Week 16 received nemolizumab 30 mg, Q4W at Weeks 16, 20, 24, 28, 32, 36, 40, and 44 by a single SC injection during Maintenance Period.",
+     "deathsNumAffected": 0,
+     "deathsNumAtRisk": 91,
+     "seriousNumAffected": 4,
+     "seriousNumAtRisk": 91,
+     "otherNumAffected": 27,
+     "otherNumAtRisk": 91
+    },
+    {
+     "id": "EG003",
+     "title": "Maintenance Period (Week 16-Week 48): Nemolizumab 30 mg Q4W to Q8W",
+     "description": "Participants who received nemolizumab, Q4W during Initial Treatment Period and were clinical responders (defined as participants with an IGA of 0 (clear) or 1 (almost clear) or a \\>=75% improvement in EASI from Baseline) at Week 16 received nemolizumab 30 mg, every 8 weeks (Q8W) at Weeks 16, 24, 32, and 40 by a single SC injection during Maintenance Period.",
+     "deathsNumAffected": 0,
+     "deathsNumAtRisk": 90,
+     "seriousNumAffected": 3,
+     "seriousNumAtRisk": 90,
+     "otherNumAffected": 28,
+     "otherNumAtRisk": 90
+    },
+    {
+     "id": "EG004",
+     "title": "Maintenance Period (Week 16-Week 48): Nemolizumab 30 mg Q4W to Placebo Q4W",
+     "description": "Participants who received nemolizumab, Q4W during Initial Treatment Period and were clinical responders (defined as participants with an IGA of 0 (clear) or 1 (almost clear) or a \\>=75% improvement in EASI from Baseline) at Week 16 received placebo, Q4W at Weeks 16, 20, 24, 28, 32, 36, 40, and 44 by a single SC injection during Maintenance Period.",
+     "deathsNumAffected": 0,
+     "deathsNumAtRisk": 91,
+     "seriousNumAffected": 2,
+     "seriousNumAtRisk": 91,
+     "otherNumAffected": 33,
+     "otherNumAtRisk": 91
+    },
+    {
+     "id": "EG005",
+     "title": "Maintenance Period (Week 16-Week 48): Placebo Q4W Re-assigned to Placebo Q4W",
+     "description": "Participants who received placebo, Q4W during Initial Treatment Period and were clinical responders (defined as participants with an IGA of 0 (clear) or 1 (almost clear) or a \\>=75% improvement in EASI from Baseline) at Week 16 received placebo, Q4W at Weeks 16, 20, 24, 28, 32, 36, 40, and 44 by a single SC injection during Maintenance Period.",
+     "deathsNumAffected": 0,
+     "deathsNumAtRisk": 100,
+     "seriousNumAffected": 1,
+     "seriousNumAtRisk": 100,
+     "otherNumAffected": 35,
+     "otherNumAtRisk": 100
+    }
+   ],
+   "seriousEvents": [
+    {
+     "term": "COVID-19 pneumonia",
+     "organSystem": "Infections and infestations",
+     "sourceVocabulary": "MedDRA(25.0)",
+     "assessmentType": "NON_SYSTEMATIC_ASSESSMENT",
+     "stats": [
+      {
+       "groupId": "EG000",
+       "numAffected": 1,
+       "numAtRisk": 321
+      },
+      {
+       "groupId": "EG001",
+       "numAffected": 0,
+       "numAtRisk": 616
+      },
+      {
+       "groupId": "EG002",
+       "numAffected": 0,
+       "numAtRisk": 91
+      },
+      {
+       "groupId": "EG003",
+       "numAffected": 0,
+       "numAtRisk": 90
+      },
+      {
+       "groupId": "EG004",
+       "numAffected": 0,
+       "numAtRisk": 91
+      },
+      {
+       "groupId": "EG005",
+       "numAffected": 0,
+       "numAtRisk": 100
+      }
+     ]
+    },
+    {
+     "term": "Salivary gland cancer",
+     "organSystem": "Neoplasms benign, malignant and unspecified (incl cysts and polyps)",
+     "sourceVocabulary": "MedDRA(25.0)",
+     "assessmentType": "NON_SYSTEMATIC_ASSESSMENT",
+     "stats": [
+      {
+       "groupId": "EG000",
+       "numAffected": 0,
+       "numAtRisk": 321
+      },
+      {
+       "groupId": "EG001",
+       "numAffected": 1,
+       "numAtRisk": 616
+      },
+      {
+       "groupId": "EG002",
+       "numAffected": 0,
+       "numAtRisk": 91
+      },
+      {
+       "groupId": "EG003",
+       "numAffected": 0,
+       "numAtRisk": 90
+      },
+      {
+       "groupId": "EG004",
+       "numAffected": 0,
+       "numAtRisk": 91
+      },
+      {
+       "groupId": "EG005",
+       "numAffected": 0,
+       "numAtRisk": 100
+      }
+     ]
+    },
+    {
+     "term": "Uterine leiomyoma",
+     "organSystem": "Neoplasms benign, malignant and unspecified (incl cysts and polyps)",
+     "sourceVocabulary": "MedDRA(25.0)",
+     "assessmentType": "NON_SYSTEMATIC_ASSESSMENT",
+     "stats": [
+      {
+       "groupId": "EG000",
+       "numAffected": 0,
+       "numAtRisk": 321
+      },
+      {
+       "groupId": "EG001",
+       "numAffected": 1,
+       "numAtRisk": 616
+      },
+      {
+       "groupId": "EG002",
+       "numAffected": 0,
+       "numAtRisk": 91
+      },
+      {
+       "groupId": "EG003",
+       "numAffected": 0,
+       "numAtRisk": 90
+      },
+      {
+       "groupId": "EG004",
+       "numAffected": 0,
+       "numAtRisk": 91
+      },
+      {
+       "groupId": "EG005",
+       "numAffected": 0,
+       "numAtRisk": 100
+      }
+     ]
+    }
+   ],
+   "otherEvents": [
+    {
+     "term": "COVID-19",
+     "organSystem": "Infections and infestations",
+     "sourceVocabulary": "MedDRA(25.0)",
+     "assessmentType": "NON_SYSTEMATIC_ASSESSMENT",
+     "stats": [
+      {
+       "groupId": "EG000",
+       "numAffected": 6,
+       "numAtRisk": 321
+      },
+      {
+       "groupId": "EG001",
+       "numAffected": 10,
+       "numAtRisk": 616
+      },
+      {
+       "groupId": "EG002",
+       "numAffected": 9,
+       "numAtRisk": 91
+      },
+      {
+       "groupId": "EG003",
+       "numAffected": 9,
+       "numAtRisk": 90
+      },
+      {
+       "groupId": "EG004",
+       "numAffected": 6,
+       "numAtRisk": 91
+      },
+      {
+       "groupId": "EG005",
+       "numAffected": 10,
+       "numAtRisk": 100
+      }
+     ]
+    },
+    {
+     "term": "Nasopharyngitis",
+     "organSystem": "Infections and infestations",
+     "sourceVocabulary": "MedDRA(25.0)",
+     "assessmentType": "NON_SYSTEMATIC_ASSESSMENT",
+     "stats": [
+      {
+       "groupId": "EG000",
+       "numAffected": 8,
+       "numAtRisk": 321
+      },
+      {
+       "groupId": "EG001",
+       "numAffected": 9,
+       "numAtRisk": 616
+      },
+      {
+       "groupId": "EG002",
+       "numAffected": 7,
+       "numAtRisk": 91
+      },
+      {
+       "groupId": "EG003",
+       "numAffected": 5,
+       "numAtRisk": 90
+      },
+      {
+       "groupId": "EG004",
+       "numAffected": 7,
+       "numAtRisk": 91
+      },
+      {
+       "groupId": "EG005",
+       "numAffected": 6,
+       "numAtRisk": 100
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "hasResults": true
+}

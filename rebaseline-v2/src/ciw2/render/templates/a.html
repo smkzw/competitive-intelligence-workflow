@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block kpis %}
+<div class="kpi"><b>{{ data.rows | length }}</b><span>纳入药物（含待定）</span></div>
+<div class="kpi"><b>{{ data.rows | selectattr('phase_china', 'ne', 'unknown') | list | length }}</b><span>有中国阶段信息</span></div>
+<div class="kpi"><b>{{ data.excluded | length }}</b><span>已排除</span></div>
+{% endblock %}
+{% block content %}
+<div class="grid">
+  <div class="card"><h2>靶点 × 全球最高阶段</h2><div id="chart-heat" class="chart"></div></div>
+  <div class="card"><h2>阶段分布：全球 vs 中国</h2><div id="chart-phase" class="chart"></div></div>
+</div>
+<h2>竞品管线</h2>
+<input class="filter" data-filter="tbl-a" placeholder="筛选：药物 / 靶点 / 企业 / 阶段">
+<div class="card" style="overflow:auto"><table id="tbl-a"><thead><tr>
+<th>药物</th><th>靶点</th><th>类型</th><th>研发/权益方</th><th>中国 MAH</th><th>中国阶段</th><th>全球阶段</th>
+<th>试验数（含中国站点）</th><th>发现路线</th><th>纳入</th></tr></thead><tbody>
+{% for r in data.rows %}<tr>
+<td><b>{{ r.name }}</b>{% if r.name_zh %}<br>{{ r.name_zh }}{% endif %}</td>
+<td>{% for t in r.targets %}<span class="tag">{{ t }}</span>{% endfor %}</td>
+<td>{{ r.modality or '—' }}</td><td>{{ r.companies | join('；') or '—' }}</td><td>{{ r.china_mah or '—' }}</td>
+<td><span class="tag med">{{ r.phase_china | phase }}</span></td><td>{{ r.phase_global | phase }}</td>
+<td>{{ r.n_trials }}（{{ r.n_china_trials }}）</td>
+<td class="muted">{{ r.found_by | join(', ') }}</td>
+<td>{% if r.in_scope is none %}<span class="badge unknown">待定</span>{% else %}<span class="badge verified">纳入</span>{% endif %}
+{% if r.scope_reason %}<div class="quote">{{ r.scope_reason }}</div>{% endif %}
+{% for u in r.evidence_urls[:3] %}<div><a href="{{ u }}" target="_blank" rel="noopener">来源{{ loop.index }}</a></div>{% endfor %}</td>
+</tr>{% endfor %}
+</tbody></table></div>
+{% if data.excluded %}
+<details class="card"><summary>已排除 {{ data.excluded | length }} 个候选（含理由）</summary><table><tbody>
+{% for r in data.excluded %}<tr><td>{{ r.name }}</td><td>{{ r.scope_reason }}</td></tr>{% endfor %}
+</tbody></table></details>
+{% endif %}
+{% endblock %}

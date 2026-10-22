@@ -1,0 +1,50 @@
+# 01 · PRD v2（临床试验医学经理工作台 · 竞品调研子系统）
+
+## 1. 定位
+- 医学经理工作台的一个子系统；**单用户、独立部署的 Web 服务**。
+- 用户输入适应症与需求 → 平台自动跑完调研流水线 → 在平台内以 HTML 门户展示 A/B/C 报告。
+- 内嵌最小 Skill Harness（下称 DSH）：平台自己执行 Skill，不依赖外部 Agent 宿主。
+
+## 2. 用户与场景
+用户：临床试验医学经理（中文工作语言，熟悉临床终点与安全性语义）。场景不定顺序，按需选择：
+
+| 报告 | 回答的问题 | 主要来源 |
+|---|---|---|
+| A 竞争格局 | 该适应症有哪些药、谁在做、到哪一阶段、中国权益/MAH 在谁手里 | 中国登记/CDE/NMPA、CT.gov、企业管线、微信公众号、Drugs@FDA |
+| B 疗效与安全性 | 关键终点与安全性怎么横比 | CT.gov 结构化结果、PubMed/PMC、会议摘要、FDA 审评 |
+| C 试验设计先例 | 我们的方案怎么设计（终点/时间点/样本量/对照/入排） | CT.gov、中国登记、论文方法学 |
+
+## 3. 功能需求
+| ID | 需求 | 验收 |
+|---|---|---|
+| FR1 | 新建项目：适应症、报告类型（多选）、需求原话、关注点、截止日期 | Web 表单 + `POST /api/projects` |
+| FR2 | 后台运行流水线，阶段状态实时可见；失败可从失败阶段继续 | 项目页阶段表；`resume_run` |
+| FR3 | **中国竞品宇宙必须全面**：必跑路线 + 靶点/企业/别名反向扩展 | 每条路线在覆盖台账留痕；M2 用专家金标准清单验召回率 ≥95% |
+| FR4 | 国际竞品尽可能充分：CT.gov、Drugs@FDA、PubMed、会议（全网搜索） | 覆盖台账 |
+| FR5 | 覆盖率是**可见指标而不是门**：被拦截/失败的路线如实显示，不阻止出报告 | 门户「检索覆盖」区块 |
+| FR6 | 字段分级：critical 严格核验（原文片段存在 + 数值出现在片段）；standard 轻量 | `domain/tiers.py`；门户「未核实」标记 |
+| FR7 | 图表数值轴只放已核实数据；不可比条件（终点/时间点/统计形式/单位）分组作图 | `render/portal.py::data_b` |
+| FR8 | 临床语义硬规则：unknown≠0、人数≠次数、比例只由人数/同组分母派生、安全类别保留否定/严重性/分级 | `domain/semantics.py` 单测 |
+| FR9 | 每个事实可追溯：来源 URL、原文片段、抽取方式（code/llm）、核验状态 | 门户表格 + `/api/projects/{id}/facts` |
+| FR10 | Agent 全程留痕可回放 | `/api/runs/{id}/steps` |
+| FR11 | 门户使用康哲设计 tokens + ECharts，可筛选表格 | `render/static/*` |
+| FR12 | 微信公众号检索作为可插拔外部 Skill；仅作线索来源 | `CIW_WECHAT_SEARCH_CMD` |
+
+**明确不做**：报告内编辑、同步、撤销、配置界面、离线分享包（v1 FR13–16）；PDF/PPTX 导出；多用户/权限体系；商业数据库。
+
+## 4. 非功能
+- 部署：单机 `ciw2 serve`；默认只监听 127.0.0.1；对外时设 `CIW_ACCESS_TOKEN`。
+- LLM：任意 OpenAI 兼容接口（默认 DeepSeek，可换 GLM/Qwen/Moonshot/OpenAI）；密钥只来自环境变量。
+- 数据：SQLite + 内容寻址存储（CAS），全部在 `CIW_DATA_DIR`，不入 git。
+- 一次 A 报告运行目标 ≤30 分钟、LLM 成本可控（每个 Skill 有步数预算）。
+- 公共仓库：不得提交本机路径、密钥、第三方全文、运行产物。
+
+## 5. 字段分级（critical 前缀）
+`result.primary` `result.key_secondary` `result.denominator` `safety.sae` `safety.discontinuation` `safety.death`
+`design.sample_size` `design.primary_endpoint` `status.china` `status.china_mah` `status.global_approval`。
+其余为 standard。分级表是代码（`domain/tiers.py`），修改需同时改测试。
+
+## 6. 成功标准
+1. 中国完整性：对 3 个适应症，专家金标准清单召回率 ≥95%（M2 验收）。
+2. critical 字段：抽样 50 条，原文核验通过的字段人工复核准确率 ≥98%。
+3. 用户可在 30 分钟内从新建项目拿到 A 报告；B/C 在 60 分钟内。

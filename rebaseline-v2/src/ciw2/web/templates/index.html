@@ -1,0 +1,20 @@
+{% extends "_layout.html" %}
+{% block content %}
+<div class="grid">
+<div class="card"><h2>新建调研</h2>
+<form class="new" method="post" action="/projects">
+<label>适应症（中文）</label><input name="indication" required placeholder="例如：阵发性睡眠性血红蛋白尿症">
+<label>报告</label><div>
+<label><input type="checkbox" name="reports" value="A" checked style="width:auto"> A 竞争格局</label>
+<label><input type="checkbox" name="reports" value="B" style="width:auto"> B 疗效与安全性</label>
+<label><input type="checkbox" name="reports" value="C" style="width:auto"> C 试验设计先例</label></div>
+<label>需求原话（可选）</label><textarea name="request_text" rows="3" placeholder="例如：重点看中国已上市和 III 期的补体抑制剂"></textarea>
+<label>关注点（可选）</label><input name="focus">
+<label>数据截止日期（可选）</label><input name="cutoff_date" type="date">
+<button type="submit">开始调研</button></form></div>
+<div class="card"><h2>项目</h2><table><thead><tr><th>适应症</th><th>报告</th><th>最近运行</th><th>创建</th></tr></thead><tbody>
+{% for p in projects %}<tr><td><a href="/projects/{{ p.id }}">{{ p.indication }}</a></td><td>{{ p.reports }}</td>
+<td>{% if p.run %}<span class="badge {{ 'verified' if p.run.status == 'succeeded' else ('unverified' if p.run.status == 'failed' else 'unknown') }}">{{ p.run.status }}</span>{% else %}—{% endif %}</td>
+<td class="muted">{{ p.created_at[:16] }}</td></tr>{% else %}<tr><td colspan="4" class="muted">暂无项目</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

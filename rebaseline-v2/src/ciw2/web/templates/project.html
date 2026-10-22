@@ -1,0 +1,29 @@
+{% extends "_layout.html" %}
+{% block title %}{{ p.indication }}{% endblock %}
+{% block head %}{% if latest and latest.status in ('queued', 'running') %}<meta http-equiv="refresh" content="5">{% endif %}{% endblock %}
+{% block content %}
+<h1>{{ p.indication }}</h1>
+<p class="sub">{{ p.request_text or '' }}</p>
+<div class="kpis">
+<div class="kpi"><b>{{ counts.drug }}</b><span>药物</span></div><div class="kpi"><b>{{ counts.trial }}</b><span>试验</span></div>
+<div class="kpi"><b>{{ counts.company }}</b><span>企业</span></div><div class="kpi"><b>{{ n_facts }}</b><span>事实</span></div>
+</div>
+<h2>报告</h2>
+<p>{% for r in p.reports %}<a class="btn" href="/projects/{{ p.id }}/portal/{{ r }}">{{ {'A':'A 竞争格局','B':'B 疗效与安全性','C':'C 试验设计先例'}[r] }}</a> {% endfor %}</p>
+{% if latest %}
+<h2>最近运行 <span class="badge {{ 'verified' if latest.status == 'succeeded' else ('unverified' if latest.status == 'failed' else 'unknown') }}">{{ latest.status }}</span></h2>
+{% if latest.error %}<p class="warn">{{ latest.error }}</p>{% endif %}
+<div class="card"><table><thead><tr><th>阶段</th><th>状态</th><th>阻断</th><th>开始</th><th>结束</th><th>错误</th></tr></thead><tbody>
+{% for s in stages %}<tr><td>{{ s.name }}</td><td><span class="badge {{ 'verified' if s.status == 'succeeded' else ('unverified' if s.status == 'failed' else 'unknown') }}">{{ s.status }}</span></td>
+<td>{{ '是' if s.blocking else '否' }}</td><td class="muted">{{ (s.started_at or '')[11:19] }}</td><td class="muted">{{ (s.finished_at or '')[11:19] }}</td>
+<td class="quote">{{ (s.error or '')[:300] }}</td></tr>{% endfor %}</tbody></table>
+<form method="post" action="/projects/{{ p.id }}/runs" style="margin-top:12px;display:flex;gap:8px">
+{% if latest.status == 'failed' %}<input type="hidden" name="resume_run" value="{{ latest.id }}"><button type="submit">从失败处继续</button>
+{% else %}<button type="submit" class="secondary">重新运行</button>{% endif %}</form></div>
+<h2>检索覆盖</h2>
+<div class="card"><table><thead><tr><th>区域</th><th>路线</th><th>状态</th><th>次数</th><th>命中</th></tr></thead><tbody>
+{% for c in coverage %}<tr><td>{{ c.region }}</td><td>{{ c.route_id }}</td><td>{{ c.status }}</td><td>{{ c.n }}</td><td>{{ c.hits or 0 }}</td></tr>{% endfor %}
+</tbody></table></div>
+<p class="muted">Agent 留痕：<a href="/api/runs/{{ latest.id }}/steps">/api/runs/{{ latest.id }}/steps</a></p>
+{% endif %}
+{% endblock %}
