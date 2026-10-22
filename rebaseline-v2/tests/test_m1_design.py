@@ -204,3 +204,47 @@ def test_c_expanded_definition_is_complete_and_identical_criteria_not_repeated(d
     assert definition in html
     assert html.count(str(escape(criteria))) == 1
     assert f'data-fact-id="{fid}"' in html and 'https://example.org/source' in html
+
+
+def test_secondary_source_atoms_preserve_each_full_definition_and_locator(study):
+    endpoints = [{'measure': 'Same scale', 'timeFrame': 'Week 16', 'description': 'Definition A'},
+                 {'measure': 'Same scale', 'timeFrame': 'Week 24', 'description': 'Definition B'}]
+    study['protocolSection']['outcomesModule']['secondaryOutcomes'] = endpoints
+    facts = [f for f in design_facts(parse_study(study)) if f['field'] == 'design.secondary_endpoint']
+    assert [f['value'] for f in facts] == [
+        {'measure': e['measure'], 'time_frame': e['timeFrame'], 'description': e['description']} for e in endpoints]
+    assert [f['context']['json_path'] for f in facts] == [
+        'outcomesModule.secondaryOutcomes[0]', 'outcomesModule.secondaryOutcomes[1]']
+
+
+def test_all_secondary_instances_survive_report_and_summary_without_last_wins(design_project):
+    from ciw2.pipeline.stages import _compact
+
+    ids = [add_fact(design_project, 'design.secondary_endpoint', {
+        'measure': 'Secondary scale', 'time_frame': visit, 'description': definition})
+        for visit, definition in [('Week 16', 'Exact secondary definition A'),
+                                 ('Week 24', 'Exact secondary definition B'),
+                                 ('Week 24', 'Exact secondary definition B')]]
+    data = data_c(*design_project[:2])
+    row = data['rows'][0]
+    assert {e['fact_id'] for e in row['secondary_endpoints']} == set(ids)
+    assert 'secondary_endpoint' not in row
+    compact = _compact(data)['rows'][0]['secondary_endpoints']
+    assert {e['fact_id'] for e in compact} == set(ids)
+    assert len(compact) == 3 and {e['description'] for e in compact} == {
+        'Exact secondary definition A', 'Exact secondary definition B'}
+    html = render_report(*design_project[:2], 'C')
+    assert '次要终点' in html
+    assert all(f'data-fact-id="{fid}"' in html for fid in ids)
+    assert all(text in html for text in ('Exact secondary definition A', 'Exact secondary definition B'))
+
+
+def test_endpoint_groups_keep_role_and_definition_separate(design_project):
+    for field, definition in [('design.primary_endpoint', 'Definition A'),
+                              ('design.secondary_endpoint', 'Definition A'),
+                              ('design.secondary_endpoint', 'Definition B')]:
+        add_fact(design_project, field, {'measure': 'Same measure', 'description': definition, 'time_frame': 'Week 16'})
+    groups = data_c(*design_project[:2])['endpoint_groups']
+    assert len(groups) == 3
+    assert sorted(g['kind'] for g in groups) == ['primary', 'secondary', 'secondary']
+    assert all(len(g['entries']) == 1 for g in groups)

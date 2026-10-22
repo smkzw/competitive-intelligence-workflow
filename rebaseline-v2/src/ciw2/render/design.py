@@ -41,7 +41,9 @@ def source_ref(fact: dict[str, Any], sources: dict[str, dict[str, Any]]) -> dict
 def endpoint_groups(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     groups: dict[tuple[Any, ...], dict[str, Any]] = {}
     for row in rows:
-        for endpoint in row['primary_endpoints']:
+        endpoints = [(kind, endpoint) for kind in ('primary', 'secondary')
+                     for endpoint in row.get(f'{kind}_endpoints', [])]
+        for kind, endpoint in endpoints:
             name = endpoint.get('measure') or ''
             visit = endpoint.get('time_frame') or ''
             time = parse_timepoint(visit)
@@ -49,8 +51,8 @@ def endpoint_groups(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 time = parse_timepoint('')
             frame = ('days', time.days) if time.days is not None else (
                 ('months', time.months) if time.months is not None else ('raw', visit.casefold().strip()))
-            key = (' '.join(name.casefold().split()), *frame)
-            group = groups.setdefault(key, {'measure': name, 'timepoint': visit, 'entries': []})
+            key = (kind, ' '.join(name.casefold().split()), endpoint.get('description'), *frame)
+            group = groups.setdefault(key, {'kind': kind, 'measure': name, 'timepoint': visit, 'entries': []})
             group['entries'].append({**endpoint, 'trial': row['trial'], 'drugs': row['drugs']})
     return list(groups.values())
 
@@ -70,14 +72,14 @@ def design_data(db: DB, pid: str, phase_zh: dict[str, str]) -> dict[str, Any]:
             continue
         trial = trials[tid]
         row = rows.setdefault(tid, {'trial': trial['name'], 'title': trial['attrs'].get('title'),
-            'url': trial['attrs'].get('url'), 'drugs': names[tid], 'primary_endpoints': [],
+            'url': trial['attrs'].get('url'), 'drugs': names[tid], 'primary_endpoints': [], 'secondary_endpoints': [],
             'unverified': [], 'sources': {}, 'eligibility_thresholds': []})
         ref = source_ref(fact, sources)
         key = 'trial_status' if field == 'status.trial' else field.split('.', 1)[1].replace('.', '_')
         row['sources'].setdefault(key, []).append(ref)
-        if field == 'design.primary_endpoint':
+        if field in {'design.primary_endpoint', 'design.secondary_endpoint'}:
             value = fact['value'] if isinstance(fact['value'], dict) else {'measure': fact['value']}
-            row['primary_endpoints'].append({**value, **ref})
+            row[f'{key}s'].append({**value, **ref})
         else:
             row[key] = fact['value']
         if field == 'design.sample_size':

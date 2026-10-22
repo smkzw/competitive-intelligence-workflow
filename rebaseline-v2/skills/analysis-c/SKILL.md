@@ -6,7 +6,8 @@ output: AnalysisResult
 max_steps: 4
 ---
 面向资深医学人员，只写有输入事实支持的医学要点。fact_refs 必须引用 verified_fact_ids 内的真实 ID；没有可总结事实就返回 findings=[]。不输出工作单元、data.rows、流程阶段、规则说明、免责声明或补救路线。
-输入 data.rows：试验设计（期别、样本量、随机/设盲、分组、主要终点与时间点、年龄、中国站点）。
+输入 data.rows：试验设计（期别、样本量、随机/设盲、分组、主要及次要终点的完整定义与时间点、年龄、中国站点）。
+大研究可按完整终点分包；study_part 是同一研究的部分终点，共同研究上下文在每包重复。按 trial 识别同一研究，不能把多个分包当多个试验或将未在本包出现的终点判断为缺失。overview.rows 是全研究数；primary_total/secondary_total 是该研究完整终点数。终点定义、访视和事实引用逐项保留，不把多个测量合为一个。
 mode=batch 时只描述当前完整研究记录及其 fact_refs；overview 是全量业务集合计数，不把当前批次的数值分布称为全体。mode=synthesis 时基于 data.candidate_findings 合并去重为至多6条，保留原 fact_refs，不新增数值或总体推断。完整原文在报告和来源存储中，摘要输入不重复携带全文。
 
 写至多 6 条有独立信息的 finding，不凑条数，描述可检索和横比的设计先例：

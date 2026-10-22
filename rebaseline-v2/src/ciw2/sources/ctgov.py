@@ -123,7 +123,8 @@ def design_facts(s: dict[str, Any]) -> list[dict[str, Any]]:
                          quote=o.get("measure"), path=f"outcomesModule.primaryOutcomes[{i}]",
                          timepoint=o.get("timeFrame")))
     for i, o in enumerate(s["secondary_outcomes"]):
-        out.append(_fact("design.secondary_endpoint", {"measure": o.get("measure"), "time_frame": o.get("timeFrame")},
+        out.append(_fact("design.secondary_endpoint", {"measure": o.get("measure"), "time_frame": o.get("timeFrame"),
+                                                       "description": o.get("description")},
                          quote=o.get("measure"), path=f"outcomesModule.secondaryOutcomes[{i}]",
                          timepoint=o.get("timeFrame")))
     return out

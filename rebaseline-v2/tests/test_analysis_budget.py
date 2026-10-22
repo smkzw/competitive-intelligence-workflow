@@ -162,3 +162,44 @@ def test_summary_uses_smaller_complete_record_batches_after_actual_large_input_t
     assert all(len(json.dumps(task, ensure_ascii=False)) <= 24000 for task in calls)
     assert [r['trial'] for task in calls if task['mode'] == 'batch' for r in task['data']['rows']] == [
         r['trial'] for r in data['rows']]
+
+
+def test_large_design_study_partitions_whole_endpoints_with_shared_context():
+    from ciw2.pipeline.stages import _analysis_tasks
+
+    endpoints = [{'fact_id': f'fct_{i}', 'measure': 'Scale', 'description': f'Definition {i} ' * 80,
+                  'time_frame': 'Week 16', 'population': 'ITT', 'status': 'verified'} for i in range(90)]
+    row = {'trial': 'NCT00000001', 'drugs': ['Test drug'], 'sample_size': 0,
+           'sample_size_type': 'ACTUAL', 'arms': [{'label': 'A', 'description': 'Full schedule'}],
+           'primary_endpoints': endpoints[:3], 'secondary_endpoints': endpoints[3:],
+           'eligibility_thresholds': [{'rule_text': 'EASI >=16 OR IGA >=3', 'section': 'inclusion'}],
+           'sources': {'secondary_endpoint': [{'fact_id': e['fact_id'], 'status': 'verified'} for e in endpoints[3:]],
+                       'sample_size': [{'fact_id': 'fct_n', 'status': 'verified'}]}}
+    before = json.dumps(row, sort_keys=True)
+    tasks = _analysis_tasks({'rows': [row]}, {'overview': {'rows': 1}}, {e['fact_id'] for e in endpoints} | {'fct_n'})
+    parts = [r for task in tasks for r in task['data']['rows']]
+    assert len(parts) > 1
+    assert all(len(json.dumps(task, ensure_ascii=False)) <= 24000 for task in tasks)
+    assert [e for part in parts for e in part['primary_endpoints']] == endpoints[:3]
+    assert [e for part in parts for e in part['secondary_endpoints']] == endpoints[3:]
+    for i, part in enumerate(parts, 1):
+        assert part['study_part'] == {'index': i, 'count': len(parts), 'primary_total': 3, 'secondary_total': 87}
+        assert all(part[key] == row[key] for key in ('trial', 'drugs', 'sample_size', 'sample_size_type',
+                                                    'arms', 'eligibility_thresholds'))
+    assert set.union(*(set(task['verified_fact_ids']) for task in tasks)) == {e['fact_id'] for e in endpoints} | {'fct_n'}
+    assert all(task['overview']['rows'] == 1 for task in tasks)
+    assert json.dumps(row, sort_keys=True) == before
+
+
+def test_design_partition_never_splits_one_definition_or_drops_unmatched_refs():
+    from ciw2.pipeline.stages import _analysis_tasks
+
+    row = {'trial': 'NCT00000001', 'primary_endpoints': [], 'secondary_endpoints': [
+        {'fact_id': f'fct_{i}', 'description': 'Complete definition' * 600} for i in range(4)],
+        'sources': {'secondary_endpoint': [{'fact_id': 'extra_ref', 'status': 'unknown'}]}}
+    tasks = _analysis_tasks({'rows': [row]}, {}, {'fct_0', 'fct_1', 'fct_2', 'fct_3'})
+    assert all(r['sources']['secondary_endpoint'] == row['sources']['secondary_endpoint']
+               for task in tasks for r in task['data']['rows'])
+    row['secondary_endpoints'][0]['description'] *= 4
+    with pytest.raises(ValueError, match='摘要输入'):
+        _analysis_tasks({'rows': [row]}, {}, {'fct_0'})

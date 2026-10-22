@@ -347,8 +347,46 @@ def _analysis_budget(task: dict[str, Any]) -> None:
         raise ValueError('摘要输入超过整包预算；保留完整记录，不截断临床定义或伪装全量总结')
 
 
+def _design_parts(row: dict[str, Any], fits: Callable[[dict[str, Any]], bool]) -> list[dict[str, Any]]:
+    """Partition oversized studies by whole endpoints, repeating study context."""
+    if fits(row):
+        return [row]
+    fields = ('primary_endpoints', 'secondary_endpoints')
+    endpoints = [(key, item) for key in fields for item in row.get(key, [])]
+    if not endpoints:
+        return [row]  # The ordinary task guard reports oversized non-endpoint context.
+    common = {key: value for key, value in row.items() if key not in fields}
+    ids = {e.get('fact_id') for _, e in endpoints if e.get('fact_id')}
+    common['sources'] = {key: [ref for ref in refs if key not in {'primary_endpoint', 'secondary_endpoint'}
+                              or ref.get('fact_id') not in ids]
+                         for key, refs in row.get('sources', {}).items()}
+
+    def empty() -> dict[str, Any]:
+        return {**common, **{key: [] for key in fields}, 'study_part': {
+            'index': len(endpoints), 'count': len(endpoints),
+            'primary_total': len(row.get(fields[0], [])), 'secondary_total': len(row.get(fields[1], []))}}
+
+    pending, parts = empty(), []
+    for key, endpoint in endpoints:
+        pending[key].append(endpoint)
+        if fits(pending):
+            continue
+        pending[key].pop()
+        if any(pending[name] for name in fields):
+            parts.append(pending)
+        pending = empty()
+        pending[key].append(endpoint)
+        if not fits(pending):
+            raise ValueError('摘要输入中单条完整终点或共同研究上下文超预算，不截断定义')
+    if any(pending[name] for name in fields):
+        parts.append(pending)
+    for index, part in enumerate(parts, 1):
+        part['study_part'] = {**part['study_part'], 'index': index, 'count': len(parts)}
+    return parts
+
+
 def _analysis_tasks(data: dict[str, Any], base: dict[str, Any], verified: set[str]) -> list[dict[str, Any]]:
-    """Plan every complete record before calling a model; no fixed Top-N."""
+    """Plan complete records; large studies use whole endpoints with study context."""
     arrays = {key: value for key, value in data.items() if isinstance(value, list)}
     fixed = {key: value for key, value in data.items() if key not in arrays}
 
@@ -356,6 +394,13 @@ def _analysis_tasks(data: dict[str, Any], base: dict[str, Any], verified: set[st
         return {**base, 'mode': 'batch', 'data': payload,
                 'verified_fact_ids': sorted(_analysis_refs(payload) & verified)}
 
+    def row_fits(row: dict[str, Any]) -> bool:
+        payload = {**fixed, **{key: [] for key in arrays}, 'rows': [row]}
+        return len(json.dumps(task(payload), ensure_ascii=False, default=str)) <= ANALYSIS_TASK_CHARS
+
+    if 'rows' in arrays:
+        arrays['rows'] = [part for row in arrays['rows'] for part in (
+            _design_parts(row, row_fits) if isinstance(row, dict) and 'primary_endpoints' in row else [row])]
     pending = {**fixed, **{key: [] for key in arrays}}
     _analysis_budget(task(pending))
     tasks = []
