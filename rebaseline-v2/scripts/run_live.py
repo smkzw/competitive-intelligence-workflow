@@ -29,19 +29,23 @@ def main() -> None:
     parser.add_argument('--project')
     parser.add_argument('--resume-run')
     args = parser.parse_args()
+    if args.resume_run and not args.project:
+        parser.error('--resume-run requires --project')
     service = Service(get_settings())
     project = args.project or service.create_project(args.indication, args.reports.split(','), focus=args.focus)
     run_id = args.resume_run or service.db.create_run(project)
     root = service.settings.data_dir / 'receipts'
     root.mkdir(exist_ok=True)
-    marker = root / f'{run_id}.json'
+    attempt = len(list(root.glob(f'{run_id}*.json'))) + 1
+    marker = root / f'{run_id}-attempt-{attempt:04d}.json'
     initial = {'project_id': project, 'run_id': run_id, 'requested_model': service.settings.llm_model,
                'state': 'STARTED_REAL_PIPELINE_NOT_ACCEPTED',
                'source_hashes': source_hashes(Path.cwd())}
-    marker.write_text(json.dumps(initial, ensure_ascii=False, indent=2))
-    print(json.dumps(initial, ensure_ascii=False), flush=True)
+    with marker.open('x') as stream:
+        stream.write(json.dumps(initial, ensure_ascii=False, indent=2))
+    print(json.dumps({k: v for k, v in initial.items() if k != 'source_hashes'}, ensure_ascii=False), flush=True)
     service.start_run(project, resume_run=run_id, background=False)
-    run = service.latest_run(project)
+    run = service.db.one('SELECT * FROM runs WHERE id=?', (run_id,))
     stages = service.db.query('SELECT name,status,error FROM stages WHERE run_id=?', (run_id,))
     rows = {r: report_data(service.db, project, r).get('rows', [])
             for r in service.db.project(project)['reports']}
@@ -52,6 +56,7 @@ def main() -> None:
     result = {**initial, 'state': 'REAL_PIPELINE_RETURNED_NOT_VISUAL_OR_SCIENTIFIC_ACCEPTANCE',
               'run_status': run['status'], 'stages': stages, 'rows': {r: len(v) for r, v in rows.items()},
               'facts': len(service.db.current_facts(project)), 'files': files,
+              'source_hashes_end': source_hashes(Path.cwd()),
               'model_calls': [json.loads(x['content']) for x in identity]}
     marker.write_text(json.dumps(result, ensure_ascii=False, indent=2))
     print(json.dumps({k: result[k] for k in ('project_id', 'run_id', 'run_status', 'rows', 'facts')},

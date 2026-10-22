@@ -51,17 +51,19 @@ class LLMError(RuntimeError):
 
 class OpenAICompatLLM:
     def __init__(self, base_url: str, api_key: str, model: str, timeout_s: float = 120.0,
-                 max_retries: int = 3, temperature: float = 0.1) -> None:
+                 max_retries: int = 3, temperature: float = 0.1, max_output_tokens: int = 8192) -> None:
         if not api_key:
             raise LLMError("未配置 CIW_LLM_API_KEY")
         self.base_url = base_url.rstrip("/")
         self.model = model
         self.temperature = temperature
         self.max_retries = max_retries
+        self.max_output_tokens = max_output_tokens
         self._client = httpx.Client(timeout=timeout_s, headers={"Authorization": f"Bearer {api_key}"})
 
     def chat(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]] | None = None) -> LLMReply:
-        body: dict[str, Any] = {"model": self.model, "messages": messages, "temperature": self.temperature}
+        body: dict[str, Any] = {"model": self.model, "messages": messages, "temperature": self.temperature,
+                                'max_tokens': self.max_output_tokens}
         if tools:
             body["tools"] = tools
             body["tool_choice"] = "auto"

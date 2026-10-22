@@ -185,12 +185,18 @@ def _extract(skill: str, extra: Callable[[RunContext, dict[str, Any]], dict[str,
                                       "phase": t["attrs"].get("phase"),
                                       "has_results": t["attrs"].get("has_results")} for t in trials],
                     **extra(rc, d)}
+            if skill == 'extract-design':
+                trial_ids = {t['id'] for t in trials}
+                task['existing_design_facts'] = [
+                    {k: f[k] for k in ('id', 'entity_id', 'field', 'value', 'source_id', 'status')}
+                    for f in rc.db.current_facts(rc.project_id)
+                    if f['entity_id'] in trial_ids and f['field'].startswith('design.')]
             try:
                 res: ExtractionResult = rc.skill(skill, task)
             except Exception as exc:  # noqa: BLE001 - 保留单药错误供恢复
                 errors.append(f"{d['name']}: {type(exc).__name__}: {exc}")
                 continue
-            facts += [{**f.model_dump(), "drug": d["name"]} for f in res.facts]
+            facts += [{**f.model_dump(), "drug": d["name"], 'extraction_model': rc.llm.model} for f in res.facts]
             gaps += [f"{d['name']}: {g}" for g in res.gaps]
         if errors and not facts:
             raise RuntimeError("全部药物抽取失败：" + "; ".join(errors[:5]))
@@ -261,6 +267,15 @@ def verify(rc: RunContext) -> dict[str, Any]:
                     agree = cross_check(rc.check_llm, f)
                     if agree is False:
                         status, reason = "conflict", "二次核对模型不同意"
+            entity_id = _entity_for(rc, f['entity'], f['drug'])
+            supersedes = f.get('supersedes')
+            if supersedes:
+                old = next((v for v in rc.db.current_facts(rc.project_id, entity_id)
+                            if v['id'] == supersedes and v['field'] == f['field']), None)
+                if old is None:
+                    status, reason = 'conflict', '修订对象不属于同项目、同实体、同字段的当前事实'
+                if status != 'verified':
+                    supersedes = None
             stats[status] += 1
             if reason:
                 reasons[reason] = reasons.get(reason, 0) + 1
@@ -268,12 +283,12 @@ def verify(rc: RunContext) -> dict[str, Any]:
                     if f.get(k) is not None}
             if f["field"].startswith("result."):
                 ctxt["endpoint_key"] = ctgov.endpoint_key(ctxt.get("endpoint") or f["field"])
-            rc.db.add_fact({"project_id": rc.project_id, "entity_id": _entity_for(rc, f["entity"], f["drug"]),
+            rc.db.add_fact({"project_id": rc.project_id, "entity_id": entity_id,
                             "field": f["field"], "value": f["value"], "tier": tier, "status": status,
                             "source_id": src["id"] if src else None, "quote": f.get("quote"),
                             "quote_start": start, "quote_end": end,
                             "context": {**ctxt, "source_url": f["source_url"], "verify_note": reason},
-                            "extracted_by": f"llm:{model}"})
+                            "extracted_by": f"llm:{f.get('extraction_model', model)}", 'supersedes': supersedes})
     return {"stats": stats, "reasons": reasons}
 
 

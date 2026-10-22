@@ -83,6 +83,7 @@ class ExtractedFact(Strict):
     denominator: int | None = Field(default=None, description="仅当来源明确给出该组分析 N 时填写")
     source_url: str
     quote: str = Field(description="来源原文中逐字复制的支持片段（≤400 字）")
+    supersedes: str | None = Field(default=None, description='明确取代的既有事实 ID；无依据时留空')
 
 
 class ExtractionResult(Strict):

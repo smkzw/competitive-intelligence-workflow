@@ -28,3 +28,20 @@ def test_missing_quote():
 
 def test_number_boundary():
     assert not check_quote("rate was 135.6%", "rate was 135.6%", 35.6).ok
+
+
+import pytest
+
+
+@pytest.mark.parametrize(
+    ("source", "value", "expected"),
+    [
+        ("The change was 1.5 points.", -1.5, False),
+        ("The response was 10.1 percent.", 10, False),
+        ("The sample size was 1,000 participants.", 1000, True),
+        ("The change was -1.50 points.", -1.5, True),
+        ("The concentration was 1e-3 units.", 0.001, True),
+    ],
+)
+def test_numeric_verification_preserves_sign_precision_and_thousands(source, value, expected):
+    assert check_quote(source, source, value).ok is expected

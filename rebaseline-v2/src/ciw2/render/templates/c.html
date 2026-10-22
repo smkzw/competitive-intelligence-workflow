@@ -5,16 +5,17 @@
 {% if ref.quote %}<blockquote>{{ ref.quote }}</blockquote>{% endif %}</div>{% endfor %}</details>{% endif %}{% endmacro %}
 {% block kpis %}<div class="kpi"><b>{{ data.rows | length }}</b><span>试验设计</span></div>{% endblock %}
 {% block content %}
+{% if not data.rows %}<p class="card">尚未取得试验设计资料。<a href="/projects/{{ project.id }}">查看检索进度</a></p>{% else %}
 <div class="grid">
   {% if data.charts.size.labels %}<div class="card design-size"><h2>样本量</h2><div id="chart-size" class="chart"></div></div>{% endif %}
-  {% if data.rows %}<div class="card design-phase"><h2>期别分布</h2><div id="chart-phase-pie" class="chart sm"></div></div>{% endif %}
+  {% if data.charts.phase %}<div class="card design-phase"><h2>期别分布</h2><div id="chart-phase-pie" class="chart sm"></div></div>{% endif %}
 </div>
 <h2>设计先例横比</h2>
 <label>检索设计先例 <input class="filter" data-filter="tbl-c" placeholder="试验、药物、终点或关键入排"></label>
 <span id="design-count" aria-live="polite">{{ data.rows|length }} 项研究</span>
 <div class="card table-card"><table id="tbl-c"><thead><tr><th>试验</th><th>药物</th><th>期别</th><th>状态</th>
 <th>样本量</th><th>随机/设盲</th><th>分组</th><th>主要终点（时间点）</th><th>年龄与关键阈值</th><th>中国站点</th><th>设计原文</th></tr></thead><tbody>
-{% for r in data.rows %}<tr data-trial="{{ r.trial }}" data-phase="{{ r.phase|phase }}">
+{% for r in data.rows %}<tr data-trial="{{ r.trial }}" data-phase="{{ r.phase|phase }}" data-phase-status="{{ r.phase_status }}">
 <td>{% if r.url %}<a href="{{ r.url }}" target="_blank" rel="noopener">{{ r.trial }}</a>{% else %}{{ r.trial }}{% endif %}
 {% if r.title %}<details><summary>研究名称</summary><div class="quote">{{ r.title }}</div></details>{% endif %}</td>
 <td>{{ r.drugs | join('/') or '—' }}</td><td>{{ r.phase | phase }}</td><td>{{ r.trial_status or '—' }}</td>
@@ -39,4 +40,5 @@
 {% for g in data.endpoint_groups %}<tr><td><details><summary>查看定义</summary>{{ g.measure }}</details></td><td>{{ g.timepoint or '—' }}</td>
 <td>{% for e in g.entries %}<span class="endpoint-entry" data-trial="{{ e.trial }}" data-fact-id="{{ e.fact_id }}">{{ e.trial }} {{ evidence([e]) }}</span>{% endfor %}</td></tr>{% endfor %}
 </tbody></table></div>{% endif %}
+{% endif %}
 {% endblock %}

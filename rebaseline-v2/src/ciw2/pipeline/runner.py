@@ -20,6 +20,12 @@ def execute(rc: RunContext) -> str:
     plan = stages_for(rc.project["reports"])
     done = {r["name"] for r in rc.db.query("SELECT name FROM stages WHERE run_id=? AND status='succeeded'",
                                            (rc.run_id,))}
+    failed = {r['name'] for r in rc.db.query("SELECT name FROM stages WHERE run_id=? AND status='failed'",
+                                           (rc.run_id,))}
+    restart = next((i for i, stage in enumerate(plan) if stage.name in failed), len(plan))
+    # A recovered upstream changes downstream inputs, including an earlier empty
+    # "success". Keep completed stages only before the first failed dependency.
+    done &= {stage.name for stage in plan[:restart]}
     soft_failures: list[str] = []
     for st in plan:
         if st.name in done:

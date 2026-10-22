@@ -298,10 +298,20 @@ def _ctgov_search(ctx: ToolContext, a: SearchArgs) -> Any:
             new += int(is_new)
         if ctx.run_id:
             ctx.db.log_coverage(ctx.run_id, a.route_id, a.region, q, "ok", hits=len(rows), new_entities=new)
-    return {"count": len(rows), "studies": [
-        {"nct": s["nct"], "title": s["title"], "phase": s["phase"], "status": s["overall_status"],
-         "sponsor": s["sponsor"], "interventions": [i["name"] for i in s["interventions"]][:6],
-         "china_site": s["china_site"], "start": s["start_date"]} for s in rows]}
+    interventions: dict[tuple[str, str], dict[str, Any]] = {}
+    for study in rows:
+        for item in study['interventions']:
+            key = (item.get('name') or '', item.get('type') or '')
+            entry = interventions.setdefault(key, {'name': key[0], 'type': key[1],
+                                                   'other_names': [], 'trials': []})
+            entry['other_names'] = sorted(set(entry['other_names']) | set(item.get('other_names') or []))
+            if study['nct'] not in entry['trials']:
+                entry['trials'].append(study['nct'])
+    return {'count': len(rows), 'interventions': list(interventions.values()),
+            'sponsors': sorted({s['sponsor'] for s in rows if s.get('sponsor')}),
+            'studies': [{'nct': s['nct'], 'phase': s['phase'], 'china_site': s['china_site']}
+                        for s in rows],
+            'details_tool': 'ctgov_get', 'source_url_template': STUDY_URL}
 
 
 class GetArgs(BaseModel):
@@ -311,6 +321,4 @@ class GetArgs(BaseModel):
 @REGISTRY.register("ctgov_get", "获取单个 CT.gov 试验的设计摘要（臂、终点、样本量、入排年龄、国家）。", GetArgs)
 def _ctgov_get(ctx: ToolContext, a: GetArgs) -> Any:
     study, _ = get_study(ctx, a.nct)
-    s = parse_study(study)
-    s["eligibility"]["criteria"] = (s["eligibility"]["criteria"] or "")[:3000]
-    return s
+    return parse_study(study)

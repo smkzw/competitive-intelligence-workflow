@@ -20,7 +20,17 @@ Managed by Trellis. Edits outside this block are preserved; edits inside may be 
 
 <!-- TRELLIS:END -->
 
-# Project Rules
+# Current Product Scope — rebaseline-v2
+
+- The user authorized the rebaseline-v2 subsystem on 2026-10-23. Develop only `rebaseline-v2/`; v1 code, paused projects and dirty files remain read-only references. Do not resume the old 1007V1 repair/review loops.
+- Current product requirements, architecture, milestones and state live in `rebaseline-v2/docs/01_PRD.md`, `02_ARCHITECTURE.md`, `03_PLAN.md` and `STATUS.md`. Read `04_AGENT_RULES.md` as local v2 rules; it cannot override global governance or grant destructive authority.
+- Active Trellis task: `.trellis/tasks/10-23-rebaseline-v2-m1/`. Old root HANDOFF/pause records describe v1 historical state, not a pause of the newly authorized v2 work.
+- v2 is a single-user Web service with its own minimal Skill Harness. Do not carry v1 host packages, report editing/undo/configuration/sharing or 24-portal gates into its acceptance. Preserve their history without deleting it.
+- Keep sources, CAS, databases, credentials and runtime receipts local and out of commits. No history rewriting, force push, global routing changes or cleanup is authorized by the review ZIP.
+- Never touch the retired Chinese workspace. Preserve unknown files and all v1 user changes; explicit English-root working directories are mandatory.
+- Retain native Chinese expert presentation, ECharts with matching tables, genuine source context, missing-not-zero and desktop screen use. Avoid defensive disclaimer walls and project-specific renderer dictionaries.
+
+# Historical v1 Project Rules (v1 only)
 
 - The latest audience-presentation contract is the 2026-10-11 expert-reading section of `packets/2026-09-22-sol-delivery/PRD.md`, with matching DESIGN/PLAN/ACCEPTANCE and task records. It supersedes older defensive-copy requirements: no expert-facing disclaimer walls; real comparison is ECharts plus the corresponding table, and longitudinal data uses annotated lines. Keep source data and internal scientific checks. Do not reintroduce the removed prose during later repairs.
 

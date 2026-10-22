@@ -80,7 +80,9 @@
         series: [{ data: indices.map(function (i) { return D.size.values[i]; }) }] });
     }
     var phases = {};
-    visible.forEach(function (tr) { phases[tr.dataset.phase] = (phases[tr.dataset.phase] || 0) + 1; });
+    visible.forEach(function (tr) {
+      if (tr.dataset.phaseStatus === "verified") phases[tr.dataset.phase] = (phases[tr.dataset.phase] || 0) + 1;
+    });
     if (instances["chart-phase-pie"]) {
       el("chart-phase-pie").closest(".card").hidden = !visible.length;
       instances["chart-phase-pie"].setOption({ series: [{ data: Object.keys(phases).map(function (name) { return { name: name, value: phases[name] }; }) }] });

@@ -19,3 +19,5 @@ max_steps: 30
 - 安慰剂、标准治疗背景用药、诊断试剂不是候选；仿制药/生物类似药 innovative=false 仍列出。
 - highest_phase_global：已获批任一主要监管机构 = approved；否则取最高在研阶段。
 - 每个候选至少一个 evidence_url；routes_failed 如实记录。
+- ctgov_search 返回完整去重干预名/原别名/对应试验，优先用于候选发现。studies 的全部编号与阶段可查，详细设计由后续阶段读取，不因逐页重读重复标题耗尽预算。
+- 预留最后一步 submit_result；工具失效时保留已取得候选与失败路线，不将 blocked 当作无项目。

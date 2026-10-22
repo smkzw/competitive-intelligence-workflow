@@ -6,6 +6,7 @@ from typing import Any
 
 import ciw2.sources  # noqa: F401  注册全部工具
 from ciw2.config import Settings
+from ciw2.harness.fallback import FallbackLLM
 from ciw2.harness.llm import LLM, LLMError, OpenAICompatLLM
 from ciw2.harness.skills import load_skills
 from ciw2.pipeline.context import RunContext
@@ -17,9 +18,23 @@ LLMFactory = Callable[[Settings], tuple[LLM, LLM | None]]
 
 
 def default_llms(s: Settings) -> tuple[LLM, LLM | None]:
+    import json
+    import os
+
     main = OpenAICompatLLM(s.llm_base_url, s.llm_api_key, s.llm_model)
+    routes: list[LLM] = [main]
+    try:
+        fallbacks = json.loads(s.llm_fallbacks)
+        if not isinstance(fallbacks, list):
+            raise TypeError('备用路由必须是数组')
+        for route in fallbacks:
+            routes.append(OpenAICompatLLM(os.environ[route['base_url_env']],
+                os.environ[route['api_key_env']], route['model'],
+                timeout_s=float(route.get('timeout_s', 120))))
+    except (ValueError, KeyError, TypeError) as exc:
+        raise LLMError('备用模型配置不完整或格式不正确') from exc
     check = OpenAICompatLLM(s.llm_base_url, s.llm_api_key, s.llm_check_model) if s.llm_check_model else None
-    return main, check
+    return FallbackLLM(routes) if len(routes) > 1 else main, check
 
 
 class Service:

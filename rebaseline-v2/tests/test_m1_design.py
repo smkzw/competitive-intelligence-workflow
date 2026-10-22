@@ -81,3 +81,17 @@ def test_c_has_comparison_and_inline_original_evidence(design_project):
     html = render_report(*design_project[:2], 'C')
     assert '终点与时间点' in html and 'Original design evidence' in html
     assert 'https://example.org/source' in html and 'data-fact-id=' in html
+
+
+def test_single_visit_and_interval_are_not_merged(design_project):
+    for visit in ('Week 16', 'Baseline to Week 16', 'Week 16 and Week 24'):
+        add_fact(design_project, 'design.primary_endpoint', {'measure': 'EASI-75', 'time_frame': visit})
+    groups = data_c(*design_project[:2])['endpoint_groups']
+    assert len(groups) == 3
+
+
+def test_phase_counts_do_not_use_unverified_phase(design_project):
+    add_fact(design_project, 'design.phase', 'phase3', 'unverified')
+    data = data_c(*design_project[:2])
+    assert data['rows'][0]['phase'] == 'phase3'
+    assert data['charts']['phase'] == []

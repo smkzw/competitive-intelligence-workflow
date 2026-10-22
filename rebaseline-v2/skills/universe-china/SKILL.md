@@ -25,3 +25,5 @@ max_steps: 30
 - 工具返回 blocked/failed：写进 routes_failed（原样写 route_id + 原因），不要当作「中国无此药」。
 - already_known 中的药物仍需补充中国信息，可以再次列出。
 - expansion_queries 记录反向扩展用过的查询。
+- ctgov_search 的 interventions 是完整去重干预名及其试验对应表，优先用它识别候选；studies 保留全部检索到的试验编号。需要设计细节时由后续代码阶段抓取，不为了重复标题逐页阅读所有试验。长结果仍可通过 read_tool_result 继续读取。
+- 保留至少最后一步提交结果；来源 blocked/failed 时提交已读到的候选与失败路线，不无限重复同一失效工具。

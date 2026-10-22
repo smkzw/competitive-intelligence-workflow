@@ -16,3 +16,5 @@ design.primary_endpoint（value 写 {"measure":..., "time_frame":...}）/ design
 design.stratification / design.multiplicity。
 
 规则同 extract-results：先读取原文，quote 逐字复制，找不到写 gaps。
+
+输入 existing_design_facts 提供既有事实的 ID、字段、值和来源。只有新来源明确修订同一研究同一字段时才填写 supersedes；不要按优先级猜测取代关系。无明确修订仍保留各来源，原登记与原文不修改。未通过原文核验的值不能取代既有已核实事实。

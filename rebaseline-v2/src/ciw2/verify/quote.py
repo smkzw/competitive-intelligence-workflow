@@ -11,6 +11,7 @@ from __future__ import annotations
 import re
 import unicodedata
 from dataclasses import dataclass
+from decimal import Decimal, InvalidOperation
 
 _TRANS = str.maketrans({
     "“": '"', "”": '"', "‘": "'", "’": "'", "–": "-", "—": "-", "−": "-",
@@ -54,8 +55,13 @@ def _numbers(value: object) -> list[str]:
 
 
 def _number_in(num: str, text: str) -> bool:
-    pattern = r"(?<![\d.])" + re.escape(num.lstrip("-")) + r"(?:\.0+)?(?![\d])"
-    return re.search(pattern, text) is not None
+    try:
+        target = Decimal(num)
+    except InvalidOperation:
+        return False
+    pattern = r'(?<![A-Za-z0-9_.])[-+]?(?:\d{1,3}(?:,\d{3})+|\d+|\.\d+)(?:\.\d+)?(?:e[-+]?\d+)?(?!\d|\.\d)'
+    return target.is_finite() and any(
+        Decimal(match[0].replace(',', '')) == target for match in re.finditer(pattern, text))
 
 
 def check_quote(source_text: str, quote: str | None, value: object = None) -> QuoteCheck:

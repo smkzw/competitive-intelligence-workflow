@@ -35,6 +35,8 @@ def endpoint_groups(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             name = endpoint.get('measure') or ''
             visit = endpoint.get('time_frame') or ''
             time = parse_timepoint(visit)
+            if not re.fullmatch(r'(?:at\s+)?(?:(?:week|day|month)\s*\d+|\d+\s*(?:weeks?|days?|months?)|第\s*\d+\s*[周天月])', visit.strip(), re.IGNORECASE):
+                time = parse_timepoint('')
             frame = ('days', time.days) if time.days is not None else (
                 ('months', time.months) if time.months is not None else ('raw', visit.casefold().strip()))
             key = (' '.join(name.casefold().split()), *frame)
@@ -71,6 +73,8 @@ def design_data(db: DB, pid: str, phase_zh: dict[str, str]) -> dict[str, Any]:
         if field == 'design.sample_size':
             row['sample_size_status'] = fact['status']
             row['sample_size_type'] = fact['context'].get('enrollment_type')
+        if field == 'design.phase':
+            row['phase_status'] = fact['status']
         if field == 'design.eligibility.criteria' and isinstance(fact['value'], str):
             row['eligibility_thresholds'] = thresholds(fact['value'])
         if fact['tier'] == 'critical' and fact['status'] != 'verified':
@@ -80,7 +84,8 @@ def design_data(db: DB, pid: str, phase_zh: dict[str, str]) -> dict[str, Any]:
              and r.get('sample_size_status') == 'verified']
     counts: dict[str, int] = defaultdict(int)
     for row in ordered:
-        counts[phase_zh.get(row.get('phase') or 'unknown', '未知')] += 1
+        if row.get('phase_status') == 'verified':
+            counts[phase_zh.get(row.get('phase') or 'unknown', '未知')] += 1
     return {'rows': ordered, 'endpoint_groups': endpoint_groups(ordered), 'charts': {
         'size': {'labels': [r['trial'] for r in sized], 'values': [r['sample_size'] for r in sized]},
         'phase': [{'name': key, 'value': count} for key, count in counts.items()]}}

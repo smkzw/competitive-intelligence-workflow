@@ -66,3 +66,22 @@ def test_resume_skips_succeeded_stages(settings, offline_ctgov):
     intake_steps = svc.db.query("SELECT COUNT(*) n FROM agent_steps WHERE run_id=? AND skill='intake' AND role='task'",
                                 (rid,))
     assert intake_steps[0]["n"] == 1   # intake 没有重跑
+
+
+def test_resume_failed_discovery_invalidates_empty_downstream_results(settings, offline_ctgov):
+    unavailable = {'value': True}
+
+    def responder(messages):
+        if unavailable['value'] and '# Skill：universe-' in messages[0]['content']:
+            raise RuntimeError('discovery temporarily unavailable')
+        return fake_llm_responder(messages)
+
+    svc = Service(settings, llm_factory=lambda s: (ScriptedLLM(responder), None))
+    pid = svc.create_project('特应性皮炎', ['C'])
+    rid = svc.start_run(pid, background=False)
+    assert report_data(svc.db, pid, 'C')['rows'] == []
+    unavailable['value'] = False
+    svc.start_run(pid, resume_run=rid, background=False)
+    assert len(report_data(svc.db, pid, 'C')['rows']) == 1
+    assert svc.db.one("SELECT COUNT(*) n FROM agent_steps WHERE run_id=? AND skill='intake' AND role='task'",
+                      (rid,))['n'] == 1
