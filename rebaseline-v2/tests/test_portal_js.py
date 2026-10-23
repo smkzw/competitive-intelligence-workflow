@@ -50,6 +50,40 @@ def run_portal(script):
     assert result.returncode == 0, result.stderr
 
 
+def test_landscape_unknown_sparse_dense_and_filtered_membership_share_one_query():
+    run_portal(r'''
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
+const cards={},elements={},charts={};let input;
+for(const id of ['chart-heat','chart-phase']){
+  cards[id]={hidden:false};elements[id]={id,style:{},closest:()=>cards[id]};
+}
+const known={id:'known',name:'Known',targets:['Target X'],phase_global:'phase2',phase_china:'unknown'};
+const unknown={id:'unknown',name:'Unknown',targets:[],phase_global:'unknown',phase_china:'unknown'};
+const rows=[known,unknown].map(r=>({dataset:{entityId:r.id},style:{},textContent:r.name}));
+const table={id:'tbl-a',querySelectorAll:()=>rows};elements['tbl-a']=table;elements['landscape-count']={};
+elements.charts={textContent:JSON.stringify({landscape:{rows:[known,unknown],phase_labels:{phase2:'II 期'}}})};
+const filter={value:'',getAttribute:k=>k==='data-filter'?'tbl-a':null,addEventListener:(_,fn)=>input=fn};
+const document={getElementById:id=>elements[id],querySelectorAll:s=>s==='input[data-filter]'?[filter]:[]};
+const echarts={init(n){const c={options:[],setOption(o){this.options.push(o);},resize(){},dispose(){}};charts[n.id]=c;return c;}};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window:{echarts,addEventListener(){}},echarts,
+ ResizeObserver:class{observe(){}disconnect(){}},Set,Map,Math,Array,JSON});
+assert.deepEqual(JSON.parse(JSON.stringify(charts['chart-heat'].options.at(-1).series[0].data)),[[0,0,1]]);
+assert.ok(parseInt(elements['chart-heat'].style.height)<=160);
+assert.ok(parseInt(elements['chart-phase'].style.height)<=220);
+const phase=charts['chart-phase'].options.at(-1);
+assert.equal(phase.legend.top,0);assert.ok(phase.grid.top>=48);
+assert.deepEqual(JSON.parse(JSON.stringify(phase.series.map(s=>s.data))),[[1],[0]]);
+assert.ok(!JSON.stringify(phase.xAxis.data).includes('未知'));
+assert.equal(elements['landscape-count'].textContent,'2 / 2 个药物 · 全球阶段 1 · 中国阶段 0 · 靶点与阶段 1');
+filter.value='Unknown';input();assert.ok(cards['chart-heat'].hidden&&cards['chart-phase'].hidden);
+assert.ok(elements['landscape-count'].textContent.startsWith('1 / 2'));
+assert.equal(rows[1].style.display,'');
+filter.value='Known';input();assert.ok(!cards['chart-heat'].hidden&&!cards['chart-phase'].hidden);
+filter.value='no-match';input();assert.ok(cards['chart-heat'].hidden&&cards['chart-phase'].hidden);
+filter.value='';input();assert.ok(!cards['chart-heat'].hidden&&!cards['chart-phase'].hidden);
+''')
+
+
 def test_endpoint_index_count_tracks_visible_study_membership():
     run_portal(r'''
 const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
@@ -188,9 +222,10 @@ def test_chart_source_labels_are_safe_text_and_missing_library_has_no_internal_p
     script = r'''
 const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
 const attack='<img src=x onerror=alert(1)>';
-const heat={id:'chart-heat',innerHTML:''};
+const heat={id:'chart-heat',innerHTML:'',style:{},closest:()=>({hidden:false})};
 const pie={id:'chart-phase-pie',style:{},closest:()=>({hidden:false})};
-const payload={heat:{x:['I期'],y:[attack],data:[[0,0,1]]},phase:[{name:attack,value:2}]};
+const payload={landscape:{rows:[{id:'drug',targets:[attack],phase_global:'phase1',phase_china:'unknown'}],
+  phase_labels:{phase1:'I期'}},phase:[{name:attack,value:2}]};
 const elements={charts:{textContent:JSON.stringify(payload)},'chart-heat':heat,'chart-phase-pie':pie};
 const charts={};
 const document={getElementById:id=>elements[id]||null,querySelectorAll:()=>[]};
@@ -206,3 +241,29 @@ vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window:{add
 assert.ok(heat.innerHTML.includes('数据表')&&!heat.innerHTML.includes('scripts/'));
 '''
     run_portal(script)
+
+
+def test_dense_landscape_keeps_all_target_cells_and_unknown_stage_stays_in_table_query():
+    run_portal(r'''
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
+const rows=Array.from({length:18},(_,i)=>({id:'d'+i,targets:['T'+i,'T'+i],phase_global:'phase2',phase_china:'unknown'}));
+rows.push({id:'extra',targets:['unresolved'],phase_global:'unknown',phase_china:'unknown'});
+rows[0].phase_china='phase1';
+const elements={},charts={};
+for(const id of ['chart-heat','chart-phase'])elements[id]={id,style:{},closest:()=>({hidden:false})};
+elements.charts={textContent:JSON.stringify({landscape:{rows,phase_labels:{phase1:'I期',phase2:'II期'}}})};
+elements['landscape-count']={};
+const document={getElementById:id=>elements[id],querySelectorAll:()=>[]};
+const echarts={init(n){const c={options:[],setOption(o){this.options.push(o);},resize(){},dispose(){}};charts[n.id]=c;return c;}};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window:{echarts,addEventListener(){}},echarts,
+ ResizeObserver:class{observe(){}disconnect(){}},Set,Map,Math,Array,JSON});
+const heat=charts['chart-heat'].options[0];
+assert.equal(heat.series[0].data.length,18);
+assert.ok(heat.series[0].data.every(p=>p[2]===1));
+assert.equal(heat.yAxis.data.length,18);assert.ok(!heat.yAxis.data.includes('unresolved'));
+assert.deepEqual(JSON.parse(JSON.stringify(heat.xAxis.data)),['II期']);
+assert.deepEqual(JSON.parse(JSON.stringify(charts['chart-phase'].options[0].xAxis.data)),['I期','II期']);
+assert.equal(heat.dataZoom[0].show,true);assert.equal(heat.dataZoom[0].endValue,5);
+assert.equal(elements['chart-heat'].style.height,'328px');
+assert.ok(elements['landscape-count'].textContent.startsWith('19 / 19'));
+''')

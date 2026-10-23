@@ -9,10 +9,14 @@
 - 历史恢复依据：Trellis `10-23-rebaseline-v2-m1/PAUSE_HANDOFF_20261023_0810.md`；原暂停回执/备份不改。用户已解除暂停，历史paused/旧PID不覆盖新授权。
 - 模型cms-router/glm-5.3-flash → DGX/deepseek → DGX/qwen；凭据仅注册配置到必要子进程环境，不入文件/日志/提示词，不改全局路由。
 
-## 当前节点：真实临床阅读切片；归并独立运行
+## 当前节点：A未知大图与同查询修正；归并独立运行
+- 当前完整v2门 **700PASS/3.04s**，Ruff全src/tests/scripts、3JS/sh语法通过，1既有TestClient警告。A根因3RED→22相关PASS，移除未知-only图但保留候选、按实体ID同查询/正确计数、靶点去重不重复计药、图区最高328px、稀疏128px、阶段208px、图例独立。旧安全文本测试换为当前生产payload，原转义/缺库断言保留；未建第二套图形框架。
+- ciw-data/browser-current/landscape-reading-02：真实源1/302候选完整保留，事实hash f08e6c7…/f903dc7…不变；A HTML cdea717e6acdde41383e7b3ca0046239596ec1507e572061ae10ed1d23995b88/d7eafeb25cc1214b7297fd520adbdf1b280487e901efcf8ee089965411fbd26b。Ego63四宽17图全部实看/独立owner-audit绑定：真实未知不画图；已知密集/筛后稀疏来自明确标注合成布局夹具，仅接受几何/查询，不冒充真实临床正向富集。候选01两图实看发现同排卡拉伸，已修且原17图保留；仍不关闭M3/全A美学。
+- 新独立执行节点ciw2-outcome-domain已preflight后启动句柄73488；live E03请求CodeBuddy/codebuddy-cli/deepseek-v4.1-flash/max及manifest备用，只准新建domain/outcomes.py与其测试，owner掌管接入/医学与发布。29条实际源终点元数据已绑定；待终态核实际模型/工具/输出，不称独立审阅或科学通过。
+### 前一组件（已提交7ea2d518并fresh remote exact）
 - 当前完整v2门 **696PASS/3.31s**，Ruff全src/tests/scripts及3JS/sh语法通过，1既有TestClient警告。本批仅修图轴临床身份、安全表折叠/同查询/逐行来源及短来源阅读宽度；不改变科学数值/药物绑定，不重跑来源。
 - 正常生产摄取同一官方捕获记录生成A/B/C，ciw-data/browser-current/clinical-abc-03，668/668数据点保留，事实hash f08e6c7a485d88d1bf899d05435ae6c788ae70e378bd2906ea007dc1bbc58157。Ego63/p1四宽共22截图已逐张实看；真实glyph点击→正确事实/来源，筛后221/668结果及2/6安全，短来源1040px/Esc回焦，完整入排2219字/8强调。首脚本完成12图后仪器等待超时，仅恢复缺失交互与A/C，失败及初始NOT_RUN回执不改；owner-audit独立绑定hash。不是新网络核查/模型报告/全流水线。
-- 本次只接受上述组件：A未知-only热图/阶段图占位且图例重叠仍未通过美学；B药代域≠疗效分类仍待M4、MAH/中文名富集仍待M3，安全图未完成。下一有界UI包消除无信息大图，不用删事实或猜值解决。
+- 上述组件仅接受临床身份/阅读：当时A未知图问题已在本节新组件关闭占位根因，非整个A接受；B药代域分类待M4、MAH/中文名富集待M3，安全图未完成。不用删事实或猜值解决。
 - 临床阅读/修订恢复节点已白名单提交并推送349cccf54750531a503dd3a3236098fb5480b333，fresh remote exact；v1未知改动/健康日志未提交。下节690门及界面候选绑定该实现，不借新归并代码改写旧回执。
 - 新根因包4个生产RED→29相关PASS；研究包仍24000字符，归并包单独8000（真实mode/metadata计预算），中间至多2/最终6条，全部完整候选参与，单条超预算拒绝而非裁短。输出超量在缓存签入前拒绝，成功归并可复用；未新增框架/配置平台。
 - 当前完整v2开发门 **694PASS/3.53s**，Ruff全src/tests/scripts、3JS/sh语法通过，1既有TestClient警告。归并根因包已白名单提交/推送ec32ca47c76e999565d724c8f994b74fa075c16a并fresh remote exact；不是M1完整流水线或产品接受。

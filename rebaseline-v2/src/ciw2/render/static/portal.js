@@ -98,23 +98,61 @@
         emphasis: { label: { show: false }, labelLine: { show: false } }, data: items }]
     };
   }
-  if (D.heat) {
+  function drawLandscape(heat, phases) {
+    var heatNode = el('chart-heat'), phaseNode = el('chart-phase');
+    if (heatNode) heatNode.closest('.card').hidden = !heat.data.length;
+    if (phaseNode) phaseNode.closest('.card').hidden = !phases.x.length;
+    if (heat.data.length) {
+    setPanelHeight('chart-heat', Math.min(336, 88 + Math.min(6, heat.y.length) * 40));
     chart("chart-heat", {
-      tooltip: { formatter: function (p) { return safeText(D.heat.y[p.value[1]]) + " · " + safeText(D.heat.x[p.value[0]]) + "：" + safeText(p.value[2]) + " 个药物"; } },
-      grid: { left: 140, right: 20, top: 20, bottom: 60 },
-      xAxis: { type: "category", data: D.heat.x }, yAxis: { type: "category", data: D.heat.y },
-      visualMap: { min: 0, max: Math.max.apply(null, D.heat.data.map(function (d) { return d[2]; }).concat([1])),
+      tooltip: { formatter: function (p) { return safeText(heat.y[p.value[1]]) + " · " + safeText(heat.x[p.value[0]]) + "：" + safeText(p.value[2]) + " 个药物"; } },
+      grid: { left: 180, right: 32, top: 12, bottom: 64 },
+      xAxis: { type: "category", data: heat.x },
+      yAxis: { type: "category", data: heat.y, axisLabel: { width: 160, overflow: 'break' } },
+      dataZoom: [{ type: 'slider', yAxisIndex: 0, right: 0, width: 16, show: heat.y.length > 6,
+        startValue: 0, endValue: Math.min(5, heat.y.length - 1), filterMode: 'filter' }],
+      visualMap: { min: 0, max: Math.max.apply(null, heat.data.map(function (d) { return d[2]; }).concat([1])),
         orient: "horizontal", left: "center", bottom: 0, inRange: { color: ["#FFF3E0", C.brand] } },
-      series: [{ type: "heatmap", data: D.heat.data, label: { show: true } }]
+      series: [{ type: "heatmap", data: heat.data, label: { show: true } }]
     });
-  }
-  if (D.phase_bar) {
+    }
+    if (phases.x.length) {
+    setPanelHeight('chart-phase', 208);
     chart("chart-phase", {
-      tooltip: { trigger: "axis" }, legend: {}, grid: { left: 40, right: 20, top: 40, bottom: 30 },
-      xAxis: { type: "category", data: D.phase_bar.x }, yAxis: { type: "value", minInterval: 1 },
-      series: D.phase_bar.series.map(function (s) { return { name: s.name, type: "bar", data: s.data, barMaxWidth: 28 }; })
+      tooltip: { trigger: "axis" }, legend: { top: 0 }, grid: { left: 48, right: 16, top: 48, bottom: 64 },
+      xAxis: { type: "category", data: phases.x, axisLabel: { interval: 0, rotate: phases.x.length > 5 ? 30 : 0 } },
+      yAxis: { type: "value", minInterval: 1 },
+      series: phases.series.map(function (s) { return { name: s.name, type: "bar", data: s.data, barMaxWidth: 28 }; })
     });
+    }
   }
+  function updateLandscapeQuery(table) {
+    if (!D.landscape) return;
+    var all = D.landscape.rows, labels = D.landscape.phase_labels;
+    var visible = table ? new Set(Array.from(table.querySelectorAll('tbody tr')).filter(function (r) {
+      return r.style.display !== 'none';
+    }).map(function (r) { return r.dataset.entityId; })) : new Set(all.map(function (r) { return r.id; }));
+    var rows = all.filter(function (r) { return visible.has(r.id); });
+    var phases = Object.keys(labels).filter(function (p) {
+      return rows.some(function (r) { return r.phase_global === p || r.phase_china === p; });
+    });
+    var eligible = rows.filter(function (r) { return labels[r.phase_global] && r.targets.length; });
+    var heatPhases = phases.filter(function (p) { return eligible.some(function (r) { return r.phase_global === p; }); });
+    var targets = Array.from(new Set(eligible.flatMap(function (r) { return r.targets; }))).sort(), cells = new Map();
+    eligible.forEach(function (r) { new Set(r.targets).forEach(function (t) {
+      var key = JSON.stringify([heatPhases.indexOf(r.phase_global), targets.indexOf(t)]);
+      cells.set(key, (cells.get(key) || 0) + 1);
+    }); });
+    drawLandscape({x: heatPhases.map(function (p) { return labels[p]; }), y: targets,
+      data: Array.from(cells, function (pair) { return JSON.parse(pair[0]).concat(pair[1]); })},
+      {x: phases.map(function (p) { return labels[p]; }), series: [
+        {name: '全球最高阶段', data: phases.map(function (p) { return rows.filter(function (r) { return r.phase_global === p; }).length; })},
+        {name: '中国最高阶段', data: phases.map(function (p) { return rows.filter(function (r) { return r.phase_china === p; }).length; })}]});
+    if (el('landscape-count')) el('landscape-count').textContent = rows.length + ' / ' + all.length + ' 个药物 · 全球阶段 ' +
+      rows.filter(function (r) { return labels[r.phase_global]; }).length + ' · 中国阶段 ' +
+      rows.filter(function (r) { return labels[r.phase_china]; }).length + ' · 靶点与阶段 ' + eligible.length;
+  }
+  if (D.landscape) updateLandscapeQuery(null);
   function resultTooltip(p) {
     var point = p.data || {};
     return safeText(point.series_name || point.label || "") + "<br>" + safeText(point.visit || "") +
@@ -247,6 +285,7 @@
           extraRows.filter(function (tr) { return tr.style.display !== "none"; }).length + " / " + extraRows.length;
       }
       if (table.id === "tbl-c") updateDesignQuery(table);
+      if (table.id === "tbl-a") updateLandscapeQuery(table);
       if (table.id === "tbl-b" && el("result-group")) updateResultQuery(table);
     });
   });

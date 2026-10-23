@@ -72,7 +72,7 @@ def data_a(db: DB, pid: str) -> dict[str, Any]:
         a = d["attrs"]
         ts = per_drug.get(d["name"], [])
         rows.append({
-            "name": d["name"], "name_zh": d["name_zh"], "targets": a.get("targets", []),
+            "id": d['id'], "name": d["name"], "name_zh": d["name_zh"], "targets": a.get("targets", []),
             "modality": a.get("modality"), "companies": a.get("companies", []),
             "china_mah": ' / '.join(dict.fromkeys(c['name'] for c in holder_map[d['id']])),
             'mah_refs': holder_map[d['id']],
@@ -84,24 +84,10 @@ def data_a(db: DB, pid: str) -> dict[str, Any]:
             "trials": [identities[t['id']] for t in ts if t['id'] in identities],
         })
     included = [r for r in rows if r["in_scope"] != 0]
-    targets = sorted({t for r in included for t in (r["targets"] or ["未知靶点"])})
-    phases = [p for p in PHASE_ORDER if any(r["phase_global"] == p or r["phase_china"] == p for r in included)]
-    heat = []
-    for r in included:
-        for t in r["targets"] or ["未知靶点"]:
-            if r["phase_global"] in phases:
-                heat.append([phases.index(r["phase_global"]), targets.index(t)])
-    counts: dict[tuple[int, int], int] = defaultdict(int)
-    for x, y in heat:
-        counts[(x, y)] += 1
-    bar_g = [sum(1 for r in included if r["phase_global"] == p) for p in phases]
-    bar_c = [sum(1 for r in included if r["phase_china"] == p) for p in phases]
-    charts = {
-        "heat": {"x": [PHASE_ZH[p] for p in phases], "y": targets,
-                 "data": [[x, y, n] for (x, y), n in counts.items()]},
-        "phase_bar": {"x": [PHASE_ZH[p] for p in phases], "series": [
-            {"name": "全球最高阶段", "data": bar_g}, {"name": "中国最高阶段", "data": bar_c}]},
-    }
+    charts = {'landscape': {
+        'rows': [{key: r[key] for key in ('id', 'targets', 'phase_global', 'phase_china')} for r in included],
+        'phase_labels': {p: PHASE_ZH[p] for p in PHASE_ORDER if p != 'unknown'},
+    }}
     return {"rows": sorted(included, key=lambda r: PHASE_ORDER.index(r["phase_china"]))
             , "excluded": [r for r in rows if r["in_scope"] == 0], "charts": charts}
 

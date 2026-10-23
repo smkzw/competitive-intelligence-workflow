@@ -6,16 +6,17 @@
 <div class="kpi"><b>{{ data.excluded | length }}</b><span>已排除</span></div>
 {% endblock %}
 {% block content %}
-<div class="grid">
-  <div class="card"><h2>靶点 × 全球最高阶段</h2><div id="chart-heat" class="chart"></div></div>
-  <div class="card"><h2>阶段分布：全球 vs 中国</h2><div id="chart-phase" class="chart"></div></div>
-</div>
 <h2>竞品管线</h2>
 <input class="filter" data-filter="tbl-a" placeholder="筛选：药物 / 靶点 / 企业 / 阶段">
+<p id="landscape-count" aria-live="polite">{{ data.rows|length }} 个药物</p>
+<div class="grid landscape-grid">
+  <div class="card" hidden><h2>靶点 × 全球最高阶段</h2><div id="chart-heat" class="chart"></div></div>
+  <div class="card" hidden><h2>阶段分布：全球 vs 中国</h2><div id="chart-phase" class="chart"></div></div>
+</div>
 <div class="card" style="overflow:auto"><table id="tbl-a"><thead><tr>
 <th>药物</th><th>靶点</th><th>类型</th><th>相关企业</th><th>中国 MAH</th><th>中国阶段</th><th>全球阶段</th>
 <th>试验数（含中国站点）</th><th>发现路线</th><th>纳入</th></tr></thead><tbody>
-{% for r in data.rows %}<tr>
+{% for r in data.rows %}<tr data-entity-id="{{ r.id }}">
 <td><b>{{ r.name_zh or r.name }}</b>{% if r.name_zh %}<div class="muted">{{ r.name }}</div>{% endif %}</td>
 <td>{% for t in r.targets %}<span class="tag">{{ t }}</span>{% endfor %}</td>
 <td>{{ r.modality or '—' }}</td><td>{{ r.companies | join('；') or '—' }}</td><td>{{ r.china_mah or '—' }}
