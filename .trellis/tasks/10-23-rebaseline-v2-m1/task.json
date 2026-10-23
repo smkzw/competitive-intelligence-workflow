@@ -21,7 +21,7 @@
   "children": [],
   "parent": null,
   "relatedFiles": [],
-  "notes": "User explicitly resumed rebaseline-v2 implementation 2026-10-23. Preserve pause checkpoint and 51 R4 cached batches; resume same frozen stage, close M2 expansion and C desktop reading roots.",
+  "notes": "Active rebaseline-v2 delivery. C/B reading roots and M2 CTR list/CDE acceptance tools implemented; current product20131812 pushed/remote exact,647 v2 tests. Preserve frozen R4 run49763 and source/model caches. Read v2 STATUS for remaining M1 publication chain, CDE review-by-ID/NMPA and goldens; no pause or full-product acceptance.",
   "meta": {
     "workflow_state": "in_progress",
     "pause_checkpoint": "PAUSE_HANDOFF_20261023_0810.md",
