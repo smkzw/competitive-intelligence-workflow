@@ -1,6 +1,6 @@
 """Source-span eligibility reading projection.
 
-Only explicit named-scale and laboratory inequalities are recognised.  The
+Only explicit named-scale/laboratory comparisons and score choices are recognised. The
 projection never decides eligibility, never rewrites the source, and never
 supplies a missing threshold or unit.  Unrecognised language is returned
 unchanged as plain text.  Callers must HTML-escape every returned string; this
@@ -10,7 +10,11 @@ Documented limits: this is a phrase reader, not a clinical parser.  It handles
 the common ``EASI/IGA/SCORAD/BSA/PP-NRS/WI-NRS/NRS`` scale forms and explicit
 ``ALT/AST/eGFR/platelets/neutrophils/hemoglobin`` laboratory inequalities,
 including ``x ULN`` units, percentage units and adjacent ``ALT or AST``
-conditions.  Timing, visit, negation and other qualifiers stay in ``rule_text``;
+conditions, parenthesized lab pairs, explicit Chinese ULN, discrete score choices
+and immediately joined bounds. ``one_of`` keeps a list of literal scores, not
+a continuous range. Joined bounds inherit the explicitly adjacent metric, not
+an omitted unit; they never cross a clause, line or another named measure.
+Timing, visit, negation and other qualifiers stay in ``rule_text``;
 they are never turned into additional rules.  ``label`` is only the explicit
 comparison, so callers that show it should keep ``rule_text`` visible for those
 qualifiers.  List markers are trimmed from ``rule_text`` only; the ``segments``
@@ -31,8 +35,8 @@ _LOGIC = "logic"
 _NEGATION = "negation"
 
 _SCORE = r"EASI|vIGA|IGA|SCORAD|BSA|PP[-\s]?NRS|WI[-\s]?NRS|NRS"
-_LAB = r"ALT|AST|eGFR|platelets?|neutrophils?|h[ae]moglobin"
-_LAB_WORD = r"ALT|AST|eGFR|platelets?|neutrophils?|h[ae]moglobin"
+_LAB = r"ALT|AST|SCr|eGFR|platelets?|neutrophils?|h[ae]moglobin"
+_LAB_WORD = _LAB
 _METRIC = rf"(?:{_SCORE}|{_LAB})(?![A-Za-z0-9])"
 
 _METRIC_PHRASE = (
@@ -57,7 +61,7 @@ _CMP = rf"(?:{_SYMBOL}|{_WORD})"
 
 _UNIT = (
     r"(?:%|percent(?:\s*\(%\))?|"
-    r"(?:\u00d7|x|times|\u500d)\s*(?:the\s+)?(?:ULN|upper\s+limit\s+of\s+normal)(?:\s*\(ULN\))?|"
+    r"(?:\u00d7|x|times|\u500d)\s*(?:the\s+)?(?:ULN|upper\s+limit\s+of\s+normal|正常(?:值|范围)?上限)(?:\s*\(ULN\))?|"
     r"(?:the\s+)?(?:ULN|upper\s+limit\s+of\s+normal)(?:\s*\(ULN\))?|"
     r"[\u00d7x]?\s*10\s*\^?\s*9\s*/\s*[Ll]|"
     r"(?:mg|g|\u00b5g|ng|mmol|\u00b5mol|umol|U|mEq)\s*/\s*(?:dL|dl|L|mL)|"
@@ -70,13 +74,21 @@ _SUFFIX = rf"\s*(?:of\s+)?(?P<cmp>{_CMP})\s*(?P<num>{_NUMBER})(?:\s*(?P<unit>{_U
 _PREFIX = re.compile(r"(?<![A-Za-z-])" + _METRIC_PHRASE + _SUFFIX, re.IGNORECASE)
 _LAB_ONE = rf"(?:{_LAB_WORD})(?![A-Za-z0-9])"
 _COMPOUND = re.compile(
-    r"(?<![A-Za-z-])(?P<measure>"
+    r"(?<![A-Za-z-])(?:[（(][ \t]*)?(?P<measure>"
     + _LAB_ONE
     + rf"(?:\s*/\s*{_LAB_ONE}|\s*,\s*{_LAB_ONE}"
-      rf"|\s+(?:or|and)\s*{_LAB_ONE}|\s*(?:\u6216|\u548c|\u4ee5\u53ca)\s*{_LAB_ONE})+)"
+      rf"|\s+(?:or|and)\s*{_LAB_ONE}|\s*(?:\u6216|\u548c|\u4ee5\u53ca)\s*{_LAB_ONE})+)(?:[ \t]*[）)])?"
     + _SUFFIX,
     re.IGNORECASE,
 )
+_DISCRETE = re.compile(
+    rf'(?<![A-Za-z-])(?P<measure>{_SCORE})(?![A-Za-z0-9-])'
+    rf'[ \t]*(?:评分|score)?[ \t]*(?:为|等于|is|=)[ \t]*'
+    rf'(?P<choices>{_NUMBER}(?:[ \t]*(?:或|or)[ \t]*{_NUMBER})+)(?:[ \t]*分)?'
+    r'(?!\.\d)(?=$|[，,；;。.\r\n)）]|且|并且)',re.IGNORECASE)
+_CONTINUATION = re.compile(
+    rf'(?P<link>[ \t]*(?:并且|且|或|and/or|and|or)[ \t]*)'
+    rf'(?P<cmp>{_CMP})[ \t]*(?P<num>{_NUMBER})(?:[ \t]*(?P<unit>{_UNIT}))?',re.IGNORECASE)
 _BSA_REVERSE = re.compile(
     rf"(?P<cmp>{_CMP})\s*(?P<num>{_NUMBER})\s*(?P<unit>percent(?:\s*\(%\))?|%)"
     r"\s*(?:of\s+|in\s+)?(?:the\s+)?(?:body\s+surface\s+area(?:\s*\(BSA\))?|BSA)(?![A-Za-z0-9])",
@@ -107,7 +119,7 @@ _NEGATION_RE = re.compile(
 _MEASURE_NAMES = {
     "easi": "EASI", "iga": "IGA", "viga": "vIGA", "scorad": "SCORAD", "bsa": "BSA",
     "ppnrs": "PP-NRS", "winrs": "WI-NRS", "nrs": "NRS",
-    "alt": "ALT", "ast": "AST", "egfr": "eGFR",
+    "alt": "ALT", "ast": "AST", "scr": "SCr", "egfr": "eGFR",
     "platelet": "platelets", "platelets": "platelets",
     "neutrophil": "neutrophils", "neutrophils": "neutrophils",
     "hemoglobin": "hemoglobin", "haemoglobin": "hemoglobin",
@@ -151,6 +163,22 @@ def _candidates(text: str) -> list[dict[str, Any]]:
         found.append(_rule(text, match, measure, _kind(measure), measure))
     for match in _BSA_REVERSE.finditer(text):
         found.append(_rule(text, match, "BSA", "score", "BSA"))
+    for rule in list(found):
+        end=rule['source_end']
+        while match:=_CONTINUATION.match(text,end):
+            tail=_rule(text,match,rule['measure'],rule['kind'],rule['measure'])
+            tail['_logic']=[(match.start('link'),match.end('link'),_LOGIC)]
+            found.append(tail)
+            end=match.end()
+    for match in _DISCRETE.finditer(text):
+        measure=_canonical(match['measure'])
+        numbers=re.findall(_NUMBER,match['choices'])
+        found.append({'kind':'score','measure':measure,'operator':'one_of',
+            'value':[float(n.replace(',','')) for n in numbers],'unit':None,
+            'source_start':match.start(),'source_end':match.end(),'quote':match.group(),
+            'label':f'{_display(measure)} 评分 = '+ ' 或 '.join(numbers),
+            '_logic':[(m.start()+match.start('choices'),m.end()+match.start('choices'),_LOGIC)
+                      for m in re.finditer(r'或|or',match['choices'],re.IGNORECASE)]})
     return found
 
 
@@ -254,7 +282,7 @@ def _unit(raw: str | None) -> str | None:
     low = value.casefold()
     if value == "%" or low.startswith("percent"):
         return "%"
-    if "uln" in low or "upper limit" in low:
+    if "uln" in low or "upper limit" in low or re.search(r'正常(?:值|范围)?上限',value):
         return "\u00d7 ULN" if re.search(r"[\u00d7x]|times|\u500d", value, re.IGNORECASE) else "ULN"
     if re.fullmatch(r"[\u00d7x]?\s*10\s*\^?\s*9\s*/\s*[Ll]", value):
         return "\u00d7 10^9/L" if value[0] in "\u00d7xX" else "10^9/L"

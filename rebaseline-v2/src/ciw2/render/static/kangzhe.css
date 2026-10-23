@@ -75,7 +75,9 @@ details summary{font-weight:500}.evidence{margin:3px 0}
 #design-evidence-dialog .criteria{max-width:none;margin:0}
 #design-evidence-dialog section{min-width:0}
 #design-evidence-dialog>.source-evidence-content,#design-evidence-body>.source-evidence-content{max-width:90ch;margin:0 auto}
-#design-evidence-dialog:has(#design-evidence-body>.source-evidence-content){width:min(88vw,1040px)}
+#design-evidence-dialog:has(#design-evidence-body>.source-evidence-content){width:min(88vw,760px)}
+#design-evidence-dialog:has(#design-evidence-body>.source-evidence-content) h2{font-size:20px}
+#design-evidence-body>.source-evidence-content{margin:0}
 #design-evidence-dialog>header h2{min-width:0;overflow-wrap:anywhere}
 #design-evidence-dialog>header button{flex-shrink:0}
 button.secondary{color:#fff}

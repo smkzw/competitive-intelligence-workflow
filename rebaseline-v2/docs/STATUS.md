@@ -10,7 +10,14 @@
 - 模型cms-router/glm-5.3-flash→DGX/deepseek→DGX/qwen；密钥只在必要环境，不入文件/提示词/日志，不改全局路由。
 - 用户永久授权本项目Ego专用空间缺失时自行替换，不再询问。目前63/p1复用；不改登录、缓存、其他任务空间或升级浏览器。
 
-## 当前节点：中国登记原表已接入普通设计流水线
+## 最新完成：真实中文入排表达与阅读收口
+- 中国原表流水线节点 **ec43388cbdbd6071518e1875ef295d42ec9ff718** 已push/fresh remote exact；当前阅读节点提交以Git为准。新增12族用例，初始6RED/5正向后扩充小数访视反例；相关61PASS/0.61s，当前完整v2 **996PASS/6.46s**、Ruff全src/tests/scripts及portal.js语法PASS，64生产Python/600-80规则PASS（create_app既定例外）。不为私有浏览器脚本修改重跑宽门。
+- 既有源片段读取器支持IGA离散选择one_of=[2,3]（非区间）、同句紧邻BSA双侧界、括号AST/ALT及SCr/明确中文正常值上限单位；连接词、全部原文、原位置与段落保留，不跨行/条款/其他指标借值，不补未写单位。没有新增事实/模型/平台；新字段依据标签具体化，少字来源窗收敛至760px、标题20/body16px。
+- ciw-data/china-reading-current-01复用相同34事实/事实SHA7f6d368f…、来源字节不变，0网络/模型；新C **3990bfbea9995292da71ee2e4f5da05d56e5c22961c2af76361581928fca0c2b**。真实CTR20263748现6项表达与原文一致。四宽×入排/来源8图在browser-03逐张实看，quote逐字/原文hash/深红700下划线/双侧值与ULN/合法来源/760宽/实际Esc回焦/AD101查询均通过，owner-review.md限定组件接受，不称完整M1/M2或全C医学视觉接受。
+- 前两浏览器轮次几何断言失败留存：受控诊断证明1440下ECharts画布仍为上一尺寸时scroll1494，真实ResizeObserver/动画结束后scroll1440；第三轮等待实际尺寸/动画而非隐藏overflow/固定sleep或改产品断言。不是全仓代码失败，也不能把失败回执回写PASS。
+- 下一有界项：核对native CTR与既有药物纳排的范围继承，按FR5检查来源单项失败后报告仍可得且运行不能假称完整成功；随后扩大真实来源设计切片。旧52075只在真实节点边界查终态，不复跑151原始模型批。Goal持续active，无暂停。
+
+## 上一完成节点：中国登记原表已接入普通设计流水线
 - 当前父HEAD6c8ef552；本节点正式提交见Git，以下不借用961旧门。2年龄/范围RED、4普通流水线/身份RED及3来源运行/原名字段RED后，相关204PASS/1.07s；当前完整v2 **984PASS/6.30s**、Ruff全src/tests/scripts PASS，64生产Python/600-80规则PASS（create_app既定例外）。5JS语法通过；首次shell检查错指不存在run.sh属NOT_RUN，实际scripts/fetch_assets.sh已单独通过，不为命令笔误重跑全仓。
 - china_design按原字段保留所有终点/条件性PK、全部强度和对照、完整入排、年龄/范围、健康受试者、申请人及不同地域/计划/进度/实际人数；不从登记适应症推患者人群、不猜MAH。明确“曾用名”与主名分开，原字串保留。china_ingest核项目/run/CAS/CTR/详情/原文后整包原子采用；A→B→A及幂等/失败回滚/独立来源保留已验证，复用facts/links/stages，无新表/平台。
 - 普通trial_evidence现处理项目内所有未排除CTR（默认无数量截断），逐来源/规则恢复、失败保留ID与原因，新run再核查；extract-design不再重复改写已结构化中国表。单元测试mock只替代网络边界，不是全宇宙实跑。
