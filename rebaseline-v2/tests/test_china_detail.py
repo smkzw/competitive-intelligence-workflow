@@ -52,6 +52,21 @@ def test_parse_keeps_full_clauses_nested_rows_and_literal_roles():
     assert not {'mah','sponsor','approved','enrollment','phase'} & out.keys()
 
 
+@pytest.mark.parametrize('detail',['f'*32+'_p','FA'*16+'_p','12345_p'])
+def test_detail_accepts_exact_legacy_identifiers_already_supported_by_public_list(detail):
+    raw=capture()
+    raw['detail_id']=detail
+    out=china_detail.parse_capture(raw,ctr=CTR,detail_id=detail)
+    assert out['detail_id']==detail and out['registry_id']==CTR
+
+
+@pytest.mark.parametrize('detail',['0_p','0123_p','123','123_p?token=x','../123_p','f'*32+'_p/','123_p\n'])
+def test_legacy_support_does_not_allow_paths_sessions_or_unobserved_id_shapes(detail):
+    raw=capture()
+    raw['detail_id']=detail
+    with pytest.raises(ValueError):china_detail.parse_capture(raw,ctr=CTR,detail_id=detail)
+
+
 @pytest.mark.parametrize('change',['ctr','detail_id','url','credentials','title','basic_ctr','missing_block','duplicate','nested_mismatch','bad_cells'])
 def test_changed_or_malformed_capture_is_not_a_valid_trial(change):
     raw=capture()

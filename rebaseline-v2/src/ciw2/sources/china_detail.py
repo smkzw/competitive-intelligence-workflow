@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field
 from ciw2.harness.tools import REGISTRY, ToolContext
 from ciw2.sources import china_browser
 from ciw2.sources.china_capture import parse_capture as parse_list
+from ciw2.sources.china_capture import valid_detail_id
 from ciw2.sources.http import register_text
 
 SCRIPT=Path(__file__).with_suffix('.mjs')
@@ -73,7 +74,7 @@ def parse_capture(raw: dict, *, ctr: str, detail_id: str) -> dict[str,Any]:
     expected={'url','title','section','registry_id','detail_id','basic','tables','observed_at'}
     if not isinstance(raw,dict) or set(raw)!=expected:
         raise ValueError('登记详情捕获结构不符')
-    if not re.fullmatch(r'CTR[0-9]{8}',ctr) or not re.fullmatch(r'[0-9a-f]{32}',detail_id):
+    if not re.fullmatch(r'CTR[0-9]{8}',ctr) or not valid_detail_id(detail_id):
         raise ValueError('登记详情请求标识不合法')
     u=urlsplit(raw['url'])
     if (u.scheme!='https' or u.hostname not in {'www.chinadrugtrials.org.cn','chinadrugtrials.org.cn'}

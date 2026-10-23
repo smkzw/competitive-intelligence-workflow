@@ -21,6 +21,12 @@ _ROW_KEYS = frozenset({"cells", "detail_id"})
 _CTR = re.compile(r"CTR[0-9]{8}\Z")
 _DETAIL_ID = re.compile(r"(?:[0-9a-fA-F]{32}(?:_p)?|[1-9][0-9]*_p)\Z")
 _ROW_NUMBER = re.compile(r"[1-9][0-9]*\Z")
+
+
+def valid_detail_id(value: Any) -> bool:
+    return isinstance(value,str) and _DETAIL_ID.fullmatch(value) is not None
+
+
 _FOOTER = re.compile(
     r"当前第\s*([0-9]+)\s*页\s*[,，]\s*共\s*([0-9]+)\s*页\s*[,，]\s*共\s*([0-9]+)\s*条记录"
 )
@@ -140,7 +146,7 @@ def _parse_row(value: Any, *, source_url: str) -> dict[str, Any]:
     if not drug_name:
         raise CaptureError("药物名称为空")
     detail_id = row["detail_id"]
-    if not isinstance(detail_id, str) or not _DETAIL_ID.match(detail_id):
+    if not valid_detail_id(detail_id):
         raise CaptureError(f"detail_id 不是已观察的公开记录标识：{detail_id!r}")
     return {
         "ctr": ctr,

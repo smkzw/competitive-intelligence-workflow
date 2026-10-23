@@ -10,7 +10,13 @@
 - 模型cms-router/glm-5.3-flash→DGX/deepseek→DGX/qwen；密钥只在必要环境，不入文件/提示词/日志，不改全局路由。
 - 用户永久授权本项目Ego专用空间缺失时自行替换，不再询问。目前63/p1复用；不改登录、缓存、其他任务空间或升级浏览器。
 
-## 当前节点：明确范围与来源失败的报告可用性
+## 当前节点：旧登记详情兼容与真实扩展
+- 77a318641783291a36312df1f1bbbe088e2d32c7已push/fresh remote exact。固定464条列表中确有10个旧_p标识；详情只收32hex造成3生产RED。列表/详情现复用单一valid_detail_id合同（32hex可带_p、正整数_p），不开放路径/查询/会话字符串，不去掉_p猜新ID。相关156PASS/0.43s；当前完整v2 **1014PASS/6.35s**、Ruff全src/tests/scripts及详情MJS语法PASS。
+- ciw-data/china-legacy-detail-live-01使用原06/07列表DB的隔离只读拷贝，普通生产ingest_trial在Ego63/p1实际查询CTR20131043/1317_p、打开原页并采用22事实/0模型/原来源不变，源码运行前后hash一致。来源d42fa4eb24777332e4cae85b9220fe279dc2594e9550f2c4bd3b33b74a36861a，原文8fbf69f73cc9762ebe1d4502298b8baee6b5391f697f27850d1da0e3c43d828c；C5191ada0e73d3dd6a11a3ff923074b7959f96fe8c437199c706a8a6cb2e16e75。不是十条详情/完整M1/M2/医学视觉接受，随后扩大其余9旧ID完整族，不为凑数量跳过旧格式。
+- 本轮新增候选/读图证据各1.3–8.7MB，测试缓存124KB；CAS已按不可变摘要硬链接复用，不复制同一原文。当前均有恢复/修复证据用途，不为124KB缓存收益清理唯一现场或别的agent_health日志。
+- 旧归并任务只以原生文件事件等待唯一终态receipt，私有await-r4-terminal-01.py不读取进度/不固定轮询，也不重做151批；终态仍须owner审查。Goal active/连续实施。
+
+## 上一完成节点：明确范围与来源失败的报告可用性
 - 上一8596d3dd1718e274205a92822d167732c8f5925b已push/fresh remote exact。当前根因3RED/4正向加CT.gov明确排除RED后，相关83PASS/1.25s；完整v2 **1004PASS/6.94s**、Ruff全src/tests/scripts及portal.js语法PASS。只复用既有scope查询、非阻断IncompleteWork和下游恢复机制，不建新执行器。
 - 中国抓取、设计C/结果B/管线A当前查询共用明确范围：研究本身排除或全部已关联药物明确排除时退出；混合父候选、unknown、无关系研究保留，不推断为纳入。CT.gov搜索再命中已明确排除试验也不重新采用。原事实/来源不删；B同一保留研究的全部已记录组别不因某药排除而被删。
 - trial_evidence未完/单源失败继续渲染现有资料，但run仍failed、保留具体ID/原因。测试普通真实Stage定义：3项中1失败仍渲染2项，恢复仅补缺失1项后重建3项/变succeeded；不是mock整条执行器，也不是实际新来源网络验收。
