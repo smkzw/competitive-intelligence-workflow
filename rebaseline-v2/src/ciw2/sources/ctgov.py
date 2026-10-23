@@ -16,6 +16,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from ciw2.domain.identity import CONTROL_LABELS, research_aliases
 from ciw2.domain.semantics import derive_proportion, parse_number
 from ciw2.domain.tiers import tier_of
 from ciw2.harness.tools import REGISTRY, ToolContext
@@ -48,6 +49,15 @@ def _g(d: Any, *path: str, default: Any = None) -> Any:
 
 
 # ------------------------------------------------------------------ 解析
+def _aliases(intervention: dict[str, Any]) -> list[str]:
+    aliases = intervention.get('otherNames')
+    if aliases is None:
+        return []
+    if not isinstance(aliases, list) or any(not isinstance(alias, str) for alias in aliases):
+        raise ValueError('登记来源药物别名不是文本数组，不拆成字符或猜测身份')
+    return aliases
+
+
 def parse_study(study: dict[str, Any]) -> dict[str, Any]:
     ps = study.get("protocolSection", {})
     ident, status = ps.get("identificationModule", {}), ps.get("statusModule", {})
@@ -74,7 +84,7 @@ def parse_study(study: dict[str, Any]) -> dict[str, Any]:
         "enrollment_type": _g(design, "enrollmentInfo", "type"),
         "conditions": _g(ps, "conditionsModule", "conditions", default=[]),
         "interventions": [
-            {"type": i.get("type"), "name": i.get("name"), "other_names": i.get("otherNames") or []}
+            {"type": i.get("type"), "name": i.get("name"), "other_names": _aliases(i)}
             for i in arms_mod.get("interventions", [])
         ],
         "arms": [
@@ -370,16 +380,17 @@ def _ctgov_search(ctx: ToolContext, a: SearchArgs) -> Any:
             trial_id, is_new = ctx.db.upsert_entity(ctx.project_id, "trial", s["nct"], attrs=_trial_attrs(s),
                                                     route_id=a.route_id)
             new += int(is_new)
-            if ctx.stage in {'universe_china', 'universe_global'}:
+            if ctx.stage in {'universe_china', 'universe_global', 'universe_expand'}:
                 for intervention in s['interventions']:
                     raw = (intervention.get('name') or '').strip()
-                    if intervention.get('type') not in {'DRUG', 'BIOLOGICAL'} or not raw or raw.casefold() in {'placebo', '安慰剂'}:
+                    if intervention.get('type') not in {'DRUG', 'BIOLOGICAL'} or not raw or raw.casefold() in CONTROL_LABELS:
                         continue
                     # Registry occurrence is a provisional candidate, not a claim
                     # of innovation, approval, MAH, target or group assignment.
                     name = raw.casefold() if raw.isalpha() and raw.isascii() else raw
                     drug_id, drug_new = ctx.db.upsert_entity(ctx.project_id, 'drug', name,
-                        aliases=[raw] if raw != name else [], route_id=a.route_id,
+                        aliases=research_aliases(([raw] if raw != name else []) + list(intervention.get('other_names') or [])),
+                        route_id=a.route_id,
                         attrs={'discovery_method': 'registry_intervention',
                                'evidence_urls': [STUDY_URL.format(nct=s['nct'])]})
                     ctx.db.link(ctx.project_id, drug_id, 'drug-trial', trial_id)

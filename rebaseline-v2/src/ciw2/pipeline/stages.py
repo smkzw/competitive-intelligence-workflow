@@ -1,7 +1,7 @@
 """阶段定义。确定性工作（抓取、解析、核验、渲染）用代码；判断类工作交给 Skill。
 
 DAG（按报告类型裁剪）：
-intake → universe_china → universe_global → coverage_review(scope) → trial_evidence(code)
+ intake → universe_china → universe_global → candidate_triage → universe_expand → coverage_review → trial_evidence(code)
        → extract_results(B) → extract_design(C) → verify(code) → analysis_A/B/C → render(code)
 """
 from __future__ import annotations
@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from ciw2.domain.identity import literal_names, name_key, name_owners, possible_trial_relation
+from ciw2.domain.identity import literal_names, name_key, name_owners, possible_trial_relation, research_aliases
 from ciw2.domain.models import AnalysisResult, IntakeResult, UniverseResult
 from ciw2.domain.tiers import tier_of
 from ciw2.harness.agent import HARNESS_RULES
@@ -59,7 +59,7 @@ def _persist_universe(rc: RunContext, res: UniverseResult) -> int:
                  if k not in {"name", "name_zh", "aliases", "route_id"} and v not in (None, [], "unknown")}
         attrs[f"found_in_{res.region}"] = True
         eid, is_new = rc.db.upsert_entity(rc.project_id, "drug", c.name, name_zh=c.name_zh,
-                                          aliases=c.aliases, attrs=attrs, route_id=c.route_id)
+                                          aliases=research_aliases(c.aliases), attrs=attrs, route_id=c.route_id)
         new += int(is_new)
         for comp in c.companies:
             cid, _ = rc.db.upsert_entity(rc.project_id, "company", comp, route_id=c.route_id)
@@ -92,6 +92,11 @@ def _universe(region: str) -> Callable[[RunContext], dict[str, Any]]:
 
 
 # ------------------------------------------------------------------ scope / coverage review
+def universe_expand(rc: RunContext) -> dict[str, Any]:
+    from ciw2.pipeline.expansion import expand_universe
+    return expand_universe(rc, lambda result: _persist_universe(rc, result))
+
+
 def coverage_review(rc: RunContext) -> dict[str, Any]:
     from ciw2.pipeline.scope import review_scope
     return review_scope(rc, _intake(rc)["indication"])
@@ -480,6 +485,8 @@ STAGES: list[Stage] = [
     Stage("intake", intake),
     Stage("universe_china", _universe("china"), blocking=False),
     Stage("universe_global", _universe("global"), blocking=False),
+    Stage('candidate_triage', coverage_review),
+    Stage('universe_expand', universe_expand, blocking=False),
     Stage("coverage_review", coverage_review),
     Stage("trial_evidence", trial_evidence),
     Stage("extract_results", _extract("extract-results", _results_extra), frozenset({"B"}), blocking=False),

@@ -40,6 +40,13 @@ def offline_ctgov(monkeypatch: pytest.MonkeyPatch, study: dict[str, Any]) -> Non
 
     monkeypatch.setattr(ctgov, "search", fake_search)
     monkeypatch.setattr(ctgov, "get_study", fake_get)
+    # All discovery/expansion integration tests stay offline, including China fallbacks.
+    from ciw2.sources import china
+
+    def blocked_china(*args, **kwargs):
+        raise china.RegistryBlocked('Offline fixture: direct China source unavailable')
+
+    monkeypatch.setattr(china, 'direct_search', blocked_china)
 
 
 def _skill_of(messages: list[dict[str, Any]]) -> str:

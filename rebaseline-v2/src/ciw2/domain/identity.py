@@ -7,14 +7,21 @@ from pathlib import Path
 from typing import Any
 
 CODE_HASH = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+CONTROL_LABELS = frozenset({'placebo', '安慰剂'})
 
 
 def name_key(name: str | None) -> str:
     return ' '.join((name or '').split()).casefold()
 
 
+def research_aliases(names: list[str | None]) -> list[str]:
+    """Apply the existing exact control-label exclusion to aliases, not source text."""
+    return [name for name in names if isinstance(name, str) and name_key(name)
+            and name_key(name) not in CONTROL_LABELS]
+
+
 def literal_names(entity: dict[str, Any]) -> set[str]:
-    return {name_key(name) for name in [entity['name'], entity.get('name_zh'), *entity.get('aliases', [])]
+    return {name_key(name) for name in [entity['name'], entity.get('name_zh'), *research_aliases(entity.get('aliases', []))]
             if name_key(name)}
 
 

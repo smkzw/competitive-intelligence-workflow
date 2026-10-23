@@ -19,8 +19,10 @@
 | 阶段 | 类型 | 报告 | 阻断 | 说明 |
 |---|---|---|---|---|
 | intake | Skill | ABC | 是 | 标准适应症、英文名、同义词、关注点 |
-| universe_china | Skill | ABC | 否 | 中国必跑路线 + 反向扩展 |
+| universe_china | Skill | ABC | 否 | 中国必跑路线和来源候选 |
 | universe_global | Skill | ABC | 否 | CT.gov / FDA / PubMed / 会议 |
+| candidate_triage | Skill | ABC | 是 | 复用coverage-review，先排除明确背景；unknown保留 |
+| universe_expand | 代码+既有Skill | ABC | 否 | 别名/靶点/企业驱动来源查询，最多三轮，新增线索交原universe Skill解释 |
 | coverage_review | Skill | ABC | 是 | 全量候选分批纳排；明确ID写回，不擅自合并实体 |
 | trial_evidence | 代码 | ABC | 是 | 按药物检索 CT.gov，干预名匹配后入库设计/结果/AE 事实 |
 | extract_results | Skill | B | 否 | 论文/会议/FDA 结果抽取（逐字引用） |
@@ -38,6 +40,7 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 - `sources`：按项目/URL/原始字节digest复用内容版本，保留首次存储时间。每次网络核查、缓存复用、导入另在agent_steps记录source_observation；只有network_checked含network_checked_at及实际HTTP状态。**抽取只能引用本项目已读取的来源**。
 - `entities`（drug/company/trial/target，含别名、发现路线、纳排）+ `links`（drug-trial / drug-company / drug-target）。
 - `domain/identity.py`只做大小写/空白形式归一及字面名称/已知别名匹配，保留标点，不推断药学等同。scope、trial_evidence和verify复用；scope缓存绑定该规则源码hash。明确且唯一的试验关联用drug-trial；宽检索/共享别名保留drug-trial-candidate（pending及原干预名），沿用links不增表。后来字面关系确认时保留候选记录并标resolved_literal_match；不是自动解决剂型/组合药学语义。
+- 共同research_aliases仅复用既有精确placebo/安慰剂排除；原otherNames仍在来源和研究元数据中，旧存量别名只在采用/身份/查询读取层过滤，AB-1与AB1不合并。检索候选和已确认科学身份不同。
 - `facts`：追加式；`supersedes` 指向被取代的版本；`tier` `status` `quote` `quote_start/end` `context`（组/时间点/人群/统计对象/分母/终点）。
 - `coverage`：每条检索路线的状态（ok/failed/blocked）、命中、新增实体。
 - 发现工具逐批保存登记原名与药物—试验关系，最终模型提交失败不抹掉已读来源；不据此推断创新属性或监管身份。
@@ -78,6 +81,8 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 - 新增 Skill：写 SKILL.md + （必要时）在 `domain/models.py` 增加输出模型 + 在 stages 中接入。
 
 ## 5. 中国来源现状（实测）
+- `pipeline/expansion.py`复用注册工具、CAS和stages单元回执：每个别名/靶点/企业种子生成中国CT.gov+三登记/CDE/NMPA查询及全球CT.gov/全网查询，按实际参数稳定去重并保留实体owners。最多3轮，显式预算保存pending；只要新查询未做完就IncompleteWork，来源blocked/failed按FR5继续其他资料但expansion_complete=false。没有新增Skill/表/路由器。
+- 来源回执先于模型解释保存，恢复不重复已完成fetch；source ID/digest、实现/规则、提供方及实际参数绑定。解释键另含任务、Skill、schema、模型与来源，采用和解释回执同一事务。空/损坏结构不算无结果，阻断/失败不缓存为成功；空候选集合不算宇宙接受。一次真实中国CT.gov扩展查到1研究，仅证明来源可执行；中国直连与召回门仍未过。
 - 搜索响应先核验JSON对象、结果数组/条目及错误状态；无可核验集合不判0。SerpApi只有文档明确的Success+Fully empty为空成功例外（可含error）；见[官方状态合同](https://serpapi.com/api-status-and-error-codes)。请求失败只保留状态码/异常类别；site备用检索的blocked/failed单独记账，来源未接通不借安全测试算通过。
 - 药物临床试验登记与信息公示平台：对 httpx 返回 HTTP 202 + JS 挑战页 → 记 `blocked`，退回 `site:` 全网搜索。
 - CDE/NMPA：前端渲染为主 → 同上。M2 实现 Playwright 适配器（真实浏览器、限速、缓存）。
