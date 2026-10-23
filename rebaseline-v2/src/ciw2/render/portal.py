@@ -105,6 +105,7 @@ def _result_rows(db: DB, pid: str) -> list[dict[str, Any]]:
             "stat_type": c.get("stat_type"), "denominator": c.get("denominator"),
             "proportion": c.get("proportion"), "population": c.get("population"),
             "status": f["status"], "tier": f["tier"], "extracted_by": f["extracted_by"],
+            'stored_status': f.get('stored_status', f['status']), 'verdict_note': f.get('verdict_note'),
             "source_url": c.get("source_url") or srcs.get(f["source_id"] or ""), "quote": f["quote"],
             "verify_note": c.get("verify_note"),
             **{key: c.get(key) for key in ('class_title', 'category', 'param_type', 'dispersion_type',

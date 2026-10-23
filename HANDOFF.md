@@ -1,3 +1,13 @@
+# 当前构建入口｜rebaseline-v2｜2026-10-24
+
+当前用户授权为继续构建 rebaseline-v2；宿主 Goal 实查为 active，尚未整体交付，不恢复 v1 的旧执行链。
+唯一当前状态：[v2 STATUS](rebaseline-v2/docs/STATUS.md)；任务计划：[v2 PLAN](rebaseline-v2/docs/03_PLAN.md)。
+产品合同与实施规则见 [v2 PRD](rebaseline-v2/docs/01_PRD.md)、[架构](rebaseline-v2/docs/02_ARCHITECTURE.md)、[开发规则](rebaseline-v2/docs/04_AGENT_RULES.md)；恢复索引见 [.trellis 当前任务](.trellis/tasks/10-23-rebaseline-v2-m1/implement.md)。
+最新实测范围、未完成项和仍在运行的模型任务只在 v2 STATUS 更新；局部检查通过不代表完整报告或全部产品交付。
+以下 v1 原文仅为历史，保留原内容；其中的暂停、Goal、在途、旧 PID、旧入口与旧版本计数均不覆盖上述 v2 当前合同，不据此重跑。
+
+---
+
 # 唯一接手入口｜1007V1连续实施，非暂停、非RC
 
 唯一当前状态：[STATUS顶节](packets/2026-09-22-sol-delivery/STATUS.md)。

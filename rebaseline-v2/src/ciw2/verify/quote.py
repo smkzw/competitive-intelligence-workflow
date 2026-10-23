@@ -17,6 +17,8 @@ _TRANS = str.maketrans({
     "“": '"', "”": '"', "‘": "'", "’": "'", "–": "-", "—": "-", "−": "-",
     "≥": ">=", "≤": "<=", "\u00a0": " ",
 })
+_NUMERIC_TOKEN = r'[-+]?(?:\d{1,3}(?:,\d{3})+|\d+|\.\d+)(?:\.\d+)?(?:e[-+]?\d+)?'
+_NUMBER = rf'(?<![A-Za-z0-9_.]){_NUMERIC_TOKEN}(?!\d|\.\d)'
 
 
 def normalize(text: str) -> str:
@@ -40,8 +42,7 @@ def _numbers(value: object) -> list[str]:
     if isinstance(value, bool):
         return []
     if isinstance(value, (int, float)):
-        v = float(value)
-        return [str(int(v))] if v.is_integer() else [repr(v).rstrip("0").rstrip(".")]
+        return [str(value)]  # Preserve integer precision and exponent digits verbatim.
     if isinstance(value, dict):
         out: list[str] = []
         for v in value.values():
@@ -52,17 +53,16 @@ def _numbers(value: object) -> list[str]:
         for v in value:
             out += _numbers(v)
         return out
-    return re.findall(r"-?\d+(?:\.\d+)?", str(value))
+    return re.findall(_NUMERIC_TOKEN, normalize(str(value)))
 
 
 def _number_in(num: str, text: str) -> bool:
     try:
-        target = Decimal(num)
+        target = Decimal(num.replace(',', ''))
     except InvalidOperation:
         return False
-    pattern = r'(?<![A-Za-z0-9_.])[-+]?(?:\d{1,3}(?:,\d{3})+|\d+|\.\d+)(?:\.\d+)?(?:e[-+]?\d+)?(?!\d|\.\d)'
     return target.is_finite() and any(
-        Decimal(match[0].replace(',', '')) == target for match in re.finditer(pattern, text))
+        Decimal(match[0].replace(',', '')) == target for match in re.finditer(_NUMBER, text))
 
 
 def check_quote(source_text: str, quote: str | None, value: object = None) -> QuoteCheck:
@@ -77,5 +77,7 @@ def check_quote(source_text: str, quote: str | None, value: object = None) -> Qu
         return QuoteCheck(False, None, None, "原文中找不到该片段")
     missing = [n for n in _numbers(value) if not _number_in(n, q)]
     if missing:
-        return QuoteCheck(False, idx, idx + len(q), f"数值未出现在片段中：{', '.join(missing)}")
+        sample=', '.join(n[:80] for n in missing[:5])
+        extra=f'（另{len(missing)-5}项）' if len(missing)>5 else ''
+        return QuoteCheck(False, idx, idx + len(q), f"数值未出现在片段中：{sample}{extra}")
     return QuoteCheck(True, idx, idx + len(q))

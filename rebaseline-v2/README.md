@@ -10,8 +10,7 @@ python -m venv .venv && . .venv/bin/activate
 pip install -e '.[dev]'
 bash scripts/fetch_assets.sh          # ECharts 6.1.0，固定SHA256验证（Apache-2.0，不入库）
 pytest -q                             # 当前验证范围和结果见 docs/STATUS.md
-cp .env.example .env && $EDITOR .env  # 填 LLM / 搜索密钥
-set -a && . ./.env && set +a
+# LLM / 搜索密钥由宿主受控环境注入，不写项目文件、命令参数或日志
 ciw2 skills                           # 校验 Skill 与工具
 ciw2 serve                            # http://127.0.0.1:8765
 # 或命令行：ciw2 run --indication 特应性皮炎 --reports A,C
@@ -30,7 +29,7 @@ scripts/     fetch_assets.sh、smoke_live.py、run_live.py、replay_design_sourc
 ```
 
 ## 报告
-- **A 竞争格局**：药物 × 靶点 × 中国/全球最高阶段 × 企业/MAH，含纳排理由与发现路线。
+- **A 竞争格局**：药物 × 靶点 × 中国/全球最高阶段 × 企业/MAH；检索过程在项目工作台查看。
 - **B 疗效与安全性**：只用已核实数据作图；不同终点/时间点/统计形式分开；SAE/死亡按组、比例仅在分母明确时计算。
 - **C 试验设计先例**：期别、样本量、随机/设盲、分组、主要终点与时间点、年龄、中国站点。
 
@@ -48,4 +47,8 @@ scripts/     fetch_assets.sh、smoke_live.py、run_live.py、replay_design_sourc
 
 用 `python scripts/smoke_china_browser.py --space SPACE_ID --query 特应性皮炎 --output NEW_OUTPUT_DIR` 验证生产来源工具，保存全页来源及回执，不调用模型。CDE受理目录加 `--registry cde --query-kind drug_name --query 度普利尤单抗`；也支持明确company/acceptance_number，不把疾病塞到药名框。化药IND新报审评任务改用 `--registry cde --cde-section new_review_task_chemical_ind --query-kind acceptance_number --query 完整受理号`：读取全序列后精确取匹配，其他序列仍待接通。结果中的source_total_records与rows分别是原序列总数和精确匹配数。
 
-中国登记失败冒烟可加`--resume-output PREVIOUS_OUTPUT_DIR`在原run只补缺页，回执另存新目录；CDE自动缺页恢复尚未接通。来源切片成功不等于全部中国竞品、适应症/监管结论或整个报告验收。
+中国登记与已接通CDE栏目失败冒烟可加`--resume-output PREVIOUS_OUTPUT_DIR`在原run按已验证范围补缺页，回执另存新目录。当前阶段、恢复点与未完成项统一见`docs/STATUS.md`；不把来源切片成功当作整个报告验收。
+
+已取得确切NMPA公开证书URL后，可用`python scripts/smoke_nmpa_detail.py --space SPACE_ID --url OFFICIAL_DETAIL_URL --registration-number 完整证件号 --category 境内生产药品 --output NEW_OUTPUT_DIR`核对普通生产工具；境外记录使用对应类别。该命令在新资料目录核对首次读取、同run缓存与新run核查，只登记来源、不调用模型或采用事实。
+
+规则升级后，`ciw2 requalify --project PROJECT_ID --dry-run`可先统计本项目固定原文的复核结果；移除`--dry-run`才追加当前裁决回执。它不重新检索或调用模型，不修改旧科学事实。先备份真实资料；历史未核实/冲突不会被自动提升，暂时缺失的固定原文恢复后也可沿普通同run核验恢复。

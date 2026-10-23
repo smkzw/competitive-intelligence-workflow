@@ -20,6 +20,9 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("--focus", default="")
     r.add_argument("--max-drugs", type=int, default=None, help="可选执行预算；留空处理全部药物，未处理项保留供恢复")
     sub.add_parser("skills", help="校验并列出 Skill")
+    requalify_parser=sub.add_parser('requalify',help='离线复核当前已核实LLM事实的原文裁决；只追加回执，不调用模型或网络')
+    requalify_parser.add_argument('--project',required=True)
+    requalify_parser.add_argument('--dry-run',action='store_true',help='只统计，不写入任何回执')
     backup_parser=sub.add_parser('backup',help='备份当前数据库与引用资料；输出必须为新目录')
     backup_parser.add_argument('--output',type=Path,required=True)
     restore_parser=sub.add_parser('restore',help='验证资料备份并恢复到明确的新数据目录，不覆盖当前资料')
@@ -28,6 +31,22 @@ def main(argv: list[str] | None = None) -> int:
     a = ap.parse_args(argv)
 
     from ciw2.config import get_settings
+    if a.cmd == 'requalify':
+        from ciw2.config import Settings
+        from ciw2.pipeline.requalify import requalify_project
+        from ciw2.store.cas import CAS
+        from ciw2.store.db import DB
+        settings=Settings()  # 不为一次离线复核隐式创建新的数据根
+        if not settings.db_path.exists():
+            print('项目不存在；未写入任何核验回执。',file=sys.stderr)
+            return 2
+        try:
+            summary=requalify_project(DB(settings.db_path),CAS(settings.cas_dir),a.project,dry_run=a.dry_run)
+        except KeyError:
+            print('项目不存在；未写入任何核验回执。',file=sys.stderr)
+            return 2
+        print(json.dumps(summary,ensure_ascii=False,indent=2))
+        return 0
     if a.cmd in {'backup','restore'}:
         from sqlite3 import Error as SQLiteError
 

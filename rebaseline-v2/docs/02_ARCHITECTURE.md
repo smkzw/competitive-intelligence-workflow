@@ -63,6 +63,9 @@ Service复用标准库Condition/deque及一个执行锁，在同一服务进程�
 3. critical 且通过 → 可选 `CIW_LLM_CHECK_MODEL` 二次核对（只回答 YES/NO），不同意 → conflict。
 4. 门户：未核实/冲突的 critical 字段只进表格（红色标记），不进图表数值轴。
 5. verify的实体写回必须唯一关联本项目既有实体或明确登记号；未知/共享别名不默认落到父药物。原抽取事实不删除，阶段输出identity_issues/unresolved_entities；其余正常事实继续核验。候选关联和身份问题不代表科学验收通过。
+6. 当前引文裁决复用agent_steps(role=fact_verdict)追加回执，不增表、不覆写facts/sources/links/entities。回执绑定完整有类型的事实、原引文、固定source_id/raw/text SHA及实际quote.py+assessment.py字节规则。raw_current_facts保留成员/历史投影；current_facts统一叠加当前有效状态。旧LLM verified无有效当前回执按待核读取，已存unverified/conflict/unknown不自动升格；代码解析事实不受该迁移影响。科学supersedes与核验裁决不是同一事件。
+7. 新采用事实与其裁决同一事务；同run恢复只重核固定版本，不再插入同一事实。暂时不可读/不可用/摘要错误的旧回执在普通恢复时也重核相同固定来源，恢复原字节后可重新确认；持久片段否定与无引文不重复重核。`ciw2 requalify --project ID [--dry-run]`离线读取本项目CAS，区分未绑定/不可读/摘要错误/片段不符，真实执行只追加回执；采用及复核专用BEGIN IMMEDIATE在跨连接读取最新回执前取得写所有权，普通只读导出仍为deferred事务，不建进程锁或调度器。归一化坐标不是原文坐标。B/C图、摘要查询、身份和JSON/CSV共用当前投影；C原位短状态与折叠具体原因一致，历史来源只标“当时已核实”等当时状态。
+8. 核验数值直接保留整数精度、浮点指数及数值字符串的小数/千位形式，以Decimal比较，不先转float或裁指数尾数。缺失数字原因只列有界示例及剩余数量，fact_verdict完整JSON不受普通对话日志字符截断。核验失效不自动复活被supersedes替代的历史事实：当前后继保持待核，前驱仍在原始历史与C来源链可查；科学成员与核验状态分开，不重写历史或擅自选择旧值为当前真值。
 
 ## 4. DSH（内嵌最小 Skill Harness）
 - Skill = `skills/<name>/SKILL.md`：frontmatter（name/description/tools/output/max_steps）+ 正文（工作说明）。
@@ -98,11 +101,13 @@ Service复用标准库Condition/deque及一个执行锁，在同一服务进程�
 - 完整结构化登记行代码直接写暂定drug/trial和带来源/页/行的显式关系，保留整条药名和unknown纳排，不再将464条重复送模型抽取；科学纳排仍走既有coverage-review。没有新增事实表/Skill/浏览器框架。
 - CDE受理目录已接同一Ego空间与现有CLI传输，单独cde_browser.mjs/cde_capture.py消费实际八列表头；只扩展现有_invoke的内部脚本/filters选项，不新建执行器。ChinaArgs.query_kind明确drug_name/company/acceptance_number；未指定/indication/target不进入药名框，按blocked/site路线记账。反向扩展把原词送单字段（中国登记也用原始关键词），不拼适应症到药名/企业框。CDE实现及配置空间进入来源缓存键，栏目+六筛选进入request_context；相同URL的不同查询不相互覆盖。
 - CDE强制全部年度/类型，完整翻页并保留八列原值/原公司复合文本/空格。公司列→company_text，承办日期→handled_date_text，不认定申办方/MAH或获批/首次公开时间。受理引用放暂定drug.attrs，不生成trial或临床事实；纳排仍走既有coverage-review。CDE空tbody“暂无内容”+无pager保留真实文本/page_size=null，不造数字页脚。已观察的2015及以前选项原样保留；表单筛选在捕获JSON中，列表URI不接受查询/会话参数。错误/部分页保存有效来源但不签收完整。
-- CDE新报化药IND切片使用cde_review_capture.py/cde_review_browser.py及同一Ego传输；既有工具增加明确cde_section，不另建执行器。完整十二列/本页图例/范围/分页核对后精确查找受理号；JSON locator保持原始pages数组位置。同受理号的不同观察保留，未知/冲突图形记录内部原因，不按图标名选状态。只追加到有本项目受理来源支持的既有候选引用，0新试验/临床事实。同run共用fetch_cache，以项目/run/空间/代码版本作键，CAS校验后标cache_reused并登记本次读集；新run重读公开页，缓存不伪装新核查。部分页保全但不成功缓存。其他审评序列/公示栏目、NMPA、登记详情仍待接通，M2仍需专家金标准验召回。
+- CDE新报化药IND切片使用cde_review_capture.py/cde_review_browser.py及同一Ego传输；既有工具增加明确cde_section，不另建执行器。完整十二列/本页图例/范围/分页核对后精确查找受理号；JSON locator保持原始pages数组位置。同受理号的不同观察保留，未知/冲突图形记录内部原因，不按图标名选状态。只追加到有本项目受理来源支持的既有候选引用，0新试验/临床事实。同run共用fetch_cache，以项目/run/空间/代码版本作键，CAS校验后标cache_reused并登记本次读集；新run重读公开页，缓存不伪装新核查。部分页保全但不成功缓存。其他审评序列/公示栏目仍待接通；登记详情原表与NMPA精确证书已另接通，全量应查详情/许可目录及M2专家金标准召回仍待验收。
 - cde_resume.py为受理/审评共用的同run原始分页读取器：最新匹配来源已完整则不回退，未完整须CAS/范围/生产校验器验证；只读无事件写入。既有适配器登记cache_read并传第一页内容/总数/页长锚点；两个MJS先取新第一页，不匹配则全部新采，匹配则用实际分页跳转补缺口。宿主再核验实际新页/复用页和锚点，合并后重跑完整集合校验，保存reused_source_ids/reused_pages/new_pages_checked；旧来源不改写。明确空页元数据使用实际current=0，不用循环索引。共用实现hash进入相关缓存/冒烟清单；无新增框架或数据表。
 - china_detail.py/.mjs注册china_trial_detail：先核本项目/run/列表CAS与CTR—detail_id绑定，再用同一Ego空间的原生查询及详情popup读取。只捕获基本身份和临床表/内表，联系人/研究者联系方式不进入该来源包；内表逐定位核对父单元格，完整原文另入text_digest。新源经register_text登记，browser_checked与同run cache_reused分开；缓存校验raw/text/context和代码版本，新run实际重读，不新建浏览器框架、数据表或自动事实采纳路径。公开详情URL不是单研究永久链接，原始CTR/detail_id保留在request_context及捕获字节中。
 - ExtractedFact.source_id为可选精确版本指针。抽取调用者仍只接受本项目本次实际读取且URL一致的版本；中国登记设计/试验事实另需来源CTR匹配entity。未指定时只允许唯一来源，显式错误ID不能改挑另一个。已有verify原文/数字/上下文及事务采纳不变。extract-design的已知CTR输入给出detail_tool，工具脚本/解析版本进入该Skill单元失效键；不迁移旧冻结研究或伪装已做新核查。
 - CT.gov `query.locn=China` 可用（PNH 实测 52 条）。
+
+- `nmpa_detail.py/.mjs`注册nmpa_product_detail：只读已明确定位的境内/境外公开证书，不替代目录检索。沿用Ego传输/指定空间p1、现有CAS/sources/read-set/分页工具；严格官方HTTPS记录URL、类别/证号/表头/原字段绑定，MAH、制造商、境内责任人及发证/批准/有效日期分开。原始可见行与字面全文分别存储，published_date为空，不以许可日期倒证历史公开。按项目/run/空间/URL/证号/类别/实际代码键验证缓存的原字节/全文/上下文；新run重新浏览，读取与复用回执分开，无事实/实体自动采用。真实两证书40/16字段及同run复用/新run重核通过，仅该来源工具组件；全目录、适应症批准、集团和M2/M3仍未接受。CAS统一拒绝非64位小写SHA-256命名，非法元数据不触发目录外读取。
 
 ## 6. 配置（环境变量）
 ### 当前事实下载

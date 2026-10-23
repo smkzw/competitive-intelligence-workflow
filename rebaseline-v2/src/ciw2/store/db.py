@@ -16,6 +16,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from ciw2.verify import assessment
+
 SCHEMA = """
 PRAGMA journal_mode=WAL;
 CREATE TABLE IF NOT EXISTS projects (
@@ -144,9 +146,9 @@ class DB:
         self._conn.executescript(SCHEMA)
 
     @contextmanager
-    def tx(self) -> Iterator[sqlite3.Connection]:
+    def tx(self, *, immediate: bool = False) -> Iterator[sqlite3.Connection]:
         with self._lock:
-            self._conn.execute("BEGIN")
+            self._conn.execute('BEGIN IMMEDIATE' if immediate else 'BEGIN')
             try:
                 yield self._conn
                 self._conn.execute("COMMIT")
@@ -252,7 +254,7 @@ class DB:
         self.execute(
             "INSERT INTO agent_steps (run_id, stage, skill, step, role, content, created_at) "
             "VALUES (?,?,?,?,?,?,?)",
-            (run_id, stage, skill, step, role, text[:20000], now()),
+            (run_id, stage, skill, step, role, text if role==assessment.ROLE else text[:20000], now()),
         )
 
     # ---- sources / entities / facts -------------------------------------
@@ -334,8 +336,8 @@ class DB:
         )
         return fid
 
-    def current_facts(self, project_id: str, entity_id: str | None = None) -> list[dict[str, Any]]:
-        """Current registry document plus independent facts; immutable legacy stays readable."""
+    def raw_current_facts(self, project_id: str, entity_id: str | None = None) -> list[dict[str, Any]]:
+        """当前集合的历史/成员资格投影：不含现行裁决，供离线复核扫描。"""
         sql = ("SELECT * FROM facts f WHERE project_id=? AND NOT EXISTS "
                "(SELECT 1 FROM facts g WHERE g.project_id=f.project_id AND g.supersedes=f.id) AND ("
                "f.extracted_by NOT IN ('code:ctgov','code:chinadrugtrials') OR NOT EXISTS (SELECT 1 FROM links l "
@@ -353,6 +355,55 @@ class DB:
         for r in rows:
             r["value"] = json.loads(r["value"])
             r["context"] = json.loads(r["context"])
+        return rows
+
+    def latest_verdicts(self, project_id: str, rule: str | None = None) -> dict[str, dict[str, Any]]:
+        """本项目、当前规则下每个事实的最新 append-only 裁决回执（一次查询）。"""
+        rule = rule if rule is not None else assessment.rule_identity()
+        rows = self.query(
+            "SELECT content FROM agent_steps WHERE role='fact_verdict' AND json_valid(content) "
+            "AND json_extract(content,'$.project_id')=? AND json_extract(content,'$.rule')=? ORDER BY id",
+            (project_id, rule))
+        sources={row['id']:row for row in self.query(
+            'SELECT id,digest,text_digest FROM sources WHERE project_id=?',(project_id,))} if rows else {}
+        latest: dict[str, dict[str, Any]] = {}
+        for row in rows:
+            try:
+                content = json.loads(row['content'])
+            except (TypeError, ValueError):
+                continue
+            if isinstance(content, dict) and isinstance(content.get('fact_id'), str):
+                if isinstance(content.get('verdict'),str) and content['verdict'] in {'confirmed','invalidated'}:
+                    sid=content.get('source_id')
+                    source=sources.get(sid) if isinstance(sid,str) else None
+                    if (source is None or content.get('source_digest')!=source['digest']
+                            or content.get('text_digest')!=source['text_digest']):
+                        latest.pop(content['fact_id'],None)  # Invalid latest proof cannot resurrect an older one.
+                        continue
+                latest[content['fact_id']] = content
+        return latest
+
+    def current_facts(self, project_id: str, entity_id: str | None = None) -> list[dict[str, Any]]:
+        """当前事实 = 历史/成员资格投影 + 当前规则裁决；科学上下文原样保留。"""
+        rows = self.raw_current_facts(project_id, entity_id)
+        rule = assessment.rule_identity()
+        verdicts = self.latest_verdicts(project_id, rule)
+        for r in rows:
+            r['stored_status'] = r['status']
+            if not str(r.get('extracted_by') or '').startswith('llm:'):
+                continue
+            receipt = verdicts.get(r['id'])
+            if receipt is not None and assessment.receipt_matches(receipt, r):
+                r['status'] = receipt['status']
+                r['verdict'] = receipt['verdict']
+                r['verdict_rule'] = rule
+                r['verdict_note'] = receipt.get('reason') or None
+                continue
+            pending = r['stored_status'] == 'verified'
+            r['status'] = 'unverified' if pending else r['stored_status']
+            r['verdict'] = 'pending' if pending else None
+            r['verdict_rule'] = rule if pending else None
+            r['verdict_note'] = assessment.PENDING_NOTE if pending else None
         return rows
 
     def log_coverage(self, run_id: str, route_id: str, region: str, query: str, status: str,

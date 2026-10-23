@@ -1,7 +1,7 @@
 ---
 name: universe-china
 description: 中国竞品宇宙：尽可能完整地找出在中国开发/上市/申报该适应症的药物
-tools: [china_registry_search, china_trial_detail, ctgov_search, web_search, wechat_search, fetch_url]
+tools: [china_registry_search, china_trial_detail, nmpa_product_detail, ctgov_search, web_search, wechat_search, fetch_url]
 output: UniverseResult
 max_steps: 30
 ---
@@ -30,5 +30,6 @@ mode=expansion_results 时只整理程序已实际检索得到的 source_hits：
 - ctgov_search 的 interventions 是完整去重干预名及其试验对应表，优先用它识别候选；studies 保留全部检索到的试验编号。需要设计细节时由后续代码阶段抓取，不为了重复标题逐页阅读所有试验。长结果仍可通过 read_tool_result 继续读取。
 - registry=chinadrugtrials 的 mode=browser、complete=true、persisted=true 表示公开列表全部页已核对，原始药名和CTR暂定关系已由代码入库；不必再逐条复制重抽这些列表字段。保留来源中的完整中文/复合药名，不强造INN或合并别名；只补充有明确新来源的身份、靶点、企业及开发信息。列表状态不是获批/MAH/创新属性证明。相同公开POST列表URL须连同查询、页、CTR定位，不猜造GET详情链接。未完/失败不能当作中国零结果。
 - CDE受理目录须明确query_kind=drug_name/company/acceptance_number，query只填该原始检索词，不前缀拼入适应症；默认全部年度/药品类型/申请类型。结构化受理记录入暂定药物的来源引用，不创建CTR试验或科学状态事实，不再逐条重复抽取。企业名称列是原始company_text，不认定申办方/MAH；handled_date_text只是承办日期，不作批准/首次公开日期。适应症、靶点或未指定类型只能走对应公开线索/site备用；target_indication必须另有直接证据。受理记录不自动属于当前适应症，也不是已获批或审评结论。
+- NMPA药品批准证明文件只在公开目录已定位到确切注册证号/批准文号及公开详情URL时，用nmpa_product_detail读取；标题、药品类别与证件号必须完全一致。只登记公开原文来源，不自动创建药物/试验/事实；发证/批准日期不是首次公开日期，也不据此推断适应症获批。上市许可持有人、生产厂商、境内责任人是不同法律角色，境内/境外类别字段不得互换。
 - 保留至少最后一步提交结果；来源 blocked/failed 时提交已读到的候选与失败路线，不无限重复同一失效工具。
 - CDE化药IND新报任务需明确cde_section=new_review_task_chemical_ind、query_kind=acceptance_number及完整受理号；其他序列仍未验证。工具先读完整公开序列再精确查找，原站输入框只是定位/高亮，不把原序列总数当某受理号的命中数。行状态、专业图例状态、进入中心日期独立保存，不推成批准或适应症归属。已有受理来源支持的候选可追加引用，未绑定者仅返回来源记录；不重复逐页提取同run已核过的完整来源，cache_reused不代表新核查。

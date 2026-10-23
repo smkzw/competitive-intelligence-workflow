@@ -20,13 +20,15 @@ def thresholds(criteria: str) -> list[dict[str, Any]]:
     return eligibility_reading(criteria)['rules']
 
 
-def source_ref(fact: dict[str, Any], sources: dict[str, dict[str, Any]]) -> dict[str, Any]:
+def source_ref(fact: dict[str, Any], sources: dict[str, dict[str, Any]], *, historical: bool = False) -> dict[str, Any]:
     source = sources.get(fact['source_id'], {})
     url = source.get('url') or fact['context'].get('source_url')
     if url and urlsplit(url).scheme not in {'http', 'https'}:
         url = None
     return {'fact_id': fact['id'], 'source_id': fact['source_id'], 'url': url,
             'quote': fact['quote'], 'status': fact['status'],
+            'stored_status': fact.get('stored_status', fact['status']), 'historical': historical,
+            'verdict_note': fact.get('verdict_note'),
             'locator': fact['context'].get('json_path'), 'value': fact['value'], 'context': fact['context']}
 
 
@@ -105,7 +107,7 @@ def design_data(db: DB, pid: str, phase_zh: dict[str, str]) -> dict[str, Any]:
             if old is None:
                 break
             old['value'], old['context'] = json.loads(old['value']), json.loads(old['context'])
-            history.append(source_ref(old, sources))
+            history.append(source_ref(old, sources, historical=True))
             prior = old['supersedes']
         if history:
             ref['supersedes'], ref['history'] = history[0], history

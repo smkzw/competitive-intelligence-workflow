@@ -31,7 +31,7 @@
 <details><summary>原始单位与统计</summary>{{ r.unit or '—' }} · {{ r.stat_type or '—' }}</details></td><td>{{ r.denominator if r.denominator is not none else '—' }}</td>
 <td><span class="badge {{ r.status }}">{{ r.status|status }}</span></td>
 <td>{% if r.source_url %}<a href="{{ r.source_url }}" target="_blank" rel="noopener">原文</a>{% endif %}
-{% if r.quote %}<details><summary>原文值</summary><div class="quote">{{ r.quote }}</div></details>{% endif %}</td></tr>{% endfor %}
+{% if r.quote or r.verdict_note %}<details><summary>原文值</summary>{% if r.status != 'verified' and r.verdict_note %}<p class="muted">{{ r.verdict_note }}</p>{% endif %}<div class="quote">{{ r.quote or '' }}</div></details>{% endif %}</td></tr>{% endfor %}
 </tbody></table></div></details>
 
 {% if data.safety %}<h2>安全性</h2>
@@ -42,6 +42,6 @@
 <td>{{ r.denominator if r.denominator is not none else '—' }}</td><td>{{ r.proportion if r.proportion is not none else '—' }}</td>
 <td><details><summary>时间窗</summary>{{ r.timepoint or '—' }}</details></td><td><span class="badge {{ r.status }}">{{ r.status|status }}</span></td>
 <td>{% if r.source_url %}<a href="{{ r.source_url }}" target="_blank" rel="noopener">原文</a>{% endif %}
-{% if r.quote %}<details><summary>原文值</summary><div class="quote">{{ r.quote }}</div></details>{% endif %}</td></tr>{% endfor %}
+{% if r.quote or r.verdict_note %}<details><summary>原文值</summary>{% if r.status != 'verified' and r.verdict_note %}<p class="muted">{{ r.verdict_note }}</p>{% endif %}<div class="quote">{{ r.quote or '' }}</div></details>{% endif %}</td></tr>{% endfor %}
 </tbody></table></div></details>{% endif %}
 {% endblock %}

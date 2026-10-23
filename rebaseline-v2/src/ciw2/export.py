@@ -48,13 +48,16 @@ def encode_export(payload: dict[str, Any], file_format: str) -> bytes:
     if file_format != 'csv':
         raise ValueError('Unsupported export format')
     output = io.StringIO(newline='')
-    columns = ['id', 'project_id', 'entity_id', 'entity_name', 'field', 'value_json', 'status', 'tier',
-               'unit', 'source_id', 'source_url', 'source_digest', 'quote', 'context_json', 'csv_escaped_fields']
+    columns = ['id', 'project_id', 'entity_id', 'entity_name', 'field', 'value_json', 'status', 'stored_status',
+               'verdict_rule', 'verdict_note', 'tier', 'unit', 'source_id', 'source_url', 'source_digest',
+               'quote', 'context_json', 'csv_escaped_fields']
     writer = csv.DictWriter(output, fieldnames=columns)
     writer.writeheader()
     for fact in payload['facts']:
         entity, source = fact['entity'] or {}, fact['source'] or {}
         flat = {key: fact[key] for key in ('id', 'project_id', 'entity_id', 'field', 'status', 'tier', 'source_id', 'quote')}
+        flat.update(stored_status=fact.get('stored_status', fact['status']),
+                    verdict_rule=fact.get('verdict_rule'), verdict_note=fact.get('verdict_note'))
         flat.update(entity_name=entity.get('name_zh') or entity.get('name'), unit=fact['context'].get('unit'),
                     source_url=source.get('url'), source_digest=source.get('digest'))
         escaped: list[str] = []

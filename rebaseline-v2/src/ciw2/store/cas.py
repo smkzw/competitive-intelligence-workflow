@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import re
 from pathlib import Path
 
 
@@ -12,6 +13,8 @@ class CAS:
         self.root.mkdir(parents=True, exist_ok=True)
 
     def _path(self, digest: str) -> Path:
+        if not isinstance(digest,str) or not re.fullmatch(r'[0-9a-f]{64}',digest):
+            raise ValueError('CAS摘要必须为64位小写SHA-256')
         return self.root / digest[:2] / digest
 
     def put(self, data: bytes) -> str:
