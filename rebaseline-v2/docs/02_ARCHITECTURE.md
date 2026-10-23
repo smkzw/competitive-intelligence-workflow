@@ -98,6 +98,8 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 - CDE强制全部年度/类型，完整翻页并保留八列原值/原公司复合文本/空格。公司列→company_text，承办日期→handled_date_text，不认定申办方/MAH或获批/首次公开时间。受理引用放暂定drug.attrs，不生成trial或临床事实；纳排仍走既有coverage-review。CDE空tbody“暂无内容”+无pager保留真实文本/page_size=null，不造数字页脚。已观察的2015及以前选项原样保留；表单筛选在捕获JSON中，列表URI不接受查询/会话参数。错误/部分页保存有效来源但不签收完整。
 - CDE新报化药IND切片使用cde_review_capture.py/cde_review_browser.py及同一Ego传输；既有工具增加明确cde_section，不另建执行器。完整十二列/本页图例/范围/分页核对后精确查找受理号；JSON locator保持原始pages数组位置。同受理号的不同观察保留，未知/冲突图形记录内部原因，不按图标名选状态。只追加到有本项目受理来源支持的既有候选引用，0新试验/临床事实。同run共用fetch_cache，以项目/run/空间/代码版本作键，CAS校验后标cache_reused并登记本次读集；新run重读公开页，缓存不伪装新核查。部分页保全但不成功缓存。其他审评序列/公示栏目、NMPA、登记详情仍待接通，M2仍需专家金标准验召回。
 - cde_resume.py为受理/审评共用的同run原始分页读取器：最新匹配来源已完整则不回退，未完整须CAS/范围/生产校验器验证；只读无事件写入。既有适配器登记cache_read并传第一页内容/总数/页长锚点；两个MJS先取新第一页，不匹配则全部新采，匹配则用实际分页跳转补缺口。宿主再核验实际新页/复用页和锚点，合并后重跑完整集合校验，保存reused_source_ids/reused_pages/new_pages_checked；旧来源不改写。明确空页元数据使用实际current=0，不用循环索引。共用实现hash进入相关缓存/冒烟清单；无新增框架或数据表。
+- china_detail.py/.mjs注册china_trial_detail：先核本项目/run/列表CAS与CTR—detail_id绑定，再用同一Ego空间的原生查询及详情popup读取。只捕获基本身份和临床表/内表，联系人/研究者联系方式不进入该来源包；内表逐定位核对父单元格，完整原文另入text_digest。新源经register_text登记，browser_checked与同run cache_reused分开；缓存校验raw/text/context和代码版本，新run实际重读，不新建浏览器框架、数据表或自动事实采纳路径。公开详情URL不是单研究永久链接，原始CTR/detail_id保留在request_context及捕获字节中。
+- ExtractedFact.source_id为可选精确版本指针。抽取调用者仍只接受本项目本次实际读取且URL一致的版本；中国登记设计/试验事实另需来源CTR匹配entity。未指定时只允许唯一来源，显式错误ID不能改挑另一个。已有verify原文/数字/上下文及事务采纳不变。extract-design的已知CTR输入给出detail_tool，工具脚本/解析版本进入该Skill单元失效键；不迁移旧冻结研究或伪装已做新核查。
 - CT.gov `query.locn=China` 可用（PNH 实测 52 条）。
 
 ## 6. 配置（环境变量）

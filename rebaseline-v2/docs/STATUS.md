@@ -10,7 +10,19 @@
 - 模型cms-router/glm-5.3-flash→DGX/deepseek→DGX/qwen；密钥只在必要环境，不入文件/提示词/日志，不改全局路由。
 - 用户永久授权本项目Ego专用空间缺失时自行替换，不再询问。目前63/p1复用；不改登录、缓存、其他任务空间或升级浏览器。
 
-## 当前完成节点：CDE缺页恢复（组件，不是M2全验）
+## 当前节点：登记详情/来源绑定与数据备份（待白名单提交）
+- 恢复节点ac7731dca91191ae83b65643fa0662eb8e2ad264已push/fresh remote exact。owner在同Ego63/p1观察中国登记详情；不会用列表期别/公司文本冒作详情或MAH。
+- 新china_trial_detail工具已取得一个真实CTR的7临床表/6内表，完整中文入排、组别、终点原文保留；请求先核本项目列表来源/CAS/CTR/详情ID，读源不直接采用科学事实或法律角色。ciw-data/china-detail-live-01原普通列表1条/新详情源be66e5e4ab7488c32494e4c57c1662ff3a408aa426b1c0b73eb2c690362ac065、原文229a46ac…，本次browser_checked/同run二读cache_reused分开，0模型/原事实/实体/源不变；不是全量登记详情或M2接受。
+- 完整族反例覆盖错CTR/详情/URL、重复身份、内表篡改、未绑定来源、跨项目、缓存损坏、同run/新run。首次模块缺失RED→141相关PASS；source_id合同4RED/1PASS及同URL错研究2RED后，现160相关PASS/0.49s/Ruff/新MJS语法PASS。来源同URL不等同同版本：明确source_id还须属于实际读集/项目/URL/CTR；无明确ID只能唯一匹配，错误明确ID不能回退借另一来源。完整当前门尚未执行，不借873历史门。
+- 实际模型82760已终态failed：ciw-data/china-detail-model-01的90冻结依赖未变，真实GLM-5.3-flash3次/无模型错误/无fallback，源工具1/错误分页1/提交1，5提案但均错填域名/未绑定来源。模型说截断，实际工具日志有完整原文及source_id/URL，不能据模型自述认定传输截断。验证脚本还绕过extract_drugs的drug补全而KeyError，0事实采用/无C文件；不是生产verify本身缺drug。原回执/提案/源/冻结代码全部保留，无重键或冒称接受。
+- owner删除模型payload重复JSON表及内部detail_id，精确来源置前、完整source_text仍可达，原始内表保留CAS。新增1RED后相关166PASS/0.61s（含5CLI分派mock测试）。新27751已终态：ciw-data/china-detail-model-02冻结90依赖/绑定runner摘要，完整普通extract_drugs→verify→C，真实GLM-5.3-flash3次/主路，无模型错误；源工具2次（其中同run缓存复用）、提交1。7事实全部正确来源绑定，仅3已核实/4因模型在值内加条目号、解释及单位字符串等未通过逐字/数值核验；主要终点仍漏提。**科学未接受，不等于完整M1/M2**；不改引文或放宽守卫凑PASS。
+- 当前代码另用china-detail-current-01对同7提案/同源版本无模型重放：7幂等、状态/事实不变、同原元数据C字节仍e20204e…；新隔离展示副本只去除内部测试focus（原模型任务/DB/HTML不改），C为eb49768b…，尚未视觉验收。下一根因是按v2规则直接解析原有中文结构化临床表，接完整终点/入排/申请人身份，不为改措辞再跑模型。Ego63已无运行占用，可复用；旧52075独立归并未触碰。
+- E03执行26997已终态：首路CodeBuddy rc0后runner按manifest走ZCode启动失败→Pi/MTPLX空输出→同Pi会话GPT6Luna/max续接，最终实际openai-codex/gpt-6-luna（runtime确认）、session01a16a3e-679c-7000-83eb-9264ba3c0a60/602.137s最终轮；顶层effective仍CodeBuddy，不能冒作实际终审模型。raw工具计数945未独立复计，不按此宣称独立操作/费用。首路最终输出/转备用理由保留不足，不反推首路质量失败。不是独立复核意见。完整345行/572测试及报告923ce19d…已读/先存worker-source.tar；原源码ba2c1362…/测试3e984804…均保留后才改。
+- 最终worker已补符号链接祖先/重复清单键等问题；owner另组1RED/56PASS暴露SQLite backup不受连接timeout约束，现只对无进展BUSY/LOCKED加现有30s时限，健康拷贝不受总大小时限。57相关PASS/1.34s/Ruff；guard audit-execution/review-gate PASS，无额外Hermes/chair/conference。备份是DB+快照引用CAS，不含配置/凭据/任意缓存/外置大日志/生成门户，不是安装/分享/完整会话备份。
+- 真实ciw-data/data-backup-live-01普通CLI exit0/0/1：1026事实（668结果）/1引用CAS/全部10表恢复逐行相等，原DB/存在的WAL/CAS及备份字节不变。A6724f004…/Be1b6903…/Cf97c7fd2…与同当前renderer原资料输出逐字一致；坏副本拒绝/无目标，0模型/来源请求。清单SHA bdb602c9ed171d7897588fcbb1ec1462de0c5e81a5f52e6d2530577f7bfc765e；不是完整M6或新视觉接受。
+- 首次当前宽门10FAIL/948PASS揭示新增source_id默认None破坏旧提案“省略”语义。wrap序列化只省略真正未传入ID，明确null仍严格拒借来源；旧修订/事务合同不回退。相关124PASS/1.97s→当前完整v2 **961PASS/5.94s**、Ruff全src/tests/scripts、5JS/sh语法PASS，1既有TestClient警告；61生产Python/376函数符合600/80（create_app既定例外）。前次FAIL不改PASS；当前门不是旧冻结模型或整个产品通过。
+
+## 已提交节点：CDE缺页恢复（组件，不是M2全验）
 - E03句柄58566已真实终态，不再等待：CodeBuddy/codebuddy-cli/deepseek-v4.1-flash CLI max/session01a16a25-0fec-7d2a-832a-957eb0d3e422，278.974s/53tools/无fallback；modelUsage确认模型，后端effort/费用未知。原报告d7e4aec4…及两文件原字节先存worker-source.tar。owner读完整输出后新增4RED，修正真实受理元数据method=browser_form不匹配及非法complete标记；独立分工仅两新文件，owner持有共享调用者。
 - 同项目/run/栏目/原始筛选/CAS限定；两生产MJS实际读新第一页，内容/总数/页长变化则全采，匹配则原生跳缺页；宿主复验新读/复用页和锚点，合并后完整集合校验。原始页/来源不改，cache_read与browser_checked分开，复用页保持原observed_at。实际脚本空结果反例1RED/4PASS修正新读页号1→真实0；来源失败不当零值。
 - 218相关PASS/1.00s→完整v2 **873PASS/4.15s**、Ruff全src/tests/scripts、4JS/sh语法PASS，1既有TestClient警告；59生产Python/342函数符合600/80（create_app既定例外）。首次语法命令误用了不存在charts.js，未执行，随后仅重跑实际portal.js及3MJS；不把最终shell退出码冒充错误检查通过，不重跑已绿873套件。
@@ -71,9 +83,9 @@
 | M3/A | 同查询/几何/未知保留 | 正式中文名/MAH集团/靶点/产品阶段真实富集及3适应症 |
 | M4/B | 同源组身份/测量/领域/图表查询 | 跨研究医学归并、独立论文、关键50条准确率、安全图、最终视觉 |
 | M5全球/历史 | 来源版本原子采用/缓存核查分离 | 历史事实版本公开资格/全球扩充，历史日期守卫不得删除 |
-| M6加固 | 单文件发布/部分恢复/当前事实JSON-CSV下载 | 队列/取消/完整成本/备份 |
+| M6加固 | 单文件发布/部分恢复/当前事实JSON-CSV下载/本地DB-来源备份恢复 | 队列/取消/完整成本/最终综合接受 |
 
 ## 下一条有界任务
-- 白名单提交本恢复节点，保留真实负向/恢复证据；58566已终态并完成输出审计，不再等待。下一来源单元是中国登记详情；英文指标标题/图顶留白与其他M2/M6门仍待做，不重复旧候选已验步骤。
+- 白名单提交本登记来源/备份节点；26997/27751都已终态，不再等待或重派。下一条是中文登记临床表的确定性事实投影/完整入排与终点、明确申请人角色及原始期别显示，取代无效的单条提案改写循环；英文指标标题/图顶留白和其他M2/M6门继续保留。
 - 冻结52075实际终态一到即核原始receipt/响应模型/源码和源hash；失败只做归并恢复，不碰151旧批。当前不因等待制造阶段暂停点。
 - 登记详情/NMPA及真实名称MAH富集继续按现有M2/M3包推进，不另建平台。所需新来源访问按授权执行，缺失/受阻不写0。

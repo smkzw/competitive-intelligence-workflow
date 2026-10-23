@@ -13,6 +13,7 @@ from ciw2.harness.tools import REGISTRY
 from ciw2.pipeline.context import IncompleteWork, RunContext, work_limit
 from ciw2.pipeline.queries import drug_trials, intake_data, scoped_drugs
 from ciw2.pipeline.recovery import fingerprint, get_unit, put_unit
+from ciw2.sources import china_detail
 from ciw2.sources.http import source_by_url
 
 CODE_HASH = hashlib.sha256(b''.join(Path(path).read_bytes() for path in (
@@ -38,8 +39,11 @@ def _tasks(rc: RunContext, skill: str, drug: dict[str, Any], extra: dict[str, An
         out = {**base, **{key: [item for item in value if item in ncts]
                          if key in {'trials_with_registry_design', 'trials_with_registry_results'} else value
                          for key, value in extra.items()},
-               'known_trials': [{'nct': t['name'], 'entity_id': t['id'], **{key: t['attrs'].get(key)
-                                for key in ('title', 'phase', 'has_results')}} for t in trials]}
+               'known_trials': [{'nct': t['name'], 'entity_id': t['id'],
+                                 'title':t['attrs'].get('title') or t['attrs'].get('registry_title'),
+                                 **{key:t['attrs'].get(key) for key in ('phase','has_results')},
+                                 'detail_tool':'china_trial_detail' if t['attrs'].get('registry_detail_id') else None}
+                                for t in trials]}
         if skill == 'extract-design':
             out['existing_design_facts'] = [ref for trial in trials for ref in refs.get(trial['id'], [])]
         return out
@@ -66,6 +70,7 @@ def _key(rc: RunContext, skill: str, task: dict[str, Any]) -> str:
     spec = rc.skills[skill]
     signature = {'task': task, 'code': CODE_HASH, 'rules': HARNESS_RULES, 'skill': spec.body,
                  'schema': ExtractionResult.model_json_schema(), 'model': rc.settings.llm_model,
+                 'china_detail_version':china_detail.code_hash() if 'china_trial_detail' in spec.tools else None,
                  'tools': [{'schema': REGISTRY.get(name).schema(), 'code': hashlib.sha256(
                      Path(REGISTRY.get(name).fn.__code__.co_filename).read_bytes()).hexdigest()}
                      for name in spec.tools]}
@@ -77,10 +82,21 @@ def _call(rc: RunContext, skill: str, task: dict[str, Any], key: str) -> dict[st
     result = ExtractionResult.model_validate(rc.skill(skill, task))
     output = result.model_dump()
     read_ids = set(rc.cache.get('last_skill_source_ids', []))
-    read_sources = rc.db.query('SELECT id,url FROM sources WHERE project_id=?', (rc.project_id,))
+    read_sources = rc.db.query('SELECT id,url,meta FROM sources WHERE project_id=?', (rc.project_id,))
     for fact in output['facts']:
-        candidates = {s['id'] for s in read_sources if s['id'] in read_ids and s['url'] == fact['source_url']}
-        fact['source_id'] = next(iter(candidates)) if len(candidates) == 1 else None
+        candidates=set()
+        for source in read_sources:
+            if source['id'] not in read_ids or source['url']!=fact['source_url']:
+                continue
+            scope=json.loads(source['meta']).get('request_context',{})
+            if (scope.get('registry')=='chinadrugtrials' and scope.get('section')=='trial_detail'
+                    and fact['field'].startswith(('design.','trial.','status.trial'))
+                    and scope.get('registry_id')!=fact['entity'].strip().upper()):
+                continue
+            candidates.add(source['id'])
+        supplied=fact.get('source_id')
+        fact['source_id'] = (supplied if supplied in candidates else None) if supplied is not None else (
+            next(iter(candidates)) if len(candidates) == 1 else None)
     output['extraction_model'] = rc.llm.model
     put_unit(rc, key, output, source_ids=rc.cache.get('last_skill_source_ids', []),
              urls=[fact.source_url for fact in result.facts])

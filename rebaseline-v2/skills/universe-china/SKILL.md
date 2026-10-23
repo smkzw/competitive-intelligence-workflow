@@ -1,7 +1,7 @@
 ---
 name: universe-china
 description: 中国竞品宇宙：尽可能完整地找出在中国开发/上市/申报该适应症的药物
-tools: [china_registry_search, ctgov_search, web_search, wechat_search, fetch_url]
+tools: [china_registry_search, china_trial_detail, ctgov_search, web_search, wechat_search, fetch_url]
 output: UniverseResult
 max_steps: 30
 ---

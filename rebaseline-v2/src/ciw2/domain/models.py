@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 Region = Literal["china", "global"]
 Phase = Literal["preclinical", "phase1", "phase1_2", "phase2", "phase2_3", "phase3", "nda_bla",
@@ -85,8 +85,18 @@ class ExtractedFact(Strict):
     enrollment_type: Literal['ESTIMATED', 'ACTUAL'] | None = Field(
         default=None, description='样本量为计划还是实际入组；仅照录来源明确含义，不由数值猜测')
     source_url: str
+    source_id: str | None = Field(default=None, description='实际读取的精确来源版本ID；同一URL含多个研究/版本时必须指定，不得编造')
     quote: str = Field(description="来源原文中逐字复制的支持片段（≤400 字）")
     supersedes: str | None = Field(default=None, description='明确取代的既有事实 ID；无依据时留空')
+
+    @model_serializer(mode='wrap')
+    def _source_presence(self, handler: Any) -> dict[str, Any]:
+        data=handler(self)
+        # Legacy omitted ID is not an explicit failed source binding. Preserve
+        # presence so verification never borrows a source for an explicit null.
+        if 'source_id' not in self.model_fields_set:
+            data.pop('source_id',None)
+        return data
 
 
 class ExtractionResult(Strict):

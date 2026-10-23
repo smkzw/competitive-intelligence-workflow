@@ -41,6 +41,9 @@ scripts/     fetch_assets.sh、smoke_live.py、run_live.py、replay_design_sourc
 
 公开浏览器冒烟中断后，可用相同参数、新的 `--output` 目录及 `--resume-output 原失败输出目录` 续接。同项目/运行的已捕获来源保留；CDE先实际重查首个来源页，内容或总数变化时全部重采，否则只补缺页并记录复用来源。不要把不同运行的旧数据当作本次新查。
 
+本地资料保护：`ciw2 backup --output NEW_BACKUP_DIR` 备份当前 `CIW_DATA_DIR` 的已提交数据库与实际引用原文；`ciw2 restore --input BACKUP_DIR --output NEW_DATA_DIR` 验证后恢复到新目录，不覆盖正在使用的资料。两个输出目录都必须不存在，父目录已存在且不经过符号链接。恢复不会启动研究任务或改动原目录。备份含项目历史和引用资料，应留在受控本地，不当作对外分享包；不含应用、配置、密钥、生成门户或任意缓存。恢复后另提供兼容应用/ECharts资产与连接环境，再通过平台按原数据生成门户；不要覆盖旧历史回执。
+数据库中的运行记录保留，但外置的大段运行日志载荷不属于资料备份内容；这不是完整Agent会话或开发环境备份。
+
 中国来源可配置 `CIW_CHINA_EGO_SPACE_ID` 为已授权专用Ego空间ID，复用p1；工具不自动创建或接管空间，不改登录或读凭据。未配置时如实记录受阻并尝试已配置的site备用。
 
 用 `python scripts/smoke_china_browser.py --space SPACE_ID --query 特应性皮炎 --output NEW_OUTPUT_DIR` 验证生产来源工具，保存全页来源及回执，不调用模型。CDE受理目录加 `--registry cde --query-kind drug_name --query 度普利尤单抗`；也支持明确company/acceptance_number，不把疾病塞到药名框。化药IND新报审评任务改用 `--registry cde --cde-section new_review_task_chemical_ind --query-kind acceptance_number --query 完整受理号`：读取全序列后精确取匹配，其他序列仍待接通。结果中的source_total_records与rows分别是原序列总数和精确匹配数。

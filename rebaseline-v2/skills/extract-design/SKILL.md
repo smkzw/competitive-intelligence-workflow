@@ -1,7 +1,7 @@
 ---
 name: extract-design
 description: 为一个药物补充试验设计信息（尤其中国登记、无 CT.gov 记录或 CT.gov 信息不全的试验）
-tools: [china_registry_search, ctgov_get, web_search, fetch_url, pubmed_search, pubmed_fetch, read_project_fact]
+tools: [china_registry_search, china_trial_detail, ctgov_get, web_search, fetch_url, pubmed_search, pubmed_fetch, read_project_fact]
 output: ExtractionResult
 max_steps: 20
 ---
@@ -16,6 +16,12 @@ design.primary_endpoint（value 写 {"measure":..., "time_frame":...}）/ design
 design.stratification / design.multiplicity。
 
 规则同 extract-results：先读取原文，quote 逐字复制，找不到写 gaps。
+
+known_trials中detail_tool=china_trial_detail的CTR研究，使用该工具读取中文登记详情；不猜详情URL，不从列表题目推断期别、人群或申请人角色。完整中文入排、组别及终点内表均保留在可分页结果中；计划/已入组/实际总人数分别照录，空缺不是0。登记申请人不是自动核实的MAH；健康人药代研究仍按实际人群和测量保留，不写成患者疗效。
+
+每条事实优先填写本次工具返回的source_id及source_url。同一公开详情URL可对应多个CTR和来源版本，必须逐事实指定实际读取的版本；宿主仍核对本次读集、项目及URL，错误/未读取的ID不能落成已核实来源。source_id不是接受许可，quote/数字/科学上下文核验仍照常执行。
+
+china_trial_detail优先给出精确来源和完整source_text；quote从该原文逐字复制，不抄JSON数组的引号/逗号。只有工具包明确status=paged时才用顶层64位result_id和next_offset调用read_tool_result；网页内部32位detail_id不是分页ID。未出现分页标记不能自行宣称文本被截断。登记原词、计划/实际与未知状态照录，未读取的后续内容不能补造。
 
 样本量的 enrollment_type 只在原文明确时填写 ESTIMATED（计划）或 ACTUAL（实际入组），未知留空。计划与实际、不同组、分析人群或访视是不同观察，不互相 supersedes。新来源明确修订同一科学上下文时才能取代原值；保留来源限定，不从人数大小猜测类型。
 
