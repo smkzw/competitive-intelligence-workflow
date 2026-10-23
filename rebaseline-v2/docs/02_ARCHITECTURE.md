@@ -89,7 +89,9 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 - 中国登记平台httpx直连挑战仍记blocked；显式CIW_CHINA_EGO_SPACE_ID启用现有Ego公开UI桥，复用指定空间p1，不创建/claim/profile discovery。随包sources/china_browser.mjs驱动普通搜索/Next，逐页校验查询、序号、总页/条数、CTR/公开详情ID及重复；全部收齐才返回mode=browser/complete=true。只提取公开表格，不存cookie/隐藏字段/运行原始报错。超时已获有效页入CAS但不签收完整；其他来源继续按FR5执行。site备用独立记账。
 - 列表来源含公开POST request_context(method/registry/query)，不伪造GET详情URL；recovery对该上下文取本项目最近实际导入版本，其他查询不会相互失效。同上下文新版本仍失效，无scope旧回执只读兼容。browser_checked有实际浏览器核查时间，无虚构HTTP状态；imported与网络核查分开。
 - 完整结构化登记行代码直接写暂定drug/trial和带来源/页/行的显式关系，保留整条药名和unknown纳排，不再将464条重复送模型抽取；科学纳排仍走既有coverage-review。没有新增事实表/Skill/浏览器框架。
-- CDE/NMPA仍缺专属浏览器提取与验收，当前site路线不是官方登记闭包。M2仍需详情/来源语义及专家金标准验召回，列表行数不能替代。
+- CDE受理目录已接同一Ego空间与现有CLI传输，单独cde_browser.mjs/cde_capture.py消费实际八列表头；只扩展现有_invoke的内部脚本/filters选项，不新建执行器。ChinaArgs.query_kind明确drug_name/company/acceptance_number；未指定/indication/target不进入药名框，按blocked/site路线记账。反向扩展把原词送单字段（中国登记也用原始关键词），不拼适应症到药名/企业框。CDE实现及配置空间进入来源缓存键，栏目+六筛选进入request_context；相同URL的不同查询不相互覆盖。
+- CDE强制全部年度/类型，完整翻页并保留八列原值/原公司复合文本/空格。公司列→company_text，承办日期→handled_date_text，不认定申办方/MAH或获批/首次公开时间。受理引用放暂定drug.attrs，不生成trial或临床事实；纳排仍走既有coverage-review。CDE空tbody“暂无内容”+无pager保留真实文本/page_size=null，不造数字页脚。已观察的2015及以前选项原样保留；表单筛选在捕获JSON中，列表URI不接受查询/会话参数。错误/部分页保存有效来源但不签收完整；CDE缺页自动补取尚未接通，不能借中国登记恢复测试声称已完成。
+- CDE审评任务/优先审评/突破性治疗/默示许可、NMPA、登记详情仍待接通；受理目录与site路线都不是官方登记闭包或适应症/监管结论。M2仍需专家金标准验召回。
 - CT.gov `query.locn=China` 可用（PNH 实测 52 条）。
 
 ## 6. 配置（环境变量）

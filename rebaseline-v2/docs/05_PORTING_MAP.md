@@ -12,13 +12,13 @@
 | `policies/recovery/source-strategies-v1*` | `skills/universe-*` 路线表 + `china.py` 退回策略 | 路线即代码/Skill | M2 |
 | `connectors/clinicaltrials_gov.py`、`ctgov_fetch.py` | `sources/ctgov.py` | 已重写（v2 JSON API） | M0 ✓ |
 | `connectors/pubmed*.py` | `sources/pubmed.py` | 已重写 | M0 ✓ |
-| `connectors/china_registries.py`（CDE/NMPA/chinadrugtrials 模型） | `sources/china.py` | 字段模型移植；抓取改 Playwright | M2 |
+| `connectors/china_registries.py`（CDE/NMPA/chinadrugtrials 模型） | `sources/china.py` | 只核验字段知识；中国登记列表接现有Ego公开UI，详情/CDE/NMPA待验，不新增浏览器框架 | M2 |
 | `connectors/regulators.py` | `sources/openfda.py` + M5 EMA/PMDA | FDA 已重写 | M0 ✓ / M5 |
 | `connectors/authoritative_wechat.py` | `sources/wechat.py` + 权威账号白名单 | 白名单作为 `sources.meta.trust` | M2 |
 | `contracts/kangzhe/v6-site/tokens/tokens.json`、portal.css | `render/static/kangzhe.css` | 已移植 tokens | M0 ✓ |
 | `renderers/portal/assets/echarts.min.js` | `scripts/fetch_assets.sh` 复制/下载 | 不入库 | M0 ✓ |
 | `REVIEW.md` F01–F11 | `tests/regressions/` | 每条一个最小用例 | M4 |
 | `renderers/report_a.py` `report_b.py` | — | 不移植（含项目硬编码）；只参考版式 | — |
-| `renderers/pdf_native` `pptx_master` `html_ppt` | — | 删除 | — |
+| `renderers/pdf_native` `pptx_master` `html_ppt` | — | 不移植；v1历史只读保留 | — |
 | `application/run_service.py` | `pipeline/*` | 不移植 | — |
-| `runs/ output/ packets/ prompts/ reviews/` | — | 不移植；旧仓建议清理历史 | — |
+| `runs/ output/ packets/ prompts/ reviews/` | — | 不移植；本表不授权清理旧工程或历史证据 | — |

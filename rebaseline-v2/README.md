@@ -39,4 +39,4 @@ scripts/     fetch_assets.sh、smoke_live.py、run_live.py、replay_design_sourc
 开发者可使用 `python scripts/smoke_live.py --complete-ctgov "Atopic Dermatitis" NEW_OUTPUT_DIR` 隔离核对完整登记分页及官方总数，保留来源哈希与回执，不调用模型或改动已有报告。输出目录必须是新的；该检查不代替报告验收。
 已有冻结来源的隔离副本可用 `python scripts/run_live.py --indication 特应性皮炎 --project PREPARED_PROJECT_ID --only-stage analysis_C` 验证同一生产分析及渲染阶段。须将CIW_DATA_DIR指向副本；回执会明确单阶段，不作为完整研究或发布通过。
 
-中国登记公开浏览器路线可选配置 `CIW_CHINA_EGO_SPACE_ID` 为已授权专用Ego空间ID，复用其p1；工具不会创建空间、接管用户空间、修改登录或读取凭据。未配置仍记录受阻并尝试已配置的site备用。安装本机现有ego-browser工具后，可用 `python scripts/smoke_china_browser.py --space SPACE_ID --query 特应性皮炎 --output NEW_OUTPUT_DIR` 隔离验证普通生产来源工具，保存全页来源及回执，不调用模型。列表成功不代表CDE/NMPA、竞品召回或整个报告验收。
+中国登记列表/CDE受理目录可选配置 `CIW_CHINA_EGO_SPACE_ID` 为已授权专用Ego空间ID，复用其p1；工具不会创建空间、接管用户空间、修改登录或读取凭据。未配置仍记录受阻并尝试已配置的site备用。使用本机现有ego-browser工具，可用 `python scripts/smoke_china_browser.py --space SPACE_ID --query 特应性皮炎 --output NEW_OUTPUT_DIR` 隔离验证普通生产来源工具，保存全页来源及回执，不调用模型。CDE加 `--registry cde --query-kind drug_name --query 度普利尤单抗`；也可明确company/acceptance_number，不把疾病塞到药名框。当前CDE只有受理目录，不是审评/批准或适应症归属结论。中国登记失败冒烟可加`--resume-output PREVIOUS_OUTPUT_DIR`恢复原run并只补缺页，回执仍另存新目录；CDE自动缺页恢复尚未接通。列表成功不代表竞品召回或整个报告验收。

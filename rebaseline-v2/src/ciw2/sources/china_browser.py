@@ -34,19 +34,22 @@ def _markers(*streams: str | bytes | None) -> str:
     return '\n'.join(lines)
 
 
-def _invoke(ctx: ToolContext, query: str, resume: dict[str, Any] | None = None) -> tuple[str, bool]:
+def _invoke(ctx: ToolContext, query: str, resume: dict[str, Any] | None = None, *,
+            script_path: Path = SCRIPT, options: dict[str, Any] | None = None) -> tuple[str, bool]:
     space = ctx.settings.china_ego_space_id
     if isinstance(space, bool) or not isinstance(space, int) or space <= 0:
         raise BrowserBlocked('未配置专用Ego浏览器空间')
     executable = shutil.which('ego-browser')
     if not executable:
         raise BrowserBlocked('Ego浏览器工具不可用')
-    config = {'space':space,'query':query}
+    if options and {'space','query'} & options.keys():
+        raise BrowserFailed('浏览器配置不得覆盖授权空间或查询')
+    config = {'space':space,'query':query,**(options or {})}
     if resume:
         parsed = [parse_page(page,query=query) for page in resume['pages']]
         config.update(skip_pages=[page['page'] for page in parsed],
                       expected_totals=[parsed[0]['total_pages'],parsed[0]['total_records']])
-    script = 'const config = ' + json.dumps(config, ensure_ascii=False) + ';\n' + SCRIPT.read_text()
+    script = 'const config = ' + json.dumps(config, ensure_ascii=False) + ';\n' + script_path.read_text()
     try:
         proc = subprocess.run([executable,'nodejs','-e',script],capture_output=True,text=True,
                               timeout=ctx.settings.china_browser_timeout_s,check=False)

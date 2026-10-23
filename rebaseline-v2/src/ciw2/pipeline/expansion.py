@@ -16,13 +16,13 @@ from ciw2.harness.agent import HARNESS_RULES
 from ciw2.pipeline.context import IncompleteWork, RunContext, work_limit
 from ciw2.pipeline.queries import intake_data
 from ciw2.pipeline.recovery import fingerprint, get_unit, put_unit
-from ciw2.sources import china, ctgov, websearch
+from ciw2.sources import cde_browser, china, ctgov, websearch
 from ciw2.sources.china_browser import CODE_HASH as CHINA_BROWSER_HASH
 from ciw2.sources.http import FetchError
 
 CODE_HASH = hashlib.sha256(Path(__file__).read_bytes() + IDENTITY_HASH.encode() +
     ctgov.EXTRACTOR_VERSION.encode() + Path(china.__file__).read_bytes() +
-    Path(websearch.__file__).read_bytes() + CHINA_BROWSER_HASH.encode()).hexdigest()
+    Path(websearch.__file__).read_bytes() + CHINA_BROWSER_HASH.encode() + cde_browser.code_hash().encode()).hexdigest()
 
 
 def _seeds(rc: RunContext) -> list[dict[str, Any]]:
@@ -55,9 +55,12 @@ def query_plan(rc: RunContext) -> list[dict[str, Any]]:
                     'intervention' if seed['kind'] == 'alias' else 'term': seed['term']}
             routes = [('ctgov_search', args)]
             if region == 'china':
-                routes.extend(('china_registry_search', {'registry': registry,
-                    'query': f"{intake['indication']} {seed['term']}"})
-                    for registry in ('chinadrugtrials', 'cde', 'nmpa'))
+                for registry in ('chinadrugtrials','cde','nmpa'):
+                    parameters = {'registry':registry,'query':seed['term'] if registry != 'nmpa'
+                                  else f"{intake['indication']} {seed['term']}"}
+                    if registry == 'cde':
+                        parameters['query_kind'] = {'alias':'drug_name','company':'company','target':'target'}[seed['kind']]
+                    routes.append(('china_registry_search',parameters))
             else:
                 routes.append(('web_search', {'query': f"{condition} {seed['term']}", 'region': region}))
             for tool, arguments in routes:
@@ -93,7 +96,7 @@ def _source_shape(query: dict[str, Any], result: dict[str, Any]) -> bool:
 def _source(rc: RunContext, query: dict[str, Any], admitted: bool) -> tuple[dict[str, Any], str]:
     key = 'expansion_source:' + fingerprint({'arguments': query['arguments'], 'tool': query['tool'],
         'code': CODE_HASH, 'search_provider': rc.settings.websearch_provider,
-        'china_browser_space':rc.settings.china_ego_space_id if query.get('registry') == 'chinadrugtrials' else None})
+        'china_browser_space':rc.settings.china_ego_space_id if query.get('registry') in {'chinadrugtrials','cde'} else None})
     cached = get_unit(rc, key)
     if cached is not None:
         return {**cached, 'payload': _read_result(rc, cached['digest'])}, 'cached'

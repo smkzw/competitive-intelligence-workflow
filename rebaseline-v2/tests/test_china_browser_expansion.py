@@ -6,9 +6,10 @@ from test_expansion import setup_expansion
 from ciw2.pipeline import expansion
 
 
-def test_complete_browser_source_is_accepted_and_space_change_invalidates_same_run_cache(settings):
+@pytest.mark.parametrize('registry',['chinadrugtrials','cde'])
+def test_complete_browser_source_is_accepted_and_space_change_invalidates_same_run_cache(settings,registry):
     _,rc,_,calls=setup_expansion(settings)
-    query=next(q for q in expansion.query_plan(rc) if q['registry']=='chinadrugtrials')
+    query=next(q for q in expansion.query_plan(rc) if q['registry']==registry)
     original=rc.registry.get('china_registry_search').fn
     def browser(ctx,args):
         original(ctx,args)

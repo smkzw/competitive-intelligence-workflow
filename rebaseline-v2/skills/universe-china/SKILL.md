@@ -11,7 +11,7 @@ mode=expansion_results 时只整理程序已实际检索得到的 source_hits：
 
 必须跑的检索路线（route_id 用括号里的名字；每条都要真正调用工具）：
 1. `china:cdt:indication` — china_registry_search(registry=chinadrugtrials, query=中文适应症名及主要同义词)
-2. `china:cde:indication` — china_registry_search(registry=cde, query=中文适应症名)：受理、优先审评、突破性治疗
+2. `china:cde:indication` — china_registry_search(registry=cde, query=中文适应症名, query_kind=indication)：这是适应症线索路线；公开受理目录没有适应症字段，不能把它塞入药名检索后用0判无此类药物。药名/企业/受理号来源另按下方规则检索。
 3. `china:nmpa:approved` — china_registry_search(registry=nmpa, query=中文适应症名 + 批准上市)
 4. `china:ctgov:location` — ctgov_search(condition=英文适应症, location=China, region=china)
 5. `china:web:company` — web_search 中文：「适应症 + 临床试验/IND/获批/管线」，重点覆盖中国本土药企和引进权益（License-in）
@@ -28,5 +28,6 @@ mode=expansion_results 时只整理程序已实际检索得到的 source_hits：
 - already_known 中的药物仍需补充中国信息，可以再次列出。
 - expansion_queries 记录反向扩展用过的查询。
 - ctgov_search 的 interventions 是完整去重干预名及其试验对应表，优先用它识别候选；studies 保留全部检索到的试验编号。需要设计细节时由后续代码阶段抓取，不为了重复标题逐页阅读所有试验。长结果仍可通过 read_tool_result 继续读取。
-- china_registry_search 的 mode=browser、complete=true、persisted=true 表示公开列表全部页已核对，原始药名和CTR暂定关系已由代码入库；不必再逐条复制重抽这些列表字段。保留来源中的完整中文/复合药名，不强造INN或合并别名；只补充有明确新来源的身份、靶点、企业及开发信息。列表状态不是获批/MAH/创新属性证明。相同公开POST列表URL须连同查询、页、CTR定位，不猜造GET详情链接。未完/失败不能当作中国零结果。
+- registry=chinadrugtrials 的 mode=browser、complete=true、persisted=true 表示公开列表全部页已核对，原始药名和CTR暂定关系已由代码入库；不必再逐条复制重抽这些列表字段。保留来源中的完整中文/复合药名，不强造INN或合并别名；只补充有明确新来源的身份、靶点、企业及开发信息。列表状态不是获批/MAH/创新属性证明。相同公开POST列表URL须连同查询、页、CTR定位，不猜造GET详情链接。未完/失败不能当作中国零结果。
+- CDE受理目录须明确query_kind=drug_name/company/acceptance_number，query只填该原始检索词，不前缀拼入适应症；默认全部年度/药品类型/申请类型。结构化受理记录入暂定药物的来源引用，不创建CTR试验或科学状态事实，不再逐条重复抽取。企业名称列是原始company_text，不认定申办方/MAH；handled_date_text只是承办日期，不作批准/首次公开日期。适应症、靶点或未指定类型只能走对应公开线索/site备用；target_indication必须另有直接证据。受理记录不自动属于当前适应症，也不是已获批或审评结论。
 - 保留至少最后一步提交结果；来源 blocked/failed 时提交已读到的候选与失败路线，不无限重复同一失效工具。

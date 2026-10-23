@@ -3,7 +3,7 @@
 无法用 httpx 直接抓取；CDE/NMPA 列表页大量依赖前端渲染。因此：
 - M0（本包）：`china_registry_search` 先尝试直连；识别到反爬/挑战页 → 记为 blocked，
   并自动退回到 site: 限定的全网搜索（需配置搜索提供方），结果标注为「线索」。
-- M2：显式专用空间启用Ego公开登记列表采集，保存CTR暂定候选；CDE/NMPA专属采集仍待实现。
+- M2：显式专用空间启用Ego登记列表及CDE受理目录；登记详情、CDE审评/许可及NMPA专属采集仍待实现。
 任何时候都不得把 blocked 当成「中国无此药/无试验」。
 """
 from __future__ import annotations
@@ -39,7 +39,7 @@ def looks_like_challenge(status: int, text: str) -> bool:
 def direct_search(ctx: ToolContext, registry: str, query: str) -> list[dict[str, Any]]:
     url = REGISTRIES[registry]["search_url"]
     if not url:
-        raise RegistryBlocked(f"{registry} 无可用直连检索接口（专属浏览器适配待实现）")
+        raise RegistryBlocked(f"{registry} 无可用直连检索接口，按已配置浏览器能力或site备用继续")
     try:
         f = fetch(ctx, url, kind=registry, params={"keywords": query}, register=False, retries=0)
     except FetchError as exc:
@@ -77,6 +77,8 @@ class ChinaArgs(BaseModel):
     registry: Literal["chinadrugtrials", "cde", "nmpa"]
     query: str = Field(description="中文或英文关键词：适应症中文名、药物中文名/代号、企业名、靶点")
     route_id: str = Field(description="如 china:cde:indication")
+    query_kind: Literal['keyword','drug_name','company','acceptance_number','indication','target'] = Field(
+        default='keyword',description='CDE公开目录需明确药名、企业或受理号；不能将适应症/靶点误作药名')
 
 
 @REGISTRY.register("china_registry_search",
@@ -101,6 +103,17 @@ def _china(ctx: ToolContext, a: ChinaArgs) -> Any:
                 _persist_browser_candidates(ctx,captured,a.route_id)
                 if ctx.db and ctx.run_id:
                     ctx.db.log_coverage(ctx.run_id,f'{a.route_id}:browser','china',a.query,'ok',hits=len(captured['results']))
+                return {**captured,'mode':'browser','persisted':True,'registry':reg['label'],'count':len(captured['results'])}
+        if a.registry == 'cde' and ctx.settings.china_ego_space_id is not None:
+            from ciw2.sources import cde_browser
+            try:
+                captured = cde_browser.browser_search(ctx,a.query,a.query_kind)
+            except (BrowserBlocked,BrowserFailed) as exc:
+                status = 'blocked' if isinstance(exc,BrowserBlocked) else 'failed'
+                ctx.db.log_coverage(ctx.run_id,f'{a.route_id}:browser','china',a.query,status,note=str(exc))
+            else:
+                cde_browser.persist_candidates(ctx,captured,a.route_id)
+                ctx.db.log_coverage(ctx.run_id,f'{a.route_id}:browser','china',a.query,'ok',hits=len(captured['results']))
                 return {**captured,'mode':'browser','persisted':True,'registry':reg['label'],'count':len(captured['results'])}
         try:
             rows = web_search(ctx.settings, f"site:{reg['site']} {a.query}", 10)

@@ -1,11 +1,11 @@
 # STATUS
 
-**2026-10-23｜Goal=active，继续实施｜M1/M2进行中，未交付**
+**2026-10-24｜Goal=active，继续实施｜M1/M2进行中，未交付**
 
 ## 当前入口与范围
 - 产品权威：01_PRD、02_ARCHITECTURE、03_PLAN、04_AGENT_RULES；本页替换更新，不另立规格。
 - 唯一英文工程根内rebaseline-v2；单用户Web服务+内嵌9 Skills。v1多宿主包、编辑/分享、24门户不是v2发布门；未知v1工作树保留，旧中文工程零接触。
-- 分支codex/rebaseline-v2-m1。前序39ceae9efc2d493cb6ce4417c57ece4dbeea782f已核远端exact；本节点中国登记浏览器/恢复代码与本文同步提交。B测量45c5ecf2、B归属c0485479、C阅读43a4bc86、来源扩展ad65b790已推送。当前完整验收范围见下，不借前序门扩张结论。
+- 分支codex/rebaseline-v2-m1。当前中国登记浏览器/恢复代码4f20d0f5b8c5b496c001e9fb5a2ba292b30d0e8d已push并核远端exact。B测量45c5ecf2、B归属c0485479、C阅读43a4bc86、来源扩展ad65b790已推送。当前完整验收范围见下，不借前序门扩张结论。
 - 历史恢复依据：Trellis `10-23-rebaseline-v2-m1/PAUSE_HANDOFF_20261023_0810.md`；原暂停回执/备份不改。用户已解除暂停，历史paused/旧PID不覆盖新授权。
 - 模型cms-router/glm-5.3-flash → DGX/deepseek → DGX/qwen；凭据仅注册配置到必要子进程环境，不入文件/日志/提示词，不改全局路由。
 
@@ -14,7 +14,7 @@
 |---|---|---|
 | M0骨架 | 离线骨架/部分公开来源冒烟具备 | 不是产品交付 |
 | M1/C | 完整终点投影、C阅读组件具备；模型阶段恢复中 | 完整流水线/论文修订/最终科学及产品接受 |
-| M2中国宇宙 | 登记公开列表浏览器接通，真实全页/缺页恢复/零结果通过 | 登记详情、CDE/NMPA、3份专家清单/≥95%召回 |
+| M2中国宇宙 | 中国登记列表及CDE受理目录接通，真实全页/零结果；中国登记缺页恢复通过 | 登记详情、其他CDE栏目/NMPA、3份专家清单/≥95%召回 |
 | M3/A、M4/B | 骨架与部分切片；B组归属生产路径修复 | 对应正式科学/图表/真实项目验收 |
 | M5全球/历史 | 来源版本原子采用具备 | 历史公开资格/全球来源扩充 |
 | M6加固 | 未完成 | 队列/取消/成本/导出/备份 |
@@ -27,8 +27,22 @@
 - 原attempt0001 STARTED回执不改，原97920用户SIGINT终态不再等待。暂停一致性DB备份SHA e9c18f2153ac95cff0495839d38caa4bc38a7cf1c46342fe0bcb168d3af2ce3e；冻结源/WIP副本/diff在ciw-data/pause-20261023-0810。
 - 冻结模型使用旧renderer，不随当前前端热更新。其产物和本轮C候选分开验收。
 
-## 中国登记公开浏览器：本节点来源工具接受，不是M2完成
-- 显式CIW_CHINA_EGO_SPACE_ID复用已授权Ego59/p1；不创建/claim/profile discovery，不改登录/缓存，不绕过控制。不再新增Playwright框架；保留未配置时blocked/site备用，CDE/NMPA另记未接通。
+## CDE受理目录：来源工具切片完成，M2未验收
+- 当前改动在4f20d0f5基础上，代码/文档白名单提交中；647门只覆盖本v2候选，不是旧v1或全产品接受。
+- 同Ego59/p1/现有CLI，普通生产china_registry_search增加明确query_kind；仅drug_name/company/acceptance_number进公开受理目录，其余blocked/site，不将适应症或靶点当药名。年度/药品类型/申请类型全部；栏目+六筛选进入来源上下文。
+- 原词用于中国登记反向检索、CDE药名/企业框，不再前缀拼入疾病；结构化查询范围和临床纳排分开。CDE实现与空间配置入来源键，已保存结构化行不再送第二个抽取模型。
+- 实际cde-browser-live-03-current：度普利尤单抗全部年度80行/2页(50+30)/80唯一受理号，1暂定药物/0试验/0科学事实/0模型；源码9文件及入口SHA运行前后相同。CAS SHA cd088a30a57542b7734a9584d5b9238a3fd4656e3dd8994796492e04aa86d1c0；41原始空格子保留。不能把80个申请当80项AD试验/获批或MAH结论。
+- 真空结果cde-browser-live-02-zero：官方无pager、单一“暂无内容”，0行、页长未提供(page_size null)，SHA9825bc01f44d51d73aebf0b2eda31d22135d74361ccbbb6cacdfb2b7f31541cd。来源不造“共0条”。03较02新增URI会话参数拒绝；当前解析器离线重读两CAS仍完整80/0，不称重新核查。原回执不改。
+- 03之后仅更正china.py过时说明/失败提示及CLI帮助；反向构造旧文本核hash验证，来源读取/采用逻辑不变，不重抓80条。china.py文字在647门前修正，647门后仅CLI帮助另查；来源脚本/解析器版本以各回执为准，不回写历史hash。
+- 企业名称仅company_text、承办日期仅handled_date_text，原始复合企业/空单元格/受理号保留，暂定drug.attrs带来源引用，不猜申办方/MAH/批准/首次公开日期。内部filter键applicant只是企业名称控件，不是已证实角色。真实2015及以前选项保留；CDE列表URI不接受查询/会话参数，筛选在捕获JSON。
+- 官方侦察cde-public-source-01/page2.png已实看，页末76–80/总80/50条页与原数据一致。生产零结果截图尝试因Ego窗口最小化失败，NOT_RUN；未强制恢复窗口、未改登录或借旧截图签收。此处非A/B/C视觉验收。
+- 同一CLI运输扩展后，中国登记09-zero-current实际生产工具仍明确0成功，SHAf1eeac7d8754896423fe9c7608fb5520319fb480d011ce7edd57e9326d8da4c0；不是再次全量抓464条。各运行0模型，R4模型不受影响。
+- parser执行CodeBuddy/codebuddy-cli/deepseek-v4.1-flash/max，358.763s/36calls/session01a1696b-fb5b-7265-94d0-45538901d5c4/一轮/no fallback，输出SHA28ae5251362e9fb80d3dc430de31535e733971f58abb718e3973cf732890547b。owner完整阅读原267行源/451行测试，补角色/日期/真实零状态/年份/URI及接通；不是把worker116PASS当整合通过。preflight/audit/review-gate PASS；初始重复report路径格式FAIL在派发前修正，原prompt不回改；cleanup只dry-run，无独立科学会商。
+- 当前完整v2 **647PASS/2.97s**；显式v2 Ruff全src/tests/scripts、3JS/sh语法、56个生产Python600/80门PASS；1既有TestClient警告。owner4RED+扩展3RED+会话URI2RED→最终289相关PASS后一次宽门。此前516/282/285等只对原范围有效，不按每行改动重跑全仓。
+- 受理目录之外的CDE审评/优先/突破/默示许可、NMPA、适应症归属/科学事实、金标准与M2门仍未过；CDE缺页自动补取未实现，不借中国登记的恢复证据签收。继续有界实现，不造暂停点。
+
+## 中国登记公开浏览器：前一节点来源工具接受，不是M2完成
+- 显式CIW_CHINA_EGO_SPACE_ID复用已授权Ego59/p1；不创建/claim/profile discovery，不改登录/缓存，不绕过控制。不再新增Playwright框架；保留未配置时blocked/site备用，其他来源的当下接通范围见上。
 - 特应性皮炎真实列表：24页/464唯一CTR，161条不同原药物标签、464研究/464显式关系，全部unknown纳排，0临床事实/0模型调用；不是161种创新药或MAH/召回验收。
 - ciw-data/china-browser-live-07为同06的prj_446b8ea5087c/run_ab02bcd2272e恢复回执；DB/CAS仍在06/data。来源SHA fc7f4fa3705a5da58e5e17930f428424fc417d0b835c9ee72274b61e41031e12，145826字节，完整24页/464行/CTR集合及CAS摘要实际核对。
 - 06留下23页/444行的有效未完来源；07正常UI跳转只补第23页。元数据逐项记录reused_source_ids/reused_pages/new_pages_checked，不把旧23页冒称本次全部重新核查；旧失败回执不改。公开POST request_context分开查询缓存，同查询新版本仍失效，跨项目/跨run不借用。
@@ -38,7 +52,7 @@
 - 解析整字段/六列表头/查询/总数/重复/页集合；原始复合药名不取首项，保留public detail_id，不猜GET详情URL。现代32hex及实际旧数字_p/32hex_p均有反例；用户名/token/隐藏字段/运行原始错误不入来源。有效页在整批冲突时保留为未完CAS，错误页不混入已采用集合。
 - 复盘：02漏读CLI stderr；03 glyph文本selector不匹配嵌套箭头；04–05早期detail_id形式未覆盖；06保留有效页后定位23页32hex_p，07仅补缺页。初始只看首页不足以确定全站schema；早期失败未保留原流导致多抓，已补来源恢复，不能把这些失败改PASS。01脚本注册错误属于执行入口，不是网络空结果。
 - parser执行CodeBuddy/codebuddy-cli/deepseek-v4.1-flash/max，259.616s/33calls/session01a16946-164c-797f-9eb5-42b7c7205972/一轮/no fallback，输出SHA bf0f2b387c3c7a32448f5cbe01b45a721f9938ed8d9faf955253e84c4cc60781。owner修安全/真实旧ID/桥/恢复；preflight、audit-execution、review-gate实际PASS。没有独立科学review或额外Hermes节点；cleanup只dry-run，原始证据保留。
-- 当前最终v2 516PASS/2.71s；显式v2 Ruff全src/tests/scripts、两JS/sh语法、54个生产Python文件600/80门PASS。1既有TestClient警告。早期512PASS/Ruff BLE001、各族RED/相关GREEN分别保留，不用本门改写其状态；只在完整根因修复后跑最终宽门，不按每行重跑。
+- 前一节点最终v2 516PASS/2.71s；Ruff/两JS/sh/54Python600/80 PASS。当前647门见上，不能沿用516冒充当前。早期512PASS/Ruff BLE001、各族RED/相关GREEN分别保留，不改写历史。
 
 ## C阅读组件：同源candidate03核验完成
 - Ego旧53不存在；原生Ask批准替代并复用 **59/p1**。只读预览localhost49587/C3，句柄47130；不改登录/缓存/其他空间。Ego提示更新，未擅自升级。
@@ -85,5 +99,5 @@
 ## 下一有界动作
 1. 已完成本轮产品白名单提交及远端exact；继续只处理v2当前包，排除v1 WIP/未知健康日志/运行证据。Goal保持active，不创建暂停点。
 2. 同句柄等模型终态后核冻结身份/来源/缓存，只恢复失效或未完单元，不重跑已完成研究。
-3. 继续M2登记详情/CDE/NMPA/搜索缺口和M1论文修订真实链；登记列表已接通不重做。M4其余科学域及跨研究语义另按正式包，不把单研究图形接受扩大。根因族RED→完整改动→相关批，里程碑一次宽门。
-4. 搜索/微信未配置、CDE/NMPA适配/专家清单未具备；M1完整链/论文修订及M2–M6正式门未过不宣称交付。无须新用户裁决，不设人为暂停点。
+3. 继续M2登记详情/CDE审评按受理号串联/NMPA/搜索缺口和M1论文修订真实链；中国登记列表、CDE受理目录不重做。M4其余科学域另按正式包，不扩张单研究图形接受。根因族RED→完整改动→相关批，里程碑一次宽门。
+4. 搜索/微信未配置、其他CDE/NMPA适配/专家清单未具备；M1完整链/论文修订及M2–M6正式门未过不宣称交付。无须新用户裁决，不设人为暂停点。

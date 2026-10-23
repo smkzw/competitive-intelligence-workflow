@@ -18,8 +18,11 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument('--space',type=int,required=True,help='已授权专用Ego空间，不自动创建或接管')
     parser.add_argument('--query',required=True)
+    parser.add_argument('--registry',choices=['chinadrugtrials','cde'],default='chinadrugtrials')
+    parser.add_argument('--query-kind',choices=['keyword','drug_name','company','acceptance_number','indication','target'],
+                        default='keyword')
     parser.add_argument('--output',type=Path,required=True)
-    parser.add_argument('--resume-output',type=Path,help='同一隔离冒烟的失败回执目录，只补有效已采页之外的缺页')
+    parser.add_argument('--resume-output',type=Path,help='同一隔离冒烟的失败回执目录；中国登记补缺页，CDE重试本查询')
     args = parser.parse_args()
     output = args.output.resolve()
     if output.exists():
@@ -27,11 +30,15 @@ def main() -> int:
     output.mkdir(parents=True)
     module = Path(__file__).resolve().parents[1]/'src/ciw2'
     files = ('config.py','sources/china.py','sources/china_capture.py','sources/china_browser.py',
-             'sources/china_browser.mjs','sources/http.py')
+             'sources/china_browser.mjs','sources/http.py','sources/cde_browser.py',
+             'sources/cde_browser.mjs','sources/cde_capture.py')
     source_files = {name:hashlib.sha256((module/name).read_bytes()).hexdigest() for name in files}
+    entrypoint_sha256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     prior = json.loads((args.resume_output/'receipt.json').read_text()) if args.resume_output else None
     if prior and (prior['query'] != args.query or prior['space'] != args.space):
         parser.error('恢复输入与原查询/浏览器空间不符')
+    if prior and (prior.get('registry','chinadrugtrials') != args.registry or prior.get('query_kind','keyword') != args.query_kind):
+        parser.error('恢复检索类型与原来源不符')
     settings = replace(Settings(),data_dir=(args.resume_output or output)/'data',china_ego_space_id=args.space)
     settings.ensure_dirs()
     db, cas = DB(settings.db_path), CAS(settings.cas_dir)
@@ -47,7 +54,8 @@ def main() -> int:
     try:
         tool = REGISTRY.get('china_registry_search')
         result = tool.fn(ctx,tool.args_model.model_validate({
-            'registry':'chinadrugtrials','query':args.query,'route_id':'china:ctr:browser_smoke'}))
+            'registry':args.registry,'query':args.query,'query_kind':args.query_kind,
+            'route_id':f'china:{args.registry}:browser_smoke'}))
     except (RuntimeError,ValueError,OSError,KeyError) as exc:
         result = {'mode':'failed','error_type':type(exc).__name__}
     ok = result.get('mode') == 'browser' and result.get('complete') is True
@@ -58,9 +66,10 @@ def main() -> int:
     (output/'result.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
     db.set_run(rid,'succeeded' if ok else 'failed',None if ok else '公开浏览器来源未完成')
     code_unchanged = all(hashlib.sha256((module/name).read_bytes()).hexdigest()==digest
-                         for name,digest in source_files.items())
+                         for name,digest in source_files.items()) and entrypoint_sha256 == hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     receipt = {'scope':'REAL_CHINA_SOURCE_TOOL_ONLY','query':args.query,'space':args.space,
         'resumed_from':args.resume_output.name if args.resume_output else None,
+        'registry':args.registry,'query_kind':args.query_kind,'entrypoint_sha256':entrypoint_sha256,
         'project_id':pid,'run_id':rid,'mode':result.get('mode'),'complete':bool(result.get('complete')),
         'rows':len(result.get('results',[])),'pages':result.get('pages_read'),
         'source_id':source['id'] if source else None,'source_sha256':source['digest'] if source else None,
