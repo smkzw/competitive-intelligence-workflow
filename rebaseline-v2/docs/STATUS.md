@@ -1,67 +1,59 @@
 # STATUS
 
-**2026-10-23｜用户已明确解除暂停，Goal=active｜M1/M2实施中，未交付**
+**2026-10-23｜Goal=active，继续实施｜M1/M2进行中，未交付**
 
-## 唯一当前入口
-- 产品权威仍为01_PRD、02_ARCHITECTURE、03_PLAN、04_AGENT_RULES；本状态不是新规格。
-- 历史暂停/恢复依据：根Trellis任务 `10-23-rebaseline-v2-m1/PAUSE_HANDOFF_20261023_0810.md`，原件保留；本页为当前状态，历史paused/live句柄不覆盖用户新授权。
-- 只实施英文工程rebaseline-v2。v2为单用户Web服务+内嵌9 Skills，不延用v1宿主包、编辑/分享及24门户旧验收合同。v1未知脏树保留，旧中文工程零接触。
-- 分支codex/rebaseline-v2-m1；HEAD与本次核对远端exact均为 `2c02740f2caee990ca5cf808e98d27944c2875e7`。
-- 当前M2根因包收尾中，完成当前全门后白名单提交；暂停WIP副本/diff/一致性DB不变。不reset/clean、不混入v1或运行资料。
-- 模型cms-router/glm-5.3-flash → DGX/deepseek → DGX/qwen；凭据仅必要子进程环境，无全局路由/模型改动。
+## 当前入口与范围
+- 产品权威：01_PRD、02_ARCHITECTURE、03_PLAN、04_AGENT_RULES；本页替换更新，不另立规格。
+- 唯一英文工程根内rebaseline-v2；单用户Web服务+内嵌9 Skills。v1多宿主包、编辑/分享、24门户不是v2发布门；未知v1工作树保留，旧中文工程零接触。
+- 分支codex/rebaseline-v2-m1。来源扩展节点已提交/push并核远端exact：`ad65b790fa63917dc2a5dbdf79ef611d5f87f1c2`。当前C阅读修复待白名单提交。
+- 历史恢复依据：Trellis `10-23-rebaseline-v2-m1/PAUSE_HANDOFF_20261023_0810.md`；原暂停回执/备份不改。用户已解除暂停，历史paused/旧PID不覆盖新授权。
+- 模型cms-router/glm-5.3-flash → DGX/deepseek → DGX/qwen；凭据仅注册配置到必要子进程环境，不入文件/日志/提示词，不改全局路由。
 
-## 阶段进度（不是整体完成百分比）
-- M0：离线骨架、部分公开来源冒烟具备；不是产品交付。
-- M1/C：真实来源/完整终点投影和报告组件已接通；全流水线、论文修订与视觉交互未验收。
-- M2：中国反向扩展代码在工作树，相关回归通过；中国浏览器适配、3份专家金标准、≥95%召回未完成。
-- M3/A、M4/B、M5全球/历史资格、M6加固：有骨架/切片，均未完成对应正式验收。
+## 阶段进度
+| 阶段 | 实际状态 | 主要未完成门 |
+|---|---|---|
+| M0骨架 | 离线骨架/部分公开来源冒烟具备 | 不是产品交付 |
+| M1/C | 完整终点投影、C阅读组件具备；模型阶段恢复中 | 完整流水线/论文修订/最终科学及产品接受 |
+| M2中国宇宙 | 反向扩展及恢复代码已提交，真实源离线重放通过 | 中国浏览器适配/3份专家清单/≥95%召回 |
+| M3/A、M4/B | 骨架与部分切片 | 对应正式科学/图表/真实项目验收 |
+| M5全球/历史 | 来源版本原子采用具备 | 历史公开资格/全球来源扩充 |
+| M6加固 | 未完成 | 队列/取消/成本/导出/备份 |
 
-## 同一真实模型阶段已恢复（原暂停记录保留）
-- 新句柄49763已实际启动attempt0002：同run/同冻结2cb代码/同数据/模型顺序；预检全部冻结hash、46源字节、DB完整性及51缓存存在后恢复。脚本ciw-data/resume-r4-20261023.py；未重跑bootstrap/来源，不覆盖attempt0001。不定期轮询/重派，终态再核实际模型、缓存和渲染。
-- run_a37cd8cba43b / prj_f21d0823b44a / attempt0001 / scope=stage/analysis_C；数据ciw-data/model-stage-r4/data。
-- 用户暂停后只向已确认子PID69497发送SIGINT；子进程及父69466均退出，句柄97920已terminal，不再等待/重派。
-- 使用冻结2cbab03927fbe22cc2212f3fa4105862cfec0992，冻结源码开始/暂停hash一致，46来源CAS逐项校验，6580事实保留。
-- 按冻结生产任务键只读审计：**151批，51缓存有效，100待做；33非空、195条分批要点**。均按schema及当前verified引用核验。不是195条最终结论，归并未执行。
-- 51有效模型事件均实际DeepSeek-V4.1-Flash-TF。有效事件480519 tokens不含失败/中断请求，不是总成本；成功事件output_recovery=0，不宣称真实扩容已验证。
-- run/analysis_C库行仍running：原脚本未捕获KeyboardInterrupt。原STARTED回执不改，本暂停回执明确进程已停；不能误当健康任务或伪造failed/succeeded。
-- 恢复必须同run/冻结代码/输入/规则/模型，复用51批，只重发未提交中断批并做剩余100批及归并/渲染。原start-r4脚本会新建目录，禁止重跑。
-- 本地ciw-data/pause-20261023-0810/pause-audit.json含完整键、源/代码/WIP/截图hash。
-- SQLite一致性备份integrity=ok，SHA e9c18f2153ac95cff0495839d38caa4bc38a7cf1c46342fe0bcb168d3af2ce3e；不重复复制CAS。
-- 原attempt回执SHA cd99f6d06a99a5afabf29ed8a8b6b2055a576957b4ab9dcac396d846eaaefe2e未改。暂停前12文件副本及tracked.patch另存，不覆盖未知工作树。
+## 同一R4真实模型阶段：仍运行
+- 句柄49763，run_a37cd8cba43b / prj_f21d0823b44a，**attempt0002**；scope=stage/analysis_C，pipeline_acceptance=NOT_RUN。脚本ciw-data/resume-r4-20261023.py。
+- 冻结`2cbab03927fbe22cc2212f3fa4105862cfec0992`代码/Skills/规则/模型和原数据；恢复启动已核冻结hash、46源、DB完整性、6580事实及缓存。没有重跑bootstrap/来源/51已完成批。
+- 恢复基线151任务/51合格缓存/100待做；33非空、195条分批要点仅为暂停时范围，不是最终归并结论。不定期轮询、不因等待替换运行。
+- 最近同句柄等待仍pending无新输出。终态后核实际模型、151批引用、输出恢复、用量、源hash及渲染；stage成功不替代M1完整链。
+- 原attempt0001 STARTED回执不改，原97920用户SIGINT终态不再等待。暂停一致性DB备份SHA e9c18f2153ac95cff0495839d38caa4bc38a7cf1c46342fe0bcb168d3af2ce3e；冻结源/WIP副本/diff在ciw-data/pause-20261023-0810。
+- 冻结模型使用旧renderer，不随当前前端热更新。其产物和本轮C候选分开验收。
 
-## 当前C页面：已实看，视觉FAIL
-- 用户已授权替代Ego空间，实际 **53 / p1**；暂停handOff保留，未finish、未清缓存/改登录，不再使用“授权待答”旧说法。
-- 当前ciw-data/browser-m1/c-reading-r4-01/C.html：SHA 2e965c9604eb3d810f1a558bf998f552ccd80ac7cb4a25ea8e81ea2f71286c28，12283219字节。
-- 来源组件284研究、580主要/2876次要终点、282样本点、5明确0；不是创新药全集或模型最终报告。
-- 四张1440/1600/1920/2560×1080首屏截图均实看：同目录 `{宽度}-actual-first.png`。截前同调用确认innerWidth/scrollWidth等于目标，无整页横向溢出。
-- **FAIL**：1440/1600期别饼图标签截短；两图绘图区高504px、卡片约596px，对照表接近首屏底部，主任务空间不足。尚未修复，不写“图形优化完成”。
-- 初次1920-first.png实为1728×659（跨调用设备尺寸被还原），保留但退出验收；后四张actual截图才是有效宽度证据。
-- 筛选page.fill因控件不在实际viewport超时；只读诊断仍空查询/284行。不是查无数据，也未证明产品筛选坏了；筛后/展开/来源/键盘均未完成，不记PASS。
-- 只读预览63024/PID89464及旧8767/PID45481已停止、监听消失。HTML未删；p1暂停后指向已停预览，恢复重启单文件只读预览。
-- Ego提示更新，本轮未升级，需用户批准，不能借此换浏览器。
+## C阅读组件：同源candidate03核验完成
+- Ego旧53不存在；原生Ask批准替代并复用 **59/p1**。只读预览localhost49587/C3，句柄47130；不改登录/缓存/其他空间。Ego提示更新，未擅自升级。
+- ciw-data/browser-m1/c-reading-r4-03/C.html：SHA `e96d5ca88c9f14db48abd2a5eecbbfb5c6eafb18de27834671d775ec84738ffc`，12,371,833字节。
+- 正常生产renderer/同R4源：284研究/6580事实/580主要/2876次要终点/282样本点/5明确0；事实hash f903dc7b89a22bc4b1c83edb8696d7df96699166e3986b089700cd2828f1be53。不是创新药全集/模型最终报告。
+- 1440/1600/1920/2560×1080密集、筛后单项、原文阅读共12截图全部实看。同目录dense-stable/interaction/restoration-browser JSON含实测及操作。
+- 密集样本量336px/期别160px，完整期别计数不截短，对照表顶部743.98px（旧约947）；筛后两图区120px/表顶部527.98。不缩字号、删数据或伪点。
+- 9462字入排从旧181px窄格改同页宽幅阅读，四宽正文806/900/1088/1463px，16px；事实依据独立列，原文不复制改写。英语仅主动打开原文层，不铺默认首页。
+- 真实键盘焦点留原生dialog；原文滚动627.5px/背景0；Esc恢复原内容、触发焦点和查询。无JS/不支持dialog仍可原details读取。
+- 原生键盘检索末项NCT00932074=1；无命中0且两图卡隐藏；恢复284/284、282样本点/5明确0不变。
+- 候选01标签截短/504px判FAIL保留；02单项220/300px空白被owner拒收后修复。首次03截图未等ResizeObserver稳定不采用，dense-stable才采纳；不改历史FAIL或借旧图签收。
+- 接受仅C来源阅读/几何/检索组件。A/B、模型全文、论文修订及最终医学/审美门未完成；不宣称完整康哲6.1.3影像/动效合规。
 
-## 工作树中的M2根因包
-- 新生产顺序：发现→candidate_triage→universe_expand→coverage_review→后续；复用coverage-review Skill，无新增表/模型路由/平台。
-- 别名/靶点/企业生成中国CT.gov及三登记/CDE/NMPA路线、全球CT.gov/搜索路线，最多3轮；预算pending可恢复；来源/解释分别缓存；blocked/failed不判空成功。
-- 已排除候选不扩展，unknown保留。真实476候选元数据只读规划555种子/3330查询，非实际已跑查询或宇宙完整性。
-- 隔离真实中国CT.gov查询1研究、17待查、0模型，ciw-data/expansion-source-smoke-01/receipt.json。随后发现otherNames含Placebo，不能作主动药别名；旧源/回执保留。
-- 当前将既有精确placebo/安慰剂规则复用到别名、旧数据身份读取及扩展种子；原始otherNames仍保留。3RED后相关37PASS；扩大身份/纳排/恢复/扩展相关 **64PASS/1.10s**。
-- 已捕获真实源离线生产重放完成：1研究，原控制别名保留、主动药匹配false、无控制检索种子、0网络/0模型；旧smoke回执hash不变。回执ciw-data/expansion-control-alias-replay-01/audit.json。当前最终v2 **361PASS/2.69s**、Ruff全src/tests/scripts、生产JS/sh语法及600/80尺寸门通过；1项既有TestClient弃用警告。不是中国宇宙/医学/视觉验收。
-- 新expansion.py/smoke_expansion.py及两测试、修改的身份/CTgov/stages/两Skills/conftest等已保全；未知agent_health及v1改动不提交/清理。
-- PRD/ARCH/PLAN已原位同步triage→expand→最终review及恢复/原始别名与身份采用合同，无第二套产品规格。
+## 测试、协作与复盘
+- 当前全v2 **364PASS/2.70s**，Ruff全src/tests/scripts、生产JS/sh语法、Python600/80尺寸门PASS；1既有TestClient警告。相关24PASS，不为文档收尾再跑宽门。
+- 一次有界执行：CodeBuddy/codebuddy-cli/deepseek-v4.1-flash/max，session01a1690e-8288-7d63-a24c-f1f2424cb2d8，304.785s/36tools/return0，无fallback，输出hash核对。worker图例/数据窗/查询；owner补稀疏高度及宽幅阅读。
+- 协作审计格式缺口保留：custom prompt缺解析器规定route bullet，audit-execution FAIL/prompt_route=null；真实runner身份/effort/hash另核。不改已派发prompt、不为标题重派、不伪造审计绿；下次dispatch前规范bullet。executor不是独立科学/审美review。
+- Trellis implement/check在dispatch后发现seed并已改为当前PRD/规则2+2；prompt原含read set，不能冒称清单先前已修。raw证据在ciw-data，不入Git。
+- 复盘：可达不等于好读，实看长原文和筛后态；少条目不能套密集卡。viewport/ResizeObserver采样时机、大范围computed-style超时与产品缺陷分开记账。
 
-## 已有底座与未交付项
-- CT.gov完整分页18页/1787唯一ID=官方总数，不等于创新药闭包。源版本原子采用/失败旧current不变；network/cache/import分开；独立论文不随登记刷新撤回。
-- R4固定77容器重建46采用来源/284研究/6580事实；2488非空次要定义补回，其他科学值/上下文0变化。580主要/2876次要完整投影，按整终点+共同上下文分包151任务/最大23984字符，不裁尾部。
-- 字面身份、共享别名待核、全量游标/全候选/未完单元恢复已具备；B组—药设计关系仍须对应包验收，不能借C证明。
-- ECharts6.1.0固定hash、中文状态/7列设计表/完整原文折叠/16px底线已实现，康哲融合阅读功能子集，未获得审美接受。
-- 旧R3 attempt0002终态failed（28旧批/0报告），原生产run_524b14044e4e旧尝试也failed，不等待/重跑或拼接R4通过。
-- 搜索/微信未配置、中国适配/金标准未具备；历史as-of未实现且启动/数据/HTML守卫拒绝，不能移除守卫冒充完成。
-- v2最终交付未完成：M1全链路/论文修订/视觉交互，M2召回，A/B正式门，历史资格及加固均待后续。
+## 来源底座与已提交M2节点
+- 发现→全量candidate_triage→universe_expand→最终coverage_review；复用Skill，不添平台/表/路由。别名/靶点/企业驱动中国CT.gov+三中国站点及全球路线，最多3轮；unknown保留，failed/blocked/pending不算空成功，来源/解释独立缓存。
+- 真实中国CT.gov冒烟1研究/17待查/0模型；原Placebo保留，但共同身份/旧别名读取/种子排除精确控制标签。捕获源离线重放1研究、0网络0模型，原回执hash不变。节点361PASS/ad65b790已提交，不是召回通过。
+- CT.gov18页/1787唯一ID=官方总数，不是创新药闭包。77容器采用46源/284研究/6580事实，2488非空次要定义补回，其他科学值/上下文0变化；151完整终点包最大23984字符，无截尾。
+- 来源文档+解析器版本原子采用，失败旧current不变；独立论文不随登记刷新撤回；HTTP/缓存/导入分开。历史as-of未实施，启动/数据/HTML守卫拒绝，不删守卫冒充完成。
 
-## 当前有界顺序
-1. 读本页/暂停文档，核HEAD、WIP、冻结源码/DB/来源hash；不重跑摄取/来源重建/51缓存。
-2. 同冻结代码/同run/注册环境接续100批，原run_live.py显式--resume-run与--only-stage analysis_C，保留attempt0001并生成新attempt。
-3. 前端独立根因包：紧凑概览/期别完整标签；复用Ego53，四宽同候选实测检索/展开/键盘。不缩字体、不隐藏事实。
-4. M2真实源离线反例→原位PRD/ARCH/PLAN→相关批→一次全v2/Ruff/JS/sh/尺寸门→白名单提交/push/远端exact。
-5. 当前候选完整研究、论文修订及M2–M6正式验收未过前不宣称交付；现有授权继续实施，不形成无必要阶段性暂停。
+## 下一有界动作
+1. 白名单提交本轮五个前端/测试文件、原位PRD/ARCH/PLAN/STATUS及现有Trellis记录，push核远端exact；排除v1 WIP/未知健康日志/运行证据。
+2. 同句柄等模型终态后核冻结身份/来源/缓存，只恢复失效或未完单元，不重跑已完成研究。
+3. 推进不依赖模型的M2中国来源接入及A/B科学消费缺口，根因族RED→完整改动→相关批，里程碑一次宽门。
+4. 搜索/微信未配置、中国适配/专家清单未具备；M1完整链/论文修订及M2–M6正式门未过不宣称交付。无须新用户裁决，不设人为暂停点。

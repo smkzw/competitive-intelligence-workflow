@@ -89,6 +89,10 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 - CT.gov `query.locn=China` 可用（PNH 实测 52 条）。
 
 ## 6. 配置（环境变量）
+### C阅读层
+沿用单一portal.js/kangzhe.css及Jinja。样本量图保留全部数据，用dataZoom限定可读窗口而非Top-N；密集/稀疏高度按数据量，期别独立高度和完整名称/计数图例。完整入排details为无JS基线；有native dialog时单个模态容器临时移动原DOM内容，关闭恢复原位/触发焦点，使用textContent显示研究名，不生成另一份科学数据。长原文与事实依据两列，保留原引文/链接，不引入下钻框架或新的状态库。
+
+### 环境项
 `CIW_DATA_DIR` `CIW_SKILLS_DIR` `CIW_LLM_BASE_URL` `CIW_LLM_API_KEY` `CIW_LLM_MODEL` `CIW_LLM_CHECK_MODEL`
 `CIW_WEBSEARCH_PROVIDER`(tavily|bing|serpapi|none) `CIW_WEBSEARCH_API_KEY` `CIW_WECHAT_SEARCH_CMD`
 `CIW_NCBI_API_KEY` `CIW_HTTP_TIMEOUT_S` `CIW_MAX_AGENT_STEPS` `CIW_ACCESS_TOKEN`。

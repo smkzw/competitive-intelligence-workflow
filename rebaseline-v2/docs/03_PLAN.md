@@ -12,6 +12,7 @@
 1. 按用户裁决接入 cms-router/glm-5.3-flash，备用 DGX/deepseek → DGX/qwen，记录实际响应模型；搜索提供方未配置则明确 blocked。跑通 `ciw2 run --indication <X> --reports C`。
 2. 修正 Skill 提示词与工具返回体积（截断、分页），保证每个 Skill 在预算内提交。
 3. C 门户：主要终点按时间点聚类展示；入排关键阈值（年龄、基线评分）结构化。
+   当前阅读根因包另包括：密集/筛后稀疏图卡高度、完整期别计数图例、长入排宽幅原文阅读/键盘返回；以同源新候选四宽实屏验证，旧候选截图保留，不与模型阶段PASS混用。
 4. 注意 CT.gov「primary」可能多于方案主要终点（APPLY-PNH 实测登记 8 个 primary）：允许论文来源以 `supersedes` 覆盖并在门户标注。
 - 验收：一个适应症 ≥10 个试验设计行；critical 字段 100% 有来源；截图入 STATUS。
 

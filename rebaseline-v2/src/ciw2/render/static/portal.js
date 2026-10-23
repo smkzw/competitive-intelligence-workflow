@@ -36,7 +36,7 @@
     (option.series || []).forEach(function (series) {
       series.label = Object.assign({}, series.label, { fontSize: readingSize });
     });
-    if (option.legend) option.legend.textStyle = { fontSize: readingSize };
+    if (option.legend) option.legend.textStyle = Object.assign({}, option.legend.textStyle, { fontSize: readingSize });
     option.tooltip = Object.assign({}, option.tooltip, { textStyle: { fontSize: readingSize } });
     c.setOption(option);
     var observer = new ResizeObserver(function () { c.resize(); });
@@ -44,14 +44,45 @@
   }
   var dataNode = el("charts");
   var D = dataNode ? JSON.parse(dataNode.textContent || "{}") : {};
+  var DESIGN_MAX_HEIGHT = 336, DESIGN_MIN_HEIGHT = 120, DESIGN_VISIBLE_ROWS = 12;
+  var DESIGN_ROW_HEIGHT = 24, DESIGN_PANEL_CHROME = 48, PHASE_MIN_HEIGHT = 120;
   function designZoom(count) {
-    var end = Math.max(0, Math.min(count - 1, 17));
+    var shown = Math.max(1, Math.min(DESIGN_VISIBLE_ROWS, count || 0));
+    var end = Math.max(0, Math.min(count - 1, shown - 1));
     return [{ type: "slider", yAxisIndex: 0, right: 0, width: 16,
-      show: count > 18, startValue: 0, endValue: end, filterMode: "filter" },
+      show: count > DESIGN_VISIBLE_ROWS, startValue: 0, endValue: end, filterMode: "filter" },
       { type: "inside", yAxisIndex: 0, startValue: 0, endValue: end,
         filterMode: "filter", zoomOnMouseWheel: false, moveOnMouseWheel: true }];
   }
-  function designPanelHeight(count) { return Math.max(200, Math.min(504, count * 24 + 72)); }
+  function designPanelHeight(count) {
+    var rows = Math.max(1, Math.min(DESIGN_VISIBLE_ROWS, count || 0));
+    return Math.min(DESIGN_MAX_HEIGHT, Math.max(DESIGN_MIN_HEIGHT, rows * DESIGN_ROW_HEIGHT + DESIGN_PANEL_CHROME));
+  }
+  function phasePanelHeight(count) {
+    return Math.min(DESIGN_MAX_HEIGHT, Math.max(PHASE_MIN_HEIGHT, 32 + Math.max(1, count || 0) * 32));
+  }
+  function setPanelHeight(id, height) {
+    var node = el(id);
+    if (!node) return;
+    node.style.height = height + "px";
+    if (instances[id]) instances[id].resize();
+  }
+  function phaseLegend(counts) {
+    return { type: "plain", orient: "vertical", right: 0, top: "middle",
+      itemWidth: 14, itemHeight: 14, itemGap: 10, textStyle: { lineHeight: 22 },
+      formatter: function (name) { return String(name) + " " + (counts[name] || 0) + " 项"; } };
+  }
+  function phaseOption(items) {
+    var counts = {};
+    items.forEach(function (item) { counts[String(item.name)] = item.value; });
+    return {
+      tooltip: { formatter: function (p) { return safeText(p.name) + "：" + safeText(p.value) + " 项研究"; } },
+      legend: phaseLegend(counts),
+      series: [{ type: "pie", center: ["32%", "50%"], radius: ["30%", "58%"],
+        label: { show: false }, labelLine: { show: false },
+        emphasis: { label: { show: false }, labelLine: { show: false } }, data: items }]
+    };
+  }
   if (D.heat) {
     chart("chart-heat", {
       tooltip: { formatter: function (p) { return safeText(D.heat.y[p.value[1]]) + " · " + safeText(D.heat.x[p.value[0]]) + "：" + safeText(p.value[2]) + " 个药物"; } },
@@ -78,10 +109,7 @@
     });
   });
   if (D.size) {
-    var designHeight = designPanelHeight(D.size.labels.length);
-    ["chart-size", "chart-phase-pie"].forEach(function (id) {
-      if (el(id)) el(id).style.height = designHeight + "px";
-    });
+    setPanelHeight("chart-size", designPanelHeight(D.size.labels.length));
     chart("chart-size", {
       tooltip: { trigger: "axis" }, grid: { left: 130, right: 70, top: 24, bottom: 30 },
       dataZoom: designZoom(D.size.labels.length),
@@ -91,7 +119,8 @@
     });
   }
   if (D.phase) {
-    chart("chart-phase-pie", { tooltip: {}, series: [{ type: "pie", radius: ["40%", "70%"], data: D.phase }] });
+    setPanelHeight("chart-phase-pie", phasePanelHeight(D.phase.length));
+    chart("chart-phase-pie", phaseOption(D.phase));
   }
   document.querySelectorAll("input[data-filter]").forEach(function (inp) {
     var table = el(inp.getAttribute("data-filter"));
@@ -104,34 +133,76 @@
     });
   });
   function updateDesignQuery(table) {
-    var visible = Array.from(table.querySelectorAll("tbody tr")).filter(function (tr) { return tr.style.display !== "none"; });
+    var rows = Array.from(table.querySelectorAll("tbody tr"));
+    var visible = rows.filter(function (tr) { return tr.style.display !== "none"; });
     var selected = new Set(visible.map(function (tr) { return tr.dataset.trial; }));
-    var indices = D.size.labels.map(function (label, index) { return selected.has(label) ? index : -1; }).filter(function (i) { return i >= 0; });
-    ["chart-size", "chart-phase-pie"].forEach(function (id) {
-      if (el(id)) el(id).style.height = designPanelHeight(indices.length || visible.length) + "px";
-    });
+    var labels = D.size ? D.size.labels : [];
+    var values = D.size ? D.size.values : [];
+    var indices = labels.map(function (label, index) { return selected.has(label) ? index : -1; }).filter(function (i) { return i >= 0; });
     if (instances["chart-size"]) {
       var node = el("chart-size");
-      node.closest(".card").hidden = !indices.length;
-      instances["chart-size"].setOption({ yAxis: { data: indices.map(function (i) { return D.size.labels[i]; }) },
-        dataZoom: designZoom(indices.length),
-        series: [{ data: indices.map(function (i) { return D.size.values[i]; }) }] });
+      if (node.closest(".card")) node.closest(".card").hidden = !indices.length;
+      if (indices.length) {
+        setPanelHeight("chart-size", designPanelHeight(indices.length));
+        instances["chart-size"].setOption({ yAxis: { data: indices.map(function (i) { return labels[i]; }) },
+          dataZoom: designZoom(indices.length),
+          series: [{ data: indices.map(function (i) { return values[i]; }) }] });
+      }
     }
     var phases = {};
     visible.forEach(function (tr) {
-      if (tr.dataset.phaseStatus === "verified") phases[tr.dataset.phase] = (phases[tr.dataset.phase] || 0) + 1;
+      if (tr.dataset.phaseStatus === "verified" && tr.dataset.phase) phases[tr.dataset.phase] = (phases[tr.dataset.phase] || 0) + 1;
     });
+    var order = (D.phase || []).map(function (item) { return String(item.name); });
+    var items = Object.keys(phases).sort(function (a, b) {
+      var ia = order.indexOf(a), ib = order.indexOf(b);
+      return (ia < 0 ? order.length : ia) - (ib < 0 ? order.length : ib);
+    }).map(function (name) { return { name: name, value: phases[name] }; });
     if (instances["chart-phase-pie"]) {
-      el("chart-phase-pie").closest(".card").hidden = !Object.keys(phases).length;
-      instances["chart-phase-pie"].setOption({ series: [{ data: Object.keys(phases).map(function (name) { return { name: name, value: phases[name] }; }) }] });
+      var pie = el("chart-phase-pie");
+      if (pie.closest(".card")) pie.closest(".card").hidden = !items.length;
+      if (items.length) {
+        var counts = {};
+        items.forEach(function (item) { counts[item.name] = item.value; });
+        setPanelHeight("chart-phase-pie", phasePanelHeight(items.length));
+        instances["chart-phase-pie"].setOption({ legend: phaseLegend(counts), series: [{ data: items }] });
+      }
     }
-    if (el("design-count")) el("design-count").textContent = visible.length + " / " + table.querySelectorAll("tbody tr").length + " 项研究";
+    if (el("design-count")) el("design-count").textContent = visible.length + " / " + rows.length + " 项研究";
     document.querySelectorAll(".endpoint-entry").forEach(function (entry) { entry.hidden = !selected.has(entry.dataset.trial); });
     document.querySelectorAll(".endpoint-entry").forEach(function (entry) {
       var row = entry.closest("tr"); row.hidden = !Array.from(row.querySelectorAll(".endpoint-entry")).some(function (e) { return !e.hidden; });
     });
   }
+  function designEvidenceReader() {
+    var dialog = el("design-evidence-dialog"), body = el("design-evidence-body");
+    var title = el("design-evidence-title"), close = el("design-evidence-close");
+    if (!dialog || !body || !title || !close || typeof dialog.showModal !== "function") return function () {};
+    var origin, content, trigger;
+    dialog.addEventListener("close", function () {
+      if (content && origin) { origin.appendChild(content); origin.open = false; }
+      if (trigger) trigger.focus();
+      origin = content = trigger = null;
+    });
+    close.addEventListener("click", function () { dialog.close(); });
+    document.querySelectorAll(".design-evidence > summary").forEach(function (summary) {
+      summary.addEventListener("click", function (event) {
+        if (dialog.open) return;
+        var section = summary.parentElement.querySelector(".design-evidence-content");
+        if (!section) return;
+        event.preventDefault();
+        origin = summary.parentElement; content = section; trigger = summary;
+        var row = summary.closest("tr");
+        title.textContent = (row ? row.dataset.trial + " · " : "") + "入排与依据";
+        body.appendChild(content);
+        dialog.showModal();
+      });
+    });
+    return function () { if (dialog.open) dialog.close(); };
+  }
+  var closeEvidenceReader = designEvidenceReader();
   window.addEventListener("pagehide", function () {
+    closeEvidenceReader();
     observers.forEach(function (observer) { observer.disconnect(); });
     Object.keys(instances).forEach(function (id) { instances[id].dispose(); });
   });

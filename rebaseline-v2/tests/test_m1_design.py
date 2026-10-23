@@ -206,6 +206,19 @@ def test_c_expanded_definition_is_complete_and_identical_criteria_not_repeated(d
     assert f'data-fact-id="{fid}"' in html and 'https://example.org/source' in html
 
 
+def test_c_full_original_has_one_native_wide_reader_and_progressive_source_content(design_project):
+    add_fact(design_project, 'design.sample_size', 100)
+    criteria = 'Inclusion Criteria:\nEASI >= 16 OR IGA >= 3'
+    add_fact(design_project, 'design.eligibility.criteria', criteria)
+    html = render_report(*design_project[:2], 'C')
+    assert html.count('<dialog id="design-evidence-dialog"') == 1
+    assert 'class="design-evidence"' in html and 'class="design-evidence-content"' in html
+    assert 'aria-labelledby="design-evidence-title"' in html
+    assert 'data-close-design-evidence' in html
+    assert '完整入排' in html and '事实依据' in html and '样本量依据' in html
+    assert 'EASI &gt;= 16 OR IGA &gt;= 3' in html and 'https://example.org/source' in html
+
+
 def test_secondary_source_atoms_preserve_each_full_definition_and_locator(study):
     endpoints = [{'measure': 'Same scale', 'timeFrame': 'Week 16', 'description': 'Definition A'},
                  {'measure': 'Same scale', 'timeFrame': 'Week 24', 'description': 'Definition B'}]

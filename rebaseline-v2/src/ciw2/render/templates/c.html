@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% macro evidence(refs, shown_text=none) %}{% if refs %}<details class="evidence"><summary>依据 {{ refs|length }}</summary>
+{% macro evidence(refs, shown_text=none, label='依据') %}{% if refs %}<details class="evidence"><summary>{{ label }} {{ refs|length }}</summary>
 {% for ref in refs %}<div data-fact-id="{{ ref.fact_id }}"><span class="badge {{ ref.status }}">{{ ref.status|status }}</span>
 {% if ref.url %}<a href="{{ ref.url }}" target="_blank" rel="noopener">原始来源</a>{% endif %}
 {% if ref.quote and ref.quote != shown_text %}<blockquote>{{ ref.quote }}</blockquote>{% endif %}</div>{% endfor %}</details>{% endif %}{% endmacro %}
-{% block kpis %}<div class="kpi"><b>{{ data.rows | length }}</b><span>试验设计</span></div>{% endblock %}
+{% block kpis %}<div class="kpi design-total"><b>{{ data.rows | length }}</b><span>试验设计</span></div>{% endblock %}
 {% block content %}
 {% if not data.rows %}<p class="card">尚未取得试验设计资料。<a href="/projects/{{ project.id }}">查看检索进度</a></p>{% else %}
 <div class="grid">
@@ -47,10 +47,16 @@
 <p><span class="muted">{{ {'inclusion':'入选','exclusion':'排除','unspecified':'原条款'}[section] }}</span> {{ group.grouper }}</p>
 {% endfor %}{% endfor %}</details>{% endif %}
 {{ evidence(r.sources.get('eligibility_age', [])) }}</td>
-<td><details><summary>完整入排与依据</summary>{% if r.eligibility_criteria %}<pre class="criteria">{{ r.eligibility_criteria }}</pre>{% endif %}
-{% for name, refs in r.sources.items() %}{{ evidence(refs, r.eligibility_criteria) }}{% endfor %}</details></td>
+<td><details class="design-evidence"><summary>完整入排与依据</summary><div class="design-evidence-content">
+<section><h3>完整入排</h3>{% if r.eligibility_criteria %}<pre class="criteria">{{ r.eligibility_criteria }}</pre>{% else %}<p>—</p>{% endif %}</section>
+<section><h3>事实依据</h3>{% set source_labels = {'sample_size':'样本量','phase':'研究期别','allocation':'随机分组','masking':'设盲','arms':'研究组别','eligibility_age':'年龄','eligibility_criteria':'完整入排','primary_endpoint':'主要终点','secondary_endpoint':'次要终点','trial_status':'研究状态','countries':'研究国家','china_site':'中国站点','start_date':'研究启动日期'} %}
+{% for name, refs in r.sources.items() %}{{ evidence(refs, r.eligibility_criteria, source_labels.get(name, '资料') ~ '依据') }}{% endfor %}</section>
+</div></details></td>
 </tr>{% endfor %}
 </tbody></table></div>
+<dialog id="design-evidence-dialog" aria-labelledby="design-evidence-title">
+<header><h2 id="design-evidence-title">入排与依据</h2><button id="design-evidence-close" data-close-design-evidence autofocus>关闭</button></header>
+<div id="design-evidence-body"></div></dialog>
 {% if data.endpoint_groups %}<details class="endpoint-index"><summary>终点与时间点（{{ data.endpoint_groups|length }}组）</summary>
 <div class="card table-card"><table><thead><tr><th>终点定义</th><th>访视</th><th>采用该设计的研究</th></tr></thead><tbody>
 {% for g in data.endpoint_groups %}<tr><td><details><summary>{{ '主要终点' if g.kind == 'primary' else '次要终点' }} · 查看定义</summary>{{ g.measure }}

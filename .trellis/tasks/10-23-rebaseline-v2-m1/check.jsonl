@@ -1,1 +1,2 @@
-{"_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python3 .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line once real entries are added."}
+{"file":"rebaseline-v2/docs/01_PRD.md","reason":"Check current requirements only, retain clinical/source and expert-reading contracts."}
+{"file":"rebaseline-v2/docs/04_AGENT_RULES.md","reason":"Accurate verification scope, real browser evidence separate from tests, no history rewrite."}
