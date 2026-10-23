@@ -24,7 +24,7 @@
 | candidate_triage | Skill | ABC | 是 | 复用coverage-review，先排除明确背景；unknown保留 |
 | universe_expand | 代码+既有Skill | ABC | 否 | 别名/靶点/企业驱动来源查询，最多三轮，新增线索交原universe Skill解释 |
 | coverage_review | Skill | ABC | 是 | 全量候选分批纳排；明确ID写回，不擅自合并实体 |
-| trial_evidence | 代码 | ABC | 是 | CT.gov按明确干预关系入库；项目内未排除CTR通过列表绑定的详情读取/确定性整表解析，原子采用设计事实 |
+| trial_evidence | 代码 | ABC | 否 | CT.gov按明确干预关系入库；范围内CTR按列表绑定详情原子采用。未完/来源失败运行仍failed，但后续可读已有事实；恢复重建下游 |
 | extract_results | Skill | B | 否 | 论文/会议/FDA 结果抽取（逐字引用） |
 | extract_design | Skill | C | 否 | 中国登记/论文方法学设计抽取 |
 | verify | 代码 | BC | 是 | 原文核验 + 分级 + 可选二次模型 |

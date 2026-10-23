@@ -8,6 +8,7 @@ from typing import Any
 from urllib.parse import urlsplit
 
 from ciw2.domain.semantics import parse_timepoint
+from ciw2.pipeline.queries import scoped_trials
 from ciw2.render.eligibility import eligibility_reading
 from ciw2.render.labels import phase_label
 from ciw2.render.trial_identity import trial_identities
@@ -77,7 +78,7 @@ def endpoint_groups(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def design_data(db: DB, pid: str, phase_zh: dict[str, str]) -> dict[str, Any]:
-    trials = {t['id']: t for t in db.entities(pid, 'trial')}
+    trials = {t['id']: t for t in scoped_trials(db,pid)}
     identities = trial_identities(db, pid)
     drugs = {d['id']: d['name_zh'] or d['name'] for d in db.entities(pid, 'drug')}
     sources = {s['id']: s for s in db.query('SELECT id, url FROM sources WHERE project_id=?', (pid,))}

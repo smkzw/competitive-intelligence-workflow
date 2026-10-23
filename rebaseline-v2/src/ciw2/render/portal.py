@@ -14,6 +14,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from ciw2.domain.availability import require_supported_cutoff
 from ciw2.domain.outcomes import DOMAIN_LABELS, classify_outcome_domain
+from ciw2.pipeline.queries import scoped_trials
 from ciw2.render.labels import PHASE_ZH, age_label, phase_label, registry_label
 from ciw2.render.result_identity import bind_result_drugs
 from ciw2.render.results import result_groups
@@ -49,7 +50,7 @@ def data_a(db: DB, pid: str) -> dict[str, Any]:
     holder_map = verified_holders(db.current_facts(pid), {s['id']: s for s in db.query(
         'SELECT id,url FROM sources WHERE project_id=?', (pid,))})
     tmap = _trial_drugs(db, pid)
-    trials = {t["id"]: t for t in db.entities(pid, "trial")}
+    trials = {t["id"]: t for t in scoped_trials(db,pid)}
     per_drug: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for tid, dnames in tmap.items():
         for n in dnames:
@@ -82,13 +83,17 @@ def data_a(db: DB, pid: str) -> dict[str, Any]:
 
 def _result_rows(db: DB, pid: str) -> list[dict[str, Any]]:
     tmap = _trial_drugs(db, pid)
-    ents = {e["id"]: e for e in db.query("SELECT id, name, type FROM entities WHERE project_id=?", (pid,))}
+    ents = {e["id"]: e for e in db.query("SELECT id, name, type, in_scope FROM entities WHERE project_id=?", (pid,))}
+    trials={t['id'] for t in scoped_trials(db,pid)}
     srcs = {s["id"]: s["url"] for s in db.query("SELECT id, url FROM sources WHERE project_id=?", (pid,))}
     rows = []
     for f in db.current_facts(pid):
         if not f["field"].startswith(("result.", "safety.")):
             continue
         e = ents.get(f["entity_id"], {})
+        if ((e.get('type')=='trial' and f['entity_id'] not in trials)
+                or (e.get('type')=='drug' and e['in_scope']==0)):
+            continue
         c = f["context"]
         rows.append({
             "id": f["id"], "field": f["field"], "entity": e.get("name"),

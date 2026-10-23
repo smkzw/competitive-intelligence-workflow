@@ -135,9 +135,11 @@ def trial_evidence(rc: RunContext) -> dict[str, Any]:
             pending.append({'drug_id': d['id'], 'nct': None, 'reason': 'source_search_failed'})
             rows = []
         known = {t["name"]: t for t in rc.db.entities(rc.project_id, "trial")}
-        candidates = {r["nct"]: r for r in rows}
+        excluded = {t['name'] for t in known.values() if t['in_scope']==0}
+        candidates = {r["nct"]: r for r in rows if r['nct'] not in excluded}
         for t in known.values():
-            candidates.setdefault(t["name"], {"nct": t["name"], **t["attrs"]})
+            if t['name'] not in excluded:
+                candidates.setdefault(t["name"], {"nct": t["name"], **t["attrs"]})
         hits = [r for r in candidates.values() if _matches(d, r.get("interventions") or [], ambiguous)]
         confirmed = {r['nct'] for r in hits}
         for row in candidates.values():
@@ -461,7 +463,7 @@ STAGES: list[Stage] = [
     Stage('candidate_triage', coverage_review),
     Stage('universe_expand', universe_expand, blocking=False),
     Stage("coverage_review", coverage_review),
-    Stage("trial_evidence", trial_evidence),
+    Stage("trial_evidence", trial_evidence, blocking=False),
     Stage("extract_results", _extract("extract-results", _results_extra), frozenset({"B"}), blocking=False),
     Stage("extract_design", _extract("extract-design", _design_extra), frozenset({"C"}), blocking=False),
     Stage("verify", verify, frozenset({"B", "C"})),

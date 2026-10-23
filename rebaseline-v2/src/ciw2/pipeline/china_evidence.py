@@ -4,13 +4,14 @@ from __future__ import annotations
 import re
 
 from ciw2.pipeline.context import RunContext, work_limit
+from ciw2.pipeline.queries import scoped_trials
 from ciw2.pipeline.recovery import fingerprint, get_unit, put_unit
 from ciw2.sources import china_detail, china_ingest
 
 
 def collect(rc: RunContext) -> dict:
-    trials=sorted((t for t in rc.db.entities(rc.project_id,'trial')
-                   if t['in_scope']!=0 and re.fullmatch(r'CTR[0-9]{8}',t['name'])),key=lambda t:t['name'])
+    trials=sorted((t for t in scoped_trials(rc.db,rc.project_id)
+                   if re.fullmatch(r'CTR[0-9]{8}',t['name'])),key=lambda t:t['name'])
     limit=work_limit(rc.cache.get('max_china_trials'))
     started=ingested=0
     pending=[]
