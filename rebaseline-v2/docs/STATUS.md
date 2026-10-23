@@ -5,7 +5,7 @@
 ## 当前入口与范围
 - 产品权威：01_PRD、02_ARCHITECTURE、03_PLAN、04_AGENT_RULES；本页替换更新，不另立规格。
 - 唯一英文工程根内rebaseline-v2；单用户Web服务+内嵌9 Skills。v1多宿主包、编辑/分享、24门户不是v2发布门；未知v1工作树保留，旧中文工程零接触。
-- 分支codex/rebaseline-v2-m1。来源扩展节点已提交/push并核远端exact：`ad65b790fa63917dc2a5dbdf79ef611d5f87f1c2`。当前C阅读修复待白名单提交。
+- 分支codex/rebaseline-v2-m1。C阅读节点已提交/push并核远端exact：`43a4bc86cb7ce1ea8b220735c0836202525ebdfb`；来源扩展ad65b790也已推送。当前B结果组归属切片待白名单提交。
 - 历史恢复依据：Trellis `10-23-rebaseline-v2-m1/PAUSE_HANDOFF_20261023_0810.md`；原暂停回执/备份不改。用户已解除暂停，历史paused/旧PID不覆盖新授权。
 - 模型cms-router/glm-5.3-flash → DGX/deepseek → DGX/qwen；凭据仅注册配置到必要子进程环境，不入文件/日志/提示词，不改全局路由。
 
@@ -15,7 +15,7 @@
 | M0骨架 | 离线骨架/部分公开来源冒烟具备 | 不是产品交付 |
 | M1/C | 完整终点投影、C阅读组件具备；模型阶段恢复中 | 完整流水线/论文修订/最终科学及产品接受 |
 | M2中国宇宙 | 反向扩展及恢复代码已提交，真实源离线重放通过 | 中国浏览器适配/3份专家清单/≥95%召回 |
-| M3/A、M4/B | 骨架与部分切片 | 对应正式科学/图表/真实项目验收 |
+| M3/A、M4/B | 骨架与部分切片；B组归属生产路径修复 | 对应正式科学/图表/真实项目验收 |
 | M5全球/历史 | 来源版本原子采用具备 | 历史公开资格/全球来源扩充 |
 | M6加固 | 未完成 | 队列/取消/成本/导出/备份 |
 
@@ -39,8 +39,16 @@
 - 候选01标签截短/504px判FAIL保留；02单项220/300px空白被owner拒收后修复。首次03截图未等ResizeObserver稳定不采用，dense-stable才采纳；不改历史FAIL或借旧图签收。
 - 接受仅C来源阅读/几何/检索组件。A/B、模型全文、论文修订及最终医学/审美门未完成；不宣称完整康哲6.1.3影像/动效合规。
 
+## B结果组归属：代码/真实源切片完成，B产品仍未接受
+- 删除renderer删标点/子串first-wins和表格全试验药物冒归属路径。current verified同研究/来源版本design.arms+字面身份形成一套图/表投影；短中文名/代码合法、联合方案全保留、控制组不贴主动药。关系缺失/冲突保留原组名/值/引用，药物栏为“—”。不改原始来源、历史事实或运行中代码。
+- 13项生产反例RED（前一次缺tier的夹具错误单列，不算产品RED）→根因修复→身份/流水线/解析相邻47PASS。正向、标点/前缀/复合冲突、共享别名、跨研究/来源/未核实、对照、联合方案与图表/表格一致均覆盖。
+- 固定77个真实已捕获源只读扫描，78研究含明确同名组关系；代表性NCT04921345完整668结果，665绑定/3缺关系，0新网络/模型。原始值/事实集合保持，PK/ADA记录仍按来源保留，不据此当临床疗效接受。
+- ciw-data/browser-m4/b-arm-identity-02/B.html，SHA45846a75f7c29b2c9c24c0983d8b94aa9016e3962443f93c3262ee23a08bb9cb；源SHA50bc0483d2b3cfb6ebe207a71afe94575ca15e30acc707dbb4634ab56532dee2。01原件不改，02只读同DB重新渲染当前模板。
+- Ego59/p1实际1920页核对、原生筛选Cohort1.1得到221条，显示正确Nemolizumab；截图1920-identity-table.png实看。**B视觉FAIL保留**：多测量标签重叠、完整访视/类别未投影、静默12图上限、图表未随B检索、默认标题仍有泛化提醒；不是新候选签收。下一根因包处理这组共同结果呈现路径，不重复identity或C测试。
+- 当前B只读预览localhost52853/B，句柄58845；C预览47130保留。两个均属本任务、无目录/DB写入，非产品服务。
+
 ## 测试、协作与复盘
-- 当前全v2 **364PASS/2.70s**，Ruff全src/tests/scripts、生产JS/sh语法、Python600/80尺寸门PASS；1既有TestClient警告。相关24PASS，不为文档收尾再跑宽门。
+- 最新完整v2 **377PASS/3.13s**，Ruff全src/tests/scripts、生产JS/sh语法、Python src/scripts600/80尺寸门PASS；1既有TestClient警告。B相关47PASS，C节点364PASS独立绑定。不为文档收尾再跑宽门。
 - 一次有界执行：CodeBuddy/codebuddy-cli/deepseek-v4.1-flash/max，session01a1690e-8288-7d63-a24c-f1f2424cb2d8，304.785s/36tools/return0，无fallback，输出hash核对。worker图例/数据窗/查询；owner补稀疏高度及宽幅阅读。
 - 协作审计格式缺口保留：custom prompt缺解析器规定route bullet，audit-execution FAIL/prompt_route=null；真实runner身份/effort/hash另核。不改已派发prompt、不为标题重派、不伪造审计绿；下次dispatch前规范bullet。executor不是独立科学/审美review。
 - Trellis implement/check在dispatch后发现seed并已改为当前PRD/规则2+2；prompt原含read set，不能冒称清单先前已修。raw证据在ciw-data，不入Git。
@@ -53,7 +61,7 @@
 - 来源文档+解析器版本原子采用，失败旧current不变；独立论文不随登记刷新撤回；HTTP/缓存/导入分开。历史as-of未实施，启动/数据/HTML守卫拒绝，不删守卫冒充完成。
 
 ## 下一有界动作
-1. 白名单提交本轮五个前端/测试文件、原位PRD/ARCH/PLAN/STATUS及现有Trellis记录，push核远端exact；排除v1 WIP/未知健康日志/运行证据。
+1. 白名单提交本轮B归属生产/模板/测试、原位PRD/ARCH/PLAN/STATUS及现有Trellis记录，push核远端exact；排除v1 WIP/未知健康日志/运行证据。
 2. 同句柄等模型终态后核冻结身份/来源/缓存，只恢复失效或未完单元，不重跑已完成研究。
-3. 推进不依赖模型的M2中国来源接入及A/B科学消费缺口，根因族RED→完整改动→相关批，里程碑一次宽门。
+3. 先修实屏暴露的B测量实例/图表共同呈现根因（不是再刷完整identity/C审查），再推进M2中国来源接入；根因族RED→完整改动→相关批，里程碑一次宽门。
 4. 搜索/微信未配置、中国适配/专家清单未具备；M1完整链/论文修订及M2–M6正式门未过不宣称交付。无须新用户裁决，不设人为暂停点。

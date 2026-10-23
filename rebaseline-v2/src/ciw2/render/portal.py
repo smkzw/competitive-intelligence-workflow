@@ -15,6 +15,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from ciw2.domain.availability import require_supported_cutoff
 from ciw2.domain.semantics import parse_timepoint
 from ciw2.render.labels import age_label, registry_label
+from ciw2.render.result_identity import bind_result_drugs
 from ciw2.store.db import DB
 
 HERE = Path(__file__).resolve().parent
@@ -113,6 +114,8 @@ def _result_rows(db: DB, pid: str) -> list[dict[str, Any]]:
         c = f["context"]
         rows.append({
             "id": f["id"], "field": f["field"], "entity": e.get("name"),
+            "entity_id": f["entity_id"], "entity_type": e.get("type"), "source_id": f["source_id"],
+            "source_snapshot": c.get("source_snapshot"),
             "drugs": tmap.get(f["entity_id"], [e.get("name")] if e.get("type") == "drug" else []),
             "endpoint": c.get("endpoint") or c.get("term") or f["field"], "endpoint_key": c.get("endpoint_key"),
             "timepoint": c.get("timepoint"), "arm": c.get("arm"), "value": f["value"], "unit": c.get("unit"),
@@ -125,23 +128,9 @@ def _result_rows(db: DB, pid: str) -> list[dict[str, Any]]:
     return rows
 
 
-def _norm(s: str | None) -> str:
-    import re
-    return re.sub(r"[^a-z0-9\u4e00-\u9fff]+", "", (s or "").lower())
-
-
-def _arm_drug(db: DB, pid: str) -> Any:
-    """组别 → 药物：只有组名里出现药物名/别名才归属该药，其余（安慰剂、对照药）不冒用试验药名。"""
-    keys = [(_norm(k), d["name"]) for d in db.entities(pid, "drug") for k in [d["name"], *d["aliases"]]
-            if len(_norm(k)) >= 4]
-    return lambda arm: next((name for k, name in keys if k in _norm(arm)), None)
-
-
 def data_b(db: DB, pid: str) -> dict[str, Any]:
     rows = _result_rows(db, pid)
-    arm_drug = _arm_drug(db, pid)
-    for r in rows:
-        r["arm_drug"] = arm_drug(r["arm"]) if r["arm"] else None
+    bind_result_drugs(db, pid, rows)
     results = [r for r in rows if r["field"].startswith("result.") and not r["field"].endswith(".analysis")]
     analyses = [r for r in rows if r["field"].endswith(".analysis")]
     safety = [r for r in rows if r["field"] in ("safety.sae.any", "safety.death.all_cause")]

@@ -53,6 +53,7 @@ M1运行恢复节点：冻结91e的attempt0002已终态failed，61源码hash前�
 2. PDF 原文（论文/FDA 审评）文本化：pdfplumber，页码进 `context`，门户可显示页码。
 3. 安全性：按 `classify_safety` 分列；复合类别不拆分。
 4. 移植 v1 REVIEW F01–F11 为回归用例（`tests/regressions/`）。
+- 2026-10-23归属切片：删除B renderer删标点/子串first-wins及表格全试验药物冒归属路径；复用current verified同研究/来源版本design.arms与字面身份，联合方案全保留，冲突/缺关系不猜。真实已捕获源离线生产重放NCT04921345：668结果完整保留、665明确绑定/3缺关系，0新网络/模型，不是M4临床结果语义、所有研究归属或正式验收。PK/PD等科学域、数值共轴、全量图形与论文跨来源绑定仍须后续包验收。
 - 验收：critical 抽样 50 条人工复核准确率 ≥98%；无 F05/F06 类错误。
 
 ## M5 · 全球广度
