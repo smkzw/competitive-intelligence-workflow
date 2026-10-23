@@ -10,6 +10,7 @@
 </div>
 <h2>报告</h2>
 <p>{% for r in p.reports %}<a class="btn" href="/projects/{{ p.id }}/portal/{{ r }}">{{ {'A':'A 竞争格局','B':'B 疗效与安全性','C':'C 试验设计先例'}[r] }}</a> {% endfor %}</p>
+<p>下载当前研究资料：<a href="/api/projects/{{ p.id }}/facts/export?format=json">JSON</a> · <a href="/api/projects/{{ p.id }}/facts/export?format=csv">CSV</a></p>
 {% if latest %}
 <h2>最近运行 <span class="badge {{ 'verified' if latest.status == 'succeeded' else ('unverified' if latest.status == 'failed' else 'unknown') }}">{{ latest.status }}</span></h2>
 {% if latest.error %}<p class="warn">{{ latest.error }}</p>{% endif %}

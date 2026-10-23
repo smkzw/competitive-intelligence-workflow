@@ -5,12 +5,19 @@
 ## 当前入口与授权
 - 唯一英文工程根内rebaseline-v2；产品权威01_PRD、02_ARCHITECTURE、03_PLAN、04_AGENT_RULES。本页替换更新，详细历史在根Trellis任务10-23-rebaseline-v2-m1/implement.md及Git，不另立规格。
 - 单用户Web服务+内嵌9 Skills；v1多宿主包、编辑/分享、24门户不是v2发布门。未知v1工作树保留，旧中文工程零接触；不得reset/clean/add-all。
-- 分支codex/rebaseline-v2-m1；本节点父HEAD55b3c5fe833a7a3b32893a44aea502b1bc52d280（领域投影已push并fresh remote exact），本共同阅读节点提交以Git记录为准。
+- 分支codex/rebaseline-v2-m1；本节点父HEADdf1846fa9ad2b63856f5d30dad69fbbbc5db9e01（共同阅读已push并fresh remote exact），本下载节点提交以Git记录为准。
 - 用户已解除暂停；历史暂停点10-23-rebaseline-v2-m1/PAUSE_HANDOFF_20261023_0810.md仅供恢复，不覆盖新实施授权。
 - 模型cms-router/glm-5.3-flash→DGX/deepseek→DGX/qwen；密钥只在必要环境，不入文件/提示词/日志，不改全局路由。
 - 用户永久授权本项目Ego专用空间缺失时自行替换，不再询问。目前63/p1复用；不改登录、缓存、其他任务空间或升级浏览器。
 
-## 当前完成节点：单位与报告正文清理
+## 当前完成节点：当前事实JSON/CSV下载
+- 复用现有项目/鉴权/current_facts，标准库export.py在单一DB读取快照中关联本项目精确来源版本/摘要/实体；一条只读下载路由+工作台两链接。不调用模型/来源，不读CAS全文/日志/meta，不造共享包或备份。原facts API不变；缺失/跨项目来源保留None，不按同URL挑新源。
+- JSON保留原始类型和context/quote；CSV用value_json/context_json区分0/null/false/空串/结构化值，文本公式前缀显式转义并列csv_escaped_fields。过滤、鉴权/404/422、历史日期/非有限值409均覆盖，不把坏值补0或null。6整族RED→19相邻PASS→扩展类型/公式/异常反例27PASS；当前完整v2 **828PASS/3.95s**、Ruff全src/tests/scripts、4JS/sh语法PASS，1既有TestClient警告；58生产Python/332函数符合600/80（create_app既定例外）。一次错路径仅未收集测试，修正后运行，不算产品RED。
+- ciw-data/fact-export-live-01：原同源实际有**1026当前事实，其中668为result**。早前记录“668事实”是结果范围简称，不能当全部DB事实数量；f08e6c7a485d88d1bf899d05435ae6c788ae70e378bd2906ea007dc1bbc58157仍是完整1026集合hash，不改旧回执。JSON82317b8783a5761a4c8705a2400a501d69ec6ce6cdca38514fee38b35f6fc1c1/1583305bytes；CSV790c81f4daf91746e0a74a1d788532e4a76cb3e6d3ee64ec8311daa187388851/1115218bytes。
+- 实际生产HTTP端点及Ego63/p1原生点击两次下载/saveAs，两个文件与HTTP逐字一致；owner-audit逐ID/严格JSON类型/完整context、原文与精确来源digest重读核对，旧事实/源不变，0网络来源/0模型。原浏览器NOT_RUN回执不回写；新browser-12记录真实下载。工作台视觉截图当时最小化失败，NOT_RUN，不借旧截图宣称通过。
+- 浏览器已回固定B文件，停工作台自动刷新；明确核对自建PID41656(probe-fact-export-01.py)/84559(preview-publication.py)后仅SIGINT停止两个临时服务，源/下载/截图/回执均未删，健康52075未触碰。下载不是完整M6；队列/取消/总成本/备份仍未完成。
+
+## 已提交节点：单位与报告正文清理（df1846fa）
 - 同一labels.py精确映射常见单位/统计形式，B图/表共用，原始单位和统计可原位展开；未知文本保持原样，不换算值、不把比例/概率混同。移除A/B/C检索路线正文和无用读取；项目工作台仍显示实际路线，生产Web测试确认，不删覆盖证据或来源。
 - 7RED/3PASS→145相关PASS/0.61s；旧测试要求把内部route_id塞在报告的实现断言迁移为实际工作台HTTP200含记录、报告无内部诊断。当前完整v2 **814PASS/3.75s**、Ruff全src/tests/scripts、4JS/sh语法PASS，1既有TestClient警告；门后仅labels说明文和规范/记录更新，无行为变化。
 - ciw-data/browser-current/outcome-reading-02只读同668源重渲染A/B/C，事实仍f08e6c7…、0网络/模型；A6724f004b417bb74b2ceb7aebd1aa6298ffe370b31071faebf6a5c7f85971318，Be1b6903adb0fb690e71edad3a48d604c074feae438485484916ab96dfd331661，Cf97c7fd2b25ec7049d5eaf2703d40573590080f44d6eff0b263e3bdc8059cfd5。移除无用coverage查询及说明文后，当前renderer重放逐字等同，owner-audit另绑定当前消费hash，不回写原回执。
@@ -56,9 +63,9 @@
 | M3/A | 同查询/几何/未知保留 | 正式中文名/MAH集团/靶点/产品阶段真实富集及3适应症 |
 | M4/B | 同源组身份/测量/领域/图表查询 | 跨研究医学归并、独立论文、关键50条准确率、安全图、最终视觉 |
 | M5全球/历史 | 来源版本原子采用/缓存核查分离 | 历史事实版本公开资格/全球扩充，历史日期守卫不得删除 |
-| M6加固 | 单文件发布/部分恢复 | 队列/取消/完整成本/JSON-CSV导出/备份 |
+| M6加固 | 单文件发布/部分恢复/当前事实JSON-CSV下载 | 队列/取消/完整成本/备份 |
 
 ## 下一条有界任务
-- 白名单提交共同阅读节点→push exact；领域节点55b3c5fe及其20图已固定，不重跑。继续既定M2来源/语义及M6有界加固，英文指标标题与图顶留白保持明确待办，不把组件改善宣称交付。
+- 白名单提交当前下载节点→push exact；55b3c5fe/df1846fa组件及既有图已固定，不重跑。继续既定M2来源/语义及M6有界加固，英文指标标题与图顶留白保持明确待办，不把组件改善宣称交付。
 - 冻结52075实际终态一到即核原始receipt/响应模型/源码和源hash；失败只做归并恢复，不碰151旧批。当前不因等待制造阶段暂停点。
 - 登记详情/CDE缺页/NMPA及真实名称MAH富集继续按现有M2/M3包推进，不另建平台。所需新来源访问按授权执行，缺失/受阻不写0。

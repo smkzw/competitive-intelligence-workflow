@@ -3,16 +3,17 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 from fastapi import FastAPI, Form, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
 from ciw2.config import Settings, get_settings
 from ciw2.domain.availability import HistoricalReportUnavailable
+from ciw2.export import encode_export, fact_export
 from ciw2.pipeline.runner import stage_table
 from ciw2.render.portal import STATIC, render_report
 from ciw2.service import LLMFactory, RunRequestError, Service, default_llms
@@ -113,6 +114,19 @@ def create_app(settings: Settings | None = None, llm_factory: LLMFactory = defau
         _project(pid)
         rows = svc.db.current_facts(pid)
         return [f for f in rows if f["field"].startswith(field_prefix) and (not status or f["status"] == status)]
+
+    @app.get('/api/projects/{pid}/facts/export')
+    def export_facts(pid: str, format: Literal['json', 'csv'] = 'json',
+                     field_prefix: str = '', status: str = '') -> Response:
+        _project(pid)
+        payload = fact_export(svc.db, pid, field_prefix, status)
+        try:
+            content = encode_export(payload, format)
+        except ValueError as exc:
+            raise HTTPException(409, '当前资料含不可导出值，请核对原始记录') from exc
+        return Response(content, media_type='application/json' if format == 'json' else 'text/csv',
+                        headers={'Content-Disposition': f'attachment; filename="ciw2-facts.{format}"',
+                                 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff'})
 
     @app.get("/api/projects/{pid}/coverage")
     def coverage(pid: str) -> Any:
