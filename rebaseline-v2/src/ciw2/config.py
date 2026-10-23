@@ -11,6 +11,15 @@ def _env(name: str, default: str = "") -> str:
     return os.environ.get(name, default).strip()
 
 
+def _ego_space() -> int | None:
+    value = _env('CIW_CHINA_EGO_SPACE_ID')
+    if not value:
+        return None
+    if not value.isdecimal() or int(value) <= 0:
+        raise ValueError('CIW_CHINA_EGO_SPACE_ID 必须为专用浏览器空间的正整数ID')
+    return int(value)
+
+
 @dataclass(frozen=True)
 class Settings:
     data_dir: Path = field(default_factory=lambda: Path(_env("CIW_DATA_DIR", "./ciw-data")).resolve())
@@ -29,6 +38,8 @@ class Settings:
     # 全网搜索提供方：tavily | bing | serpapi | none
     websearch_provider: str = field(default_factory=lambda: _env("CIW_WEBSEARCH_PROVIDER", "none"))
     websearch_api_key: str = field(default_factory=lambda: _env("CIW_WEBSEARCH_API_KEY"))
+    china_ego_space_id: int | None = field(default_factory=_ego_space)
+    china_browser_timeout_s: float = field(default_factory=lambda: float(_env('CIW_CHINA_BROWSER_TIMEOUT_S', '240')))
     # 微信公众号搜索 Skill 的外部命令，例如 "python /opt/wechat-search/search.py"；留空则禁用。
     wechat_search_cmd: str = field(default_factory=lambda: _env("CIW_WECHAT_SEARCH_CMD"))
     ncbi_api_key: str = field(default_factory=lambda: _env("CIW_NCBI_API_KEY"))

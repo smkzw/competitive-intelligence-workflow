@@ -86,8 +86,10 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 - `pipeline/expansion.py`复用注册工具、CAS和stages单元回执：每个别名/靶点/企业种子生成中国CT.gov+三登记/CDE/NMPA查询及全球CT.gov/全网查询，按实际参数稳定去重并保留实体owners。最多3轮，显式预算保存pending；只要新查询未做完就IncompleteWork，来源blocked/failed按FR5继续其他资料但expansion_complete=false。没有新增Skill/表/路由器。
 - 来源回执先于模型解释保存，恢复不重复已完成fetch；source ID/digest、实现/规则、提供方及实际参数绑定。解释键另含任务、Skill、schema、模型与来源，采用和解释回执同一事务。空/损坏结构不算无结果，阻断/失败不缓存为成功；空候选集合不算宇宙接受。一次真实中国CT.gov扩展查到1研究，仅证明来源可执行；中国直连与召回门仍未过。
 - 搜索响应先核验JSON对象、结果数组/条目及错误状态；无可核验集合不判0。SerpApi只有文档明确的Success+Fully empty为空成功例外（可含error）；见[官方状态合同](https://serpapi.com/api-status-and-error-codes)。请求失败只保留状态码/异常类别；site备用检索的blocked/failed单独记账，来源未接通不借安全测试算通过。
-- 药物临床试验登记与信息公示平台：对 httpx 返回 HTTP 202 + JS 挑战页 → 记 `blocked`，退回 `site:` 全网搜索。
-- CDE/NMPA：前端渲染为主 → 同上。M2 实现 Playwright 适配器（真实浏览器、限速、缓存）。
+- 中国登记平台httpx直连挑战仍记blocked；显式CIW_CHINA_EGO_SPACE_ID启用现有Ego公开UI桥，复用指定空间p1，不创建/claim/profile discovery。随包sources/china_browser.mjs驱动普通搜索/Next，逐页校验查询、序号、总页/条数、CTR/公开详情ID及重复；全部收齐才返回mode=browser/complete=true。只提取公开表格，不存cookie/隐藏字段/运行原始报错。超时已获有效页入CAS但不签收完整；其他来源继续按FR5执行。site备用独立记账。
+- 列表来源含公开POST request_context(method/registry/query)，不伪造GET详情URL；recovery对该上下文取本项目最近实际导入版本，其他查询不会相互失效。同上下文新版本仍失效，无scope旧回执只读兼容。browser_checked有实际浏览器核查时间，无虚构HTTP状态；imported与网络核查分开。
+- 完整结构化登记行代码直接写暂定drug/trial和带来源/页/行的显式关系，保留整条药名和unknown纳排，不再将464条重复送模型抽取；科学纳排仍走既有coverage-review。没有新增事实表/Skill/浏览器框架。
+- CDE/NMPA仍缺专属浏览器提取与验收，当前site路线不是官方登记闭包。M2仍需详情/来源语义及专家金标准验召回，列表行数不能替代。
 - CT.gov `query.locn=China` 可用（PNH 实测 52 条）。
 
 ## 6. 配置（环境变量）
@@ -97,4 +99,5 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 ### 环境项
 `CIW_DATA_DIR` `CIW_SKILLS_DIR` `CIW_LLM_BASE_URL` `CIW_LLM_API_KEY` `CIW_LLM_MODEL` `CIW_LLM_CHECK_MODEL`
 `CIW_WEBSEARCH_PROVIDER`(tavily|bing|serpapi|none) `CIW_WEBSEARCH_API_KEY` `CIW_WECHAT_SEARCH_CMD`
+`CIW_CHINA_EGO_SPACE_ID`(可选已授权专用空间) `CIW_CHINA_BROWSER_TIMEOUT_S`(默认240秒)
 `CIW_NCBI_API_KEY` `CIW_HTTP_TIMEOUT_S` `CIW_MAX_AGENT_STEPS` `CIW_ACCESS_TOKEN`。

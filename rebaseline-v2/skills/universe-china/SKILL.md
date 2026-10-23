@@ -28,4 +28,5 @@ mode=expansion_results 时只整理程序已实际检索得到的 source_hits：
 - already_known 中的药物仍需补充中国信息，可以再次列出。
 - expansion_queries 记录反向扩展用过的查询。
 - ctgov_search 的 interventions 是完整去重干预名及其试验对应表，优先用它识别候选；studies 保留全部检索到的试验编号。需要设计细节时由后续代码阶段抓取，不为了重复标题逐页阅读所有试验。长结果仍可通过 read_tool_result 继续读取。
+- china_registry_search 的 mode=browser、complete=true、persisted=true 表示公开列表全部页已核对，原始药名和CTR暂定关系已由代码入库；不必再逐条复制重抽这些列表字段。保留来源中的完整中文/复合药名，不强造INN或合并别名；只补充有明确新来源的身份、靶点、企业及开发信息。列表状态不是获批/MAH/创新属性证明。相同公开POST列表URL须连同查询、页、CTR定位，不猜造GET详情链接。未完/失败不能当作中国零结果。
 - 保留至少最后一步提交结果；来源 blocked/failed 时提交已读到的候选与失败路线，不无限重复同一失效工具。

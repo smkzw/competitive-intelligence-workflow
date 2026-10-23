@@ -28,7 +28,7 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [tool.setuptools.package-data]
-ciw2 = ["render/templates/*.html", "render/static/*", "web/templates/*.html"]
+ciw2 = ["render/templates/*.html", "render/static/*", "web/templates/*.html", "sources/*.mjs"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

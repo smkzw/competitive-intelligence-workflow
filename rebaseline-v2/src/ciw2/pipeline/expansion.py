@@ -17,11 +17,12 @@ from ciw2.pipeline.context import IncompleteWork, RunContext, work_limit
 from ciw2.pipeline.queries import intake_data
 from ciw2.pipeline.recovery import fingerprint, get_unit, put_unit
 from ciw2.sources import china, ctgov, websearch
+from ciw2.sources.china_browser import CODE_HASH as CHINA_BROWSER_HASH
 from ciw2.sources.http import FetchError
 
 CODE_HASH = hashlib.sha256(Path(__file__).read_bytes() + IDENTITY_HASH.encode() +
     ctgov.EXTRACTOR_VERSION.encode() + Path(china.__file__).read_bytes() +
-    Path(websearch.__file__).read_bytes()).hexdigest()
+    Path(websearch.__file__).read_bytes() + CHINA_BROWSER_HASH.encode()).hexdigest()
 
 
 def _seeds(rc: RunContext) -> list[dict[str, Any]]:
@@ -91,7 +92,8 @@ def _source_shape(query: dict[str, Any], result: dict[str, Any]) -> bool:
 
 def _source(rc: RunContext, query: dict[str, Any], admitted: bool) -> tuple[dict[str, Any], str]:
     key = 'expansion_source:' + fingerprint({'arguments': query['arguments'], 'tool': query['tool'],
-        'code': CODE_HASH, 'search_provider': rc.settings.websearch_provider})
+        'code': CODE_HASH, 'search_provider': rc.settings.websearch_provider,
+        'china_browser_space':rc.settings.china_ego_space_id if query.get('registry') == 'chinadrugtrials' else None})
     cached = get_unit(rc, key)
     if cached is not None:
         return {**cached, 'payload': _read_result(rc, cached['digest'])}, 'cached'
@@ -113,7 +115,9 @@ def _source(rc: RunContext, query: dict[str, Any], admitted: bool) -> tuple[dict
         return {'error_type': 'InvalidSourceShape'}, 'failed'
     if status in {'blocked', 'failed', 'tool_failed', 'unsupported'}:
         return {}, 'blocked' if status in {'blocked', 'unsupported'} else 'failed'
-    if status not in {None, 'ok', 'success', 'direct', 'site_search'} or not _source_shape(query, result):
+    if status == 'browser' and result.get('complete') is not True:
+        return {'error_type':'IncompleteBrowserCapture'},'failed'
+    if status not in {None, 'ok', 'success', 'direct', 'site_search', 'browser'} or not _source_shape(query, result):
         return {'error_type': 'InvalidSourceShape'}, 'failed'
     digest = rc.cas.put(json.dumps(result, ensure_ascii=False).encode())
     sources = sorted((ctx.extra or {}).get('source_ids_read', set()))
@@ -127,6 +131,8 @@ def _interpret(rc: RunContext, query: dict[str, Any], source: dict[str, Any],
     if query['tool'] == 'ctgov_search':
         return  # The production source tool already persists every provisional intervention and literal alias.
     payload = source['payload']
+    if query['tool'] == 'china_registry_search' and payload.get('mode') == 'browser' and payload.get('persisted') is True:
+        return  # Structured labels/relations already adopted; scope review still decides scientific inclusion.
     if not payload.get('results'):
         return
     skill = rc.skills[f"universe-{query['region']}"]

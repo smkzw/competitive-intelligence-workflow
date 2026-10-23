@@ -15,7 +15,11 @@ def fingerprint(value: Any) -> str:
 
 
 def _version(row: dict[str, Any] | None, url: str) -> dict[str, Any]:
-    return {'url': url, **{key: row.get(key) if row else None for key in ('id', 'digest', 'text_digest')}}
+    version = {'url': url, **{key: row.get(key) if row else None for key in ('id', 'digest', 'text_digest')}}
+    context = json.loads(row['meta']).get('request_context') if row else None
+    if context is not None:
+        version['request_context'] = context
+    return version
 
 
 def get_unit(rc: RunContext, key: str) -> Any:
@@ -23,7 +27,8 @@ def get_unit(rc: RunContext, key: str) -> Any:
     if cached is None:
         return None
     ctx = rc.tool_ctx()
-    if any(_version(source_by_url(ctx, source['url']), source['url']) != source for source in cached['sources']):
+    if any(_version(source_by_url(ctx, source['url'], request_context=source.get('request_context')),
+                    source['url']) != source for source in cached['sources']):
         return None
     rc.db.log_step(rc.run_id, rc.stage, rc.stage, 0, 'cache', {'reused_stage': key})
     return cached['result']

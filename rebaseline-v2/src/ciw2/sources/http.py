@@ -184,16 +184,20 @@ def source_text(ctx: ToolContext, source_id: str) -> str | None:
     return ctx.cas.get_text(row["text_digest"])
 
 
-def source_by_url(ctx: ToolContext, url: str) -> dict[str, Any] | None:
+def source_by_url(ctx: ToolContext, url: str, *, request_context: dict[str, Any] | None = None) -> dict[str, Any] | None:
     url = public_url(url)
-    row = ctx.db.one("SELECT s.* FROM agent_steps a JOIN sources s "
+    candidates = ctx.db.query("SELECT s.* FROM agent_steps a JOIN sources s "
                      "ON s.id=json_extract(a.content,'$.source_id') "
                      "WHERE a.role='source_observation' AND s.project_id=? AND s.url=? "
                      "AND json_extract(a.content,'$.mode') IN ('network_checked','imported') "
-                     "ORDER BY a.id DESC LIMIT 1", (ctx.project_id, url))
+                     "ORDER BY a.id DESC", (ctx.project_id, url))
+    def matches(source: dict[str, Any]) -> bool:
+        return request_context is None or json.loads(source['meta']).get('request_context') == request_context
+    row = next((source for source in candidates if matches(source)),None)
     if row is None:  # Read-only compatibility for evidence captured before observation receipts.
-        row = ctx.db.one("SELECT * FROM sources WHERE project_id=? AND url=? ORDER BY fetched_at DESC, rowid DESC",
-                         (ctx.project_id, url))
+        candidates = ctx.db.query("SELECT * FROM sources WHERE project_id=? AND url=? ORDER BY fetched_at DESC, rowid DESC",
+                                  (ctx.project_id, url))
+        row = next((source for source in candidates if matches(source)),None)
     if row:
         _observe(ctx, row['id'])
     return row
