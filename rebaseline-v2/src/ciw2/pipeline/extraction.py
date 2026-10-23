@@ -26,6 +26,11 @@ def _tasks(rc: RunContext, skill: str, drug: dict[str, Any], extra: dict[str, An
     it = intake_data(rc)
     base = {'indication': it['indication'], 'indication_en': it.get('indication_en'), 'focus': rc.project['focus'],
             'drug': {key: drug[key] for key in ('name', 'name_zh', 'aliases')}}
+    if extra.get('mode')=='identity_enrichment':
+        from ciw2.render.drug_identity import drug_identities
+        formal=drug_identities(rc.db,rc.project_id)[drug['id']]
+        base['drug']={key:formal[key] for key in ('name','name_zh','aliases')}
+        return [{**base,**extra}]
     refs: dict[str, list[dict[str, Any]]] = {}
     if skill == 'extract-design':
         for fact in rc.db.current_facts(rc.project_id):
@@ -67,8 +72,11 @@ def _tasks(rc: RunContext, skill: str, drug: dict[str, Any], extra: dict[str, An
 
 
 def _key(rc: RunContext, skill: str, task: dict[str, Any]) -> str:
+    from ciw2.pipeline import profile
     spec = rc.skills[skill]
     signature = {'task': task, 'code': CODE_HASH, 'rules': HARNESS_RULES, 'skill': spec.body,
+                 'profile_rule':hashlib.sha256(Path(profile.__file__).read_bytes()).hexdigest()
+                     if task.get('mode')=='identity_enrichment' else None,
                  'schema': ExtractionResult.model_json_schema(), 'model': rc.settings.llm_model,
                  'china_detail_version':china_detail.code_hash() if 'china_trial_detail' in spec.tools else None,
                  'tools': [{'schema': REGISTRY.get(name).schema(), 'code': hashlib.sha256(
@@ -80,6 +88,10 @@ def _key(rc: RunContext, skill: str, task: dict[str, Any]) -> str:
 def _call(rc: RunContext, skill: str, task: dict[str, Any], key: str) -> dict[str, Any]:
     rc.cache.pop('last_skill_source_ids', None)
     result = ExtractionResult.model_validate(rc.skill(skill, task))
+    if task.get('mode')=='identity_enrichment':
+        from ciw2.pipeline.profile import FIELDS
+        if any(fact.field not in FIELDS for fact in result.facts):
+            raise ValueError('身份富集单元返回了范围外字段；不混入结果或设计观察')
     output = result.model_dump()
     read_ids = set(rc.cache.get('last_skill_source_ids', []))
     read_sources = rc.db.query('SELECT id,url,meta FROM sources WHERE project_id=?', (rc.project_id,))

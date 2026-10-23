@@ -13,11 +13,13 @@ from typing import Any
 
 from ciw2.domain.tiers import tier_of
 from ciw2.pipeline.context import RunContext
+from ciw2.pipeline.profile import FIELDS, SOURCE_CONTEXT, anchored, context_of
 from ciw2.sources import ctgov
 from ciw2.sources.http import source_by_url
 from ciw2.verify import assessment
 
-CONTEXT_KEYS = ('endpoint', 'unit', 'stat_type', 'arm', 'timepoint', 'population', 'denominator', 'enrollment_type')
+CONTEXT_KEYS = ('endpoint', 'unit', 'stat_type', 'arm', 'timepoint', 'population', 'denominator', 'enrollment_type',
+                *SOURCE_CONTEXT)
 SOURCE_UNREAD = '来源版本未在本项目中读取，无法核验'
 RETRYABLE = frozenset({'source_unavailable','source_unreadable','source_digest_mismatch'})
 
@@ -35,12 +37,12 @@ def prepare(rc: RunContext, cross_check: Callable[..., Any]) -> list[dict[str, A
     ctx, prepared = rc.tool_ctx(), []
     rule = assessment.rule_identity()
     receipts = rc.db.latest_verdicts(rc.project_id, rule)
-    for stage in ('extract_results', 'extract_design'):
-        for proposal in (rc.db.stage_output(rc.run_id, stage) or {}).get('facts', []):
-            digest = hashlib.sha256(json.dumps([rc.project_id, rc.run_id, stage, proposal],
-                sort_keys=True, ensure_ascii=False, allow_nan=False).encode()).hexdigest()
-            fid = f'fct_{digest}'
-            existing = rc.db.one('SELECT * FROM facts WHERE project_id=? AND id=?', (rc.project_id, fid))
+    for stage in ('enrich_drugs', 'extract_results', 'extract_design'):
+        for raw in _proposals(rc,stage):
+            fid=_proposal_id(rc,stage,raw)
+            existing=_existing_proposal(rc,stage,raw,fid)
+            proposal=raw if existing else anchored(rc,raw)
+            if existing:fid=existing['id']
             if existing:
                 row = _stored(existing)
                 receipt = receipts.get(fid)
@@ -52,8 +54,7 @@ def prepare(rc: RunContext, cross_check: Callable[..., Any]) -> list[dict[str, A
                     prepared.append({'id': fid, 'replay': True, 'status': row['status'], 'rule': rule})
                     continue
                 # Rule changed or no valid receipt: recheck the pinned source, adopt no fact.
-                result = assessment.inspect(rc.db, rc.cas, project_id=rc.project_id,
-                                            source_id=row['source_id'], quote=row['quote'], value=row['value'])
+                result = assessment.inspect_fact(rc.db,rc.cas,row)
                 receipt = assessment.make_receipt(row, rule=rule, stored_status='verified', result=result)
                 prepared.append({'id': fid, 'replay': True, 'reassessed': True, 'rule': rule,
                                  'status': receipt['status'], 'receipt': receipt})
@@ -66,21 +67,68 @@ def prepare(rc: RunContext, cross_check: Callable[..., Any]) -> list[dict[str, A
             item: dict[str, Any] = {'id': fid, 'proposal': proposal, 'rule': rule,
                                     'source_id': src['id'] if src else None, 'status': 'unverified',
                                     'quote_start': None, 'quote_end': None, 'reason': ''}
+            if proposal['field'] in FIELDS:
+                try:item['entity_id']=_profile_entity(rc,proposal)
+                except ValueError as exc:
+                    item['identity_error']=str(exc);prepared.append(item);continue
             if proposal.get('value') is None:
                 item.update(status='unknown', reason='来源未给出')
             elif src is None:
                 item['reason'] = SOURCE_UNREAD
             else:
-                result = assessment.inspect(rc.db, rc.cas, project_id=rc.project_id, source_id=src['id'],
-                                            quote=proposal.get('quote'), value=proposal['value'])
+                result = assessment.inspect_fact(rc.db,rc.cas,{'project_id':rc.project_id,
+                    'entity_id':item.get('entity_id'),'source_id':src['id'],'field':proposal['field'],
+                    'quote':proposal.get('quote'),'value':proposal['value'],'context':context_of(proposal)})
                 status = 'verified' if result['verdict'] == 'confirmed' else 'unverified'
                 item.update(status=status, reason=result['reason'], assessment=result,
                             quote_start=result['quote_start'], quote_end=result['quote_end'])
-                if (status == 'verified' and tier_of(proposal['field']) == 'critical' and rc.check_llm is not None
+                if (item['status'] == 'verified' and tier_of(proposal['field']) == 'critical' and rc.check_llm is not None
                         and cross_check(rc.check_llm, proposal) is False):
                     item.update(status='conflict', reason='二次核对模型不同意')
             prepared.append(item)
     return prepared
+
+
+def _proposal_id(rc: RunContext,stage: str,proposal: dict[str,Any]) -> str:
+    digest=hashlib.sha256(json.dumps([rc.project_id,rc.run_id,stage,proposal],
+        sort_keys=True,ensure_ascii=False,allow_nan=False).encode()).hexdigest()
+    return f'fct_{digest}'
+
+
+def _existing_proposal(rc: RunContext,stage: str,raw: dict[str,Any],fid: str) -> dict[str,Any] | None:
+    existing=rc.db.one('SELECT * FROM facts WHERE project_id=? AND id=?',(rc.project_id,fid))
+    if existing or raw['field'] not in FIELDS:return existing
+    # Read-only compatibility: old IDs hashed the expanded quote. Reconstruct that
+    # exact historical ID from stored quotes, not from current CAS availability.
+    matches=[]
+    for row in rc.db.query('SELECT * FROM facts WHERE project_id=? AND field=? AND source_id IS ?',
+                            (rc.project_id,raw['field'],raw.get('source_id'))):
+        legacy={**raw,'quote':row['quote']}
+        if _proposal_id(rc,stage,legacy)==row['id']:matches.append(row)
+    if len(matches)>1:raise ValueError('原始提案存在多个历史采用身份，保留现场不猜选')
+    return matches[0] if matches else None
+
+
+def _proposals(rc: RunContext,stage: str) -> list[dict[str,Any]]:
+    row=rc.db.one("SELECT status,output_json FROM stages WHERE run_id=? AND name=?",(rc.run_id,stage))
+    if not row or not row['output_json'] or row['status'] not in {'succeeded','failed'}:return []
+    output=json.loads(row['output_json'])
+    if row['status']=='failed' and (stage!='enrich_drugs'
+            or not (output.get('pending_units') or output.get('pending_drug_ids'))):return []
+    return output.get('facts',[])
+
+
+def _profile_entity(rc: RunContext,proposal: dict[str,Any]) -> str:
+    from ciw2.domain.identity import name_key
+    from ciw2.domain.profile_evidence import drug_names
+    drugs=rc.db.entities(rc.project_id,'drug')
+    expected={d['id'] for d in drugs if name_key(d['name'])==name_key(proposal['drug'])}
+    actual={d['id'] for d in drugs if name_key(d['name'])==name_key(proposal['entity'])}
+    if not actual:
+        actual={d['id'] for d in drugs if any(name_key(n)==name_key(proposal['entity'])
+                for n in drug_names(rc.db,rc.project_id,d['id']))}
+    if len(expected)!=1 or actual!=expected:raise ValueError('档案返回实体不等于宿主输入药物实体')
+    return next(iter(expected))
 
 
 def _append(rc: RunContext, receipt: dict[str, Any], rule: str,
@@ -110,6 +158,10 @@ def adopt(rc: RunContext, entity_for: Callable[..., str], cross_check: Callable[
         rule = assessment.rule_identity()
         receipts = rc.db.latest_verdicts(rc.project_id, rule)
         for item in prepared:
+            if item.get('identity_error'):
+                fact=item['proposal']
+                issues.append({**{k:fact[k] for k in ('entity','drug','field')},'reason':item['identity_error']})
+                continue
             if item.get('replay'):
                 if item.get('receipt') and _append(rc, item['receipt'], rule, receipts):
                     reassessed += 1
@@ -123,14 +175,14 @@ def adopt(rc: RunContext, entity_for: Callable[..., str], cross_check: Callable[
                 continue
             fact = item['proposal']
             try:
-                entity = entity_for(rc, fact['entity'], fact['drug'])
+                entity = item['entity_id'] if 'entity_id' in item else entity_for(rc, fact['entity'], fact['drug'])
                 if (fact['field'].startswith(('design.', 'trial.', 'status.trial'))
                         and not any(e['id'] == entity for e in rc.db.entities(rc.project_id, 'trial'))):
                     raise ValueError('试验设计事实需要明确的研究实体')
             except ValueError as exc:
                 issues.append({**{k: fact[k] for k in ('entity', 'drug', 'field')}, 'reason': str(exc)})
                 continue
-            context = {key: fact[key] for key in CONTEXT_KEYS if fact.get(key) is not None}
+            context = {**context_of(fact),**{key:fact[key] for key in CONTEXT_KEYS if fact.get(key) is not None}}
             if fact['field'].startswith('result.'):
                 context['endpoint_key'] = ctgov.endpoint_key(context.get('endpoint') or fact['field'])
             status, reason, supersedes = item['status'], item['reason'], fact.get('supersedes')

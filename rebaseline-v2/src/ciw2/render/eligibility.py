@@ -72,6 +72,11 @@ _UNIT = (
 _SUFFIX = rf"\s*(?:of\s+)?(?P<cmp>{_CMP})\s*(?P<num>{_NUMBER})(?:\s*(?P<unit>{_UNIT}))?"
 
 _PREFIX = re.compile(r"(?<![A-Za-z-])" + _METRIC_PHRASE + _SUFFIX, re.IGNORECASE)
+_AVERAGE = r'(?P<average>weekly[ \t]+(?:mean|average)|(?:的)?(?:周平均(?:值|分)|平均(?:值|评分|分))|mean|average)'
+_AVERAGE_MEASURE = rf'(?P<measure>(?:{_SCORE})(?![A-Za-z0-9-]))[ \t]*(?:scores?|评分)?'
+_AVERAGES = [re.compile(r'(?<![A-Za-z-])'+pattern+_SUFFIX,re.IGNORECASE) for pattern in (
+    _AVERAGE_MEASURE+r'[ \t]*'+_AVERAGE,
+    _AVERAGE+r'[ \t]+'+_AVERAGE_MEASURE)]
 _LAB_ONE = rf"(?:{_LAB_WORD})(?![A-Za-z0-9])"
 _COMPOUND = re.compile(
     r"(?<![A-Za-z-])(?:[（(][ \t]*)?(?P<measure>"
@@ -154,6 +159,10 @@ def eligibility_reading(text: str) -> dict[str, Any]:
 
 def _candidates(text: str) -> list[dict[str, Any]]:
     found = []
+    for pattern in _AVERAGES:
+        for match in pattern.finditer(text):
+            measure=_canonical(match['measure'])
+            found.append(_average(_rule(text,match,measure,'score',measure),match['average']))
     for match in _COMPOUND.finditer(text):
         rule = _rule(text, match, *_compound(match.group("measure")))
         rule["_logic"] = _connector_spans(match)
@@ -167,6 +176,7 @@ def _candidates(text: str) -> list[dict[str, Any]]:
         end=rule['source_end']
         while match:=_CONTINUATION.match(text,end):
             tail=_rule(text,match,rule['measure'],rule['kind'],rule['measure'])
+            if rule.get('aggregation_text'):tail=_average(tail,rule['aggregation_text'])
             tail['_logic']=[(match.start('link'),match.end('link'),_LOGIC)]
             found.append(tail)
             end=match.end()
@@ -180,6 +190,14 @@ def _candidates(text: str) -> list[dict[str, Any]]:
             '_logic':[(m.start()+match.start('choices'),m.end()+match.start('choices'),_LOGIC)
                       for m in re.finditer(r'或|or',match['choices'],re.IGNORECASE)]})
     return found
+
+
+def _average(rule: dict[str,Any],raw: str) -> dict[str,Any]:
+    weekly=re.search(r'weekly|周',raw,re.IGNORECASE) is not None
+    head=_display(rule['measure'])+(' 评分' if rule['measure']!='BSA' else '')
+    rule['label']=rule['label'].replace(head,head+('（周平均）' if weekly else '（平均）'),1)
+    rule.update(aggregation='weekly_mean' if weekly else 'mean',aggregation_text=raw)
+    return rule
 
 
 def _connector_spans(match: re.Match[str]) -> list[tuple[int, int, str]]:

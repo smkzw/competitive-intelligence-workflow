@@ -33,6 +33,9 @@
   {% block content %}{% endblock %}
 
 </main>
+<dialog id="design-evidence-dialog" aria-labelledby="design-evidence-title">
+<header><h2 id="design-evidence-title">原文与依据</h2><button id="design-evidence-close" data-close-design-evidence autofocus>关闭</button></header>
+<div id="design-evidence-body"></div></dialog>
 <script id="charts" type="application/json">{{ charts_json | tojson }}</script>
 {% if assets %}<script>{{ assets.echarts | safe }}</script><script>{{ assets.js | safe }}</script>
 {% else %}<script src="{{ static }}/echarts.min.js"></script><script src="{{ static }}/portal.js"></script>{% endif %}

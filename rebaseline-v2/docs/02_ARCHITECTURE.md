@@ -1,5 +1,7 @@
 # 02 · 架构
 
+M3来源档案沿用extract-results/ExtractionResult与现有逐药缓存/核验事务：trial_evidence→enrich_drugs（所有报告）→extract_results/extract_design→verify（所有报告）。SourceContext仅承载来源原有法律实体、关系、as_of、jurisdiction、indication，不覆盖临床组/量表/时间窗。共享drug_profiles只读当前已核实事实，A/B/C不消费发现attrs来认证靶点/阶段/集团；原attrs留作检索线索，不就地迁移历史事实。未解集团不从公司名猜测；来源原值与显示期别映射分开。
+
 ```
 浏览器 ──HTTP──> FastAPI (web/app.py) ──> Service (service.py)
                                             │
@@ -25,13 +27,16 @@
 | universe_expand | 代码+既有Skill | ABC | 否 | 别名/靶点/企业驱动来源查询，最多三轮，新增线索交原universe Skill解释 |
 | coverage_review | Skill | ABC | 是 | 全量候选分批纳排；明确ID写回，不擅自合并实体 |
 | trial_evidence | 代码 | ABC | 否 | CT.gov按明确干预关系入库；范围内CTR按列表绑定详情原子采用。未完/来源失败运行仍failed，但后续可读已有事实；恢复重建下游 |
+| enrich_drugs | 既有extract-results模式 | ABC | 否 | 逐药来源档案；固定源/读集、完整返回实体绑定、部分已完单元可采用，其他单元仍pending |
 | extract_results | Skill | B | 否 | 论文/会议/FDA 结果抽取（逐字引用） |
 | extract_design | Skill | C | 否 | 中国登记/论文方法学设计抽取 |
-| verify | 代码 | BC | 是 | 原文核验 + 分级 + 可选二次模型 |
+| verify | 代码 | ABC | 是 | 原文核验 + 同一实体/字段/上下文检查 + 分级 + 可选二次模型 |
 | analysis_A/B/C | Skill | 各自 | 否 | 中文要点（不新增事实） |
 | render | 代码 | ABC | 是 | 写门户快照；平台也实时渲染 |
 
 `render/publish.py`用标准库在目标目录内建立独占临时目录：先准备所有HTML，再逐文件`Path.replace`，正常失败只清理自己新建的临时文件。模板或写入失败不截断旧报告；返回文件名仅在全部替换完成后。每份文件原子可见，不是跨A/B/C事务或断电持久性承诺；替换中途失败仍按既有runner失败/恢复语义处理，不新增发布平台。
+
+档案证据规则只保留在domain/profile_evidence.py；assessment.inspect_fact供首次采用、恢复和离线复核共同调用，当前rule绑定该文件/身份规则/引文checker实际字节。上下文名称/日期共现不作关系证明：只接受明确支持的声明形式，未知/否定/其他地域/无关日期留为未核实，不增加审批或新Skill。许可记录过期时集团呈现保留原角色。旧事实/回执不改写，规则升级追加裁决；数字开头的科学标识与紧邻单位分别检查。
 
 可恢复：同一 run 从最早失败阶段重新计算依赖分支，之前成功的前置阶段不重跑；待重算下游立即置 pending，不能沿用上轮空成功。非阻断阶段失败 → 记录并继续（运行状态 succeeded + 错误说明）；这不是产品验收信号。
 `IncompleteWork`是例外：即使该阶段允许后续继续，存在预算/未完成单元时run最终仍failed，部分产物可用但不能显示工作已全完；runner保留partial output。CLI对失败或带错误运行返回非零，普通被拦来源仍依既有非阻断合同处理，不加新发布状态。

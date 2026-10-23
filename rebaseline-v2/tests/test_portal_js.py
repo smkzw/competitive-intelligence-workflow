@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 
-@pytest.mark.parametrize('evidence_kind',['original','source'])
+@pytest.mark.parametrize('evidence_kind',['original','source','profile'])
 @pytest.mark.parametrize('reading_label',[True,False])
 def test_original_evidence_native_reader_moves_content_then_restores_actual_trigger(evidence_kind,reading_label):
     node = shutil.which('node')
@@ -30,7 +30,7 @@ const body={appendChild(n){n.parentElement=this;}};
 const title={textContent:''};
 const close={addEventListener(k,fn){events['close:'+k]=fn;}};
 const elements={'design-evidence-dialog':dialog,'design-evidence-body':body,'design-evidence-title':title,'design-evidence-close':close};
-const document={getElementById:id=>elements[id],querySelectorAll:s=>s.includes('design-evidence > summary')?[trigger]:[]};
+const document={getElementById:id=>elements[id],querySelectorAll:s=>s.includes(kind==='profile'?'shared-evidence > summary':'design-evidence > summary')?[trigger]:[]};
 vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window:{addEventListener(k,fn){life[k]=fn;}}});
 assert.equal(typeof events.click,'function');
 let prevented=false;events.click({preventDefault(){prevented=true;}});

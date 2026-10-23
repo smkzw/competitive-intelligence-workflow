@@ -31,8 +31,7 @@ def requalify_project(db: DB, cas: CAS, project_id: str, *, dry_run: bool = Fals
     for row in targets:
         counts['scanned'] += 1
         try:
-            result = assessment.inspect(db, cas, project_id=project_id, source_id=row['source_id'],
-                                        quote=row['quote'], value=row['value'])
+            result = assessment.inspect_fact(db,cas,row)
         except Exception:  # noqa: BLE001 - 单条读取异常不能中断整个项目复核
             counts['errors'] += 1
             continue

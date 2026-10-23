@@ -79,6 +79,8 @@ def fake_llm_responder(messages: list[dict[str, Any]]) -> LLMReply:
         return _submit({"decisions": [{"drug": "nemolizumab", "in_scope": True, "reason": "IL-31RA 单抗"},
                                       {"drug": "placebo-like-noise", "in_scope": False, "reason": "非药物"}]})
     if skill == "extract-results":
+        if any('identity_enrichment' in str(m.get('content','')) for m in messages if m['role']=='user'):
+            return _submit({'facts':[],'gaps':['Synthetic fixture has no directly sourced product profile']})
         base = {"entity": "NCT03985943", "endpoint": "IGA success", "timepoint": "Week 16", "unit": "%",
                 "stat_type": "proportion", "source_url": PAPER_URL}
         return _submit({"facts": [

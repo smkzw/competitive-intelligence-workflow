@@ -4,11 +4,12 @@ from __future__ import annotations
 import json
 import re
 from collections import defaultdict
-from datetime import date, datetime
 from typing import Any
 
 from ciw2.domain.identity import name_key
+from ciw2.domain.profile_evidence import holder_role
 from ciw2.render.drug_identity import drug_identities, web_url
+from ciw2.render.drug_profile import drug_profiles
 from ciw2.render.labels import phase_label
 from ciw2.store.db import DB
 
@@ -22,12 +23,8 @@ def verified_holders(facts: list[dict[str, Any]], sources: dict[str, dict[str, A
                 or fact['context'].get('jurisdiction') not in {None, 'CN', 'China', '中国'}):
             continue
         context=fact['context']
-        try:
-            expired=date.fromisoformat(context.get('valid_until'))<datetime.fromisoformat(context.get('observed_at')).date()
-        except (TypeError,ValueError):
-            expired=False
-        role='许可记录持有人' if expired else '中国MAH'
-        display=f"{fact['value']}（证书有效期至 {context['valid_until']}）" if expired else fact['value']
+        role=holder_role(context)
+        display=f"{fact['value']}（证书有效期至 {context['valid_until']}）" if role=='许可记录持有人' else fact['value']
         out[fact['entity_id']].append({'role':role,'name':fact['value'],'display_name':display,'fact_id':fact['id'],
             'source_id': fact['source_id'], 'url': web_url(sources[fact['source_id']]['url']),
             'quote': fact['quote'], 'jurisdiction': 'CN',
@@ -54,6 +51,7 @@ def trial_identities(db: DB, pid: str) -> dict[str, dict[str, Any]]:
     project = db.project(pid)
     assert project is not None
     drugs = drug_identities(db,pid)
+    profiles=drug_profiles(db,pid)
     sources = {s['id']: s for s in db.query('SELECT id,url,kind,meta FROM sources WHERE project_id=?', (pid,))}
     facts = db.current_facts(pid)
     holders = verified_holders(facts, sources)
@@ -86,7 +84,15 @@ def trial_identities(db: DB, pid: str) -> dict[str, dict[str, Any]]:
         conditions = [c for c in attrs.get('conditions', []) if isinstance(c, str) and c.strip()]
         indication = _indication(conditions, project)
         phase_text = ' / '.join(sorted({phase_label(p) for p in phases[tid]}))
-        companies = [holder for d in per_trial[tid] for holder in holders[d]]
+        companies=[]
+        for did in per_trial[tid]:
+            for holder in holders[did]:
+                groups=[ref for ref in profiles[did]['group_refs']
+                        if name_key(ref['legal_entity'])==name_key(holder['name'])]
+                companies.append({**holder,**({'role':holder['role']+'所属集团',
+                    'display_name':' / '.join(dict.fromkeys(ref['name'] for ref in groups)),
+                    'legal_entity':holder['name'],'group_refs':groups} if groups else {})})
+            companies.extend(profiles[did]['companies'])
         for fact in facts:
             source=sources.get(fact['source_id'])
             if (fact['entity_id']==tid and fact['field']=='trial.applicant' and fact['status']=='verified'
@@ -109,6 +115,8 @@ def trial_identities(db: DB, pid: str) -> dict[str, dict[str, Any]]:
             'title': attrs.get('title'), 'drug_label': drug_label, 'drugs': names,
             'drug_names_original': original_names,
             'name_refs':[ref for d in per_trial[tid] for ref in drugs[d]['name_refs']],
+            'targets':sorted({target for d in per_trial[tid] for target in profiles[d]['targets']},key=name_key),
+            'profile_refs':[ref for d in per_trial[tid] for ref in profiles[d]['profile_refs']],
             'indication': indication, 'conditions_original': conditions,
             'scope_indication': project['indication'], 'phase_label': phase_text,
             'companies': companies, 'label': label, 'axis_label': ' · '.join(filter(None, (drug_label, phase_text)))}

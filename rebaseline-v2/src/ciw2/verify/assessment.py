@@ -29,7 +29,9 @@ def _identity() -> str:
     # Hash the real checker plus this contract, not a hand-maintained version.
     here = Path(__file__).resolve()
     checker = here.with_name('quote.py').read_bytes()
-    return 'quote-' + hashlib.sha256(checker + b'\0' + here.read_bytes()).hexdigest()[:16]
+    profile=here.parent.parent/'domain/profile_evidence.py'
+    identity=profile.with_name('identity.py')
+    return 'quote-' + hashlib.sha256(b'\0'.join((checker,here.read_bytes(),profile.read_bytes(),identity.read_bytes()))).hexdigest()[:16]
 
 
 _RULE = _identity()
@@ -100,6 +102,28 @@ def inspect(db: Any, cas: Any, *, project_id: str, source_id: str | None, quote:
     check = check_quote(text_bytes.decode('utf-8', errors='replace'), quote, value)
     return _result('confirmed' if check.ok else 'invalidated', check.reason, quote=quote,
                    start=check.start, end=check.end, **evidence)
+
+
+def inspect_fact(db: Any,cas: Any,fact: dict[str,Any]) -> dict[str,Any]:
+    """Identical field/entity/context checks for first adoption and every later recheck."""
+    result=inspect(db,cas,project_id=fact['project_id'],source_id=fact.get('source_id'),
+                   quote=fact.get('quote'),value=fact.get('value'))
+    if result['verdict']=='confirmed':
+        from ciw2.domain.profile_evidence import FIELDS, issue
+        if fact.get('field') in FIELDS:
+            try:text=cas.get(result['text_digest'])
+            except OSError:return {**result,'verdict':'source_unreadable','reason':'来源原文暂不可读'}
+            if hashlib.sha256(text).hexdigest()!=result['text_digest']:
+                return {**result,'verdict':'source_digest_mismatch','reason':'来源字节已变化'}
+            import re
+            if not any(normalize(fact.get('quote') or '') in normalize(block)
+                       for block in re.split(r'\n\s*\n',text.decode('utf-8',errors='replace'))):
+                return {**result,'verdict':'invalidated','reason':'档案引文跨段，主体关联尚未成立'}
+        context=fact.get('context')
+        reason=issue(db,fact['project_id'],fact.get('entity_id'),fact.get('field'),fact.get('value'),
+                     fact.get('quote') or '',context if isinstance(context,dict) else {})
+        if reason:result.update(verdict='invalidated',reason=reason)
+    return result
 
 
 def make_receipt(fact: dict[str, Any], *, rule: str, stored_status: str,

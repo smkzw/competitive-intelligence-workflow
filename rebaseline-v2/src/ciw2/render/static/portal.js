@@ -350,7 +350,7 @@
       origin = content = trigger = null;
     });
     close.addEventListener("click", function () { dialog.close(); });
-    document.querySelectorAll(".design-evidence > summary, #tbl-c .evidence > summary").forEach(function (summary) {
+    document.querySelectorAll(".design-evidence > summary, #tbl-c .evidence > summary, .shared-evidence > summary").forEach(function (summary) {
       summary.addEventListener("click", function (event) {
         if (dialog.open) return;
         var section = summary.parentElement.querySelector(".design-evidence-content, .source-evidence-content");

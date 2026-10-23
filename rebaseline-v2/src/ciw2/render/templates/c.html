@@ -77,9 +77,6 @@
 </div></details></td>
 </tr>{% endfor %}
 </tbody></table></div>
-<dialog id="design-evidence-dialog" aria-labelledby="design-evidence-title">
-<header><h2 id="design-evidence-title">入排与依据</h2><button id="design-evidence-close" data-close-design-evidence autofocus>关闭</button></header>
-<div id="design-evidence-body"></div></dialog>
 {% if data.endpoint_groups %}<details class="endpoint-index"><summary>终点与时间点（<span id="endpoint-group-count">{{ data.endpoint_groups|length }}</span>组）</summary>
 <div class="card table-card"><table><thead><tr><th>终点定义</th><th>访视</th><th>采用该设计的研究</th></tr></thead><tbody>
 {% for g in data.endpoint_groups %}<tr><td><details><summary>{{ '主要终点' if g.kind == 'primary' else '次要终点' }} · 查看定义</summary>{{ g.measure }}

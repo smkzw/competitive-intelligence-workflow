@@ -16,6 +16,7 @@ from ciw2.domain.availability import require_supported_cutoff
 from ciw2.domain.outcomes import DOMAIN_LABELS, classify_outcome_domain
 from ciw2.pipeline.queries import scoped_trials
 from ciw2.render.drug_identity import china_trial_sites, drug_identities
+from ciw2.render.drug_profile import drug_profiles
 from ciw2.render.labels import PHASE_ZH, age_label, phase_label, registry_label
 from ciw2.render.result_identity import bind_result_drugs
 from ciw2.render.results import result_groups
@@ -47,6 +48,7 @@ def _trial_drugs(db: DB, pid: str) -> dict[str, list[str]]:
 
 def data_a(db: DB, pid: str) -> dict[str, Any]:
     drugs = list(drug_identities(db,pid).values())
+    profiles=drug_profiles(db,pid)
     identities = trial_identities(db, pid)
     holder_map = verified_holders(db.current_facts(pid), {s['id']: s for s in db.query(
         'SELECT id,url FROM sources WHERE project_id=?', (pid,))})
@@ -61,16 +63,19 @@ def data_a(db: DB, pid: str) -> dict[str, Any]:
     rows = []
     for d in drugs:
         a = d["attrs"]
+        profile=profiles[d['id']]
         ts = per_drug.get(d["name"], [])
         n_china=sum(china_sites.get(t['id']) is True for t in ts)
         unknown_sites=sum(china_sites.get(t['id']) is None for t in ts)
         rows.append({
-            "id": d['id'], "name": d["name"], "name_zh": d["name_zh"], "targets": a.get("targets", []),
-            "modality": a.get("modality"), "companies": a.get("companies", []),
+            "id": d['id'], "name": d["name"], "name_zh": d["name_zh"], "targets": profile['targets'],
+            "modality":profile['modality'],"companies":profile['companies'],
             "china_mah": ' / '.join(dict.fromkeys(c['display_name'] for c in holder_map[d['id']])),
             'mah_refs': holder_map[d['id']], 'name_refs': d['name_refs'],
-            "phase_global": a.get("highest_phase_global", "unknown"),
-            "phase_china": a.get("highest_phase_china", "unknown"), "innovative": a.get("innovative"),
+            'group_refs':profile['group_refs'],'profile_refs':profile['profile_refs'],
+            'phase_china_refs':profile['phase_china_refs'],'phase_global_refs':profile['phase_global_refs'],
+            "phase_global":profile['phase_global'],
+            "phase_china":profile['phase_china'],"innovative": a.get("innovative"),
             "n_trials": len(ts), "n_china_trials": None if not n_china and unknown_sites else n_china,
             'n_china_trials_unknown':unknown_sites,
             "found_by": d["found_by"], "in_scope": d["in_scope"], "scope_reason": d["scope_reason"],

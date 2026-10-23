@@ -19,6 +19,7 @@ from ciw2.domain.models import AnalysisResult, IntakeResult, UniverseResult
 from ciw2.domain.tiers import tier_of
 from ciw2.harness.agent import HARNESS_RULES
 from ciw2.pipeline.context import IncompleteWork, RunContext, work_limit
+from ciw2.pipeline.profile import enrich
 from ciw2.pipeline.queries import drug_trials, scoped_drugs
 from ciw2.pipeline.queries import intake_data as _intake
 from ciw2.pipeline.recovery import fingerprint, get_unit, put_unit
@@ -227,7 +228,7 @@ def cross_check(llm: Any, fact: dict[str, Any]) -> bool | None:
     from ciw2.harness.llm import LLMError
     prompt = ("只回答 YES 或 NO：下面的原文片段是否明确支持该事实（数值、组别、时间点、人群、统计对象全部一致）？\n"
               + json.dumps({k: fact.get(k) for k in ("field", "value", "unit", "stat_type", "arm", "timepoint",
-                                                      "population", "denominator", "enrollment_type", "quote")}, ensure_ascii=False))
+                                                      "population", "denominator", "enrollment_type", "source_context", "quote")}, ensure_ascii=False))
     try:
         reply = llm.chat([{"role": "user", "content": prompt}])
     except LLMError:
@@ -468,9 +469,10 @@ STAGES: list[Stage] = [
     Stage('universe_expand', universe_expand, blocking=False),
     Stage("coverage_review", coverage_review),
     Stage("trial_evidence", trial_evidence, blocking=False),
+    Stage('enrich_drugs',enrich,blocking=False),
     Stage("extract_results", _extract("extract-results", _results_extra), frozenset({"B"}), blocking=False),
     Stage("extract_design", _extract("extract-design", _design_extra), frozenset({"C"}), blocking=False),
-    Stage("verify", verify, frozenset({"B", "C"})),
+    Stage("verify", verify),
     Stage("analysis_A", _analysis("A"), frozenset({"A"}), blocking=False),
     Stage("analysis_B", _analysis("B"), frozenset({"B"}), blocking=False),
     Stage("analysis_C", _analysis("C"), frozenset({"C"}), blocking=False),

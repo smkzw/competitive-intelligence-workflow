@@ -71,6 +71,14 @@ class ScopeResult(Strict):
     decisions: list[ScopeDecision]
 
 
+class SourceContext(Strict):
+    legal_entity: str | None = None
+    relationship: str | None = None
+    as_of: str | None = None
+    jurisdiction: str | None = None
+    indication: str | None = None
+
+
 class ExtractedFact(Strict):
     entity: str = Field(description="实体名：NCT 号 / 药物名 / 公司名")
     field: str = Field(description="字段路径，例如 result.primary.value、design.primary_endpoint")
@@ -88,6 +96,8 @@ class ExtractedFact(Strict):
     source_id: str | None = Field(default=None, description='实际读取的精确来源版本ID；同一URL含多个研究/版本时必须指定，不得编造')
     quote: str = Field(description="来源原文中逐字复制的支持片段（≤400 字）")
     supersedes: str | None = Field(default=None, description='明确取代的既有事实 ID；无依据时留空')
+    source_context: SourceContext | None = Field(default=None,
+        description='药物身份/集团/开发状态的原文范围；法律实体、关系、截至日期、辖区和适应症不得猜测')
 
     @model_serializer(mode='wrap')
     def _source_presence(self, handler: Any) -> dict[str, Any]:
