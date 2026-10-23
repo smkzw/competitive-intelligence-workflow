@@ -69,3 +69,10 @@ button.secondary{color:#fff}
 .grid>.design-phase{align-self:start}
 .design-total{display:flex;align-items:baseline;gap:8px;min-width:0;padding:6px 12px}
 html:has(#design-evidence-dialog[open]){overflow:hidden}
+.result-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:16px}
+.result-controls label{display:grid;gap:6px;min-width:0}
+.result-controls input,.result-controls select{width:100%;max-width:100%;box-sizing:border-box;font:inherit;min-height:40px}
+.result-panel .chart{height:320px}
+.result-panel details{margin-top:8px}.result-panel #result-definition{overflow-wrap:anywhere}
+.result-series-row{margin:4px 0}.result-table{margin-top:12px}
+#result-count{margin:8px 0}.result-table>summary{font-weight:600}

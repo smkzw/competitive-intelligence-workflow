@@ -42,6 +42,7 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 - `domain/identity.py`只做大小写/空白形式归一及字面名称/已知别名匹配，保留标点，不推断药学等同。scope、trial_evidence和verify复用；scope缓存绑定该规则源码hash。明确且唯一的试验关联用drug-trial；宽检索/共享别名保留drug-trial-candidate（pending及原干预名），沿用links不增表。后来字面关系确认时保留候选记录并标resolved_literal_match；不是自动解决剂型/组合药学语义。
 - 共同research_aliases仅复用既有精确placebo/安慰剂排除；原otherNames仍在来源和研究元数据中，旧存量别名只在采用/身份/查询读取层过滤，AB-1与AB1不合并。检索候选和已确认科学身份不同。
 - B的render/result_identity.py读取current verified design.arms，按(entity_id,source_id,source_snapshot,原组名)建立关系；仅去空白/大小写及明确Drug/Biological类型前缀，复用同研究已关联药物的name_owners。原组名/原值不改，组合全列、冲突不first-wins、控制标签不归主动药；trial_drugs仅作研究语境，drugs/arm_drugs才是图表和明细共同归属。关系事实ID与内部原因保留，缺来源/跨源或跨版本/未核实不自动借用，不增加表或猜测型组映射。
+- B的render/results.py投影全部测量实例；严格fullmatch单访视，不复用旧parse_timepoint的宽文本首数字匹配。endpoint原定义、单位/paramType/dispersion/人群、非访视class/category与原窗共同分组；人口/统计/单位缺项不自动跨研究。每点绑定fact_id及来源组series。重复坐标不覆盖，非数值/未核实留表与内部plot_exclusions。positions包含已知缺测访视供断线，不生成零或新事实。portal.js只复用一个ECharts实例/ResizeObserver，完整组选择及同查询图/表/来源；系列编号颜色按完整组稳定，周显示在数值坐标构建时精确缩放，不对任意day刻度除7造循环小数。条形包含0，完整长表/定义原生折叠；无新框架/状态库。
 - `facts`：追加式；`supersedes` 指向被取代的版本；`tier` `status` `quote` `quote_start/end` `context`（组/时间点/人群/统计对象/分母/终点）。
 - `coverage`：每条检索路线的状态（ok/failed/blocked）、命中、新增实体。
 - 发现工具逐批保存登记原名与药物—试验关系，最终模型提交失败不抹掉已读来源；不据此推断创新属性或监管身份。

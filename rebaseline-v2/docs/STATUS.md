@@ -5,7 +5,7 @@
 ## 当前入口与范围
 - 产品权威：01_PRD、02_ARCHITECTURE、03_PLAN、04_AGENT_RULES；本页替换更新，不另立规格。
 - 唯一英文工程根内rebaseline-v2；单用户Web服务+内嵌9 Skills。v1多宿主包、编辑/分享、24门户不是v2发布门；未知v1工作树保留，旧中文工程零接触。
-- 分支codex/rebaseline-v2-m1。C阅读节点已提交/push并核远端exact：`43a4bc86cb7ce1ea8b220735c0836202525ebdfb`；来源扩展ad65b790也已推送。当前B结果组归属切片待白名单提交。
+- 分支codex/rebaseline-v2-m1。B组归属节点已提交/push并核远端exact：`c04854795db76bae223a7c7ea58d48ef9d82f7db`；C阅读43a4bc86、来源扩展ad65b790也已推送。当前B测量/折线/查询节点待白名单提交。
 - 历史恢复依据：Trellis `10-23-rebaseline-v2-m1/PAUSE_HANDOFF_20261023_0810.md`；原暂停回执/备份不改。用户已解除暂停，历史paused/旧PID不覆盖新授权。
 - 模型cms-router/glm-5.3-flash → DGX/deepseek → DGX/qwen；凭据仅注册配置到必要子进程环境，不入文件/日志/提示词，不改全局路由。
 
@@ -22,7 +22,7 @@
 ## 同一R4真实模型阶段：仍运行
 - 句柄49763，run_a37cd8cba43b / prj_f21d0823b44a，**attempt0002**；scope=stage/analysis_C，pipeline_acceptance=NOT_RUN。脚本ciw-data/resume-r4-20261023.py。
 - 冻结`2cbab03927fbe22cc2212f3fa4105862cfec0992`代码/Skills/规则/模型和原数据；恢复启动已核冻结hash、46源、DB完整性、6580事实及缓存。没有重跑bootstrap/来源/51已完成批。
-- 恢复基线151任务/51合格缓存/100待做；33非空、195条分批要点仅为暂停时范围，不是最终归并结论。不定期轮询、不因等待替换运行。
+- 恢复基线151任务/51合格缓存/100待做；33非空、195分批要点仅为暂停时范围。当前B节点结束一次只读核对：80个batch succeeded行（较恢复+29）、51次cache回放；恢复后32条model事件为DeepSeek-V4.1-Flash-TF 1、Qwen3.8-Flash-Next 31。不是80批已完成最终审阅或模型总成本；完整键/引用终态再核。不定期轮询、不因等待替换运行。
 - 最近同句柄等待仍pending无新输出。终态后核实际模型、151批引用、输出恢复、用量、源hash及渲染；stage成功不替代M1完整链。
 - 原attempt0001 STARTED回执不改，原97920用户SIGINT终态不再等待。暂停一致性DB备份SHA e9c18f2153ac95cff0495839d38caa4bc38a7cf1c46342fe0bcb168d3af2ce3e；冻结源/WIP副本/diff在ciw-data/pause-20261023-0810。
 - 冻结模型使用旧renderer，不随当前前端热更新。其产物和本轮C候选分开验收。
@@ -44,11 +44,20 @@
 - 13项生产反例RED（前一次缺tier的夹具错误单列，不算产品RED）→根因修复→身份/流水线/解析相邻47PASS。正向、标点/前缀/复合冲突、共享别名、跨研究/来源/未核实、对照、联合方案与图表/表格一致均覆盖。
 - 固定77个真实已捕获源只读扫描，78研究含明确同名组关系；代表性NCT04921345完整668结果，665绑定/3缺关系，0新网络/模型。原始值/事实集合保持，PK/ADA记录仍按来源保留，不据此当临床疗效接受。
 - ciw-data/browser-m4/b-arm-identity-02/B.html，SHA45846a75f7c29b2c9c24c0983d8b94aa9016e3962443f93c3262ee23a08bb9cb；源SHA50bc0483d2b3cfb6ebe207a71afe94575ca15e30acc707dbb4634ab56532dee2。01原件不改，02只读同DB重新渲染当前模板。
-- Ego59/p1实际1920页核对、原生筛选Cohort1.1得到221条，显示正确Nemolizumab；截图1920-identity-table.png实看。**B视觉FAIL保留**：多测量标签重叠、完整访视/类别未投影、静默12图上限、图表未随B检索、默认标题仍有泛化提醒；不是新候选签收。下一根因包处理这组共同结果呈现路径，不重复identity或C测试。
-- 当前B只读预览localhost52853/B，句柄58845；C预览47130保留。两个均属本任务、无目录/DB写入，非产品服务。
+- Ego59/p1旧02实际1920核对、原生筛选Cohort1.1=221条，药物归属正确，但**旧B视觉FAIL保留**：重叠标签、访视/类别丢失、12图上限、图表查询不联动及泛化提醒。以下新节点修同族消费路径；不将旧图冒充新验收。
+
+## B测量呈现：当前06组件完成，不是M4正式验收
+- _result_rows补完整class/category/paramType/dispersion/实例上下文；results.py严格单访视，聚合时间窗不取首数、矛盾不猜、月不固定换天、重复坐标不覆盖。缺测在折线上断开而非补零，事实原值/来源不变。
+- 全部图组在同一ECharts位切换，不再12组截断或每条一卡；完整表默认折叠，指标原定义/人群/原窗完整可读。图/表同检索及fact_id定位，系列颜色/编号稳定，单访视收敛为紧凑对照。泛化提醒标题已移除，单位仍可见。
+- 同一真实668事实→70组（18折线/52观察组），668逐fact ID完整一次覆盖、0遗漏/0新增；未改变PK/ADA科学域，也不宣称这些是临床疗效结论。M4语义/跨来源/临床结果验证仍待正式包。
+- 当前ciw-data/browser-m4/b-measurements-06/B.html，SHA `80fdd0b60dfa95699f386d022f4f027947de8017005eba19441eecac3efa4b82`，2,234,534字节。源/事实hash沿用本页B归属切片，同DB只读渲染，无新来源/模型。正常renderer，不是手写demo。
+- Ego59/p1，localhost58583/B，当前只读预览句柄88458；C预览47130仍保留。过时B预览58845/46358/29710/76757已确认所属PID后正常停止，只停自建服务、不删任何源/截图/回执。
+- 当前06共10截图全部实看：四宽1440/1600/1920/2560密集3系列18点、cohort筛后1系列6点；16px/无横溢出。单访视3点绘图区192px、零基线且颜色对应原系列；完整70组末项可选，空查询隐藏图，恢复668行/70组及原选择。实际鼠标点击ECharts glyph→正确fact行/来源URL，非模拟emit。
+- 03周刻度循环小数、05条形截断起点均在实看后拒收，原件留存；06精确坐标换算、条形包含0及稳定色后再验。没有用缩字号、裁数据或假点解决。browser.json及命令/源码hash在06目录，生成回执NOT_RUN字段原样保留，后验另记。
+- 只关闭该真实源测量/查询组件；单项原始研究不是跨试验临床等价、PK/PD分类、50条critical人工准确率或整个B交付。C03较早组件证据也不拼接成当前完整候选PASS。
 
 ## 测试、协作与复盘
-- 最新完整v2 **377PASS/3.13s**，Ruff全src/tests/scripts、生产JS/sh语法、Python src/scripts600/80尺寸门PASS；1既有TestClient警告。B相关47PASS，C节点364PASS独立绑定。不为文档收尾再跑宽门。
+- 最新完整v2 **388PASS/2.67s**，Ruff显式v2 pyproject全src/tests/scripts、生产JS/sh语法、Python src/scripts600/80尺寸门PASS；1既有TestClient警告。本节点9RED→相关32PASS，缺测/真实JS/基线等补回归；B归属47PASS、377宽门及C364宽门分别保留。不为文档收尾再跑宽门。
 - 一次有界执行：CodeBuddy/codebuddy-cli/deepseek-v4.1-flash/max，session01a1690e-8288-7d63-a24c-f1f2424cb2d8，304.785s/36tools/return0，无fallback，输出hash核对。worker图例/数据窗/查询；owner补稀疏高度及宽幅阅读。
 - 协作审计格式缺口保留：custom prompt缺解析器规定route bullet，audit-execution FAIL/prompt_route=null；真实runner身份/effort/hash另核。不改已派发prompt、不为标题重派、不伪造审计绿；下次dispatch前规范bullet。executor不是独立科学/审美review。
 - Trellis implement/check在dispatch后发现seed并已改为当前PRD/规则2+2；prompt原含read set，不能冒称清单先前已修。raw证据在ciw-data，不入Git。
@@ -61,7 +70,7 @@
 - 来源文档+解析器版本原子采用，失败旧current不变；独立论文不随登记刷新撤回；HTTP/缓存/导入分开。历史as-of未实施，启动/数据/HTML守卫拒绝，不删守卫冒充完成。
 
 ## 下一有界动作
-1. 白名单提交本轮B归属生产/模板/测试、原位PRD/ARCH/PLAN/STATUS及现有Trellis记录，push核远端exact；排除v1 WIP/未知健康日志/运行证据。
+1. 白名单提交B测量模块/查询前端/模板/测试、原位PRD/ARCH/PLAN/STATUS及现有Trellis记录，push核远端exact；排除v1 WIP/未知健康日志/运行证据。
 2. 同句柄等模型终态后核冻结身份/来源/缓存，只恢复失效或未完单元，不重跑已完成研究。
-3. 先修实屏暴露的B测量实例/图表共同呈现根因（不是再刷完整identity/C审查），再推进M2中国来源接入；根因族RED→完整改动→相关批，里程碑一次宽门。
+3. 继续M2中国来源接入/搜索缺口和M1论文修订真实链；M4其余科学域及跨研究语义另按正式包，不把本次单研究图形接受扩大。根因族RED→完整改动→相关批，里程碑一次宽门。
 4. 搜索/微信未配置、中国适配/专家清单未具备；M1完整链/论文修订及M2–M6正式门未过不宣称交付。无须新用户裁决，不设人为暂停点。

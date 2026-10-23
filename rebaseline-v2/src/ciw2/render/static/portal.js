@@ -21,7 +21,8 @@
     var node = el(id);
     if (!node) return;
     if (!window.echarts) { node.innerHTML = '<p class="muted">图表暂不可用，完整数据请见数据表。</p>'; return; }
-    var c = echarts.init(node);
+    var fresh = !instances[id];
+    var c = instances[id] || echarts.init(node);
     instances[id] = c;
     option.color = option.color || palette;
     option.textStyle = { fontFamily: readingFont, fontSize: readingSize };
@@ -38,9 +39,11 @@
     });
     if (option.legend) option.legend.textStyle = Object.assign({}, option.legend.textStyle, { fontSize: readingSize });
     option.tooltip = Object.assign({}, option.tooltip, { textStyle: { fontSize: readingSize } });
-    c.setOption(option);
-    var observer = new ResizeObserver(function () { c.resize(); });
-    observer.observe(node); observers.push(observer);
+    c.setOption(option, true);
+    if (fresh) {
+      var observer = new ResizeObserver(function () { c.resize(); });
+      observer.observe(node); observers.push(observer);
+    }
   }
   var dataNode = el("charts");
   var D = dataNode ? JSON.parse(dataNode.textContent || "{}") : {};
@@ -100,14 +103,104 @@
       series: D.phase_bar.series.map(function (s) { return { name: s.name, type: "bar", data: s.data, barMaxWidth: 28 }; })
     });
   }
-  (D.groups || []).forEach(function (g, i) {
-    chart("chart-group-" + i, {
-      title: { text: g.title, subtext: g.subtitle, textStyle: { fontSize: readingSize }, subtextStyle: { fontSize: readingSize } },
-      tooltip: {}, grid: { left: 260, right: 40, top: 60, bottom: 20 },
-      xAxis: { type: "value" }, yAxis: { type: "category", data: g.labels, axisLabel: { width: 240, overflow: "break" } },
-      series: [{ type: "bar", data: g.values, barMaxWidth: 18, label: { show: true, position: "right" } }]
+  function resultTooltip(p) {
+    var point = p.data || {};
+    return safeText(point.series_name || point.label || "") + "<br>" + safeText(point.visit || "") +
+      "：" + safeText(Array.isArray(point.value) ? point.value[1] : point.value);
+  }
+  function resultOption(group, points) {
+    var option = { tooltip: { formatter: resultTooltip }, grid: { left: 72, right: 48, top: 24, bottom: 72 } };
+    var order = Array.from(new Set(group.points.map(function (p) { return p.series_key; })));
+    if (group.kind === "line") {
+      var series = new Map();
+      points.forEach(function (p) {
+        if (!series.has(p.series_key)) series.set(p.series_key, []);
+        series.get(p.series_key).push(p);
+      });
+      option.legend = { type: "scroll", bottom: 0, formatter: function (name) {
+        var point = group.points.find(function (p) { return p.series_key === order[Number(name) - 1]; });
+        return (point && point.drug_label ? point.drug_label + " · " : "") + "组" + name;
+      } };
+      option.xAxis = { type: "value", scale: true, name: group.display_axis === "weeks" ? "周" : group.axis_unit === "months" ? "月" : "天" };
+      option.yAxis = { type: "value", scale: true };
+      option.series = Array.from(series.values()).map(function (items) {
+        items.sort(function (a, b) { return a.x - b.x; });
+        var index = order.indexOf(items[0].series_key), at = new Map(items.map(function (p) { return [p.x, p]; }));
+        return { name: String(index + 1), type: "line", smooth: false, connectNulls: false, symbolSize: 7,
+          labelLayout: { hideOverlap: true },
+          lineStyle: { color: palette[index % palette.length] }, itemStyle: { color: palette[index % palette.length] },
+          data: (group.positions || items.map(function (p) { return p.x; })).map(function (x) {
+            var p = at.get(x);
+            var plottedX = group.display_axis === "weeks" ? x / 7 : x;
+            return p ? Object.assign({}, p, { value: [plottedX, p.value],
+              label: { show: items.length <= 8 || p === items[items.length - 1], position: "top" } }) : { value: [plottedX, null] };
+          }),
+          label: { formatter: function (p) { return p.value[1]; } } };
+      });
+    } else {
+      option.grid.left = 210; option.grid.bottom = 32;
+      option.xAxis = { type: "value", scale: false };
+      option.yAxis = { type: "category", inverse: true, data: points.map(function (p, i) {
+        return String(i + 1) + " · " + (p.visit && p.visit.length <= 16 ? p.visit : p.trial);
+      }) };
+      option.dataZoom = [{ type: "slider", yAxisIndex: 0, right: 0, width: 16, show: points.length > 6,
+        startValue: 0, endValue: Math.min(5, points.length - 1), filterMode: "filter" }];
+      option.series = [{ type: "bar", barMaxWidth: 22, data: points.map(function (p) {
+        return Object.assign({}, p, { itemStyle: { color: palette[order.indexOf(p.series_key) % palette.length] } });
+      }),
+        label: { show: true, position: "right" } }];
+    }
+    return option;
+  }
+  var resultPreferred, resultClickBound = false;
+  function updateResultQuery(table) {
+    var rows = Array.from(table.querySelectorAll("tbody tr"));
+    var visible = rows.filter(function (row) { return row.style.display !== "none"; });
+    var selected = new Set(visible.map(function (row) { return row.dataset.factId; }));
+    var available = (D.groups || []).filter(function (g) { return g.points.some(function (p) { return selected.has(p.fact_id); }); });
+    var selector = el("result-group"), availableIds = new Set(available.map(function (g) { return g.id; }));
+    Array.from(selector.querySelectorAll("option")).forEach(function (o) { o.hidden = o.disabled = !availableIds.has(o.value); });
+    var group = available.find(function (g) { return g.id === resultPreferred; }) || available[0];
+    selector.disabled = !group;
+    if (el("result-count")) el("result-count").textContent = visible.length + " / " + rows.length + " 条结果 · " + available.length + " 组";
+    if (el("result-panel")) el("result-panel").hidden = !group;
+    if (el("result-empty")) el("result-empty").hidden = !!group;
+    if (!group) return;
+    selector.value = group.id;
+    var points = group.points.filter(function (p) { return selected.has(p.fact_id); });
+    var viewGroup = Object.assign({}, group, { kind: group.kind === "line" && new Set(points.map(function (p) { return p.x; })).size > 1 ? "line" : "bar" });
+    var height = viewGroup.kind === "line" ? 320 : Math.max(120, Math.min(336, Math.min(points.length, 6) * 44 + 60));
+    setPanelHeight("chart-result", height);
+    el("result-definition").textContent = [group.title, group.population, group.unit, group.stat_type].filter(Boolean).join(" · ");
+    var statistics = { mean: "均值", median: "中位数", ls_mean: "最小二乘均值", ls_mean_change: "最小二乘均值变化",
+      mean_change: "均值变化", percent_change: "百分比变化", proportion: "受试者比例", count_participants: "受试者人数",
+      count_events: "事件次数", hazard_ratio: "风险比", odds_ratio: "优势比", risk_difference: "风险差" };
+    if (el("result-unit")) el("result-unit").textContent = [group.unit, statistics[group.stat_type] || group.stat_type].filter(Boolean).join(" · ");
+    var series = new Map();
+    points.forEach(function (p) { if (!series.has(p.series_key)) series.set(p.series_key, p.series_name); });
+    el("result-series").replaceChildren();
+    var order = Array.from(new Set(group.points.map(function (p) { return p.series_key; })));
+    Array.from(series.entries()).forEach(function (item) {
+      var node = document.createElement("p"); node.className = "result-series-row";
+      node.textContent = "组" + (order.indexOf(item[0]) + 1) + "：" + item[1]; el("result-series").appendChild(node);
     });
-  });
+    chart("chart-result", resultOption(viewGroup, points));
+    if (!resultClickBound && instances["chart-result"]) {
+      instances["chart-result"].on("click", function (p) {
+        var row = rows.find(function (r) { return p.data && r.dataset.factId === p.data.fact_id; });
+        if (!row || row.style.display === "none") return;
+        row.closest(".result-table").open = true; row.tabIndex = -1; row.focus(); row.scrollIntoView({ block: "center" });
+      });
+      resultClickBound = true;
+    }
+  }
+  if (D.groups && el("result-group")) {
+    resultPreferred = el("result-group").value;
+    el("result-group").addEventListener("change", function () {
+      resultPreferred = this.value; updateResultQuery(el("tbl-b"));
+    });
+    updateResultQuery(el("tbl-b"));
+  }
   if (D.size) {
     setPanelHeight("chart-size", designPanelHeight(D.size.labels.length));
     chart("chart-size", {
@@ -130,6 +223,7 @@
         tr.style.display = !q || tr.textContent.toLowerCase().indexOf(q) >= 0 ? "" : "none";
       });
       if (table.id === "tbl-c") updateDesignQuery(table);
+      if (table.id === "tbl-b" && el("result-group")) updateResultQuery(table);
     });
   });
   function updateDesignQuery(table) {

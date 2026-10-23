@@ -1,34 +1,41 @@
 {% extends "base.html" %}
 {% block kpis %}
-<div class="kpi"><b>{{ data.results | length }}</b><span>结果数据点</span></div>
-<div class="kpi"><b>{{ data.charts.groups | length }}</b><span>可同轴比较的终点组</span></div>
-<div class="kpi"><b class="{{ 'warn' if data.unverified_critical }}">{{ data.unverified_critical }}</b><span>关键字段未核实</span></div>
+<div class="kpi design-total"><b>{{ data.results | length }}</b><span>结果数据点</span></div>
+<div class="kpi design-total"><b>{{ data.charts.groups | length }}</b><span>结果组</span></div>
 {% endblock %}
 {% block content %}
-<h2>终点横比（仅已核实数据；不同终点/时间点/统计形式分开作图）</h2>
-<div class="grid">{% for g in data.charts.groups %}<div class="card"><div id="chart-group-{{ loop.index0 }}" class="chart"></div>
-<div class="sub">{{ g.trials }} 个来源实体</div></div>{% else %}<p class="muted">暂无可作图的已核实结果。</p>{% endfor %}</div>
+<h2>结果横比</h2>
+<div class="result-controls">
+<label>检索结果 <input id="result-query" class="filter" data-filter="tbl-b" placeholder="药物、研究、组别、终点或访视"></label>
+<label>选择指标 <select id="result-group">{% for g in data.charts.groups %}<option value="{{ g.id }}">{{ loop.index }} · {{ g.title }}</option>{% endfor %}</select></label>
+</div>
+<p id="result-count" aria-live="polite">{{ data.results|length }} 条结果</p>
+{% if data.charts.groups %}<div class="card result-panel" id="result-panel">
+<p id="result-unit" class="muted"></p>
+<div id="chart-result" class="chart"></div>
+<details><summary>指标定义与研究组别</summary><p id="result-definition"></p><div id="result-series"></div></details>
+</div>{% endif %}
+<p id="result-empty" class="muted" {% if data.charts.groups %}hidden{% endif %}>暂无匹配的数值结果。</p>
 
-<h2>安全性（受试者人数；比例仅在同组分母明确时计算）</h2>
-<div class="card" style="overflow:auto"><table><thead><tr><th>药物</th><th>试验</th><th>组别（来源原名）</th><th>类别</th>
-<th>n</th><th>N</th><th>%</th><th>时间窗</th><th>状态</th></tr></thead><tbody>
-{% for r in data.safety %}<tr><td>{{ r.drugs | join('/') if r.drugs else '—' }}</td><td>{{ r.entity }}</td><td>{{ r.arm or '—' }}</td>
-<td>{{ 'SAE（任意）' if r.field == 'safety.sae.any' else '全因死亡' }}</td>
-<td>{{ '未报告' if r.value is none else r.value }}</td><td>{{ r.denominator or '—' }}</td>
-<td>{{ r.proportion if r.proportion is not none else '—' }}</td><td class="quote">{{ (r.timepoint or '')[:80] }}</td>
-<td><span class="badge {{ r.status }}">{{ r.status | status }}</span></td></tr>{% endfor %}
-</tbody></table></div>
-
-<h2>全部结果数据</h2>
-<input class="filter" data-filter="tbl-b" placeholder="筛选：药物 / 试验 / 终点 / 组别">
-<div class="card" style="overflow:auto"><table id="tbl-b"><thead><tr><th>药物</th><th>来源实体</th><th>终点</th><th>时间点</th>
-<th>组别</th><th>值</th><th>单位/统计</th><th>分母</th><th>核验</th><th>来源</th></tr></thead><tbody>
-{% for r in data.results %}<tr><td>{{ r.drugs | join('/') if r.drugs else '—' }}</td><td>{{ r.entity }}</td><td>{{ r.endpoint[:120] }}</td>
-<td>{{ r.timepoint or '—' }}</td><td>{{ r.arm or '—' }}</td><td><b>{{ '未报告' if r.value is none else r.value }}</b></td>
-<td class="muted">{{ r.unit or '' }} {{ r.stat_type or '' }}</td><td>{{ r.denominator or '—' }}</td>
-<td><span class="badge {{ r.status }}">{{ r.status | status }}</span>{% if r.tier == 'critical' %} <span class="tag med">关键</span>{% endif %}
-{% if r.verify_note %}<div class="quote">{{ r.verify_note }}</div>{% endif %}</td>
+<details class="result-table"><summary>完整数据表（{{ data.results|length }}条）</summary>
+<div class="card table-card"><table id="tbl-b"><thead><tr><th>药物</th><th>研究</th><th>终点</th><th>访视与分层</th>
+<th>组别</th><th>值</th><th>单位/统计</th><th>N</th><th>状态</th><th>来源</th></tr></thead><tbody>
+{% for r in data.results %}<tr data-fact-id="{{ r.id }}"><td>{{ r.drugs|join(' / ') if r.drugs else '—' }}</td>
+<td>{{ r.entity }}</td><td><details><summary>完整终点</summary>{{ r.endpoint }}</details></td>
+<td>{% if r.class_title %}<div>{{ r.class_title }}</div>{% endif %}{% if r.category %}<div>{{ r.category }}</div>{% endif %}
+<details><summary>时间与人群</summary><p>{{ r.timepoint or '—' }}</p><p>{{ r.population or '—' }}</p></details></td>
+<td>{{ r.arm or '—' }}</td><td><b>{{ '—' if r.value is none else r.value }}</b></td>
+<td>{{ r.unit or '—' }}<div class="muted">{{ r.stat_type or '—' }}</div></td><td>{{ r.denominator if r.denominator is not none else '—' }}</td>
+<td><span class="badge {{ r.status }}">{{ r.status|status }}</span></td>
 <td>{% if r.source_url %}<a href="{{ r.source_url }}" target="_blank" rel="noopener">原文</a>{% endif %}
-{% if r.quote and not r.extracted_by.startswith('code:') %}<details><summary>片段</summary><div class="quote">{{ r.quote }}</div></details>{% endif %}</td></tr>{% endfor %}
-</tbody></table></div>
+{% if r.quote %}<details><summary>原文值</summary><div class="quote">{{ r.quote }}</div></details>{% endif %}</td></tr>{% endfor %}
+</tbody></table></div></details>
+
+{% if data.safety %}<h2>安全性</h2>
+<div class="card table-card"><table><thead><tr><th>药物</th><th>研究</th><th>组别</th><th>类别</th><th>n</th><th>N</th><th>%</th><th>时间窗</th><th>状态</th></tr></thead><tbody>
+{% for r in data.safety %}<tr><td>{{ r.drugs|join(' / ') if r.drugs else '—' }}</td><td>{{ r.entity }}</td><td>{{ r.arm or '—' }}</td>
+<td>{{ 'SAE' if r.field == 'safety.sae.any' else '全因死亡' }}</td><td>{{ '—' if r.value is none else r.value }}</td>
+<td>{{ r.denominator if r.denominator is not none else '—' }}</td><td>{{ r.proportion if r.proportion is not none else '—' }}</td>
+<td><details><summary>时间窗</summary>{{ r.timepoint or '—' }}</details></td><td><span class="badge {{ r.status }}">{{ r.status|status }}</span></td></tr>{% endfor %}
+</tbody></table></div>{% endif %}
 {% endblock %}

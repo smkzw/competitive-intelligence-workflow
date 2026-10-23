@@ -13,9 +13,9 @@ from typing import Any
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from ciw2.domain.availability import require_supported_cutoff
-from ciw2.domain.semantics import parse_timepoint
 from ciw2.render.labels import age_label, registry_label
 from ciw2.render.result_identity import bind_result_drugs
+from ciw2.render.results import result_groups
 from ciw2.store.db import DB
 
 HERE = Path(__file__).resolve().parent
@@ -124,6 +124,8 @@ def _result_rows(db: DB, pid: str) -> list[dict[str, Any]]:
             "status": f["status"], "tier": f["tier"], "extracted_by": f["extracted_by"],
             "source_url": c.get("source_url") or srcs.get(f["source_id"] or ""), "quote": f["quote"],
             "verify_note": c.get("verify_note"),
+            **{key: c.get(key) for key in ('class_title', 'category', 'param_type', 'dispersion_type',
+                                          'group_id', 'raw_value', 'spread', 'lower', 'upper', 'json_path')},
         })
     return rows
 
@@ -134,27 +136,10 @@ def data_b(db: DB, pid: str) -> dict[str, Any]:
     results = [r for r in rows if r["field"].startswith("result.") and not r["field"].endswith(".analysis")]
     analyses = [r for r in rows if r["field"].endswith(".analysis")]
     safety = [r for r in rows if r["field"] in ("safety.sae.any", "safety.death.all_cause")]
-    groups: dict[tuple[Any, ...], list[dict[str, Any]]] = defaultdict(list)
-    for r in results:
-        if r["status"] != "verified" or not isinstance(r["value"], (int, float)):
-            continue
-        tp = parse_timepoint(r["timepoint"] or "")
-        key = (r["endpoint_key"] or r["endpoint"], tp.days if tp.days is not None else (tp.months, "m"),
-               r["stat_type"], (r["unit"] or "").lower())
-        groups[key].append(r)
-    charts = []
-    for key, items in sorted(groups.items(), key=lambda kv: (-len({i["entity"] for i in kv[1]}),
-                                                               not kv[1][0]["field"].startswith("result.primary")))[:12]:
-        charts.append({
-            "title": items[0]["endpoint"][:90], "subtitle": f"{items[0]['timepoint'] or '时间点未报告'} · "
-                                                            f"{items[0]['unit'] or items[0]['stat_type'] or ''}",
-            "labels": [" · ".join(x for x in (i["arm_drug"], i["entity"], i["arm"] or "组别未报告") if x)
-                       for i in items],
-            "primary": items[0]["field"].startswith("result.primary"),
-            "values": [i["value"] for i in items], "trials": len({i["entity"] for i in items})})
+    charts, exclusions = result_groups(results)
     unverified_critical = sum(1 for r in rows if r["tier"] == "critical" and r["status"] != "verified")
     return {"results": results, "analyses": analyses, "safety": safety, "charts": {"groups": charts},
-            "unverified_critical": unverified_critical}
+            "unverified_critical": unverified_critical, "plot_exclusions": exclusions}
 
 
 def data_c(db: DB, pid: str) -> dict[str, Any]:
