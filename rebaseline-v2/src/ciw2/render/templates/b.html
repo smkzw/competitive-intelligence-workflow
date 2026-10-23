@@ -8,6 +8,7 @@
 <h2>结果横比</h2>
 <div class="result-controls">
 <label>检索结果 <input id="result-query" class="filter" data-filter="tbl-b" data-filter-extra="tbl-b-safety" placeholder="药物、研究、组别、终点或访视"></label>
+<label>指标领域 <select id="result-domain"><option value="all" {% if data.default_domain == 'all' %}selected{% endif %}>全部（{{ data.results|length }}）</option>{% for domain, count in data.domain_counts.items() %}<option value="{{ domain }}" {% if data.default_domain == domain %}selected{% endif %}>{{ data.domain_labels[domain] }}（{{ count }}）</option>{% endfor %}</select></label>
 <label>选择指标 <select id="result-group">{% for g in data.charts.groups %}<option value="{{ g.id }}">{{ loop.index }} · {{ g.title }}</option>{% endfor %}</select></label>
 </div>
 <p id="result-count" aria-live="polite">{{ data.results|length }} 条结果</p>
@@ -21,7 +22,7 @@
 <details class="result-table"><summary>完整数据表（{{ data.results|length }}条）</summary>
 <div class="card table-card"><table id="tbl-b"><thead><tr><th>药物</th><th>研究</th><th>终点</th><th>访视与分层</th>
 <th>组别</th><th>值</th><th>单位/统计</th><th>N</th><th>状态</th><th>来源</th></tr></thead><tbody>
-{% for r in data.results %}<tr data-fact-id="{{ r.id }}"><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td>
+{% for r in data.results %}<tr data-fact-id="{{ r.id }}" data-domain="{{ r.domain }}"><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td>
 <td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td><details><summary>完整终点</summary>{{ r.endpoint }}</details></td>
 <td>{% if r.class_title %}<div>{{ r.class_title }}</div>{% endif %}{% if r.category %}<div>{{ r.category }}</div>{% endif %}
 <details><summary>时间与人群</summary><p>{{ r.timepoint or '—' }}</p><p>{{ r.population or '—' }}</p></details></td>

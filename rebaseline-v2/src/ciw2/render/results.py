@@ -9,6 +9,7 @@ from collections import Counter, defaultdict
 from typing import Any
 
 from ciw2.domain.identity import name_key
+from ciw2.domain.outcomes import DOMAIN_LABELS
 
 VISIT = re.compile(r'(?:at\s+)?(week|day|month)s?\s*(\d+)|第\s*(\d+)\s*(周|天|月)', re.IGNORECASE)
 
@@ -40,7 +41,8 @@ def _measurement(row: dict[str, Any]) -> tuple[tuple, tuple[str, int, str] | Non
     frame = (name_key(row['endpoint']), row.get('stat_type'), name_key(row.get('unit')),
              row.get('param_type'), row.get('dispersion_type'), name_key(row.get('population')),
              visit[0] if visit else None, facets,
-             (row['entity_id'], row['source_id']) if incomplete else None)
+             (row['entity_id'], row['source_id']) if incomplete else None,
+             row.get('domain', 'unresolved'))
     return frame, visit
 
 
@@ -74,6 +76,7 @@ def _group(frame: tuple, items: list[tuple[dict, tuple | None]], positions: set[
     axes = frame[6]
     group_id = hashlib.sha256(json.dumps(frame, ensure_ascii=False).encode()).hexdigest()[:16]
     return {'id': group_id, 'title': rows[0]['endpoint'], 'subtitle': rows[0].get('timepoint') or '',
+            'domain': frame[-1],
             'population': rows[0].get('population') or '', 'unit': rows[0].get('unit') or '',
             'stat_type': rows[0].get('stat_type') or '', 'primary': any(row['field'].startswith('result.primary') for row in rows),
             'kind': 'line' if line else 'bar', 'axis_unit': axes, 'collision': collision, 'positions': sorted(positions),
@@ -98,5 +101,6 @@ def result_groups(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dic
             continue
         groups[frame].append((row, visit))
     figures = [_group(frame, items, positions[frame]) for frame, items in groups.items()]
-    return sorted(figures, key=lambda group: (not group['primary'], group['kind'] != 'line',
+    return sorted(figures, key=lambda group: (list(DOMAIN_LABELS).index(group['domain']),
+                                             not group['primary'], group['kind'] != 'line',
                                              name_key(group['title']), group['id'])), exclusions

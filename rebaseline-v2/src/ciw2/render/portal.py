@@ -13,6 +13,7 @@ from typing import Any
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from ciw2.domain.availability import require_supported_cutoff
+from ciw2.domain.outcomes import DOMAIN_LABELS, classify_outcome_domain
 from ciw2.render.labels import PHASE_ZH, age_label, registry_label
 from ciw2.render.result_identity import bind_result_drugs
 from ciw2.render.results import result_groups
@@ -130,13 +131,19 @@ def data_b(db: DB, pid: str) -> dict[str, Any]:
         row['display_drugs'] = [drug_names.get(name, name) for name in row['drugs']]
         row['arm_drug_label'] = ' / '.join(drug_names.get(name, name) + (f'（{name}）' if drug_names.get(name, name) != name else '')
                                          for name in row['drugs'])
+        row['domain'] = ('safety' if row['field'].startswith('safety.') else
+                         classify_outcome_domain(row['endpoint'], drug_names=row['drugs']))
     results = [r for r in rows if r["field"].startswith("result.") and not r["field"].endswith(".analysis")]
     analyses = [r for r in rows if r["field"].endswith(".analysis")]
     safety = [r for r in rows if r["field"] in ("safety.sae.any", "safety.death.all_cause")]
     charts, exclusions = result_groups(results)
+    counts = {label: sum(r['domain'] == label for r in results) for label in DOMAIN_LABELS}
+    counts = {label: count for label, count in counts.items() if count}
     unverified_critical = sum(1 for r in rows if r["tier"] == "critical" and r["status"] != "verified")
     return {"results": results, "analyses": analyses, "safety": safety, "charts": {"groups": charts},
-            "unverified_critical": unverified_critical, "plot_exclusions": exclusions}
+            "unverified_critical": unverified_critical, "plot_exclusions": exclusions,
+            'domain_counts': counts, 'domain_labels': DOMAIN_LABELS,
+            'default_domain': 'clinical' if counts.get('clinical') else 'all'}
 
 
 def data_c(db: DB, pid: str) -> dict[str, Any]:

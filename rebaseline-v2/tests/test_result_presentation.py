@@ -134,3 +134,27 @@ def test_safety_defaults_to_folded_source_linked_rows_and_shared_query(settings)
     assert f'<tr data-fact-id="{fid}">' in html
     safety=html.split('id="tbl-b-safety"',1)[1].split('</table>',1)[0]
     assert 'https://example.org/results' in safety and '<summary>原文值</summary>' in safety
+
+
+def test_reading_domains_keep_all_facts_and_choose_clinical_without_registry_priority(settings):
+    observations = [
+        {'context': {'endpoint':'Nemolizumab Serum Concentrations'}},
+        {'context': {'endpoint':'Absolute Change From Baseline in EASI Score'}},
+        {'context': {'endpoint':'Number of Participants With Positive Anti-Drug Antibodies'}},
+        {'context': {'endpoint':'PK/PD Relationship Between Concentration and EASI Score'}},
+        {'context': {'endpoint':'Unknown source outcome'}, 'value':None},
+    ]
+    db,pid,ids=project(settings,observations)
+    before=db.current_facts(pid)
+    data=data_b(db,pid)
+    assert [r['id'] for r in data['results']]==ids
+    assert [r['domain'] for r in data['results']]==['unresolved','clinical','immunogenicity','unresolved','unresolved']
+    assert data['domain_counts']=={'clinical':1,'immunogenicity':1,'unresolved':3}
+    assert data['default_domain']=='clinical'
+    assert data['charts']['groups'][0]['domain']=='clinical'
+    assert {p['fact_id'] for g in data['charts']['groups'] for p in g['points']}==set(ids[:4])
+    html=render_report(db,pid,'B')
+    assert 'id="result-domain"' in html and 'value="clinical" selected' in html
+    for row in data['results']:
+        assert f'data-fact-id="{row["id"]}" data-domain="{row["domain"]}"' in html
+    assert db.current_facts(pid)==before

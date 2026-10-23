@@ -207,6 +207,12 @@
   var resultPreferred, resultClickBound = false;
   function updateResultQuery(table) {
     var rows = Array.from(table.querySelectorAll("tbody tr"));
+    var domain = el('result-domain'), query = el('result-query');
+    if (domain) rows.forEach(function (row) {
+      var matchesDomain = domain.value === 'all' || row.dataset.domain === domain.value;
+      var q = query ? query.value.trim().toLowerCase() : '';
+      row.style.display = matchesDomain && (!q || row.textContent.toLowerCase().indexOf(q) >= 0) ? '' : 'none';
+    });
     var visible = rows.filter(function (row) { return row.style.display !== "none"; });
     var selected = new Set(visible.map(function (row) { return row.dataset.factId; }));
     var available = (D.groups || []).filter(function (g) { return g.points.some(function (p) { return selected.has(p.fact_id); }); });
@@ -250,6 +256,9 @@
     resultPreferred = el("result-group").value;
     el("result-group").addEventListener("change", function () {
       resultPreferred = this.value; updateResultQuery(el("tbl-b"));
+    });
+    if (el('result-domain')) el('result-domain').addEventListener('change', function () {
+      updateResultQuery(el('tbl-b'));
     });
     updateResultQuery(el("tbl-b"));
   }

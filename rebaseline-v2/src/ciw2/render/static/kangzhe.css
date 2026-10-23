@@ -84,7 +84,7 @@ button.secondary{color:#fff}
 .grid>.design-phase{align-self:start}
 .design-total{display:flex;align-items:baseline;gap:8px;min-width:0;padding:6px 12px}
 html:has(#design-evidence-dialog[open]){overflow:hidden}
-.result-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:16px}
+.result-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.7fr) minmax(0,2fr);gap:16px}
 .result-controls label{display:grid;gap:6px;min-width:0}
 .result-controls input,.result-controls select{width:100%;max-width:100%;box-sizing:border-box;font:inherit;min-height:40px}
 .result-panel .chart{height:320px}

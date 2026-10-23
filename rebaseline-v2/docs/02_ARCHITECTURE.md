@@ -104,6 +104,7 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 沿用单一portal.js/kangzhe.css及Jinja。样本量图保留全部数据，用dataZoom限定可读窗口而非Top-N；密集/稀疏高度按数据量，期别独立高度和完整名称/计数图例。完整入排details为无JS基线；有native dialog时单个模态容器临时移动原DOM内容，关闭恢复原位/触发焦点，使用textContent显示研究名，不生成另一份科学数据。长原文与事实依据两列，保留原引文/链接，不引入下钻框架或新的状态库。
 
 ### 共用临床身份与入排强调
+- `domain/outcomes.py`提供七种可逆阅读标签；B在同来源组—药物绑定之后投影，不写DB或扩展本体。原始标题保留，PK分析物仅用明确绑定的完整药名；缩写扩展/混合测量不被一个优先级规则吞并。`results.py`保留现有测量frame并附阅读域，未解记录不丢弃；B领域/检索共用可见fact集合，仍使用单一ECharts实例及完整表。分类不改变单位、人群、时间、源版本或数值资格。
 - `render/trial_identity.py`为A/B/C共享临床身份读取投影：已确认关联药物/中文名、来源适应症、核实期别及来源支持的MAH/申办方。按精确项目别名显示中文适应症，不用项目标题覆盖不同疾病；MAH不取未核实attrs或推测集团。旧登记无current link时只读兼容唯一同研究code:ctgov来源。B先绑定真实组—药物，再附研究身份；图形稳定键仍为登记ID，标签为临床信息。
 - `render/eligibility.py`返回规则与无损文本segments，不返回可信HTML；Jinja逐段转义后以有限语义角色强调。规则保留source_start/end、section_title和clause_start，按原条款/队列归组；原文DOM textContent必须逐字相同。vIGA与IGA不互换，复合逻辑按来源顺序保存，未识别语句不删改。
 - C所有依据与完整入排复用一个native dialog，原DOM移动后归位，Esc回实际触发者。终点索引同研究筛选并报告可见/总数。摘要不重复带eligibility_reading/clauses全文副本，但保留结构化规则、完整原条款、队列和引用；不引入新执行平台。
