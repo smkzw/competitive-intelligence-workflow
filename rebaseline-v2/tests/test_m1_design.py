@@ -182,7 +182,11 @@ def test_c_comparison_groups_seven_reading_columns_and_keeps_whole_or_clause(des
     assert '完整入排与依据' in html and 'https://example.org/source' in html
 
 
-def test_report_first_screen_uses_clinical_counts_not_duplicate_engineering_kpis(design_project):
+def test_report_first_screen_uses_clinical_counts_not_duplicate_engineering_kpis(design_project,settings):
+    from fastapi.testclient import TestClient
+
+    from ciw2.web.app import create_app
+
     db, pid = design_project[:2]
     rid = db.create_run(pid)
     db.log_coverage(rid, 'global:test-source', 'global', 'public query', 'ok', hits=5)
@@ -190,7 +194,11 @@ def test_report_first_screen_uses_clinical_counts_not_duplicate_engineering_kpis
     html = render_report(db, pid, 'C')
     kpis = html.split('class="kpis"', 1)[1].split('</div>', 1)[0]
     assert '检索路线成功' not in kpis
-    assert '试验设计' in kpis and 'global:test-source' in html
+    assert '试验设计' in kpis and 'global:test-source' not in html
+    assert '检索覆盖' not in html
+    with TestClient(create_app(settings)) as client:
+        response=client.get(f'/projects/{pid}')
+    assert response.status_code==200 and 'global:test-source' in response.text
     assert '关注点：未指定' not in html
 
 

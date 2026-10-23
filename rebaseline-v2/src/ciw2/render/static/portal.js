@@ -184,7 +184,8 @@
             var p = at.get(x);
             var plottedX = group.display_axis === "weeks" ? x / 7 : x;
             return p ? Object.assign({}, p, { value: [plottedX, p.value],
-              label: { show: items.length <= 8 || p === items[items.length - 1], position: "top" } }) : { value: [plottedX, null] };
+              label: { show: items.length <= 8 || p === items[items.length - 1],
+                position: index % 2 ? 'bottom' : 'top', distance: 8 } }) : { value: [plottedX, null] };
           }),
           label: { formatter: function (p) { return p.value[1]; } } };
       });
@@ -230,10 +231,8 @@
     var height = viewGroup.kind === "line" ? 320 : Math.max(120, Math.min(336, Math.min(points.length, 6) * 44 + 60));
     setPanelHeight("chart-result", height);
     el("result-definition").textContent = [group.title, group.population, group.unit, group.stat_type].filter(Boolean).join(" · ");
-    var statistics = { mean: "均值", median: "中位数", ls_mean: "最小二乘均值", ls_mean_change: "最小二乘均值变化",
-      mean_change: "均值变化", percent_change: "百分比变化", proportion: "受试者比例", count_participants: "受试者人数",
-      count_events: "事件次数", hazard_ratio: "风险比", odds_ratio: "优势比", risk_difference: "风险差" };
-    if (el("result-unit")) el("result-unit").textContent = [group.unit, statistics[group.stat_type] || group.stat_type].filter(Boolean).join(" · ");
+    if (el("result-unit")) el("result-unit").textContent = [group.unit_label || group.unit,
+      group.stat_label || group.stat_type].filter(Boolean).join(" · ");
     var series = new Map();
     points.forEach(function (p) { if (!series.has(p.series_key)) series.set(p.series_key, p.series_name); });
     el("result-series").replaceChildren();

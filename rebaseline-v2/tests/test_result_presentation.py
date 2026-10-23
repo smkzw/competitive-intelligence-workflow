@@ -158,3 +158,13 @@ def test_reading_domains_keep_all_facts_and_choose_clinical_without_registry_pri
     for row in data['results']:
         assert f'data-fact-id="{row["id"]}" data-domain="{row["domain"]}"' in html
     assert db.current_facts(pid)==before
+
+
+def test_unit_reading_is_one_projection_raw_source_retained_and_no_route_diagnostics(settings):
+    db,pid,_=project(settings,[{'context':{'unit':'score on a scale'}}])
+    data=data_b(db,pid)
+    group=data['charts']['groups'][0]
+    assert group['unit']=='score on a scale' and group['unit_label']=='分'
+    html=render_report(db,pid,'B')
+    assert 'score on a scale' in html
+    assert '检索覆盖' not in html and '条路线记录' not in html

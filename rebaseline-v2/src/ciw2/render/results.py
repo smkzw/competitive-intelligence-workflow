@@ -10,6 +10,7 @@ from typing import Any
 
 from ciw2.domain.identity import name_key
 from ciw2.domain.outcomes import DOMAIN_LABELS
+from ciw2.render.labels import registry_label
 
 VISIT = re.compile(r'(?:at\s+)?(week|day|month)s?\s*(\d+)|第\s*(\d+)\s*(周|天|月)', re.IGNORECASE)
 
@@ -78,6 +79,8 @@ def _group(frame: tuple, items: list[tuple[dict, tuple | None]], positions: set[
     return {'id': group_id, 'title': rows[0]['endpoint'], 'subtitle': rows[0].get('timepoint') or '',
             'domain': frame[-1],
             'population': rows[0].get('population') or '', 'unit': rows[0].get('unit') or '',
+            'unit_label': registry_label(rows[0].get('unit'), 'measure_unit'),
+            'stat_label': registry_label(rows[0].get('stat_type'), 'statistic'),
             'stat_type': rows[0].get('stat_type') or '', 'primary': any(row['field'].startswith('result.primary') for row in rows),
             'kind': 'line' if line else 'bar', 'axis_unit': axes, 'collision': collision, 'positions': sorted(positions),
             'display_axis': 'weeks' if axes == 'days' and all(p['x'] is not None and p['x'] % 7 == 0 for p in points) else axes,

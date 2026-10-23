@@ -43,19 +43,6 @@ def _trial_drugs(db: DB, pid: str) -> dict[str, list[str]]:
     return out
 
 
-def _coverage(db: DB, pid: str) -> dict[str, Any]:
-    run = db.one("SELECT id FROM runs WHERE project_id=? ORDER BY created_at DESC LIMIT 1", (pid,))
-    if not run:
-        return {"regions": {}, "routes": []}
-    rows = db.query("SELECT route_id, region, status, COUNT(*) n, SUM(hits) hits, SUM(new_entities) new "
-                    "FROM coverage WHERE run_id=? GROUP BY route_id, region, status ORDER BY region, route_id",
-                    (run["id"],))
-    regions: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
-    for r in rows:
-        regions[r["region"]][r["status"]] += r["n"]
-    return {"regions": {k: dict(v) for k, v in regions.items()}, "routes": rows}
-
-
 def data_a(db: DB, pid: str) -> dict[str, Any]:
     drugs = db.entities(pid, "drug")
     identities = trial_identities(db, pid)
@@ -184,6 +171,6 @@ def render_report(db: DB, pid: str, report: str, *, findings: dict[str, Any] | N
                   if (STATIC / "echarts.min.js").exists() else ""}
     tpl = _env.get_template(f"{report.lower()}.html")
     return tpl.render(project=project, report=report, report_title=REPORT_ZH[report], data=data,
-                      findings=summaries, coverage=_coverage(db, pid),
+                      findings=summaries,
                       charts_json=data.get("charts", {}),
                       static=static_prefix, assets=assets, reports=project["reports"], phase_zh=PHASE_ZH)

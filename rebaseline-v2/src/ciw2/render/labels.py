@@ -1,4 +1,4 @@
-"""注册中心枚举与年龄单位的中文显示适配。
+"""注册中心枚举、统计/测量单位与年龄单位的显示适配。
 
 纯查表映射，输入是数据而不是指令：
 - 只做精确匹配，不折叠大小写、不去空白/标点、不做模糊匹配；
@@ -16,6 +16,22 @@ PHASE_ZH = {"preclinical": "临床前", "phase1": "I 期", "phase1_2": "I/II 期
             "phase4": "IV 期", "unknown": "未知"}
 
 _REGISTRY_LABELS: dict[str, dict[str, str]] = {
+    'measure_unit': {
+        'score on a scale': '分', 'Participants': '人', 'participants': '人',
+        'percent change': '%变化', 'percentage of participants': '%',
+        'nanograms per milliliters (ng/mL)': 'ng/mL',
+        'micrograms per milliliter (ug/mL)': 'ug/mL',
+        'liter per micrograms (L/ug)': 'L/ug', 'liter per day (L/day)': 'L/day',
+        'liter': 'L', 'per day': '1/天', 'day': '天',
+    },
+    'statistic': {
+        'mean': '均值', 'median': '中位数', 'ls_mean': '最小二乘均值',
+        'ls_mean_change': '最小二乘均值变化', 'mean_change': '均值变化',
+        'percent_change': '百分比变化', 'proportion': '受试者比例',
+        'count_participants': '受试者人数', 'count_events': '事件次数',
+        'hazard_ratio': '风险比', 'odds_ratio': '优势比', 'risk_difference': '风险差',
+        'number': '数值',
+    },
     "trial_status": {
         "NOT_YET_RECRUITING": "尚未招募",
         "RECRUITING": "正在招募",

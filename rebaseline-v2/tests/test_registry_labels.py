@@ -33,6 +33,17 @@ FIXED_MAPPINGS = [
 FIXED_CATEGORIES = ["trial_status", "allocation", "masking", "arm_type"]
 
 
+@pytest.mark.parametrize('raw,expected',[
+    ('score on a scale','分'),('Participants','人'),('percent change','%变化'),
+    ('nanograms per milliliters (ng/mL)','ng/mL'),
+    ('liter per micrograms (L/ug)','L/ug'),('per day','1/天'),
+    ('probability of participants','probability of participants'),
+    ('my unknown unit','my unknown unit'),('<img src=x>','<img src=x>'),
+])
+def test_measurement_unit_display_preserves_scale_and_unknown_text(raw,expected):
+    assert registry_label(raw,'measure_unit')==expected
+
+
 @pytest.mark.parametrize(("category", "code", "expected"), FIXED_MAPPINGS)
 def test_fixed_canonical_mappings_are_exact(category, code, expected):
     assert registry_label(code, category) == expected
