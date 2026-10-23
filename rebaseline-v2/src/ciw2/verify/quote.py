@@ -21,7 +21,8 @@ _TRANS = str.maketrans({
 
 def normalize(text: str) -> str:
     text = unicodedata.normalize("NFKC", text).translate(_TRANS)
-    text = re.sub(r"<[^>]+>", " ", text)  # 去掉 HTML 标签
+    # Inputs are source plaintext (HTML is extracted at ingestion). Inequalities
+    # and literal markup are evidence, not HTML tags to delete a second time.
     return re.sub(r"\s+", " ", text).strip().lower()
 
 

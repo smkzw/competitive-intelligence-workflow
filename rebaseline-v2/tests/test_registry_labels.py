@@ -2,7 +2,7 @@
 
 import pytest
 
-from ciw2.render.labels import EM_DASH, age_label, registry_label
+from ciw2.render.labels import EM_DASH, age_label, phase_label, registry_label
 
 FIXED_MAPPINGS = [
     ("trial_status", "NOT_YET_RECRUITING", "尚未招募"),
@@ -31,6 +31,12 @@ FIXED_MAPPINGS = [
 ]
 
 FIXED_CATEGORIES = ["trial_status", "allocation", "masking", "arm_type"]
+
+
+@pytest.mark.parametrize('raw,label',[('其它 其他说明:','其他'),('其他 其他说明：生物等效性研究','其他 · 生物等效性研究'),
+                                    ('来源中的其他研究阶段','来源中的其他研究阶段')])
+def test_phase_form_label_does_not_replace_or_invent_a_clinical_phase(raw,label):
+    assert phase_label(raw)==label
 
 
 @pytest.mark.parametrize('raw,expected',[

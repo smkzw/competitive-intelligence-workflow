@@ -201,6 +201,28 @@ class DB:
         self.execute("UPDATE runs SET status=?, error=?, finished_at=? WHERE id=?",
                      (status, error, finished, run_id))
 
+    def run(self, run_id: str) -> dict[str, Any] | None:
+        return self.one("SELECT * FROM runs WHERE id=?", (run_id,))
+
+    def active_run(self, project_id: str) -> dict[str, Any] | None:
+        """本进程可观察到的该项目排队/执行中运行；所有权由 Service 判断。"""
+        return self.one("SELECT * FROM runs WHERE project_id=? AND status IN ('queued','running') "
+                        "ORDER BY rowid DESC LIMIT 1", (project_id,))
+
+    def start_run_if_queued(self, run_id: str) -> bool:
+        """原子认领：排队运行被取消后不会再被工作线程启动。"""
+        with self._lock:
+            cur = self._conn.execute("UPDATE runs SET status='running', error=NULL, finished_at=NULL "
+                                     "WHERE id=? AND status='queued'", (run_id,))
+            return cur.rowcount == 1
+
+    def cancel_queued_run(self, run_id: str, note: str) -> bool:
+        """仅当运行仍在排队时置为取消；已开始执行时返回 False，由执行方处理停止意图。"""
+        with self._lock:
+            cur = self._conn.execute("UPDATE runs SET status='cancelled', error=?, finished_at=? "
+                                     "WHERE id=? AND status='queued'", (note, now(), run_id))
+            return cur.rowcount == 1
+
     def set_stage(self, run_id: str, name: str, status: str, output: Any = None,
                   error: str | None = None) -> None:
         out = json.dumps(output, ensure_ascii=False) if output is not None else None
@@ -209,9 +231,9 @@ class DB:
             self.execute("INSERT INTO stages VALUES (?,?,?,?,?,?,?)",
                          (run_id, name, status, out, error,
                           now() if status == "running" else None,
-                          now() if status in {"succeeded", "failed", "skipped"} else None))
+                          now() if status in {"succeeded", "failed", "skipped", "cancelled"} else None))
         else:
-            finished = now() if status in {"succeeded", "failed", "skipped"} else None
+            finished = now() if status in {"succeeded", "failed", "skipped", "cancelled"} else None
             self.execute(
                 "UPDATE stages SET status=?, output_json=COALESCE(?, output_json), error=?, "
                 "started_at=COALESCE(started_at, CASE WHEN ?='running' THEN ? END), finished_at=? "

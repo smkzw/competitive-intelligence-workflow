@@ -12,6 +12,8 @@ from typing import Any
 
 from pydantic import BaseModel, Field, ValidationError
 
+from ciw2.harness.cancellation import RunCancelled
+
 
 @dataclass
 class ToolContext:
@@ -47,6 +49,8 @@ class Tool:
                               ensure_ascii=False, default=str)
         try:
             result = self.fn(ctx, args)
+        except RunCancelled:
+            raise   # 停止意图不是工具失败，不能回给模型后继续重试
         except Exception as exc:  # noqa: BLE001 - 工具边界将未知异常显式交回模型
             return json.dumps({"error": f"{type(exc).__name__}: {exc}", "status": "tool_failed"},
                               ensure_ascii=False)

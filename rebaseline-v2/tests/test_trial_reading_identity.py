@@ -78,6 +78,24 @@ def test_original_disease_context_not_replaced_by_unrelated_project_label(identi
     assert ident['scope_indication']=='特应性皮炎'
 
 
+@pytest.mark.parametrize('condition,short',[
+    ('本品适用于治疗急性湿疹、接触性皮炎、特应性皮炎、慢性湿疹。','特应性皮炎'),
+    ('本品适用于治疗非特应性皮炎。','本品适用于治疗非特应性皮炎。'),
+    ('本品适用于治疗特应性皮炎，但不包括中重度患者。','本品适用于治疗特应性皮炎，但不包括中重度患者。'),
+])
+def test_explicit_multi_indication_list_focus_is_concise_and_complete_original_remains_reachable(identity_project,condition,short):
+    from ciw2.render.trial_identity import trial_identities
+    svc,pid,trial,_,_=identity_project
+    attrs=svc.db.entities(pid,'trial')[0]['attrs']
+    attrs['conditions']=[condition]
+    svc.db.execute('UPDATE entities SET attrs=? WHERE id=?',(json.dumps(attrs),trial))
+    ident=trial_identities(svc.db,pid)[trial]
+    assert ident['indication']==short and ident['conditions_original']==[condition]
+    html=render_report(svc.db,pid,'C')
+    assert condition in html
+    if short!=condition:assert '原登记适应症' in html
+
+
 def test_result_points_and_a_trial_list_share_context_without_changing_arm_identity(identity_project):
     svc,pid,trial,drug,sid=identity_project
     svc.db.add_fact({'project_id':pid,'entity_id':trial,'field':'result.primary.value','value':25.0,

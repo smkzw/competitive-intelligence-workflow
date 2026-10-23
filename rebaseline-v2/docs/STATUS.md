@@ -5,12 +5,19 @@
 ## 当前入口与授权
 - 唯一英文工程根内rebaseline-v2；产品权威01_PRD、02_ARCHITECTURE、03_PLAN、04_AGENT_RULES。本页替换更新，详细历史在根Trellis任务10-23-rebaseline-v2-m1/implement.md及Git，不另立规格。
 - 单用户Web服务+内嵌9 Skills；v1多宿主包、编辑/分享、24门户不是v2发布门。未知v1工作树保留，旧中文工程零接触；不得reset/clean/add-all。
-- 分支codex/rebaseline-v2-m1；本节点父HEADc13a155c72ea8061a13160580792dcb8b45d6f01（下载组件已push并fresh remote exact），本恢复节点提交以Git记录为准。
+- 分支codex/rebaseline-v2-m1；本节点父HEAD022ed1a0810d75e73db44a6819b964a63366d670已push/fresh remote exact，本节点提交以Git记录为准。
 - 用户已解除暂停；历史暂停点10-23-rebaseline-v2-m1/PAUSE_HANDOFF_20261023_0810.md仅供恢复，不覆盖新实施授权。
 - 模型cms-router/glm-5.3-flash→DGX/deepseek→DGX/qwen；密钥只在必要环境，不入文件/提示词/日志，不改全局路由。
 - 用户永久授权本项目Ego专用空间缺失时自行替换，不再询问。目前63/p1复用；不改登录、缓存、其他任务空间或升级浏览器。
 
-## 当前节点：旧登记详情兼容与真实扩展
+## 当前节点：十条真实原表、阅读修正及运行控制
+- 旧ID族实际采集10条：先8条/169事实成功，2条在明确四列“企业选择不公示”终点行失败；原始来源全部留存。已修正字段级未公开映射，不伪造终点或吞掉未知坏表。另发现已是纯文本的临床不等式被二次HTML正则删除，既误拒真引文也可能误接收拼接引文；3真实RED后移除二次剥离（原HTMLParser不变）。旧事实核验状态的规则升级重放仍待独立C03结论，未宣称已完成历史再核验。
+- 年龄非数值上界、其他说明表单标签及长适应症主层4RED/3正向→145相关PASS；当前完整v2 **1051PASS/6.45s**、Ruff全src/tests/scripts和portal.js语法PASS。年龄原句/缺口、限定适应症、完整原文仍可查，无新医学推断。
+- ciw-data/china-legacy-family-current-05重放相同10份CAS：199当前事实、原169行字节保留、来源不变、引文全核对、重复采用0；不是重新采源或创新宇宙接受。C选择的Web候选current-06事实SHA49ab953120c5fd8044d1497cd27e8213eddc5e92689043ba38c30653c90cc50a、C f66cb519b44d4210a013696dfefce3fb7281bf6b09be73429f2c3daba9186baf；四宽实屏进行中，旧候选截图不借用。
+- M6有界执行节点2865已终态：实际CodeBuddy/deepseek-v4.1-flash/max、会话01a16a80-860d-79c5-9e3a-e5a8f33f9f6f、666.278s/99工具，未fallback。owner核查字节并补普通来源单元4RED→69相关PASS；单进程排队、防重复、合作式停止/恢复已接通，真实工作台/真实模型来源链仍未验收。worker未保留单独RED且超合同跑宽门，不能把其1040自报当owner验收。独立C03仅评核验规则升级，不是对此worker的独立验收。
+- current-06/browser-03四宽×密集/筛后/入排/来源16图已逐张实看：完整原文与BSA/IGA/EASI/NRS重点、正确来源23/375、760px来源窗、真实Esc回焦/保留查询、无横溢出通过。不是最终C视觉接受：筛后单研究的饼图仍占多余高度，同药同期别的多个试验图轴缺次级消歧，下一有界布局包修正；不推测公司集团以缩短原申请人。前两轮隐藏原文/四个合法依据按钮选择器失败保留，不删除真实资料以过测。
+
+## 上一完成节点：旧登记详情兼容与真实扩展
 - 77a318641783291a36312df1f1bbbe088e2d32c7已push/fresh remote exact。固定464条列表中确有10个旧_p标识；详情只收32hex造成3生产RED。列表/详情现复用单一valid_detail_id合同（32hex可带_p、正整数_p），不开放路径/查询/会话字符串，不去掉_p猜新ID。相关156PASS/0.43s；当前完整v2 **1014PASS/6.35s**、Ruff全src/tests/scripts及详情MJS语法PASS。
 - ciw-data/china-legacy-detail-live-01使用原06/07列表DB的隔离只读拷贝，普通生产ingest_trial在Ego63/p1实际查询CTR20131043/1317_p、打开原页并采用22事实/0模型/原来源不变，源码运行前后hash一致。来源d42fa4eb24777332e4cae85b9220fe279dc2594e9550f2c4bd3b33b74a36861a，原文8fbf69f73cc9762ebe1d4502298b8baee6b5391f697f27850d1da0e3c43d828c；C5191ada0e73d3dd6a11a3ff923074b7959f96fe8c437199c706a8a6cb2e16e75。不是十条详情/完整M1/M2/医学视觉接受，随后扩大其余9旧ID完整族，不为凑数量跳过旧格式。
 - 本轮新增候选/读图证据各1.3–8.7MB，测试缓存124KB；CAS已按不可变摘要硬链接复用，不复制同一原文。当前均有恢复/修复证据用途，不为124KB缓存收益清理唯一现场或别的agent_health日志。

@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Callable
 from typing import Any
 
 from pydantic import BaseModel, ValidationError
@@ -42,7 +43,9 @@ def _submit_tool(output: type[BaseModel] | None) -> dict[str, Any]:
 
 
 def run_skill(skill: Skill, task: dict[str, Any], llm: LLM, registry: ToolRegistry,
-              ctx: ToolContext, max_steps: int | None = None) -> BaseModel | dict[str, Any]:
+              ctx: ToolContext, max_steps: int | None = None,
+              check_cancelled: Callable[[], None] | None = None) -> BaseModel | dict[str, Any]:
+    check = check_cancelled or (lambda: None)
     tools = registry.subset(skill.tools) + [RESULT_PAGE_TOOL] if skill.tools else []
     tool_by_name = {t.name: t for t in tools}
     schemas = [t.schema() for t in tools] + [_submit_tool(skill.output)]
@@ -63,6 +66,7 @@ def run_skill(skill: Skill, task: dict[str, Any], llm: LLM, registry: ToolRegist
     log(0, "task", task)
     for step in range(1, budget + 1):
         remaining = budget - step + 1
+        check()
         if remaining <= 2:
             messages.append({'role': 'user', 'content': f'本工作单元剩余 {remaining} 次模型交互。请及时使用 submit_result 提交已有证据支持的结果，未完成项如实保留，禁止补造。'})
         # A final response is still schema/source checked. Do not spend the
@@ -85,6 +89,9 @@ def run_skill(skill: Skill, task: dict[str, Any], llm: LLM, registry: ToolRegist
             messages.append({"role": "user", "content": "请继续使用工具，完成后调用 submit_result。"})
             continue
         for call in reply.tool_calls:
+            # A completed submission is kept; a new source/tool call is not started after a stop request.
+            if call.name != "submit_result":
+                check()
             result_text, final = _dispatch(call, skill, {} if remaining == 1 else tool_by_name, ctx)
             messages.append({"role": "tool", "tool_call_id": call.id, "content": result_text})
             log(step, f"tool:{call.name}", result_text)

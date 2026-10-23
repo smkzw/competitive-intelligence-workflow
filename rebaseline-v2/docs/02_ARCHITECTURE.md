@@ -37,6 +37,8 @@
 `IncompleteWork`是例外：即使该阶段允许后续继续，存在预算/未完成单元时run最终仍failed，部分产物可用但不能显示工作已全完；runner保留partial output。CLI对失败或带错误运行返回非零，普通被拦来源仍依既有非阻断合同处理，不加新发布状态。
 Service在初始化模型前检查项目与resume_run归属，不存在或跨项目请求返回明确冲突且不修改旧run。历史截止日暂由共同availability守卫阻断：启动产生失败记录，不发模型/来源请求；report_data与HTML入口也拒绝输出未筛选的历史报告，Web返回409。M5须完成逐版本资格后替换此守卫，不能直接解除检查。
 
+Service复用标准库Condition/deque及一个执行锁，在同一服务进程串行准入，后台队列与同步CLI共用锁；运行所有权和停止意图在内存，不建调度平台或自动接管旧running。排队取消采用SQLite条件更新，活跃取消通过每run的RunControl传递；RunCancelled继承BaseException，穿透既有逐条except Exception隔离，runner记录cancelled。普通CTR/CT.gov、反向来源扩展和抽取批次循环均在下一单元前检查，不丢已完成单元回执；Skill在新模型/工具前、FallbackLLM在进入下条原配置路线前检查。取消恢复与失败共用既有依赖重置机制；当前请求可完成，不宣称即时中断或跨进程互斥。
+
 ## 2. 数据模型（store/db.py）
 - `projects` `runs` `stages` `agent_steps`：运行与留痕。
 - `sources`：按项目/URL/原始字节digest复用内容版本，保留首次存储时间。每次网络核查、缓存复用、导入另在agent_steps记录source_observation；只有network_checked含network_checked_at及实际HTTP状态。**抽取只能引用本项目已读取的来源**。

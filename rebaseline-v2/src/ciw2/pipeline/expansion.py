@@ -177,6 +177,7 @@ def expand_universe(rc: RunContext, persist: Callable[[UniverseResult], int]) ->
             break
         out['rounds'] = round_index + 1
         for query in planned:
+            rc.check_cancelled()
             try:
                 source, status = _source(rc, query, limit is None or out['source_attempts'] < limit)
                 if status == 'budget':

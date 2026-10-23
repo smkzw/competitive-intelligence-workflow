@@ -2,6 +2,7 @@
 <div class="trial-identity" data-clinical-trial="{{ identity.registry_id }}">
 <strong class="trial-clinical-name">{{ identity.drug_label }}</strong>
 <div class="trial-context">{% if identity.indication %}{{ identity.indication }}{% endif %}{% if identity.phase_label %} · {{ identity.phase_label }}{% endif %}</div>
+{% if identity.conditions_original and identity.conditions_original|join(' / ') != identity.indication %}<details><summary>原登记适应症</summary>{{ identity.conditions_original|join(' / ') }}</details>{% endif %}
 {% for company in identity.companies %}<div class="trial-company"><span class="muted">{{ company.role }}</span> {{ company.name }}</div>{% endfor %}
 {% if identity.drug_names_original and identity.drug_names_original != identity.drugs %}<details><summary>原名与代号</summary>{{ identity.drug_names_original|join(' / ') }}</details>{% endif %}
 {% if show_id %}<div class="registry-id">{% if identity.url %}<a href="{{ identity.url }}" target="_blank" rel="noopener">{{ identity.registry_id }}</a>{% else %}{{ identity.registry_id }}{% endif %}</div>{% endif %}

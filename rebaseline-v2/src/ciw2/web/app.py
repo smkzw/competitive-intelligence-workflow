@@ -94,6 +94,17 @@ def create_app(settings: Settings | None = None, llm_factory: LLMFactory = defau
         svc.start_run(pid, resume_run=resume_run or None, background=background)
         return RedirectResponse(f"/projects/{pid}", status_code=303)
 
+    @app.post("/api/projects/{pid}/runs/{rid}/cancel")
+    def cancel_run_api(pid: str, rid: str) -> Any:
+        _project(pid)
+        return svc.cancel_run(pid, rid)
+
+    @app.post("/projects/{pid}/runs/{rid}/cancel")
+    def cancel_run_form(pid: str, rid: str) -> Any:
+        _project(pid)
+        svc.cancel_run(pid, rid)
+        return RedirectResponse(f"/projects/{pid}", status_code=303)
+
     @app.get("/api/runs/{rid}")
     def run_status(rid: str) -> Any:
         run = svc.db.one("SELECT * FROM runs WHERE id=?", (rid,))
@@ -136,7 +147,7 @@ def create_app(settings: Settings | None = None, llm_factory: LLMFactory = defau
     @app.get("/projects/{pid}", response_class=HTMLResponse)
     def project_page(request: Request, pid: str) -> Any:
         p = _project(pid)
-        runs = svc.db.query("SELECT * FROM runs WHERE project_id=? ORDER BY created_at DESC", (pid,))
+        runs = svc.db.query("SELECT * FROM runs WHERE project_id=? ORDER BY created_at DESC, rowid DESC", (pid,))
         latest = runs[0] if runs else None
         stages = stage_table(svc.db, latest["id"], p["reports"]) if latest else []
         cov = svc.db.query("SELECT route_id, region, status, COUNT(*) n, SUM(hits) hits FROM coverage WHERE run_id=? "
@@ -144,6 +155,7 @@ def create_app(settings: Settings | None = None, llm_factory: LLMFactory = defau
         counts = {t: len(svc.db.entities(pid, t)) for t in ("drug", "trial", "company", "target")}
         return tpl.TemplateResponse(request, "project.html", {
             "p": p, "runs": runs, "latest": latest, "stages": stages, "coverage": cov, "counts": counts,
+            "stopping": svc.stopping(latest["id"]) if latest else False,
             "n_facts": len(svc.db.current_facts(pid))})
 
     @app.get("/projects/{pid}/portal/{report}", response_class=HTMLResponse)

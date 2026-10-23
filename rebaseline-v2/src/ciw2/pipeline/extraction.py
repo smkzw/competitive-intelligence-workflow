@@ -111,6 +111,7 @@ def extract_drugs(rc: RunContext, skill: str,
     started = set()
     for drug, tasks in planned:
         for task in tasks:
+            rc.check_cancelled()
             key = _key(rc, skill, task)
             result = get_unit(rc, key)
             if result is None and limit is not None and len(started) >= limit and drug['id'] not in started:

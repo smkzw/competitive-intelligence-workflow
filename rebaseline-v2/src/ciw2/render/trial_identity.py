@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import re
 from collections import defaultdict
 from typing import Any
 from urllib.parse import urlsplit
@@ -37,7 +38,13 @@ def verified_holders(facts: list[dict[str, Any]], sources: dict[str, dict[str, A
 
 def _indication(conditions: list[str], project: dict[str, Any]) -> str:
     aliases = {name_key(n) for n in [project['indication'], *project['indication_aliases']]}
-    return ' / '.join(dict.fromkeys(project['indication'] if name_key(n) in aliases else n for n in conditions))
+    labels=[]
+    for condition in conditions:
+        listing=re.fullmatch(r'本品适用于治疗([^，；;。]+)[。]?',condition)
+        items=listing[1].split('、') if listing else []
+        exact_list=len(items)>1 and any(name_key(n) in aliases for n in items)
+        labels.append(project['indication'] if name_key(condition) in aliases or exact_list else condition)
+    return ' / '.join(dict.fromkeys(labels))
 
 
 def trial_identities(db: DB, pid: str) -> dict[str, dict[str, Any]]:

@@ -17,6 +17,7 @@ def collect(rc: RunContext) -> dict:
     pending=[]
     errors=[]
     for trial in trials:
+        rc.check_cancelled()
         binding={k:trial['attrs'].get(k) for k in ('registry_detail_id','registry_source_id')}
         key=f'china_trial_ingestion:{china_ingest.EXTRACTOR_VERSION}:{china_detail.code_hash()}:{trial["name"]}:{fingerprint(binding)}'
         info=get_unit(rc,key)

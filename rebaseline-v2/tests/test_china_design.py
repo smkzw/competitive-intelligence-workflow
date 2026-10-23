@@ -142,3 +142,38 @@ def test_explicit_former_name_label_is_separate_from_main_drug_name_without_alia
     assert out['attrs']['registry_drug_name']=='原药（联合方案）'
     assert out['attrs']['registry_drug_name_raw']==raw['tables'][0]['rows'][1][1]
     assert out['attrs']['registry_former_name']==(tail or None)
+
+
+@pytest.mark.parametrize('marker,reason',[('企业选择不公示','withheld'),('登记人暂未填写该信息','not_reported')])
+def test_four_cell_explicitly_unreported_endpoint_is_gap_not_phantom_or_whole_trial_failure(marker,reason):
+    raw=design_capture()
+    table=raw['tables'][-1]
+    rows=[['序号','指标','评价时间','终点指标选择'],['1','','',marker]]
+    table['nested'][1]['rows']=rows
+    table['rows'][1][1]='\n'.join('\t'.join(r) for r in rows)
+    out=parse_design(raw)
+    assert len(facts(out,'design.primary_endpoint'))==2 and not facts(out,'design.secondary_endpoint')
+    gap=next(g for g in out['gaps'] if g['field']=='design.secondary_endpoint')
+    assert gap['reason']==reason and gap['json_path'].endswith('.rows[1]')
+    assert gap['source_ordinal']=='1' and gap['source_notice']==marker
+    assert facts(out,'design.eligibility.criteria') and facts(out,'trial.applicant')
+
+
+def test_empty_endpoint_measure_with_unexplained_clinical_cells_still_rejects():
+    raw=design_capture()
+    table=raw['tables'][-1]
+    rows=[['序号','指标','评价时间','终点指标选择'],['1','','第16周','有效性指标']]
+    table['nested'][1]['rows']=rows
+    table['rows'][1][1]='\n'.join('\t'.join(r) for r in rows)
+    with pytest.raises(ValueError,match='终点'):parse_design(raw)
+
+
+def test_non_numeric_age_bound_is_not_a_scientific_age_or_an_invented_no_upper_limit():
+    raw=design_capture()
+    raw['tables'].append({'rows':[['年龄','18岁(最小年龄)至无岁(最大年龄)']],'nested':[]})
+    out=parse_design(raw)
+    age=facts(out,'design.eligibility.age')[0]
+    assert age['value']=={'min':'18岁','max':None}
+    assert '无岁' in age['quote'] and age['context']['raw_age'].endswith('无岁(最大年龄)')
+    assert any(g['field']=='design.eligibility.age' and g.get('bound')=='max'
+               and g['reason']=='non_numeric_age_bound' for g in out['gaps'])

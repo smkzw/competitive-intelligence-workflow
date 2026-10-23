@@ -20,6 +20,9 @@ def phase_label(value: object) -> str:
     text=_text(value)
     if text is None:
         return PHASE_ZH['unknown']
+    other=re.fullmatch(r'其[他它]\s+其他说明\s*[:：]\s*(.*)',text)
+    if other:
+        return '其他'+(' · '+other[1].strip() if other[1].strip() else '')
     # Registry Chinese phase strings are already labels, not unknown enum codes.
     match=re.fullmatch(r'(I{1,3}|IV)(/(?:I{1,3}|IV))?期',text)
     return text[:-1]+' 期' if match else PHASE_ZH.get(text,text)

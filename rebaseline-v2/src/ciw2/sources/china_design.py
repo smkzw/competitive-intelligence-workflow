@@ -14,6 +14,10 @@ def _absent(text: str) -> bool:
     return not text.strip() or any(word in text for word in _MISSING)
 
 
+def _missing_reason(text: str) -> str:
+    return 'withheld' if '企业选择不公示' in text else 'not_reported'
+
+
 def _cells(rows: list[list[str]], prefix: str, table: dict | None = None) -> dict:
     found={}
     for i,row in enumerate(rows):
@@ -54,14 +58,19 @@ def _endpoints(cells: dict, facts: list, gaps: list) -> None:
             gaps.append({'field':field,'reason':'source_field_absent'})
             continue
         if not node['nested']:
-            gaps.append({'field':field,'reason':'not_reported' if _absent(node['value']) else 'unparsed_endpoint'})
+            gaps.append({'field':field,'reason':_missing_reason(node['value']) if _absent(node['value']) else 'unparsed_endpoint'})
             continue
         number,rows=node['nested'][0]
         if rows[0]!=['序号','指标','评价时间','终点指标选择']:
             raise ValueError('终点内表表头与当前来源不符')
         for i,row in enumerate(rows[1:],1):
             if len(row)==1 and _absent(row[0]):
-                gaps.append({'field':field,'reason':'not_reported','json_path':node['path']})
+                gaps.append({'field':field,'reason':_missing_reason(row[0]),'json_path':node['path']})
+                continue
+            if len(row)==4 and not row[1].strip() and not row[2].strip() and row[3].strip() in _MISSING:
+                gaps.append({'field':field,'reason':_missing_reason(row[3]),
+                    'json_path':f"{node['prefix']}.nested[{number}].rows[{i}]",
+                    'source_ordinal':row[0],'source_notice':row[3]})
                 continue
             if len(row)!=4 or not row[1].strip():
                 raise ValueError('终点内表记录不完整')
@@ -147,8 +156,18 @@ def parse_design(raw: dict) -> dict:
     age=cells.get('年龄')
     if age:
         match=re.fullmatch(r'\s*(.+?)\s*[（(]最小年龄[）)]\s*至\s*(.+?)\s*[（(]最大年龄[）)]\s*',age['value'])
-        value={'min':match[1],'max':match[2]} if match else None
-        facts.append(_fact('design.eligibility.age',value,age))
+        value=None
+        if match:
+            value={}
+            for bound,raw_bound in zip(('min','max'),match.groups(),strict=True):
+                valid=re.fullmatch(r'\s*[0-9]+(?:\.[0-9]+)?\s*(?:岁|年|个月|月|周|天|日|小时|分钟)\s*',raw_bound)
+                value[bound]=raw_bound.strip() if valid else None
+                if not valid:
+                    gaps.append({'field':'design.eligibility.age','bound':bound,
+                        'reason':'non_numeric_age_bound','raw_age_bound':raw_bound})
+            if not any(v is not None for v in value.values()):
+                value=None
+        facts.append(_fact('design.eligibility.age',value,age,raw_age=age['value']))
         if value is None:
             gaps.append({'field':'design.eligibility.age','reason':'not_reported' if _absent(age['value']) else 'unparsed_age'})
     for label,field in (('申请人名称','trial.applicant'),('试验状态','status.trial')):

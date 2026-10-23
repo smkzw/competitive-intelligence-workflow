@@ -1,6 +1,7 @@
 """Sequential user-configured routes, with explicit identity on every reply."""
 from __future__ import annotations
 
+from collections.abc import Callable
 from typing import Any
 
 from ciw2.harness.llm import LLM, LLMError, LLMReply
@@ -14,6 +15,10 @@ class FallbackLLM:
         self.index = 0
         self.failures: list[str] = []
         self.failure_details: list[dict[str, Any]] = []
+        self._cancel_check: Callable[[], None] | None = None
+
+    def set_cancel_check(self, check: Callable[[], None]) -> None:
+        self._cancel_check = check
 
     @property
     def model(self) -> str:
@@ -21,6 +26,8 @@ class FallbackLLM:
 
     def chat(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]] | None = None) -> LLMReply:
         while self.index < len(self.routes):
+            if self._cancel_check is not None:
+                self._cancel_check()  # Do not enter another configured route after a stop request.
             route = self.routes[self.index]
             try:
                 reply = route.chat(messages, tools)

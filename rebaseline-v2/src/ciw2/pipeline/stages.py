@@ -124,6 +124,7 @@ def trial_evidence(rc: RunContext) -> dict[str, Any]:
     owners = name_owners(rc.db.entities(rc.project_id, 'drug'))
     ambiguous = {name for name, ids in owners.items() if len(ids) > 1}
     for d in scoped_drugs(rc):
+        rc.check_cancelled()
         try:
             rows = ctgov.search(ctx, condition=cond, intervention=d["name"], max_results=None)
             rc.db.log_coverage(rc.run_id, "trial:ctgov:intervention", "global", f"{cond} × {d['name']}",
@@ -154,6 +155,7 @@ def trial_evidence(rc: RunContext) -> dict[str, Any]:
         hits.sort(key=lambda r: (r.get("phase") or "", r.get("start_date") or "", r['nct']), reverse=True)
         started = 0
         for r in hits:
+            rc.check_cancelled()
             key = f'trial_ingestion:{CTGOV_CODE_HASH}:{r["nct"]}:{fingerprint(r)}'
             info = get_unit(rc, key)
             if info is None and max_trials is not None and started >= max_trials:
