@@ -16,6 +16,10 @@ def workspace(settings):
 def drug(w, name, *, aliases=None, chinese=None, linked=True):
     db, pid, tid, _ = w
     eid, _ = db.upsert_entity(pid, 'drug', name, aliases=aliases, name_zh=chinese)
+    if chinese:
+        db.add_fact({'project_id':pid,'entity_id':eid,'source_id':w[3],
+            'field':'identity.name_zh','value':chinese,'quote':chinese,
+            'tier':'standard','status':'verified','extracted_by':'code:test'})
     if linked:
         db.link(pid, eid, 'drug-trial', tid)
     return eid

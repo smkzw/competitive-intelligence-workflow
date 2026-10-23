@@ -114,12 +114,14 @@ def _matches(drug: dict[str, Any], interventions: list[dict[str, Any]],
 
 def trial_evidence(rc: RunContext) -> dict[str, Any]:
     from ciw2.pipeline.china_evidence import collect
+    from ciw2.pipeline.nmpa_evidence import collect as collect_nmpa
     china=collect(rc)
+    nmpa=collect_nmpa(rc)
     it = _intake(rc)
     ctx = rc.tool_ctx()
     cond = it.get("indication_en") or rc.project["indication"]
     max_trials = work_limit(rc.cache.get('max_trials_per_drug'))
-    linked, ingested, pending_links, errors = 0, china['ingested'], 0, china['errors']
+    linked, ingested, pending_links, errors = 0, china['ingested'], 0, china['errors']+nmpa['errors']
     pending = china['pending_trials']
     owners = name_owners(rc.db.entities(rc.project_id, 'drug'))
     ambiguous = {name for name, ids in owners.items() if len(ids) > 1}
@@ -178,11 +180,11 @@ def trial_evidence(rc: RunContext) -> dict[str, Any]:
                 rc.db.link(rc.project_id, d['id'], 'drug-trial-candidate', info['entity_id'],
                            attrs={'identity_status': 'resolved_literal_match'})
             linked += 1
-    output = {"linked": linked, "ingested": ingested, "errors": errors, 'pending_trials': pending,
+    output = {"linked": linked, "ingested": ingested, "errors": errors, 'pending_trials': pending,'nmpa':nmpa,
             'pending_identity_links': pending_links,
             'identity_ambiguities': [{'name': name, 'entity_ids': sorted(owners[name])} for name in sorted(ambiguous)]}
-    if pending:
-        raise IncompleteWork(f'试验资料未完成：{len(pending)}个待处理单元', output)
+    if pending or nmpa['pending_records']:
+        raise IncompleteWork(f"研究资料未完成：{len(pending)+len(nmpa['pending_records'])}个待处理单元", output)
     return output
 
 

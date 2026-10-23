@@ -1,9 +1,20 @@
+{% macro certificate_metadata(ref) %}{% if ref.registration_number or ref.strength %}<div>{% if ref.registration_number %}{{ ref.registration_number }}{% endif %}{% if ref.strength %} · {{ ref.strength }}{% endif %}</div>{% endif %}
+{% if ref.observed_at or ref.issue_date or ref.approval_date or ref.valid_until %}<div class="muted">{% if ref.observed_at %}获取 {{ ref.observed_at[:10] }}{% endif %}{% if ref.issue_date %} · 发证 {{ ref.issue_date }}{% endif %}{% if ref.approval_date %} · 批准 {{ ref.approval_date }}{% endif %}{% if ref.valid_until %} · 有效期至 {{ ref.valid_until }}{% endif %}</div>{% endif %}
+{% endmacro %}
+{% macro company_evidence(ref) %}{% if ref.fact_id %}<details><summary>{{ ref.role }}依据</summary><div data-fact-id="{{ ref.fact_id }}">{{ certificate_metadata(ref) }}
+<blockquote>{{ ref.quote or '' }}</blockquote>{% if ref.url %}<a href="{{ ref.url }}" target="_blank" rel="noopener">原始来源</a>{% endif %}</div></details>{% endif %}{% endmacro %}
+{% macro name_evidence(refs) %}{% if refs %}<details><summary>正式名称依据</summary>{% set state=namespace(keys=[]) %}
+{% for ref in refs %}<div data-fact-id="{{ ref.fact_id }}">{{ ref.name }}
+{% set key=(ref.source_id,ref.registration_number,ref.strength,ref.observed_at,ref.issue_date,ref.approval_date,ref.valid_until) %}
+{% if key not in state.keys %}{{ certificate_metadata(ref) }}{% set state.keys=state.keys+[key] %}{% endif %}
+<blockquote>{{ ref.quote or '' }}</blockquote>{% if ref.url %}<a href="{{ ref.url }}" target="_blank" rel="noopener">原始来源</a>{% endif %}</div>{% endfor %}</details>{% endif %}{% endmacro %}
 {% macro clinical_trial(identity, show_id=true) %}{% if identity %}
 <div class="trial-identity" data-clinical-trial="{{ identity.registry_id }}">
 <strong class="trial-clinical-name">{{ identity.drug_label }}</strong>
 <div class="trial-context">{% if identity.indication %}{{ identity.indication }}{% endif %}{% if identity.phase_label %} · {{ identity.phase_label }}{% endif %}</div>
 {% if identity.conditions_original and identity.conditions_original|join(' / ') != identity.indication %}<details><summary>原登记适应症</summary>{{ identity.conditions_original|join(' / ') }}</details>{% endif %}
-{% for company in identity.companies %}<div class="trial-company"><span class="muted">{{ company.role }}</span> {{ company.name }}</div>{% endfor %}
+{% for company in identity.companies %}<div class="trial-company"><span class="muted">{{ company.role }}</span> {{ company.display_name or company.name }}{{ company_evidence(company) }}</div>{% endfor %}
 {% if identity.drug_names_original and identity.drug_names_original != identity.drugs %}<details><summary>原名与代号</summary>{{ identity.drug_names_original|join(' / ') }}</details>{% endif %}
+{{ name_evidence(identity.name_refs) }}
 {% if show_id %}<div class="registry-id">{% if identity.url %}<a href="{{ identity.url }}" target="_blank" rel="noopener">{{ identity.registry_id }}</a>{% else %}{{ identity.registry_id }}{% endif %}</div>{% endif %}
 </div>{% endif %}{% endmacro %}

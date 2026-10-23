@@ -52,7 +52,7 @@
 <col style="width:18%"><col style="width:16%"><col style="width:12%"></colgroup>
 <thead><tr><th>研究与药物</th><th>期别与状态</th><th>样本量</th><th>方案与组别</th>
 <th>终点设计</th><th>人群与站点</th><th>原文与依据</th></tr></thead><tbody>
-{% for r in data.rows %}<tr data-trial="{{ r.trial }}" data-trial-label="{{ r.identity.label }}" data-phase="{{ r.phase|phase }}" data-phase-status="{{ r.phase_status }}">
+{% for r in data.rows %}<tr data-trial="{{ r.trial }}" data-trial-label="{{ r.identity.label }}" data-reading-label="{{ r.identity.axis_label }}" data-phase="{{ r.phase|phase }}" data-phase-status="{{ r.phase_status }}">
 <td>{{ clinical_trial(r.identity) }}
 {% if r.title %}<details><summary>研究名称</summary><div class="quote">{{ r.title }}</div></details>{% endif %}</td>
 <td>{{ scalar(r,'phase') }}{{ scalar(r,'trial_status') }}</td>

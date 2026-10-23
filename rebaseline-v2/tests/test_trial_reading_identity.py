@@ -22,6 +22,11 @@ def identity_project(settings,study):
     trial=_activate_trial(rc.tool_ctx(),'NCT03985943',study,sid,'test')['entity_id']
     drug,_=svc.db.upsert_entity(pid,'drug','nemolizumab',name_zh='奈莫利珠单抗',
         attrs={'china_mah':'Unverified Holder','china_mah_group':'Guessed Group'})
+    name_source=register_text(rc.tool_ctx(),kind='web',url='https://example.org/formal-name',
+                             text='正式名称：奈莫利珠单抗')
+    svc.db.add_fact({'project_id':pid,'entity_id':drug,'field':'identity.name_zh',
+        'value':'奈莫利珠单抗','tier':'standard','status':'verified','source_id':name_source,
+        'quote':'正式名称：奈莫利珠单抗','extracted_by':'code:test'})
     svc.db.link(pid,drug,'drug-trial',trial)
     return svc,pid,trial,drug,sid
 

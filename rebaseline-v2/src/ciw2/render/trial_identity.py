@@ -4,22 +4,13 @@ from __future__ import annotations
 import json
 import re
 from collections import defaultdict
+from datetime import date, datetime
 from typing import Any
-from urllib.parse import urlsplit
 
 from ciw2.domain.identity import name_key
+from ciw2.render.drug_identity import drug_identities, web_url
 from ciw2.render.labels import phase_label
 from ciw2.store.db import DB
-
-
-def web_url(value: Any) -> str | None:
-    if not isinstance(value, str):
-        return None
-    try:
-        url = urlsplit(value)
-        return value if url.scheme in {'http', 'https'} and url.hostname else None
-    except ValueError:
-        return None
 
 
 def verified_holders(facts: list[dict[str, Any]], sources: dict[str, dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
@@ -30,9 +21,21 @@ def verified_holders(facts: list[dict[str, Any]], sources: dict[str, dict[str, A
                 or fact['source_id'] not in sources
                 or fact['context'].get('jurisdiction') not in {None, 'CN', 'China', '中国'}):
             continue
-        out[fact['entity_id']].append({'role': '中国MAH', 'name': fact['value'], 'fact_id': fact['id'],
+        context=fact['context']
+        try:
+            expired=date.fromisoformat(context.get('valid_until'))<datetime.fromisoformat(context.get('observed_at')).date()
+        except (TypeError,ValueError):
+            expired=False
+        role='许可记录持有人' if expired else '中国MAH'
+        display=f"{fact['value']}（证书有效期至 {context['valid_until']}）" if expired else fact['value']
+        out[fact['entity_id']].append({'role':role,'name':fact['value'],'display_name':display,'fact_id':fact['id'],
             'source_id': fact['source_id'], 'url': web_url(sources[fact['source_id']]['url']),
-            'quote': fact['quote'], 'jurisdiction': 'CN'})
+            'quote': fact['quote'], 'jurisdiction': 'CN',
+            'registration_number':fact['context'].get('registration_number'),
+            'strength':fact['context'].get('strength'),
+            'observed_at':fact['context'].get('observed_at'),
+            'valid_until':context.get('valid_until'),'issue_date':context.get('issue_date'),
+            'approval_date':context.get('approval_date')})
     return out
 
 
@@ -50,7 +53,7 @@ def _indication(conditions: list[str], project: dict[str, Any]) -> str:
 def trial_identities(db: DB, pid: str) -> dict[str, dict[str, Any]]:
     project = db.project(pid)
     assert project is not None
-    drugs = {e['id']: e for e in db.entities(pid, 'drug')}
+    drugs = drug_identities(db,pid)
     sources = {s['id']: s for s in db.query('SELECT id,url,kind,meta FROM sources WHERE project_id=?', (pid,))}
     facts = db.current_facts(pid)
     holders = verified_holders(facts, sources)
@@ -105,6 +108,7 @@ def trial_identities(db: DB, pid: str) -> dict[str, dict[str, Any]]:
         out[tid] = {'entity_id': tid, 'registry_id': trial['name'], 'url': web_url(attrs.get('url')),
             'title': attrs.get('title'), 'drug_label': drug_label, 'drugs': names,
             'drug_names_original': original_names,
+            'name_refs':[ref for d in per_trial[tid] for ref in drugs[d]['name_refs']],
             'indication': indication, 'conditions_original': conditions,
             'scope_indication': project['indication'], 'phase_label': phase_text,
             'companies': companies, 'label': label, 'axis_label': ' · '.join(filter(None, (drug_label, phase_text)))}

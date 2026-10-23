@@ -5,6 +5,7 @@ from collections import defaultdict
 from typing import Any
 
 from ciw2.domain.identity import CONTROL_LABELS, name_key, name_owners
+from ciw2.render.drug_identity import drug_identities
 from ciw2.store.db import DB
 
 
@@ -44,7 +45,7 @@ def _declared_drugs(declared: tuple[str, ...], owners: dict[str, set[str]]) -> t
 
 def bind_result_drugs(db: DB, pid: str, rows: list[dict[str, Any]]) -> None:
     """Keep trial candidates as context; each result uses only its explicit arm relation."""
-    drugs = {drug['id']: drug for drug in db.entities(pid, 'drug')}
+    drugs = drug_identities(db,pid)
     per_trial: dict[str, set[str]] = defaultdict(set)
     for link in db.query("SELECT src,dst FROM links WHERE project_id=? AND rel='drug-trial'", (pid,)):
         if link['src'] in drugs:

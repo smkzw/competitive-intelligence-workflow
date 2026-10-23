@@ -5,12 +5,18 @@
 ## 当前入口与授权
 - 唯一英文工程根内rebaseline-v2；产品权威01_PRD、02_ARCHITECTURE、03_PLAN、04_AGENT_RULES。本页替换更新，详细历史在根Trellis任务10-23-rebaseline-v2-m1/implement.md及Git，不另立规格。
 - 单用户Web服务+内嵌9 Skills；v1多宿主包、编辑/分享、24门户不是v2发布门。未知v1工作树保留，旧中文工程零接触；不得reset/clean/add-all。
-- 分支codex/rebaseline-v2-m1；本节点基线66b95b0d341401b6b8a8b0f9d7cdcf316b9ab6d9；当前代码候选frozen05已完成有界核验/来源签收，白名单提交及远端以Git记录为准。根HANDOFF只新增v2路由前缀，既有v1的20增/4删WIP未纳入本次提交。
+- 分支codex/rebaseline-v2-m1；上次已push47bff86d14a6b3bf0fb6b7589fcfe06f98dec556；本节点白名单提交/远端以Git为准。M3有界来源身份候选frozen04（202文件/manifestd202dfbc…）已完成owner组件验收，不是全M3；根HANDOFF既有v1的20增/4删WIP不纳入提交。
 - 用户已解除暂停；历史暂停点10-23-rebaseline-v2-m1/PAUSE_HANDOFF_20261023_0810.md仅供恢复，不覆盖新实施授权。
 - 模型cms-router/glm-5.3-flash→DGX/deepseek→DGX/qwen；密钥只在必要环境，不入文件/提示词/日志，不改全局路由。
 - 用户永久授权本项目Ego专用空间缺失时自行替换，不再询问。目前63/p1复用；不改登录、缓存、其他任务空间或升级浏览器。
 
-## 当前节点：当前裁决与精确NMPA来源组件完成
+## 当前节点：M3正式名与许可身份组件完成，继续真实富集
+- 执行实际CodeBuddy/deepseek-v4.1-flash/requested max/477.375s/85tools/session01a16acd-e25f-7635-b70c-699166143e35/无备用；原33/82只为worker范围。owner4双语/规则/tool RED、共享12RED、阅读6RED后修复。C03实际Pi/openai-codex/gpt-6.1-sol/CLI high/session01a16ad7-6088-7000-a1fc-9d8e7f77e232，357.399s+329.185s同会话；原230/182行报告仍REVISE原候选，不能改PASS。F1/F2/D1独立确认03关闭；owner8RED原修正，另4P2+2来源链RED修正空持有人日期、完整规则重放及无序证明链有限闭合，无第三轮会商。
+- 最终当前完整v2 **1268PASS/8.78s**，Ruff全src/tests/scripts/JS PASS，1既有TestClient警告；114相关PASS。frozen04 manifestd202dfbc54545dc1641ddc43f1182d584d651f4fcc35d6a2e42e8de10328649f/202文件/193不可变旧字节硬链接，开发门/科学组件/真实来源/实屏范围分开，不据测试数签收全医学或M3。
+- 实际live01两证书→6名称/MAH事实、两新CTR→49设计事实，旧368历史行完整、当前199→254；当前04只新隔离副本按新规则核同固定源，0来源/模型重跑、重试0追加。owner-binding-06/acceptance.json精确CAS/quote/HTTP/HTML绑定；02四宽阅读9图、03日期5图、04两张P2图逐张实看，后者一张明确标合成空持有人夹具、一张真实来源，不冒充所有当前页全美学/B真实结果。初始A-only404与合法全文2命中探针错误保留，仅补缺步骤，不删资料/重采模型。
+- 当前执行/会商均终态、两个review-gate PASS（仅回执完整性）；原52075仍待归并终态，不重派或重做151批/780要点。关闭被替换预览11928/37248/44586/54154及合成61446后只留61472当前预览；保留原文件/未知logs与runs/v1WIP，Ego63不升级/改登录缓存。下一有界任务为现有M3的集团/靶点/产品阶段来源采用，不另建平台。
+
+## 上一节点：当前裁决与精确NMPA来源组件完成
 - 906106ea019ef2d8517b5ad716971b09154ee9b4已push/fresh remote exact。C分期改紧凑整数计数条形、单类别绘图区72px；重复药物/期别的不同研究追加次级CTR，不改科学ID/值。根因生产JS RED→40相关PASS；首轮实看发现ECharts自动跳过最后一个标签，追加真实RED并固定interval0，保留失败候选，不冒充通过。
 - ciw-data/china-layout-frozen-08从906106ea+仅3个owner布局/测试文件构成185文件完整候选，隔离并行核验worker WIP；该完整v2门 **1052PASS/6.68s**、Ruff全src/tests/scripts/JS语法PASS，不宣称当前未完成worker也全绿。current-08/C **1ea6f1fbf7e06898ef69a10d8e7f8f0aebfb61e492634e9b706dee254fc94e55**，199事实SHA49ab9531…不变；四宽×四状态16图逐张实看，全部标签、真实计数、完整入排及来源/回焦通过有界布局验收，不是全C医学/美学或M1/M2接受。
 - ciw2-current-verdict执行已终态：实际CodeBuddy/codebuddy-cli/deepseek-v4.1-flash，requested max，会话01a16a95-867e-7dd6-9e6b-b0aacbf23c7e，625.318s/无备用；实际身份来自init/result，不取报告标题。worker23RED/1已过，相关310PASS；owner另复现8个回执绑定/JSON类型/非法digest/并发根因RED并修复，再补异常类型、历史/当前页面和境内字段，89相关PASS。曾两次写错私有测试路径而未运行，未记为RED或PASS。

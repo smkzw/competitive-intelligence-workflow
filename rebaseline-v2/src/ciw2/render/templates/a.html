@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from '_trial.html' import clinical_trial %}
+{% from '_trial.html' import clinical_trial, company_evidence, name_evidence %}
 {% block kpis %}
 <div class="kpi"><b>{{ data.rows | length }}</b><span>纳入药物（含待定）</span></div>
 <div class="kpi"><b>{{ data.rows | selectattr('phase_china', 'ne', 'unknown') | list | length }}</b><span>有中国阶段信息</span></div>
@@ -15,16 +15,15 @@
 </div>
 <div class="card" style="overflow:auto"><table id="tbl-a"><thead><tr>
 <th>药物</th><th>靶点</th><th>类型</th><th>相关企业</th><th>中国 MAH</th><th>中国阶段</th><th>全球阶段</th>
-<th>试验数（含中国站点）</th><th>发现路线</th><th>纳入</th></tr></thead><tbody>
+<th>试验数（含中国站点）</th><th>纳入</th></tr></thead><tbody>
 {% for r in data.rows %}<tr data-entity-id="{{ r.id }}">
-<td><b>{{ r.name_zh or r.name }}</b>{% if r.name_zh %}<div class="muted">{{ r.name }}</div>{% endif %}</td>
+<td><b>{{ r.name_zh or r.name }}</b>{% if r.name_zh and r.name_zh != r.name %}<div class="muted">{{ r.name }}</div>{% endif %}
+{{ name_evidence(r.name_refs) }}</td>
 <td>{% for t in r.targets %}<span class="tag">{{ t }}</span>{% endfor %}</td>
 <td>{{ r.modality or '—' }}</td><td>{{ r.companies | join('；') or '—' }}</td><td>{{ r.china_mah or '—' }}
-{% if r.mah_refs %}<details><summary>持有人依据</summary>{% for ref in r.mah_refs %}<div data-fact-id="{{ ref.fact_id }}">{{ ref.name }}
-{% if ref.url %}<a href="{{ ref.url }}" target="_blank" rel="noopener">原始来源</a>{% endif %}<blockquote>{{ ref.quote or '' }}</blockquote></div>{% endfor %}</details>{% endif %}</td>
+{% for ref in r.mah_refs %}{{ company_evidence(ref) }}{% endfor %}</td>
 <td><span class="tag med">{{ r.phase_china | phase }}</span></td><td>{{ r.phase_global | phase }}</td>
-<td>{{ r.n_trials }}（{{ r.n_china_trials }}）{% if r.trials %}<details><summary>研究列表</summary>{% for trial in r.trials %}{{ clinical_trial(trial) }}{% endfor %}</details>{% endif %}</td>
-<td class="muted">{{ r.found_by | join(', ') }}</td>
+<td>{{ r.n_trials }}（中国 {% if r.n_china_trials is none %}—{% elif r.n_china_trials_unknown %}≥{{ r.n_china_trials }}{% else %}{{ r.n_china_trials }}{% endif %}）{% if r.trials %}<details><summary>研究列表</summary>{% for trial in r.trials %}{{ clinical_trial(trial) }}{% endfor %}</details>{% endif %}</td>
 <td>{% if r.in_scope is none %}<span class="badge unknown">待定</span>{% else %}<span class="badge verified">纳入</span>{% endif %}
 {% if r.scope_reason %}<div class="quote">{{ r.scope_reason }}</div>{% endif %}
 {% for u in r.evidence_urls[:3] %}<div><a href="{{ u }}" target="_blank" rel="noopener">来源{{ loop.index }}</a></div>{% endfor %}</td>

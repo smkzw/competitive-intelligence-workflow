@@ -15,6 +15,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from ciw2.domain.availability import require_supported_cutoff
 from ciw2.domain.outcomes import DOMAIN_LABELS, classify_outcome_domain
 from ciw2.pipeline.queries import scoped_trials
+from ciw2.render.drug_identity import china_trial_sites, drug_identities
 from ciw2.render.labels import PHASE_ZH, age_label, phase_label, registry_label
 from ciw2.render.result_identity import bind_result_drugs
 from ciw2.render.results import result_groups
@@ -45,12 +46,13 @@ def _trial_drugs(db: DB, pid: str) -> dict[str, list[str]]:
 
 
 def data_a(db: DB, pid: str) -> dict[str, Any]:
-    drugs = db.entities(pid, "drug")
+    drugs = list(drug_identities(db,pid).values())
     identities = trial_identities(db, pid)
     holder_map = verified_holders(db.current_facts(pid), {s['id']: s for s in db.query(
         'SELECT id,url FROM sources WHERE project_id=?', (pid,))})
     tmap = _trial_drugs(db, pid)
     trials = {t["id"]: t for t in scoped_trials(db,pid)}
+    china_sites=china_trial_sites(db,pid)
     per_drug: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for tid, dnames in tmap.items():
         for n in dnames:
@@ -60,14 +62,17 @@ def data_a(db: DB, pid: str) -> dict[str, Any]:
     for d in drugs:
         a = d["attrs"]
         ts = per_drug.get(d["name"], [])
+        n_china=sum(china_sites.get(t['id']) is True for t in ts)
+        unknown_sites=sum(china_sites.get(t['id']) is None for t in ts)
         rows.append({
             "id": d['id'], "name": d["name"], "name_zh": d["name_zh"], "targets": a.get("targets", []),
             "modality": a.get("modality"), "companies": a.get("companies", []),
-            "china_mah": ' / '.join(dict.fromkeys(c['name'] for c in holder_map[d['id']])),
-            'mah_refs': holder_map[d['id']],
+            "china_mah": ' / '.join(dict.fromkeys(c['display_name'] for c in holder_map[d['id']])),
+            'mah_refs': holder_map[d['id']], 'name_refs': d['name_refs'],
             "phase_global": a.get("highest_phase_global", "unknown"),
             "phase_china": a.get("highest_phase_china", "unknown"), "innovative": a.get("innovative"),
-            "n_trials": len(ts), "n_china_trials": sum(1 for t in ts if t["attrs"].get("china_site")),
+            "n_trials": len(ts), "n_china_trials": None if not n_china and unknown_sites else n_china,
+            'n_china_trials_unknown':unknown_sites,
             "found_by": d["found_by"], "in_scope": d["in_scope"], "scope_reason": d["scope_reason"],
             "evidence_urls": a.get("evidence_urls", []),
             "trials": [identities[t['id']] for t in ts if t['id'] in identities],
@@ -118,7 +123,7 @@ def data_b(db: DB, pid: str) -> dict[str, Any]:
     rows = _result_rows(db, pid)
     bind_result_drugs(db, pid, rows)
     identities = trial_identities(db, pid)
-    drug_names = {d['name']: d['name_zh'] or d['name'] for d in db.entities(pid, 'drug')}
+    drug_names = {d['name']: d['name_zh'] or d['name'] for d in drug_identities(db,pid).values()}
     for row in rows:
         row['identity'] = identities.get(row['entity_id'])
         row['display_drugs'] = [drug_names.get(name, name) for name in row['drugs']]

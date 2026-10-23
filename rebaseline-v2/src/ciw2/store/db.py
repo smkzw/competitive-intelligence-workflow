@@ -338,6 +338,7 @@ class DB:
 
     def raw_current_facts(self, project_id: str, entity_id: str | None = None) -> list[dict[str, Any]]:
         """当前集合的历史/成员资格投影：不含现行裁决，供离线复核扫描。"""
+        from ciw2.sources.nmpa_ingest import EXTRACTOR_VERSION
         sql = ("SELECT * FROM facts f WHERE project_id=? AND NOT EXISTS "
                "(SELECT 1 FROM facts g WHERE g.project_id=f.project_id AND g.supersedes=f.id) AND ("
                "f.extracted_by NOT IN ('code:ctgov','code:chinadrugtrials') OR NOT EXISTS (SELECT 1 FROM links l "
@@ -346,8 +347,16 @@ class DB:
                "SELECT 1 FROM links l WHERE l.project_id=f.project_id AND l.src=f.entity_id "
                "AND l.rel=CASE WHEN f.extracted_by='code:ctgov' THEN 'ctgov-current' "
                "ELSE 'chinadrugtrials-current' END AND l.dst=f.source_id "
-               "AND json_extract(l.attrs,'$.snapshot')=json_extract(f.context,'$.source_snapshot')))")
-        params: list[Any] = [project_id]
+               "AND json_extract(l.attrs,'$.snapshot')=json_extract(f.context,'$.source_snapshot'))) "
+               "AND (f.extracted_by!='code:nmpa' OR EXISTS (SELECT 1 FROM links l "
+               "JOIN sources s ON s.id=l.dst AND s.project_id=l.project_id AND s.kind='nmpa' "
+               "WHERE l.project_id=f.project_id AND l.src=f.entity_id AND l.rel='nmpa-current' "
+               "AND l.dst=f.source_id "
+               "AND json_extract(l.attrs,'$.snapshot')=json_extract(f.context,'$.source_snapshot') "
+               "AND json_extract(l.attrs,'$.registration_number')=json_extract(f.context,'$.registration_number') "
+               "AND json_extract(l.attrs,'$.category')=json_extract(f.context,'$.category') "
+               "AND json_extract(l.attrs,'$.extractor_version')=?))")
+        params: list[Any] = [project_id,EXTRACTOR_VERSION]
         if entity_id:
             sql += " AND entity_id=?"
             params.append(entity_id)

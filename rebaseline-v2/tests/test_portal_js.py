@@ -7,7 +7,8 @@ import pytest
 
 
 @pytest.mark.parametrize('evidence_kind',['original','source'])
-def test_original_evidence_native_reader_moves_content_then_restores_actual_trigger(evidence_kind):
+@pytest.mark.parametrize('reading_label',[True,False])
+def test_original_evidence_native_reader_moves_content_then_restores_actual_trigger(evidence_kind,reading_label):
     node = shutil.which('node')
     if not node:
         pytest.skip('Node unavailable')
@@ -18,7 +19,10 @@ const events={},life={}; let focused=0,opened=0;
 const kind=process.argv[2];
 const content={textContent:'Full original AND/OR criteria'}, origin={open:false,appendChild(n){n.parentElement=this;}};
 content.parentElement=origin; origin.querySelector=selector=>kind==='original'||selector.includes('source-evidence-content')?content:null;
-const trigger={parentElement:origin,closest:()=>({dataset:{trial:'<untrusted-study>'}}),focus(){focused++;},
+const short=process.argv[3]==='short';
+const dataset={trial:'<untrusted-study>',trialLabel:'Long disease and all legal entities'};
+if(short)dataset.readingLabel='药物甲 · III 期';
+const trigger={parentElement:origin,closest:()=>({dataset}),focus(){focused++;},
   addEventListener(k,fn){events[k]=fn;}};
 const dialog={open:false,addEventListener(k,fn){events['dialog:'+k]=fn;},
   showModal(){this.open=true;opened++;},close(){this.open=false;events['dialog:close']();}};
@@ -31,12 +35,13 @@ vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window:{add
 assert.equal(typeof events.click,'function');
 let prevented=false;events.click({preventDefault(){prevented=true;}});
 assert.equal(prevented,true);assert.equal(opened,1);assert.equal(content.parentElement,body);
-assert.ok(title.textContent.includes('<untrusted-study>'));
+assert.ok(title.textContent.includes(short?'药物甲 · III 期':'Long disease and all legal entities'));
+if(short)assert.ok(!title.textContent.includes('all legal entities'));
 events['close:click']();assert.equal(content.parentElement,origin);assert.equal(focused,1);assert.equal(origin.open,false);
 events.click({preventDefault(){}});dialog.close();assert.equal(focused,2);assert.equal(content.parentElement,origin);
 events.click({preventDefault(){}});life.pagehide();assert.equal(dialog.open,false);assert.equal(content.parentElement,origin);
 '''
-    result = subprocess.run([node, '-e', script, str(source),evidence_kind], capture_output=True, text=True, check=False)
+    result = subprocess.run([node, '-e', script, str(source),evidence_kind,'short' if reading_label else 'legacy'], capture_output=True, text=True, check=False)
     assert result.returncode == 0, result.stderr
 
 SOURCE = Path(__file__).resolve().parents[1] / 'src/ciw2/render/static/portal.js'

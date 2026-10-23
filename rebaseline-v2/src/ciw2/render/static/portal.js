@@ -359,7 +359,7 @@
         origin = summary.parentElement; content = section; trigger = summary;
         var row = summary.closest("tr");
         var readingTitle = summary.getAttribute && summary.getAttribute("data-reading-title") || "入排与依据";
-        title.textContent = (row ? (row.dataset.trialLabel || row.dataset.trial) + " · " : "") + readingTitle;
+        title.textContent = (row ? (row.dataset.readingLabel || row.dataset.trialLabel || row.dataset.trial) + " · " : "") + readingTitle;
         body.appendChild(content);
         dialog.showModal();
       });
