@@ -50,6 +50,37 @@ def run_portal(script):
     assert result.returncode == 0, result.stderr
 
 
+def test_design_overview_uses_compact_count_bars_and_disambiguates_only_repeated_labels():
+    run_portal(r'''
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
+const ids=['CTR00000001','CTR00000002','CTR00000003'];
+const identities=ids.map((id,i)=>({registry_id:id,axis_label:i<2?'药物甲 · III 期':'药物乙 · II 期',label:'完整研究 '+id}));
+const data={size:{labels:ids,values:[100,200,300],identities},phase:[{name:'III 期',value:2},{name:'II 期',value:1}]};
+const rows=ids.map((id,i)=>({dataset:{trial:id,phase:i<2?'III 期':'II 期',phaseStatus:'verified'},style:{},textContent:id}));
+const charts={},elements={charts:{textContent:JSON.stringify(data)},'tbl-c':{id:'tbl-c',querySelectorAll:()=>rows}};
+for(const id of ['chart-size','chart-phase-pie']){const card={hidden:false};elements[id]={id,style:{},closest:()=>card};}
+let input;const filter={value:'',getAttribute:()=>'tbl-c',addEventListener:(_,fn)=>input=fn};
+const document={getElementById:id=>elements[id],querySelectorAll:s=>s==='input[data-filter]'?[filter]:[]};
+const echarts={init(node){const c={options:[],resize(){},dispose(){},setOption(o){this.options.push(o);}};charts[node.id]=c;return c;}};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window:{echarts,addEventListener(){}},echarts,ResizeObserver:class{observe(){}},Map});
+const labels=charts['chart-size'].options[0].yAxis.axisLabel.formatter;
+assert.equal(charts['chart-size'].options[0].yAxis.axisLabel.interval,0);
+assert.equal(labels(ids[0]),'药物甲 · III 期\n'+ids[0]);
+assert.equal(labels(ids[1]),'药物甲 · III 期\n'+ids[1]);
+assert.equal(labels(ids[2]),'药物乙 · II 期');
+const phase=charts['chart-phase-pie'].options[0];
+assert.equal(phase.series[0].type,'bar');assert.equal(phase.xAxis.min,0);assert.equal(phase.xAxis.minInterval,1);
+assert.equal(JSON.stringify(phase.yAxis.data),JSON.stringify(['III 期','II 期']));
+assert.equal(JSON.stringify(phase.series[0].data),JSON.stringify([2,1]));
+filter.value=ids[2];input();
+assert.ok(parseInt(elements['chart-phase-pie'].style.height,10)<=80);
+assert.equal(JSON.stringify(charts['chart-phase-pie'].options.at(-1).series[0].data),JSON.stringify([1]));
+filter.value='';input();
+assert.equal(JSON.stringify(charts['chart-phase-pie'].options.at(-1).series[0].data),JSON.stringify([2,1]));
+assert.equal(JSON.stringify(charts['chart-size'].options.at(-1).series[0].data),JSON.stringify([100,200,300]));
+''')
+
+
 def test_landscape_unknown_sparse_dense_and_filtered_membership_share_one_query():
     run_portal(r'''
 const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
@@ -139,22 +170,21 @@ const zoom=initialSize.dataZoom[0];
 assert.equal(zoom.filterMode,'filter');
 assert.equal(zoom.endValue-zoom.startValue+1,12);
 assert.ok(zoom.endValue<labels.length-1);
-assert.equal(initialPie.series[0].type,'pie');
-assert.equal(initialPie.series[0].label.show,false);
-assert.equal(initialPie.series[0].labelLine.show,false);
-assert.ok(initialPie.legend&&initialPie.legend.formatter('III期')==='III期 160 项');
-assert.ok(initialPie.legend.formatter('未知期别')==='未知期别 1 项');
-assert.equal(initialPie.legend.textStyle.fontSize,18);
-assert.ok(height('chart-phase-pie')<=200 && height('chart-phase-pie')>=120);
+assert.equal(initialPie.series[0].type,'bar');
+assert.equal(initialPie.series[0].label.show,true);
+assert.equal(JSON.stringify(initialPie.yAxis.data),JSON.stringify(phase.map(p=>p.name)));
+assert.equal(JSON.stringify(initialPie.series[0].data),JSON.stringify(phase.map(p=>p.value)));
+assert.equal(initialPie.yAxis.axisLabel.fontSize,18);
+assert.ok(height('chart-phase-pie')<=200 && height('chart-phase-pie')>=72);
 rows.forEach((r,i)=>{r.textContent=i===260?'chosen':'other';});
 filter.value='chosen';input();
 const sparseSize=charts['chart-size'].options.at(-1);
 assert.equal(JSON.stringify(sparseSize.series[0].data),JSON.stringify([values[260]]));
 assert.ok(height('chart-size')<=144 && height('chart-size')>=100);
-assert.equal(height('chart-phase-pie'),120);
+assert.equal(height('chart-phase-pie'),72);
 const sparsePie=charts['chart-phase-pie'].options.at(-1);
-assert.equal(JSON.stringify(sparsePie.series[0].data),JSON.stringify([{name:'I期',value:1}]));
-assert.equal(sparsePie.legend.formatter('I期'),'I期 1 项');
+assert.equal(JSON.stringify(sparsePie.series[0].data),JSON.stringify([1]));
+assert.equal(JSON.stringify(sparsePie.yAxis.data),JSON.stringify(['I期']));
 assert.equal(elements['chart-phase-pie'].closest().hidden,false);
 filter.value='no-match';input();
 assert.equal(elements['chart-size'].closest().hidden,true);
@@ -167,8 +197,8 @@ assert.equal(JSON.stringify(restoredSize.yAxis.data),JSON.stringify(labels));
 assert.equal(restoredSize.dataZoom[0].endValue,11);
 assert.equal(height('chart-size'),336);
 const restoredPie=charts['chart-phase-pie'].options.at(-1);
-assert.equal(JSON.stringify(restoredPie.series[0].data),JSON.stringify(phase));
-assert.equal(restoredPie.legend.formatter('III期'),'III期 160 项');
+assert.equal(JSON.stringify(restoredPie.series[0].data),JSON.stringify(phase.map(p=>p.value)));
+assert.equal(JSON.stringify(restoredPie.yAxis.data),JSON.stringify(phase.map(p=>p.name)));
 assert.equal(elements['chart-phase-pie'].closest().hidden,false);
 assert.equal(elements['design-count'].textContent,'284 / 284 项研究');
 '''
@@ -197,22 +227,23 @@ const document={documentElement:{},getElementById:id=>elements[id],querySelector
 const window={echarts,addEventListener(){},matchMedia:()=>({matches:false}),getComputedStyle:()=>({getPropertyValue:()=>''})};
 vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window,echarts,ResizeObserver:class{observe(){} disconnect(){}},Set,Math,Array,JSON});
 assert.equal(charts['chart-size'],undefined);
-assert.equal(parseInt(elements['chart-phase-pie'].style.height,10),120);
+assert.equal(parseInt(elements['chart-phase-pie'].style.height,10),96);
 const initial=charts['chart-phase-pie'].options[0];
-assert.equal(JSON.stringify(initial.series[0].data),JSON.stringify(phase));
-assert.equal(initial.legend.formatter('III期'),'III期 1 项');
+assert.equal(JSON.stringify(initial.series[0].data),JSON.stringify([1,1]));
+assert.equal(JSON.stringify(initial.yAxis.data),JSON.stringify(['III期','II期']));
 rows.forEach((r,i)=>{r.textContent=i===0?'alpha':'other';});
 filter.value='alpha';input();
-assert.equal(JSON.stringify(charts['chart-phase-pie'].options.at(-1).series[0].data),JSON.stringify([{name:'III期',value:1}]));
-assert.equal(charts['chart-phase-pie'].options.at(-1).legend.formatter('III期'),'III期 1 项');
-assert.equal(elements['chart-phase-pie'].style.height,'120px');
+assert.equal(JSON.stringify(charts['chart-phase-pie'].options.at(-1).series[0].data),JSON.stringify([1]));
+assert.equal(JSON.stringify(charts['chart-phase-pie'].options.at(-1).yAxis.data),JSON.stringify(['III期']));
+assert.equal(elements['chart-phase-pie'].style.height,'72px');
 filter.value='unverified';rows.forEach((r,i)=>{r.textContent=i===2?'unverified':'other';});input();
 assert.equal(card.hidden,true);
 filter.value='empty';rows.forEach((r,i)=>{r.textContent=i===3?'empty':'other';});input();
 assert.equal(card.hidden,true);
 filter.value='';rows.forEach(r=>{r.textContent=r.dataset.trial;});input();
 assert.equal(card.hidden,false);
-assert.equal(JSON.stringify(charts['chart-phase-pie'].options.at(-1).series[0].data),JSON.stringify(phase));
+assert.equal(JSON.stringify(charts['chart-phase-pie'].options.at(-1).series[0].data),JSON.stringify([1,1]));
+assert.equal(JSON.stringify(charts['chart-phase-pie'].options.at(-1).yAxis.data),JSON.stringify(['III期','II期']));
 assert.equal(elements['design-count'].textContent,'4 / 4 项研究');
 '''
     run_portal(script)
@@ -236,7 +267,7 @@ const tooltip=charts['chart-heat'].options[0].tooltip.formatter({value:[0,0,1]})
 assert.ok(!tooltip.includes('<img')&&tooltip.includes('&lt;img'));
 const pieTooltip=charts['chart-phase-pie'].options[0].tooltip.formatter({name:attack,value:2});
 assert.ok(!pieTooltip.includes('<img')&&pieTooltip.includes('&lt;img'));
-assert.ok(charts['chart-phase-pie'].options[0].legend.formatter(attack).includes(attack));
+assert.equal(charts['chart-phase-pie'].options[0].yAxis.data[0],attack);
 vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window:{addEventListener(){}}});
 assert.ok(heat.innerHTML.includes('数据表')&&!heat.innerHTML.includes('scripts/'));
 '''

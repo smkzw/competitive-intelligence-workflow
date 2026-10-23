@@ -48,12 +48,16 @@
   var dataNode = el("charts");
   var D = dataNode ? JSON.parse(dataNode.textContent || "{}") : {};
   var DESIGN_MAX_HEIGHT = 336, DESIGN_MIN_HEIGHT = 120, DESIGN_VISIBLE_ROWS = 12;
-  var DESIGN_ROW_HEIGHT = 24, DESIGN_PANEL_CHROME = 48, PHASE_MIN_HEIGHT = 120;
+  var DESIGN_ROW_HEIGHT = 24, DESIGN_PANEL_CHROME = 48, PHASE_MIN_HEIGHT = 72;
   var designIdentities = new Map((D.size && D.size.identities || []).map(function (identity) { return [identity.registry_id, identity]; }));
+  var designLabelCounts = new Map();
+  designIdentities.forEach(function (identity) {
+    designLabelCounts.set(identity.axis_label, (designLabelCounts.get(identity.axis_label) || 0) + 1);
+  });
   if (designIdentities.size) { DESIGN_VISIBLE_ROWS = 6; DESIGN_ROW_HEIGHT = 44; }
   function designLabel(registryId) {
     var identity = designIdentities.get(registryId);
-    return identity ? identity.axis_label : registryId;
+    return identity ? identity.axis_label + (designLabelCounts.get(identity.axis_label) > 1 ? "\n" + registryId : "") : registryId;
   }
   function designTooltip(items) {
     var point = Array.isArray(items) ? items[0] : items;
@@ -82,20 +86,15 @@
     node.style.height = height + "px";
     if (instances[id]) instances[id].resize();
   }
-  function phaseLegend(counts) {
-    return { type: "plain", orient: "vertical", right: 0, top: "middle",
-      itemWidth: 14, itemHeight: 14, itemGap: 10, textStyle: { lineHeight: 22 },
-      formatter: function (name) { return String(name) + " " + (counts[name] || 0) + " 项"; } };
-  }
   function phaseOption(items) {
-    var counts = {};
-    items.forEach(function (item) { counts[String(item.name)] = item.value; });
     return {
       tooltip: { formatter: function (p) { return safeText(p.name) + "：" + safeText(p.value) + " 项研究"; } },
-      legend: phaseLegend(counts),
-      series: [{ type: "pie", center: ["32%", "50%"], radius: ["30%", "58%"],
-        label: { show: false }, labelLine: { show: false },
-        emphasis: { label: { show: false }, labelLine: { show: false } }, data: items }]
+      grid: { left: 96, right: 64, top: 8, bottom: 24 },
+      xAxis: { type: "value", min: 0, minInterval: 1 },
+      yAxis: { type: "category", inverse: true, data: items.map(function (item) { return item.name; }) },
+      series: [{ type: "bar", barMaxWidth: 18,
+        label: { show: true, position: "right", formatter: "{c} 项" },
+        data: items.map(function (item) { return item.value; }) }]
     };
   }
   function drawLandscape(heat, phases) {
@@ -267,7 +266,7 @@
       tooltip: { trigger: "axis", formatter: designTooltip }, grid: { left: designIdentities.size ? 320 : 130, right: 70, top: 24, bottom: 30 },
       dataZoom: designZoom(D.size.labels.length),
       yAxis: { type: "category", data: D.size.labels, inverse: true,
-        axisLabel: { formatter: designLabel, width: 290, overflow: "break", lineHeight: 22 } }, xAxis: { type: "value", name: "样本量" },
+        axisLabel: { formatter: designLabel, interval: 0, width: 290, overflow: "break", lineHeight: 22 } }, xAxis: { type: "value", name: "样本量" },
       series: [{ type: "bar", data: D.size.values, barMaxWidth: 22,
         label: { show: true, position: "right" } }]
     });
@@ -327,10 +326,8 @@
       var pie = el("chart-phase-pie");
       if (pie.closest(".card")) pie.closest(".card").hidden = !items.length;
       if (items.length) {
-        var counts = {};
-        items.forEach(function (item) { counts[item.name] = item.value; });
         setPanelHeight("chart-phase-pie", phasePanelHeight(items.length));
-        instances["chart-phase-pie"].setOption({ legend: phaseLegend(counts), series: [{ data: items }] });
+        chart("chart-phase-pie", phaseOption(items));
       }
     }
     if (el("design-count")) el("design-count").textContent = visible.length + " / " + rows.length + " 项研究";
