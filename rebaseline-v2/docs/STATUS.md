@@ -9,14 +9,20 @@
 - 历史恢复依据：Trellis `10-23-rebaseline-v2-m1/PAUSE_HANDOFF_20261023_0810.md`；原暂停回执/备份不改。用户已解除暂停，历史paused/旧PID不覆盖新授权。
 - 模型cms-router/glm-5.3-flash → DGX/deepseek → DGX/qwen；凭据仅注册配置到必要子进程环境，不入文件/日志/提示词，不改全局路由。
 
-## 当前节点：报告写入恢复；两个独立节点待终态
+## 当前节点：CDE新报任务切片；临床领域投影待纠偏接入
+- 完整当前工作树开发门 **784PASS/3.32s**（含尚未接入/未科学签收的worker领域投影59项，不借计数认可归类规则）；Ruff全src/tests/scripts、4JS/sh语法通过，1既有TestClient警告。CDE新族两次缺模块RED→175相关PASS；57生产Python+冒烟脚本符合600/80（create_app既定例外）。
+- 普通生产入口ciw-data/cde-review-live-01：化药IND新报任务9页/431完整行→CYHL2600085精确1行，source SHA90e40cf0f9b822811ffe7a10542b46deab1fb7093ea128f8cd00875d28246ba8；12来源源码+CLIhash运行前后相同。0新实体/临床事实/模型、0新审评引用（本隔离项目无受理绑定），不把431当单药命中，不认定适应症/获批。owner-audit另验原CAS/完整行/图例及同捕获内不存在受理号0匹配；后者非新网络检查。源页截图因窗口最小化未取得；Native Raise被“user changed app”拦截即停，不操作其他任务。无新的浏览器/医学接受。
+- 原站受理号为定位/高亮；新增明确cde_section，先完整源再精确匹配，行状态与本页图例专业状态分离，日期不改含义。部分页保留不成功缓存；同run缓存校验CAS/读集，新run重查；只对有本项目受理来源绑定的既有候选追加引用，坏绑定不接受。侦察scope-01因动态pager ID失效保留1页，scope-02只续8页；正式live-01另验当前工具。其他序列/申请类型、自动补页、NMPA/适应症/金标准和M2仍未完成。
+- 执行73488已终态：CodeBuddy/deepseek-v4.1-flash/max，611.31s/35tools/session01a169ed-4f92-7209-b7e9-eefaebc32206，无fallback；原311行投影/59测试已归档且尚未接入。独立C03已终态17602，首选GLM启动失败、其余两路不可用后，按manifest由pi/openai-codex/gpt-6.1-sol（请求high）149.385s/38tools/session01a169fb-1cbf-7000-abda-37ad228f8650完成；顶层effective仍误留GLM，本文以实际terminal round为准。原报告SHA6eb7a94cc0c1af122d5528fbcd9739dd44397036824191597cdfa5e1e0c0c6a4。owner已读完5项实证意见：PK/PD塌缩、药名形态/抗体、AUC/ADA/BSA缩写、生存结局和描述背景混入均须纠偏，当前不是科学接受。
+- 当前健康模型52075仍只在ec32冻结runtime做归并，不触碰151旧批或其key；最近发布提交5e6dbcd8f7a9e1ba3684f58b8dc570b3f07428b2已推送并fresh remote exact。下一有界任务：先白名单提交本CDE节点，再按上述源反例重写可逆阅读投影并接B同查询，不新增本体/审批/药名猜测，不暂停。
+### 前一发布组件（5e6dbcd8）
 - 当前完整v2门 **705PASS/3.23s**，Ruff全src/tests/scripts/3JS/sh语法通过，54生产Python符合600/80（create_app既定例外），1既有TestClient警告。发布族2RED/1PASS→61相关PASS；先准备所有模板/临时文件，再逐文件原子替换，模板/准备写入失败不截断旧文件，正常失败仅清理自建临时文件。同run只重试render，不重跑成功analysis；不是跨A/B/C事务或断电持久性通过。
 - 实际固定源ciw-data/report-publication-01：A/B/C普通生产发布与直接renderer逐字一致；注入写入中断后旧三文件hash不变、临时文件清净、重试hash相同，事实仍f08e6c7…/0网络/0模型。A cdea717e…/B eb68158b75ad3251c9623e99499b820d015018a77840329be1a64f1244747295/C f829f10421a566dbb3ef0299974d1a316b392742478c45e030e2469c3b1d851b；只接受发布/恢复组件，未新增浏览器/医学/全流水线接受。
-- stages源码改动不作用于健康52075的ec32冻结runtime；不得用当前新源码hash迁移或冒充旧151缓存。该归并恢复及73488独立执行仍待实际终态，不固定轮询/重派。前一A布局9c53728de33e422d895b002cfbbaa5d0c9561814已推送并fresh remote exact。
+- stages源码改动不作用于健康52075的ec32冻结runtime；不得用当前新源码hash迁移或冒充旧151缓存。该归并恢复仍待实际终态，不固定轮询/重派；73488后已终态，见本页顶节。前一A布局9c53728de33e422d895b002cfbbaa5d0c9561814已推送并fresh remote exact。
 ### 前一A布局组件（9c53728d）
 - 当前完整v2门 **700PASS/3.04s**，Ruff全src/tests/scripts、3JS/sh语法通过，1既有TestClient警告。A根因3RED→22相关PASS，移除未知-only图但保留候选、按实体ID同查询/正确计数、靶点去重不重复计药、图区最高328px、稀疏128px、阶段208px、图例独立。旧安全文本测试换为当前生产payload，原转义/缺库断言保留；未建第二套图形框架。
 - ciw-data/browser-current/landscape-reading-02：真实源1/302候选完整保留，事实hash f08e6c7…/f903dc7…不变；A HTML cdea717e6acdde41383e7b3ca0046239596ec1507e572061ae10ed1d23995b88/d7eafeb25cc1214b7297fd520adbdf1b280487e901efcf8ee089965411fbd26b。Ego63四宽17图全部实看/独立owner-audit绑定：真实未知不画图；已知密集/筛后稀疏来自明确标注合成布局夹具，仅接受几何/查询，不冒充真实临床正向富集。候选01两图实看发现同排卡拉伸，已修且原17图保留；仍不关闭M3/全A美学。
-- 新独立执行节点ciw2-outcome-domain已preflight后启动句柄73488；live E03请求CodeBuddy/codebuddy-cli/deepseek-v4.1-flash/max及manifest备用，只准新建domain/outcomes.py与其测试，owner掌管接入/医学与发布。29条实际源终点元数据已绑定；待终态核实际模型/工具/输出，不称独立审阅或科学通过。
+- E03领域投影执行及后续独立会商的真实终态见本页顶节；执行者不是独立审阅，初版59测试通过未关闭实际语义反例。
 ### 前一组件（已提交7ea2d518并fresh remote exact）
 - 当前完整v2门 **696PASS/3.31s**，Ruff全src/tests/scripts及3JS/sh语法通过，1既有TestClient警告。本批仅修图轴临床身份、安全表折叠/同查询/逐行来源及短来源阅读宽度；不改变科学数值/药物绑定，不重跑来源。
 - 正常生产摄取同一官方捕获记录生成A/B/C，ciw-data/browser-current/clinical-abc-03，668/668数据点保留，事实hash f08e6c7a485d88d1bf899d05435ae6c788ae70e378bd2906ea007dc1bbc58157。Ego63/p1四宽共22截图已逐张实看；真实glyph点击→正确事实/来源，筛后221/668结果及2/6安全，短来源1040px/Esc回焦，完整入排2219字/8强调。首脚本完成12图后仪器等待超时，仅恢复缺失交互与A/C，失败及初始NOT_RUN回执不改；owner-audit独立绑定hash。不是新网络核查/模型报告/全流水线。

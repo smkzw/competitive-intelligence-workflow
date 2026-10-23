@@ -96,7 +96,7 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 - 完整结构化登记行代码直接写暂定drug/trial和带来源/页/行的显式关系，保留整条药名和unknown纳排，不再将464条重复送模型抽取；科学纳排仍走既有coverage-review。没有新增事实表/Skill/浏览器框架。
 - CDE受理目录已接同一Ego空间与现有CLI传输，单独cde_browser.mjs/cde_capture.py消费实际八列表头；只扩展现有_invoke的内部脚本/filters选项，不新建执行器。ChinaArgs.query_kind明确drug_name/company/acceptance_number；未指定/indication/target不进入药名框，按blocked/site路线记账。反向扩展把原词送单字段（中国登记也用原始关键词），不拼适应症到药名/企业框。CDE实现及配置空间进入来源缓存键，栏目+六筛选进入request_context；相同URL的不同查询不相互覆盖。
 - CDE强制全部年度/类型，完整翻页并保留八列原值/原公司复合文本/空格。公司列→company_text，承办日期→handled_date_text，不认定申办方/MAH或获批/首次公开时间。受理引用放暂定drug.attrs，不生成trial或临床事实；纳排仍走既有coverage-review。CDE空tbody“暂无内容”+无pager保留真实文本/page_size=null，不造数字页脚。已观察的2015及以前选项原样保留；表单筛选在捕获JSON中，列表URI不接受查询/会话参数。错误/部分页保存有效来源但不签收完整；CDE缺页自动补取尚未接通，不能借中国登记恢复测试声称已完成。
-- CDE审评任务/优先审评/突破性治疗/默示许可、NMPA、登记详情仍待接通；受理目录与site路线都不是官方登记闭包或适应症/监管结论。M2仍需专家金标准验召回。
+- CDE新报化药IND切片使用cde_review_capture.py/cde_review_browser.py及同一Ego传输；既有工具增加明确cde_section，不另建执行器。完整十二列/本页图例/范围/分页核对后精确查找受理号；JSON locator保持原始pages数组位置。同受理号的不同观察保留，未知/冲突图形记录内部原因，不按图标名选状态。只追加到有本项目受理来源支持的既有候选引用，0新试验/临床事实。同run共用fetch_cache，以项目/run/空间/代码版本作键，CAS校验后标cache_reused并登记本次读集；新run重读公开页，缓存不伪装新核查。部分页保全但不成功缓存，自动缺页恢复尚未实现。其他审评序列/公示栏目、NMPA、登记详情仍待接通，M2仍需专家金标准验召回。
 - CT.gov `query.locn=China` 可用（PNH 实测 52 条）。
 
 ## 6. 配置（环境变量）

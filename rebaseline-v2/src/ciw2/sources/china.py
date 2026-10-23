@@ -79,6 +79,8 @@ class ChinaArgs(BaseModel):
     route_id: str = Field(description="如 china:cde:indication")
     query_kind: Literal['keyword','drug_name','company','acceptance_number','indication','target'] = Field(
         default='keyword',description='CDE公开目录需明确药名、企业或受理号；不能将适应症/靶点误作药名')
+    cde_section: Literal['acceptance','new_review_task_chemical_ind'] = Field(default='acceptance',
+        description='CDE默认受理目录；已验证的化药IND新报审评序列需明确受理号，非全部公示/批准状态')
 
 
 @REGISTRY.register("china_registry_search",
@@ -105,16 +107,21 @@ def _china(ctx: ToolContext, a: ChinaArgs) -> Any:
                     ctx.db.log_coverage(ctx.run_id,f'{a.route_id}:browser','china',a.query,'ok',hits=len(captured['results']))
                 return {**captured,'mode':'browser','persisted':True,'registry':reg['label'],'count':len(captured['results'])}
         if a.registry == 'cde' and ctx.settings.china_ego_space_id is not None:
-            from ciw2.sources import cde_browser
+            from ciw2.sources import cde_browser, cde_review_browser
+            adapter=cde_browser if a.cde_section=='acceptance' else cde_review_browser
             try:
-                captured = cde_browser.browser_search(ctx,a.query,a.query_kind)
+                captured = adapter.browser_search(ctx,a.query,a.query_kind)
             except (BrowserBlocked,BrowserFailed) as exc:
                 status = 'blocked' if isinstance(exc,BrowserBlocked) else 'failed'
                 ctx.db.log_coverage(ctx.run_id,f'{a.route_id}:browser','china',a.query,status,note=str(exc))
             else:
-                cde_browser.persist_candidates(ctx,captured,a.route_id)
+                if a.cde_section=='acceptance':
+                    cde_browser.persist_candidates(ctx,captured,a.route_id)
+                else:
+                    captured['linked_refs']=cde_review_browser.persist_refs(ctx,captured,a.route_id)
                 ctx.db.log_coverage(ctx.run_id,f'{a.route_id}:browser','china',a.query,'ok',hits=len(captured['results']))
-                return {**captured,'mode':'browser','persisted':True,'registry':reg['label'],'count':len(captured['results'])}
+                persisted=a.cde_section=='acceptance' or captured['linked_refs']>0
+                return {**captured,'mode':'browser','persisted':persisted,'registry':reg['label'],'count':len(captured['results'])}
         try:
             rows = web_search(ctx.settings, f"site:{reg['site']} {a.query}", 10)
             mode = "site_search"
