@@ -59,7 +59,9 @@
 <div>{{ e.measure }}</div>{% if e.description %}<p class="quote">{{ e.description }}</p>{% endif %}
 {{ evidence([e], e.measure) }}</details>{% endfor %}</details>{% endif %}{% endfor %}</td>
 <td>{% if r.eligibility_age %}<div>{{ r.eligibility_age.min | age_label }} ~ {{ r.eligibility_age.max | age_label }}</div>{% endif %}
-<div>中国站点 {{ '是' if r.china_site else ('否' if r.china_site is defined and r.china_site is not none else '—') }}</div>
+{% if r.trial_scope %}<div>{{ r.trial_scope }}</div>{% else %}<div>中国站点 {{ '是' if r.china_site else ('否' if r.china_site is defined and r.china_site is not none else '—') }}</div>{% endif %}
+{% if r.eligibility_sex %}<div>{{ r.eligibility_sex | registry_label('sex') }}</div>{% endif %}
+{% if r.eligibility_healthy_volunteers %}<div>健康受试者：{{ r.eligibility_healthy_volunteers }}</div>{% endif %}
 {% if r.eligibility_thresholds %}<details class="eligibility-key"><summary>入排要点</summary>
 {{ criteria_index(r.eligibility_clauses, true) }}</details>{% endif %}
 {{ evidence(r.sources.get('eligibility_age', [])) }}</td>

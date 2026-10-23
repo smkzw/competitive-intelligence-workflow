@@ -14,7 +14,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from ciw2.domain.availability import require_supported_cutoff
 from ciw2.domain.outcomes import DOMAIN_LABELS, classify_outcome_domain
-from ciw2.render.labels import PHASE_ZH, age_label, registry_label
+from ciw2.render.labels import PHASE_ZH, age_label, phase_label, registry_label
 from ciw2.render.result_identity import bind_result_drugs
 from ciw2.render.results import result_groups
 from ciw2.render.trial_identity import trial_identities, verified_holders
@@ -28,7 +28,7 @@ STATUS_ZH = {"verified": "已核实", "unverified": "未核实", "conflict": "�
 REPORT_ZH = {"A": "A · 竞争格局", "B": "B · 疗效与安全性", "C": "C · 试验设计先例"}
 
 _env = Environment(loader=FileSystemLoader(str(HERE / "templates")), autoescape=select_autoescape(["html"]))
-_env.filters["phase"] = lambda p: PHASE_ZH.get(p or "unknown", p)
+_env.filters["phase"] = phase_label
 _env.filters["status"] = lambda s: STATUS_ZH.get(s, s)
 _env.filters['registry_label'] = registry_label
 _env.filters['age_label'] = age_label

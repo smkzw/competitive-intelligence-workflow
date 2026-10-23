@@ -113,12 +113,14 @@ def _matches(drug: dict[str, Any], interventions: list[dict[str, Any]],
 
 
 def trial_evidence(rc: RunContext) -> dict[str, Any]:
+    from ciw2.pipeline.china_evidence import collect
+    china=collect(rc)
     it = _intake(rc)
     ctx = rc.tool_ctx()
     cond = it.get("indication_en") or rc.project["indication"]
     max_trials = work_limit(rc.cache.get('max_trials_per_drug'))
-    linked, ingested, pending_links, errors = 0, 0, 0, []
-    pending = []
+    linked, ingested, pending_links, errors = 0, china['ingested'], 0, china['errors']
+    pending = china['pending_trials']
     owners = name_owners(rc.db.entities(rc.project_id, 'drug'))
     ambiguous = {name for name, ids in owners.items() if len(ids) > 1}
     for d in scoped_drugs(rc):
@@ -196,7 +198,7 @@ def _results_extra(rc: RunContext, d: dict[str, Any]) -> dict[str, Any]:
 
 def _design_extra(rc: RunContext, d: dict[str, Any]) -> dict[str, Any]:
     with_design = {f["entity_id"] for f in rc.db.current_facts(rc.project_id)
-                   if f["field"] == "design.sample_size" and f["extracted_by"] == "code:ctgov"}
+                   if f["field"] == "design.sample_size" and f["extracted_by"] in {"code:ctgov","code:chinadrugtrials"}}
     return {"trials_with_registry_design": [t["name"] for t in drug_trials(rc, d["id"]) if t["id"] in with_design]}
 
 

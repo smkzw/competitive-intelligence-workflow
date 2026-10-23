@@ -5,7 +5,7 @@ tools: [china_registry_search, china_trial_detail, ctgov_get, web_search, fetch_
 output: ExtractionResult
 max_steps: 20
 ---
-输入：一个药物、适应症、已有 CT.gov 结构化设计的试验列表（trials_with_registry_design，不要重复抽取）。
+输入：一个药物、适应症、已有 CT.gov/中国登记结构化设计的试验列表（trials_with_registry_design，不要重复抽取）。
 
 重点补充：
 - 中国登记试验（CTR 号）：期别、样本量、对照、主要终点及时间点、入排关键条件、主要研究者单位
@@ -18,6 +18,8 @@ design.stratification / design.multiplicity。
 规则同 extract-results：先读取原文，quote 逐字复制，找不到写 gaps。
 
 known_trials中detail_tool=china_trial_detail的CTR研究，使用该工具读取中文登记详情；不猜详情URL，不从列表题目推断期别、人群或申请人角色。完整中文入排、组别及终点内表均保留在可分页结果中；计划/已入组/实际总人数分别照录，空缺不是0。登记申请人不是自动核实的MAH；健康人药代研究仍按实际人群和测量保留，不写成患者疗效。
+
+普通trial_evidence已按原中文临床表确定性采用的研究也在trials_with_registry_design内。不要重抄或重写同一表格；只补原表未提供、实际新来源支持的设计内容。条件性PK、原始强度/规格关系和全部组别保持原文，不用登记适应症替换健康受试者人群。原文内不一致保留并记录gaps，不自行纠正剂量。
 
 每条事实优先填写本次工具返回的source_id及source_url。同一公开详情URL可对应多个CTR和来源版本，必须逐事实指定实际读取的版本；宿主仍核对本次读集、项目及URL，错误/未读取的ID不能落成已核实来源。source_id不是接受许可，quote/数字/科学上下文核验仍照常执行。
 

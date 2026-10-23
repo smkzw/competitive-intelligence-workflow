@@ -9,6 +9,7 @@ from urllib.parse import urlsplit
 
 from ciw2.domain.semantics import parse_timepoint
 from ciw2.render.eligibility import eligibility_reading
+from ciw2.render.labels import phase_label
 from ciw2.render.trial_identity import trial_identities
 from ciw2.store.db import DB
 
@@ -124,7 +125,7 @@ def design_data(db: DB, pid: str, phase_zh: dict[str, str]) -> dict[str, Any]:
     counts: dict[str, int] = defaultdict(int)
     for row in ordered:
         if row.get('phase_status') == 'verified':
-            counts[phase_zh.get(row.get('phase') or 'unknown', '未知')] += 1
+            counts[phase_label(row.get('phase'))] += 1
     return {'rows': ordered, 'endpoint_groups': endpoint_groups(ordered), 'charts': {
         'size': {'labels': [r['trial'] for r in sized], 'values': [r['sample_size'] for r in sized],
                  'identities': [{k: r['identity'][k] for k in ('registry_id', 'axis_label', 'label')} for r in sized]},

@@ -1,12 +1,13 @@
 """Shared clinical reading identity; display never changes study, arm or fact IDs."""
 from __future__ import annotations
 
+import json
 from collections import defaultdict
 from typing import Any
 from urllib.parse import urlsplit
 
 from ciw2.domain.identity import name_key
-from ciw2.render.labels import PHASE_ZH
+from ciw2.render.labels import phase_label
 from ciw2.store.db import DB
 
 
@@ -43,7 +44,7 @@ def trial_identities(db: DB, pid: str) -> dict[str, dict[str, Any]]:
     project = db.project(pid)
     assert project is not None
     drugs = {e['id']: e for e in db.entities(pid, 'drug')}
-    sources = {s['id']: s for s in db.query('SELECT id,url,kind FROM sources WHERE project_id=?', (pid,))}
+    sources = {s['id']: s for s in db.query('SELECT id,url,kind,meta FROM sources WHERE project_id=?', (pid,))}
     facts = db.current_facts(pid)
     holders = verified_holders(facts, sources)
     per_trial: dict[str, list[str]] = defaultdict(list)
@@ -59,6 +60,8 @@ def trial_identities(db: DB, pid: str) -> dict[str, dict[str, Any]]:
             legacy_sources[fact['entity_id']].add(fact['source_id'])
     current_sources = {r['src']: r['dst'] for r in db.query(
         "SELECT src,dst FROM links WHERE project_id=? AND rel='ctgov-current'", (pid,))}
+    china_current = {r['src']: r['dst'] for r in db.query(
+        "SELECT src,dst FROM links WHERE project_id=? AND rel='chinadrugtrials-current'", (pid,))}
     out = {}
     for trial in db.entities(pid, 'trial'):
         attrs, tid = trial['attrs'], trial['id']
@@ -66,12 +69,23 @@ def trial_identities(db: DB, pid: str) -> dict[str, dict[str, Any]]:
         if not names:
             names = [i['name'] for i in attrs.get('interventions', [])
                      if i.get('type') in {'DRUG', 'BIOLOGICAL'} and isinstance(i.get('name'), str)]
+        if not names and attrs.get('registry')=='chinadrugtrials' and tid in china_current:
+            names=[attrs['registry_drug_name']] if attrs.get('registry_drug_name') else []
         drug_label = ' / '.join(dict.fromkeys(names)) or '研究方案'
         original_names = sorted({drugs[d]['name'] for d in per_trial[tid]}, key=name_key)
         conditions = [c for c in attrs.get('conditions', []) if isinstance(c, str) and c.strip()]
         indication = _indication(conditions, project)
-        phase_label = ' / '.join(sorted({PHASE_ZH.get(p, p) for p in phases[tid]}))
+        phase_text = ' / '.join(sorted({phase_label(p) for p in phases[tid]}))
         companies = [holder for d in per_trial[tid] for holder in holders[d]]
+        for fact in facts:
+            source=sources.get(fact['source_id'])
+            if (fact['entity_id']==tid and fact['field']=='trial.applicant' and fact['status']=='verified'
+                    and isinstance(fact['value'],str) and fact['value'].strip() and source
+                    and source['kind']=='chinadrugtrials' and fact['source_id']==china_current.get(tid)
+                    and json.loads(source['meta']).get('request_context',{}).get('registry_id')==trial['name']):
+                companies.append({'role':'登记申请人','name':fact['value'],'fact_id':fact['id'],
+                    'source_id':fact['source_id'],'url':web_url(source['url']),
+                    'locator':fact['context'].get('json_path'),'quote':fact['quote']})
         sid = current_sources.get(tid)
         if sid is None and attrs.get('registry') == 'ctgov' and len(legacy_sources[tid]) == 1:
             sid = next(iter(legacy_sources[tid]))  # Read-only legacy provenance, not a snapshot activation.
@@ -80,11 +94,11 @@ def trial_identities(db: DB, pid: str) -> dict[str, dict[str, Any]]:
                 'url': sources[sid]['url'], 'locator': attrs.get('replay_container_locator', '$') +
                     '.protocolSection.sponsorCollaboratorsModule.leadSponsor.name'})
         company_label = '；'.join(dict.fromkeys(f"{c['role']} {c['name']}" for c in companies))
-        label = ' · '.join(part for part in (drug_label, indication, phase_label, company_label) if part)
+        label = ' · '.join(part for part in (drug_label, indication, phase_text, company_label) if part)
         out[tid] = {'entity_id': tid, 'registry_id': trial['name'], 'url': web_url(attrs.get('url')),
             'title': attrs.get('title'), 'drug_label': drug_label, 'drugs': names,
             'drug_names_original': original_names,
             'indication': indication, 'conditions_original': conditions,
-            'scope_indication': project['indication'], 'phase_label': phase_label,
-            'companies': companies, 'label': label, 'axis_label': ' · '.join(filter(None, (drug_label, phase_label)))}
+            'scope_indication': project['indication'], 'phase_label': phase_text,
+            'companies': companies, 'label': label, 'axis_label': ' · '.join(filter(None, (drug_label, phase_text)))}
     return out

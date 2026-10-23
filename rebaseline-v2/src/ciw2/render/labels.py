@@ -15,6 +15,15 @@ PHASE_ZH = {"preclinical": "临床前", "phase1": "I 期", "phase1_2": "I/II 期
             "phase2_3": "II/III 期", "phase3": "III 期", "nda_bla": "上市申请", "approved": "已上市",
             "phase4": "IV 期", "unknown": "未知"}
 
+
+def phase_label(value: object) -> str:
+    text=_text(value)
+    if text is None:
+        return PHASE_ZH['unknown']
+    # Registry Chinese phase strings are already labels, not unknown enum codes.
+    match=re.fullmatch(r'(I{1,3}|IV)(/(?:I{1,3}|IV))?期',text)
+    return text[:-1]+' 期' if match else PHASE_ZH.get(text,text)
+
 _REGISTRY_LABELS: dict[str, dict[str, str]] = {
     'measure_unit': {
         'score on a scale': '分', 'Participants': '人', 'participants': '人',
@@ -57,6 +66,7 @@ _REGISTRY_LABELS: dict[str, dict[str, str]] = {
     },
     "arm_type": {
         "EXPERIMENTAL": "试验组",
+        "COMPARATOR": "对照组",
         "ACTIVE_COMPARATOR": "阳性对照组",
         "PLACEBO_COMPARATOR": "安慰剂对照组",
         "SHAM_COMPARATOR": "模拟干预对照组",
