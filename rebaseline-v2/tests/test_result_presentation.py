@@ -2,6 +2,22 @@ from ciw2.render.portal import data_b, render_report
 from ciw2.service import Service
 
 
+def test_plot_identity_is_clinical_without_guessing_an_unresolved_arm():
+    from ciw2.render.results import _point
+
+    row={'id':'fact','entity_id':'trial','entity':'NCT00000001','source_id':'source','value':0,
+         'arm':'Original arm','arm_drug_label':'奈莫利珠单抗','display_drugs':['奈莫利珠单抗'],
+         'identity':{'drug_label':'奈莫利珠单抗','label':'奈莫利珠单抗 · 特应性皮炎 · II 期',
+                     'axis_label':'奈莫利珠单抗 · II 期','phase_label':'II 期'}}
+    point=_point(row,None)
+    assert point['axis_label']=='奈莫利珠单抗 · II 期'
+    assert point['trial']=='NCT00000001' and point['value']==0 and point['fact_id']=='fact'
+    row['arm_drug_label']=''
+    row['display_drugs']=[]
+    point=_point(row,None)
+    assert point['drug_label']=='' and point['axis_label']=='研究：奈莫利珠单抗 · II 期'
+
+
 def project(settings, observations):
     svc = Service(settings)
     pid = svc.create_project('试验结果', ['B'])
@@ -103,3 +119,18 @@ def test_template_has_one_selectable_plot_and_full_measurement_table_without_rem
     assert 'id="result-query"' in html and 'data-fact-id=' in html
     assert 'Week 4' in html and 'Very long complete endpoint '*12 in html
     assert '仅已核实数据；' not in html and '比例仅在同组分母明确时计算' not in html
+
+
+def test_safety_defaults_to_folded_source_linked_rows_and_shared_query(settings):
+    db,pid,_=project(settings,[{}])
+    trial=db.entities(pid,'trial')[0]['id']
+    sid=db.query('SELECT id FROM sources WHERE project_id=?',(pid,))[0]['id']
+    fid=db.add_fact({'project_id':pid,'entity_id':trial,'source_id':sid,'field':'safety.sae.any',
+        'value':0,'quote':'0','status':'verified','tier':'critical','extracted_by':'code:test',
+        'context':{'arm':'Original arm','denominator':10,'timepoint':'Week 16'}})
+    html=render_report(db,pid,'B')
+    assert 'data-filter-extra="tbl-b-safety"' in html
+    assert '<details class="safety-table">' in html and '<details class="safety-table" open' not in html
+    assert f'<tr data-fact-id="{fid}">' in html
+    safety=html.split('id="tbl-b-safety"',1)[1].split('</table>',1)[0]
+    assert 'https://example.org/results' in safety and '<summary>原文值</summary>' in safety

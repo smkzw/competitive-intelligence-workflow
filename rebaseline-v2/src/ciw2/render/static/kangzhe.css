@@ -74,6 +74,9 @@ details summary{font-weight:500}.evidence{margin:3px 0}
 #design-evidence-dialog .criteria{max-width:none;margin:0}
 #design-evidence-dialog section{min-width:0}
 #design-evidence-dialog>.source-evidence-content,#design-evidence-body>.source-evidence-content{max-width:90ch;margin:0 auto}
+#design-evidence-dialog:has(#design-evidence-body>.source-evidence-content){width:min(88vw,1040px)}
+#design-evidence-dialog>header h2{min-width:0;overflow-wrap:anywhere}
+#design-evidence-dialog>header button{flex-shrink:0}
 button.secondary{color:#fff}
 .design-size .chart{height:336px;max-height:336px}
 .design-phase .chart{height:160px;max-height:336px}
@@ -85,5 +88,5 @@ html:has(#design-evidence-dialog[open]){overflow:hidden}
 .result-controls input,.result-controls select{width:100%;max-width:100%;box-sizing:border-box;font:inherit;min-height:40px}
 .result-panel .chart{height:320px}
 .result-panel details{margin-top:8px}.result-panel #result-definition{overflow-wrap:anywhere}
-.result-series-row{margin:4px 0}.result-table{margin-top:12px}
-#result-count{margin:8px 0}.result-table>summary{font-weight:600}
+.result-series-row{margin:4px 0}.result-table,.safety-table{margin-top:12px}
+#result-count{margin:8px 0}.result-table>summary,.safety-table>summary{font-weight:600}

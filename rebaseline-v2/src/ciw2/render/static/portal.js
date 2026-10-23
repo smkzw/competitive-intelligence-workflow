@@ -131,7 +131,8 @@
       });
       option.legend = { type: "scroll", bottom: 0, formatter: function (name) {
         var point = group.points.find(function (p) { return p.series_key === order[Number(name) - 1]; });
-        return (point && point.drug_label ? point.drug_label + " · " : "") + "组" + name;
+        return (point && point.drug_label ? point.drug_label + " · " : "") +
+          (point && point.phase_label ? point.phase_label + " · " : "") + "组" + name;
       } };
       option.xAxis = { type: "value", scale: true, name: group.display_axis === "weeks" ? "周" : group.axis_unit === "months" ? "月" : "天" };
       option.yAxis = { type: "value", scale: true };
@@ -150,11 +151,12 @@
           label: { formatter: function (p) { return p.value[1]; } } };
       });
     } else {
-      option.grid.left = 210; option.grid.bottom = 32;
+      option.grid.left = 310; option.grid.bottom = 32;
       option.xAxis = { type: "value", scale: false };
       option.yAxis = { type: "category", inverse: true, data: points.map(function (p, i) {
-        return String(i + 1) + " · " + (p.visit && p.visit.length <= 16 ? p.visit : p.trial);
-      }) };
+        return String(i + 1) + " · " + (p.axis_label || p.drug_label || p.arm || "研究观察") +
+          (p.visit && p.visit.length <= 16 ? " · " + p.visit : "");
+      }), axisLabel: { width: 280, overflow: "break", lineHeight: 22 } };
       option.dataZoom = [{ type: "slider", yAxisIndex: 0, right: 0, width: 16, show: points.length > 6,
         startValue: 0, endValue: Math.min(5, points.length - 1), filterMode: "filter" }];
       option.series = [{ type: "bar", barMaxWidth: 22, data: points.map(function (p) {
@@ -235,6 +237,15 @@
       table.querySelectorAll("tbody tr").forEach(function (tr) {
         tr.style.display = !q || tr.textContent.toLowerCase().indexOf(q) >= 0 ? "" : "none";
       });
+      var extra = el(inp.getAttribute("data-filter-extra"));
+      if (extra && extra !== table) {
+        var extraRows = Array.from(extra.querySelectorAll("tbody tr"));
+        extraRows.forEach(function (tr) {
+          tr.style.display = !q || tr.textContent.toLowerCase().indexOf(q) >= 0 ? "" : "none";
+        });
+        if (el("safety-count")) el("safety-count").textContent =
+          extraRows.filter(function (tr) { return tr.style.display !== "none"; }).length + " / " + extraRows.length;
+      }
       if (table.id === "tbl-c") updateDesignQuery(table);
       if (table.id === "tbl-b" && el("result-group")) updateResultQuery(table);
     });

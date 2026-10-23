@@ -9,10 +9,14 @@
 - 历史恢复依据：Trellis `10-23-rebaseline-v2-m1/PAUSE_HANDOFF_20261023_0810.md`；原暂停回执/备份不改。用户已解除暂停，历史paused/旧PID不覆盖新授权。
 - 模型cms-router/glm-5.3-flash → DGX/deepseek → DGX/qwen；凭据仅注册配置到必要子进程环境，不入文件/日志/提示词，不改全局路由。
 
-## 当前节点：只恢复归并，不重做151批研究
+## 当前节点：真实临床阅读切片；归并独立运行
+- 当前完整v2门 **696PASS/3.31s**，Ruff全src/tests/scripts及3JS/sh语法通过，1既有TestClient警告。本批仅修图轴临床身份、安全表折叠/同查询/逐行来源及短来源阅读宽度；不改变科学数值/药物绑定，不重跑来源。
+- 正常生产摄取同一官方捕获记录生成A/B/C，ciw-data/browser-current/clinical-abc-03，668/668数据点保留，事实hash f08e6c7a485d88d1bf899d05435ae6c788ae70e378bd2906ea007dc1bbc58157。Ego63/p1四宽共22截图已逐张实看；真实glyph点击→正确事实/来源，筛后221/668结果及2/6安全，短来源1040px/Esc回焦，完整入排2219字/8强调。首脚本完成12图后仪器等待超时，仅恢复缺失交互与A/C，失败及初始NOT_RUN回执不改；owner-audit独立绑定hash。不是新网络核查/模型报告/全流水线。
+- 本次只接受上述组件：A未知-only热图/阶段图占位且图例重叠仍未通过美学；B药代域≠疗效分类仍待M4、MAH/中文名富集仍待M3，安全图未完成。下一有界UI包消除无信息大图，不用删事实或猜值解决。
 - 临床阅读/修订恢复节点已白名单提交并推送349cccf54750531a503dd3a3236098fb5480b333，fresh remote exact；v1未知改动/健康日志未提交。下节690门及界面候选绑定该实现，不借新归并代码改写旧回执。
 - 新根因包4个生产RED→29相关PASS；研究包仍24000字符，归并包单独8000（真实mode/metadata计预算），中间至多2/最终6条，全部完整候选参与，单条超预算拒绝而非裁短。输出超量在缓存签入前拒绝，成功归并可复用；未新增框架/配置平台。
-- 当前完整v2开发门 **694PASS/3.53s**，Ruff全src/tests/scripts、3JS/sh语法通过，1既有TestClient警告。代码门已通过；隔离真实synthesis-only恢复尚未运行，后续须冻结代码、核旧151批/来源不变，再只处理780要点归并。它不等于M1完整流水线或产品接受。
+- 当前完整v2开发门 **694PASS/3.53s**，Ruff全src/tests/scripts、3JS/sh语法通过，1既有TestClient警告。归并根因包已白名单提交/推送ec32ca47c76e999565d724c8f994b74fa075c16a并fresh remote exact；不是M1完整流水线或产品接受。
+- 隔离真实synthesis-only已启动，句柄**52075**，项目prj_f21d0823b44a/新run_4cc7aca0a632；冻结ec32ca47，ciw-data/r4-synthesis-01/{manifest,started,findings}.json及data。151旧批逐输出hash绑定、780完整要点，包含真实focus/metadata后的首层76包/最大7999字符（简化干规划75包不能冒作实跑计划）。旧DB/runtime只读，新DB备份/CAS硬链接；0重新执行原始批、0新来源。请求路线仍GLM→DGX/deepseek→DGX/qwen；尚未核实际响应模型/终态，不记PASS。健康运行不轮询、重派或中止。
 
 ## 已提交组件：临床身份与入排重点阅读
 - 当前完整v2开发门 **690PASS/3.30s**，1既有TestClient弃用警告；Ruff覆盖src/tests/scripts、3JS及sh语法通过。生产src/ciw2 53个Python/313函数符合600/80（create_app为既定例外）；不包含v1，不代表产品交付。旧664/688门仅对当时范围成立。

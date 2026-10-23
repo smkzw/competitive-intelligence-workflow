@@ -12,7 +12,8 @@ const a={id:'a',title:'Clinical score <script>',population:'ITT',unit:'points',s
     {fact_id:'f0',series_key:'s1',series_name:'<img src=x>',x:28,value:0,visit:'第4周',trial:'NCT01'},
     {fact_id:'f2',series_key:'s1',series_name:'<img src=x>',x:84,value:8,visit:'第12周',trial:'NCT01'}]};
 const b={id:'b',title:'Separate endpoint',kind:'bar',points:[
-  {fact_id:'f1',series_key:'s2',series_name:'Other',x:null,value:3,visit:'End',trial:'NCT02'}]};
+  {fact_id:'f1',series_key:'s2',series_name:'Other',axis_label:'奈莫利珠单抗 · II 期',x:null,value:3,
+    visit:'Pre-dose at Weeks 4, 8, 12, 16, 32 and 52',trial:'NCT02'}]};
 const select={value:'a',disabled:false,options:[{value:'a'},{value:'b'}],
   querySelectorAll(){return this.options;},addEventListener(k,fn){events['select:'+k]=fn;}};
 const input={value:'',getAttribute:()=>'tbl-b',addEventListener(k,fn){events['input:'+k]=fn;}};
@@ -21,6 +22,9 @@ const elements={charts:{textContent:JSON.stringify({groups:[a,b]})},'result-grou
   'result-panel':{hidden:false},'result-empty':{hidden:true},'result-count':{},'result-definition':{},
   'result-series':{items:[],replaceChildren(){this.items=[];},appendChild(n){this.items.push(n);}},
   'chart-result':{id:'chart-result',style:{}}};
+const safetyRows=['first','other'].map(text=>({textContent:text,style:{}}));
+elements['tbl-b-safety']={querySelectorAll:()=>safetyRows};elements['safety-count']={};
+input.getAttribute=name=>name==='data-filter-extra'?'tbl-b-safety':'tbl-b';
 const document={getElementById:id=>elements[id],querySelectorAll:s=>s==='input[data-filter]'?[input]:[],
   createElement(){return {};}};
 const echarts={init(node){initCount++;const c={options:[],events:{},resize(){},dispose(){},
@@ -36,6 +40,7 @@ assert.ok(option.tooltip.formatter({data:option.series[0].data[0]}).includes('&l
 assert.ok(!option.tooltip.formatter({data:option.series[0].data[0]}).includes('<img'));
 assert.equal(option.xAxis.name,'周');
 input.value='last';events['input:input']();option=c.options.at(-1);
+assert.equal(elements['safety-count'].textContent,'0 / 2');assert.ok(safetyRows.every(r=>r.style.display==='none'));
 assert.equal(option.series[0].type,'bar');
 assert.equal(option.xAxis.scale,false);
 assert.equal(JSON.stringify(option.series[0].data.map(p=>p.value)),JSON.stringify([8]));
@@ -46,7 +51,11 @@ assert.equal(elements['result-panel'].hidden,true);assert.equal(elements['result
 assert.equal(select.disabled,true);
 input.value='';events['input:input']();
 select.value='b';events['select:change'].call(select);assert.equal(c.options.at(-1).series[0].type,'bar');
+assert.ok(c.options.at(-1).yAxis.data[0].includes('奈莫利珠单抗 · II 期'));
+assert.ok(!c.options.at(-1).yAxis.data[0].includes('NCT02'));
+assert.ok(c.options.at(-1).tooltip.formatter({data:c.options.at(-1).series[0].data[0]}).includes(b.points[0].visit));
 input.value='first';events['input:input']();assert.equal(select.value,'a');
+assert.equal(elements['safety-count'].textContent,'1 / 2');assert.equal(safetyRows[0].style.display,'');
 input.value='';events['input:input']();assert.equal(select.value,'b');
 assert.equal(elements['result-count'].textContent,'3 / 3 条结果 · 2 组');
 assert.equal(initCount,1);assert.equal(observerCount,1);

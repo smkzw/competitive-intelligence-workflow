@@ -50,11 +50,15 @@ def _point(row: dict[str, Any], visit: tuple | None) -> dict[str, Any]:
     context_label = trial_label
     if identity.get('drug_label') == ' / '.join(row.get('display_drugs', [])):
         context_label = trial_label[len(identity['drug_label']):].strip(' ·')
+    phase = identity.get('phase_label') or ''
+    drug_label = row.get('arm_drug_label') or row.get('arm_drug') or ''
+    axis_label = ' · '.join(filter(None, (drug_label, phase))) if drug_label else (
+        '研究：' + identity['axis_label'] if identity.get('axis_label') else row.get('arm') or '研究观察')
     label = ' · '.join(str(value) for value in (row.get('arm_drug_label') or row.get('arm_drug'), context_label, row.get('arm')) if value)
     series = json.dumps([row['entity_id'], row['source_id'], row.get('source_snapshot'),
                          row.get('group_id'), row.get('arm')], ensure_ascii=False)
     return {'fact_id': row['id'], 'value': row['value'], 'x': visit[1] if visit else None,
-            'drug_label': row.get('arm_drug_label') or row.get('arm_drug') or '',
+            'drug_label': drug_label, 'phase_label': phase, 'axis_label': axis_label,
             'visit': visit[2] if visit else (row.get('class_title') or row.get('category') or row.get('timepoint') or ''),
             'series_key': series, 'series_name': label, 'label': label,
             'trial': row.get('entity') or '', 'trial_label': trial_label,
