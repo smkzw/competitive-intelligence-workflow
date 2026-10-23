@@ -44,6 +44,9 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 - B的render/result_identity.py读取current verified design.arms，按(entity_id,source_id,source_snapshot,原组名)建立关系；仅去空白/大小写及明确Drug/Biological类型前缀，复用同研究已关联药物的name_owners。原组名/原值不改，组合全列、冲突不first-wins、控制标签不归主动药；trial_drugs仅作研究语境，drugs/arm_drugs才是图表和明细共同归属。关系事实ID与内部原因保留，缺来源/跨源或跨版本/未核实不自动借用，不增加表或猜测型组映射。
 - B的render/results.py投影全部测量实例；严格fullmatch单访视，不复用旧parse_timepoint的宽文本首数字匹配。endpoint原定义、单位/paramType/dispersion/人群、非访视class/category与原窗共同分组；人口/统计/单位缺项不自动跨研究。每点绑定fact_id及来源组series。重复坐标不覆盖，非数值/未核实留表与内部plot_exclusions。positions包含已知缺测访视供断线，不生成零或新事实。portal.js只复用一个ECharts实例/ResizeObserver，完整组选择及同查询图/表/来源；系列编号颜色按完整组稳定，周显示在数值坐标构建时精确缩放，不对任意day刻度除7造循环小数。条形包含0，完整长表/定义原生折叠；无新框架/状态库。
 - `facts`：追加式；`supersedes` 指向被取代的版本；`tier` `status` `quote` `quote_start/end` `context`（组/时间点/人群/统计对象/分母/终点）。
+- `pipeline/verification.py`复用既有facts/DB.tx：先读源/可选模型检查，再在一个事务中关联实体并采用整批。提案ID绑定project/run/extraction-stage及原始提案，不含可变的核验状态；先识别已提交重放，再判当前修订对象。supersedes科学上下文不匹配则不隐藏原观察，原因仅在内部记录。enrollment_type沿用登记的ESTIMATED/ACTUAL含义进入抽取合同，不从人数大小推断。
+- 抽取单元回执保存每条事实的宿主附加source_id（不是模型可填写字段），由本次读取集与精确URL确定；唯一匹配才绑定，歧义/未读为null。核验严格按同项目、同URL、同source_id读CAS；旧回执缺该键时只读兼容原按URL行为。Skill/schema/代码变化按既有恢复键失效，冻结运行仍使用自己的旧字节。
+- C标量投影汇集每个字段的完整observations，唯一已核实语义值才进入概览数值轴；待核候选不遮盖已核实值，多值并列与完整来源均保留。引用可沿supersedes只读追溯历史值、原文及版本，含循环防护，不改历史记录。不新增事实库、审批流或缓存计划框架。
 - `coverage`：每条检索路线的状态（ok/failed/blocked）、命中、新增实体。
 - 发现工具逐批保存登记原名与药物—试验关系，最终模型提交失败不抹掉已读来源；不据此推断创新属性或监管身份。
 - 同一RunContext的相同GET复用已抓CAS字节；新上下文再次调用fetch时不沿用旧HTTP缓存。已完成单元的恢复回执是固定来源复用，不声称发生新HTTP核查；新调研run不沿用上次单元回执。工具结果授权仍限定当前Skill。
@@ -97,6 +100,11 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 ## 6. 配置（环境变量）
 ### C阅读层
 沿用单一portal.js/kangzhe.css及Jinja。样本量图保留全部数据，用dataZoom限定可读窗口而非Top-N；密集/稀疏高度按数据量，期别独立高度和完整名称/计数图例。完整入排details为无JS基线；有native dialog时单个模态容器临时移动原DOM内容，关闭恢复原位/触发焦点，使用textContent显示研究名，不生成另一份科学数据。长原文与事实依据两列，保留原引文/链接，不引入下钻框架或新的状态库。
+
+### 共用临床身份与入排强调
+- `render/trial_identity.py`为A/B/C共享临床身份读取投影：已确认关联药物/中文名、来源适应症、核实期别及来源支持的MAH/申办方。按精确项目别名显示中文适应症，不用项目标题覆盖不同疾病；MAH不取未核实attrs或推测集团。旧登记无current link时只读兼容唯一同研究code:ctgov来源。B先绑定真实组—药物，再附研究身份；图形稳定键仍为登记ID，标签为临床信息。
+- `render/eligibility.py`返回规则与无损文本segments，不返回可信HTML；Jinja逐段转义后以有限语义角色强调。规则保留source_start/end、section_title和clause_start，按原条款/队列归组；原文DOM textContent必须逐字相同。vIGA与IGA不互换，复合逻辑按来源顺序保存，未识别语句不删改。
+- C所有依据与完整入排复用一个native dialog，原DOM移动后归位，Esc回实际触发者。终点索引同研究筛选并报告可见/总数。摘要不重复带eligibility_reading/clauses全文副本，但保留结构化规则、完整原条款、队列和引用；不引入新执行平台。
 
 ### 环境项
 `CIW_DATA_DIR` `CIW_SKILLS_DIR` `CIW_LLM_BASE_URL` `CIW_LLM_API_KEY` `CIW_LLM_MODEL` `CIW_LLM_CHECK_MODEL`

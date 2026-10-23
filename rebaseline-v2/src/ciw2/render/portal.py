@@ -13,18 +13,16 @@ from typing import Any
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from ciw2.domain.availability import require_supported_cutoff
-from ciw2.render.labels import age_label, registry_label
+from ciw2.render.labels import PHASE_ZH, age_label, registry_label
 from ciw2.render.result_identity import bind_result_drugs
 from ciw2.render.results import result_groups
+from ciw2.render.trial_identity import trial_identities, verified_holders
 from ciw2.store.db import DB
 
 HERE = Path(__file__).resolve().parent
 STATIC = HERE / "static"
 PHASE_ORDER = ["preclinical", "phase1", "phase1_2", "phase2", "phase2_3", "phase3", "nda_bla", "approved",
                "phase4", "unknown"]
-PHASE_ZH = {"preclinical": "临床前", "phase1": "I 期", "phase1_2": "I/II 期", "phase2": "II 期",
-            "phase2_3": "II/III 期", "phase3": "III 期", "nda_bla": "上市申请", "approved": "已上市",
-            "phase4": "IV 期", "unknown": "未知"}
 STATUS_ZH = {"verified": "已核实", "unverified": "未核实", "conflict": "冲突", "unknown": "未报告"}
 REPORT_ZH = {"A": "A · 竞争格局", "B": "B · 疗效与安全性", "C": "C · 试验设计先例"}
 
@@ -59,6 +57,9 @@ def _coverage(db: DB, pid: str) -> dict[str, Any]:
 
 def data_a(db: DB, pid: str) -> dict[str, Any]:
     drugs = db.entities(pid, "drug")
+    identities = trial_identities(db, pid)
+    holder_map = verified_holders(db.current_facts(pid), {s['id']: s for s in db.query(
+        'SELECT id,url FROM sources WHERE project_id=?', (pid,))})
     tmap = _trial_drugs(db, pid)
     trials = {t["id"]: t for t in db.entities(pid, "trial")}
     per_drug: dict[str, list[dict[str, Any]]] = defaultdict(list)
@@ -72,12 +73,15 @@ def data_a(db: DB, pid: str) -> dict[str, Any]:
         ts = per_drug.get(d["name"], [])
         rows.append({
             "name": d["name"], "name_zh": d["name_zh"], "targets": a.get("targets", []),
-            "modality": a.get("modality"), "companies": a.get("companies", []), "china_mah": a.get("china_mah"),
+            "modality": a.get("modality"), "companies": a.get("companies", []),
+            "china_mah": ' / '.join(dict.fromkeys(c['name'] for c in holder_map[d['id']])),
+            'mah_refs': holder_map[d['id']],
             "phase_global": a.get("highest_phase_global", "unknown"),
             "phase_china": a.get("highest_phase_china", "unknown"), "innovative": a.get("innovative"),
             "n_trials": len(ts), "n_china_trials": sum(1 for t in ts if t["attrs"].get("china_site")),
             "found_by": d["found_by"], "in_scope": d["in_scope"], "scope_reason": d["scope_reason"],
             "evidence_urls": a.get("evidence_urls", []),
+            "trials": [identities[t['id']] for t in ts if t['id'] in identities],
         })
     included = [r for r in rows if r["in_scope"] != 0]
     targets = sorted({t for r in included for t in (r["targets"] or ["未知靶点"])})
@@ -133,6 +137,13 @@ def _result_rows(db: DB, pid: str) -> list[dict[str, Any]]:
 def data_b(db: DB, pid: str) -> dict[str, Any]:
     rows = _result_rows(db, pid)
     bind_result_drugs(db, pid, rows)
+    identities = trial_identities(db, pid)
+    drug_names = {d['name']: d['name_zh'] or d['name'] for d in db.entities(pid, 'drug')}
+    for row in rows:
+        row['identity'] = identities.get(row['entity_id'])
+        row['display_drugs'] = [drug_names.get(name, name) for name in row['drugs']]
+        row['arm_drug_label'] = ' / '.join(drug_names.get(name, name) + (f'（{name}）' if drug_names.get(name, name) != name else '')
+                                         for name in row['drugs'])
     results = [r for r in rows if r["field"].startswith("result.") and not r["field"].endswith(".analysis")]
     analyses = [r for r in rows if r["field"].endswith(".analysis")]
     safety = [r for r in rows if r["field"] in ("safety.sae.any", "safety.death.all_cause")]
@@ -165,9 +176,13 @@ def render_report(db: DB, pid: str, report: str, *, findings: dict[str, Any] | N
         raise KeyError(pid)
     data = report_data(db, pid, report)
     has_data = any(data.get(key) for key in ('rows', 'results', 'safety', 'analyses'))
-    verified_ids = {fact['id'] for fact in db.current_facts(pid) if fact['status'] == 'verified'}
-    summaries = [finding for finding in (findings or {}).get('findings', [])
-                 if has_data and finding.get('fact_refs') and set(finding['fact_refs']) <= verified_ids]
+    verified = {fact['id']: fact for fact in db.current_facts(pid) if fact['status'] == 'verified'}
+    identities = trial_identities(db, pid)
+    summaries = []
+    for finding in (findings or {}).get('findings', []):
+        if has_data and finding.get('fact_refs') and set(finding['fact_refs']) <= verified.keys():
+            tids = dict.fromkeys(verified[fid]['entity_id'] for fid in finding['fact_refs'])
+            summaries.append({**finding, 'trial_context': [identities[tid] for tid in tids if tid in identities]})
     assets = None
     if inline:
         assets = {"css": (STATIC / "kangzhe.css").read_text(encoding="utf-8"),

@@ -11,6 +11,9 @@ from __future__ import annotations
 import re
 
 EM_DASH = "—"
+PHASE_ZH = {"preclinical": "临床前", "phase1": "I 期", "phase1_2": "I/II 期", "phase2": "II 期",
+            "phase2_3": "II/III 期", "phase3": "III 期", "nda_bla": "上市申请", "approved": "已上市",
+            "phase4": "IV 期", "unknown": "未知"}
 
 _REGISTRY_LABELS: dict[str, dict[str, str]] = {
     "trial_status": {

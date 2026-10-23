@@ -23,8 +23,6 @@ from ciw2.pipeline.queries import drug_trials, scoped_drugs
 from ciw2.pipeline.queries import intake_data as _intake
 from ciw2.pipeline.recovery import fingerprint, get_unit, put_unit
 from ciw2.sources import ctgov
-from ciw2.sources.http import source_by_url, source_text
-from ciw2.verify.quote import check_quote
 
 ANALYSIS_CODE_HASH = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 ANALYSIS_TASK_CHARS = 24000
@@ -220,7 +218,7 @@ def cross_check(llm: Any, fact: dict[str, Any]) -> bool | None:
     from ciw2.harness.llm import LLMError
     prompt = ("只回答 YES 或 NO：下面的原文片段是否明确支持该事实（数值、组别、时间点、人群、统计对象全部一致）？\n"
               + json.dumps({k: fact.get(k) for k in ("field", "value", "unit", "stat_type", "arm", "timepoint",
-                                                      "population", "denominator", "quote")}, ensure_ascii=False))
+                                                      "population", "denominator", "enrollment_type", "quote")}, ensure_ascii=False))
     try:
         reply = llm.chat([{"role": "user", "content": prompt}])
     except LLMError:
@@ -230,59 +228,8 @@ def cross_check(llm: Any, fact: dict[str, Any]) -> bool | None:
 
 
 def verify(rc: RunContext) -> dict[str, Any]:
-    ctx = rc.tool_ctx()
-    model = getattr(rc.llm, "model", "llm")
-    stats = {"verified": 0, "unverified": 0, "conflict": 0, "unknown": 0}
-    reasons: dict[str, int] = {}
-    identity_issues = []
-    for stage in ("extract_results", "extract_design"):
-        out = rc.db.stage_output(rc.run_id, stage) or {}
-        for f in out.get("facts", []):
-            try:
-                entity_id = _entity_for(rc, f['entity'], f['drug'])
-            except ValueError as exc:
-                identity_issues.append({'entity': f['entity'], 'drug': f['drug'], 'field': f['field'],
-                                        'reason': str(exc)})
-                continue  # Original fact remains in the extraction stage for recovery.
-            tier = tier_of(f["field"])
-            src = source_by_url(ctx, f["source_url"])
-            status, start, end, reason = "unverified", None, None, ""
-            if f.get("value") is None:
-                status, reason = "unknown", "来源未给出"
-            elif src is None:
-                reason = "来源未在本项目中读取，无法核验"
-            else:
-                text = source_text(ctx, src["id"]) or ""
-                chk = check_quote(text, f.get("quote"), f.get("value"))
-                start, end, reason = chk.start, chk.end, chk.reason
-                status = "verified" if chk.ok else "unverified"
-                if chk.ok and tier == "critical" and rc.check_llm is not None:
-                    agree = cross_check(rc.check_llm, f)
-                    if agree is False:
-                        status, reason = "conflict", "二次核对模型不同意"
-            supersedes = f.get('supersedes')
-            if supersedes:
-                old = next((v for v in rc.db.current_facts(rc.project_id, entity_id)
-                            if v['id'] == supersedes and v['field'] == f['field']), None)
-                if old is None:
-                    status, reason = 'conflict', '修订对象不属于同项目、同实体、同字段的当前事实'
-                if status != 'verified':
-                    supersedes = None
-            stats[status] += 1
-            if reason:
-                reasons[reason] = reasons.get(reason, 0) + 1
-            ctxt = {k: f.get(k) for k in ("endpoint", "unit", "stat_type", "arm", "timepoint", "population", "denominator")
-                    if f.get(k) is not None}
-            if f["field"].startswith("result."):
-                ctxt["endpoint_key"] = ctgov.endpoint_key(ctxt.get("endpoint") or f["field"])
-            rc.db.add_fact({"project_id": rc.project_id, "entity_id": entity_id,
-                            "field": f["field"], "value": f["value"], "tier": tier, "status": status,
-                            "source_id": src["id"] if src else None, "quote": f.get("quote"),
-                            "quote_start": start, "quote_end": end,
-                            "context": {**ctxt, "source_url": f["source_url"], "verify_note": reason},
-                            "extracted_by": f"llm:{f.get('extraction_model', model)}", 'supersedes': supersedes})
-    return {"stats": stats, "reasons": reasons, 'identity_issues': identity_issues,
-            'unresolved_entities': len(identity_issues)}
+    from ciw2.pipeline.verification import adopt
+    return adopt(rc, _entity_for, cross_check)
 
 
 # ------------------------------------------------------------------ analysis + render
@@ -308,6 +255,26 @@ def _analysis(report: str) -> Callable[[RunContext], dict[str, Any]]:
     return run
 
 
+def _clinical_context(context: dict[str, Any]) -> dict[str, Any]:
+    return {k: v for k, v in context.items() if k not in {
+        'json_path', 'source_url', 'source_snapshot', 'verify_note', 'proposed_supersedes'}}
+
+
+def _compact_observations(row: dict[str, Any], observations: dict[str, Any]) -> dict[str, Any]:
+    out = {}
+    for field, refs in observations.items():
+        slim = []
+        for ref in refs:
+            item = {key: ref[key] for key in ('fact_id', 'status') if key in ref}
+            if field != 'eligibility_criteria':
+                item['context'] = _clinical_context(ref.get('context', {}))
+                if len(refs) != 1 or field not in row:
+                    item['value'] = ref.get('value')
+            slim.append(item)
+        out[field] = slim
+    return out
+
+
 def _compact(data: Any) -> Any:
     """Remove duplicate display evidence, never shorten a clinical definition.
 
@@ -320,11 +287,19 @@ def _compact(data: Any) -> Any:
         return data
     out = {}
     for key, value in data.items():
-        if key in {'charts', 'endpoint_groups', 'eligibility_criteria', 'quote'}:
+        if key in {'charts', 'endpoint_groups', 'eligibility_criteria', 'eligibility_reading', 'eligibility_clauses', 'quote'}:
             continue
         if 'fact_id' in data and key in {'source_id', 'url', 'locator'}:
             continue  # Stable fact_id resolves original provenance; not clinical definition.
-        if key == 'sources':
+        if key == 'identity' and value:
+            out[key] = {k: value[k] for k in ('drug_label', 'indication', 'phase_label', 'conditions_original') if k in value}
+            out[key]['companies'] = [{k: c[k] for k in ('role', 'name', 'fact_id') if k in c}
+                                     for c in value.get('companies', [])]
+        elif key == 'context' and 'fact_id' in data:
+            out[key] = _clinical_context(value)
+        elif key == 'observations':
+            out[key] = _compact_observations(data, value)
+        elif key == 'sources':
             out[key] = {field: [{k: ref[k] for k in ('fact_id', 'status') if k in ref} for ref in refs]
                         for field, refs in value.items()}
         elif key == 'value' and 'fact_id' in data and isinstance(value, dict) and all(

@@ -6,7 +6,8 @@ from pathlib import Path
 import pytest
 
 
-def test_original_evidence_native_reader_moves_content_then_restores_actual_trigger():
+@pytest.mark.parametrize('evidence_kind',['original','source'])
+def test_original_evidence_native_reader_moves_content_then_restores_actual_trigger(evidence_kind):
     node = shutil.which('node')
     if not node:
         pytest.skip('Node unavailable')
@@ -14,8 +15,9 @@ def test_original_evidence_native_reader_moves_content_then_restores_actual_trig
     script = r'''
 const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
 const events={},life={}; let focused=0,opened=0;
+const kind=process.argv[2];
 const content={textContent:'Full original AND/OR criteria'}, origin={open:false,appendChild(n){n.parentElement=this;}};
-content.parentElement=origin; origin.querySelector=()=>content;
+content.parentElement=origin; origin.querySelector=selector=>kind==='original'||selector.includes('source-evidence-content')?content:null;
 const trigger={parentElement:origin,closest:()=>({dataset:{trial:'<untrusted-study>'}}),focus(){focused++;},
   addEventListener(k,fn){events[k]=fn;}};
 const dialog={open:false,addEventListener(k,fn){events['dialog:'+k]=fn;},
@@ -24,7 +26,7 @@ const body={appendChild(n){n.parentElement=this;}};
 const title={textContent:''};
 const close={addEventListener(k,fn){events['close:'+k]=fn;}};
 const elements={'design-evidence-dialog':dialog,'design-evidence-body':body,'design-evidence-title':title,'design-evidence-close':close};
-const document={getElementById:id=>elements[id],querySelectorAll:s=>s==='.design-evidence > summary'?[trigger]:[]};
+const document={getElementById:id=>elements[id],querySelectorAll:s=>s.includes('design-evidence > summary')?[trigger]:[]};
 vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window:{addEventListener(k,fn){life[k]=fn;}}});
 assert.equal(typeof events.click,'function');
 let prevented=false;events.click({preventDefault(){prevented=true;}});
@@ -34,7 +36,7 @@ events['close:click']();assert.equal(content.parentElement,origin);assert.equal(
 events.click({preventDefault(){}});dialog.close();assert.equal(focused,2);assert.equal(content.parentElement,origin);
 events.click({preventDefault(){}});life.pagehide();assert.equal(dialog.open,false);assert.equal(content.parentElement,origin);
 '''
-    result = subprocess.run([node, '-e', script, str(source)], capture_output=True, text=True, check=False)
+    result = subprocess.run([node, '-e', script, str(source),evidence_kind], capture_output=True, text=True, check=False)
     assert result.returncode == 0, result.stderr
 
 SOURCE = Path(__file__).resolve().parents[1] / 'src/ciw2/render/static/portal.js'
@@ -46,6 +48,25 @@ def run_portal(script):
         pytest.skip('Node unavailable: production JS behavior not run')
     result = subprocess.run([node, '-e', script, str(SOURCE)], capture_output=True, text=True, check=False)
     assert result.returncode == 0, result.stderr
+
+
+def test_endpoint_index_count_tracks_visible_study_membership():
+    run_portal(r'''
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
+const rows=['A','B'].map(trial=>({dataset:{trial},style:{},textContent:trial}));
+const entries=rows.map(r=>({dataset:{trial:r.dataset.trial},hidden:false}));
+const groups=entries.map(e=>({hidden:false,querySelectorAll:()=>[e]}));
+entries.forEach((e,i)=>e.closest=()=>groups[i]);
+const count={}, table={id:'tbl-c',querySelectorAll:()=>rows};let input;
+const filter={value:'',getAttribute:()=>'tbl-c',addEventListener:(_,fn)=>input=fn};
+const elements={'tbl-c':table,'endpoint-group-count':count};
+const document={getElementById:id=>elements[id],querySelectorAll:s=>s==='input[data-filter]'?[filter]:
+  s==='.endpoint-entry'?entries:s==='.endpoint-index tbody tr'?groups:[]};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window:{addEventListener(){}}});
+filter.value='A';input();assert.equal(count.textContent,'1 / 2');assert.equal(groups[1].hidden,true);
+filter.value='none';input();assert.equal(count.textContent,'0 / 2');assert.ok(groups.every(g=>g.hidden));
+filter.value='';input();assert.equal(count.textContent,'2 / 2');assert.ok(groups.every(g=>!g.hidden));
+''')
 
 
 def test_dense_design_overview_is_compact_keeps_every_point_and_reports_full_phase_counts():

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from '_trial.html' import clinical_trial %}
 {% block kpis %}
 <div class="kpi design-total"><b>{{ data.results | length }}</b><span>结果数据点</span></div>
 <div class="kpi design-total"><b>{{ data.charts.groups | length }}</b><span>结果组</span></div>
@@ -20,8 +21,8 @@
 <details class="result-table"><summary>完整数据表（{{ data.results|length }}条）</summary>
 <div class="card table-card"><table id="tbl-b"><thead><tr><th>药物</th><th>研究</th><th>终点</th><th>访视与分层</th>
 <th>组别</th><th>值</th><th>单位/统计</th><th>N</th><th>状态</th><th>来源</th></tr></thead><tbody>
-{% for r in data.results %}<tr data-fact-id="{{ r.id }}"><td>{{ r.drugs|join(' / ') if r.drugs else '—' }}</td>
-<td>{{ r.entity }}</td><td><details><summary>完整终点</summary>{{ r.endpoint }}</details></td>
+{% for r in data.results %}<tr data-fact-id="{{ r.id }}"><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td>
+<td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td><details><summary>完整终点</summary>{{ r.endpoint }}</details></td>
 <td>{% if r.class_title %}<div>{{ r.class_title }}</div>{% endif %}{% if r.category %}<div>{{ r.category }}</div>{% endif %}
 <details><summary>时间与人群</summary><p>{{ r.timepoint or '—' }}</p><p>{{ r.population or '—' }}</p></details></td>
 <td>{{ r.arm or '—' }}</td><td><b>{{ '—' if r.value is none else r.value }}</b></td>
@@ -33,7 +34,7 @@
 
 {% if data.safety %}<h2>安全性</h2>
 <div class="card table-card"><table><thead><tr><th>药物</th><th>研究</th><th>组别</th><th>类别</th><th>n</th><th>N</th><th>%</th><th>时间窗</th><th>状态</th></tr></thead><tbody>
-{% for r in data.safety %}<tr><td>{{ r.drugs|join(' / ') if r.drugs else '—' }}</td><td>{{ r.entity }}</td><td>{{ r.arm or '—' }}</td>
+{% for r in data.safety %}<tr><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td><td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td>{{ r.arm or '—' }}</td>
 <td>{{ 'SAE' if r.field == 'safety.sae.any' else '全因死亡' }}</td><td>{{ '—' if r.value is none else r.value }}</td>
 <td>{{ r.denominator if r.denominator is not none else '—' }}</td><td>{{ r.proportion if r.proportion is not none else '—' }}</td>
 <td><details><summary>时间窗</summary>{{ r.timepoint or '—' }}</details></td><td><span class="badge {{ r.status }}">{{ r.status|status }}</span></td></tr>{% endfor %}

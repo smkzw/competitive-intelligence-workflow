@@ -49,6 +49,18 @@
   var D = dataNode ? JSON.parse(dataNode.textContent || "{}") : {};
   var DESIGN_MAX_HEIGHT = 336, DESIGN_MIN_HEIGHT = 120, DESIGN_VISIBLE_ROWS = 12;
   var DESIGN_ROW_HEIGHT = 24, DESIGN_PANEL_CHROME = 48, PHASE_MIN_HEIGHT = 120;
+  var designIdentities = new Map((D.size && D.size.identities || []).map(function (identity) { return [identity.registry_id, identity]; }));
+  if (designIdentities.size) { DESIGN_VISIBLE_ROWS = 6; DESIGN_ROW_HEIGHT = 44; }
+  function designLabel(registryId) {
+    var identity = designIdentities.get(registryId);
+    return identity ? identity.axis_label : registryId;
+  }
+  function designTooltip(items) {
+    var point = Array.isArray(items) ? items[0] : items;
+    var id = point.axisValue || point.name, identity = designIdentities.get(id);
+    return safeText(identity ? identity.label : id) + "<br>样本量 " + safeText(point.value) +
+      (identity ? "<br>" + safeText(identity.registry_id) : "");
+  }
   function designZoom(count) {
     var shown = Math.max(1, Math.min(DESIGN_VISIBLE_ROWS, count || 0));
     var end = Math.max(0, Math.min(count - 1, shown - 1));
@@ -204,9 +216,10 @@
   if (D.size) {
     setPanelHeight("chart-size", designPanelHeight(D.size.labels.length));
     chart("chart-size", {
-      tooltip: { trigger: "axis" }, grid: { left: 130, right: 70, top: 24, bottom: 30 },
+      tooltip: { trigger: "axis", formatter: designTooltip }, grid: { left: designIdentities.size ? 320 : 130, right: 70, top: 24, bottom: 30 },
       dataZoom: designZoom(D.size.labels.length),
-      yAxis: { type: "category", data: D.size.labels, inverse: true }, xAxis: { type: "value", name: "样本量" },
+      yAxis: { type: "category", data: D.size.labels, inverse: true,
+        axisLabel: { formatter: designLabel, width: 290, overflow: "break", lineHeight: 22 } }, xAxis: { type: "value", name: "样本量" },
       series: [{ type: "bar", data: D.size.values, barMaxWidth: 22,
         label: { show: true, position: "right" } }]
     });
@@ -264,9 +277,12 @@
     }
     if (el("design-count")) el("design-count").textContent = visible.length + " / " + rows.length + " 项研究";
     document.querySelectorAll(".endpoint-entry").forEach(function (entry) { entry.hidden = !selected.has(entry.dataset.trial); });
-    document.querySelectorAll(".endpoint-entry").forEach(function (entry) {
-      var row = entry.closest("tr"); row.hidden = !Array.from(row.querySelectorAll(".endpoint-entry")).some(function (e) { return !e.hidden; });
+    var endpointRows = Array.from(document.querySelectorAll(".endpoint-index tbody tr"));
+    endpointRows.forEach(function (row) {
+      row.hidden = !Array.from(row.querySelectorAll(".endpoint-entry")).some(function (e) { return !e.hidden; });
     });
+    if (el("endpoint-group-count")) el("endpoint-group-count").textContent =
+      endpointRows.filter(function (row) { return !row.hidden; }).length + " / " + endpointRows.length;
   }
   function designEvidenceReader() {
     var dialog = el("design-evidence-dialog"), body = el("design-evidence-body");
@@ -279,15 +295,16 @@
       origin = content = trigger = null;
     });
     close.addEventListener("click", function () { dialog.close(); });
-    document.querySelectorAll(".design-evidence > summary").forEach(function (summary) {
+    document.querySelectorAll(".design-evidence > summary, #tbl-c .evidence > summary").forEach(function (summary) {
       summary.addEventListener("click", function (event) {
         if (dialog.open) return;
-        var section = summary.parentElement.querySelector(".design-evidence-content");
+        var section = summary.parentElement.querySelector(".design-evidence-content, .source-evidence-content");
         if (!section) return;
         event.preventDefault();
         origin = summary.parentElement; content = section; trigger = summary;
         var row = summary.closest("tr");
-        title.textContent = (row ? row.dataset.trial + " · " : "") + "入排与依据";
+        var readingTitle = summary.getAttribute && summary.getAttribute("data-reading-title") || "入排与依据";
+        title.textContent = (row ? (row.dataset.trialLabel || row.dataset.trial) + " · " : "") + readingTitle;
         body.appendChild(content);
         dialog.showModal();
       });

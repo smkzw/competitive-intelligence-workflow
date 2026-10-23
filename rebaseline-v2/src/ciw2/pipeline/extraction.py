@@ -76,6 +76,11 @@ def _call(rc: RunContext, skill: str, task: dict[str, Any], key: str) -> dict[st
     rc.cache.pop('last_skill_source_ids', None)
     result = ExtractionResult.model_validate(rc.skill(skill, task))
     output = result.model_dump()
+    read_ids = set(rc.cache.get('last_skill_source_ids', []))
+    read_sources = rc.db.query('SELECT id,url FROM sources WHERE project_id=?', (rc.project_id,))
+    for fact in output['facts']:
+        candidates = {s['id'] for s in read_sources if s['id'] in read_ids and s['url'] == fact['source_url']}
+        fact['source_id'] = next(iter(candidates)) if len(candidates) == 1 else None
     output['extraction_model'] = rc.llm.model
     put_unit(rc, key, output, source_ids=rc.cache.get('last_skill_source_ids', []),
              urls=[fact.source_url for fact in result.facts])
@@ -103,9 +108,11 @@ def extract_drugs(rc: RunContext, skill: str,
                     output['errors'].append(f"{drug['name']}: {type(exc).__name__}: {exc}")
                     output['pending_units'].append({'drug_id': drug['id'], 'key': key, 'reason': 'unit_failed'})
                     continue
-            typed = ExtractionResult.model_validate({k: result[k] for k in ('facts', 'gaps')})
+            typed = ExtractionResult.model_validate({'facts': [
+                {k: v for k, v in f.items() if k != 'source_id'} for f in result['facts']], 'gaps': result['gaps']})
             output['facts'].extend({**fact.model_dump(), 'drug': drug['name'],
-                                    'extraction_model': result['extraction_model']} for fact in typed.facts)
+                **({'source_id': raw['source_id']} if 'source_id' in raw else {}),
+                'extraction_model': result['extraction_model']} for fact, raw in zip(typed.facts, result['facts'], strict=True))
             output['gaps'].extend(f"{drug['name']}: {gap}" for gap in typed.gaps)
     output['pending_drug_ids'] = sorted({item['drug_id'] for item in output['pending_units']})
     if output['pending_units']:

@@ -1,10 +1,24 @@
 import json
+from html.parser import HTMLParser
 
 import pytest
 
 from ciw2.render.portal import data_c, render_report
 from ciw2.sources.ctgov import design_facts, parse_study
 from ciw2.store.db import DB
+
+
+def visible_text(html):
+    class Text(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.parts=[]
+
+        def handle_data(self,text):
+            self.parts.append(text)
+    parser=Text()
+    parser.feed(html)
+    return ''.join(parser.parts)
 
 
 @pytest.fixture
@@ -163,7 +177,8 @@ def test_c_comparison_groups_seven_reading_columns_and_keeps_whole_or_clause(des
     assert len(re.findall(r'<th(?:>|\s)', header)) == 7
     assert 'class="eligibility-key"' in html
     key_rules = html.split('class="eligibility-key"', 1)[1].split('</details>', 1)[0]
-    assert key_rules.count('EASI &gt;= 16 OR IGA &gt;= 3') == 1
+    assert visible_text(key_rules).count('EASI >= 16 OR IGA >= 3') == 1
+    assert 'criteria-logic">OR</span>' in key_rules
     assert '完整入排与依据' in html and 'https://example.org/source' in html
 
 
@@ -190,8 +205,6 @@ def test_report_reading_roles_do_not_use_tiny_fonts():
 
 
 def test_c_expanded_definition_is_complete_and_identical_criteria_not_repeated(design_project):
-    from markupsafe import escape
-
     definition = 'Complete endpoint definition: baseline assessment AND threshold, without truncation.'
     add_fact(design_project, 'design.primary_endpoint', {
         'measure': 'Original endpoint', 'description': definition, 'time_frame': 'Week 16'})
@@ -202,7 +215,9 @@ def test_c_expanded_definition_is_complete_and_identical_criteria_not_repeated(d
         'source_id': source, 'extracted_by': 'code:test'})
     html = render_report(db, pid, 'C')
     assert definition in html
-    assert html.count(str(escape(criteria))) == 1
+    assert html.count('<pre class="criteria">') == 1
+    original=html.split('<pre class="criteria">',1)[1].split('</pre>',1)[0]
+    assert visible_text(original) == criteria
     assert f'data-fact-id="{fid}"' in html and 'https://example.org/source' in html
 
 
@@ -216,7 +231,8 @@ def test_c_full_original_has_one_native_wide_reader_and_progressive_source_conte
     assert 'aria-labelledby="design-evidence-title"' in html
     assert 'data-close-design-evidence' in html
     assert '完整入排' in html and '事实依据' in html and '样本量依据' in html
-    assert 'EASI &gt;= 16 OR IGA &gt;= 3' in html and 'https://example.org/source' in html
+    original=html.split('<pre class="criteria">',1)[1].split('</pre>',1)[0]
+    assert visible_text(original) == criteria and 'https://example.org/source' in html
 
 
 def test_secondary_source_atoms_preserve_each_full_definition_and_locator(study):

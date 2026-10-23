@@ -1,6 +1,6 @@
 from conftest import PAPER_TEXT, PAPER_URL, fake_llm_responder
 
-from ciw2.harness.llm import ScriptedLLM
+from ciw2.harness.llm import LLMReply, ScriptedLLM, ToolCall
 from ciw2.render.portal import report_data
 from ciw2.service import Service
 from ciw2.sources.http import register_text
@@ -10,12 +10,25 @@ def _svc(settings):
     return Service(settings, llm_factory=lambda s: (ScriptedLLM(fake_llm_responder), None))
 
 
-def test_end_to_end_abc(settings, offline_ctgov):
-    svc = _svc(settings)
+def test_end_to_end_abc(settings, offline_ctgov, monkeypatch):
+    from ciw2.sources import websearch
+    from ciw2.sources.http import Fetched
+
+    def fetch_paper(ctx, url, **kwargs):
+        assert url == PAPER_URL
+        sid = register_text(ctx, kind='pubmed', url=url, text=PAPER_TEXT)
+        return Fetched(sid, url, 200, PAPER_TEXT.encode(), PAPER_TEXT, 'text/plain')
+
+    def read_then_submit(messages):
+        if '# Skill：extract-results' in messages[0]['content'] and not any(
+                m['role'] == 'assistant' for m in messages):
+            return LLMReply(tool_calls=[ToolCall(id='read-paper',name='fetch_url',arguments={'url':PAPER_URL})])
+        return fake_llm_responder(messages)
+
+    monkeypatch.setattr(websearch,'fetch',fetch_paper)
+    svc = Service(settings,llm_factory=lambda s:(ScriptedLLM(read_then_submit),None))
     pid = svc.create_project("特应性皮炎", ["A", "B", "C"], request_text="看 IL-31 通路竞品")
     run_id = svc.db.create_run(pid)
-    rc = svc.context(pid, run_id)
-    register_text(rc.tool_ctx(), kind="pubmed", url=PAPER_URL, text=PAPER_TEXT)   # 模拟 Skill 已读取的论文
     svc.start_run(pid, resume_run=run_id, background=False)
 
     run = svc.db.one("SELECT * FROM runs WHERE id=?", (run_id,))

@@ -1,8 +1,31 @@
 {% extends "base.html" %}
-{% macro evidence(refs, shown_text=none, label='依据') %}{% if refs %}<details class="evidence"><summary>{{ label }} {{ refs|length }}</summary>
+{% from '_trial.html' import clinical_trial %}
+{% macro annotated(segments) -%}{% for segment in segments %}{% if segment.emphasis %}<span class="criteria-{{ segment.emphasis }}">{{ segment.text }}</span>{% else %}{{ segment.text }}{% endif %}{% endfor %}{%- endmacro %}
+{% macro criteria_index(clauses, original=false) %}
+{% set state=namespace(scope=none) %}
+{% for clause in clauses %}{% if clause.section_title and clause.section_title != state.scope %}<h4 class="criteria-scope">{{ clause.section_title }}</h4>{% set state.scope=clause.section_title %}{% endif %}
+<div class="criteria-clause"><span class="criteria-section">{{ {'inclusion':'入选','exclusion':'排除','unspecified':'原条款'}[clause.section] }}</span>
+<div class="criteria-values">{% for label in clause.labels %}<span>{{ label }}</span>{% endfor %}</div>
+{% if original %}<p class="criteria-clause-original">{{ annotated(clause.segments) }}</p>{% endif %}</div>{% endfor %}
+{% endmacro %}
+{% macro evidence(refs, shown_text=none, label='依据', show_values=false) %}{% if refs %}<details class="evidence"><summary data-reading-title="{{ label }}">{{ label }} {{ refs|length }}</summary><div class="source-evidence-content">
 {% for ref in refs %}<div data-fact-id="{{ ref.fact_id }}"><span class="badge {{ ref.status }}">{{ ref.status|status }}</span>
+{% if show_values %}<div>{{ ref.value }}</div>{% endif %}
 {% if ref.url %}<a href="{{ ref.url }}" target="_blank" rel="noopener">原始来源</a>{% endif %}
-{% if ref.quote and ref.quote != shown_text %}<blockquote>{{ ref.quote }}</blockquote>{% endif %}</div>{% endfor %}</details>{% endif %}{% endmacro %}
+{% if ref.quote and ref.quote != shown_text %}<blockquote>{{ ref.quote }}</blockquote>{% endif %}
+{% if ref.history %}{{ evidence(ref.history, none, '修订前记录', true) }}{% endif %}</div>{% endfor %}</div></details>{% endif %}{% endmacro %}
+{% macro observation(ref, role, show_evidence=true) %}<div data-fact-id="{{ ref.fact_id }}">
+{% if role == 'phase' %}{{ ref.value|phase }}{% elif role == 'trial_status' %}{{ ref.value|registry_label('trial_status') }}{% else %}{{ ref.value if ref.value is not none else '—' }}{% endif %}
+{% if ref.context.enrollment_type %}<span class="muted">{{ {'ESTIMATED':'计划','ACTUAL':'实际'}.get(ref.context.enrollment_type, ref.context.enrollment_type) }}</span>{% endif %}
+{% for key in ('arm','timepoint','population') %}{% if ref.context.get(key) %}<span class="muted">{{ ref.context[key] }}</span>{% endif %}{% endfor %}
+{% if ref.status != 'verified' %}<span class="badge {{ ref.status }}">{{ ref.status|status }}</span>{% endif %}
+{% if show_evidence %}{{ evidence([ref]) }}{% endif %}</div>{% endmacro %}
+{% macro scalar(row, key) %}{% set refs=row.observations.get(key, []) %}
+{% set verified=refs|selectattr('status','equalto','verified')|list %}
+{% if verified %}{% for ref in verified %}{{ observation(ref,key,key not in ('phase','trial_status')) }}{% endfor %}
+{% set pending=refs|rejectattr('status','equalto','verified')|list %}
+{% if pending %}<details><summary>待核记录 {{ pending|length }}</summary>{% for ref in pending %}{{ observation(ref,key) }}{% endfor %}</details>{% endif %}
+{% else %}{% for ref in refs %}{{ observation(ref,key) }}{% else %}—{% endfor %}{% endif %}{% endmacro %}
 {% block kpis %}<div class="kpi design-total"><b>{{ data.rows | length }}</b><span>试验设计</span></div>{% endblock %}
 {% block content %}
 {% if not data.rows %}<p class="card">尚未取得试验设计资料。<a href="/projects/{{ project.id }}">查看检索进度</a></p>{% else %}
@@ -18,15 +41,11 @@
 <col style="width:18%"><col style="width:16%"><col style="width:12%"></colgroup>
 <thead><tr><th>研究与药物</th><th>期别与状态</th><th>样本量</th><th>方案与组别</th>
 <th>终点设计</th><th>人群与站点</th><th>原文与依据</th></tr></thead><tbody>
-{% for r in data.rows %}<tr data-trial="{{ r.trial }}" data-phase="{{ r.phase|phase }}" data-phase-status="{{ r.phase_status }}">
-<td>{% if r.url %}<a href="{{ r.url }}" target="_blank" rel="noopener">{{ r.trial }}</a>{% else %}{{ r.trial }}{% endif %}
-{% if r.drugs %}<div class="study-drugs">{{ r.drugs | join(' / ') }}</div>{% endif %}
+{% for r in data.rows %}<tr data-trial="{{ r.trial }}" data-trial-label="{{ r.identity.label }}" data-phase="{{ r.phase|phase }}" data-phase-status="{{ r.phase_status }}">
+<td>{{ clinical_trial(r.identity) }}
 {% if r.title %}<details><summary>研究名称</summary><div class="quote">{{ r.title }}</div></details>{% endif %}</td>
-<td>{{ r.phase | phase }}<div data-original-value="{{ r.trial_status or '' }}">{{ r.trial_status | registry_label('trial_status') }}</div></td>
-<td>{{ r.sample_size if r.sample_size is defined and r.sample_size is not none else '—' }}
-{% if r.sample_size_type %}<span class="muted">{{ {'ESTIMATED':'计划','ACTUAL':'实际'}.get(r.sample_size_type, r.sample_size_type) }}</span>{% endif %}
-{% if 'design.sample_size' in r.unverified %}<span class="badge unverified">未核实</span>{% endif %}
-{{ evidence(r.sources.get('sample_size', [])) }}</td>
+<td>{{ scalar(r,'phase') }}{{ scalar(r,'trial_status') }}</td>
+<td>{{ scalar(r,'sample_size') }}</td>
 <td><div data-original-value="{{ r.allocation or '' }}">{{ r.allocation | registry_label('allocation') }}</div>
 <div data-original-value="{{ r.masking or '' }}">{{ r.masking | registry_label('masking') }}</div>
 {% if r.arms %}<details><summary>分组详情（{{ r.arms|length }}组）</summary>
@@ -42,26 +61,24 @@
 <td>{% if r.eligibility_age %}<div>{{ r.eligibility_age.min | age_label }} ~ {{ r.eligibility_age.max | age_label }}</div>{% endif %}
 <div>中国站点 {{ '是' if r.china_site else ('否' if r.china_site is defined and r.china_site is not none else '—') }}</div>
 {% if r.eligibility_thresholds %}<details class="eligibility-key"><summary>入排要点</summary>
-{% for section in ('inclusion','exclusion','unspecified') %}
-{% for group in r.eligibility_thresholds|selectattr('section','equalto',section)|groupby('rule_text') %}
-<p><span class="muted">{{ {'inclusion':'入选','exclusion':'排除','unspecified':'原条款'}[section] }}</span> {{ group.grouper }}</p>
-{% endfor %}{% endfor %}</details>{% endif %}
+{{ criteria_index(r.eligibility_clauses, true) }}</details>{% endif %}
 {{ evidence(r.sources.get('eligibility_age', [])) }}</td>
-<td><details class="design-evidence"><summary>完整入排与依据</summary><div class="design-evidence-content">
-<section><h3>完整入排</h3>{% if r.eligibility_criteria %}<pre class="criteria">{{ r.eligibility_criteria }}</pre>{% else %}<p>—</p>{% endif %}</section>
+<td><details class="design-evidence"><summary data-reading-title="入排与依据">完整入排与依据</summary><div class="design-evidence-content">
+<section>{% if r.eligibility_clauses %}<h3>评分与检验阈值</h3>{{ criteria_index(r.eligibility_clauses, true) }}{% endif %}
+<h3>完整入排原文</h3>{% if r.eligibility_criteria %}<pre class="criteria">{{ annotated(r.eligibility_reading.segments) }}</pre>{% else %}<p>—</p>{% endif %}</section>
 <section><h3>事实依据</h3>{% set source_labels = {'sample_size':'样本量','phase':'研究期别','allocation':'随机分组','masking':'设盲','arms':'研究组别','eligibility_age':'年龄','eligibility_criteria':'完整入排','primary_endpoint':'主要终点','secondary_endpoint':'次要终点','trial_status':'研究状态','countries':'研究国家','china_site':'中国站点','start_date':'研究启动日期'} %}
-{% for name, refs in r.sources.items() %}{{ evidence(refs, r.eligibility_criteria, source_labels.get(name, '资料') ~ '依据') }}{% endfor %}</section>
+{% for name, refs in r.sources.items() %}{{ evidence(refs, r.eligibility_criteria, source_labels.get(name, '资料') ~ '依据', name in r.observations and r.get(name) is none) }}{% endfor %}</section>
 </div></details></td>
 </tr>{% endfor %}
 </tbody></table></div>
 <dialog id="design-evidence-dialog" aria-labelledby="design-evidence-title">
 <header><h2 id="design-evidence-title">入排与依据</h2><button id="design-evidence-close" data-close-design-evidence autofocus>关闭</button></header>
 <div id="design-evidence-body"></div></dialog>
-{% if data.endpoint_groups %}<details class="endpoint-index"><summary>终点与时间点（{{ data.endpoint_groups|length }}组）</summary>
+{% if data.endpoint_groups %}<details class="endpoint-index"><summary>终点与时间点（<span id="endpoint-group-count">{{ data.endpoint_groups|length }}</span>组）</summary>
 <div class="card table-card"><table><thead><tr><th>终点定义</th><th>访视</th><th>采用该设计的研究</th></tr></thead><tbody>
 {% for g in data.endpoint_groups %}<tr><td><details><summary>{{ '主要终点' if g.kind == 'primary' else '次要终点' }} · 查看定义</summary>{{ g.measure }}
 {% if g.entries[0].description %}<p class="quote">{{ g.entries[0].description }}</p>{% endif %}</details></td><td>{{ g.timepoint or '—' }}</td>
-<td>{% for e in g.entries %}<span class="endpoint-entry" data-trial="{{ e.trial }}" data-fact-id="{{ e.fact_id }}">{{ e.trial }} {{ evidence([e]) }}</span>{% endfor %}</td></tr>{% endfor %}
+<td>{% for e in g.entries %}<span class="endpoint-entry" data-trial="{{ e.trial }}" data-fact-id="{{ e.fact_id }}">{{ clinical_trial(e.identity) }} {{ evidence([e]) }}</span>{% endfor %}</td></tr>{% endfor %}
 </tbody></table></div></details>{% endif %}
 {% endif %}
 {% endblock %}

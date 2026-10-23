@@ -1,0 +1,90 @@
+"""Shared clinical reading identity; display never changes study, arm or fact IDs."""
+from __future__ import annotations
+
+from collections import defaultdict
+from typing import Any
+from urllib.parse import urlsplit
+
+from ciw2.domain.identity import name_key
+from ciw2.render.labels import PHASE_ZH
+from ciw2.store.db import DB
+
+
+def web_url(value: Any) -> str | None:
+    if not isinstance(value, str):
+        return None
+    try:
+        url = urlsplit(value)
+        return value if url.scheme in {'http', 'https'} and url.hostname else None
+    except ValueError:
+        return None
+
+
+def verified_holders(facts: list[dict[str, Any]], sources: dict[str, dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    out: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for fact in facts:
+        if (fact['field'] != 'status.china_mah' or fact['status'] != 'verified'
+                or not isinstance(fact['value'], str) or not fact['value'].strip()
+                or fact['source_id'] not in sources
+                or fact['context'].get('jurisdiction') not in {None, 'CN', 'China', '中国'}):
+            continue
+        out[fact['entity_id']].append({'role': '中国MAH', 'name': fact['value'], 'fact_id': fact['id'],
+            'source_id': fact['source_id'], 'url': web_url(sources[fact['source_id']]['url']),
+            'quote': fact['quote'], 'jurisdiction': 'CN'})
+    return out
+
+
+def _indication(conditions: list[str], project: dict[str, Any]) -> str:
+    aliases = {name_key(n) for n in [project['indication'], *project['indication_aliases']]}
+    return ' / '.join(dict.fromkeys(project['indication'] if name_key(n) in aliases else n for n in conditions))
+
+
+def trial_identities(db: DB, pid: str) -> dict[str, dict[str, Any]]:
+    project = db.project(pid)
+    assert project is not None
+    drugs = {e['id']: e for e in db.entities(pid, 'drug')}
+    sources = {s['id']: s for s in db.query('SELECT id,url,kind FROM sources WHERE project_id=?', (pid,))}
+    facts = db.current_facts(pid)
+    holders = verified_holders(facts, sources)
+    per_trial: dict[str, list[str]] = defaultdict(list)
+    for edge in db.query("SELECT src,dst FROM links WHERE project_id=? AND rel='drug-trial'", (pid,)):
+        if edge['src'] in drugs:
+            per_trial[edge['dst']].append(edge['src'])
+    phases: dict[str, set[str]] = defaultdict(set)
+    legacy_sources: dict[str, set[str]] = defaultdict(set)
+    for fact in facts:
+        if fact['field'] == 'design.phase' and fact['status'] == 'verified' and isinstance(fact['value'], str):
+            phases[fact['entity_id']].add(fact['value'])
+        if fact['extracted_by'] == 'code:ctgov' and fact['source_id'] in sources:
+            legacy_sources[fact['entity_id']].add(fact['source_id'])
+    current_sources = {r['src']: r['dst'] for r in db.query(
+        "SELECT src,dst FROM links WHERE project_id=? AND rel='ctgov-current'", (pid,))}
+    out = {}
+    for trial in db.entities(pid, 'trial'):
+        attrs, tid = trial['attrs'], trial['id']
+        names = sorted({drugs[d]['name_zh'] or drugs[d]['name'] for d in per_trial[tid]}, key=name_key)
+        if not names:
+            names = [i['name'] for i in attrs.get('interventions', [])
+                     if i.get('type') in {'DRUG', 'BIOLOGICAL'} and isinstance(i.get('name'), str)]
+        drug_label = ' / '.join(dict.fromkeys(names)) or '研究方案'
+        original_names = sorted({drugs[d]['name'] for d in per_trial[tid]}, key=name_key)
+        conditions = [c for c in attrs.get('conditions', []) if isinstance(c, str) and c.strip()]
+        indication = _indication(conditions, project)
+        phase_label = ' / '.join(sorted({PHASE_ZH.get(p, p) for p in phases[tid]}))
+        companies = [holder for d in per_trial[tid] for holder in holders[d]]
+        sid = current_sources.get(tid)
+        if sid is None and attrs.get('registry') == 'ctgov' and len(legacy_sources[tid]) == 1:
+            sid = next(iter(legacy_sources[tid]))  # Read-only legacy provenance, not a snapshot activation.
+        if attrs.get('sponsor') and sid in sources and sources[sid]['kind'] == 'ctgov':
+            companies.append({'role': '申办方', 'name': attrs['sponsor'], 'source_id': sid,
+                'url': sources[sid]['url'], 'locator': attrs.get('replay_container_locator', '$') +
+                    '.protocolSection.sponsorCollaboratorsModule.leadSponsor.name'})
+        company_label = '；'.join(dict.fromkeys(f"{c['role']} {c['name']}" for c in companies))
+        label = ' · '.join(part for part in (drug_label, indication, phase_label, company_label) if part)
+        out[tid] = {'entity_id': tid, 'registry_id': trial['name'], 'url': web_url(attrs.get('url')),
+            'title': attrs.get('title'), 'drug_label': drug_label, 'drugs': names,
+            'drug_names_original': original_names,
+            'indication': indication, 'conditions_original': conditions,
+            'scope_indication': project['indication'], 'phase_label': phase_label,
+            'companies': companies, 'label': label, 'axis_label': ' · '.join(filter(None, (drug_label, phase_label)))}
+    return out

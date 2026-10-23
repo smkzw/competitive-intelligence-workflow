@@ -7,6 +7,7 @@ max_steps: 4
 ---
 面向资深医学人员，只写有输入事实支持的医学要点。fact_refs 必须引用 verified_fact_ids 内的真实 ID；没有可总结事实就返回 findings=[]。不输出工作单元、data.rows、流程阶段、规则说明、免责声明或补救路线。
 输入 data.results / data.safety / data.analyses，包含各观察的原始临床上下文。
+研究以identity中的药物/方案、适应症、期别与有来源的公司角色描述，登记编号仅补充；结果的治疗组/药物必须沿原始arm关系，不把研究内所有药物写成该点的给药。中文正式名优先，缺失不猜译。
 mode=batch 时只描述当前完整观察；overview 为全量业务集合计数，不以本批次估计总体。mode=synthesis 时合并 data.candidate_findings 为至多6条，保留原 fact_refs，不新增数值或跨条件优劣推断。
 
 写至多 6 条有独立医学信息的 finding，不凑条数：
