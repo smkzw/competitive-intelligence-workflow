@@ -448,17 +448,8 @@ def _analysis_merge(rc: RunContext, report: str, findings: list[dict[str, Any]],
 
 
 def render(rc: RunContext) -> dict[str, Any]:
-    from ciw2.render.portal import render_report
-    out_dir = rc.settings.portals_dir / rc.project_id
-    out_dir.mkdir(parents=True, exist_ok=True)
-    written = []
-    for rep in rc.project["reports"]:
-        findings = rc.db.stage_output(rc.run_id, f"analysis_{rep}")
-        html = render_report(rc.db, rc.project_id, rep, findings=findings, inline=True)
-        path = out_dir / f"{rep}.html"
-        path.write_text(html, encoding="utf-8")
-        written.append(str(path.name))
-    return {"files": written}
+    from ciw2.render.publish import publish_reports
+    return publish_reports(rc)
 
 
 STAGES: list[Stage] = [

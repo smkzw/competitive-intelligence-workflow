@@ -9,7 +9,11 @@
 - 历史恢复依据：Trellis `10-23-rebaseline-v2-m1/PAUSE_HANDOFF_20261023_0810.md`；原暂停回执/备份不改。用户已解除暂停，历史paused/旧PID不覆盖新授权。
 - 模型cms-router/glm-5.3-flash → DGX/deepseek → DGX/qwen；凭据仅注册配置到必要子进程环境，不入文件/日志/提示词，不改全局路由。
 
-## 当前节点：A未知大图与同查询修正；归并独立运行
+## 当前节点：报告写入恢复；两个独立节点待终态
+- 当前完整v2门 **705PASS/3.23s**，Ruff全src/tests/scripts/3JS/sh语法通过，54生产Python符合600/80（create_app既定例外），1既有TestClient警告。发布族2RED/1PASS→61相关PASS；先准备所有模板/临时文件，再逐文件原子替换，模板/准备写入失败不截断旧文件，正常失败仅清理自建临时文件。同run只重试render，不重跑成功analysis；不是跨A/B/C事务或断电持久性通过。
+- 实际固定源ciw-data/report-publication-01：A/B/C普通生产发布与直接renderer逐字一致；注入写入中断后旧三文件hash不变、临时文件清净、重试hash相同，事实仍f08e6c7…/0网络/0模型。A cdea717e…/B eb68158b75ad3251c9623e99499b820d015018a77840329be1a64f1244747295/C f829f10421a566dbb3ef0299974d1a316b392742478c45e030e2469c3b1d851b；只接受发布/恢复组件，未新增浏览器/医学/全流水线接受。
+- stages源码改动不作用于健康52075的ec32冻结runtime；不得用当前新源码hash迁移或冒充旧151缓存。该归并恢复及73488独立执行仍待实际终态，不固定轮询/重派。前一A布局9c53728de33e422d895b002cfbbaa5d0c9561814已推送并fresh remote exact。
+### 前一A布局组件（9c53728d）
 - 当前完整v2门 **700PASS/3.04s**，Ruff全src/tests/scripts、3JS/sh语法通过，1既有TestClient警告。A根因3RED→22相关PASS，移除未知-only图但保留候选、按实体ID同查询/正确计数、靶点去重不重复计药、图区最高328px、稀疏128px、阶段208px、图例独立。旧安全文本测试换为当前生产payload，原转义/缺库断言保留；未建第二套图形框架。
 - ciw-data/browser-current/landscape-reading-02：真实源1/302候选完整保留，事实hash f08e6c7…/f903dc7…不变；A HTML cdea717e6acdde41383e7b3ca0046239596ec1507e572061ae10ed1d23995b88/d7eafeb25cc1214b7297fd520adbdf1b280487e901efcf8ee089965411fbd26b。Ego63四宽17图全部实看/独立owner-audit绑定：真实未知不画图；已知密集/筛后稀疏来自明确标注合成布局夹具，仅接受几何/查询，不冒充真实临床正向富集。候选01两图实看发现同排卡拉伸，已修且原17图保留；仍不关闭M3/全A美学。
 - 新独立执行节点ciw2-outcome-domain已preflight后启动句柄73488；live E03请求CodeBuddy/codebuddy-cli/deepseek-v4.1-flash/max及manifest备用，只准新建domain/outcomes.py与其测试，owner掌管接入/医学与发布。29条实际源终点元数据已绑定；待终态核实际模型/工具/输出，不称独立审阅或科学通过。
