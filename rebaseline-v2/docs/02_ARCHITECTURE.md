@@ -95,8 +95,9 @@ Service在初始化模型前检查项目与resume_run归属，不存在或跨项
 - 列表来源含公开POST request_context(method/registry/query)，不伪造GET详情URL；recovery对该上下文取本项目最近实际导入版本，其他查询不会相互失效。同上下文新版本仍失效，无scope旧回执只读兼容。browser_checked有实际浏览器核查时间，无虚构HTTP状态；imported与网络核查分开。
 - 完整结构化登记行代码直接写暂定drug/trial和带来源/页/行的显式关系，保留整条药名和unknown纳排，不再将464条重复送模型抽取；科学纳排仍走既有coverage-review。没有新增事实表/Skill/浏览器框架。
 - CDE受理目录已接同一Ego空间与现有CLI传输，单独cde_browser.mjs/cde_capture.py消费实际八列表头；只扩展现有_invoke的内部脚本/filters选项，不新建执行器。ChinaArgs.query_kind明确drug_name/company/acceptance_number；未指定/indication/target不进入药名框，按blocked/site路线记账。反向扩展把原词送单字段（中国登记也用原始关键词），不拼适应症到药名/企业框。CDE实现及配置空间进入来源缓存键，栏目+六筛选进入request_context；相同URL的不同查询不相互覆盖。
-- CDE强制全部年度/类型，完整翻页并保留八列原值/原公司复合文本/空格。公司列→company_text，承办日期→handled_date_text，不认定申办方/MAH或获批/首次公开时间。受理引用放暂定drug.attrs，不生成trial或临床事实；纳排仍走既有coverage-review。CDE空tbody“暂无内容”+无pager保留真实文本/page_size=null，不造数字页脚。已观察的2015及以前选项原样保留；表单筛选在捕获JSON中，列表URI不接受查询/会话参数。错误/部分页保存有效来源但不签收完整；CDE缺页自动补取尚未接通，不能借中国登记恢复测试声称已完成。
-- CDE新报化药IND切片使用cde_review_capture.py/cde_review_browser.py及同一Ego传输；既有工具增加明确cde_section，不另建执行器。完整十二列/本页图例/范围/分页核对后精确查找受理号；JSON locator保持原始pages数组位置。同受理号的不同观察保留，未知/冲突图形记录内部原因，不按图标名选状态。只追加到有本项目受理来源支持的既有候选引用，0新试验/临床事实。同run共用fetch_cache，以项目/run/空间/代码版本作键，CAS校验后标cache_reused并登记本次读集；新run重读公开页，缓存不伪装新核查。部分页保全但不成功缓存，自动缺页恢复尚未实现。其他审评序列/公示栏目、NMPA、登记详情仍待接通，M2仍需专家金标准验召回。
+- CDE强制全部年度/类型，完整翻页并保留八列原值/原公司复合文本/空格。公司列→company_text，承办日期→handled_date_text，不认定申办方/MAH或获批/首次公开时间。受理引用放暂定drug.attrs，不生成trial或临床事实；纳排仍走既有coverage-review。CDE空tbody“暂无内容”+无pager保留真实文本/page_size=null，不造数字页脚。已观察的2015及以前选项原样保留；表单筛选在捕获JSON中，列表URI不接受查询/会话参数。错误/部分页保存有效来源但不签收完整。
+- CDE新报化药IND切片使用cde_review_capture.py/cde_review_browser.py及同一Ego传输；既有工具增加明确cde_section，不另建执行器。完整十二列/本页图例/范围/分页核对后精确查找受理号；JSON locator保持原始pages数组位置。同受理号的不同观察保留，未知/冲突图形记录内部原因，不按图标名选状态。只追加到有本项目受理来源支持的既有候选引用，0新试验/临床事实。同run共用fetch_cache，以项目/run/空间/代码版本作键，CAS校验后标cache_reused并登记本次读集；新run重读公开页，缓存不伪装新核查。部分页保全但不成功缓存。其他审评序列/公示栏目、NMPA、登记详情仍待接通，M2仍需专家金标准验召回。
+- cde_resume.py为受理/审评共用的同run原始分页读取器：最新匹配来源已完整则不回退，未完整须CAS/范围/生产校验器验证；只读无事件写入。既有适配器登记cache_read并传第一页内容/总数/页长锚点；两个MJS先取新第一页，不匹配则全部新采，匹配则用实际分页跳转补缺口。宿主再核验实际新页/复用页和锚点，合并后重跑完整集合校验，保存reused_source_ids/reused_pages/new_pages_checked；旧来源不改写。明确空页元数据使用实际current=0，不用循环索引。共用实现hash进入相关缓存/冒烟清单；无新增框架或数据表。
 - CT.gov `query.locn=China` 可用（PNH 实测 52 条）。
 
 ## 6. 配置（环境变量）

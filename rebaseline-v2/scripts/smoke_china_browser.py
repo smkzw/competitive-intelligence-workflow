@@ -17,7 +17,7 @@ from ciw2.store.db import DB
 def source_hashes(module: Path) -> dict[str,str]:
     files=('config.py','sources/china.py','sources/china_capture.py','sources/china_browser.py',
            'sources/china_browser.mjs','sources/http.py','sources/cde_browser.py',
-           'sources/cde_browser.mjs','sources/cde_capture.py','sources/cde_review_browser.py',
+           'sources/cde_browser.mjs','sources/cde_capture.py','sources/cde_resume.py','sources/cde_review_browser.py',
            'sources/cde_review_browser.mjs','sources/cde_review_capture.py')
     return {name:hashlib.sha256((module/name).read_bytes()).hexdigest() for name in files}
 
@@ -31,7 +31,7 @@ def main() -> int:
     parser.add_argument('--query-kind',choices=['keyword','drug_name','company','acceptance_number','indication','target'],
                         default='keyword')
     parser.add_argument('--output',type=Path,required=True)
-    parser.add_argument('--resume-output',type=Path,help='同一隔离冒烟的失败回执目录；中国登记补缺页，CDE重试本查询')
+    parser.add_argument('--resume-output',type=Path,help='同一隔离冒烟的失败回执目录；复核来源锚点后补缺页，范围变化则重新采集')
     args = parser.parse_args()
     output = args.output.resolve()
     if output.exists():

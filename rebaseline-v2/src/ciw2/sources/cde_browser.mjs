@@ -1,4 +1,12 @@
 const URL = "https://www.cde.org.cn/main/xxgk/listpage/9f9c74c73e0f8f56a8bfbc646055026d";
+const {createHash} = await import('node:crypto');
+function anchor(c) {
+  const rows=c.rows.map(row=>row.map(cell=>typeof cell==='string'?cell:[cell.text,cell.images]));
+  const legend=(c.legend||[]).map(e=>[e.text,e.images]);
+  const total=c.pagination.total_records ?? Number(c.pagination.text.match(/共\s*(\d+)\s*条/)[1]);
+  return createHash('sha256').update(JSON.stringify([c.section,Object.keys(c.filters).sort().map(k=>[k,c.filters[k]]),
+    c.headers,rows,legend,c.pagination.page_size,total])).digest('hex');
+}
 function control(error) {
   return /EGO_.*(?:CONTROL|OWNERSHIP|INACTIVE|UNASSIGNED|NOT_FOUND)|user control/i.test(String(error?.message || ""));
 }
@@ -44,6 +52,7 @@ async function pagerId(page) {
     .find(element=>element.getBoundingClientRect().height>0)?.id);
 }
 let phase = "start";
+let resumeUsed=false,reusedPages=[],newPages=[],resumeRejected=null;
 try {
   const page = (await taskSpace(config.space)).page("p1");
   phase = "navigate";
@@ -82,15 +91,31 @@ try {
     const identity = JSON.stringify([meta.total_records,meta.page_size,capture.filters]);
     if (totals && totals !== identity) throw Error("page_scope_changed");
     totals = identity;
+    if(expected===1 && config.resume) {
+      resumeUsed=meta.total_records===config.resume.total_records && meta.page_size===config.resume.page_size &&
+        anchor(capture)===config.resume.first_page_sha256;
+      if(resumeUsed) reusedPages=config.resume.pages_read.filter(n=>n!==1);
+      else resumeRejected='fresh_scope_or_anchor_changed';
+    }
     console.log("CIW_CHINA_PAGE:"+JSON.stringify(capture));
-    if (!meta.total_records || expected >= Math.ceil(meta.total_records/meta.page_size)) break;
+    newPages.push(meta.current);
+    const last=meta.total_records?Math.ceil(meta.total_records/meta.page_size):0;
+    let next=expected+1;
+    while(resumeUsed && reusedPages.includes(next)) next++;
+    if (!meta.total_records || next>last) break;
     id = await pagerId(page);
     await watch(page);
-    await page.click("#"+id+" .layui-laypage-next",{label:"next public acceptance page"});
+    if(next===expected+1) await page.click("#"+id+" .layui-laypage-next",{label:"next public acceptance page"});
+    else {
+      await page.fill('#'+id+' .layui-laypage-skip input',String(next));
+      await page.click('#'+id+' .layui-laypage-btn',{label:'jump to missing acceptance page'});
+    }
     await settled(page);
-    expected++;
+    expected=next;
   }
-  console.log("CIW_CHINA_END:"+JSON.stringify({status:"ok",observed_at:new Date().toISOString()}));
+  console.log("CIW_CHINA_END:"+JSON.stringify({status:"ok",observed_at:new Date().toISOString(),
+    resume_used:resumeUsed,reused_pages:reusedPages,new_pages_checked:newPages,resume_rejected_reason:resumeRejected}));
 } catch(error) {
-  console.log("CIW_CHINA_END:"+JSON.stringify({status:control(error)?"user_control":"failed",phase,error_type:error?.name || "Error"}));
+  console.log("CIW_CHINA_END:"+JSON.stringify({status:control(error)?"user_control":"failed",phase,error_type:error?.name || "Error",
+    resume_used:resumeUsed,reused_pages:reusedPages,new_pages_checked:newPages,resume_rejected_reason:resumeRejected}));
 }

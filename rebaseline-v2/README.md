@@ -39,6 +39,8 @@ scripts/     fetch_assets.sh、smoke_live.py、run_live.py、replay_design_sourc
 开发者可使用 `python scripts/smoke_live.py --complete-ctgov "Atopic Dermatitis" NEW_OUTPUT_DIR` 隔离核对完整登记分页及官方总数，保留来源哈希与回执，不调用模型或改动已有报告。输出目录必须是新的；该检查不代替报告验收。
 已有冻结来源的隔离副本可用 `python scripts/run_live.py --indication 特应性皮炎 --project PREPARED_PROJECT_ID --only-stage analysis_C` 验证同一生产分析及渲染阶段。须将CIW_DATA_DIR指向副本；回执会明确单阶段，不作为完整研究或发布通过。
 
+公开浏览器冒烟中断后，可用相同参数、新的 `--output` 目录及 `--resume-output 原失败输出目录` 续接。同项目/运行的已捕获来源保留；CDE先实际重查首个来源页，内容或总数变化时全部重采，否则只补缺页并记录复用来源。不要把不同运行的旧数据当作本次新查。
+
 中国来源可配置 `CIW_CHINA_EGO_SPACE_ID` 为已授权专用Ego空间ID，复用p1；工具不自动创建或接管空间，不改登录或读凭据。未配置时如实记录受阻并尝试已配置的site备用。
 
 用 `python scripts/smoke_china_browser.py --space SPACE_ID --query 特应性皮炎 --output NEW_OUTPUT_DIR` 验证生产来源工具，保存全页来源及回执，不调用模型。CDE受理目录加 `--registry cde --query-kind drug_name --query 度普利尤单抗`；也支持明确company/acceptance_number，不把疾病塞到药名框。化药IND新报审评任务改用 `--registry cde --cde-section new_review_task_chemical_ind --query-kind acceptance_number --query 完整受理号`：读取全序列后精确取匹配，其他序列仍待接通。结果中的source_total_records与rows分别是原序列总数和精确匹配数。

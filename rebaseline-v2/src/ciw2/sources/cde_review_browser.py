@@ -9,6 +9,7 @@ from typing import Any
 
 from ciw2.harness.tools import ToolContext
 from ciw2.sources import china_browser
+from ciw2.sources.cde_browser import merge_capture, resume_capture, resume_options
 from ciw2.sources.cde_review_capture import SCOPE, CaptureError, parse_review_capture
 from ciw2.sources.http import register_text
 
@@ -18,7 +19,9 @@ SCRIPT=Path(__file__).with_suffix('.mjs')
 def _code_hash() -> str:
     return hashlib.sha256(b''.join(path.read_bytes() for path in (
         Path(__file__),SCRIPT,Path(__file__).with_name('cde_review_capture.py'),
-        Path(__file__).with_name('cde_capture.py'),Path(china_browser.__file__)))).hexdigest()
+        Path(__file__).with_name('cde_capture.py'),Path(china_browser.__file__),
+        Path(__file__).with_name('cde_browser.py'),Path(__file__).with_name('cde_resume.py'),
+        Path(__file__).with_name('http.py')))).hexdigest()
 
 
 def _observe(ctx: ToolContext, source: str, mode: str, complete: bool) -> None:
@@ -27,10 +30,10 @@ def _observe(ctx: ToolContext, source: str, mode: str, complete: bool) -> None:
     ctx.db.log_step(ctx.run_id,ctx.stage,'source',0,'source_observation',event)
 
 
-def _save(ctx: ToolContext, pages: list[dict[str,Any]], complete: bool) -> str:
+def _save(ctx: ToolContext, pages: list[dict[str,Any]], complete: bool, **metadata: Any) -> str:
     sid=register_text(ctx,kind='cde',url=pages[0]['url'],
         text=json.dumps({'section':'new_review_task','filters':SCOPE,'pages':pages},ensure_ascii=False),
-        title='CDE化药IND新报审评任务完整序列',meta={'method':'ego_public_ui','complete':complete,
+        title='CDE化药IND新报审评任务完整序列',meta={'method':'ego_public_ui','complete':complete,**metadata,
             'request_context':{'registry':'cde','section':'new_review_task','filters':SCOPE}})
     _observe(ctx,sid,'browser_checked',complete)
     return sid
@@ -55,17 +58,22 @@ def _scope(ctx: ToolContext) -> tuple[list[dict[str,Any]],str]:
         ctx.extra.setdefault('source_ids_read',set()).add(source['id'])
         _observe(ctx,source['id'],'cache_reused',True)
         return payload['pages'],source['id']
-    stdout,ok=china_browser._invoke(ctx,'',script_path=SCRIPT)
+    prior=resume_capture(ctx,'new_review_task',SCOPE,
+                         lambda pages:parse_review_capture(pages,filters=SCOPE,allow_partial=True))
+    stdout,ok=china_browser._invoke(ctx,'',script_path=SCRIPT,options={'resume':resume_options(prior)})
     pages,end=china_browser._read_output(stdout)
+    new_pages=pages
     if not pages:
         if end.get('status') in {'blocked','user_control'}:
             raise china_browser.BrowserBlocked('审评浏览器空间不可用或需要用户交接')
         raise china_browser.BrowserFailed('未取得公开审评来源')
     try:
+        parse_review_capture(pages,filters=SCOPE,allow_partial=True)
+        pages,recovery=merge_capture(prior,pages,end)
         parsed=parse_review_capture(pages,filters=SCOPE,allow_partial=True)
-    except CaptureError:
+    except (CaptureError,china_browser.BrowserFailed):
         valid=[]
-        for page in pages:
+        for page in new_pages:
             try:
                 parse_review_capture([page],filters=SCOPE,allow_partial=True)
             except CaptureError:
@@ -75,7 +83,7 @@ def _scope(ctx: ToolContext) -> tuple[list[dict[str,Any]],str]:
             _save(ctx,valid,False)
         raise china_browser.BrowserFailed('审评来源校验失败，未闭合查询') from None
     complete=ok and end.get('status')=='ok' and parsed['complete']
-    source=_save(ctx,pages,complete)
+    source=_save(ctx,pages,complete,**recovery)
     if not complete:
         raise china_browser.BrowserFailed('审评序列未完成，已保存有效页但未缓存为成功')
     cache[key]=source

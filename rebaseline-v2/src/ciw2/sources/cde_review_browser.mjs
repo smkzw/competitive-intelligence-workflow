@@ -1,4 +1,13 @@
 const URL='https://www.cde.org.cn/main/xxgk/listpage/9f9c74c73e0f8f56a8bfbc646055026d';
+const {createHash}=await import('node:crypto');
+function anchor(c){
+  const rows=c.rows.map(row=>row.map(cell=>typeof cell==='string'?cell:[cell.text,cell.images]));
+  const legend=(c.legend||[]).map(e=>[e.text,e.images]);
+  const total=c.pagination.total_records??Number(c.pagination.text.match(/共\s*(\d+)\s*条/)[1]);
+  return createHash('sha256').update(JSON.stringify([c.section,Object.keys(c.filters).sort().map(k=>[k,c.filters[k]]),
+    c.headers,rows,legend,c.pagination.page_size,total])).digest('hex');
+}
+let resumeUsed=false,reusedPages=[],newPages=[],resumeRejected=null;
 function control(e){return /EGO_.*(?:CONTROL|OWNERSHIP|INACTIVE|UNASSIGNED|NOT_FOUND)|user control/i.test(String(e?.message||''));}
 async function watch(p){await p.evaluate(()=>{
   window.__ciwReviewObserver?.disconnect();window.__ciwReviewChanged=false;
@@ -38,15 +47,30 @@ try{
   let id=await pagerId(p);if(!id)throw Error('Review paginator missing');
   await watch(p);await p.selectOption('#'+id+' select','50');await settled(p);
   let total;
-  for(let page=1;;page++){
+  for(let page=1;;){
     const c=await collect(p),n=Number(c.pagination.text.match(/共\s*(\d+)\s*条/)[1]);
     if(c.pagination.current!==page||c.pagination.page_size!==50||c.filters.sequence!=='化药'||c.filters.task_type!=='IND'||c.filters.ui_acceptance_number!=='')throw Error('Review scope drift');
     if(total!==undefined&&n!==total)throw Error('Review total drift');total=n;
     if(c.rows.length!==Math.min(50,n-(page-1)*50))throw Error('Review page gap');
+    if(page===1 && config.resume){
+      resumeUsed=n===config.resume.total_records && c.pagination.page_size===config.resume.page_size &&
+        anchor(c)===config.resume.first_page_sha256;
+      if(resumeUsed)reusedPages=config.resume.pages_read.filter(n=>n!==1);
+      else resumeRejected='fresh_scope_or_anchor_changed';
+    }
     console.log('CIW_CHINA_PAGE:'+JSON.stringify(c));
-    if(page*50>=n)break;
+    newPages.push(page);
+    let next=page+1;while(resumeUsed && reusedPages.includes(next))next++;
+    if(next>Math.ceil(n/50))break;
     id=await pagerId(p);await watch(p);
-    await p.click('#'+id+' .layui-laypage-next',{label:'获取公开审评序列下一页'});await settled(p);
+    if(next===page+1)await p.click('#'+id+' .layui-laypage-next',{label:'获取公开审评序列下一页'});
+    else{
+      await p.fill('#'+id+' .layui-laypage-skip input',String(next));
+      await p.click('#'+id+' .layui-laypage-btn',{label:'跳转获取缺失审评页'});
+    }
+    await settled(p);page=next;
   }
-  console.log('CIW_CHINA_END:'+JSON.stringify({status:'ok',observed_at:new Date().toISOString()}));
-}catch(e){console.log('CIW_CHINA_END:'+JSON.stringify({status:control(e)?'user_control':'failed',error_type:e?.name||'Error'}));}
+  console.log('CIW_CHINA_END:'+JSON.stringify({status:'ok',observed_at:new Date().toISOString(),
+    resume_used:resumeUsed,reused_pages:reusedPages,new_pages_checked:newPages,resume_rejected_reason:resumeRejected}));
+}catch(e){console.log('CIW_CHINA_END:'+JSON.stringify({status:control(e)?'user_control':'failed',error_type:e?.name||'Error',
+  resume_used:resumeUsed,reused_pages:reusedPages,new_pages_checked:newPages,resume_rejected_reason:resumeRejected}));}

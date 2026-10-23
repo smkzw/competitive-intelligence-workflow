@@ -5,12 +5,20 @@
 ## 当前入口与授权
 - 唯一英文工程根内rebaseline-v2；产品权威01_PRD、02_ARCHITECTURE、03_PLAN、04_AGENT_RULES。本页替换更新，详细历史在根Trellis任务10-23-rebaseline-v2-m1/implement.md及Git，不另立规格。
 - 单用户Web服务+内嵌9 Skills；v1多宿主包、编辑/分享、24门户不是v2发布门。未知v1工作树保留，旧中文工程零接触；不得reset/clean/add-all。
-- 分支codex/rebaseline-v2-m1；本节点父HEADdf1846fa9ad2b63856f5d30dad69fbbbc5db9e01（共同阅读已push并fresh remote exact），本下载节点提交以Git记录为准。
+- 分支codex/rebaseline-v2-m1；本节点父HEADc13a155c72ea8061a13160580792dcb8b45d6f01（下载组件已push并fresh remote exact），本恢复节点提交以Git记录为准。
 - 用户已解除暂停；历史暂停点10-23-rebaseline-v2-m1/PAUSE_HANDOFF_20261023_0810.md仅供恢复，不覆盖新实施授权。
 - 模型cms-router/glm-5.3-flash→DGX/deepseek→DGX/qwen；密钥只在必要环境，不入文件/提示词/日志，不改全局路由。
 - 用户永久授权本项目Ego专用空间缺失时自行替换，不再询问。目前63/p1复用；不改登录、缓存、其他任务空间或升级浏览器。
 
-## 当前完成节点：当前事实JSON/CSV下载
+## 当前完成节点：CDE缺页恢复（组件，不是M2全验）
+- E03句柄58566已真实终态，不再等待：CodeBuddy/codebuddy-cli/deepseek-v4.1-flash CLI max/session01a16a25-0fec-7d2a-832a-957eb0d3e422，278.974s/53tools/无fallback；modelUsage确认模型，后端effort/费用未知。原报告d7e4aec4…及两文件原字节先存worker-source.tar。owner读完整输出后新增4RED，修正真实受理元数据method=browser_form不匹配及非法complete标记；独立分工仅两新文件，owner持有共享调用者。
+- 同项目/run/栏目/原始筛选/CAS限定；两生产MJS实际读新第一页，内容/总数/页长变化则全采，匹配则原生跳缺页；宿主复验新读/复用页和锚点，合并后完整集合校验。原始页/来源不改，cache_read与browser_checked分开，复用页保持原observed_at。实际脚本空结果反例1RED/4PASS修正新读页号1→真实0；来源失败不当零值。
+- 218相关PASS/1.00s→完整v2 **873PASS/4.15s**、Ruff全src/tests/scripts、4JS/sh语法PASS，1既有TestClient警告；59生产Python/342函数符合600/80（create_app既定例外）。首次语法命令误用了不存在charts.js，未执行，随后仅重跑实际portal.js及3MJS；不把最终shell退出码冒充错误检查通过，不重跑已绿873套件。
+- ciw-data/cde-review-recovery-01：首次明确注入第6实际页后失败，原源f64ce33632b8aa14a87641500ea9dbbeebb1d6be7d9dd7e2e38df9ced5bc0f17。第二段完全无补丁普通CLI --resume-output，同prj_49399f4c7e8c/run_1141c35995de复用2–6、新读1/7/8/9，闭合9页431条/精确匹配1，新源22e34853f68b7b2c214e2ea96f7441968c84ccef10faa89e5f5d08572bb60c65，13源码及入口hash前后相同。owner-audit逐旧页/新页/摘要/读集/模型事件核对，0实体/事实/模型。原子来源登记另有imported事件，原审计漏计后修正为实际5事件；未改源/重跑浏览器。受理恢复有生产适配器和实际MJS反例，真实链只跑审评序列；不冒称其他栏目、视觉或M2通过。
+- 执行audit首次缺机器可读immutable route行而错误比对当前高峰route；按原manifest03:00离峰/原prompt/真实runner补回精确行并明确为派发后审计修复，原件不改。audit-execution与review-gate随后PASS；不是预派发audit/独立医学复核。无Hermes/额外chair；保留原失败与原输出，不以过程门替代产品验收。
+- 健康52075固定ec32归并仍无终态输出；不轮询/重派/重键151旧批。下一有界工作：中国登记详情/其余来源及临床阅读缺口；只在节点完成后核对模型终态。Goal持续active，不设置暂停点。
+
+## 已提交节点：当前事实JSON/CSV下载（c13a155c）
 - 复用现有项目/鉴权/current_facts，标准库export.py在单一DB读取快照中关联本项目精确来源版本/摘要/实体；一条只读下载路由+工作台两链接。不调用模型/来源，不读CAS全文/日志/meta，不造共享包或备份。原facts API不变；缺失/跨项目来源保留None，不按同URL挑新源。
 - JSON保留原始类型和context/quote；CSV用value_json/context_json区分0/null/false/空串/结构化值，文本公式前缀显式转义并列csv_escaped_fields。过滤、鉴权/404/422、历史日期/非有限值409均覆盖，不把坏值补0或null。6整族RED→19相邻PASS→扩展类型/公式/异常反例27PASS；当前完整v2 **828PASS/3.95s**、Ruff全src/tests/scripts、4JS/sh语法PASS，1既有TestClient警告；58生产Python/332函数符合600/80（create_app既定例外）。一次错路径仅未收集测试，修正后运行，不算产品RED。
 - ciw-data/fact-export-live-01：原同源实际有**1026当前事实，其中668为result**。早前记录“668事实”是结果范围简称，不能当全部DB事实数量；f08e6c7a485d88d1bf899d05435ae6c788ae70e378bd2906ea007dc1bbc58157仍是完整1026集合hash，不改旧回执。JSON82317b8783a5761a4c8705a2400a501d69ec6ce6cdca38514fee38b35f6fc1c1/1583305bytes；CSV790c81f4daf91746e0a74a1d788532e4a76cb3e6d3ee64ec8311daa187388851/1115218bytes。
@@ -59,13 +67,13 @@
 |---|---|---|
 | M0 | 离线骨架/部分公开来源 | 不代表正式交付 |
 | M1/C | 完整终点/无损原文/身份/修订/预算组件 | 归并终态、完整流水线、真实论文修订、最终科学与产品接受 |
-| M2中国宇宙 | 登记及CDE受理/化药IND新任务部分来源 | 登记详情、其他序列/栏目、CDE缺页恢复、NMPA、3专家清单/≥95%召回 |
+| M2中国宇宙 | 登记及CDE受理/化药IND新任务、同run缺页恢复组件 | 登记详情、其他序列/栏目、NMPA、3专家清单/≥95%召回 |
 | M3/A | 同查询/几何/未知保留 | 正式中文名/MAH集团/靶点/产品阶段真实富集及3适应症 |
 | M4/B | 同源组身份/测量/领域/图表查询 | 跨研究医学归并、独立论文、关键50条准确率、安全图、最终视觉 |
 | M5全球/历史 | 来源版本原子采用/缓存核查分离 | 历史事实版本公开资格/全球扩充，历史日期守卫不得删除 |
 | M6加固 | 单文件发布/部分恢复/当前事实JSON-CSV下载 | 队列/取消/完整成本/备份 |
 
 ## 下一条有界任务
-- 白名单提交当前下载节点→push exact；55b3c5fe/df1846fa组件及既有图已固定，不重跑。继续既定M2来源/语义及M6有界加固，英文指标标题与图顶留白保持明确待办，不把组件改善宣称交付。
+- 白名单提交本恢复节点，保留真实负向/恢复证据；58566已终态并完成输出审计，不再等待。下一来源单元是中国登记详情；英文指标标题/图顶留白与其他M2/M6门仍待做，不重复旧候选已验步骤。
 - 冻结52075实际终态一到即核原始receipt/响应模型/源码和源hash；失败只做归并恢复，不碰151旧批。当前不因等待制造阶段暂停点。
-- 登记详情/CDE缺页/NMPA及真实名称MAH富集继续按现有M2/M3包推进，不另建平台。所需新来源访问按授权执行，缺失/受阻不写0。
+- 登记详情/NMPA及真实名称MAH富集继续按现有M2/M3包推进，不另建平台。所需新来源访问按授权执行，缺失/受阻不写0。
