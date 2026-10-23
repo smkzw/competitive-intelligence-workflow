@@ -26,6 +26,7 @@ from ciw2.sources import ctgov
 
 ANALYSIS_CODE_HASH = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 ANALYSIS_TASK_CHARS = 24000
+SYNTHESIS_TASK_CHARS = 8000  # Dense narrative reduction is not a raw-record extraction task.
 CTGOV_CODE_HASH = hashlib.sha256(Path(ctgov.__file__).read_bytes()).hexdigest()
 
 
@@ -322,8 +323,8 @@ def _analysis_refs(data: Any) -> set[str]:
     return set()
 
 
-def _analysis_budget(task: dict[str, Any]) -> None:
-    if len(json.dumps(task, ensure_ascii=False, default=str)) > ANALYSIS_TASK_CHARS:
+def _analysis_budget(task: dict[str, Any], max_chars: int = ANALYSIS_TASK_CHARS) -> None:
+    if len(json.dumps(task, ensure_ascii=False, default=str)) > max_chars:
         raise ValueError('摘要输入超过整包预算；保留完整记录，不截断临床定义或伪装全量总结')
 
 
@@ -365,43 +366,45 @@ def _design_parts(row: dict[str, Any], fits: Callable[[dict[str, Any]], bool]) -
     return parts
 
 
-def _analysis_tasks(data: dict[str, Any], base: dict[str, Any], verified: set[str]) -> list[dict[str, Any]]:
+def _analysis_tasks(data: dict[str, Any], base: dict[str, Any], verified: set[str], *,
+                    max_chars: int = ANALYSIS_TASK_CHARS, mode: str = 'batch') -> list[dict[str, Any]]:
     """Plan complete records; large studies use whole endpoints with study context."""
     arrays = {key: value for key, value in data.items() if isinstance(value, list)}
     fixed = {key: value for key, value in data.items() if key not in arrays}
 
     def task(payload: dict[str, Any]) -> dict[str, Any]:
-        return {**base, 'mode': 'batch', 'data': payload,
+        return {**base, 'mode': mode, 'data': payload,
                 'verified_fact_ids': sorted(_analysis_refs(payload) & verified)}
 
     def row_fits(row: dict[str, Any]) -> bool:
         payload = {**fixed, **{key: [] for key in arrays}, 'rows': [row]}
-        return len(json.dumps(task(payload), ensure_ascii=False, default=str)) <= ANALYSIS_TASK_CHARS
+        return len(json.dumps(task(payload), ensure_ascii=False, default=str)) <= max_chars
 
     if 'rows' in arrays:
         arrays['rows'] = [part for row in arrays['rows'] for part in (
             _design_parts(row, row_fits) if isinstance(row, dict) and 'primary_endpoints' in row else [row])]
     pending = {**fixed, **{key: [] for key in arrays}}
-    _analysis_budget(task(pending))
+    _analysis_budget(task(pending), max_chars)
     tasks = []
     for key, records in arrays.items():
         for record in records:
             pending[key].append(record)
             candidate = task(pending)
-            if len(json.dumps(candidate, ensure_ascii=False, default=str)) <= ANALYSIS_TASK_CHARS:
+            if len(json.dumps(candidate, ensure_ascii=False, default=str)) <= max_chars:
                 continue
             pending[key].pop()
             if any(pending[key] for key in arrays):
                 tasks.append(task(pending))
             pending = {**fixed, **{name: [] for name in arrays}}
             pending[key].append(record)
-            _analysis_budget(task(pending))
+            _analysis_budget(task(pending), max_chars)
     if any(pending[key] for key in arrays) or not tasks:
         tasks.append(task(pending))
     return tasks
 
 
 def _analysis_call(rc: RunContext, report: str, task: dict[str, Any]) -> AnalysisResult:
+    _analysis_budget(task, SYNTHESIS_TASK_CHARS if task['mode'] == 'synthesis' else ANALYSIS_TASK_CHARS)
     skill = rc.skills[f'analysis-{report.lower()}']
     signature = {'task': task, 'code': ANALYSIS_CODE_HASH, 'rules': HARNESS_RULES,
                  'skill': skill.body, 'schema': AnalysisResult.model_json_schema(),
@@ -416,6 +419,8 @@ def _analysis_call(rc: RunContext, report: str, task: dict[str, Any]) -> Analysi
         result = rc.skill(skill.name, task)
     if result.report != report:
         raise ValueError('摘要返回的报告类型与任务不一致')
+    if len(result.findings) > task.get('finding_limit', 6):
+        raise ValueError('摘要条数超过本次归并上限，不缓存超量结果')
     result = result.model_copy(update={'findings': [f for f in result.findings
         if f.fact_refs and set(f.fact_refs) <= set(task['verified_fact_ids'])]})
     if cached is None:
@@ -428,13 +433,13 @@ def _analysis_merge(rc: RunContext, report: str, findings: list[dict[str, Any]],
     while findings:
         synthesis = {**base, 'mode': 'synthesis', 'data': {'candidate_findings': findings},
                      'verified_fact_ids': sorted({ref for f in findings for ref in f['fact_refs']})}
-        if len(json.dumps(synthesis, ensure_ascii=False)) <= ANALYSIS_TASK_CHARS:
+        if len(json.dumps(synthesis, ensure_ascii=False)) <= SYNTHESIS_TASK_CHARS:
             result = _analysis_call(rc, report, synthesis)
             return result.model_dump()
-        packets = _analysis_tasks({'candidate_findings': findings}, base, verified)
+        packets = _analysis_tasks({'candidate_findings': findings}, {**base, 'finding_limit': 2}, verified,
+                                  max_chars=SYNTHESIS_TASK_CHARS, mode='synthesis')
         merged = []
         for packet in packets:
-            packet['mode'] = 'synthesis'
             merged.extend(f.model_dump() for f in _analysis_call(rc, report, packet).findings)
         if len(json.dumps(merged, ensure_ascii=False)) >= len(json.dumps(findings, ensure_ascii=False)):
             raise ValueError('摘要输入归并未收敛，保留已完成结果供恢复')

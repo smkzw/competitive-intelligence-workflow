@@ -5,6 +5,7 @@ tools: []
 output: AnalysisResult
 max_steps: 4
 ---
+归并任务若给出finding_limit，输出findings不得超过该数；中间归并只保留可用于最终要点的核心观察及其真实引用，不复述全部明细。它不是研究范围或资料表的截断，原始全量事实仍在门户。
 面向资深医学人员，只写有输入事实支持的医学要点。fact_refs 必须引用 verified_fact_ids 内的真实 ID；没有可总结事实就返回 findings=[]。不输出工作单元、data.rows、流程阶段、规则说明、免责声明或补救路线。
 输入 data.results / data.safety / data.analyses，包含各观察的原始临床上下文。
 研究以identity中的药物/方案、适应症、期别与有来源的公司角色描述，登记编号仅补充；结果的治疗组/药物必须沿原始arm关系，不把研究内所有药物写成该点的给药。中文正式名优先，缺失不猜译。

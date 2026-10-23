@@ -120,6 +120,72 @@ def test_large_synthesis_is_reduced_without_oversized_model_call(settings, monke
     assert len(calls) > 1 and all(c['mode'] == 'synthesis' for c in calls)
 
 
+def test_synthesis_uses_smaller_complete_packets_not_the_raw_research_budget(settings, monkeypatch):
+    from ciw2.pipeline.stages import _analysis_merge
+
+    rc,calls,_=setup_analysis(settings,monkeypatch,count=1)
+    fid=rc.db.current_facts(rc.project_id)[0]['id']
+    findings=[{'title':f'原始先例{i}', 'bullets':['原始设计观察及完整时间人群条件 '*40],
+               'fact_refs':[fid]} for i in range(20)]
+    before=json.dumps(findings,ensure_ascii=False)
+    result=_analysis_merge(rc,'C',findings,{'overview':{'rows':284}}, {fid})
+    assert result['findings'] and len(calls)>1
+    assert all(len(json.dumps(t,ensure_ascii=False))<=8000 for t in calls)
+    originals=[f for t in calls for f in t['data']['candidate_findings'] if f['title'].startswith('原始先例')]
+    assert originals==findings  # Every complete input, not a representative/Top-N sample.
+    assert all(t['overview']['rows']==284 for t in calls)
+    assert json.dumps(findings,ensure_ascii=False)==before
+
+
+def test_synthesis_partial_failure_reuses_completed_packets_without_research(settings, monkeypatch):
+    from ciw2.harness.llm import LLMError
+    from ciw2.pipeline.stages import _analysis_merge
+
+    rc,calls,_=setup_analysis(settings,monkeypatch,count=1)
+    fid=rc.db.current_facts(rc.project_id)[0]['id']
+    findings=[{'title':f'原始先例{i}', 'bullets':['完整设计观察 '*200], 'fact_refs':[fid]} for i in range(30)]
+    original=rc.llm.script
+    attempts=[]
+    def fail_second(messages):
+        attempts.append(json.loads(messages[1]['content']))
+        if len(attempts)==2:
+            raise LLMError('one failed synthesis unit')
+        return original(messages)
+    rc.llm.script=fail_second
+    with pytest.raises(LLMError):
+        _analysis_merge(rc,'C',findings,{}, {fid})
+    first=attempts[0]
+    rc.llm.script=original
+    result=_analysis_merge(rc,'C',findings,{}, {fid})
+    assert result['findings'] and sum(t==first for t in calls)==1
+    assert all(t['mode']=='synthesis' for t in calls)
+    assert all(len(json.dumps(t,ensure_ascii=False))<=8000 for t in calls)
+
+
+def test_one_indivisible_synthesis_finding_is_not_truncated_to_fit(settings, monkeypatch):
+    from ciw2.pipeline.stages import _analysis_merge
+
+    rc,calls,_=setup_analysis(settings,monkeypatch,count=1)
+    fid=rc.db.current_facts(rc.project_id)[0]['id']
+    finding={'title':'完整先例', 'bullets':['完整医学定义及上下文 '*1200], 'fact_refs':[fid]}
+    with pytest.raises(ValueError,match='摘要输入'):
+        _analysis_merge(rc,'C',[finding],{}, {fid})
+    assert not calls
+
+
+def test_intermediate_summary_limit_is_checked_before_caching(settings,monkeypatch):
+    from ciw2.pipeline.stages import _analysis_call
+
+    rc,_,_=setup_analysis(settings,monkeypatch,count=1)
+    fid=rc.db.current_facts(rc.project_id)[0]['id']
+    rc.llm.script=lambda messages: LLMReply(tool_calls=[ToolCall('finish','submit_result',{
+        'report':'C','findings':[{'title':f'要点{i}','bullets':['有依据'],'fact_refs':[fid]} for i in range(3)]})])
+    task={'mode':'synthesis','finding_limit':2,'data':{'candidate_findings':[]},'verified_fact_ids':[fid]}
+    with pytest.raises(ValueError,match='摘要条数'):
+        _analysis_call(rc,'C',task)
+    assert not rc.db.query('SELECT * FROM stages WHERE run_id=?',(rc.run_id,))
+
+
 def test_result_and_safety_contexts_survive_summary_projection():
     from ciw2.pipeline.stages import _analysis_tasks, _compact
 
