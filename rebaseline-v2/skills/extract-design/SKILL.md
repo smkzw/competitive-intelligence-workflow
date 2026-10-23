@@ -17,6 +17,8 @@ design.stratification / design.multiplicity。
 
 规则同 extract-results：先读取原文，quote 逐字复制，找不到写 gaps。
 
+公开方案/SAP或论文方法PDF可用fetch_url读取完整文本及页码范围，长文按offset继续；引用实际source_id与quote，不能从文件名/下载时间猜历史公开资格。扫描或解析失败保留处理缺口，不把失败当成无设计内容，不自动调用OCR或请求凭据。
+
 known_trials中detail_tool=china_trial_detail的CTR研究，使用该工具读取中文登记详情；不猜详情URL，不从列表题目推断期别、人群或申请人角色。完整中文入排、组别及终点内表均保留在可分页结果中；计划/已入组/实际总人数分别照录，空缺不是0。登记申请人不是自动核实的MAH；健康人药代研究仍按实际人群和测量保留，不写成患者疗效。
 
 普通trial_evidence已按原中文临床表确定性采用的研究也在trials_with_registry_design内。不要重抄或重写同一表格；只补原表未提供、实际新来源支持的设计内容。条件性PK、原始强度/规格关系和全部组别保持原文，不用登记适应症替换健康受试者人群。原文内不一致保留并记录gaps，不自行纠正剂量。

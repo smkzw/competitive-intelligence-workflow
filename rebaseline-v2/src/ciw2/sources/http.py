@@ -8,7 +8,7 @@ import hashlib
 import json
 import re
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from html.parser import HTMLParser
 from typing import Any, ClassVar
@@ -51,6 +51,7 @@ class Fetched:
     content_type: str
     mode: str = 'unspecified'
     network_checked_at: str | None = None
+    meta: dict[str,Any] = field(default_factory=dict)
 
     def json(self) -> Any:
         return json.loads(self.content)
@@ -87,10 +88,84 @@ def html_to_text(html: str) -> str:
 
 
 def to_text(content: bytes, content_type: str) -> str:
+    if is_pdf(content,content_type):
+        from ciw2.sources.pdf_text import parse_pdf
+        return parse_pdf(content).text
     raw = content.decode("utf-8", errors="replace")
     if "html" in content_type or raw.lstrip()[:15].lower().startswith(("<!doctype", "<html")):
         return html_to_text(raw)
     return raw
+
+
+def is_pdf(content: bytes,content_type: str) -> bool:
+    return 'pdf' in content_type.casefold() or b'%PDF-' in content[:1024]
+
+
+def _document_text(ctx: ToolContext | None,body: bytes,ctype: str,url: str,kind: str) -> tuple[str,dict[str,Any],str]:
+    if not is_pdf(body,ctype):return to_text(body,ctype),{'content_type':ctype},'decoded'
+    from ciw2.sources.pdf_text import parse_pdf, parser_identity
+    parser_id=parser_identity()
+    if ctx is not None and ctx.db is not None and ctx.cas is not None:
+        rows=ctx.db.query('SELECT text_digest,meta FROM sources WHERE project_id=? AND kind=? AND url=? '
+            "AND digest=? AND text_digest IS NOT NULL AND json_extract(meta,'$.text_parser_id')=? ORDER BY rowid DESC",
+            (ctx.project_id,kind,public_url(url),hashlib.sha256(body).hexdigest(),parser_id))
+        for source in rows:
+            try:text=ctx.cas.get(source['text_digest'])
+            except OSError:continue
+            if hashlib.sha256(text).hexdigest()==source['text_digest']:
+                return text.decode('utf-8'),json.loads(source['meta']),'reused'
+    result=parse_pdf(body)
+    return result.text,{'content_type':ctype,'text_state':'parsed','text_parser_id':result.parser_id,
+        'text_parser_version':result.parser_version,'pages':result.pages},'parsed'
+
+
+def _cached(ctx: ToolContext,key: tuple[Any,...],cache: dict[Any,Any]) -> Fetched | None:
+    source=ctx.db.one('SELECT * FROM sources WHERE id=? AND project_id=? AND kind=?',
+                      (cache[key],ctx.project_id,key[1]))
+    if not source or not source['text_digest']:return None
+    try:
+        raw=ctx.cas.get(source['digest']);text=ctx.cas.get(source['text_digest'])
+    except OSError:return None
+    if hashlib.sha256(raw).hexdigest()!=source['digest'] or hashlib.sha256(text).hexdigest()!=source['text_digest']:
+        return None
+    meta=json.loads(source['meta'])
+    if is_pdf(raw,meta.get('content_type','')):
+        from ciw2.sources.pdf_text import PDFTextError, parser_identity
+        try:current=parser_identity()
+        except PDFTextError:return None
+        if meta.get('text_parser_id')!=current:return None
+    _observe(ctx,source['id']);_receipt(ctx,source['id'],'cache_reused',source['url'])
+    return Fetched(source['id'],source['url'],None,raw,text.decode('utf-8'),meta.get('content_type',''),
+                   mode='cache_reused',meta=meta)
+
+
+def _received(ctx: ToolContext | None,resp: httpx.Response,kind: str,title: str,register: bool) -> Fetched:
+    ctype=resp.headers.get('content-type','');url=public_url(str(resp.url))
+    persistent=register and ctx is not None and ctx.db is not None and ctx.cas is not None
+    digest=ctx.cas.put(resp.content) if persistent else None
+    from ciw2.sources.pdf_text import PDFTextError
+    try:text,meta,parse_mode=_document_text(ctx if persistent else None,resp.content,ctype,url,kind)
+    except PDFTextError as exc:
+        reason=getattr(exc,'reason','parser_failed')
+        reason=reason if isinstance(reason,str) and re.fullmatch(r'[a-z_]{1,40}',reason) else 'parser_failed'
+        if persistent:
+            sid=ctx.db.add_source(ctx.project_id,kind,url,digest,title=title,
+                meta={'content_type':ctype,'text_state':'failed','text_error':reason})
+            _receipt(ctx,sid,'network_checked',url,resp.status_code)
+            ctx.db.log_step(ctx.run_id,ctx.stage,'source',0,'source_parse',
+                {'source_id':sid,'state':'failed','reason':reason})
+        raise FetchError(f'PDF文本解析失败（{reason}），原始来源未作临床事实采用') from None
+    sid=None;checked_at=datetime.now(UTC).isoformat()
+    if persistent:
+        sid=ctx.db.add_source(ctx.project_id,kind,url,digest,title=title,
+            text_digest=ctx.cas.put(text.encode('utf-8')),meta=meta)
+        checked_at=_receipt(ctx,sid,'network_checked',url,resp.status_code)
+        if is_pdf(resp.content,ctype):
+            ctx.db.log_step(ctx.run_id,ctx.stage,'source',0,'source_parse',
+                {'source_id':sid,'state':'parsed','mode':parse_mode,'text_parser_id':meta['text_parser_id']})
+    _observe(ctx,sid)
+    return Fetched(sid,url,resp.status_code,resp.content,text,ctype,mode='network_checked',
+                   network_checked_at=checked_at,meta=meta)
 
 
 def _observe(ctx: ToolContext | None, source_id: str | None) -> None:
@@ -117,13 +192,8 @@ def fetch(ctx: ToolContext | None, url: str, *, kind: str, params: dict[str, Any
     request_url = httpx.URL(url) if params is None else httpx.URL(url, params=params)
     key = (getattr(ctx, 'project_id', None), kind, hashlib.sha256(str(request_url).encode()).hexdigest())
     if cache is not None and key in cache:
-        source = ctx.db.one('SELECT * FROM sources WHERE id=?', (cache[key],))
-        if source:
-            _observe(ctx, source['id'])
-            _receipt(ctx, source['id'], 'cache_reused', source['url'])
-            return Fetched(source['id'], source['url'], None, ctx.cas.get(source['digest']),
-                           ctx.cas.get_text(source['text_digest']), json.loads(source['meta']).get('content_type', ''),
-                           mode='cache_reused')
+        cached=_cached(ctx,key,cache)
+        if cached:return cached
     timeout = getattr(getattr(ctx, "settings", None), "http_timeout_s", 30.0)
     last: Exception | None = None
     own = client is None
@@ -137,21 +207,9 @@ def fetch(ctx: ToolContext | None, url: str, *, kind: str, params: dict[str, Any
                     continue
                 if resp.status_code >= 400:
                     raise FetchError(f"HTTP {resp.status_code} {public_url(str(resp.url))}")
-                ctype = resp.headers.get("content-type", "")
-                text = to_text(resp.content, ctype)
-                sid = None
-                checked_at = datetime.now(UTC).isoformat()
-                if register and ctx is not None and ctx.db is not None and ctx.cas is not None:
-                    digest = ctx.cas.put(resp.content)
-                    tdigest = ctx.cas.put(text.encode("utf-8"))
-                    sid = ctx.db.add_source(ctx.project_id, kind, public_url(str(resp.url)), digest, title=title,
-                                            text_digest=tdigest, meta={"content_type": ctype})
-                    if cache is not None:
-                        cache[key] = sid
-                    checked_at = _receipt(ctx, sid, 'network_checked', str(resp.url), resp.status_code)
-                _observe(ctx, sid)
-                return Fetched(sid, public_url(str(resp.url)), resp.status_code, resp.content, text, ctype,
-                               mode='network_checked', network_checked_at=checked_at)
+                result=_received(ctx,resp,kind,title,register)
+                if cache is not None:cache[key]=result.source_id
+                return result
             except httpx.HTTPError as exc:
                 last = exc
                 if attempt < retries:

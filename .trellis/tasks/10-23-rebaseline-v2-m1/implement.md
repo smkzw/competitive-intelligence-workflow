@@ -1,5 +1,19 @@
 # Execution checkpoint
 
+## 2026-10-24 当前：原生PDF来源表示组件完成，继续来源语义采用
+
+Goal active，不暂停；唯一当前入口仍rebaseline-v2/docs/STATUS.md。前节点cc440ae38b2bcac37c23d3ca9a0ec9582fbc1178已push/fresh remote exact，未知v1/rootHANDOFF工作不动。方法execution：一个独立新parser/tests单元能与owner HTTP/DB/恢复整合形成真正并行，源版本合同由owner统一；本节点无临床解释采用，实际原生/源码/逐字范围可决定技术结果，不另加会商/chair。临床关系判断仍不得借技术门接受。
+
+- 新执行ciw2-native-pdf初始化后先修掉生成prompt中“忽略全局”模板、完成context与明确2文件写边界、修ciw-data相对路径；独立preflight ok/0warning后才启动76255。初次多hunk顺序不对patch整体未应用，随后正确应用，未在错误prompt派发。实际CodeBuddy/codebuddy-cli/deepseek-v4.1-flash/requested max/session01a16b1f-d6fc-77fa-b058-6151a050fc50，209.695s/27tools/return0/no fallback。原2文件SHA1f60b73c79bb34fc6029dfbe34bfca9b9295ba6b6be1219fce24429bc4274e62 /691b234b89dd8879e4cc0cc6d2590440eea55b0f3c6e3c18cdf7c62d0b357c30，report5c13ffc9fd69d0780da651bb25885d132103df51a3200821913cc5ae161e4cac；修改前先存worker-source.tar。
+- Worker28测试=27mock+1实际原生合成PDF，不是论文或真实医学接受。worker未先RED，坦承事后做5个突变；owner记录流程偏差，不把它冒作先RED。owner已先建4来源表示RED、7普通fetch_url/失败/缓存RED，因实现/mock接口假设导致的实际模块4RED和解释缓存2RED再集中修正：parser_identity/result前缀统一、reason字段保留、丢模块字节安全失败、相同原件解析复用、规则变更不复用旧解释；旧source/facts/CAS不更新。
+- Nativewrapper只调用既有pdftotext26.08.0（GPL2/3独立进程，无安装/分发），shellFalse/stdin/stdout/90s上限、UTF8严格/完整layout/中间空页/最终幻影空页分清，安全错误不含stderr/私有路径。HTTP按实际header或PDFmagic识别；解析失败原件入CAS、text_digest为空、独立问题，不是二进制正文或查无数据；首次/缓存/新网络核查与解析复用分别留痕。源身份现在包括project/kind/URL/raw/text/parser，不因raw相同覆盖新正文；不增表/通用框架/OCR。
+- owner相关82PASS0.55s；当前完整v2 **1432PASS9.02s**/1既有TestClient弃用警告，Ruff全src/tests/scripts/函数≤80文件≤600（create_app既定例外）通过。一次猜错test_recovery.py无测试执行，不记产品失败；native旧断言还预期重复前缀，按修正后精确API更新后相关/宽门通过，没有放宽缓存或科学断言。没有每行全仓重跑。
+- 冻结native-pdf-frozen-01/219files/206immutablelinks/manifesta621ebf1ef45386ab1883682ff8acf31573414554d1e56080c5c631b898e7366，普通scripts/smoke_company_documents.py在新native-pdf-live-01实际执行fetch_url首/尾分页：Sanofi source src_bf893ac30248 raw3168f717afadf4fd40e6af62c12a3e02f18d574aeb8124de7fed056dbf0ccd4e/text83042006e74a218677aded0d6b05a5470079d215aa4744557a438b99614ea014/300页；Keymed新source见该receipt，rawbf07368af3fd2d8b01aa17ffc9e02868e4f4b528f98d61a184e4c824d28ab08b/textf1c67b7cb31525c160eac5079c11f3aeac2a725e5afab61d3f88c9e3e818cad5/205页。2真实HTTP200/2同runcache/2nativeparse，0模型/0facts；全部505页偏移精确、raw/text与旧公开来源逐hash相同，published_date仍空，源层未制造发布日期/科学归属。
+- native-pdf-live-01/owner-acceptance.json核固定runtime全部hash、2source/CAS、所有页字符段/HTTP回执、原源对比；不以“读取成功”采用集团表。Sanofi2025-12-31财务权益、Keymed“於本報告日期”范围/繁简法律实体仍须独立实证，不能变当前MAH集团。旧source、旧parsedtext、旧运行、旧151批全保留。README/PRD最后补能力安装/失败指引后另封native-pdf-frozen-02/219files/217links/manifest454d307e016920cce7f3b044630e12de4fc5ba027630264b6f54b1d3d2fa3548；仅这两文档变化，其他217文件与实跑01完全相同，不重新请求两PDF或跑全仓门。
+- 本节点不改前端，未重复四宽截图或冒作新视觉PASS；独立执行实际回执/owner技术检查分开。未做医学/所有权/论文/历史截止日接受，无新增模型或第二审批。原STATUS150行旧历史已在cc440ae3保全，现压为57行当前状态+回执索引，详细旧失败本Trellis保留，不清理用户logs/runs/native会话。执行review-gate仅完整性检查，不当产品验收。唯一当前preview93062保留，Ego63长期授权继续，无升级/登录/缓存改动。
+
+复盘：真正挡住重复提取的是“原始文件相同≠解析表示相同”与两个实际接口不一致，不是再堆一批字符串PASS。先集中root cases、检查实际函数/原件/页偏移，再一次相关与宽门，已经取得可用的普通入口；仍不能让技术可读替代下一步科学采用。后续优先来源支持的药物名称/活性成分与临床限定，以及真实年报集团/法律实体/截至日；不靠去剂型/同句共现/未来日期或字典补齐。受保护52075仍只待终态事件，不重跑来源/151批，不设置暂停点。
+
 ## 2026-10-24 当前：共同档案与来源阅读组件完成，继续M3
 
 当前唯一状态为rebaseline-v2/docs/STATUS.md；本节替代下面各“current”的历史现场含义，不覆盖原记录。Goal active，不暂停，不宣称M3或产品交付。方法为一有限执行节点+一独立复核节点：共享科学合同由owner统一，worker仅新增投影和测试；实际源/临床上下文存在材料性解释风险，需独立挑战固定候选。没有追加chair/Hermes或第三轮全页会商。

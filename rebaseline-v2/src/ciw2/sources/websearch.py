@@ -113,13 +113,12 @@ class FetchUrlArgs(BaseModel):
     offset: int = Field(default=0, ge=0)
 
 
-@REGISTRY.register("fetch_url", "读取网页正文并登记为来源（抽取事实前必须先读取原文）。长文用 offset 分页。", FetchUrlArgs)
+@REGISTRY.register("fetch_url", "读取网页或文本PDF并登记原件与正文来源。PDF保留页码；长文用offset分页。", FetchUrlArgs)
 def _fetch_url(ctx: ToolContext, a: FetchUrlArgs) -> Any:
     if not a.url.startswith(("http://", "https://")):
         raise ValueError("只支持 http(s) URL")
     f = fetch(ctx, a.url, kind=a.kind)
-    if "pdf" in f.content_type:
-        return {"status": "unsupported", "error": "PDF 解析在 M4 实现（pdfplumber），当前请改用 HTML/摘要页",
-                "source_url": f.url}
     return {"source_url": f.url, "source_id": f.source_id, "text": f.text[a.offset:a.offset + 12000],
-            "total_chars": len(f.text)}
+            "offset":a.offset,"total_chars": len(f.text),
+            "next_offset":a.offset+12000 if a.offset+12000<len(f.text) else None,
+            "pages":f.meta.get('pages',[]),'text_parser_id':f.meta.get('text_parser_id')}

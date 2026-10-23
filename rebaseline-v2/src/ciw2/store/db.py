@@ -261,8 +261,11 @@ class DB:
     def add_source(self, project_id: str, kind: str, url: str, digest: str, title: str = "",
                    text_digest: str | None = None, published_date: str | None = None,
                    meta: dict[str, Any] | None = None) -> str:
-        existing = self.one("SELECT id FROM sources WHERE project_id=? AND url=? AND digest=?",
-                            (project_id, url, digest))
+        # Raw bytes, parsed text and parser identity are different immutable versions.
+        # New representation never overwrites the historical source or its facts.
+        existing = self.one("SELECT id FROM sources WHERE project_id=? AND kind=? AND url=? AND digest=? "
+                            "AND text_digest IS ? AND json_extract(meta,'$.text_parser_id') IS ? ORDER BY rowid LIMIT 1",
+                            (project_id,kind,url,digest,text_digest,(meta or {}).get('text_parser_id')))
         if existing:
             return existing["id"]
         sid = new_id("src")

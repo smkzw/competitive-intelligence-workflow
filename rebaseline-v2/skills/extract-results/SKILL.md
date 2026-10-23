@@ -15,6 +15,7 @@ source_context只记录原文明确的legal_entity、relationship、as_of（YYYY
 1. 找关键结果来源：pubmed_search（药物名 AND 适应症 AND (phase 3 OR randomized)）、会议摘要（web_search）、
    FDA 审评/说明书（fda_drugsfda 的 documents）。
 2. **必须先用 pubmed_fetch / fetch_url 读取原文**，再从读取到的文本中抽取；未读取的来源不得作为 source_url。
+   fetch_url可读取文本型PDF，返回精确source_id、原文页码/字符范围及分页位置；offset继续读取固定来源，不用下载时间推断论文或事实的首次公开日期。扫描件/原生解析失败是来源处理问题，不是“没有结果”，不绕过访问权限、不自动调用OCR。quote仍逐字复制实际文本，不把PDF页码或表头补成源数值。
 3. 每个事实：
    - field：result.primary.value / result.key_secondary.value / result.secondary.value /
      safety.sae.any / safety.discontinuation / safety.death.all_cause / safety.ae.term

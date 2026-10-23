@@ -22,14 +22,27 @@ def _version(row: dict[str, Any] | None, url: str) -> dict[str, Any]:
     return version
 
 
+def _representation_current(rc: RunContext,row: dict[str,Any] | None) -> bool:
+    if row is None:return True
+    meta=json.loads(row['meta'])
+    if 'pdf' not in meta.get('content_type','').casefold() and not meta.get('text_parser_id'):
+        return True
+    from ciw2.sources.pdf_text import PDFTextError, parser_identity
+    try:
+        if not row.get('text_digest') or meta.get('text_parser_id')!=parser_identity():return False
+        raw=rc.cas.get(row['digest']);text=rc.cas.get(row['text_digest'])
+    except (PDFTextError,OSError):return False
+    return hashlib.sha256(raw).hexdigest()==row['digest'] and hashlib.sha256(text).hexdigest()==row['text_digest']
+
+
 def get_unit(rc: RunContext, key: str) -> Any:
     cached = rc.db.stage_output(rc.run_id, key)
     if cached is None:
         return None
     ctx = rc.tool_ctx()
-    if any(_version(source_by_url(ctx, source['url'], request_context=source.get('request_context')),
-                    source['url']) != source for source in cached['sources']):
-        return None
+    for source in cached['sources']:
+        row=source_by_url(ctx,source['url'],request_context=source.get('request_context'))
+        if _version(row,source['url'])!=source or not _representation_current(rc,row):return None
     rc.db.log_step(rc.run_id, rc.stage, rc.stage, 0, 'cache', {'reused_stage': key})
     return cached['result']
 
