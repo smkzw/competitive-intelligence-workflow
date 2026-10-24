@@ -1,5 +1,61 @@
 # Execution checkpoint
 
+## 2026-10-24 最新状态：用户无损暂停，非完成/非RC
+
+唯一恢复入口：rebaseline-v2/docs/PAUSE_HANDOFF_20261024_SYNTHESIS.md；STATUS替换更新，以下旧“在途/pending/Goal active”段落是当时历史，不是当前授权。实际Goal已实查paused并再次按用户要求确认paused。当前owner直接保全/停止/记录：这些操作共享同一数据库与顺序恢复边界，不新派执行或会商。
+
+用户已原生选择允许结束旧归并，随后要求无损暂停。10:32起先只读SQLite在线备份并核151原批全部SHA、原780 SHA、46CAS，再向确切子66386发SIGTERM；父66380随之退出，另停止确切预览12699。不用SIGINT以免旧finally把KeyboardInterrupt误记成功。不修改旧库历史running状态，不伪造原脚本receipt；独立owner暂停回执解释实际终态。再次一致备份核来源46/实体586/事实6580/关联446四表hash完全不变，300唯一成功缓存与303实际Qwen3.8-Flash-Next成功模型事件全部保留。未保存当次答复可能不存在，符合用户知情批准；0新来源/模型，未终止浏览器/共享模型服务/其他任务。
+
+ciw-data/pause-20261024-synthesis含before-stop/after-stop.sqlite3与46CAS不可变链接，receiptSHAf24b4dac024b06d9a22c42ebef3a2cb648b607f834d137fa2f260a24a177275f；working-tree含全部在途代码/文档/Skill/未跟踪新测试及补丁/清单，并核当前223UI/224归并冻结文件。不是仅保存统计文字；GitHub记录不含本地数据库或未提交修复，换机需受控转移恢复包。未知v1/rootHANDOFF/日志/其他用户资产完全不动，无清理/reset/checkout/clean/add-all。
+
+C03定向round2实际已终态REVISE，不再pending；原报告SHAc00667741f0f8ad1fdfd5f848087e536630820aa21d0a569e291cb0b74b6e972，同session实际CodeBuddy/deepseek-v4.1-flash/CLImax无fallback。两附加同session轮次39.577s/2tools及316.754s/12tools，非伪称单次；宿主Bash拒绝，源码复核，独立测试/hash/DB/browser NOT_RUN。原报告不改。冻结03大映射持久化/现有backup恢复有owner实际生产测试，未冒作第三次独立接受。
+
+真实未完：普通_analysis全空批会绕过新空层guard；merge_layer先succeeded后拒绝需明确状态；父要点引用集合颗粒度与叙事择取合同未澄清；多层不同来源引用/实际publish链/最终正文上限需补反例。审阅“未来新run自动复用旧Qwen”推断被store/db.py:246按run_id查询否定，不能盲重键或扩建平台；publish.py无run-status发布守卫，但现有测试仅回调，不说实际文件链已验。旧108/3919与原780/5212的逐层差异本地保存，缺于摘要不等于删除科学事实；恢复优先原780，不重跑151研究批。
+
+最新归并WIP开发门1563PASS10.28s/Ruff/JS，通过不替代REVISE、真实模型归并或完整M1；暂停期间不再跑产品测试/新来源/模型/浏览器。f268b192产品已push；本次仅做暂停文档提交，代码WIP保持未提交并有本地完整备份。全M1–M6仍未全部验收。恢复授权后先关闭以上同族剩余问题，一批相关回归/候选一次宽门，冻结新run再仅归并，不重复旧研究或无限全页会商。
+
+暂停实际补证：52075终态exit1/子SIGTERM、预览34826终态143，三个精确PID均不存在。working-tree清单3ad4af24…保存14文件/补丁/未跟踪新测试；223UI/224归并冻结全部字节再核。旧封存逐层引用数5212→4466→4239→4061→3978→3919，原集合外新增均0；第4层缺于摘要1293，不代表科学事实被删除，不据此声称临床结论遗失。完整逐项列表本地保存，恢复优先原780有实际依据而非只凭偏好。最后仅补记录，未继续改产品。
+
+---
+
+## 2026-10-24 当前在途：归并引用运输根因与同session定向补审
+
+owner邻接消费者检查捕获真实新根因：DB.log_step非裁决日志截20k，冻02的完整reference_map大时断JSON；4000长引用生产RED后用既有stages analysis_basis:<digest>存全量映射（非科学接受），agent_steps仅短指针。相同映射检查现有值不覆盖，用户备份仍DB+sourceCAS原格式，不为临时映射扩建CAS/日志平台。替代完整源码/4k映射真实现有create_backup→restore_backup测试后96相关PASS1.41s、最终1563PASS10.28s/Ruff全src/tests/scripts/setup/JS、stages534行无>80函数；这是实际大输入失败后的候选门，不是每行重跑。旧冻02/plan01日志局限保留，03只修此已实证根因，不倒改旧hash/截图/审阅。
+
+新synthesis-convergence-frozen03/224files219immutablelinks/manifestbceb04a7d426f4d27210081bfaca8257b857bd7ddbf40fee878e4450acb13baa；transport-plan02/run_f64741dac787（offline后cancelled）用正常生产_basis/_analysis_tasks，在原合格副本检查实际持久化映射与内存等同，原780/5212refs仍50包/7997字符，108/3919仍25/7919，所有正文/原ID逐项恢复。0模型/来源/原库写，不混淆上一规划run_9a0…或虚报真实归并。03源码和完整映射备份恢复仅owner确定性检查；round2仍只针对不可变02，不能宣称新模型已review03。等其终态处理真实剩余问题，若存储局限被指出用上述生产RED/恢复实物关闭，不展开第三轮全页审查。
+
+最新当前整合门1562PASS9.83s/Ruff全src-tests-scripts-setup/JS/193Python600-80通过（1既有Starlette TestClient警告），仅本根因族相关48后一次宽门，不逐行全仓。已修功能/测试/9Skill中ABC内说明及PRD/ARCH/PLAN同步，仍未提交/未跑新真实归并；round2与用户旧任务停止选择尚pending，不据开发门接受M1。架构数字为本地算法参数非新用户审批；后续同一冻结对相关临床/模型实际结果验收。
+
+当前运输生产离线实物：r4-recovery-qualification01/transport-plan01，在已隔离合格数据新建仅规划run_9a0cc1617614（随后cancelled明确offline），原780实际5212current refs→50包/最大7997字/输出上限295；完成108的3919refs→25包/7919/上限60。每包还原后完整title/bullets/fact_refs逐项等于原始输入，0新model/source/原库写；不是宣称50次调用已跑、能保证最终6条或临床接受。此证据说明短引用运输减少重复ID，不等于拿代表样本截断研究。当前完整开发里程碑门在跑（仅此root batch一次），待真实结果不猜数；独立round2仍pending。
+
+初审21801真实终态：CodeBuddy/codebuddy-cli/deepseek-v4.1-flash/CLI max/session01a16ba9-4821-7820-a5f1-0e093acbbab1，329.637s/14tools/return0/no fallback。164行原报告全读，SHAde7a57230018b54284188324924b8a1cf804b7c48e6b521cba0833737d1894ec，保持REVISE。宿主Bash拒绝，只有Read，未跑测试/hash/DB/browser，不把owner证据当独立实测。
+
+意见评估：接受缓慢减少条数仍近乎不收敛、非空→空、单/多包引用资格不一致、层检查点/多层重放及总体状态语义；初审提“完全无取消检查”不成立，uncached rc.skill已有检查（源码确认），仅补缓存/循环边界。原ec32有字节守卫，非“完全无guard”；旧阶段计数不是采纳数，5完整层303出现=272独立key+31确切复用，不按计数差异推断覆盖碰撞。审阅时尚无恢复包，owner后来已用ec32确切code/rules/schema/请求glm+实际Qwen/完整输入重建封存，原REVISE/blocked不倒改。没有采用“缺摘要就阻断全部有效报告”新产品门：现行部分报告合同保留图表/表格，只使摘要失败的run为failed，不能假成功。
+
+新的决定性owner反例：108条摘要引用3919个真实长ID，编号重复占预算，单调减字/改上限不能治根。新增5实际RED（两种输入大小的未核实引用、空层、真实长度ID无法归并、摘要失败但run成功），再用冻结01生产字节重放2RED（条数微降和非法别名）后合族修。用每条完整输入要点的临时summary_ref映射运输，full canonical fact_ids留在追加lineage中，basis digest绑定完整原内容/引用映射以使缓存版本不同；每次模型输出恢复全部实际ID，不改科学事实/原来源、正文与条件不截断、不建平台/依赖。最终6条，上限每包ceil(n/2) capped6；非空不得空、未知别名失败不缓存、不静默删；层记录INTERMEDIATE_NOT_FINAL_REPORT含原输入hash/完整输出/版本绑定，取消每包检查；至少25%条数或15%叙事字符实质进展，硬12层。字符指标不是“字节”，原文措辞统一待落档。
+
+新完整相关批48PASS0.88s/Ruff（analysis_budget/summary/pipeline/cancel邻接），含完整160真实长度引用无损归并、文本同但ID变化不能误缓存、多层失败重放已完成4调用零新调用、线性消耗第一层止损。3旧断言在替代事实ID/源图谱正向后迁移：两运输ID向量现通过真实basis还原后完整比较，计数区分模型包与层检查点；没有删科学断言。当前stages527行/无>80函数，尚未最终宽门/真实模型，不声明交付。
+
+隔离当前规则资格已实际核46源/6580facts/586entities/446links、46CAS、原151输出hash、3919引用全当前verified，0missing/0nonverified；原科学表/current未改、0源/模型/原库写。原脚本错误CAS.get_bytes后保留副本，仅续完成CAS.get及回执，LLM verified targets本来为0，不再clone/复核，回执r4-recovery-qualification01。恢复包PREPARED/输入QUALIFIED均非执行/科学接受。实际部分源码API使用错误和恢复记录保留。
+
+用户原旧任务保护边界仍生效：已用原生选择Ask请求是否允许结束这一旧归并（仅旧归并；保留151/780/所有已完成，未保存单次答复可能损失），等待选择，**未停止**，其他离线实现继续。不能把Ego全授权扩成结束模型任务。未来优先原780一次新归并减少多代改写；须原run结束/明确授权停止，不启动并发重复归并。
+
+冻结synthesis-convergence-frozen02/224files217immutablelinks/manifest566463f569e2447dec8195638f1eeb814557c18e55107c94c24af705290d5456，源/Skill/测试均封存。round2 prompt一文件一行、Runner-managed格式修后preflight PASS（初只Output file不识别，未在FAIL时派发），复用同CodeBuddy session定向补审上述新根因/恢复条件已实际派发；待终态不轮询/不新全页会商、不冒作PASS。下一先准备原780新引用运输的离线绑定/预算证明，不调用模型；收到用户停止决定按精确PID和保留点执行，否则旧任务保持。
+
+## 2026-10-24 在途：摘要必须真实收敛（UI已push，旧研究不重跑）
+
+在途补证：一致read-only SQLite事务只封存完成前5层/108条（不借第五层未完72条），r4-recovery-packet01/manifestc49e0eaaf01c8f2c7d5c5ba1f2c7908e7ce9fa1bc2523f46f8092ca2c90557b0/层记录5aa64833…/findings58364fa0…。逐包绑定原taskkey/task/原outputhash/report/ref资格/实际模型；原151输出hash/原780及四科学表摘要保留，0原库写/0新调用。实际旧各完成归并为Qwen3.8-Flash-Next，不能把请求glm或默认路由写成实际采用GLM；新正常development6次GLM是另一单元不混淆。当前production仅离线规划同108条→53包/上限53输出、最大7922字符/完整输入及引用并集，未执行模型、未复制旧阶段为新PASS。激活前仍须独立审阅、隔离副本现行fact/source资格、新run及原运行终态，未修改旧进程。
+
+安装跟进：install-owner03从reading-density-frozen03的223清单copy非硬链接到build-source，在复制目录offline构建/新venv；原223文件构建后仍全匹配。实际/tmp -I模块/16资产/9作者hash/工具/输出/override/空集exit2通过，wheel7a131392f4093a36e0352f9257510fc6a6d1a667c28813cdf2b4c98b8041291d，sdist36442a480829905a7b470ea600c44b40e36e1a1628ab17dac8261fb286e205a4；绑定UI f268不含在途stages修正，不冒作完整M6。
+
+用户既有定期清理授权下，仅五个已终态ciw2-install-skills/isolated-venv[-editable/-final/-final2/-fixed]经显式cfg/非根符号链接/无活跃exe检查，记录22/23/22/22/22包及重建方式后精确删除；install-env-cleanup-01.json与result01保留。原worker报告SHA/tarSHA重核不变，当前主环境、最新owner03、全部包/科学资料/截图/会话/未知WIP/旧中文根不碰。不能直接撤销但可保留包离线重装；du逻辑18+15+18+18+18M并非已实测物理节省，不虚报87MB释放。通知用户已清理临时测试环境，不重复索要Ego授权。
+
+f268b192a1975db1f8e5246b915bb3a7a243ca5b已push/fresh remote exact。当前production _analysis_merge两真实RED（两输入/两输出只缩短字符导致重复13调用；单条包同数微缩不停止）+显著压缩单条正向后，改中间finding_limit1且字节必须减少、同条数必须至少减半；保留完整输入/引用/已缓存单元，最终6条上限及8k预算不变。22相关PASS0.41s/Ruff；尚未宽门/新真实模型，不当终验。旧ec32运行/源/151批不热改/强停。
+
+方式direct实施+一个独立C03：小公共函数不值得另派writer；归并上下文/缓存续接是有实质不确定性的后果判断，需新鲜独立挑战。synthesis-convergence-frozen01/224files220immutablelinks/manifestc7e8a10b9fe5e50bea9221b802863bd9969fbf6eab774dbccfdd4a9d9096ad52；生成egg-info已排除，不直接在冻结目录打包。prompt删“ignore global”模板、补context/mainplan，初preflight误把行内read-only说明当路径拒绝，改成一行一文件后PASS，未在失败preflight时派发。单C03实际runner已启动，待终态核真实model/session/effort，初始化路线CodeBuddy/deepseek-v4.1-flash:max不冒作实际已完成；120min硬等不控制轮询、不扩全页会商。
+
+下一安全动作：保留本writer两未提交源/测试；准备只读旧缓存续接身份包，验证report/factID/来源/代码/模型/全部原始输入绑定，不将旧阶段改键为新接受，不调用重复真实模型；等独立终态后按root处理。旧模型终态只事件/真实依赖边界核，不新增固定轮询。当前预览12699/51687/Ego68p1保留，Goal active未暂停。
+
 ## 2026-10-24 当前：默认阅读密度完成，下一归并弱收敛
 
 6e29485e6c73d4be3a28fb4da9c9781d02c1d07c已push/fresh remote exact。此密度包选direct：明确实屏根因、共享宏由单owner修改，机械内容可达/几何/键盘可决定，无新临床等价判读，不再派全页会商。Kangzhe16px/配色沿用，非全站设计系统签收；源数据/图表决策/证据语义不改。初始3真实行为RED（长角色、长人群、重复/多行来源），唯一申请人正向PASS；短靶点测试夹具先缺mah_refs、再缺evidence_urls、后改生产workspace遗漏tier，均属测试脚手架错误不冒作产品RED。实际旧截图短靶点换行已证实；最终production fixture通过。首相关82PASS/1FAIL为DefaultText错误把details直接文本算可见，修测试可见性后83PASS1.02s。首次1549开发门，实际Ego02的真实37字条件仍默认展开，15图后FAIL保留；调整仅显示折叠长度并加入37字生产反例，最终1550PASS10.61s/Ruff全src-tests-scripts-setup/JS/192Python600-80过，1既有Starlette warning；Ruff import单空行格式修后不重复宽门。

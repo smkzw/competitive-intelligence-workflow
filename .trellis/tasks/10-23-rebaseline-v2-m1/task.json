@@ -21,10 +21,10 @@
   "children": [],
   "parent": null,
   "relatedFiles": [],
-  "notes": "Active rebaseline-v2 delivery. C/B reading roots and M2 CTR list/CDE acceptance tools implemented; current product20131812 pushed/remote exact,647 v2 tests. Preserve frozen R4 run49763 and source/model caches. Read v2 STATUS for remaining M1 publication chain, CDE review-by-ID/NMPA and goldens; no pause or full-product acceptance.",
+  "notes": "Paused by explicit user request 2026-10-24; not complete or RC. Product base f268b192 pushed; convergence WIP uncommitted, latest development gate1563. User approved ending old nonconvergent reducer; exact task processes stopped after verified SQLite/CAS preservation. 151 research batches,780 findings,300 cached stages retained. Resume only with new user authority; read rebaseline-v2/docs/PAUSE_HANDOFF_20261024_SYNTHESIS.md. No study-batch rerun, v1 cleanup or retired workspace access.",
   "meta": {
-    "workflow_state": "in_progress",
-    "pause_checkpoint": "PAUSE_HANDOFF_20261023_0810.md",
-    "goal_status": "active"
+    "workflow_state": "paused",
+    "pause_checkpoint": "rebaseline-v2/docs/PAUSE_HANDOFF_20261024_SYNTHESIS.md",
+    "goal_status": "paused"
   }
 }

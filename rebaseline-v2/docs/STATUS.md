@@ -1,20 +1,34 @@
 # STATUS
 
-**2026-10-24｜Goal active，连续实施｜M1–M6未全部完成，未交付**
+**2026-10-24｜用户明确无损暂停，Goal paused｜M1–M6未全部完成，未交付**
+
+最新唯一恢复入口：[暂停交接、全局进度与深度复盘](PAUSE_HANDOFF_20261024_SYNTHESIS.md)。暂停前产品HEAD为f268b192；本次仅提交记录，不接受/提交在途产品修复。暂停回执与完整本地代码/数据库/CAS备份位于ciw-data/pause-20261024-synthesis。恢复前须有用户新授权，不等待旧PID、不重跑151研究批。
 
 ## 当前入口
 
 - 唯一工程英文根中的rebaseline-v2；权威为01_PRD、02_ARCHITECTURE、03_PLAN、04_AGENT_RULES。本页替换更新；详细历史/失败/实际路由/回执均在根Trellis任务10-23-rebaseline-v2-m1/implement.md和对应Git。
 - 产品是单用户Web+9内嵌Skills；v1三宿主包、编辑/分享、24门户不是v2发布门。保留未知v1工作树与根HANDOFF既有20增/4删；旧中文根零接触，不reset/clean/add-all。
-- 分支codex/rebaseline-v2-m1；最新已push/fresh remote exact **6e29485e6c73d4be3a28fb4da9c9781d02c1d07c**，限定声明与安装资源已提交。以下新阅读密度包待提交，不假称已发布。
+- 分支codex/rebaseline-v2-m1；最新已push/fresh remote exact **f268b192a1975db1f8e5246b915bb3a7a243ca5b**，限定声明/安装及阅读密度已提交。摘要收敛修正仍在途，不假称已发布。
 - 研究模型cms-router/glm-5.3-flash→DGX/deepseek→DGX/qwen；凭据仅必要环境，不入文件/提示词/日志、不改全局路由。执行/会商按实时manifest和实际回执。
-- Ego专用空间替换/恢复已长期授权，不再问；当前 **68/p1**，p2官方来源，不改登录/缓存/其他任务空间/版本。预览12699/51687服务reading-density-live-03，无后台模型；旧94391/11185/63606已核精确命令后停止，不恢复旧预览。
+- Ego专用空间替换/恢复已长期授权，不再问；最近使用 **68/p1**，p2官方来源，不改登录/缓存/其他任务空间/版本。暂停已精确停止预览12699/51687；旧94391/11185/63606亦已停止。保留全部页面/截图，不把上次空间存在当下次已验证。
 
-## 当前：默认阅读密度根因（有界验证完成，待提交）
+## 暂停时未完成：摘要真实收敛
+
+- 初审CodeBuddy/deepseek-v4.1-flash/CLImax/session01a16ba9-4821-7820-a5f1-0e093acbbab1终态329.637s/14tools/no fallback，原SHAde7a5723…保持REVISE；Bash拒绝仅源码阅读，NOT_RUN测试/hash/DB。owner接受弱收敛/空层/引用不一致/检查点，取消缺失及碰撞等推断按真实源码与key映射纠正，不盲采信。
+- 再5实际RED+冻结01的2生产RED后，短引用运输/完整映射/basis digest恢复所有原ID，不截正文/条件/来源。8k/最终6条、包ceil(n/2) capped6、混合进展/硬12层、空/未知引用拒绝、层检查点/取消；摘要失败仍显示图表但run failed。owner追加4000长引用实际RED又捕获20k日志截断，现完整映射存既有DB检查点、日志仅短指针，备份格式不变。96相关/大映射备份恢复PASS1.41s，最新全v2 **1563PASS/10.28s**、Ruff全src/tests/scripts/setup/JS通过；stages534行/无>80函数，193Python规则保持。1既有TestClient警告，不据开发门接受归并/M1。
+- 冻结synthesis-convergence-frozen02/224files217immutablelinks，manifest566463f569e2447dec8195638f1eeb814557c18e55107c94c24af705290d5456；同session定向round2已终态REVISE，报告SHAc0066774…；宿主拒绝Bash，独立测试/DB/hash/浏览器NOT_RUN。空生产批假成功、拒绝层状态、引用颗粒度、多层不同引用/实际发布链及最终正文预算仍待解决；不因1563开发门假称已接受。
+- 最新synthesis-convergence-frozen03/224files219immutablelinks，manifestbceb04a7d426f4d27210081bfaca8257b857bd7ddbf40fee878e4450acb13baa，仅补大映射持久化/还原测试；02及其补审不改。transport-plan02真实原780/5212refs与完成108/3919的全部持久化映射、正文/引用还原通过，0新调用；旧plan01只有内存还原，日志截断局限保留不冒作持久化通过。
+- 原151批/780要点不动，不重键旧阶段、不启动重复研究。用户已批准停止旧ec32归并并要求暂停；实际Goal paused，完整M1–M6仍未验收。
+- r4-recovery-packet01已只读一致事务封存完整前5层及108条，manifestc49e0eaa…/层记录5aa64833…/findings58364fa0…；原151输出hash/原780输入/每包完整任务、原输出摘要及实际模型逐一绑定，实际这些旧归并采用Qwen3.8-Flash-Next（请求glm，授权备用），不能谎称GLM。新规则只离线规划108→53包/最大7922字符/完整输入引用并集，0新模型。仅PREPARED_NOT_EXECUTED_NOT_ACCEPTED，当前规则/源/fact资格、新run和旧运行终态仍是激活前提。
+- 当前隔离资格核3919引用全verified/0missing，46源6580facts586entities446links/46CAS/原151输出hash且科学表不改、0网络模型原写；这是输入资格而非医学接受。用户已答允许结束旧归并。10:32起先备份再精确SIGTERM子66386，父66380随之退出；不使用会导致旧脚本假成功的SIGINT。暂停后备份再核四表完全不变，300唯一成功缓存/303实际Qwen成功模型事件保留；原库running字段不改，以独立暂停回执为准，未保存当次答复可能不存在。恢复优先原780，不重跑151批。
+- 最新实际生产运输规划：原780有5212current refs→50包/最大7997字符/首层上限295；旧完成108→25包/7919/上限60，完整原文与引用逐项还原。0真实模型/来源，独立规划run明确cancelled/offline；非宣称已完成50调用或最终6条，receipt为r4-recovery-qualification01/transport-plan01。
+
+## 已提交：默认阅读密度根因（f268b192）
 
 - 共享身份主层保留MAH/研发，登记申请人/申办方在已有更直接角色时折叠到其他企业；唯一申请人不隐藏、不改MAH。长登记人群逐字折叠，不借项目标签；C来源行内具字段级可访问名称，重复年龄入口删除，短靶点一行，16px字号不变。相关83PASS后实屏发现真实37字人群未折叠，修显示阈值/加实际反例；当前全v2 **1550PASS/10.61s**，Ruff全src/tests/scripts/setup、JS、192Python600/80过，1既有TestClient警告。Ruff末次仅修测试import空行，不重复全套。
 - reading-density-frozen-03：223文件/218旧不可变硬链接，manifest **4f7bd69e2e3e66ad645f22a3195d6a6a7103e08dcd808c7a02ae9405e38704ce**；全部清单字节可核。isolated live03与development-current02原19源625实体510事实478关系/当前指针相同，0网络/模型/重核；A a299a9df…/B d3c5e9f5…/C cf629e88…真实HTTP逐字等于保存页。
-- Ego54334终态16图全部实看，四宽A短靶点/C未筛与筛后、身份窗/行内来源/完整原文/长人群展开；12身份事实和完整入排SHAf9fc9ef5…保留，Enter/Esc回实际入口、无页面溢出。真实目标研究行高1440/1600从276.88→252.48、1920/2560从268.48→230.09，减少8.81%–14.30%，非整页比例。A仅一已知阶段仍低信息整行、C小样本列引用在1440/1600换行，完整美学/当前B/M1–M6仍不接受。本UI后的安装包尚未重建，不借上包签收新模板。
+- Ego54334终态16图全部实看，四宽A短靶点/C未筛与筛后、身份窗/行内来源/完整原文/长人群展开；12身份事实和完整入排SHAf9fc9ef5…保留，Enter/Esc回实际入口、无页面溢出。真实目标研究行高1440/1600从276.88→252.48、1920/2560从268.48→230.09，减少8.81%–14.30%，非整页比例。A仅一已知阶段仍低信息整行、C小样本列引用在1440/1600换行，完整美学/当前B/M1–M6仍不接受。
+- 最新UI安装资源install-owner03从独立复制223文件构建，未在冻结目录执行；offline sdist→wheel→freshvenv、/tmp的-I、9Skill/16资产/全部模块同字节通过，且构建后原223清单仍完全相同。wheel7a131392…/sdist36442a48…绑定已提交UI，**不包含在途reducer**，不是新归并/完整M6接受。五个已终态worker测试venv经cfg/路径/进程与包版本清单核对后删除，原报告/tar/包/hash/主环境/资料/会话均保留；不能直接撤销删除，可离线重装，不虚报87MB实际释放（uv共享硬链接未测物理差额）。
 - 原新冻01因构建元数据摘要不符拒绝，失败现场保留；查明uv打包在旧development-frozen02重写唯一生成文件src/ciw2.egg-info/SOURCES.txt（ec4ad219…→8f59d7df…），没有产品源码/原始源/科学事实变化，其他旧清单无同inode共享。旧manifest/hash/回执不改，不能再宣称旧228文件全量当前匹配。新冻结排除egg-info；以后打包使用独立复制目录，不在冻结目录直接运行构建。02浏览器15有效截图后因真实长人群仍展开FAIL保留，03当前16图独立核，不拼PASS。
 
 ## 已提交：限定阶段记录与普通安装（6e29485e）
