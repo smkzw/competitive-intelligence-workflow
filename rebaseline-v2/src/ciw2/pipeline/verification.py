@@ -46,7 +46,7 @@ def prepare(rc: RunContext, cross_check: Callable[..., Any]) -> list[dict[str, A
             if existing:
                 row = _stored(existing)
                 receipt = receipts.get(fid)
-                if (receipt is not None and assessment.receipt_matches(receipt, row)
+                if (receipt is not None and assessment.receipt_matches(receipt, row,db=rc.db)
                         and receipt['verdict'] not in RETRYABLE):
                     prepared.append({'id': fid, 'replay': True, 'status': receipt['status'], 'rule': rule})
                     continue
@@ -135,15 +135,17 @@ def _append(rc: RunContext, receipt: dict[str, Any], rule: str,
             latest: dict[str, dict[str, Any]]) -> bool:
     if receipt.get('rule') != rule or assessment.same_receipt(latest.get(receipt['fact_id']), receipt):
         return False
+    row=rc.db.one('SELECT * FROM facts WHERE id=? AND project_id=?',(receipt['fact_id'],rc.project_id))
+    if row is None or not assessment.receipt_matches(receipt,_stored(row),db=rc.db):return False
     rc.db.log_step(rc.run_id, rc.stage or 'verify', 'verify', 0, assessment.ROLE, receipt)
     latest[receipt['fact_id']] = receipt
     return True
 
 
-def _replayed(row: dict[str, Any], receipts: dict[str, dict[str, Any]]) -> str:
+def _replayed(row: dict[str, Any], receipts: dict[str, dict[str, Any]],db: Any) -> str:
     """并发/竞态兜底：已有事实只读，不能凭本轮提案回执认证。"""
     receipt = receipts.get(row['id'])
-    if receipt is not None and assessment.receipt_matches(receipt, row):
+    if receipt is not None and assessment.receipt_matches(receipt, row,db=db):
         return receipt['status']
     return 'unverified' if row['status'] == 'verified' else row['status']
 
@@ -166,12 +168,13 @@ def adopt(rc: RunContext, entity_for: Callable[..., str], cross_check: Callable[
                 if item.get('receipt') and _append(rc, item['receipt'], rule, receipts):
                     reassessed += 1
                 replayed += 1
-                stats[item['status']] += 1
+                row=rc.db.one('SELECT * FROM facts WHERE id=?',(item['id'],))
+                stats[_replayed(_stored(row),receipts,rc.db)] += 1
                 continue
             existing = rc.db.one('SELECT * FROM facts WHERE id=?', (item['id'],))
             if existing:
                 replayed += 1
-                stats[_replayed(_stored(existing), receipts)] += 1
+                stats[_replayed(_stored(existing), receipts,rc.db)] += 1
                 continue
             fact = item['proposal']
             try:
@@ -195,6 +198,10 @@ def adopt(rc: RunContext, entity_for: Callable[..., str], cross_check: Callable[
                     reason, supersedes = 'revision_context_mismatch', None
                 if status != 'verified':
                     supersedes = None
+            if status=='verified' and fact['field'] in {'identity.target','identity.modality'}:
+                from ciw2.domain.profile_evidence import brand_basis
+                if (item.get('assessment') or {}).get('identity_basis')!=brand_basis(rc.db,rc.project_id,entity):
+                    status,reason,supersedes='unverified','身份来源已变化，待重新核验',None
             stats[status] += 1
             if reason:
                 reasons[reason] = reasons.get(reason, 0) + 1

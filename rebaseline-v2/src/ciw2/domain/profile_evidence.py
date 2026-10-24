@@ -5,6 +5,8 @@ name/date co-occurrence is not treated as a relationship or jurisdiction proof.
 """
 from __future__ import annotations
 
+import hashlib
+import json
 import re
 from datetime import date, datetime
 from typing import Any
@@ -14,7 +16,11 @@ from ciw2.domain.identity import name_key
 FIELDS=('identity.target','identity.modality','identity.developer','identity.rights_holder',
         'status.china_mah_group','status.china.development','status.global.development')
 SOURCE_CONTEXT=('legal_entity','relationship','as_of','jurisdiction','indication')
-_NEGATED=re.compile(r'\b(?:not|never|neither|no longer|without)\b|并非|並非|不是|不属于|不屬於|尚未|未获|未獲|不在',re.IGNORECASE)
+TRADE_FIELDS=('identity.trade_name_zh','identity.trade_name_en')
+NAME_FIELDS=('identity.name_zh','identity.name_en')
+_NEGATED=re.compile(r'\b(?:not|never|neither|no longer|without)\b|并非|並非|不是|不属于|不屬於|尚未|未获|未獲|不在'
+    r'|尚无|尚無|并无|並無|没有|沒有|未见|未見|未发现|未發現'
+    r'|[无無][^。；;，]{0,80}(?:证据|證據|记录|紀錄|报道|報道|获批|獲批|上市)',re.IGNORECASE)
 
 
 def contains(quote: str,value: str) -> bool:
@@ -24,10 +30,53 @@ def contains(quote: str,value: str) -> bool:
 def drug_names(db: Any,pid: str,eid: str) -> list[str]:
     entity=next((d for d in db.entities(pid,'drug') if d['id']==eid),None)
     if entity is None:return []
+    return [entity['name'],*(f['value'] for f in _name_rows(db,pid,eid))]
+
+
+def _name_rows(db: Any,pid: str,eid: str) -> list[dict[str,Any]]:
+    """Resolve only name fields, without recursively projecting target/modality facts."""
+    from ciw2.verify import assessment
     sources={row['id'] for row in db.query('SELECT id FROM sources WHERE project_id=?',(pid,))}
-    return [entity['name'],*(f['value'] for f in db.current_facts(pid,eid)
-        if f['field'] in {'identity.name_zh','identity.name_en'} and f['status']=='verified'
-        and f['source_id'] in sources and isinstance(f['value'],str) and f['value'].strip() and f['quote'])]
+    receipts=db.latest_verdicts(pid)
+    rows=[]
+    for fact in db.raw_current_facts(pid,eid,fields=NAME_FIELDS):
+        if (fact['status']!='verified' or fact['source_id'] not in sources or not fact['quote']
+                or not isinstance(fact['value'],str) or not fact['value'].strip()):continue
+        if str(fact['extracted_by']).startswith('llm:'):
+            receipt=receipts.get(fact['id'])
+            if not assessment.receipt_matches(receipt,fact,db=db) or receipt['status']!='verified':continue
+        rows.append(fact)
+    return rows
+
+
+def _brand_rows(db: Any,pid: str) -> list[dict[str,Any]]:
+    sources={s['id'] for s in db.query("SELECT id FROM sources WHERE project_id=? AND kind='nmpa'",(pid,))}
+    return [f for f in db.raw_current_facts(pid,fields=TRADE_FIELDS)
+        if f['extracted_by']=='code:nmpa' and f['status']=='verified' and f['source_id'] in sources
+        and f['quote'] and isinstance(f['value'],str) and f['value'].strip()
+        and f['context'].get('role')=='registered_trade_name']
+
+
+def brand_basis(db: Any,pid: str,eid: str) -> dict[str,Any]:
+    """Bind receipts to actual current identity evidence, including conflicting owners."""
+    rows=_brand_rows(db,pid)
+    own={name_key(r['value']) for r in rows if r['entity_id']==eid}
+    rows=[r for r in rows if any(name_key(r['value']).startswith(key) for key in own)]
+    rows.extend(_name_rows(db,pid,eid))
+    basis=[{key:r[key] for key in ('id','entity_id','source_id','value','quote','context')}
+        for r in sorted(rows,key=lambda r:r['id'])]
+    entity=next((d['name'] for d in db.entities(pid,'drug') if d['id']==eid),None)
+    payload={'entity_name':entity,'facts':basis}
+    return {'digest':hashlib.sha256(json.dumps(payload,sort_keys=True,ensure_ascii=False).encode()).hexdigest(),
+            'fact_ids':[r['id'] for r in basis]}
+
+
+def registered_brands(db: Any,pid: str,eid: str) -> list[str]:
+    """Only current official trade names; discovery aliases and shared brands cannot bind."""
+    rows=_brand_rows(db,pid)
+    owners: dict[str,set[str]]={}
+    for row in rows:owners.setdefault(name_key(row['value']),set()).add(row['entity_id'])
+    return sorted({r['value'] for r in rows if r['entity_id']==eid and owners[name_key(r['value'])]=={eid}})
 
 
 def holder_role(context: dict[str,Any]) -> str:
@@ -89,15 +138,45 @@ def _ownership(text: str,parent: str,child: str,relation: str) -> bool:
     return any(re.search(pattern,text) for pattern in patterns)
 
 
-def _property(text: str,names: list[str],value: str,field: str) -> bool:
+def _property(text: str,names: list[str],value: str,field: str,brands: list[str],others: list[str]) -> bool:
+    if field=='identity.developer':return _development(text,names,value)
     if field not in {'identity.target','identity.modality'}:return True
     value=re.escape(name_key(value));text=name_key(text)
     for name in names:
         subject=re.escape(name_key(name))
         if field=='identity.target':
             predicate=r'\s*(?:targets?\s+|binds\s+|has (?:the )?target (?:of )?|靶向|特异性靶向|作用于|的靶点为)\s*'
+            antibody=(r'\s+is (?:a |an |the )?(?:fully human |humanized |human |recombinant )?'
+                      r'(?:monoclonal |bispecific )?antibody(?: drug)? (?:targeting|directed against)\s+')
+            if re.search(subject+antibody+value,text):return True
         else:predicate=r'\s*(?:is (?:a |an |the )?|是(?:一种|一款)?|为(?:一种|一款)?)\s*'
         if re.search(subject+predicate+value,text):return True
+    # A literal drug-class noun apposition is not merely a value elsewhere in a sentence.
+    # Only registered, unambiguous trade names may use this form; no stripped dosage-form aliases.
+    kind=value+(r'抗体药物' if field=='identity.target' else r'药物')
+    for brand in brands:
+        subject=r'(?P<brand>'+re.escape(name_key(brand))+r')(?![a-z0-9])'
+        patterns=(r'(?<![a-z0-9/+-])(?P<kind>'+kind+r')\s*'+subject,
+                  r'^作为[^。；;，]{0,80}(?P<kind>'+kind+r')，\s*'+subject)
+        for pattern in patterns:
+            for match in re.finditer(pattern,text):
+                if any(name_key(other).startswith(name_key(brand)) and len(name_key(other))>len(name_key(brand))
+                       and text.startswith(name_key(other),match.start('brand')) for other in others):continue
+                if not re.search(r'(?:非|non[- ]?)\s*$',text[:match.start('kind')]):return True
+    return False
+
+
+def _development(text: str,names: list[str],company: str) -> bool:
+    """Require a development relation, not a product's manufacturer, holder or marketer."""
+    owner=re.escape(name_key(company));text=name_key(text)
+    for name in names:
+        drug=re.escape(name_key(name))
+        patterns=(owner+r'\s+(?:developed|develops|co-developed)\s+(?:the\s+)?'+drug,
+            drug+r'\s+(?:(?:is|was)\s+)?(?:developed|co-developed)\s+by\s+'+owner,
+            owner+r'(?:宣布[，,:：]\s*(?:本)?公司)?\s*(?:自主|独立|独立自主|联合)?研发的?'
+            r'[^。；;，,\n]{0,80}'+drug,
+            drug+r'\s*(?:由|为|是)\s*'+owner+r'\s*(?:自主|独立|联合)?研发')
+        if any(re.search(pattern,text) for pattern in patterns):return True
     return False
 
 
@@ -128,8 +207,13 @@ def issue(db: Any,pid: str,eid: str,field: str,value: Any,quote: str,context: di
                 and not _NEGATED.search(text) and _ownership(text,value,legal,relation)]
         if not holder or not claims:return '原文未明确绑定该持有人与集团的控制关系'
     else:
+        brands=registered_brands(db,pid,eid) if field in {'identity.target','identity.modality'} else []
+        others=[r['value'] for r in _brand_rows(db,pid) if r['entity_id']!=eid] if brands else []
         claims=[text for text in _claims(quote) if contains(text,value) and any(contains(text,name) for name in names)
-                and not _NEGATED.search(text) and _property(text,names,value,field)]
+                and not _NEGATED.search(text) and _property(text,names,value,field,brands,others)]
+        claims.extend(text for text in _claims(quote) if contains(text,value)
+            and any(contains(text,brand) for brand in brands) and not _NEGATED.search(text)
+            and _property(text,[],value,field,brands,others) and text not in claims)
         if not claims:claims=_deictic(quote,names,value,field)
         if not claims:return '原文未支持该药物的身份值'
     if field=='identity.rights_holder' and not any(re.search(r'权益|许可|授权|独家|rights|licen[cs]',c,re.IGNORECASE) for c in claims):

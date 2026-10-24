@@ -1,5 +1,7 @@
 """Smoke-driver metadata only; no source/model/clinical acceptance."""
+import importlib.util
 import json
+from pathlib import Path
 
 from test_drug_enrichment import setup
 
@@ -8,7 +10,9 @@ from ciw2.service import Service
 
 
 def test_selected_unit_smoke_does_not_leave_a_queued_or_successful_full_research_run(settings,tmp_path,monkeypatch):
-    import scripts.smoke_drug_profile as smoke
+    path=Path(__file__).resolve().parents[1]/'scripts/smoke_drug_profile.py'
+    spec=importlib.util.spec_from_file_location('_profile_smoke_metadata',path)
+    smoke=importlib.util.module_from_spec(spec);spec.loader.exec_module(smoke)
     original,_,_=setup(settings)
     output=tmp_path/'smoke-output'
     monkeypatch.setattr(smoke,'Service',lambda s:Service(s,llm_factory=lambda _:(ScriptedLLM([]),None)))

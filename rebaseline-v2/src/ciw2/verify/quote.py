@@ -59,7 +59,8 @@ def _numbers(value: object) -> list[str]:
         for v in value:
             out += _numbers(v)
         return out
-    return re.findall(_NUMERIC_TOKEN, normalize(str(value)))
+    text=normalize(str(value))
+    return [match[0] for match in re.finditer(_NUMBER,text) if _numeric_suffix(text,match.end())]
 
 
 def _identifier(value: object) -> bool:

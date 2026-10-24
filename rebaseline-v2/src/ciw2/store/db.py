@@ -339,7 +339,8 @@ class DB:
         )
         return fid
 
-    def raw_current_facts(self, project_id: str, entity_id: str | None = None) -> list[dict[str, Any]]:
+    def raw_current_facts(self, project_id: str, entity_id: str | None = None, *,
+                          fields: tuple[str,...] | None = None) -> list[dict[str, Any]]:
         """当前集合的历史/成员资格投影：不含现行裁决，供离线复核扫描。"""
         from ciw2.sources.nmpa_ingest import EXTRACTOR_VERSION
         sql = ("SELECT * FROM facts f WHERE project_id=? AND NOT EXISTS "
@@ -363,6 +364,10 @@ class DB:
         if entity_id:
             sql += " AND entity_id=?"
             params.append(entity_id)
+        if fields is not None:
+            if not fields:return []
+            sql+=' AND f.field IN ('+','.join('?' for _ in fields)+')'
+            params.extend(fields)
         rows = self.query(sql + " ORDER BY entity_id, field", params)
         for r in rows:
             r["value"] = json.loads(r["value"])
@@ -405,7 +410,7 @@ class DB:
             if not str(r.get('extracted_by') or '').startswith('llm:'):
                 continue
             receipt = verdicts.get(r['id'])
-            if receipt is not None and assessment.receipt_matches(receipt, r):
+            if receipt is not None and assessment.receipt_matches(receipt, r,db=self):
                 r['status'] = receipt['status']
                 r['verdict'] = receipt['verdict']
                 r['verdict_rule'] = rule

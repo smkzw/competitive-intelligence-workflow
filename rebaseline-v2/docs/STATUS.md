@@ -6,11 +6,26 @@
 
 - 唯一工程英文根中的rebaseline-v2；权威为01_PRD、02_ARCHITECTURE、03_PLAN、04_AGENT_RULES。本页替换更新；详细历史/失败/实际路由/回执均在根Trellis任务10-23-rebaseline-v2-m1/implement.md和对应Git。
 - 产品是单用户Web+9内嵌Skills；v1三宿主包、编辑/分享、24门户不是v2发布门。保留未知v1工作树与根HANDOFF既有20增/4删；旧中文根零接触，不reset/clean/add-all。
-- 分支codex/rebaseline-v2-m1，最近已push **cc440ae38b2bcac37c23d3ca9a0ec9582fbc1178**、fresh remote exact；本节点提交以Git为准。
+- 分支codex/rebaseline-v2-m1，本节点以本页所在Git提交及下列候选hash为准；前一已核远端提交 **0a5ef33dbb0b580da55da3b78ee92b950f8a1c08**。本节点是开发候选，不假称已发布。
 - 研究模型cms-router/glm-5.3-flash→DGX/deepseek→DGX/qwen；凭据仅必要环境，不入文件/提示词/日志、不改全局路由。执行/会商按实时manifest和实际回执。
-- Ego专用空间替换/恢复已长期授权，不再问；复用63/p1，不改登录/缓存/其他任务空间/浏览器版本。当前预览93062/54522仅服务已验M3候选，不启动研究。
+- Ego专用空间替换/恢复已长期授权，不再问；旧63消失后已自行建立替代 **68/p1**，p2复用为官方来源阅读，不改登录/缓存/其他任务空间/版本。当前预览47620/49959服务冻结品牌02、不启动研究；旧93062/21383已精确停止。
 
-## 当前：普通PDF原文来源接通（技术组件）
+## 进行中：来源注册商品名与核验依赖
+
+- 原NMPA表的商品名现确定性采用为独立事实，保留逐格引文/定位；不更改捕获parser/原件、不按药名后缀猜别名。只有唯一产品归属的当前证书商品名支持明确抗体类型同位语；另一药物、否定、重名/发现别名不借用。
+- 原初始/竞态反例后，独立D1–D4的9生产反例全部RED再集中修复；205相关/69依赖及新增类型-研发角色根因5RED后，当前231相关PASS/2.04s。完整v2 **1474PASS/9.60s**/Ruff/600-80通过（1既有TestClient警告）。曾有1452PASS/1FAIL是测试脚本加载依赖启动方式，已改显式加载、业务断言未删；不据开发门接受全医学。
+- registered-brand-frozen-01：220文件/212不可变硬链接，manifest20d441b3259ccb29a411e108c986f993601fc9351fba7af4409c4f2d8e5d7aae。原profile-live-03复制到registered-brand-live-01，复用同7提案/同固定源，9新NMPA历史事实、0模型/网络；目标恢复为有来源的IL-4Rα、研发方保留，2verified/5未核实，重试0 reassessed；旧事实/原始提案/源不改，原stored unverified不升格。
+- 原独立7162终态：实际CodeBuddy/codebuddy-cli/deepseek-v4.1-flash/requested max/session01a16b36-b8e2-7509-9b11-91ab240cdb08，594.283s/70tools/return0/no fallback；原报告SHAa20f2471…结论REVISE保留。宿主拒绝其Bash，实际为源码/原件阅读，未执行pytest/SQLite/hash；owner独立运行反例，不冒作模型实测。
+- D1正式名/实体原名依赖、D2不存在否定、D3已注册较长品牌按实际位置/后续变化失效、D4离线事务提交/计数均已修复；不用全汉字禁配或裸“无”正则。frozen02 manifestf83b9c330d565aa14995d6d939d2cbccfce6169616df923a0f1c494dd66b003e/222文件/211不可变链接；同原7提案再核2verified5未核实、2reassessed→retry0，原18源625实体469事实保留+9新规则事实，0网络/模型。
+- registered-brand-live-02/owner-evidence.json绑定新名称依据3事实、实际HTTP逐字ABC、9图逐张实看（A四宽/来源窗、C身份），Enter/Esc及列宽不变。ABC与01仅不可变事实ID变化；不是B真实结果/完整视觉医学接受。独立同session针对D1–D4及新数值/研发根因的follow-up **10080待终态**，不重派/不计PASS；预检ok两项标签警告但完整边界在prompt中。
+
+## 并行有界节点：官方监管公告的普通档案抽取
+
+- 复用原smoke_company_documents的普通fetch_url，加显式--kind/--allow-html，不新建来源平台。1离线CLI根因RED→14相关PASS；保留默认PDF检查，HTML没有页码、不虚填发布日期。regulator-document-live-01实际1网络+1同run缓存、0模型/0事实；src_7a26771fc93a，raw1391851ce40ee16e90c93130ab959753056f3ec8c51409c8fb34fed9cf5042d1/text eb7bf874be5ff33c73e5e18e2bde49d3cee55d6c8dc70ed2501f706f32ec0639。初次回执first_last_pages_read沿旧PDF标签为true，事实为HTML首尾文本，不算PDF页验证；后续改为明确格式/文本读取标记，不重写旧回执。
+- regulator-profile-frozen-01：221文件/219不可变硬链接，manifest7bba9f913a8dc0fd00b9b017f7daa04452e2f18e1a37c6eb4aeec0ab315cc36a。17060已终态，3实际glm-5.3-flash调用/无fallback，run_805a262618cb；5提案旧规则1verified4未核实，重放5/0reassessed，160其他候选未运行。owner追原文发现该1项为“of Company”误认证研发；新根因已拦截，原结果保留不是科学PASS。类型短语中的IL-4Rα被当-4、自然is-a targeting未支持、拼接状态/日期亦保持未核实；5RED/3positive后共同规则及Skill集中纠偏，不按原计数交付。
+- 25666正以frozen02、新副本regulator-profile-live-02执行同一药物/官方公告的正常新Skill单元，未见终态；不是重写原5提案或强行升级旧未核实。Updated日期不当获批日，也不据2025公告声称2026最新阶段。原归并52075不变。
+
+## 已提交：普通PDF原文来源接通（0a5ef33d，技术组件）
 
 - 普通fetch_url复用原生pdftotext读取文本PDF，返回source_id、完整正文分页及页码Unicode范围。原件/正文/解析器分别形成不可变来源表示；失败保留原件和具体问题，不回传二进制伪正文/空结果，不自动安装或OCR。
 - 执行76255已终态：实际CodeBuddy/codebuddy-cli/deepseek-v4.1-flash/requested max/session01a16b1f-d6fc-77fa-b058-6151a050fc50，209.695s/27tools/return0/no fallback，仅2新文件。原文件/报告封存；worker28检查=27假进程边界+1真实合成PDF。未先RED已披露，不把事后突变测试冒作TDD。

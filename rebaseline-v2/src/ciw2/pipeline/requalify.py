@@ -44,7 +44,13 @@ def requalify_project(db: DB, cas: CAS, project_id: str, *, dry_run: bool = Fals
     if not dry_run:
         with db.tx(immediate=True):
             latest=db.latest_verdicts(project_id,rule)
+            current={row['id']:row for row in db.raw_current_facts(project_id)}
             for receipt in prepared:
+                row=current.get(receipt['fact_id'])
+                if row is None or not assessment.receipt_matches(receipt,row,db=db):
+                    counts[receipt['verdict']]-=1
+                    counts['errors']+=1
+                    continue
                 if assessment.same_receipt(latest.get(receipt['fact_id']),receipt):
                     counts['skipped']+=1
                     continue

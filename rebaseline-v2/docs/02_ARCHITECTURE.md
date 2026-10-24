@@ -48,6 +48,8 @@ Service复用标准库Condition/deque及一个执行锁，在同一服务进程�
 - `projects` `runs` `stages` `agent_steps`：运行与留痕。
 - `sources`：按项目/来源类型/URL/原始字节digest/正文text_digest/解析器text_parser_id复用不可变来源表示，保留首次存储时间。原件相同但正文或解析器改变时追加来源版本，不覆盖旧源/事实。每次网络核查、缓存复用、导入另在agent_steps记录source_observation；只有network_checked含network_checked_at及实际HTTP状态。**抽取只能引用本项目已读取的来源**。
 - 文本PDF由既有原生pdftotext读取，CAS同时保存原件和未经重排的完整UTF-8 layout文本；meta.pages是1起页码及0起Unicode字符范围，meta.text_parser_id绑定二进制版本/解析实现/选项。普通fetch_url按固定source_id分页，失败原件保留、text_digest为空且独立source_parse问题；不能回传二进制伪正文/空结果。相同原件/规则复用解析仍须分别记录本次网络核查；同run读取缓存不伪装新HTTP。模型工作单元恢复也检查PDF解析器身份/CAS，不复用过时表示的解释；旧冻结运行不热升级。页码/获取时间不构成历史公开资格，论文科学内容和扫描件OCR另验。
+- 原证书全部字段已捕获时，正式商品名采用只扩展nmpa_ingest的采用规则与新snapshot，不重取浏览器原件或改来源parser版本。identity.trade_name_zh/en保留逐格引文/JSON定位，不进入全局发现别名。profile_evidence只使用当前code:nmpa来源、唯一产品归属的商品名识别明确抗体类型同位语；常规措辞未支持仍保留待核。目标/类型fact_verdict的identity_basis含名称事实ID与完整依据摘要；DB当前读取、普通重放、离线复核与提交内复验一致检查，依赖变更不能借旧receipt认证，不新建关系库/审批平台。
+- 名称依据同时含当前有效正式名称事实/实体原名及相关较长品牌的所有者，取名称字段时不递归投影目标事实。中文前缀碰撞按当前位置的已注册长品牌判别，保留合法中文后缀；不存在/未发现等否定不建立类型事实。requalify在写事务内核对当前成员/依据，失效项保留待核错误、不追加旧已确认回执或假计数。普通英文is-a抗体targeting形式与明确研发谓词共用profile_evidence，完整类型描述里的科学标识沿用同一数值边界。
 - `entities`（drug/company/trial/target，含别名、发现路线、纳排）+ `links`（drug-trial / drug-company / drug-target）。
 - `domain/identity.py`只做大小写/空白形式归一及字面名称/已知别名匹配，保留标点，不推断药学等同。scope、trial_evidence和verify复用；scope缓存绑定该规则源码hash。明确且唯一的试验关联用drug-trial；宽检索/共享别名保留drug-trial-candidate（pending及原干预名），沿用links不增表。后来字面关系确认时保留候选记录并标resolved_literal_match；不是自动解决剂型/组合药学语义。
 - 共同research_aliases仅复用既有精确placebo/安慰剂排除；原otherNames仍在来源和研究元数据中，旧存量别名只在采用/身份/查询读取层过滤，AB-1与AB1不合并。检索候选和已确认科学身份不同。

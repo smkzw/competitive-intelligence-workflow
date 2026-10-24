@@ -29,6 +29,9 @@ EXTRACTOR_VERSION=hashlib.sha256(b''.join(Path(module.__file__).read_bytes() for
 CURRENT='nmpa-current'
 ROLES=(('identity.name_zh','drug_name','registered_product_name_zh'),
        ('identity.name_en','drug_name_en','registered_product_name_en'))
+TRADE_LABELS={nmpa_capture.DOMESTIC:(('identity.trade_name_zh','商品名'),),
+    nmpa_capture.FOREIGN:(('identity.trade_name_zh','商品名（中文）'),
+                         ('identity.trade_name_en','商品名（英文）'))}
 
 
 def _require(ctx: ToolContext) -> None:
@@ -161,9 +164,11 @@ def _context(parsed: dict[str,Any], snapshot: str, role: str, path: str) -> dict
 def _fact(parsed: dict[str,Any], snapshot: str, field: str, value: str, role: str,
           key: str) -> dict[str,Any]:
     labels=nmpa_capture.FIELDS[parsed['category']]
-    label=labels[key]
+    label=labels.get(key,key)
     raw=parsed['raw_fields'].get(label)
     path=parsed['field_locators'].get(key)
+    if path is None and label in parsed['raw_fields']:
+        path=f'$.rows[{list(parsed["raw_fields"]).index(label)}][1]'
     if not isinstance(raw,str) or not raw or not isinstance(path,str) or not path:
         raise ValueError('NMPA许可字段缺少原值或定位')
     quote=label+'\t'+raw
@@ -181,6 +186,10 @@ def _facts(parsed: dict[str,Any], snapshot: str) -> list[dict[str,Any]]:
         value=parsed.get(key)
         if value:
             facts.append(_fact(parsed,snapshot,field,value,role,key))
+    for field,label in TRADE_LABELS[parsed['category']]:
+        value=nmpa_capture._value(parsed['raw_fields'],label)
+        if value:
+            facts.append(_fact(parsed,snapshot,field,value,'registered_trade_name',label))
     if parsed['holder_name_zh'] is not None:
         holder='holder_name_zh'
     elif parsed['holder_name_en'] is not None:

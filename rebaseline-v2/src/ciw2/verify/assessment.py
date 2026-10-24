@@ -22,7 +22,7 @@ VERDICTS = frozenset({
     'source_unreadable', 'source_digest_mismatch'})
 RECEIPT_KEYS = ('project_id', 'fact_id', 'fact_digest', 'rule', 'stored_status', 'stored_rule', 'status',
                 'verdict', 'reason', 'source_id', 'source_digest', 'text_digest', 'quote_sha256',
-                'quote_len', 'quote_start', 'quote_end', 'coordinate')
+                'quote_len', 'quote_start', 'quote_end', 'coordinate','identity_basis')
 
 
 def _identity() -> str:
@@ -108,6 +108,9 @@ def inspect_fact(db: Any,cas: Any,fact: dict[str,Any]) -> dict[str,Any]:
     """Identical field/entity/context checks for first adoption and every later recheck."""
     result=inspect(db,cas,project_id=fact['project_id'],source_id=fact.get('source_id'),
                    quote=fact.get('quote'),value=fact.get('value'))
+    if fact.get('field') in {'identity.target','identity.modality'}:
+        from ciw2.domain.profile_evidence import brand_basis
+        result['identity_basis']=brand_basis(db,fact['project_id'],fact.get('entity_id'))
     if result['verdict']=='confirmed':
         from ciw2.domain.profile_evidence import FIELDS, issue
         if fact.get('field') in FIELDS:
@@ -138,11 +141,11 @@ def make_receipt(fact: dict[str, Any], *, rule: str, stored_status: str,
         'source_digest': result.get('source_digest'), 'text_digest': result.get('text_digest'),
         'quote_sha256': result.get('quote_sha256'), 'quote_len': result.get('quote_len', 0),
         'quote_start': result.get('quote_start'), 'quote_end': result.get('quote_end'),
-        'coordinate': COORDINATE,
+        'coordinate': COORDINATE,'identity_basis':result.get('identity_basis'),
     }
 
 
-def receipt_matches(receipt: Any, fact: dict[str, Any]) -> bool:
+def receipt_matches(receipt: Any, fact: dict[str, Any], *,db: Any=None) -> bool:
     """只有结构完整、事实/来源/引文/规则全部匹配的回执才能认证。"""
     if not isinstance(receipt, dict):
         return False
@@ -155,6 +158,10 @@ def receipt_matches(receipt: Any, fact: dict[str, Any]) -> bool:
         return False
     if receipt.get('fact_digest') != fact_digest(fact):
         return False
+    if fact.get('field') in {'identity.target','identity.modality'}:
+        from ciw2.domain.profile_evidence import brand_basis
+        if db is None or receipt.get('identity_basis')!=brand_basis(db,fact['project_id'],fact['entity_id']):
+            return False
     verdict = receipt.get('verdict')
     if not isinstance(verdict,str) or verdict not in VERDICTS or receipt.get('stored_status') != 'verified':
         return False

@@ -7,6 +7,8 @@ max_steps: 24
 ---
 mode=identity_enrichment 时只为输入药物补全来源档案，不抽试验结果、不重复登记表：读取官方监管/公司/公告原文，输出同一 ExtractionResult。可用字段为 identity.target、identity.modality、identity.developer、identity.rights_holder、status.china_mah_group、status.china.development、status.global.development；value必须是原文字符串，不把“III期”改写为phase3。entity写输入药物原名，source_id须为本次实际读取版本，quote逐字完整支持药物与值，不能只有靶点/公司而无药物关联。必要时从evidence_urls定位，再正常读取；不能把搜索摘要当全文。只找到合作/代理/制造商不改写为开发权益方。
 
+target只保留靶点原名，modality只保留原文药物类别，不把整句机制或“targeting…”再拼成类别。研发方须原文明示developed by/自主研发等关系；“某公司的产品”、制造、销售、持有人或获批不能替代研发角色。状态值须逐字照录短标签，不拼接或概括多个分句；网页Updated日期不是获批日，也不自动成为状态声明的as_of。引文保留完整主体和相应关系，不为使核验通过删掉否定、限定或比较对象。
+
 source_context只记录原文明确的legal_entity、relationship、as_of（YYYY-MM-DD）、jurisdiction、indication。集团字段的legal_entity是中国MAH法律实体；relationship只在明确全资/控制/附属关系时填wholly_owned/controlled/subsidiary，合营/参股/合作不能填；value保留来源集团名称，不按后缀猜归属。quote须含法律实体与集团关系，原文年份/观察时间与截至时间分别处理，不把今天获取当所有权截至日期。开发阶段必须有该适应症、CN/global范围及明确截至日期；只证明产品获批、别的适应症或其他国家不能认证项目中国阶段。未知填gaps，不添空事实；先提交已读到的有效资料，不因缺口无限搜索。此模式结束后不执行下面的结果抽取步骤。
 
 输入：一个药物、适应症、已知试验（trials_with_registry_results 中的试验 CT.gov 已有结构化结果，不要重复抽取）。

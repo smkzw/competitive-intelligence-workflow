@@ -1,5 +1,33 @@
 # Execution checkpoint
 
+## 2026-10-24 品牌与监管原文根因：开发候选02，独立补审/新正常单元在途
+
+Goal active，继续，无暂停/发布/完整M3接受。当前代码和源版本由owner统一改动；原独立7162实际终态CodeBuddy/codebuddy-cli/deepseek-v4.1-flash/requested max/session01a16b36-b8e2-7509-9b11-91ab240cdb08，594.283s/70tools/return0/no fallback；原132行报告SHAa20f24717563569e2b973622a31650f1d68fe9b1f44ed8fdad7d7fe950263b9a保持REVISE。其宿主Bash被拒、只读源码/原件，未实际pytest/SQLite/重算hash；不能把model工具清单/return0或owner验证写成其独立执行。模型指出D1正式名依赖漏绑、D2“尚无/没有”等存在否定、D3中文短品牌命中别的已注册长品牌、D4离线提交与计数竞态；owner集中9RED/20既有PASS后修复，再205相关PASS2.00s，补新长品牌未来生效/合法中文后缀/无进展生存期负向边界后69PASS0.65s。名称依据现在含当前正式名事实/实体原名/相关前缀冲突；不递归全目标投影，不改历史科学事实/源码冻结件，不建立新审批。
+
+regulator-profile-live-01的新真实单元17060已终态：run_805a262618cb/实际3glm-5.3-flash调用、18272总tokens（只此3次usage，非完整项目成本）/无fallback；旧候选5提案1verified4未核实/重放5且0reassessed，160其他药未运行。1核实研发方来自原文“产品of Company”，owner判为角色误采用，原提案/错误回执保留；自然英文抗体targeting和类型长短语IL-4Rα数值边界另暴露false-negative。新test_regulatory_profile_claims一次5RED/3positive→最小共同规则/Skill修正：明确研发关系才可认证（制造/销售/of不行），完整类型里的科学标识不当负数，普通is-a抗体targeting有直接谓词支持；拼接状态/Updated未绑定仍不采用。没有为填计数改原文、加别名字典或升级旧stored unverified。完整相关231PASS2.04s；当前全v2 **1474PASS9.60s**/1既有TestClient弃用警告、Ruffall、184Python600/80通过。之前CLI全门1452PASS/1FAIL是旧测试import scripts依赖python -m启动路径，显式spec加载修复，业务断言保留；记录原失败，不称产品失败。错误猜路径/独立预检标签失败均未冒作执行；一次无界字符difflib诊断改逐行/ID规范化，精确停止自己只读诊断46661，不涉及研究/代理模型。
+
+frozen02/222files/211immutablelinks/manifestf83b9c330d565aa14995d6d939d2cbccfce6169616df923a0f1c494dd66b003e固定；registered-brand-live-02从01新副本同原7提案/原四表重核，2verified5未核实、2reassessed→retry0、0模型/来源；保留18源625实体469历史事实+9新NMPA采用规则事实（quote checker字节变更使采用版本变，新ID不是改旧数据）。目标依据digest3f498be12fc4c6eb599636c49ef23a484df98b7ba439d7deb26d46028fb5aedd/3正式名-商品名事实可追溯。A136b26182eb546687ac2383bd7401c79485fe78b06dcf61c4773a497b8ff8c63，Bd3c5e9f58369f77ffc1bb5cb9b1b20891bb31a273eb02396ab8a542103775df8，Cb8f11d890d25434336146e3bf6f7b7e759328faf2dde9a2b5a0c30feec9a3072；新旧ABC仅fct_64hex变化，非ID全部字节相同。owner-evidence.json核固定清单/原rows/提案/source/真实HTTP/9当前截图逐张实看。A四宽源窗/几何/真实Enter-Esc、C临床身份有效；非全M3/B真实结果/完整前端美学。C身份多来源默认入口仍偏多，后续应整合入口而不是隐去药物/MAH等信息，不能标为整体审美通过。当前Ego68/p1，p2官方源；新23568/PID47620/49959服务frozen02，无模型背景；精确停止旧21383（93062亦已停），不清登录/缓存或其他任务空间。
+
+同session独立follow-up10080只看新固定02与D1–D4/新类型数值-研发角色反例，原报告不覆盖；预检ok但两项形式标签warnings，边界/读集在prompt已明确，不改宿主权限绕过Bash拒绝、不多加reviewer/chair，尚待实际终态。新25666正跑普通smoke_drug_profile单药单官方公告，从regulator-profile-live-01另复制/使用frozen02与新Skill；初轮错误属于旧候选，不把新未跑状态写PASS。原受保护52075在本实际组件节点仅查终态receipt仍不存在；不轮询/重启/热迁移/重跑151批。下一步核上述两个终态、原提案和影响范围，白名单提交当前开发候选；之后继续带临床限定适应症/集团与真实全链，而非再次做全页三路审查。
+
+## 2026-10-24 同节点补证与有界监管来源单元（在途）
+
+不暂停，Goal active。用户再次明确Ego空间全部授权；旧63不存在后自动建立68，同goal始终复用，p1保留当前ABC预览/p2官方公告；不动个人配置/缓存/登录/其他任务。旧93062已精确停止，只保留21383/54873当前服务。registered-brand-live-01/owner-evidence.json核9图逐张实看、A四宽来源窗760px不改列宽/Enter/Esc实际回焦/C身份一致，ABC实际HTTP字节相等，原18sources/625entities/460facts逐行不改+9新证书事实/同原7提案；不是完整科学或M3通过。独立7162待终态，不因慢改路/重派或把placeholder当审阅。
+
+下一可并行无共享writer任务由owner direct：复用既有smoke_company_documents普通工具，1离线CLI RED后增加显式kind/allow-html（默认PDF检查保留），14邻接PASS0.40s/Ruff；无新依赖/解析器/平台。实际regulator-document-live-01读官方NMPA英文公告：src_7a26771fc93a/raw1391851ce40ee16e90c93130ab959753056f3ec8c51409c8fb34fed9cf5042d1/texteb7bf874be5ff33c73e5e18e2bde49d3cee55d6c8dc70ed2501f706f32ec0639/1639字，1网络+1缓存、0模型/0事实。首次receipt沿旧first_last_pages_read=true标签不准确（HTML不是PDF页）；保留原件回执，之后独立first_tail_text_read及format修正，不倒改旧结果。Updated:2025-02-19不认证真实获批日或2026新鲜状态，正文明确人群/靶点后仍须普通提案/科学规则处理。
+
+regulator-profile-frozen-01 manifest7bba9f913a8dc0fd00b9b017f7daa04452e2f18e1a37c6eb4aeec0ab315cc36a，221files/219immutablelinks；新17060按此前已批准研究路由cms-router/glm-5.3-flash→DGX/deepseek→DGX/qwen、同6步预算启动。只复制registered-brand-live-01既有数据，在新run上执行一个药物/一个官方源的正常extract-results/verify，不重跑旧151批/160其他候选；凭据仅内存/child env。实际模型、提出/采用/未核实及终态尚待回执。品牌审阅仍绑定原frozen01，不将新代码或源归入其结论。
+
+## 2026-10-24 在途：来源注册商品名（不是接受结论）
+
+前PDF组件0a5ef33dbb0b580da55da3b78ee92b950f8a1c08已push/fresh remote exact；继续Goal active，无暂停。当前科学合同由owner一人改动（direct实施），注册商品名是原证书确定字段，不需另一个共享writer；类型同位语/动态名称依据存在材料性解释不确定，因此固定候选后用一独立C03挑战（conference），不重复全页或加chair。
+
+- NMPA已捕获表中明确商品名此前未采用；只扩nmpa_ingest采用规则/新snapshot，源capture/detail代码不变、原source仍同版本。商品名独立identity.trade_name_zh/en，原标签/值/JSON行定位/证号都保留，不进全局发现aliases。profile_evidence只取当前code:nmpa唯一产品归属的注册商品名，允许明确“IL-x抗体药物Brand”或“作为…IL-x抗体药物，Brand…”同位表述，不按注射液后缀/同句共现猜药物。
+- 初始5RED/8负向PASS→80相关；随后2真实依赖撤回/重名RED，2prepare/commit与复核统计竞态RED，空白否定2RED/7既有负向PASS后集中修复。identity_basis含事实IDs与完整依据摘要，当前读取/普通重放/离线及提交内均复验。DB.raw_current_facts加可选fields参数复用原成员合同，不复制SQL指针规则或全扫大观察值，无新表/审批。_brand_rows初次编辑漏if在检查前修正，不记测试反例；事实科学历史不改，未核实原值不自动升格。
+- 当前151相关PASS1.53s、完整v2 **1452PASS8.87s**、Ruff全src/tests/scripts/600-80通过；不是全M3/科学接受。registered-brand-frozen-01/220files/212immutablelinks/manifest20d441b3259ccb29a411e108c986f993601fc9351fba7af4409c4f2d8e5d7aae。registered-brand-live-01从profile-live-03新副本复核同原7提案：2verified目标IL-4Rα/研发方康诺亚、5未核实；9新NMPA历史事实，2reassessed→retry0，0来源/模型，原四表/提案字节不变。旧target stored verified经旧规则曾被invalidated，现有注册品牌新证据的追加receipt可确认原科学观察；stored unverified依旧不升级，不重采旧两次模型提案。
+- 新C03 ciw2-registered-brand-review按当前live manifest首路CodeBuddy/deepseek-v4.1-flash/max（不同于此前C03首路），唯一角色evidence_single_object；7162已启动未见终态。初始化不等于派发；修掉生成prompt忽略global模板，补完整只读固定候选/原source/原型反例。两次输出文件标签预检失败后读guard真实extract_prompt_lists，改Runner-managed report path，独立preflight ok/0warning才启动。实际模型/fallback/审阅结论待终态，不能借请求标签或1452计数认作独立接受。只挑战本source/依赖根因，不网络/模型重采/修原DB，不碰52075。
+- 新隔离预览21383/54873服务冻结01、无背景研究/模型；Ego63/p1继续复用，旧93062待替换后精确关闭。不把旧截图拼当前接受，先看有真实IL4目标的A来源阅读/四宽及C身份；未完成部分不标PASS。当前未提交此品牌单元，用户WIP不动，下一步实际页面及独立反例返回后评估再修，不设置暂停点。
+
 ## 2026-10-24 当前：原生PDF来源表示组件完成，继续来源语义采用
 
 Goal active，不暂停；唯一当前入口仍rebaseline-v2/docs/STATUS.md。前节点cc440ae38b2bcac37c23d3ca9a0ec9582fbc1178已push/fresh remote exact，未知v1/rootHANDOFF工作不动。方法execution：一个独立新parser/tests单元能与owner HTTP/DB/恢复整合形成真正并行，源版本合同由owner统一；本节点无临床解释采用，实际原生/源码/逐字范围可决定技术结果，不另加会商/chair。临床关系判断仍不得借技术门接受。
