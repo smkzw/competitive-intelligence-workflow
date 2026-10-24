@@ -74,6 +74,7 @@ def data_a(db: DB, pid: str) -> dict[str, Any]:
             'mah_refs': holder_map[d['id']], 'name_refs': d['name_refs'],
             'group_refs':profile['group_refs'],'profile_refs':profile['profile_refs'],
             'phase_china_refs':profile['phase_china_refs'],'phase_global_refs':profile['phase_global_refs'],
+            'has_china_stage':bool(profile['phase_china_refs']),
             "phase_global":profile['phase_global'],
             "phase_china":profile['phase_china'],"innovative": a.get("innovative"),
             "n_trials": len(ts), "n_china_trials": None if not n_china and unknown_sites else n_china,
@@ -84,7 +85,14 @@ def data_a(db: DB, pid: str) -> dict[str, Any]:
         })
     included = [r for r in rows if r["in_scope"] != 0]
     charts = {'landscape': {
-        'rows': [{key: r[key] for key in ('id', 'targets', 'phase_global', 'phase_china')} for r in included],
+        'rows': [{**{key: r[key] for key in ('id', 'targets', 'phase_global', 'phase_china')},
+                  'phase_observations':[{'region':region,'phase':ref['phase_code'],
+                      'raw_value':ref['value'],'plot_reason':None if ref['phase_code']!='unknown' else 'stage_not_mapped',
+                      'indication':ref['context']['indication'],'as_of':ref['context']['as_of'],
+                      'source_kind':ref['source_kind'],'source_label':registry_label(ref['source_kind'],'source_kind'),
+                      'fact_id':ref['fact_id'],'source_id':ref['source_id']}
+                      for region in ('global','china') for ref in r['phase_'+region+'_refs']]}
+                 for r in included],
         'phase_labels': {p: PHASE_ZH[p] for p in PHASE_ORDER if p != 'unknown'},
     }}
     return {"rows": sorted(included, key=lambda r: PHASE_ORDER.index(r["phase_china"]))

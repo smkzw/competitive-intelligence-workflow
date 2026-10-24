@@ -6,16 +6,28 @@
 
 - 唯一工程英文根中的rebaseline-v2；权威为01_PRD、02_ARCHITECTURE、03_PLAN、04_AGENT_RULES。本页替换更新；详细历史/失败/实际路由/回执均在根Trellis任务10-23-rebaseline-v2-m1/implement.md和对应Git。
 - 产品是单用户Web+9内嵌Skills；v1三宿主包、编辑/分享、24门户不是v2发布门。保留未知v1工作树与根HANDOFF既有20增/4删；旧中文根零接触，不reset/clean/add-all。
-- 分支codex/rebaseline-v2-m1，本节点以本页所在Git提交及下列候选hash为准；前一已push/fresh remote exact **0aeb4dc8fa030f5a16ac1fc62c17a9f2ae830f82**。本节点是开发候选，不假称已发布。
+- 分支codex/rebaseline-v2-m1；最新已push/fresh remote exact **9181bbd4b4e7335337493fa71c32e339ca671d89**。以下新scope/安装整合仍未提交，按冻结清单绑定开发候选，不假称已发布。
 - 研究模型cms-router/glm-5.3-flash→DGX/deepseek→DGX/qwen；凭据仅必要环境，不入文件/提示词/日志、不改全局路由。执行/会商按实时manifest和实际回执。
-- Ego专用空间替换/恢复已长期授权，不再问；旧63消失后已自行建立替代 **68/p1**，p2复用为官方来源阅读，不改登录/缓存/其他任务空间/版本。当前预览63606/63293服务identity-reading-live-01、不启动研究；旧监管预览56438已精确停止，其他旧预览不恢复。
+- Ego专用空间替换/恢复已长期授权，不再问；当前 **68/p1**，p2官方来源，不改登录/缓存/其他任务空间/版本。预览94391/53942服务development-scope-current-02，无后台模型；旧63606/63293已核精确命令后停止，56438等已停止，不恢复旧预览。
+
+## 当前整合：限定阶段记录与普通安装（有界验证完成，待提交）
+
+- 全v2 **1544PASS/9.46s**、Ruff src/tests/scripts/setup、JS语法、191Python600/80通过，1既有TestClient警告。原1531门不是本次图形修改后的门；开发门不替代科学/视觉/完整M3/M6。
+- development-scope-frozen-02：228文件/207旧不可变硬链接（含新增setup.py），manifest **693dd7a5ccdac6cae7884cf85f2c5adf1ac2200fd317d988e6179ec093728c6e**。source-current-02仅新副本复核同源/同5提案，19源625实体510事实478关系与原live-01四表逐行相同，0新网络/模型/事实；8旧verified确认、1旧错误研发invalidated，原stored unverified不升格，重放5/0reassessed。
+- 原正常81224已终态：run_ac0f7aa8aae9/prj446，6实际glm-5.3-flash/no fallback/41646本单元tokens，5提案4核实1未核实，160候选仍待跑。来源src_cebf4fc0e867的批准声明明确成人中重度AD/as_of2024-09-12；不是实际批准日/完整监管标签或当今全面状态。新候选A53e80bbe…/Bd3c5e9f5…/Cd5814124…；B该副本无临床结果，不签收真实B。
+- C03实际CodeBuddy/codebuddy-cli/deepseek-v4.1-flash/CLI max/session01a16b6a-0de1-76ff-8340-a4fe974c7fb8，847.987s/56tools/return0/no fallback；原261行报告SHA12750401…保持REVISE。宿主拒绝Bash，仅只读源码/两原文，不冒作独立pytest/hash/浏览器。owner复现7真实source RED+1JS RED+1重复caption RED，修申请/拒绝误批准、名称依据撤回后状态/开发/权益重核、图/KPI完整限定。一个图夹具紧贴III先触发旧词界，已改空格不计产品RED；两个旧向量断言在新事实引用/范围正向替代成立后迁移，不降科学断言。
+- 未采用审阅“把限定数据排除出图+提示见表格”的建议：新图按地域/人群/日期/来源类型分系列和矩阵行，保留全部可映射观察与fact/source ID并集；无来源阶段不造零/空系列，未知映射留原值/原因和表格。来源声明明确“企业公告”，不拼接NMPA Update/既往治疗限定来冒充核准标签；完整核准标签与全量当前状态仍属M3待办。表格/KPI与筛选同查询，单图可用整行、稀疏高度160，字号16不变。
+- 安装worker86874已终态：同CodeBuddy模型/max/session01a16b6c-e922-781a-81f7-a333b1b2ec63，417.519s/96tools/return0；原报告和4文件tar留存。旧wheel0Skill且CLI空成功是实际RED，另3AttributeError只是单测缺函数。新包9同字节/普通sdist→wheel及editable实际验证；worker未遵apply_patch而用Write/Edit、生成标准build/egg-info的边界偏差已记，不改历史或未知WIP。
+- owner再5生产RED修输出目录删除/外部符号链接/未知文件及空校验成功，25相关PASS。install-owner-01从/tmp的-I独立安装核9作者hash/16资产/模块字节/工具输出/显式覆盖、空集exit2且无资料创建；wheel16707af8…/sdistafe656fa…仅绑定当时字节，后续新图形须补当前包，不冒作整个M6通过。没有新增依赖/doctor平台/第二作者源。
+- Ego78154已终态，四宽A/C未筛/筛后/身份来源+真实glyph tooltip/原文强调，共26图全部逐张实看。owner-audit绑定228文件/全部CAS/原四表与当前指针、原5提案和6模型行不变、真实HTTPABC、A11/C12身份事实及完整原文SHAf9fc9ef5…；查询/来源/Tooltip/Enter-Esc/无页面溢出有界PASS。全A/C美学NOT_ACCEPTED：A短靶点胶囊换行、C长法律身份/逐字段来源仍高，下一根因包合并修；实际几何证实A9列表均容纳，不能把视觉猜测误报横向裁切。新B真实结果NOT_RUN。
+- install-owner-02已从同冻结02离线sdist→wheel→全新venv，/tmp的-I实际9原Skill/16资产/全部模块字节、显式覆盖与空集exit2/无资料创建通过。wheel **93a39cd360cf439664bbc01484395c6bfd8f0032f4591cfe1a790cdfeec31540**，sdist **a8b35fdda5680fa62661001b09a76d68cedbf67744bba938ab2c85f090b3cd38**；0外网包下载/来源/模型。仅安装资源组件，非完整M6。review/metrics已实填，原REVISE保留；开发门与审阅格式门不能代替医学/整产品。
 
 ## 已实现：中文类型与共同身份依据阅读
 
 - A采用固定通用术语中文显示，未知词保留原值；源层monoclonal antibody不变，不新增药物/公司字典。每药/研究一个身份依据入口；仅同source_id+原文+URL合并引文，所有事实ID/法律实体/角色/截至日/证书日期和原始链接仍可达。名称/集团/研发/目标共用原reader，不改CSS/JS/图表资产或科学值。
 - 初始7行为RED，相关旧3标题断言在替代行为测试建立后迁移；首次宽门1499PASS/1FAIL捕获过期持有人来源标题误称中国MAH，保留原断言并修中性标题/合格角色优先。最终222相关PASS/1.18s；全v2 **1501PASS/9.55s**、Ruff全src/tests/scripts通过，1既有TestClient警告。不是全医学/整个产品接受。
 - identity-reading-frozen-01：223文件/216旧不可变硬链接，manifesta2d30ccddd2d56b88419f6d41817295970753bf5b92c03c2c8e407181e54d0bb。isolated live-01与监管04的19源/625实体/505事实/478关系逐行相同，CAS/所有当前指针不变，0网络/模型/重核。
-- owner-audit.json绑定真实HTTP与保存ABC、四宽A7/C8身份事实ID并集、完整入排SHAf9fc9ef55a343384c580415105156034e10f0bb8791e5ed5a78dc9d79928756e。17张当前图已逐张实看；无横向溢出，760px来源窗不改变表格列宽，Enter/Esc回实际触发者；C身份区329.58→239.98px、入口5→1，约减27%，不是整页高度或字号压缩。
+- owner-audit.json绑定真实HTTP与保存ABC、四宽A7/C8身份事实ID并集、完整入排SHAf9fc9ef55a343384c580415105156034e10f0bb8791e5ed5a78dc9d79928756e。17张固定检索状态图已逐张实看（不是未筛全报告的接受）；无横向溢出，760px来源窗不改变表格列宽，Enter/Esc回实际触发者；C身份区329.58→239.98px、入口5→1，约减27%，不是整页高度或字号压缩。
 - 当前A648346cf…/Bd3c5e9f5…/C640e82ab…；B实际结果在该副本为空，仅共同宏/生产测试，不借旧B证据签收。相同原文合并不等于所有部分重叠段落自动改写；全研究图表、M1–M6均未由本节点关闭。
 
 ## 已实现的有界组件：来源注册商品名与核验依赖
@@ -80,4 +92,4 @@
 
 ## 下一条有界任务
 
-继续带成人/儿童限定的适应症与开发状态、全称—成分关系及年报集团/日期/法律实体；不把财务权益/合作/共现冒作控制，不以最大期别猜当前批准。保留未核实提案及全部历史，先一条真实链再扩覆盖，原归并有终态时另核。继续白名单提交，不设人工阶段暂停点。
+白名单提交当前限定声明/安装修正后，立即处理A短靶点和C默认长身份/重复逐字段来源的共同密度根因，保留完整信息、阈值原文与键盘可达，不靠缩字号/假点/隐藏事实。随后继续全称—成分/集团日期、真实研究闭包和M4跨研究语义/论文链；不把财务权益冒作控制或选最大期别。原归并只终态或真实依赖节点核，不重跑151批，不设人工暂停点。

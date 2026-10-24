@@ -68,9 +68,13 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if a.cmd == "skills":
         import ciw2.sources  # noqa: F401
+        from ciw2.config import Settings
         from ciw2.harness.skills import load_skills
         from ciw2.harness.tools import REGISTRY
-        skills = load_skills(get_settings().skills_dir)
+        skills = load_skills(Settings().skills_dir)
+        if not skills:
+            print('未找到可用 Skill；请检查安装包或 CIW_SKILLS_DIR。',file=sys.stderr)
+            return 2
         for sk in skills.values():
             REGISTRY.subset(sk.tools)
             print(f"{sk.name:22s} tools={','.join(sk.tools) or '-':60s} output={sk.output.__name__ if sk.output else '-'}")

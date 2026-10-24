@@ -14,7 +14,7 @@ from datetime import date
 from typing import Any
 
 from ciw2.domain.identity import name_key
-from ciw2.domain.profile_evidence import FIELDS, holder_role
+from ciw2.domain.profile_evidence import FIELDS, holder_role, indication_qualifies
 from ciw2.render.drug_identity import web_url
 from ciw2.render.labels import PHASE_ZH
 from ciw2.store.db import DB
@@ -103,7 +103,7 @@ def _group_qualifies(fact: dict[str, Any], holder_keys: set[str]) -> bool:
 def _development_qualifies(fact: dict[str, Any], indication_keys: set[str], region: str) -> bool:
     context = _context(fact)
     indication = _text(context.get('indication'))
-    if indication is None or name_key(indication) not in indication_keys:
+    if not indication_qualifies(indication,indication_keys):
         return False
     allowed = CHINA_JURISDICTIONS if region == 'china' else GLOBAL_JURISDICTIONS
     if _jurisdiction(context) not in allowed:
@@ -127,6 +127,8 @@ def _holder_keys(facts: list[dict[str, Any]], sources: dict[str, dict[str, Any]]
 def _ref(fact: dict[str, Any], value: str, sources: dict[str, dict[str, Any]]) -> dict[str, Any]:
     return {'field': fact['field'], 'value': value, 'context': dict(_context(fact)),
             'fact_id': fact['id'], 'source_id': fact['source_id'], 'quote': fact['quote'],
+            'source_kind':sources[fact['source_id']]['kind'],
+            **({'phase_code':_canonical_phase(value)} if fact['field'] in DEVELOPMENT_FIELDS else {}),
             'url': web_url(sources[fact['source_id']]['url'])}
 
 
@@ -201,7 +203,7 @@ def drug_profiles(db: DB, pid: str) -> dict[str, dict[str, Any]]:
     assert project is not None
     indication_keys = {name_key(_text(name)) for name in (project['indication'], *project['indication_aliases'])}
     indication_keys.discard('')
-    sources = {row['id']: row for row in db.query('SELECT id,url FROM sources WHERE project_id=?', (pid,))}
+    sources = {row['id']: row for row in db.query('SELECT id,url,kind FROM sources WHERE project_id=?', (pid,))}
     facts = [fact for fact in db.current_facts(pid) if _verified(fact, sources)]
     holders = _holder_keys(facts, sources)
     by_entity: dict[str, list[dict[str, Any]]] = defaultdict(list)

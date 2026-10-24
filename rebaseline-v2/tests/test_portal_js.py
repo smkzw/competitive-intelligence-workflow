@@ -103,12 +103,12 @@ const document={getElementById:id=>elements[id],querySelectorAll:s=>s==='input[d
 const echarts={init(n){const c={options:[],setOption(o){this.options.push(o);},resize(){},dispose(){}};charts[n.id]=c;return c;}};
 vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window:{echarts,addEventListener(){}},echarts,
  ResizeObserver:class{observe(){}disconnect(){}},Set,Map,Math,Array,JSON});
-assert.deepEqual(JSON.parse(JSON.stringify(charts['chart-heat'].options.at(-1).series[0].data)),[[0,0,1]]);
+assert.deepEqual(JSON.parse(JSON.stringify(charts['chart-heat'].options.at(-1).series[0].data.map(p=>p.value))),[[0,0,1]]);
 assert.ok(parseInt(elements['chart-heat'].style.height)<=160);
 assert.ok(parseInt(elements['chart-phase'].style.height)<=220);
 const phase=charts['chart-phase'].options.at(-1);
 assert.equal(phase.legend.top,0);assert.ok(phase.grid.top>=48);
-assert.deepEqual(JSON.parse(JSON.stringify(phase.series.map(s=>s.data))),[[1],[0]]);
+assert.deepEqual(JSON.parse(JSON.stringify(phase.series.map(s=>s.data.map(p=>p.value)))),[[1]]);
 assert.ok(!JSON.stringify(phase.xAxis.data).includes('未知'));
 assert.equal(elements['landscape-count'].textContent,'2 / 2 个药物 · 全球阶段 1 · 中国阶段 0 · 靶点与阶段 1');
 filter.value='Unknown';input();assert.ok(cards['chart-heat'].hidden&&cards['chart-phase'].hidden);
@@ -117,6 +117,42 @@ assert.equal(rows[1].style.display,'');
 filter.value='Known';input();assert.ok(!cards['chart-heat'].hidden&&!cards['chart-phase'].hidden);
 filter.value='no-match';input();assert.ok(cards['chart-heat'].hidden&&cards['chart-phase'].hidden);
 filter.value='';input();assert.ok(!cards['chart-heat'].hidden&&!cards['chart-phase'].hidden);
+''')
+
+
+def test_landscape_qualified_records_are_plotted_with_scope_date_and_fact_ids_not_hidden():
+    run_portal(r'''
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
+const cards={},elements={},charts={};let input;
+for(const id of ['chart-heat','chart-phase']){
+  cards[id]={hidden:false};elements[id]={id,style:{},closest:()=>cards[id]};
+}
+const adult={region:'china',phase:'approved',indication:'成人中重度特应性皮炎',as_of:'2024-09-12',source_kind:'company',source_label:'企业公告',fact_id:'adult',source_id:'s1'};
+const child={region:'china',phase:'phase3',indication:'儿童特应性皮炎',as_of:'2025-01-02',source_kind:'company',source_label:'企业公告',fact_id:'child',source_id:'s2'};
+const global={region:'global',phase:'phase2',indication:'特应性皮炎',as_of:'2025-06-01',source_kind:'regulator',source_label:'监管公告',fact_id:'global',source_id:'s3'};
+const known={id:'known',name:'Known',targets:['Target X'],phase_global:'phase2',phase_china:'unknown',phase_observations:[adult,child,global]};
+const unknown={id:'unknown',name:'Unknown',targets:[],phase_global:'unknown',phase_china:'unknown',phase_observations:[]};
+const rows=[known,unknown].map(r=>({dataset:{entityId:r.id},style:{},textContent:r.name}));
+const table={id:'tbl-a',querySelectorAll:()=>rows};elements['tbl-a']=table;elements['landscape-count']={};
+elements.charts={textContent:JSON.stringify({landscape:{rows:[known,unknown],phase_labels:{phase2:'II 期',phase3:'III 期',approved:'已上市'}}})};
+const filter={value:'',getAttribute:k=>k==='data-filter'?'tbl-a':null,addEventListener:(_,fn)=>input=fn};
+const document={getElementById:id=>elements[id],querySelectorAll:s=>s==='input[data-filter]'?[filter]:[]};
+const echarts={init(n){const c={options:[],setOption(o){this.options.push(o);},resize(){},dispose(){}};charts[n.id]=c;return c;}};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window:{echarts,addEventListener(){}},echarts,
+ ResizeObserver:class{observe(){}disconnect(){}},Set,Map,Math,Array,JSON});
+const phase=charts['chart-phase'].options.at(-1);
+assert.ok(phase.series.some(s=>s.name.includes(adult.indication)&&s.name.includes(adult.as_of)&&s.name.includes('企业公告')));
+assert.ok(phase.series.some(s=>s.name.includes(child.indication)&&s.name.includes(child.as_of)));
+assert.equal(phase.legend.type,'scroll');
+const plotted=new Set(phase.series.flatMap(s=>s.data.flatMap(p=>p.fact_ids)));
+assert.deepEqual([...plotted].sort(),['adult','child','global']);
+assert.ok(phase.series.every(s=>!s.name.includes('最高')));
+const heat=charts['chart-heat'].options.at(-1);
+assert.ok(heat.yAxis.data[0].includes(global.indication)&&heat.yAxis.data[0].includes(global.as_of));
+assert.ok(elements['landscape-count'].textContent.includes('中国阶段 1'));
+filter.value='Unknown';input();assert.ok(cards['chart-heat'].hidden&&cards['chart-phase'].hidden);
+filter.value='Known';input();assert.ok(!cards['chart-phase'].hidden);
+assert.deepEqual([...new Set(charts['chart-phase'].options.at(-1).series.flatMap(s=>s.data.flatMap(p=>p.fact_ids)))].sort(),['adult','child','global']);
 ''')
 
 
@@ -295,7 +331,7 @@ vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window:{ech
  ResizeObserver:class{observe(){}disconnect(){}},Set,Map,Math,Array,JSON});
 const heat=charts['chart-heat'].options[0];
 assert.equal(heat.series[0].data.length,18);
-assert.ok(heat.series[0].data.every(p=>p[2]===1));
+assert.ok(heat.series[0].data.every(p=>p.value[2]===1));
 assert.equal(heat.yAxis.data.length,18);assert.ok(!heat.yAxis.data.includes('unresolved'));
 assert.deepEqual(JSON.parse(JSON.stringify(heat.xAxis.data)),['II期']);
 assert.deepEqual(JSON.parse(JSON.stringify(charts['chart-phase'].options[0].xAxis.data)),['I期','II期']);

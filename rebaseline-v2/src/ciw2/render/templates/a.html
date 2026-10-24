@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% from '_trial.html' import clinical_trial, identity_evidence %}
+{% from '_trial.html' import clinical_trial, identity_evidence, development_status, companies_summary %}
 {% block kpis %}
 <div class="kpi"><b>{{ data.rows | length }}</b><span>纳入药物（含待定）</span></div>
-<div class="kpi"><b>{{ data.rows | selectattr('phase_china', 'ne', 'unknown') | list | length }}</b><span>有中国阶段信息</span></div>
+<div class="kpi"><b>{{ data.rows | selectattr('has_china_stage') | list | length }}</b><span>有中国阶段记录</span></div>
 <div class="kpi"><b>{{ data.excluded | length }}</b><span>已排除</span></div>
 {% endblock %}
 {% block content %}
@@ -10,8 +10,8 @@
 <input class="filter" data-filter="tbl-a" placeholder="筛选：药物 / 靶点 / 企业 / 阶段">
 <p id="landscape-count" aria-live="polite">{{ data.rows|length }} 个药物</p>
 <div class="grid landscape-grid">
-  <div class="card" hidden><h2>靶点 × 全球最高阶段</h2><div id="chart-heat" class="chart"></div></div>
-  <div class="card" hidden><h2>阶段分布：全球 vs 中国</h2><div id="chart-phase" class="chart"></div></div>
+  <div class="card" hidden><h2>靶点 × 全球阶段记录</h2><div id="chart-heat" class="chart"></div></div>
+  <div class="card" hidden><h2>阶段记录：中国 / 全球</h2><div id="chart-phase" class="chart"></div></div>
 </div>
 <div class="card" style="overflow:auto"><table id="tbl-a"><thead><tr>
 <th>药物</th><th>靶点</th><th>类型</th><th>相关企业</th><th>中国 MAH</th><th>中国阶段</th><th>全球阶段</th>
@@ -20,8 +20,8 @@
 <td><b>{{ r.name_zh or r.name }}</b>{% if r.name_zh and r.name_zh != r.name %}<div class="muted">{{ r.name }}</div>{% endif %}
 {{ identity_evidence(r,r.mah_refs,'药物身份依据') }}</td>
 <td>{% for t in r.targets %}<span class="tag">{{ t }}</span>{% endfor %}</td>
-<td>{% for value in r.profile_refs|selectattr('field','equalto','identity.modality')|map(attribute='value')|map('registry_label','drug_modality')|unique(case_sensitive=true) %}{{ value }}{% if not loop.last %} / {% endif %}{% else %}—{% endfor %}</td><td>{% for company in r.companies %}<div>{{ company.role }} {{ company.name }}</div>{% else %}—{% endfor %}</td><td>{% if r.group_refs %}{% for group in r.group_refs %}<div><span class="muted">{{ group.role }}</span> {{ group.name }}</div>{% endfor %}<details><summary>持有人法律实体</summary>{{ r.china_mah }}</details>{% else %}{{ r.china_mah or '—' }}{% endif %}</td>
-<td><span class="tag med">{{ r.phase_china | phase }}</span></td><td>{{ r.phase_global | phase }}</td>
+<td>{% for value in r.profile_refs|selectattr('field','equalto','identity.modality')|map(attribute='value')|map('registry_label','drug_modality')|unique(case_sensitive=true) %}{{ value }}{% if not loop.last %} / {% endif %}{% else %}—{% endfor %}</td><td>{{ companies_summary(r.companies) }}</td><td>{% if r.group_refs %}{% for group in r.group_refs %}<div><span class="muted">{{ group.role }}</span> {{ group.name }}</div>{% endfor %}<details><summary>持有人法律实体</summary>{{ r.china_mah }}</details>{% else %}{{ r.china_mah or '—' }}{% endif %}</td>
+<td>{{ development_status(r.phase_china_refs) }}</td><td>{{ development_status(r.phase_global_refs) }}</td>
 <td>{{ r.n_trials }}（中国 {% if r.n_china_trials is none %}—{% elif r.n_china_trials_unknown %}≥{{ r.n_china_trials }}{% else %}{{ r.n_china_trials }}{% endif %}）{% if r.trials %}<details><summary>研究列表</summary>{% for trial in r.trials %}{{ clinical_trial(trial) }}{% endfor %}</details>{% endif %}</td>
 <td>{% if r.in_scope is none %}<span class="badge unknown">待定</span>{% else %}<span class="badge verified">纳入</span>{% endif %}
 {% if r.scope_reason %}<div class="quote">{{ r.scope_reason }}</div>{% endif %}

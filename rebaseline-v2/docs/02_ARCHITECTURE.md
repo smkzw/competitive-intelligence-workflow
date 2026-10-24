@@ -1,6 +1,10 @@
 # 02 · 架构
 
 M3来源档案沿用extract-results/ExtractionResult与现有逐药缓存/核验事务：trial_evidence→enrich_drugs（所有报告）→extract_results/extract_design→verify（所有报告）。SourceContext仅承载来源原有法律实体、关系、as_of、jurisdiction、indication，不覆盖临床组/量表/时间窗。共享drug_profiles只读当前已核实事实，A/B/C不消费发现attrs来认证靶点/阶段/集团；原attrs留作检索线索，不就地迁移历史事实。未解集团不从公司名猜测；来源原值与显示期别映射分开。
+开发阶段的确切年龄/严重程度限定由profile_evidence.indication_qualifies统一检查项目疾病归属，限定原文保存在原context.indication；不是泛化疾病或临床等价算法。明确日期/药物/NMPA批准/治疗对象有直接语法关系的中文声明可核验，其余未知表达不自动接受。A阶段格显示每条合格观察的原状态、完整适应症及截至日，多观察不选max/latest；原事实/历史回执不重写，无新增表、字段或Skill。
+当前阶段图使用同一phase_observations投影，逐条带phase/raw_value、范围、日期、来源类型、source_id/fact_id和不可映射原因；JS按完整口径分系列/矩阵行，保留全部观察而不排除有限定的事实。每口径/阶段按药物ID计数、全fact ID并集，不按标量unknown判断有无资料；标量只保留兼容字段，不再决定新图。后台新payload始终带观察数组，旧单值HTML输入只读兼容。来源中文标签沿用labels单一确切映射；不同日期的两阶段记录不表示互斥比例或临床疗效排名。
+NAME_BOUND_FIELDS复用既有identity_basis回执：目标/模态保留注册品牌+名称依据，开发/权益/阶段只绑定实际名称依据与实体原名，初次采用/提交/当前读取/重放/离线核验一致；不另建subject表或审批。所有状态语法先排除计划/申请/被拒等非实际状态，不仅检查新增自然句分支。相同公司角色/显示名在默认层去重，引用、日期、法律实体和原事实均保留在共同阅读器。
+普通构建复用setuptools build_py/sdist小hook，把唯一作者skills/*/SKILL.md复制到包内；源码可编辑模式与安装资源解析分开，CIW_SKILLS_DIR显式覆盖。已有构建目标出现未知文件或符号链接即失败，作者链接亦拒绝，不自动删除目录。ciw2 skills使用不创建资料的Settings且空集合返回2；没有新增依赖、doctor框架或后台安装器。
 
 ```
 浏览器 ──HTTP──> FastAPI (web/app.py) ──> Service (service.py)

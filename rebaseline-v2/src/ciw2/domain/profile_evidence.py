@@ -16,6 +16,7 @@ from ciw2.domain.identity import name_key
 FIELDS=('identity.target','identity.modality','identity.developer','identity.rights_holder',
         'status.china_mah_group','status.china.development','status.global.development')
 SOURCE_CONTEXT=('legal_entity','relationship','as_of','jurisdiction','indication')
+NAME_BOUND_FIELDS=frozenset(FIELDS)-{'status.china_mah_group'}
 TRADE_FIELDS=('identity.trade_name_zh','identity.trade_name_en')
 NAME_FIELDS=('identity.name_zh','identity.name_en')
 _NEGATED=re.compile(r'\b(?:not|never|neither|no longer|without)\b|并非|並非|不是|不属于|不屬於|尚未|未获|未獲|不在'
@@ -58,9 +59,9 @@ def _brand_rows(db: Any,pid: str) -> list[dict[str,Any]]:
         and f['context'].get('role')=='registered_trade_name']
 
 
-def brand_basis(db: Any,pid: str,eid: str) -> dict[str,Any]:
+def brand_basis(db: Any,pid: str,eid: str,*,include_brands: bool=True) -> dict[str,Any]:
     """Bind receipts to actual current identity evidence, including conflicting owners."""
-    rows=_brand_rows(db,pid)
+    rows=_brand_rows(db,pid) if include_brands else []
     own={name_key(r['value']) for r in rows if r['entity_id']==eid}
     rows=[r for r in rows if any(name_key(r['value']).startswith(key) or key.startswith(name_key(r['value']))
                                for key in own)]
@@ -114,14 +115,34 @@ def _claims(quote: str) -> list[str]:
 
 
 def _region_bound(text: str,names: list[str],indication: str,value: str,china: bool) -> bool:
+    if re.search(r'计划|拟|预计|预期|有望|即将|将会|一旦|若|如果|可能|是否|被拒|拒绝|驳回|不予',text):return False
     region=r'(?:中国|china|cn)' if china else r'(?:全球|global|globally|worldwide)'
     drug='(?:'+'|'.join(re.escape(name_key(n)) for n in names)+')'
-    disease,raw=re.escape(name_key(indication)),re.escape(name_key(value))
+    disease=re.escape(name_key(indication))
+    raw=re.escape(name_key(value))+r'(?!申请|申报|许可申请|受理|审评|程序|在即|被拒|拒绝|驳回|不予)'
     gap=r'[ \t,，:：-]*'
     patterns=[drug+gap+region+gap+disease+gap+raw,
               region+gap+drug+gap+disease+gap+raw,
               drug+gap+disease+gap+raw+gap+r'(?:is\s+)?(?:in\s+|在|于|於)'+region]
+    if china and value in {'批准上市','获批上市'}:
+        regulator=r'(?:中国)?(?:国家药品监督管理局|国家药监局)'
+        patterns.append(drug+r'[）)]?\s*(?:正式)?(?:获得|获|经)'+regulator+r'(?:的)?'+raw+
+                        r'[，,]\s*(?:用于|适用于)治疗'+disease+r'(?=[，,；;。.]|$)')
     return any(re.search(pattern,name_key(text)) for pattern in patterns)
+
+
+def indication_qualifies(value: Any,keys: set[str]) -> bool:
+    """Accept explicit age/severity qualifiers without removing them from stored scope.
+
+    This is literal project-disease membership, not clinical equivalence or a
+    generic substring match. Unrecognized descriptions remain unresolved.
+    """
+    if not isinstance(value,str):return False
+    text=name_key(value)
+    if text in keys:return True
+    age=r'(?:成人及青少年|成人和青少年|儿童及青少年|成人|儿童|青少年)?'
+    severity=r'(?:轻中度|中重度|轻度|中度|重度)?'
+    return any(re.fullmatch(age+severity+re.escape(key)+r'(?:患者)?',text) is not None for key in keys if key)
 
 
 def _ownership(text: str,parent: str,child: str,relation: str) -> bool:
@@ -224,7 +245,7 @@ def issue(db: Any,pid: str,eid: str,field: str,value: Any,quote: str,context: di
     if field.endswith('.development'):
         indication=context.get('indication');project=db.project(pid)
         keys={name_key(n) for n in [project['indication'],*project['indication_aliases']]}
-        if not isinstance(indication,str) or name_key(indication) not in keys:return '项目适应症范围未匹配'
+        if not indication_qualifies(indication,keys):return '项目适应症范围未匹配'
         china=field=='status.china.development'
         if context.get('jurisdiction') not in ({'CN','China','中国'} if china else {'global'}):return '地域范围未匹配'
         claims=[c for c in claims if contains(c,indication) and _region_bound(c,names,indication,value,china)]

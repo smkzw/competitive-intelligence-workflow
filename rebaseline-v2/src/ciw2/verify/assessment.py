@@ -108,9 +108,10 @@ def inspect_fact(db: Any,cas: Any,fact: dict[str,Any]) -> dict[str,Any]:
     """Identical field/entity/context checks for first adoption and every later recheck."""
     result=inspect(db,cas,project_id=fact['project_id'],source_id=fact.get('source_id'),
                    quote=fact.get('quote'),value=fact.get('value'))
-    if fact.get('field') in {'identity.target','identity.modality'}:
-        from ciw2.domain.profile_evidence import brand_basis
-        result['identity_basis']=brand_basis(db,fact['project_id'],fact.get('entity_id'))
+    from ciw2.domain.profile_evidence import NAME_BOUND_FIELDS, brand_basis
+    if fact.get('field') in NAME_BOUND_FIELDS:
+        result['identity_basis']=brand_basis(db,fact['project_id'],fact.get('entity_id'),
+            include_brands=fact['field'] in {'identity.target','identity.modality'})
     if result['verdict']=='confirmed':
         from ciw2.domain.profile_evidence import FIELDS, issue
         if fact.get('field') in FIELDS:
@@ -158,10 +159,11 @@ def receipt_matches(receipt: Any, fact: dict[str, Any], *,db: Any=None) -> bool:
         return False
     if receipt.get('fact_digest') != fact_digest(fact):
         return False
-    if fact.get('field') in {'identity.target','identity.modality'}:
-        from ciw2.domain.profile_evidence import brand_basis
-        if db is None or receipt.get('identity_basis')!=brand_basis(db,fact['project_id'],fact['entity_id']):
-            return False
+    from ciw2.domain.profile_evidence import NAME_BOUND_FIELDS, brand_basis
+    if fact.get('field') in NAME_BOUND_FIELDS and (db is None or
+            receipt.get('identity_basis')!=brand_basis(db,fact['project_id'],fact['entity_id'],
+                include_brands=fact['field'] in {'identity.target','identity.modality'})):
+        return False
     verdict = receipt.get('verdict')
     if not isinstance(verdict,str) or verdict not in VERDICTS or receipt.get('stored_status') != 'verified':
         return False

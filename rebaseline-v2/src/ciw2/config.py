@@ -20,14 +20,28 @@ def _ego_space() -> int | None:
     return int(value)
 
 
+_PACKAGE_DIR = Path(__file__).resolve().parent
+
+
+def _default_skills_dir(package_dir: Path = _PACKAGE_DIR) -> Path:
+    """安装包优先使用构建时嵌入的副本；可编辑检出回退到仓库 skills。"""
+    embedded = package_dir / "skills"
+    if any(embedded.glob("*/SKILL.md")):
+        return embedded
+    return package_dir.parents[1] / "skills"
+
+
+def _skills_dir() -> Path:
+    raw = os.environ.get("CIW_SKILLS_DIR")
+    if raw is not None:
+        return Path(raw.strip())
+    return _default_skills_dir(_PACKAGE_DIR)
+
+
 @dataclass(frozen=True)
 class Settings:
     data_dir: Path = field(default_factory=lambda: Path(_env("CIW_DATA_DIR", "./ciw-data")).resolve())
-    skills_dir: Path = field(
-        default_factory=lambda: Path(
-            _env("CIW_SKILLS_DIR", str(Path(__file__).resolve().parents[2] / "skills"))
-        )
-    )
+    skills_dir: Path = field(default_factory=_skills_dir)
     # OpenAI 兼容接口：DeepSeek / GLM / Qwen / OpenAI 等均可。
     llm_base_url: str = field(default_factory=lambda: _env("CIW_LLM_BASE_URL", "http://127.0.0.1:20128/v1"))
     llm_api_key: str = field(default_factory=lambda: _env("CIW_LLM_API_KEY"), repr=False)

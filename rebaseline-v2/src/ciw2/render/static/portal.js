@@ -101,29 +101,54 @@
     var heatNode = el('chart-heat'), phaseNode = el('chart-phase');
     if (heatNode) heatNode.closest('.card').hidden = !heat.data.length;
     if (phaseNode) phaseNode.closest('.card').hidden = !phases.x.length;
+    var grid = phaseNode && phaseNode.closest('.card').parentElement;
+    if (grid && grid.style) grid.style.gridTemplateColumns = heat.data.length && phases.x.length ? '' : '1fr';
     if (heat.data.length) {
-    setPanelHeight('chart-heat', Math.min(336, 88 + Math.min(6, heat.y.length) * 40));
+    var pageSize = heat.scoped ? 4 : 6, rowHeight = heat.scoped ? 88 : 40;
+    setPanelHeight('chart-heat', Math.min(440, 88 + Math.min(pageSize, heat.y.length) * rowHeight));
     chart("chart-heat", {
       tooltip: { formatter: function (p) { return safeText(heat.y[p.value[1]]) + " · " + safeText(heat.x[p.value[0]]) + "：" + safeText(p.value[2]) + " 个药物"; } },
       grid: { left: 180, right: 32, top: 12, bottom: 64 },
       xAxis: { type: "category", data: heat.x },
       yAxis: { type: "category", data: heat.y, axisLabel: { width: 160, overflow: 'break' } },
-      dataZoom: [{ type: 'slider', yAxisIndex: 0, right: 0, width: 16, show: heat.y.length > 6,
-        startValue: 0, endValue: Math.min(5, heat.y.length - 1), filterMode: 'filter' }],
-      visualMap: { min: 0, max: Math.max.apply(null, heat.data.map(function (d) { return d[2]; }).concat([1])),
+      dataZoom: [{ type: 'slider', yAxisIndex: 0, right: 0, width: 16, show: heat.y.length > pageSize,
+        startValue: 0, endValue: Math.min(pageSize - 1, heat.y.length - 1), filterMode: 'filter' }],
+      visualMap: { min: 0, max: Math.max.apply(null, heat.data.map(function (d) { return d.value[2]; }).concat([1])),
         orient: "horizontal", left: "center", bottom: 0, inRange: { color: ["#FFF3E0", C.brand] } },
-      series: [{ type: "heatmap", data: heat.data, label: { show: true } }]
+      series: [{ type: "heatmap", data: heat.data, label: { show: true, formatter: function (p) { return p.value[2]; } } }]
     });
     }
     if (phases.x.length) {
-    setPanelHeight('chart-phase', 208);
+    var compact = phases.x.length <= 2 && phases.series.length <= 2;
+    setPanelHeight('chart-phase', compact ? 160 : 208);
     chart("chart-phase", {
-      tooltip: { trigger: "axis" }, legend: { top: 0 }, grid: { left: 48, right: 16, top: 48, bottom: 64 },
+      tooltip: { trigger: "axis", formatter: function (items) { return items.map(function (p) {
+        return safeText(p.seriesName) + '：' + safeText(p.value) + ' 个药物';
+      }).join('<br>'); } }, legend: { type: 'scroll', top: 0 }, grid: { left: 48, right: 16, top: 48, bottom: compact ? 48 : 64 },
       xAxis: { type: "category", data: phases.x, axisLabel: { interval: 0, rotate: phases.x.length > 5 ? 30 : 0 } },
       yAxis: { type: "value", minInterval: 1 },
-      series: phases.series.map(function (s) { return { name: s.name, type: "bar", data: s.data, barMaxWidth: 28 }; })
+      series: phases.series.map(function (s) { return { name: s.name, type: "bar", data: s.data,
+        itemStyle: {color: s.color}, barMaxWidth: 28, label: {show: true, position: 'top'} }; })
     });
     }
+  }
+  function landscapeObservations(rows) {
+    return rows.flatMap(function (r) {
+      var observations = r.phase_observations;
+      if (!Array.isArray(observations)) observations = ['global', 'china'].filter(function (region) {
+        return r['phase_' + region] && r['phase_' + region] !== 'unknown';
+      }).map(function (region) { return {region: region, phase: r['phase_' + region]}; });
+      return observations.map(function (o) {
+        return Object.assign({}, o, {entity_id: r.id, targets: r.targets, frame: [
+          o.region === 'china' ? '中国' : '全球', o.indication,
+          o.as_of ? '截至 ' + o.as_of : '', o.source_label || o.source_kind
+        ].filter(Boolean).join(' · ')});
+      });
+    });
+  }
+  function landscapePoint(points, value) {
+    return {value: value, fact_ids: Array.from(new Set(points.map(function (p) { return p.fact_id; }).filter(Boolean))),
+      source_ids: Array.from(new Set(points.map(function (p) { return p.source_id; }).filter(Boolean)))};
   }
   function updateLandscapeQuery(table) {
     if (!D.landscape) return;
@@ -132,24 +157,34 @@
       return r.style.display !== 'none';
     }).map(function (r) { return r.dataset.entityId; })) : new Set(all.map(function (r) { return r.id; }));
     var rows = all.filter(function (r) { return visible.has(r.id); });
-    var phases = Object.keys(labels).filter(function (p) {
-      return rows.some(function (r) { return r.phase_global === p || r.phase_china === p; });
-    });
-    var eligible = rows.filter(function (r) { return labels[r.phase_global] && r.targets.length; });
-    var heatPhases = phases.filter(function (p) { return eligible.some(function (r) { return r.phase_global === p; }); });
-    var targets = Array.from(new Set(eligible.flatMap(function (r) { return r.targets; }))).sort(), cells = new Map();
-    eligible.forEach(function (r) { new Set(r.targets).forEach(function (t) {
-      var key = JSON.stringify([heatPhases.indexOf(r.phase_global), targets.indexOf(t)]);
-      cells.set(key, (cells.get(key) || 0) + 1);
+    var observations = landscapeObservations(rows), plotted = observations.filter(function (o) { return labels[o.phase]; });
+    var phases = Object.keys(labels).filter(function (p) { return plotted.some(function (o) { return o.phase === p; }); });
+    var frames = Array.from(new Set(landscapeObservations(all).map(function (o) { return o.frame; }))).sort();
+    var activeFrames = frames.filter(function (f) { return plotted.some(function (o) { return o.frame === f; }); });
+    var eligible = plotted.filter(function (o) { return o.region === 'global' && o.targets.length; });
+    function targetLabel(target, o) { return target + (o.indication || o.as_of ? '\n' + o.frame : ''); }
+    var targets = Array.from(new Set(eligible.flatMap(function (o) {
+      return o.targets.map(function (t) { return targetLabel(t, o); });
+    }))).sort(), cells = new Map();
+    var heatPhases = phases.filter(function (p) { return eligible.some(function (o) { return o.phase === p; }); });
+    eligible.forEach(function (o) { new Set(o.targets).forEach(function (t) {
+      var key = JSON.stringify([heatPhases.indexOf(o.phase), targets.indexOf(targetLabel(t, o))]);
+      if (!cells.has(key)) cells.set(key, []);
+      cells.get(key).push(o);
     }); });
+    function count(points) { return new Set(points.map(function (o) { return o.entity_id; })).size; }
     drawLandscape({x: heatPhases.map(function (p) { return labels[p]; }), y: targets,
-      data: Array.from(cells, function (pair) { return JSON.parse(pair[0]).concat(pair[1]); })},
-      {x: phases.map(function (p) { return labels[p]; }), series: [
-        {name: '全球最高阶段', data: phases.map(function (p) { return rows.filter(function (r) { return r.phase_global === p; }).length; })},
-        {name: '中国最高阶段', data: phases.map(function (p) { return rows.filter(function (r) { return r.phase_china === p; }).length; })}]});
+      scoped: eligible.some(function (o) { return o.indication || o.as_of; }),
+      data: Array.from(cells, function (pair) { return landscapePoint(pair[1], JSON.parse(pair[0]).concat(count(pair[1]))); })},
+      {x: phases.map(function (p) { return labels[p]; }), series: activeFrames.map(function (f) {
+        return {name: f, color: palette[frames.indexOf(f) % palette.length], data: phases.map(function (p) {
+          var points = plotted.filter(function (o) { return o.frame === f && o.phase === p; });
+          return landscapePoint(points, count(points));
+        })};
+      })});
     if (el('landscape-count')) el('landscape-count').textContent = rows.length + ' / ' + all.length + ' 个药物 · 全球阶段 ' +
-      rows.filter(function (r) { return labels[r.phase_global]; }).length + ' · 中国阶段 ' +
-      rows.filter(function (r) { return labels[r.phase_china]; }).length + ' · 靶点与阶段 ' + eligible.length;
+      count(observations.filter(function (o) { return o.region === 'global'; })) + ' · 中国阶段 ' +
+      count(observations.filter(function (o) { return o.region === 'china'; })) + ' · 靶点与阶段 ' + count(eligible);
   }
   if (D.landscape) updateLandscapeQuery(null);
   function resultTooltip(p) {

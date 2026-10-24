@@ -64,11 +64,29 @@ def test_consolidated_identity_preserves_name_company_group_and_original_source(
     assert all(text in clinical for text in ('正式药名','中国MAH','持有人','研发方','合成人群','II 期','SYNTHETIC-1'))
 
 
+def test_duplicate_company_captions_are_once_but_all_fact_dates_and_ids_remain():
+    companies=[{'fact_id':fid,'source_id':'source-v1','role':'研发方','name':'Company',
+        'as_of':day,'quote':'Company developed this drug.','url':'https://example.org/source'}
+        for fid,day in [('old','2024-01-01'),('new','2025-01-01')]]
+    identity={'drug_label':'药物','registry_id':'SYNTHETIC','companies':companies}
+    html=str(_env.get_template('_trial.html').module.clinical_trial(identity))
+    assert html.count('<div class="trial-company">')==1
+    assert set(Evidence(html).facts)=={'old','new'}
+    assert '2024-01-01' in html and '2025-01-01' in html
+
+
 def test_source_strings_remain_plain_escaped_text():
     raw='<img src=x onerror=alert(1)>'
     html=str(_env.get_template('_trial.html').module.profile_evidence([
         ref('unsafe','identity.modality',raw,quote=raw)]))
     assert '<img' not in html and '&lt;img' in html
+
+
+def test_unmapped_stage_keeps_literal_text_instead_of_replacing_it_with_unknown():
+    ref={'value':'原文新阶段','phase_code':'unknown','source_kind':'company',
+         'context':{'indication':'研究范围','as_of':'2025-01-01'}}
+    html=str(_env.get_template('_trial.html').module.development_status([ref]))
+    assert '原文新阶段' in html and '企业公告' in html and '未知' not in html
 
 
 def test_current_role_projection_wins_over_a_neutral_field_caption_without_rewriting_the_fact():
