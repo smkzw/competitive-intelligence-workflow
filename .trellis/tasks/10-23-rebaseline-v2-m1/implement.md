@@ -1,5 +1,17 @@
 # Execution checkpoint
 
+## 2026-10-24 有界完成：中文类型与单一身份依据入口
+
+上一根因提交0aeb4dc8fa030f5a16ac1fc62c17a9f2ae830f82已push/fresh remote exact；Goal active继续，不暂停。Kangzhe包实际VERSION6.1.3/REVISION KZ6-1007-A08与此前必读owners一致，重读当前SKILL；本节点只改文字/来源阅读结构，CSS/tokens/运行时/图形/图像/源资料不变，不为局部改动引入完整视觉平台。方法direct：共享宏和确切标签由一个owner维护，纯显示/不可变ID和原文并集检查可决定正确性，不新增科学解释或不必要会商节点。
+
+新增test_identity_evidence_reading初始7RED/1安全转义正例：5确切通用类型中文映射、同source_id/URL/原文只呈现一次但不同source版本不合并、名称/MAH/集团/开发事实全可达的一入口。现有_registry_label原精确合同复用，不规范化或猜未知值、不加药物/公司字典；A类型先映射再显示去重，DB/raw profile.modality不改。_trial宏按固定来源/原文分组、保留每个不可变factID/角色/截至日期/许可metadata/法律实体/原文URL；公司group refs一层收全，原JS reader无改动；默认A药物身份依据、B/C研究身份依据取代多个名称/公司/档案按钮，临床药物/适应症/期别/公司角色/NCT次显保持。
+
+第一相关批188PASS/3FAIL仅旧测试强制“档案依据”按钮标题，先建立完整替代事实ID/单入口/原文版本/恶意文本测试后，迁移到新产品标题并加全部药物核实事实ID可达断言，未删科学断言。随后191相关PASS1.03s/Ruff及别名显示去重正例；首次宽门1499PASS/1FAIL是真过期持有人来源标题错误，保留旧断言、修中性字段名和已有合格group角色优先并补相邻例。最终222相关PASS1.18s，完整v2 1501PASS9.55s/1既有TestClient警告/Ruffall，186Python600/80通过。代码仅render/labels.py、_trial.html/a.html及两测试；CSS/JS/ECharts三资产逐字不改。
+
+identity-reading-frozen-01 manifest a2d30ccddd2d56b88419f6d41817295970753bf5b92c03c2c8e407181e54d0bb，223files/216旧不可变硬链接。live-01从监管04隔离clone，19源625实体505事实478关系与原四表及所有指针逐行相等，0网络/模型/重核。ABC实际HTTP逐字等于保存HTML：A648346cf3743578b306ee3519524b87d0e0201f74aa9dde9ad8f9ad22fd0e00c、Bd3c5e9f58369f77ffc1bb5cb9b1b20891bb31a273eb02396ab8a542103775df8、C640e82abd505540c0c0a76a4d187216e2f0fe9015ce2835d574d94696d39c7cf。owner-audit.json绑定全部CAS、8四宽状态、A7/C8预期身份factID精确并集、入排原文SHAf9fc9ef55a343384c580415105156034e10f0bb8791e5ed5a78dc9d79928756e。真实Ego68/p1当前17图全部逐张查看；同版本同筛选/键盘Enter-Esc回实际触发者/列宽差≤1px/760px来源窗无横向溢出。C1440身份区329.578125→239.984375px（约减27%），入口5→1，不是整页高度/缩小字体/完整产品视觉接受。一次4图输出超过上下文被截断，不计目视，通过逐张读取补齐而不重跑浏览器。B该副本无临床结果，仅共同宏/生产测试，不借其他版本结果签收。
+
+预览新74585/PID63606/63293只服务当前UI，无model/background；旧72137/PID56438已先核精确命令再TERM，未删除资料/缓存/来源、未动受保护52075。继续临床适应症/人群/地域状态的有界根因，不设人工暂停、不重跑151批。此节点白名单提交，完整Goal及M1–M6仍未完成。
+
 ## 2026-10-24 当前：来源档案根因族有界完成，继续中文阅读与临床范围
 
 上一开发提交01432c1fbad885183a2f56ab7e4188f7e0ba491e已push/fresh remote exact。Goal active，未暂停/完成/发布；当前模型研究只剩受保护52075未见终态，不对其做固定轮询/重跑151批。方法direct整合：已有独立意见给出具体可复现反例，owner逐族RED及原文/共享函数检查可决定本次最小修复；不加第三轮全页会商或额外chair。外部模型没有做测试/SQLite/重hash/视觉，不能把owner证据冒作其独立执行。原7162报告及同session10080补审均保持REVISE；10080实际CodeBuddy/codebuddy-cli/deepseek-v4.1-flash/requested max/session01a16b36-b8e2-7509-9b11-91ab240cdb08，449.684s/25tools/return0/no fallback，124行报告SHAf486367a98709543d974fb609193e5dd949bffba52e323323ae1dd1809416e4a。补审明确D1/D3/D4窄范围已修正，又指出R1纯存在否定/PFS跨窗、R2分段数字靶点、R3生产工艺所有格冒研发、R4反向短品牌/剂型歧义、R5dry-run统计竞态。其额外读取02 started元数据在原明确01来源读集之外；仅只读启动信息，不据此声称来源02独立验收或隐瞒边界偏差。

@@ -28,6 +28,16 @@ def phase_label(value: object) -> str:
     return text[:-1]+' 期' if match else PHASE_ZH.get(text,text)
 
 _REGISTRY_LABELS: dict[str, dict[str, str]] = {
+    'drug_modality': {
+        'monoclonal antibody':'单克隆抗体','mAb':'单克隆抗体','ADC':'抗体偶联药物',
+        'bispecific antibody':'双特异性抗体','small molecule':'小分子药物',
+    },
+    'profile_field': {
+        'identity.name_zh':'正式中文名','identity.name_en':'原文英文名',
+        'identity.target':'靶点','identity.modality':'药物类型','identity.developer':'研发方',
+        'identity.rights_holder':'研发权益方','status.china_mah_group':'持有人所属集团',
+        'status.china.development':'中国开发阶段','status.global.development':'全球开发阶段',
+    },
     'measure_unit': {
         'score on a scale': '分', 'Participants': '人', 'participants': '人',
         'percent change': '%变化', 'percentage of participants': '%',

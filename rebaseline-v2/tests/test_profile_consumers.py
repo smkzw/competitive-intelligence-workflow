@@ -62,4 +62,24 @@ def test_profile_evidence_uses_one_shared_reader_without_expanding_table_column(
     html=render_report(svc.db,pid,report)
     assert html.count('id="design-evidence-dialog"')==1
     assert 'class="shared-evidence"' in html
-    assert 'data-reading-title="档案依据"' in html
+    title='药物身份依据' if report=='A' else '研究身份依据'
+    assert f'data-reading-title="{title}"' in html
+    for fact in svc.db.current_facts(pid):
+        if fact['entity_id']==svc.db.entities(pid,'drug')[0]['id'] and fact['status']=='verified':
+            assert f'data-fact-id="{fact["id"]}"' in html
+
+
+def test_chinese_type_display_deduplicates_known_labels_without_changing_source_values(identity_project):  # noqa: F811
+    svc,pid,_,did,_=identity_project
+    rc=svc.context(pid,svc.db.create_run(pid))
+    text='nemolizumab is a monoclonal antibody (mAb).'
+    sid=register_text(rc.tool_ctx(),kind='company',url='https://example.org/modality',text=text)
+    for value in ('monoclonal antibody','mAb'):
+        svc.db.add_fact({'project_id':pid,'entity_id':did,'field':'identity.modality','value':value,
+            'source_id':sid,'quote':text,'status':'verified','tier':'standard','extracted_by':'code:synthetic'})
+    before=svc.db.query('SELECT * FROM facts ORDER BY id')
+    html=render_report(svc.db,pid,'A')
+    assert '<td>单克隆抗体</td>' in html
+    assert '单克隆抗体 / 单克隆抗体' not in html and text in html
+    assert set(report_data(svc.db,pid,'A')['rows'][0]['modality'].split(' / '))=={'monoclonal antibody','mAb'}
+    assert svc.db.query('SELECT * FROM facts ORDER BY id')==before
