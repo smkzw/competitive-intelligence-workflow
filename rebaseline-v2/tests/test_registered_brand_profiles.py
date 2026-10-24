@@ -167,7 +167,8 @@ def test_registered_short_brand_does_not_steal_a_longer_chinese_brand(settings):
     assert propose(rc,'identity.target','IL-31RA','IL-31RA抗体药物商品甲乙获批。')['status']=='unverified'
 
 
-def test_offline_receipt_append_rechecks_its_current_identity_basis(settings,monkeypatch):
+@pytest.mark.parametrize('dry_run',(False,True))
+def test_offline_receipt_append_rechecks_its_current_identity_basis(settings,monkeypatch,dry_run):
     from ciw2.pipeline.requalify import requalify_project
     from ciw2.verify import assessment
     svc,rc,ctx,_,_=setup(settings)
@@ -180,7 +181,7 @@ def test_offline_receipt_append_rechecks_its_current_identity_basis(settings,mon
         nmpa_ingest.activate_source(ctx,registered(ctx,certificate(observed='2026-10-24T01:00:00Z')))
         return result
     monkeypatch.setattr(assessment,'inspect_fact',revoke)
-    result=requalify_project(svc.db,svc.cas,rc.project_id)
+    result=requalify_project(svc.db,svc.cas,rc.project_id,dry_run=dry_run)
     assert result['counts']['confirmed']==0 and result['counts']['errors']==1
     assert row['id'] not in svc.db.latest_verdicts(rc.project_id)
 
@@ -201,3 +202,31 @@ def test_later_longer_brand_invalidates_previous_prefix_acceptance(settings):
 def test_chinese_suffix_and_non_negated_clinical_term_are_not_blanket_rejected(settings,text):
     _,rc,_,_,_=setup(settings)
     assert propose(rc,'identity.target','IL-31RA',text)['status']=='verified'
+
+
+@pytest.mark.parametrize('text,expected',(
+    ('目前无IL-31RA抗体药物商品甲。','unverified'),
+    ('IL-31RA抗体药物商品甲的无进展生存期显著延长且获批。','verified'),
+))
+def test_existence_negation_is_local_not_an_arbitrary_outcome_window(settings,text,expected):
+    _,rc,_,_,_=setup(settings)
+    assert propose(rc,'identity.target','IL-31RA',text)['status']==expected
+
+
+@pytest.mark.parametrize('introduce_first',(True,False))
+def test_competing_shorter_brand_makes_dosage_suffix_interpretation_ambiguous(settings,introduce_first):
+    svc,rc,ctx,did,_=setup(settings)
+    raw=certificate(observed='2026-10-24T01:00:00Z')
+    raw['rows'].append(['商品名（中文）','独立品牌注射液'])
+    nmpa_ingest.activate_source(ctx,registered(ctx,raw))
+    def shorter():
+        drug(ctx,'Other Injection')
+        other=certificate(seed='b',number='国药准字SJ20240002',name='其他药注射液',name_en='Other Injection')
+        other['rows'].append(['商品名（中文）','独立品牌'])
+        nmpa_ingest.activate_source(ctx,registered(ctx,other))
+    if introduce_first:shorter()
+    row=propose(rc,'identity.target','IL-31RA','IL-31RA抗体药物独立品牌注射液获批。')
+    if not introduce_first:
+        assert row['status']=='verified'
+        shorter()
+    assert next(f for f in svc.db.current_facts(rc.project_id,did) if f['id']==row['id'])['status']=='unverified'

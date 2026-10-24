@@ -40,27 +40,31 @@ class QuoteCheck:
     reason: str = ""
 
 
-def _numbers(value: object) -> list[str]:
+def _numbers(value: object,quote: str | None=None) -> list[str]:
     if value is None:
         return []
     if isinstance(value, bool):
         return []
     if isinstance(value, (int, float)):
         return [str(value)]  # Preserve integer precision and exponent digits verbatim.
+    if isinstance(value,str) and quote is not None and re.search(
+            r'(?<![\w/+-])'+re.escape(normalize(value))+r'(?![\w/+-])',quote):
+        # The complete literal text proves its embedded identifiers; do not
+        # discard numbers from unmatched prose merely because a suffix is unknown.
+        return []
     if _identifier(value):
         return []
     if isinstance(value, dict):
         out: list[str] = []
         for v in value.values():
-            out += _numbers(v)
+            out += _numbers(v,quote)
         return out
     if isinstance(value, (list, tuple)):
         out = []
         for v in value:
-            out += _numbers(v)
+            out += _numbers(v,quote)
         return out
-    text=normalize(str(value))
-    return [match[0] for match in re.finditer(_NUMBER,text) if _numeric_suffix(text,match.end())]
+    return re.findall(_NUMERIC_TOKEN, normalize(str(value)))
 
 
 def _identifier(value: object) -> bool:
@@ -85,12 +89,18 @@ def _number_in(num: str, text: str) -> bool:
         target = Decimal(num.replace(',', ''))
     except InvalidOperation:
         return False
-    return target.is_finite() and any(
+    if not target.is_finite():return False
+    if any(
         Decimal(match[0].replace(',', '')) == target and _numeric_suffix(text,match.end())
-        for match in re.finditer(_NUMBER, text))
+        for match in re.finditer(_NUMBER, text)):return True
+    # An unsigned upper endpoint is not a negative number or a digit inside 4-1BB.
+    ranges=re.finditer(r'(?<![\w.+/-])\d+(?:\.\d+)?\s*-\s*(?P<upper>\d+(?:\.\d+)?)(?![\d.-])',text)
+    return any(Decimal(match['upper'])==target and _numeric_suffix(text,match.end()) for match in ranges)
 
 
 def _numeric_suffix(text: str,end: int) -> bool:
+    joined=re.match(r'[-_/]\d+(?:\.\d+)?([a-zµα-ω][a-z0-9µα-ω/^]*|[-_/][\w/-]+)',text[end:])
+    if joined:return all(part in _UNIT_PARTS for part in joined[1].split('/'))
     tail=re.match(r'[a-zµα-ω][a-z0-9µα-ω/^]*|[-_/][a-zα-ω][a-z0-9α-ω_-]*',text[end:])
     if tail is None:return True
     # Numeric quantities may touch units; 2F8/5-HT2A are complete identifiers, not counts.
@@ -109,7 +119,7 @@ def check_quote(source_text: str, quote: str | None, value: object = None) -> Qu
         return QuoteCheck(False, None, None, "原文中找不到该片段")
     if _missing_labels(value,q):
         return QuoteCheck(False,idx,idx+len(q),'原文片段缺少完整科学标识')
-    missing = [n for n in _numbers(value) if not _number_in(n, q)]
+    missing = [n for n in _numbers(value,q) if not _number_in(n, q)]
     if missing:
         sample=', '.join(n[:80] for n in missing[:5])
         extra=f'（另{len(missing)-5}项）' if len(missing)>5 else ''

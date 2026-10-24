@@ -20,7 +20,8 @@ TRADE_FIELDS=('identity.trade_name_zh','identity.trade_name_en')
 NAME_FIELDS=('identity.name_zh','identity.name_en')
 _NEGATED=re.compile(r'\b(?:not|never|neither|no longer|without)\b|并非|並非|不是|不属于|不屬於|尚未|未获|未獲|不在'
     r'|尚无|尚無|并无|並無|没有|沒有|未见|未見|未发现|未發現'
-    r'|[无無][^。；;，]{0,80}(?:证据|證據|记录|紀錄|报道|報道|获批|獲批|上市)',re.IGNORECASE)
+    r'|(?:^|[，,；;。\s])(?:目前|至今|尚|均|仍)?[无無](?![进進]展)[^。；;，]{0,80}'
+    r'(?:抗体药物|药物|药品|产品|產品|疗法|療法|证据|證據|记录|紀錄|报道|報道|获批|獲批|上市)',re.IGNORECASE)
 
 
 def contains(quote: str,value: str) -> bool:
@@ -61,7 +62,8 @@ def brand_basis(db: Any,pid: str,eid: str) -> dict[str,Any]:
     """Bind receipts to actual current identity evidence, including conflicting owners."""
     rows=_brand_rows(db,pid)
     own={name_key(r['value']) for r in rows if r['entity_id']==eid}
-    rows=[r for r in rows if any(name_key(r['value']).startswith(key) for key in own)]
+    rows=[r for r in rows if any(name_key(r['value']).startswith(key) or key.startswith(name_key(r['value']))
+                               for key in own)]
     rows.extend(_name_rows(db,pid,eid))
     basis=[{key:r[key] for key in ('id','entity_id','source_id','value','quote','context')}
         for r in sorted(rows,key=lambda r:r['id'])]
@@ -160,8 +162,9 @@ def _property(text: str,names: list[str],value: str,field: str,brands: list[str]
                   r'^作为[^。；;，]{0,80}(?P<kind>'+kind+r')，\s*'+subject)
         for pattern in patterns:
             for match in re.finditer(pattern,text):
-                if any(name_key(other).startswith(name_key(brand)) and len(name_key(other))>len(name_key(brand))
-                       and text.startswith(name_key(other),match.start('brand')) for other in others):continue
+                if any((name_key(other).startswith(name_key(brand)) or name_key(brand).startswith(name_key(other)))
+                       and re.match(re.escape(name_key(other))+r'(?![a-z0-9])',text[match.start('brand'):])
+                       for other in others):continue
                 if not re.search(r'(?:非|non[- ]?)\s*$',text[:match.start('kind')]):return True
     return False
 
@@ -170,7 +173,7 @@ def _development(text: str,names: list[str],company: str) -> bool:
     """Require a development relation, not a product's manufacturer, holder or marketer."""
     owner=re.escape(name_key(company));text=name_key(text)
     for name in names:
-        drug=re.escape(name_key(name))
+        drug=(re.escape(name_key(name))+r"(?!['’]|的|[a-z0-9]|\s*(?:manufacturing|production|process|生产|生產|工艺|工藝|制造|製造))")
         patterns=(owner+r'\s+(?:developed|develops|co-developed)\s+(?:the\s+)?'+drug,
             drug+r'\s+(?:(?:is|was)\s+)?(?:developed|co-developed)\s+by\s+'+owner,
             owner+r'(?:宣布[，,:：]\s*(?:本)?公司)?\s*(?:自主|独立|独立自主|联合)?研发的?'

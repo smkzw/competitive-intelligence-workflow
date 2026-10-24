@@ -38,22 +38,19 @@ def requalify_project(db: DB, cas: CAS, project_id: str, *, dry_run: bool = Fals
         counts[result['verdict']] += 1
         receipt = assessment.make_receipt(row, rule=rule, stored_status='verified', result=result)
         prepared.append(receipt)
-        if dry_run:
-            counts['skipped']+=int(assessment.same_receipt(latest.get(row['id']),receipt))
-            continue
-    if not dry_run:
-        with db.tx(immediate=True):
-            latest=db.latest_verdicts(project_id,rule)
-            current={row['id']:row for row in db.raw_current_facts(project_id)}
-            for receipt in prepared:
-                row=current.get(receipt['fact_id'])
-                if row is None or not assessment.receipt_matches(receipt,row,db=db):
-                    counts[receipt['verdict']]-=1
-                    counts['errors']+=1
-                    continue
-                if assessment.same_receipt(latest.get(receipt['fact_id']),receipt):
-                    counts['skipped']+=1
-                    continue
+    with db.tx(immediate=not dry_run):
+        latest=db.latest_verdicts(project_id,rule)
+        current={row['id']:row for row in db.raw_current_facts(project_id)}
+        for receipt in prepared:
+            row=current.get(receipt['fact_id'])
+            if row is None or not assessment.receipt_matches(receipt,row,db=db):
+                counts[receipt['verdict']]-=1
+                counts['errors']+=1
+                continue
+            if assessment.same_receipt(latest.get(receipt['fact_id']),receipt):
+                counts['skipped']+=1
+                continue
+            if not dry_run:
                 db.log_step(None,'requalification','verify',0,assessment.ROLE,receipt)
                 latest[receipt['fact_id']]=receipt
     return {'schema_version': 'ciw2-requalify-v1', 'project_id': project_id, 'rule': rule,

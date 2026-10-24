@@ -1,5 +1,19 @@
 # Execution checkpoint
 
+## 2026-10-24 当前：来源档案根因族有界完成，继续中文阅读与临床范围
+
+上一开发提交01432c1fbad885183a2f56ab7e4188f7e0ba491e已push/fresh remote exact。Goal active，未暂停/完成/发布；当前模型研究只剩受保护52075未见终态，不对其做固定轮询/重跑151批。方法direct整合：已有独立意见给出具体可复现反例，owner逐族RED及原文/共享函数检查可决定本次最小修复；不加第三轮全页会商或额外chair。外部模型没有做测试/SQLite/重hash/视觉，不能把owner证据冒作其独立执行。原7162报告及同session10080补审均保持REVISE；10080实际CodeBuddy/codebuddy-cli/deepseek-v4.1-flash/requested max/session01a16b36-b8e2-7509-9b11-91ab240cdb08，449.684s/25tools/return0/no fallback，124行报告SHAf486367a98709543d974fb609193e5dd949bffba52e323323ae1dd1809416e4a。补审明确D1/D3/D4窄范围已修正，又指出R1纯存在否定/PFS跨窗、R2分段数字靶点、R3生产工艺所有格冒研发、R4反向短品牌/剂型歧义、R5dry-run统计竞态。其额外读取02 started元数据在原明确01来源读集之外；仅只读启动信息，不据此声称来源02独立验收或隐瞒边界偏差。
+
+Owner另发现过宽_numeric_suffix过滤可漏验500mm3/2F8两反例，2RED/9既有PASS后改为完整词界逐字文本证据，未命中字符串仍严格核数值，嵌套值各自核对，123相关PASS0.82s，frozen03时1479全门9.28s。补审R1–R5随后集中12RED/46既有PASS，一批完整最小修复：存在否定限定分句起始而不把PFS当否定；4-1BB/Unicode/下划线不拆人数，真实10–20mg/每kg区间端点保持无符号证据；药物所有格/生产工艺不作研发药物；双向已注册前缀冲突同位点拒绝、未来变化使依据失效；dry-run与真实追加均在事务内复查，只有真实模式写receipt。248相关PASS1.81s，最终当前全v2 **1491PASS9.17s**/1既有TestClient弃用警告、Ruffall/184Python600-80通过。原测试失败/原审阅不改，未用缩门/降断言或固定裸“无”词表遮盖问题。
+
+正常新Skill实际25666已终态：regulator-profile-live-02/run_b581052a8655，2实际glm-5.3-flash/no fallback，11432tokens只计此2次真实usage；4新提案2核实IL-4Rα/monoclonal antibody、2状态/集团未核实，replay4/0reassessed，160其他候选未运行。研发/权益不再由of-company猜，未造Updated as_of/获批日；未知研究模型搜索gaps不能替代coverage真实blocked状态。补审读取时它还未结束，保留原NOT_RUN历史。原第一次5提案及错误研发记录全部保留，新单元不是改旧提案或强升原unverified。
+
+当前regulator-current-frozen-04 manifestbf4cd5a297682c4e8c5a3318fe4cfb2bc62057cae41578163588c8eea443b710/222files/215immutablelinks；新副本regulator-current-live-04保留03的19sources625entities496facts原行，追加9个新quote-checker采用版本NMPA事实；0新来源/模型。旧错误fct_fc9a2ea3086f628fda77a2d34b39fd5bd86ed5e1839a37a3e05404cd7e86d109保留stored verified而current invalidated/unverified，真实康诺亚开发事实仍确认，旧stored unverified未升级。5旧verified离线复核4confirmed1invalidated/重复skipped5；新4提案replay4/0reassessed、2核实2未核实，全部旧源/CAS/原提案SHA核对。04首次回执组装KeyError:model_events发生在复制/复核/页面生成之后；保留partial目录，resume-regulator-current-04.py只恢复同copy的元数据汇总/幂等复核，前后A/B/C逐字相同，不重采/重跑模型、不覆写历史回执。新receipt/owner-audit/owner-final-binding分开保存。
+
+04 A009cc2164401ff7636b3b20296d4ee09768d949d8539064159dc802d12aa5a70，Bd3c5e9f58369f77ffc1bb5cb9b1b20891bb31a273eb02396ab8a542103775df8，C7805e4aa750e5cb756abf4789dfabb26574fd8f451e54781b2366cbd84ed735d；与03非ID字节完全相同，258事实ID逐处双射且均存在本项目DB。03九图逐张实看：A四宽源窗/新类型/几何、C临床身份；04另用新实际HTTP逐字ABC+真实名称证据/新factIDs/Enter-Esc/delta图实看再验受影响关联，不混异候选PASS。当前源窗有短英文原文正常折叠，但A类型仍短英文、同原文重复及C多来源入口冗余未优化，不宣称最终视觉/中文原生/M3接受。Ego68同goal复用，p1当前04，p2官网；当前72137/PID56438/56604，无后台研究；旧47620/53281已查明精确停止，旧21383/93062亦已停。不删除证据、缓存、其他空间或日常登录。独立guard review-gate首次因旧模板必需Hermes字样不通过，补明“实际无Hermes/chair，仅模板标签”后格式通过，不冒作额外模型或科学通过。
+
+下一条有界实际实现：共享类型中文标签/源值保留、相同原文的档案来源去重和入口合并，按现有Kangzhe功能优先规范减少默认阅读噪音；相关一批回归后核受影响真实页面，不改数据/旧源。随后继续带人群限定的适应症/地域阶段、正式全称—成分及集团日期/法律实体，已有真实source-first结果可以复用；不回退到大规模重复提案/全页会商。当前根因族可白名单提交，源数据、私有模型/审阅日志不入Git；M1–M6最终门仍未通过。
+
 ## 2026-10-24 品牌与监管原文根因：开发候选02，独立补审/新正常单元在途
 
 Goal active，继续，无暂停/发布/完整M3接受。当前代码和源版本由owner统一改动；原独立7162实际终态CodeBuddy/codebuddy-cli/deepseek-v4.1-flash/requested max/session01a16b36-b8e2-7509-9b11-91ab240cdb08，594.283s/70tools/return0/no fallback；原132行报告SHAa20f24717563569e2b973622a31650f1d68fe9b1f44ed8fdad7d7fe950263b9a保持REVISE。其宿主Bash被拒、只读源码/原件，未实际pytest/SQLite/重算hash；不能把model工具清单/return0或owner验证写成其独立执行。模型指出D1正式名依赖漏绑、D2“尚无/没有”等存在否定、D3中文短品牌命中别的已注册长品牌、D4离线提交与计数竞态；owner集中9RED/20既有PASS后修复，再205相关PASS2.00s，补新长品牌未来生效/合法中文后缀/无进展生存期负向边界后69PASS0.65s。名称依据现在含当前正式名事实/实体原名/相关前缀冲突；不递归全目标投影，不改历史科学事实/源码冻结件，不建立新审批。
