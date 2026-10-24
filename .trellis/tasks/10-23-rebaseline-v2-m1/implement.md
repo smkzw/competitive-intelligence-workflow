@@ -1,5 +1,19 @@
 # Execution checkpoint
 
+## 2026-10-24 当前：默认阅读密度完成，下一归并弱收敛
+
+6e29485e6c73d4be3a28fb4da9c9781d02c1d07c已push/fresh remote exact。此密度包选direct：明确实屏根因、共享宏由单owner修改，机械内容可达/几何/键盘可决定，无新临床等价判读，不再派全页会商。Kangzhe16px/配色沿用，非全站设计系统签收；源数据/图表决策/证据语义不改。初始3真实行为RED（长角色、长人群、重复/多行来源），唯一申请人正向PASS；短靶点测试夹具先缺mah_refs、再缺evidence_urls、后改生产workspace遗漏tier，均属测试脚手架错误不冒作产品RED。实际旧截图短靶点换行已证实；最终production fixture通过。首相关82PASS/1FAIL为DefaultText错误把details直接文本算可见，修测试可见性后83PASS1.02s。首次1549开发门，实际Ego02的真实37字条件仍默认展开，15图后FAIL保留；调整仅显示折叠长度并加入37字生产反例，最终1550PASS10.61s/Ruff全src-tests-scripts-setup/JS/192Python600-80过，1既有Starlette warning；Ruff import单空行格式修后不重复宽门。
+
+共享clinical identity保留全部MAH/研发/权益，只有存在更直接公司角色才把申请人/申办方放“其他企业”，只有申请人时仍默认显示。长人群原文折叠不重写成项目标签，C行内来源为字段级aria-label，年龄原3控制恢复为单邻接来源+统一阅读器。短靶点≤12字不换行，长组合仍完整可换行，没有缩字号/全局overflow隐藏/药物字典。
+
+冻01发现生成元数据被uv构建重写，拒绝未完成冻结/预览，错误现场保留。旧development-scope-frozen02只有src/ciw2.egg-info/SOURCES.txt漂移ec4ad219…→8f59d7df…；全部产品源码/科学资料不变，同inode仅该冻结清单，旧manifest/hash不改。原owner审计在构建前通过，之后不可再声称228文件整体一致；已如实追加说明。新freeze排除egg-info，未来包构建复制工作目录，不直接在冻结目录构建。新的03/223files/218immutablelinks/manifest4f7bd69e2e3e66ad645f22a3195d6a6a7103e08dcd808c7a02ae9405e38704ce可全量核。
+
+reading-density-live03与原current0219/625/510/478及current逐行相同、0HTTP/model/重核；owner-audit绑定全部CAS/HTTPABC（Aa299a9df…/Bd3c5e9f5…/Ccf629e88…）、C12身份facts和完整入排f9fc9ef5…。Ego54334终态16图全部逐张实际查看，四宽未筛/筛后、短靶点、身份与行内来源、完整原文阈值红700下划线/长人群展开、Enter/Esc回实际触发者。C目标行276.88→252.48（1440/1600）、268.48→230.09（1920/2560），减8.81%/14.30%，不是整页缩短。A单已知点整行低密度、C窄样本列[1]换行仍后续；不签收全美学/新B/完整M1–M6；本UI后的新wheel未重建。精确ps后停止旧94391/11185预览，当前12699/51687、Ego68p1保留；无文件/环境清理或硬盘释放宣称。
+
+本次依赖边界发现原52075归并仍running，精确pid存在不代表进展；一次read-only缓存追踪（非定时poll）证明780→134→114→108→108→108，283model成功事件/280cache，下一53包当时36完成。弱“字节略降”收敛导致108条多层反复，下一任务应严格有界压缩而非只等待/重复研究；原151批/780要点/冻结源全部保留，0新调用/0原库写，不强停或热改旧进程。私有审计初错导HARNESS_RULES模块后改真实stages导出；一个SQLite as_uri相对路径错误改resolve，均仅诊断脚手架非模型失败。
+
+下一安全动作：白名单提交本UI/PRD/PLAN/STATUS/Trellis→修生产摘要收敛root，先成族离线反例/完整最小修改，再新有界恢复方案独立核对缓存兼容。Goal active无暂停/假完成，不重跑151原批，不接触旧中文根。
+
 ## 2026-10-24 当前：限定阶段/安装节点有界完成，继续密度根因
 
 最新完整开发门1544PASS9.46s、Ruff src/tests/scripts/setup、JS/191Python600-80通过；未因补文档再跑宽门。development-scope-frozen-02/228files/207immutablelinks/manifest693dd7a5ccdac6cae7884cf85f2c5adf1ac2200fd317d988e6179ec093728c6e。current-02原19源625实体510事实478关系、当前指针/5提案/6原模型事件与live01逐行不变；0新网络模型事实，旧错误开发有效invalidated，原stored unverified不升格。
