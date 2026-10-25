@@ -436,6 +436,9 @@ def _analysis_call(rc: RunContext, report: str, task: dict[str, Any]) -> Analysi
         raise ValueError('摘要返回的报告类型与任务不一致')
     if len(result.findings) > task.get('finding_limit', 6):
         raise ValueError('摘要条数超过本次归并上限，不缓存超量结果')
+    if any(not f.title.strip() or not f.bullets or any(not text.strip() for text in f.bullets)
+           for f in result.findings):
+        raise ValueError('摘要正文内容为空，不缓存无内容的结构化成功')
     if any(not f.fact_refs or not set(f.fact_refs) <= set(task['verified_fact_ids']) for f in result.findings):
         raise ValueError('摘要引用不属于本次完整输入，不缓存或静默删除')
     if not result.findings and task['verified_fact_ids'] and (task['mode'] == 'batch' or task.get('final_summary')):
@@ -490,7 +493,8 @@ def _analysis_merge(rc: RunContext, report: str, findings: list[dict[str, Any]],
             'input_sha256': fingerprint(findings), 'basis_sha256': basis,
             'input_count': len(findings), 'output_count': len(merged), 'chars_in': before, 'chars_out': after})
         if not accepted:
-            raise ValueError('摘要输入归并未收敛，保留已完成结果供恢复')
+            raise ValueError('摘要输入归并未收敛；同一策略继续只复用相同结果。'
+                             '保留原研究资料，在新归并运行中调整策略；无需重跑研究批次')
         findings = merged
     raise ValueError('摘要归并超过12层，保留完整检查点，不继续模型调用')
 

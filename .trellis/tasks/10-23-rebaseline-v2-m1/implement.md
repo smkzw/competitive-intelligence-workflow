@@ -1,5 +1,23 @@
 # Execution checkpoint
 
+## 2026-10-25 当前集成节点 归并含义读取及Kangzhe7.1.1
+
+方法execution-plus-conference：E03承担独立共享前端写集，C03挑战冻结摘要引用/恢复语义，owner统一事实与缓存合同并做实屏；没有额外chair或无限全页循环。
+
+已push 0a39e40dfc577184ed9d7703232b786b3e2f1ac6（归并空成功/1:1引用及审计组件）。两委派均终态：E03实际pi/cursor/default/session01a17132-3eca-7000-a44a-767990c933b2，750.402s/380tools/return0/no fallback，只能确认selector为default，不能猜底层模型；原报告ee3a2270…并非视觉接受。C03原Grok认证发现失败、Cursor该Grok目录不存在，批准链最终实际pi/openai-codex/gpt-6.1-sol/high/session01a17137-fb96-7000-ba8a-349f5cdc2055，236.855s/96tools/return0，47独立离线PASS0.74s，原报告84b269d7…REVISE保留，顶层旧Grok字段不是实际模型。
+
+C03空结构正文/同策略拒绝层再失败两项：owner6实际RED后集中修，空白标题/空bullet/空白bullet在新回复及缓存读取拒绝；同策略不收敛明确终态，保留原批资料，新归并策略单元处理，不许误导继续按钮可自动修复。第一回归52PASS/1FAIL是正例生成器将短正文切成空，改正正例有效内容后相关75PASS1.31s/Ruff，不放宽新负向断言。
+
+引用含义不透明是实质设计风险。两生产RED后复用已有read_project_fact白名单与分页，RunContext从同run的analysis_basis注入仅本包一对一映射；工具返回完整值/科学上下文/来源及requested_ref。别名次序反转仍能按读取的字段选年龄事实；越包/越调用旧别名拒绝，原真实ID读法兼容。69相关PASS1.42s；这证明工具可达与运输，不冒充真实医学结论已复核。未新建表/平台/网络来源、未膨胀8k包。
+
+UI worker后owner实屏发现C表首行719px比旧约670px更晚，未采信“布局优化”的文字报告。共享标题+统计同栏、检索标签+输入同行后1920×940表顶581px、18px正文、无横向溢出。官方Logo SHA8d16d3ae…与Kangzhe7.1.1 tokens/motion原字节固定；一个kz-site挂环境光场及摘要/KPI指针光，图/表不旋转不被wrapper破坏。减少动态、打印、pagehide释放/pageshow恢复沿用官方runtime。无大首屏电影/新框架，文件/JS/inline均走普通renderer。静态测试首次误把inline CSS中的属性字符串当DOM属性，修测试仪器，不作为产品FAIL。
+
+新集成01完整门1587PASS/2FAIL：新analysis只读工具暴露后旧smoke_model诊断禁止所有工具，是真相邻消费者不兼容；普通单请求诊断现在广告实际工具schema但不执行，回执明确executed_tool_calls=0，继续不是完整Agent检查。补正向现有mock断言，冻结02后完整v2 **1589PASS10.93s**、Ruff全src/tests/scripts/setup.py、全部5JS语法及77生产Python600/80通过，1既有TestClient警告；255输入字节后核无变化。集成02manifest **b7c6d3d96f4ed3d654bd68bf9de17778aca1dbf33fbe302cc0b92bcfe5c787bd**，01失败日志及冻结不覆盖。不把77生产Python与此前含tests的195计数混为源码减少。
+
+真实新候选预览PID89478/port50057/句柄14784，固定19源510事实625实体478关系的A/C副本，B同原真实NCT04921345的668结果/708事实，0来源模型。B初hash检查拒绝，诊断仅新增stored_status投影元数据：移除此键精确重现旧e40c8c18…，所有状态相同、原668 IDs仍齐；新投影eb4067d2…，无改旧科学值。server.json与B.html新hash绑定，旧原DB以mode=ro访问。Ego80/p1四宽真实验收进行中，完成前不标视觉PASS。
+
+原0a39准备runtime未启动，因发现空正文问题已被当前候选取代，保留原manifest。下一安全动作：完成四宽及交互/独立视觉窄审，白名单提交当前修复，固定新runtime仅归并原780，不重跑151研究批。整体Goal active；M1–M6未交付，旧工程零接触/历史v1 WIP完整。
+
 ## 2026-10-25 恢复实施 归并收口与Kangzhe7.1并行
 
 当前整族实证：新增生产8场景先6FAIL/2PASS，修空普通批/未知引用静默过滤/拒绝层succeeded/无限正文/实际HTML发布链；随后集中邻接58PASS1.04s及Ruff。新增1:1短事实引用正例在旧冻03真实FAIL（旧结果错误带上第二事实）。首次只设PYTHONPATH的probe被pytest pythonpath=src覆盖而PASS，是仪器失配，不算旧代码通过；用-o pythonpath指向冻结目录后才计真实RED。summary_lineage.py54行复用现有stages，无新表/DB/接口；选/未选事实留审计，不强迫六条引用全体。stages代码签名绑定helper，拒绝层带accepted=false与failed且旧层字节保留；空final/有核实输入的空batch缓存前拒绝，取消含缓存循环。

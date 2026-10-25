@@ -6,6 +6,7 @@
 """
 from __future__ import annotations
 
+import base64
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -189,8 +190,11 @@ def render_report(db: DB, pid: str, report: str, *, findings: dict[str, Any] | N
             summaries.append({**finding, 'trial_context': [identities[tid] for tid in tids if tid in identities]})
     assets = None
     if inline:
-        assets = {"css": (STATIC / "kangzhe.css").read_text(encoding="utf-8"),
-                  "js": (STATIC / "portal.js").read_text(encoding="utf-8"),
+        assets = {"css": '\n'.join((STATIC / name).read_text(encoding='utf-8')
+                                    for name in ('kz-tokens.css', 'kangzhe.css')),
+                  "js": '\n'.join((STATIC / name).read_text(encoding='utf-8')
+                                   for name in ('kz-tokens.js', 'kz-motion.js', 'kz-site.js', 'portal.js')),
+                  "logo": 'data:image/svg+xml;base64,' + base64.b64encode((STATIC / 'logo_bot.svg').read_bytes()).decode(),
                   "echarts": (STATIC / "echarts.min.js").read_text(encoding="utf-8")
                   if (STATIC / "echarts.min.js").exists() else ""}
     tpl = _env.get_template(f"{report.lower()}.html")

@@ -4,33 +4,46 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ project.indication }} · {{ report_title }}</title>
-{% if assets %}<style>{{ assets.css | safe }}</style>{% else %}<link rel="stylesheet" href="{{ static }}/kangzhe.css">{% endif %}
+{% if assets %}<style>{{ assets.css | safe }}</style>{% else %}<link rel="stylesheet" href="{{ static }}/kz-tokens.css"><link rel="stylesheet" href="{{ static }}/kangzhe.css">{% endif %}
 </head>
 <body>
+<div class="kz-optical-field" aria-hidden="true"></div>
 <header class="top">
-  <span class="brand">临床竞品调研</span>
-  <nav>
-    {% for r in reports %}<a href="{{ r }}" class="{{ 'on' if r == report }}">{{ {'A':'A 竞争格局','B':'B 疗效安全','C':'C 设计先例'}[r] }}</a>{% endfor %}
-  </nav>
-  <span class="sub">{{ project.indication }}{% if project.cutoff_date %} · 截止 {{ project.cutoff_date }}{% endif %}</span>
+  <div class="kz-header-row">
+    <span class="brand"><img class="brand-logo" src="{{ assets.logo if assets else static ~ '/logo_bot.svg' }}" alt="康哲药业">临床竞品调研</span>
+    <nav class="kz-reports" aria-label="报告">
+      {% for r in reports %}<a href="{{ r }}" class="{{ 'on' if r == report }}">{{ {'A':'A 竞争格局','B':'B 疗效安全','C':'C 设计先例'}[r] }}</a>{% endfor %}
+    </nav>
+    <nav class="kz-sections" aria-label="本页章节">
+      {% if findings %}<a href="#findings">要点</a>{% endif %}
+      {% block section_nav %}{% endblock %}
+    </nav>
+  </div>
 </header>
 <main>
-  <h1>{{ project.indication }} · {{ report_title }}</h1>
-  {% if project.focus %}<p class="sub">关注点：{{ project.focus }}</p>{% endif %}
+  <section id="report-heading" class="report-heading" aria-label="报告概览">
+  <div class="kz-title">
+    <h1>{{ report_title }}</h1>
+    <p class="kz-lede">{{ project.indication }}{% if project.cutoff_date %} · 截止 {{ project.cutoff_date }}{% endif %}</p>
+    {% if project.focus %}<p class="sub">关注点：{{ project.focus }}</p>{% endif %}
+  </div>
 
   <div class="kpis">
     {% block kpis %}{% endblock %}
   </div>
+  </section>
+
+  {% block content %}{% endblock %}
 
   {% if findings %}
+  <section id="findings" class="kz-section">
   <h2>要点</h2>
   {% for f in findings %}
   <div class="finding"><h3>{{ f.title }}</h3><ul>{% for b in f.bullets %}<li>{{ b }}</li>{% endfor %}</ul>
   {% if f.trial_context %}<details><summary>研究先例</summary>{% for identity in f.trial_context %}{{ clinical_trial(identity) }}{% endfor %}</details>{% endif %}</div>
   {% endfor %}
+  </section>
   {% endif %}
-
-  {% block content %}{% endblock %}
 
 </main>
 <dialog id="design-evidence-dialog" aria-labelledby="design-evidence-title">
@@ -38,6 +51,6 @@
 <div id="design-evidence-body"></div></dialog>
 <script id="charts" type="application/json">{{ charts_json | tojson }}</script>
 {% if assets %}<script>{{ assets.echarts | safe }}</script><script>{{ assets.js | safe }}</script>
-{% else %}<script src="{{ static }}/echarts.min.js"></script><script src="{{ static }}/portal.js"></script>{% endif %}
+{% else %}<script src="{{ static }}/echarts.min.js"></script><script src="{{ static }}/kz-tokens.js"></script><script src="{{ static }}/kz-motion.js"></script><script src="{{ static }}/kz-site.js"></script><script src="{{ static }}/portal.js"></script>{% endif %}
 </body>
 </html>

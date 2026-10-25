@@ -99,6 +99,7 @@ Service复用标准库Condition/deque及一个执行锁，在同一服务进程�
 - harness任务/assistant/工具记录超过20k时先写现有CAS，agent_steps只记有效JSON指针（digest/format/字符数），不截成破损JSON；assistant先排除reasoning正文。诊断读取验证CAS摘要，旧截断日志仅在固定数据重建及原前缀吻合时兼容，不重写历史。
 - 只有思考信息、没有可用正文/工具结果，或必需提交未履行，属于协议未完成：立即记录并仅走已配置备用，不把它当作正常回复耗尽整个工作单元。错误回执保留类别、实际模型与可用用量，不记录服务原始错误正文或凭据。
 - 大数据摘要先建立全部完整记录的预算内任务，再执行；无固定Top-N。多批要点超预算时继续有界归并，输出至多6条；不收敛即明确失败。完整门户数据不裁剪。
+- 摘要接受边界复验非空白标题与每条正文，不因findings非空就放行无内容对象。被拒层的单元缓存留作原始回执，不自动删改；相同策略重复恢复可重现失败但不会继续消耗模型，明确诊断要求保留原研究资料并建立调整策略的新归并运行。该终止政策不冒充自动修复，目标是避免无效循环；真实最终选择的引用语义在实际结果复核，不由alias成员校验替代。
 - summary_lineage.py只管理既有stages中的短引用谱系：每个summary_ref_*唯一映射一条factID，完整输入title/bullets及映射绑定basis digest，所有批仍不截正文。analysis_basis检查点存完整映射，日志只记指针；analysis_selection按每包保存选择/未选canonical引用及输入输出摘要，不是科学撤回，也不要求六条结论引用全体事实。代码签名同时绑定stages和lineage字节；同run缓存不跨run借用，请求模型与实际agent_steps响应模型分开记录，不倒改旧缓存身份。引用ID合格不证明叙事科学正确，真实最终摘要须复核。
 - 中间每包上限ceil(要点数/2)、最多6，传输8k含真实元数据；所有摘要输出正文≤8k。进展至少25%条数或15%正文字符且不扩张，最多12层。检查点带schema/accepted及code/rules/Skill/schema摘要和requested_model，被拒层保留完整输出但status=failed，stage_output不能将它当成功恢复。普通有核实输入的空批、空最终、无效引用和膨胀结果在缓存前拒绝；无核实事实可合法为空。每包含缓存路径检查取消；旧冻结不迁移/改键。当前规则/输入资格及模型真实身份在新隔离run单独绑定，不重跑原研究。
 - 真实58775字符输入在主模型120秒超时后，摘要改为≤24000字符整包，并移除fact_id已能定位的重复URL/来源ID/locator，不移除临床定义。次要终点全量保留后，单研究最高111395字符；现按完整终点及重复共同研究上下文分包，标记study_part/总主要次要数，所有测量实例恰好覆盖一次。只剔除与端点记录重复的来源引用，未知未映射引用仍保留；单定义/共同上下文过大明确失败。R4实际284研究/580主要/2876次要规划151任务、最大23984字符；这是输入规划，不是模型或医学验收。旧冻结62任务仅覆盖此前投影。
@@ -144,3 +145,9 @@ Service复用标准库Condition/deque及一个执行锁，在同一服务进程�
 `CIW_WEBSEARCH_PROVIDER`(tavily|bing|serpapi|none) `CIW_WEBSEARCH_API_KEY` `CIW_WECHAT_SEARCH_CMD`
 `CIW_CHINA_EGO_SPACE_ID`(可选已授权专用空间) `CIW_CHINA_BROWSER_TIMEOUT_S`(默认240秒)
 `CIW_NCBI_API_KEY` `CIW_HTTP_TIMEOUT_S` `CIW_MAX_AGENT_STEPS` `CIW_ACCESS_TOKEN`。
+
+### 当前归并与视觉集成（2026-10-25）
+
+- 摘要复用现有read_project_fact；RunContext从当前run的analysis_basis检查点注入本包一对一短引用，只在该工具上下文解析。完整值和来源由已有工具分页返回，缓存不伪造医学语义接受。
+- 前端复用现有Jinja/JS/ECharts。官方Kangzhe7.1.1的Logo/tokens/motion原字节与hash登记在static/kangzhe-assets.json；一个kz-site生命周期只挂环境光场和摘要/KPI指针光，不接管导航/图表/下钻、不旋转数据平面。pagehide释放、pageshow重挂，减少动态/打印正常阅读。
+- 本产品是临床查阅任务，使用紧凑标题/统计栏、图表/表格/原文入口；不插入占据首屏的装饰电影或虚构进程。桌面1440/1600/1920/2560按实际可视区检验，正文18px、辅助16px；原文与证据完整保留。

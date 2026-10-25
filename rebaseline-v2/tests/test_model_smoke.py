@@ -33,6 +33,8 @@ def test_model_probe_uses_mock_transport_and_safe_isolated_receipt(settings, tmp
     output = tmp_path / 'probe'
     result = fn(settings, task, output)
     assert len(requests) == 1
+    assert 'read_project_fact' in {t['function']['name'] for t in requests[0]['tools']}
+    assert result['executed_tool_calls'] == 0  # One transport probe, no fact/source execution.
     assert result['pipeline_acceptance'] == 'NOT_RUN'
     assert ('schema_valid' in result) == (status == 200)
     if status != 200:

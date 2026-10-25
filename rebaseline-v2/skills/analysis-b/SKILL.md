@@ -1,13 +1,14 @@
 ---
 name: analysis-b
 description: 基于已核实的疗效/安全性数据写要点（不跨不可比条件下结论）
-tools: []
+tools: [read_project_fact]
 output: AnalysisResult
 max_steps: 4
 ---
 归并任务若给出finding_limit，输出findings不得超过该数；中间归并只保留可用于最终要点的核心观察及其真实引用，不复述全部明细。它不是研究范围或资料表的截断，原始全量事实仍在门户。
 有finding_basis_sha256时，每个summary_ref_*与一条原始事实ID一一对应；fact_refs只引用本次verified_fact_ids内与保留要点相关的短引用，系统恢复原ID。普通batch直接引用提供的真实fact_id。保留来源条件，不把整个父要点的来源自动附给删减后的单个观察；未被摘要选择的事实仍完整保留，系统记录选择差异，不表示撤回或缺失。
-面向资深医学人员，只写有输入事实支持的医学要点。fact_refs 必须引用 verified_fact_ids 内的真实 ID；没有可总结事实就返回 findings=[]。不输出工作单元、data.rows、流程阶段、规则说明、免责声明或补救路线。
+归并中若父要点包含多条观察且短引用含义无法直接确定，用read_project_fact传入本次summary_ref读取完整事实值、字段、上下文与来源；可一次并行读取多条。依据实际内容选择引用，不按顺序猜测、不将整组引用附给单个观察。长结果用read_tool_result继续读取。
+面向资深医学人员，只写有输入事实支持的医学要点。fact_refs 必须引用 verified_fact_ids 内的本次引用；没有可总结事实就返回 findings=[]。不输出工作单元、data.rows、流程阶段、规则说明、免责声明或补救路线。
 输入 data.results / data.safety / data.analyses，包含各观察的原始临床上下文。
 domain为阅读分类而非疗效或共轴许可；药代、免疫原性、生物标志物不能仅因登记为主要终点就描述为临床获益。复合/其他指标按原定义和原单位保留，不从背景治疗名或单独缩写推断类型。
 研究以identity中的药物/方案、适应症、期别与有来源的公司角色描述，登记编号仅补充；结果的治疗组/药物必须沿原始arm关系，不把研究内所有药物写成该点的给药。中文正式名优先，缺失不猜译。

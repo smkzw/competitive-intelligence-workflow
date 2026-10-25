@@ -65,6 +65,13 @@ class RunContext:
     def skill(self, name: str, task: dict[str, Any]) -> Any:
         self.check_cancelled()
         ctx = self.tool_ctx()
+        if name.startswith('analysis-') and task.get('finding_basis_sha256'):
+            basis = self.db.stage_output(self.run_id, 'analysis_basis:' + task['finding_basis_sha256'])
+            mapping = (basis or {}).get('reference_map', {})
+            supplied = task.get('verified_fact_ids', [])
+            if any(alias not in mapping or len(mapping[alias]) != 1 for alias in supplied):
+                raise ValueError('摘要事实读取缺少本次一对一引用依据')
+            ctx.extra['summary_fact_refs'] = {alias: mapping[alias][0] for alias in supplied}
         try:
             return run_skill(self.skills[name], task, self.llm, self.registry, ctx,
                              max_steps=self.settings.max_agent_steps,

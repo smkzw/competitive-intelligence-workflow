@@ -1,0 +1,10 @@
+{
+  "version": "7.1.1",
+  "source": "kangzhe-design bundled assets/runtime; unchanged bytes",
+  "files": {
+    "logo_bot.svg": "8d16d3ae8353dd31f46a50d401e66f9e62af40be6cc42cdf5050866a4e6e1cae",
+    "kz-tokens.css": "aa3d49cf318beba4ac647c4c8c6267f068972b3c16c74e21293221ede61ba523",
+    "kz-tokens.js": "f31e4585b6cfcc83bbfa54c494f38656feeed81429360abecbdbb6b9ea58f9fa",
+    "kz-motion.js": "2ba1d23f5e704ec6df1983c6d5c9e44659bdbe5fae1940e53585839d8ca7a41d"
+  }
+}

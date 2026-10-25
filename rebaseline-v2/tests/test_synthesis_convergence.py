@@ -17,7 +17,7 @@ def reducer(rc, *, items=8, length=3500, cut=1):
         task=json.loads(messages[1]['content']);calls.append(task)
         assert len(calls)<=12, 'Repeated near-identical layers consumed unbounded calls'
         rows=copy.deepcopy(task['data']['candidate_findings'][:task.get('finding_limit',6)])
-        for row in rows:row['bullets']=[row['bullets'][0][:-cut]]
+        for row in rows:row['bullets']=[row['bullets'][0][:-cut] or row['bullets'][0][:32]]
         return LLMReply(tool_calls=[ToolCall('finish','submit_result',{'report':'C','findings':rows})])
     rc.llm.script=respond
     return fid,inputs,calls

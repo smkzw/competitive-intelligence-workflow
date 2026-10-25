@@ -17,6 +17,7 @@ from ciw2.config import Settings
 from ciw2.harness.agent import HARNESS_RULES, _submit_tool
 from ciw2.harness.llm import LLMError, OpenAICompatLLM
 from ciw2.harness.skills import load_skills
+from ciw2.harness.tools import REGISTRY, RESULT_PAGE_TOOL
 from ciw2.pipeline.stages import _analysis_tasks, _compact
 from ciw2.render.portal import report_data
 from ciw2.store.db import DB
@@ -73,15 +74,14 @@ def probe(settings: Settings, task: dict, output_dir: Path, timeout: float = 120
     skill = load_skills(settings.skills_dir)['analysis-c']
     messages = [{'role': 'system', 'content': f'{HARNESS_RULES}\n本次最多 4 次模型交互，预留最后一次提交已核实结果。\n\n# Skill：{skill.name}\n{skill.body}'},
                 {'role': 'user', 'content': json.dumps(task, ensure_ascii=False)}]
-    if skill.tools:
-        raise ValueError('This bounded diagnostic supports the no-research-tools analysis-c contract only')
-    tools = [_submit_tool(skill.output)]
+    available = REGISTRY.subset(skill.tools) + [RESULT_PAGE_TOOL] if skill.tools else []
+    tools = [tool.schema() for tool in available] + [_submit_tool(skill.output)]
     encoded = json.dumps({'messages': messages, 'tools': tools}, ensure_ascii=False).encode()
     output_dir.mkdir(parents=True, exist_ok=False)
     result = {'status': 'STARTED_PROTOCOL_PROBE_NOT_ACCEPTED', 'requested_model': settings.llm_model,
               'input_sha256': hashlib.sha256(encoded).hexdigest(), 'input_bytes': len(encoded),
               'task_chars': len(messages[1]['content']), 'pipeline_acceptance': 'NOT_RUN',
-              'input_origin': input_origin,
+              'input_origin': input_origin, 'executed_tool_calls': 0,
               'script_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
     (output_dir / 'started.json').write_text(json.dumps(result, ensure_ascii=False, indent=2))
     client = OpenAICompatLLM(settings.llm_base_url, settings.llm_api_key, settings.llm_model,

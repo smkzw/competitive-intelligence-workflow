@@ -123,15 +123,16 @@ class ReadFactArgs(BaseModel):
     fact_id: str = Field(min_length=1)
 
 
-@REGISTRY.register('read_project_fact', '读取本项目当前事实完整值、科学上下文与来源；长结果可继续分页。', ReadFactArgs)
+@REGISTRY.register('read_project_fact', '读取当前事实完整值、科学上下文与来源；支持本次摘要短引用，长结果可继续分页。', ReadFactArgs)
 def read_project_fact(ctx: ToolContext, args: ReadFactArgs) -> Any:
     if ctx.db is None or not ctx.project_id:
         return {'status': 'tool_failed', 'error': '缺少当前项目'}
-    fact = next((fact for fact in ctx.db.current_facts(ctx.project_id) if fact['id'] == args.fact_id), None)
+    fact_id = (ctx.extra or {}).get('summary_fact_refs', {}).get(args.fact_id, args.fact_id)
+    fact = next((fact for fact in ctx.db.current_facts(ctx.project_id) if fact['id'] == fact_id), None)
     if fact is None:
         return {'status': 'tool_failed', 'error': '该事实不属于本项目当前事实集合'}
     if ctx.extra is None:
         ctx.extra = {}
     if fact['source_id']:
         ctx.extra.setdefault('source_ids_read', set()).add(fact['source_id'])
-    return {'status': 'ok', 'fact': fact}
+    return {'status': 'ok', 'requested_ref': args.fact_id, 'fact': fact}

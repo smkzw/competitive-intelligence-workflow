@@ -37,17 +37,27 @@
 {% set pending=refs|rejectattr('status','equalto','verified')|list %}
 {% if pending %}<details><summary>待核记录 {{ pending|length }}</summary>{% for ref in pending %}{{ observation(ref,key) }}{% endfor %}</details>{% endif %}
 {% else %}{% for ref in refs %}{{ observation(ref,key) }}{% else %}{% if key in ('phase','trial_status','sample_size') %}—{% endif %}{% endfor %}{% endif %}{% endmacro %}
+{% block section_nav %}
+<a href="#comparison">设计比较</a>
+{% if data.rows %}<a href="#precedents">设计对照</a>{% endif %}
+{% if data.endpoint_groups %}<a href="#endpoints">终点</a>{% endif %}
+{% endblock %}
 {% block kpis %}<div class="kpi design-total"><b>{{ data.rows | length }}</b><span>试验设计</span></div>{% endblock %}
 {% block content %}
-{% if not data.rows %}<p class="card">尚未取得试验设计资料。<a href="/projects/{{ project.id }}">查看检索进度</a></p>{% else %}
+{% if not data.rows %}<section id="comparison" class="kz-section"><p class="card">尚未取得试验设计资料。<a href="/projects/{{ project.id }}">查看检索进度</a></p></section>{% else %}
+<section id="comparison" class="kz-section" aria-label="设计概览">
 <div class="grid">
-  {% if data.charts.size.labels %}<div class="card design-size"><h2>样本量</h2><div id="chart-size" class="chart"></div></div>{% endif %}
-  {% if data.charts.phase %}<div class="card design-phase"><h2>期别分布</h2><div id="chart-phase-pie" class="chart sm"></div></div>{% endif %}
+  {% if data.charts.size.labels %}<div class="card design-size kz-data"><h3>样本量</h3><div id="chart-size" class="chart"></div></div>{% endif %}
+  {% if data.charts.phase %}<div class="card design-phase kz-data"><h3>期别分布</h3><div id="chart-phase-pie" class="chart sm"></div></div>{% endif %}
 </div>
-<h2>设计先例横比</h2>
+<div class="kz-query">
 <label>检索设计先例 <input class="filter" data-filter="tbl-c" placeholder="试验、药物、终点或关键入排"></label>
 <span id="design-count" aria-live="polite">{{ data.rows|length }} 项研究</span>
-<div class="card table-card"><table id="tbl-c" class="design-table">
+</div>
+</section>
+<section id="precedents" class="kz-section">
+<h2>设计先例横比</h2>
+<div class="card table-card kz-data"><table id="tbl-c" class="design-table">
 <colgroup><col style="width:19%"><col style="width:11%"><col style="width:9%"><col style="width:15%">
 <col style="width:18%"><col style="width:16%"><col style="width:12%"></colgroup>
 <thead><tr><th>研究与药物</th><th>期别与状态</th><th>样本量</th><th>方案与组别</th>
@@ -77,11 +87,12 @@
 </div></details></td>
 </tr>{% endfor %}
 </tbody></table></div>
-{% if data.endpoint_groups %}<details class="endpoint-index"><summary>终点与时间点（<span id="endpoint-group-count">{{ data.endpoint_groups|length }}</span>组）</summary>
-<div class="card table-card"><table><thead><tr><th>终点定义</th><th>访视</th><th>采用该设计的研究</th></tr></thead><tbody>
+</section>
+{% if data.endpoint_groups %}<section id="endpoints" class="kz-section"><details class="endpoint-index"><summary>终点与时间点（<span id="endpoint-group-count">{{ data.endpoint_groups|length }}</span>组）</summary>
+<div class="card table-card kz-data"><table><thead><tr><th>终点定义</th><th>访视</th><th>采用该设计的研究</th></tr></thead><tbody>
 {% for g in data.endpoint_groups %}<tr><td><details><summary>{{ '主要终点' if g.kind == 'primary' else '次要终点' }} · 查看定义</summary>{{ g.measure }}
 {% if g.entries[0].description %}<p class="quote">{{ g.entries[0].description }}</p>{% endif %}</details></td><td>{{ g.timepoint or '—' }}</td>
 <td>{% for e in g.entries %}<span class="endpoint-entry" data-trial="{{ e.trial }}" data-fact-id="{{ e.fact_id }}">{{ clinical_trial(e.identity) }}{% if e.status != 'verified' %} <span class="badge {{ e.status }}">{{ e.status|status }}</span>{% endif %} {{ evidence([e]) }}</span>{% endfor %}</td></tr>{% endfor %}
-</tbody></table></div></details>{% endif %}
+</tbody></table></div></details></section>{% endif %}
 {% endif %}
 {% endblock %}

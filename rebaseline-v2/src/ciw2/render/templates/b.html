@@ -1,10 +1,15 @@
 {% extends "base.html" %}
 {% from '_trial.html' import clinical_trial %}
+{% block section_nav %}
+<a href="#comparison">结果横比</a><a href="#measurements">完整数据</a>
+{% if data.safety %}<a href="#safety">安全性</a>{% endif %}
+{% endblock %}
 {% block kpis %}
 <div class="kpi design-total"><b>{{ data.results | length }}</b><span>结果数据点</span></div>
 <div class="kpi design-total"><b>{{ data.charts.groups | length }}</b><span>结果组</span></div>
 {% endblock %}
 {% block content %}
+<section id="comparison" class="kz-section">
 <h2>结果横比</h2>
 <div class="result-controls">
 <label>检索结果 <input id="result-query" class="filter" data-filter="tbl-b" data-filter-extra="tbl-b-safety" placeholder="药物、研究、组别、终点或访视"></label>
@@ -12,15 +17,16 @@
 <label>选择指标 <select id="result-group">{% for g in data.charts.groups %}<option value="{{ g.id }}">{{ loop.index }} · {{ g.title }}</option>{% endfor %}</select></label>
 </div>
 <p id="result-count" aria-live="polite">{{ data.results|length }} 条结果</p>
-{% if data.charts.groups %}<div class="card result-panel" id="result-panel">
+{% if data.charts.groups %}<div class="card result-panel kz-data" id="result-panel">
 <p id="result-unit" class="muted"></p>
 <div id="chart-result" class="chart"></div>
 <details><summary>指标定义与研究组别</summary><p id="result-definition"></p><div id="result-series"></div></details>
 </div>{% endif %}
 <p id="result-empty" class="muted" {% if data.charts.groups %}hidden{% endif %}>暂无匹配的数值结果。</p>
-
+</section>
+<section id="measurements" class="kz-section">
 <details class="result-table"><summary>完整数据表（{{ data.results|length }}条）</summary>
-<div class="card table-card"><table id="tbl-b"><thead><tr><th>药物</th><th>研究</th><th>终点</th><th>访视与分层</th>
+<div class="card table-card kz-data"><table id="tbl-b"><thead><tr><th>药物</th><th>研究</th><th>终点</th><th>访视与分层</th>
 <th>组别</th><th>值</th><th>单位/统计</th><th>N</th><th>状态</th><th>来源</th></tr></thead><tbody>
 {% for r in data.results %}<tr data-fact-id="{{ r.id }}" data-domain="{{ r.domain }}"><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td>
 <td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td><details><summary>完整终点</summary>{{ r.endpoint }}</details></td>
@@ -33,15 +39,15 @@
 <td>{% if r.source_url %}<a href="{{ r.source_url }}" target="_blank" rel="noopener">原文</a>{% endif %}
 {% if r.quote or r.verdict_note %}<details><summary>原文值</summary>{% if r.status != 'verified' and r.verdict_note %}<p class="muted">{{ r.verdict_note }}</p>{% endif %}<div class="quote">{{ r.quote or '' }}</div></details>{% endif %}</td></tr>{% endfor %}
 </tbody></table></div></details>
-
-{% if data.safety %}<h2>安全性</h2>
+</section>
+{% if data.safety %}<section id="safety" class="kz-section"><h2>安全性</h2>
 <details class="safety-table"><summary>安全性数据表（<span id="safety-count">{{ data.safety|length }}</span>条）</summary>
-<div class="card table-card"><table id="tbl-b-safety"><thead><tr><th>药物</th><th>研究</th><th>组别</th><th>类别</th><th>n</th><th>N</th><th>%</th><th>时间窗</th><th>状态</th><th>来源</th></tr></thead><tbody>
+<div class="card table-card kz-data"><table id="tbl-b-safety"><thead><tr><th>药物</th><th>研究</th><th>组别</th><th>类别</th><th>n</th><th>N</th><th>%</th><th>时间窗</th><th>状态</th><th>来源</th></tr></thead><tbody>
 {% for r in data.safety %}<tr data-fact-id="{{ r.id }}"><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td><td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td>{{ r.arm or '—' }}</td>
 <td>{{ 'SAE' if r.field == 'safety.sae.any' else '全因死亡' }}</td><td>{{ '—' if r.value is none else r.value }}</td>
 <td>{{ r.denominator if r.denominator is not none else '—' }}</td><td>{{ r.proportion if r.proportion is not none else '—' }}</td>
 <td><details><summary>时间窗</summary>{{ r.timepoint or '—' }}</details></td><td><span class="badge {{ r.status }}">{{ r.status|status }}</span></td>
 <td>{% if r.source_url %}<a href="{{ r.source_url }}" target="_blank" rel="noopener">原文</a>{% endif %}
 {% if r.quote or r.verdict_note %}<details><summary>原文值</summary>{% if r.status != 'verified' and r.verdict_note %}<p class="muted">{{ r.verdict_note }}</p>{% endif %}<div class="quote">{{ r.quote or '' }}</div></details>{% endif %}</td></tr>{% endfor %}
-</tbody></table></div></details>{% endif %}
+</tbody></table></div></details></section>{% endif %}
 {% endblock %}
