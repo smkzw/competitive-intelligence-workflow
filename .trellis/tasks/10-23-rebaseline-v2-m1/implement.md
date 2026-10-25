@@ -779,3 +779,23 @@ Method changed to execution because one independently writable source-replay hel
 3aa1f559已push确认。当前10包以该HEAD Git archive+唯一已核ECharts构建，337源/7fbf3424…；标准离线隔离build/newvenv0下载，wheel8eb2b8bbcfced289f9f6d564b664695da78e800ef82a3517fcadb0c78d7e483d/sdistd1554dc7bf12aff538b97cdf838e5660cf3b9191a419cf95894bfa4205bad335。全部模块/23资产/9Skill同字节、/tmp-I/9CLI/override exit2无数据。标准恢复并真正渲染当前A/C19源269当前510历史+B708事实668结果，HTML与固定当前源一致；已安装普通ASGI B两状态/668ID/科学四表，11ID实际旧提交离线回放及同key第二次缓存、161历史不改；普通scope恢复零模型/来源、10条CDE proof恢复均过。仅已安装组件，不是医学/全页浏览器/新四目录/全M6。首组件命令又在/tmp相对创建/执行失败，未产生资料或测试；绝对apply_patch创建+绝对-I恢复该单步，错误保留。没有源码变更/全仓重跑。
 
 用户新回复锁定核心范围：创新药+有独立临床开发改良剂型；生物类似药单列不计核心。已更新唯一PRD/PLAN/STATUS与M2任务，policy11覆盖层保持原127/57/28三清单SHA，未封存分母/算召回。两条明确代码产品IBI3027/QL2108的CDE治疗用生物3.3处置，核原始CAS row/已目视NMPA定义，QL空补充不填、不建CTR受理等号。第一次检查raw列忽略序号导致断言失败，未写分类；核完整保存原行后改明确列再过，失败不改成PASS。GS101/改良剂型独立开发/唯一计数/中国适应症仍待源闭合；生产相关分面/核心计数尚未实现。
+
+
+## 2026-10-25 下一goal节点：阶段版本恢复
+
+上轮为progress：82bcf684已推送，1847代码门及安装10/源12/政策11有实际证据。本节点execution：runner+独立版本辅助模块可有界交worker，owner并行核M2原始TLL来源，互不写同文件。只解决当前runner按name/status误跳旧规则，不改151单元缓存、stages.py或科学规则。兼容已绑定前缀保留，最早变化/新阶段使下游先pending；旧无版本成功前缀必须0成本拒绝而非猜资格或自动重跑。每阶段output/receipt同事务，明确只绑定工程运行兼容性。新packet先填完整边界、预检解析ok再派，实际路由按实时manifest，不复用旧模型表；终态前不认采用。
+
+- owner实际旧安装10 RED补证：在06原标准备份恢复的真实synthesis-only运行32c2…上调用普通旧runner，会误进入全新intake并产生1次禁止的mock模型调用、改动旧stage状态；实际外部模型/来源0，原备份/科学表不变。证明仅检查“成功前缀无binding”不足以区分孤立阶段实验与普通完整流程；worker终态后owner须补legacy scope0调用/不改stage反例，不在任务执行中热改其上下文或源码。回执legacy-stage-scope-probe-20261025-01，不把该RED记产品接受。
+- 并行source-only E07已预检ok/0warning实际启动原生62090，CodeBuddy DS4.1flash:max选择器、96turn7200s；中立input manifest固定214 raw源/原212条及D23来源，禁读生产及owner裁决，输出仅qualification15。执行node75482仍未取终态，不轮询DB/不热改/不强杀，不以report文件存在当接受。
+- Owner源13/14只读补证：TLL三旧条共享同分子，健康PK NCT05945810与真实患者ADⅡ/Ⅲ期NCT07784816分开，issuer明确TLL018/girocitinib，保留ER/IR不猜患者剂型，拟一core家族但计数未终审。SB12原CTR20201869/协议SB12-3003明确拟定依库珠单抗生物类似药，单列不计core/不并参照品。六家族source index11ebadec…不是完整分母，原文件hash不变，0模型/网络。源14 helper一条无效空断言已移除，真实原三表SHA逐一断言实际执行通过，不靠空断言证明。
+- 当前STATUS替换为61行当前状态，旧全文保留于82bcf684，不再将历史“当前/在途”段当现场。进行中两handle与预检/请求模型未伪称实际终态；各M1–M6未完、old raw running不是当前活PID、当前source和source-only范围均明确。
+
+## 2026-10-25 阶段恢复终态、owner补根因与候选19
+
+执行选择沿用已登记execution：两个有界写集分离，owner最终整合。阶段75482终态实际由声明备用Pi/openai-codex/gpt-6-luna续接，终态1081.85s；不能只照元数据effective_primary写DS独立完成。CodeBuddy报告恢复、ZCode失败、MTPLX空输出及原生waiter的0进度轮询均保留。worker47相关通过；owner读全代码发现缺普通流程scope与正则/共同读取依赖，先4+5个RED后成族修复，58相关通过；676/705行拆分为显式依赖表/版本函数、两个测试模块及小helper，无新平台/依赖/表/单元缓存key改动。
+
+真实synthesis-only备份在当前代码零阶段/模型/来源调用拒绝，全部stage/unit/agent_steps/四科学表/原备份不变；普通准备入口+真实生产render的B708事实668结果副本，未变更跳过、隔离CSS变化只重绘且ID/科学表不变。owner探针误用fact_id导致后段失败，保留已完成legacy核验，只恢复普通段，未重复研究。并非完整流水线/医学/视觉或新安装接受。
+
+18冻结准备遗漏setup.py导致4安装FAIL+1884PASS；19首次预检又发现Git忽略的必需ECharts，未写合格manifest；均属owner源集准备错误、原失败保留。19-recovery01采用历史受验源集+已跟踪应用文件+显式新文件，349输入含setup/ECharts、排除生成egg-info。1888PASS13.02s、Ruff、13JS、233Python600/80，349SHA不变；1既有Starlette弃用warning。不能缩检查范围或把初始化命令exit0误称测试过。当前代码与该冻结274产品/测试/配置输入一致。下一安全动作：当前新包离线安装及恢复→合格现有单元恢复/普通C；M2资格15REVISE另沿具体源缺口补，未封分母，不热改05或盲跑151批。Goal经API实查active、未完成，不暂停/不宣RC。
+
+- 提交前diff --check在两份新测试的EOF额外空行处拒绝；只归一EOF并用AST相等复验，生产代码与19冻结字节不变，未为格式变更再跑全仓。公开回执分别保留冻结/当前测试SHA及此范围，不伪称冻结349原字节等于已归一格式。

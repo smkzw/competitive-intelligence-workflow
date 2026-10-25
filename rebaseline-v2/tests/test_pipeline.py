@@ -107,6 +107,8 @@ def test_resumed_run_does_not_display_previous_downstream_success(settings, monk
     svc = _svc(settings)
     pid = svc.create_project('重试', ['C'])
     rid = svc.db.create_run(pid)
+    # Fixture represents an ordinary run that already entered this runner.
+    assert runner.stage_versions.ensure_pipeline_scope(svc.context(pid, rid))
     svc.db.set_stage(rid, 'upstream', 'failed', error='old failure')
     svc.db.set_stage(rid, 'downstream', 'succeeded', output={'obsolete': True})
 

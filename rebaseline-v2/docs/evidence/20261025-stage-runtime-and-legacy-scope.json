@@ -1,0 +1,102 @@
+{
+  "scope": "STAGE_RUNTIME_AND_LEGACY_SCOPE_COMPONENT_ACCEPTANCE_NOT_FULL_DELIVERY",
+  "base_commit": "82bcf684a9b2c012005323a8c0fa78fc15664bf7",
+  "frozen_manifest_sha256": "eb9fa892329dacef11cfc2189a5fee7127c967170e9cba1c7e09730bc3bbc65c",
+  "frozen_files": 349,
+  "gate": {
+    "pytest_passed": 1888,
+    "pytest_seconds": 13.02,
+    "warnings": 1,
+    "warning_kind": "existing Starlette TestClient deprecation",
+    "ruff_pass": true,
+    "scope": "ALL_FROZEN_APPLICATION_PYTHON_AND_JS",
+    "python_files": 233,
+    "js_files": 13,
+    "structure_600_80_pass": true,
+    "js_syntax_pass": true,
+    "frozen_inputs_unchanged": 349,
+    "frozen_manifest_sha256": "eb9fa892329dacef11cfc2189a5fee7127c967170e9cba1c7e09730bc3bbc65c"
+  },
+  "related_tests": {
+    "passed": 58,
+    "owner_scope_red_cases": 4,
+    "owner_dependency_red_cases": 5
+  },
+  "real_copy": {
+    "scope": "REAL_COPIED_DATA_STAGE_RECOVERY_COMPONENT_NOT_MEDICAL_VISUAL_FULL_PIPELINE_OR_INSTALL_ACCEPTANCE",
+    "frozen_manifest_sha256": "56c7befdb86e44f4146c34d4e5e6a2345a4b2464b4852210aeb134fd3319ed19",
+    "frozen_inputs_unchanged": true,
+    "legacy_refusal": {
+      "run_id": "run_32c2b8ad6478",
+      "status": "failed",
+      "stage_rows_unchanged": true,
+      "unit_cache_preserved": true,
+      "agent_steps_unchanged": true,
+      "scientific_tables_unchanged": true,
+      "original_backup_unchanged": true,
+      "model_or_source_calls": 0,
+      "error": "旧运行的成功阶段缺少运行版本回执（普通流程身份未绑定；已有记录可能属于独立组件运行）；为避免把旧结果当作当前规则，本次恢复在调用任何阶段、模型或来源前停止。需要具备版本回执的合格恢复候选（qualified recovery candidate）或新建运行。",
+      "provenance": "Execute completed in initial probe before owner result-id typo; recovery rechecks rows without rerunning it."
+    },
+    "ordinary_recovery": {
+      "run_id": "run_1e2e2c33b90a",
+      "scope": "CONTROLLED_PREPARED_INTAKE_PLUS_REAL_PRODUCTION_RENDER_NOT_FULL_PIPELINE",
+      "real_current_result_ids": 668,
+      "facts": 708,
+      "unchanged_resume_skips_both_stages": true,
+      "isolated_css_change_rerenders_only": true,
+      "intake_callbacks": 1,
+      "model_source_calls": 0,
+      "scientific_tables_unchanged": true,
+      "first_html_sha256": "70345102191022717fa4f5b09326ff68f4b1cfb9695e92bcb1f53dc28653968b",
+      "css_changed_html_sha256": "8f1d009e317da2e2370ccb00cd4aef33c5e82dcfdda219078ac72e258ee25cfa",
+      "visible_stage_names": [
+        "intake",
+        "render"
+      ]
+    },
+    "goal_complete": false
+  },
+  "source_and_skills_unit_cache_key_files_changed": false,
+  "worker_runtime": {
+    "requested": "CodeBuddy/codebuddy-cli/deepseek-v4.1-flash:max",
+    "actual_terminal": "Pi/openai-codex/gpt-6-luna",
+    "fallback_chain": [
+      "CodeBuddy terminal required-report recovery",
+      "ZCode GLM-5.3-Flash failed",
+      "Pi MTPLX empty output",
+      "Pi openai-codex gpt-6-luna same-session continuation"
+    ],
+    "effort": "declared fallback max; actual transport identity retained in local receipt",
+    "terminal_duration_seconds": 1081.85,
+    "independent_scientific_review": false
+  },
+  "retained_failures": [
+    "owner shell path with spaces did not execute tests",
+    "18 incomplete freezer omitted setup.py: 4 installation checks failed, 1884 passed",
+    "19 freezer caught omitted ignored-but-required ECharts asset before writing manifest",
+    "owner real-data helper used fact_id instead of result.id; completed legacy refusal was retained, only ordinary probe resumed"
+  ],
+  "not_run": [
+    "new installed package for this stage change",
+    "full ordinary C workflow",
+    "final clinical synthesis acceptance",
+    "M2 reference denominator/recall",
+    "complete A/B/C scientific and four-width visual acceptance"
+  ],
+  "local_evidence": "ciw-data/stage-runtime-frozen-20261025-19-recovery01/manifest.json",
+  "post_gate_format_only_revalidation": [
+    {
+      "path": "tests/runtime_resume_helpers.py",
+      "frozen_sha256": "f78a6cc986e6a1f012fd0325d05744858b09e8c598aad7dc70918ff0eb157920",
+      "current_sha256": "37ea1ca3f94e28b70092333bbcf9c14b62d9256af61e389d597c6a79b1bfcdee",
+      "change": "EOF blank lines only; AST identical; no production change"
+    },
+    {
+      "path": "tests/test_stage_runtime_resume.py",
+      "frozen_sha256": "1e4837779a4a8ffa082703a8a9902b1907f51aa6babb431deebf00af1f142147",
+      "current_sha256": "d06fd0a42c9c78bfb8d6b3f868fc10cc0c04216dfcea97349ebfb501be4ab977",
+      "change": "EOF blank lines only; AST identical; no production change"
+    }
+  ]
+}

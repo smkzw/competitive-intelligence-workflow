@@ -39,3 +39,14 @@ C03源身份独立新context审阅已终态REVISE，Grok4.7/high/modelUsage4.7-b
 
 - 用户新政策后有界补证12：不读取生产候选，复用07原官方CTR20253975完整capture，经当前china_detail.parse_capture身份/完整性重验证；D23-201患者原发IgANⅡ期、试验药表中文布地奈德迟释片/英文D23与申请人均直接来源。新公开Triastek官网https://www.triastek.com/detail/39.html 一次HTTP200保存原HTML/完整文字/2025-02-20页日期标签和实际获取时间（不倒证历史），明确D23为3D printed budesonide delayed-release tablet/IgAN开发。只有产品/独立患者开发资格采纳，不采营销疗效优势、不合并Nefecon/D23A、不建CTR受理号关系。
 - owner-core-eligibility12共3文件SHA复核，manifest900830f8091aa6f8cc21fce0cfddb9893e14be759368b59c0bf5a37c3ebcf0ce；0模型/1新官网HTTP，原来源与三清单SHA未变。旧57中未见确切D23 code，记录为补充候选并待全量身份去重，不直接把57+1作分母。GS101搜索只有二级线索，未据其生物类似药标签接受；原CTgov两记录只说明比较/相似性，不视为分类直接证明。初原始basic字段误按dict诊断命令失败，改用已存在生产parser，不改原源。
+
+
+## 2026-10-25 新用户政策后的独立参照资格编制
+
+新增E07单名source-only compiler：新口径已锁定，原212记录及excluded/uncertain须按独立来源复核，不重置原发现128turns。只看原三表/neutral raw-source manifest及D23原详情+官网，不看生产代码/Skill/DB/报告/owner裁决；输出仅core-policy-qualification15、全部成员mapping及具体缺口。owner并行整合不相交stage版本worker。实时非高峰CodeBuddy DS4.1flash:max请求，source-only fresh context相对生产盲；同模型族曾用于DGX备用，不能宣称全新模型票。96turn7200s总预算，全部原文SHA守卫，未终态不接受/不封分母/不算召回。
+
+## 2026-10-25 资格15终态与owner16拒绝不合格分类
+
+原生62090已实际终态：CodeBuddy/codebuddy-cli/deepseek-v4.1-flash:max选择器，778.636s/return0/无备用；底层身份未额外暴露，不冒充不同模型族。owner新审查16核217输入/31输出SHA、212成员一一覆盖、373原文逐字与SHA全过。但131组用“非生物类似药/剂型/期别/无参照”反推核心、5组按医院申办排除，无用户授权且非正向分类证据；CC-93538/Cendakimab已在引用原题直接桥接，GS101具体受理映射仍不足，不能采worker错误概括。保留原15及其原始报告，结构保全通过、分类与分母REVISE，不算95%。用户政策未变；PRD已补足证据规则，避免后来照搬推断。下一步只修具体覆盖层及补正向来源，不重做原发现、不把未知静默删分母。
+
+- owner17为非破坏覆盖层（SHA3f7170c9…），137无充分依据组退回待核，原15不改、不认为待核即非创新/排除；CC-93538/Cendakimab原登记题名直接桥接、既有阿曲生坦ALIGN/FDA物质名证据复核，分别限定身份层次。未封分母/未算召回/0生产变更，后续逐个正向源补证，不把缺口数量包装成验收失败率。

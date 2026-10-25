@@ -180,6 +180,14 @@ CT.gov countries原值保留；新trial.china_site带geographic_scope=mainland_c
 
 ### 当前摘要运行隔离与引用往返
 
-Service.latest_findings在同一SQL中按project_id选created_at DESC,rowid DESC的最新run，再取该run对应analysis_<report>的succeeded/nonempty output；不跨run回退。当前run其他阶段failed仍可读取已成功对应分析；静态历史页与旧stage不改写。此修复不代表整stage源码/Skill升级失效已实现。
+Service.latest_findings在同一SQL中按project_id选created_at DESC,rowid DESC的最新run，再取该run对应analysis_<report>的succeeded/nonempty output；不跨run回退。当前run其他阶段failed仍可读取已成功对应分析；静态历史页与旧stage不改写。整stage升级失效由下节独立运行绑定处理；其完整项目接受仍单列。
 
 summary_lineage.normalize_references读取本run的basis，只对task.verified_fact_ids的一对一map反查工具返回真实ID，转为该包短引用、去重同一事实；外来/其他包引用原样交成员校验拒绝，不静默过滤。新结果/缓存对象均不原地变更，resolve_summary恢复原科学ID及选择记录。旧schema/Skill缓存不改键伪装当前资格。
+
+### 普通流程身份与阶段运行版本
+
+复用stages表，不加调度平台/数据库。runner首次进入真正空运行时原子写入pipeline_scope:ordinary（project/run绑定）；有旧阶段/单元却没有相符普通流程身份的记录，在任何阶段、模型或来源调用前拒绝，保留其全部stage/unit/科学行，交合格恢复候选处理。不能把独立归并/临床抽取实验自动当作普通项目运行，也不补签旧版本。
+
+stage_dependencies显式列出各阶段实际Python/来源脚本/Skill依赖；stage_versions绑定已加载函数及工厂配置、默认参数、相关模块/正则、Skill正文/工具顺序/输出schema/预算、请求模型与前置阶段名。只读资产变化仅失效render，不使研究/摘要单元因新增runner元数据而改key。Python行为使用已加载code对象，不用文件名/行号/对象repr冒充运行身份；从磁盘执行的脚本及模板/JS/CSS按实际字节绑定，阶段前后校验，变化不签成功。
+
+成功输出与stage_version回执同一db.tx提交；回执追加且检查schema/内容/行名，失败或碰撞不覆盖历史。恢复跳过完全兼容前缀，从最早改变/缺失/顺序变化/输出不匹配处先置下游pending，再继续。失败或取消阶段不作成功缓存；同模型同规则合格单元仍可复用。内部身份/回执不进入计划阶段显示。此为显式依赖方案，不承诺发现未列出的外部依赖变化或两次快照间改后又还原的文件；完整运行/来源与医学接受不能由该控制组件替代。

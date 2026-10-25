@@ -200,17 +200,21 @@ def test_resume_after_cancelled_stage_does_not_reuse_stale_downstream_success(se
     svc = service(settings)
     pid = svc.create_project('下游重置', ['A'])
     run_id = svc.db.create_run(pid)
-    svc.db.set_stage(run_id, 'one', 'succeeded', output={'kept': True})
-    svc.db.set_stage(run_id, 'two', 'cancelled', error='用户请求停止')
-    svc.db.set_stage(run_id, 'three', 'succeeded', output={'stale': True})
     calls = []
 
-    monkeypatch.setattr(runner, 'STAGES', [
+    stages = [
         Stage('one', lambda rc: calls.append('one') or {}),
         Stage('two', lambda rc: calls.append('two') or {'fresh': 2}),
         Stage('three', lambda rc: calls.append('three') or {'fresh': 3}),
-    ])
-    assert runner.execute(svc.context(pid, run_id)) == 'succeeded'
+    ]
+    monkeypatch.setattr(runner, 'STAGES', stages)
+    rc = svc.context(pid, run_id)
+    # Fixture-only: seed the bound prefix with a legitimate current runtime receipt.
+    assert runner.stage_versions.ensure_pipeline_scope(rc)
+    runner.complete_stage(rc, stages[0], {'kept': True})
+    svc.db.set_stage(run_id, 'two', 'cancelled', error='用户请求停止')
+    svc.db.set_stage(run_id, 'three', 'succeeded', output={'stale': True})
+    assert runner.execute(rc) == 'succeeded'
     assert calls == ['two', 'three']
     assert svc.db.stage_output(run_id, 'one') == {'kept': True}
     assert svc.db.stage_output(run_id, 'three') == {'fresh': 3}

@@ -1,0 +1,88 @@
+{
+  "created_at": "2026-10-25T12:11:19.442716+00:00",
+  "status": "REVISE_NOT_DENOMINATOR_ACCEPTED",
+  "worker_artifact_sha256": "c0b28ff87d64f3e296d47d7f6fdde05be782620988aa94093cb33c6cc4aedeaa",
+  "immutable_inputs": {
+    "total": 217,
+    "all_unchanged": true
+  },
+  "worker_output_files": {
+    "total": 31,
+    "all_unchanged": true
+  },
+  "mapping_checks": {
+    "atopic_dermatitis": {
+      "input_ids": 127,
+      "mapped_ids": 127,
+      "same_ids_once": true,
+      "all_targets_exist": true
+    },
+    "igan": {
+      "input_ids": 57,
+      "mapped_ids": 57,
+      "same_ids_once": true,
+      "all_targets_exist": true
+    },
+    "pnh": {
+      "input_ids": 28,
+      "mapped_ids": 28,
+      "same_ids_once": true,
+      "all_targets_exist": true
+    }
+  },
+  "source_checks": {
+    "total": 373,
+    "all_sha_match": true,
+    "quote_match_counts": {
+      "exact": 373
+    }
+  },
+  "rule_flagged_groups": 136,
+  "flag_counts": {
+    "ABSENCE_OF_BIOSIMILAR_NOT_POSITIVE_INNOVATIVE_QUALIFICATION": 131,
+    "ACADEMIC_SPONSOR_NOT_USER_AUTHORIZED_CORE_EXCLUSION": 5
+  },
+  "specific_cases": [
+    {
+      "case": "CC93538_CENDAKIMAB",
+      "finding": "Worker says no saved bridge while its own exact source title binds both names. Merge eligibility needs source-based correction, not another discovery run.",
+      "source": {
+        "path": "evidence/ctgov-ad-china-interventional.json",
+        "sha256": "2b3e47e0e0d0745411e2ad232b52dbf29243b201274566be147d1b059192a603",
+        "nct": "NCT04800315",
+        "field": "protocolSection.identificationModule.officialTitle",
+        "quote": "A Phase 2, Multicenter, Global, Randomized, Double-blind, Placebo-controlled, Parallel-group Study to Evaluate the Safety and Efficacy of Cendakimab (CC-93538) in Adult Subjects With Moderate to Severe Atopic Dermatitis"
+      },
+      "worker_group": "AD-G-012"
+    },
+    {
+      "case": "GS101_CLASS",
+      "finding": "GS101 comparator studies plus a same-company generic-name CDE 3.3 row do not by themselves prove the specific GS101-to-acceptance binding. Preserve pending until an exact program bridge, no automatic biosimilar adoption.",
+      "worker_group": "AD-G-026",
+      "proposed_action": "PENDING_SPECIFIC_BINDING"
+    },
+    {
+      "case": "TLL018_SOURCES",
+      "finding": "Classification cites HKEX assertions without attaching the HKEX source in the group. Healthy-subject BE does not itself settle patient-program formulation assignment; retain original ER/IR records and attach exact family source.",
+      "worker_group": "AD-G-TLL018"
+    },
+    {
+      "case": "D23",
+      "finding": "Independent modified-form patient development is explicitly sourced; keep as supplemental candidate without adopting marketing efficacy or a CTR=acceptance identity. Issuer URL is available in the declared input manifest and owner source12, not intrinsically unknown.",
+      "worker_group": "IGAN-G-D23"
+    },
+    {
+      "case": "EXCLUDED_REVIEW",
+      "finding": "A single code in a multi-product excluded group does not authorize retaining all other same-formulation studies as excluded without product-specific review. Retain the original ledger, flag these branches pending."
+    }
+  ],
+  "acceptance": "Only structural source preservation accepted. Buckets, counting and scientific joins NOT owner-accepted; no denominator/recall/production mutation.",
+  "models_or_network_calls": 0,
+  "local_evidence": "ciw-data/reference-goldens-20261025/owner-qualification-audit-16/receipt.json",
+  "runtime": {
+    "selector": "codebuddy/codebuddy-cli/deepseek-v4.1-flash:max",
+    "duration_seconds": 778.636,
+    "fallback": false,
+    "backend_identity_independently_exposed": false
+  }
+}
