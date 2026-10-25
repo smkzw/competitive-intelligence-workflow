@@ -1,5 +1,5 @@
 <!doctype html>
-{% from '_trial.html' import clinical_trial %}
+{% from '_trial.html' import clinical_trial, companies_summary %}
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -39,7 +39,9 @@
   <section id="findings" class="kz-section">
   <h2>要点</h2>
   {% for f in findings %}
-  <div class="finding"><h3>{{ f.title }}</h3><ul>{% for b in f.bullets %}<li>{{ b }}</li>{% endfor %}</ul>
+  <div class="finding"><h3>{{ f.title }}</h3>
+  {% if f.trial_context %}<div class="finding-identity">{% for identity in f.trial_context %}<div class="source-study"><strong>{{ identity.axis_label }}</strong>{% if identity.indication %} · {{ identity.indication }}{% endif %}{{ companies_summary(identity.companies, true) }}</div>{% endfor %}</div>{% endif %}
+  <ul>{% for b in f.bullets %}<li>{{ b }}</li>{% endfor %}</ul>
   {% if f.trial_context %}<details><summary>研究先例</summary>{% for identity in f.trial_context %}{{ clinical_trial(identity) }}{% endfor %}</details>{% endif %}</div>
   {% endfor %}
   </section>

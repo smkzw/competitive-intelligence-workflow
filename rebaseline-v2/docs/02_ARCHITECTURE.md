@@ -132,6 +132,7 @@ Service复用标准库Condition/deque及一个执行锁，在同一服务进程�
 ### 当前事实下载
 复用DB.tx/current_facts和现有全局鉴权，export.py在单一读取快照内联结本项目实体与精确source_id版本，输出固定ciw2-facts-v1 JSON或UTF-8-BOM CSV；附来源digest而不读CAS全文/meta或日志。CSV保留value_json/context_json的JSON类型，其他文本公式转义留字段清单；不存在/跨项目来源不借用，非有限值明确409。一个只读下载路由和工作台链接，不加任务/缓存/表/模型路由，原facts API形状不变。
 ### C阅读层
+摘要复用已有trial_context/companies_summary：紧凑研究身份默认可见，原完整身份可展开；不复制科学事实或扩名称字典。样本量图以当前窗口真实标签计算行高，datazoom复用同一事件/实例，保留用户选定起止与完整系列，筛选后按同一查询重新布局；离屏最长标签不扩大当前行高。
 沿用单一portal.js/kangzhe.css及Jinja。样本量图保留全部数据，用dataZoom限定可读窗口而非Top-N；密集/稀疏高度按数据量，期别独立高度和完整名称/计数图例。完整入排details为无JS基线；有native dialog时单个模态容器临时移动原DOM内容，关闭恢复原位/触发焦点，使用textContent显示研究名，不生成另一份科学数据。长原文与事实依据两列，保留原引文/链接，不引入下钻框架或新的状态库。
 
 ### 共用临床身份与入排强调

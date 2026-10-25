@@ -43,12 +43,14 @@
     if (fresh) {
       var observer = new ResizeObserver(function () { c.resize(); });
       observer.observe(node); observers.push(observer);
+      if (id === "chart-size" && c.on) c.on("datazoom", designZoomChanged);
     }
   }
   var dataNode = el("charts");
   var D = dataNode ? JSON.parse(dataNode.textContent || "{}") : {};
   var DESIGN_MAX_HEIGHT = 336, DESIGN_MIN_HEIGHT = 120, DESIGN_VISIBLE_ROWS = 12;
   var DESIGN_ROW_HEIGHT = 30, DESIGN_PANEL_CHROME = 54, PHASE_MIN_HEIGHT = 72;
+  var designQuery = { labels: [], values: [] };
   var designIdentities = new Map((D.size && D.size.identities || []).map(function (identity) { return [identity.registry_id, identity]; }));
   var designLabelCounts = new Map();
   designIdentities.forEach(function (identity) {
@@ -65,17 +67,18 @@
     return safeText(identity ? identity.label : id) + "<br>样本量 " + safeText(point.value) +
       (identity ? "<br>" + safeText(identity.registry_id) : "");
   }
-  function designZoom(count, visibleRows) {
+  function designZoom(count, visibleRows, start, capacity) {
     var shown = Math.max(1, Math.min(visibleRows, count || 0));
-    var end = Math.max(0, Math.min(count - 1, shown - 1));
+    var end = Math.max(0, Math.min(count - 1, start + shown - 1));
     return [{ type: "slider", yAxisIndex: 0, right: 0, width: 16,
-      show: count > visibleRows, startValue: 0, endValue: end, filterMode: "filter" },
-      { type: "inside", yAxisIndex: 0, startValue: 0, endValue: end,
+      show: count > visibleRows, startValue: start, endValue: end, maxValueSpan: capacity - 1, filterMode: "filter" },
+      { type: "inside", yAxisIndex: 0, startValue: start, endValue: end, maxValueSpan: capacity - 1,
         filterMode: "filter", zoomOnMouseWheel: false, moveOnMouseWheel: true }];
   }
-  function designLayout(labels) {
-    var tallest = 0;
-    labels.forEach(function (id) {
+  function designLayout(labels, start, requestedRows) {
+    var tallest = 0, visibleTallest = 0, capacity = 0;
+    for (var index = start; index < Math.min(labels.length, start + DESIGN_VISIBLE_ROWS); index++) {
+      var id = labels[index];
       var text = designLabel(id), height;
       if (window.echarts && echarts.graphic && echarts.graphic.Text) {
         var label = new echarts.graphic.Text({ style: { text: text, width: 290, overflow: 'break',
@@ -87,20 +90,33 @@
           return sum + Math.max(1, Math.ceil(units * readingSize / 290)) * 22;
         }, 0);
       }
-      tallest = Math.max(tallest, height);
-    });
-    var row = Math.max(DESIGN_ROW_HEIGHT, tallest + 8);
-    var capacity = Math.max(1, Math.min(DESIGN_VISIBLE_ROWS, Math.floor((DESIGN_MAX_HEIGHT - DESIGN_PANEL_CHROME) / row)));
-    var shown = Math.max(1, Math.min(capacity, labels.length));
-    return { visibleRows: capacity, height: Math.max(DESIGN_MIN_HEIGHT, shown * row + DESIGN_PANEL_CHROME) };
+      var next = Math.max(tallest, height), row = Math.max(DESIGN_ROW_HEIGHT, next + 8);
+      if (capacity && (capacity + 1) * row + DESIGN_PANEL_CHROME > DESIGN_MAX_HEIGHT) break;
+      tallest = next; capacity++;
+      if (capacity <= requestedRows) visibleTallest = tallest;
+    }
+    var shown = Math.min(capacity, requestedRows), rowHeight = Math.max(DESIGN_ROW_HEIGHT, visibleTallest + 8);
+    return { visibleRows: Math.max(1, shown), capacity: Math.max(1, capacity),
+      height: Math.max(DESIGN_MIN_HEIGHT, shown * rowHeight + DESIGN_PANEL_CHROME) };
   }
-  function drawDesignSize(labels, values) {
-    var layout = designLayout(labels);
+  function designZoomChanged(event) {
+    var zoom = event.batch ? event.batch[0] : event, start = zoom.startValue, end = zoom.endValue;
+    if (start == null && Number.isFinite(zoom.start)) start = Math.round(zoom.start * (designQuery.labels.length - 1) / 100);
+    if (end == null && Number.isFinite(zoom.end)) end = Math.round(zoom.end * (designQuery.labels.length - 1) / 100);
+    if (typeof start === "string") start = designQuery.labels.indexOf(start);
+    if (typeof end === "string") end = designQuery.labels.indexOf(end);
+    if (Number.isFinite(start)) drawDesignSize(designQuery.labels, designQuery.values, start, end);
+  }
+  function drawDesignSize(labels, values, start, end) {
+    designQuery = { labels: labels, values: values };
+    start = Math.max(0, Math.min(labels.length - 1, Math.floor(start || 0)));
+    var requestedRows = Number.isFinite(end) ? Math.max(1, Math.floor(end - start + 1)) : DESIGN_VISIBLE_ROWS;
+    var layout = designLayout(labels, start, requestedRows);
     setPanelHeight('chart-size', layout.height);
     chart('chart-size', {
       tooltip: { trigger: 'axis', formatter: designTooltip },
       grid: { left: designIdentities.size ? 320 : 130, right: 70, top: 24, bottom: 30 },
-      dataZoom: designZoom(labels.length, layout.visibleRows),
+      dataZoom: designZoom(labels.length, layout.visibleRows, start, layout.capacity),
       yAxis: { type: 'category', data: labels, inverse: true,
         axisLabel: { formatter: designLabel, interval: 0, width: 290, overflow: 'break', lineHeight: 22 } },
       xAxis: { type: 'value', name: '样本量' },

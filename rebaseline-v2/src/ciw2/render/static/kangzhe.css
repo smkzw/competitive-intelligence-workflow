@@ -91,6 +91,7 @@ p,li,td,th{text-wrap:pretty} h1,h2,h3,.brand,nav a{text-wrap:balance}
 .kpi b{display:block;font-size:var(--kz-type-kpi);color:var(--ink);line-height:1.25}
 .kpi span{color:var(--muted);font-size:var(--report-font-body)}
 .finding{padding:8px 14px;margin:10px 0}
+.finding-identity .trial-company{display:inline-block;margin:0 0 0 12px}
 .finding h3{margin:0 0 4px} .finding ul{margin:4px 0 0 18px;padding:0}
 table{border-collapse:collapse;width:100%;background:var(--kz-data-plane);font-size:var(--kz-type-site-body)}
 th{background:var(--th);color:var(--ink);text-align:left;padding:8px 10px;font-weight:700;position:sticky;top:0}

@@ -1,0 +1,197 @@
+{
+  "scope": "VISIBLE_C_CONTEXT_AND_DESKTOP_COMPONENT_INSTALL_NOT_FULL_M1_OR_RC",
+  "base_commit": "63c4ac1347725e119c32a0be7f6a9b5a4a0ff3dc",
+  "frozen_manifest": {
+    "path": "ciw-data/frontend-visible-context-frozen-20261025-43/manifest.json",
+    "sha256": "92266608f170e75090b07e815b51eea7620e1024dd374a1c13c5b2202fe00692",
+    "files": 365
+  },
+  "gate": {
+    "pytest": "1917 passed in14.41s",
+    "ruff": "PASS",
+    "python_structure_files": 241,
+    "javascript_syntax_files": 14,
+    "frozen_inputs_unchanged": 365,
+    "warning": "Existing Starlette TestClient httpx deprecation"
+  },
+  "repairs": {
+    "chart": "Measure currently visible labels instead of offscreen maximum; reflow real dataZoom range, keep single-study selection, one listener per chart. All282 sample points and284 studies retained.",
+    "summary": "Default-visible existing trial_context axis_label, indication and sourced company role; full original clinical_trial remains expandable. No drug/company dictionary or scientific fact changes."
+  },
+  "root_tests": "Default-visible study identity RED; offscreen long label RED; user single-study zoom RED. Same family31 related PASS before once-only frozen full gate.",
+  "browser": {
+    "receipt": "ciw-data/summary-reader-preview-20261025-40/browser-final-41.json",
+    "receipt_sha256": "dfa699048ab22362dae0a3eea1cbbf049b79f04243e038552baab255acfbf627",
+    "html_sha256": "92cea0735ac1004fe42dc252103173a8b1c720f06a3ca95d205aaaa6e05d461d",
+    "viewport_states": [
+      {
+        "dense": {
+          "width": 1440,
+          "height": 900,
+          "points": 282,
+          "first": 0,
+          "last": 4,
+          "overflow": false
+        },
+        "filtered": {
+          "points": 14,
+          "query": "14 / 284 项研究"
+        },
+        "sparse": {
+          "points": 1,
+          "height": 120,
+          "source": "NCT07762833"
+        },
+        "source": {
+          "title": "Nemolizumab 30 mg · III 期 · 样本量依据",
+          "source": "NCT07762833",
+          "dialog_width": 760
+        },
+        "focusReturned": true
+      },
+      {
+        "dense": {
+          "width": 1600,
+          "height": 900,
+          "points": 282,
+          "first": 0,
+          "last": 4,
+          "overflow": false
+        },
+        "filtered": {
+          "points": 14,
+          "query": "14 / 284 项研究"
+        },
+        "sparse": {
+          "points": 1,
+          "height": 120,
+          "source": "NCT07762833"
+        },
+        "source": {
+          "title": "Nemolizumab 30 mg · III 期 · 样本量依据",
+          "source": "NCT07762833",
+          "dialog_width": 760
+        },
+        "focusReturned": true
+      },
+      {
+        "dense": {
+          "width": 1920,
+          "height": 1080,
+          "points": 282,
+          "first": 0,
+          "last": 4,
+          "overflow": false
+        },
+        "filtered": {
+          "points": 14,
+          "query": "14 / 284 项研究"
+        },
+        "sparse": {
+          "points": 1,
+          "height": 120,
+          "source": "NCT07762833"
+        },
+        "source": {
+          "title": "Nemolizumab 30 mg · III 期 · 样本量依据",
+          "source": "NCT07762833",
+          "dialog_width": 760
+        },
+        "focusReturned": true
+      },
+      {
+        "dense": {
+          "width": 2560,
+          "height": 1440,
+          "points": 282,
+          "first": 0,
+          "last": 4,
+          "overflow": false
+        },
+        "filtered": {
+          "points": 14,
+          "query": "14 / 284 项研究"
+        },
+        "sparse": {
+          "points": 1,
+          "height": 120,
+          "source": "NCT07762833"
+        },
+        "source": {
+          "title": "Nemolizumab 30 mg · III 期 · 样本量依据",
+          "source": "NCT07762833",
+          "dialog_width": 760
+        },
+        "focusReturned": true
+      }
+    ],
+    "long_label_zoom": {
+      "points": 282,
+      "first": 71,
+      "last": 71,
+      "height": 260
+    },
+    "motion": "CDP reduced motion, same invocation viewport assertion; no profile change",
+    "chart_json_before_after": "EXACT_EQUAL_282_points_284_studies",
+    "owner_inspected": [
+      "final-dense-1440.png",
+      "final-filtered-2560.png",
+      "final-findings-2560.png",
+      "final-source-1440.png",
+      "final-long-zoom-2560.png"
+    ],
+    "screenshots": {
+      "final-dense-1440.png": "3d74b35f92a4d6f6f129a227f71065ea57d1d357024a9a75f6941e021b6abbf3",
+      "final-filtered-1440.png": "801e88a5330a61be08517db2cdc65d162e6bbfee28544b8ddf561cdac1302e2c",
+      "final-sparse-1440.png": "335b1d1f4c55d6f548e57181e7801a2d4fcffff09a3eb052204fd5411cda26a0",
+      "final-source-1440.png": "982e3ea8f30d0c8cfcec866aefcf01d8365c4c0160f6a60b47aa11e9442b3be0",
+      "final-dense-1600.png": "d507730ba7df8716c613939ea779c1cc7c09265bd27d13cdbdde0be58a2a1da5",
+      "final-filtered-1600.png": "400741c5b9e2605d41616032053fb2de7c1f6eb7f069dfac6aac92542464b0f8",
+      "final-sparse-1600.png": "abed8c6242f854781554592bf799fbd4166a9859a5b6b6309c32f4413f7c4760",
+      "final-source-1600.png": "1da56e3bc5bf1ae4fd7643842caa0da3e7d9bad99dc1ff1686322b6736c1f01a",
+      "final-dense-1920.png": "01aeb56976c7d16c4d1c0aace1bbd4d0da4add3844493ecd35b97e441e5fcc33",
+      "final-filtered-1920.png": "50b959319e8737d2ecc531ea1c4407f323b72fba3b1f69962e74430555be6d67",
+      "final-sparse-1920.png": "38121086ae7d0a42a0bc1191eff185d456832eaf12f42b3c8bc09535c56b1978",
+      "final-source-1920.png": "e1158f856be7089640b1c317784a673fcdcb8af6b7465557f2a59069143c047a",
+      "final-dense-2560.png": "b27ed4774bf1f10c23790ed4dc5d65088882e4ce27921c242561bf3aa0e558f2",
+      "final-filtered-2560.png": "3ba83c4eb7e4d93874177e2689108ed483bcf03ccbc1046e720dc898f82b8511",
+      "final-sparse-2560.png": "bf6e36ebb3732dd40399de21e7cb4cdef484a8720aad9c622b24ac588bf2381a",
+      "final-source-2560.png": "578893a04aa0abc6e707fd81163388e0efb2210bedb43992c02df604294518b4",
+      "final-long-zoom-2560.png": "511f860ba278ed9afe5c0958c93b4fb468cd79080047837c743f58962e2dc836",
+      "final-findings-2560.png": "4f46022969a3ae9d6723a57bca6b09aeca57a6756a53b3441f6652a76f7f3a18"
+    }
+  },
+  "source_model_calls_for_preview": 0,
+  "preview_stage_adoption": false,
+  "actual_source_counterexamples37": {
+    "scope": "SAME_SOURCE_COUNTEREXAMPLE_REPAIR_WITH_COMPLETE_REPLANNING_NOT_FULL_C",
+    "receipt_sha256": "f383ba4462bbd6c88f2ab933ec70e74fef1d2f23e6008fa59db23fb2ac17aca3",
+    "elapsed_seconds": 522.555,
+    "actual_models": {
+      "glm-5.3-flash": 2,
+      "DeepSeek-V4.1-Flash-1017": 8
+    },
+    "successful_reply_tokens": 119933,
+    "read_scope": "Owner tool-event check: metric6/6 cited facts fully read; large34/34; no cited-but-unread facts. Original scientific/source/stage rows and360 runtime files unchanged.",
+    "owner_disposition": "Targeted PROMIS paired-window/VC-LTS role cases repaired; overall reader REVISE: long English definition, maintenance-period wording, overstrong absence wording, some long prose. Not adopted as normal analysis_C success."
+  },
+  "current_install45": {
+    "scope": "ACTUAL_FROZEN43_OFFLINE_INSTALL_AND_COMPONENT_RESTORE_NOT_FULL_M6",
+    "wheel_sha256": "fcab42578d9aff4681c3892a0d0dbc0b46a01da8302b03bbf49ed69c3cbbe873",
+    "sdist_sha256": "c73db64e5e15bc475882f8cee2c016bfe8fb723268ac70a7e72db485ae7cb0cb",
+    "source_binding_sha256": "9889e3ca342665d2467de93a9922fa76a62b0ddba591c46537ea36c6a1070075",
+    "external_downloads": 0,
+    "python_modules_23_assets_9skills_cli": "PASS",
+    "standard_restore": "PASS_708_facts_668_ids_unchanged_repaired_reports_exact_new_version",
+    "legacy_scope_refusal": "PASS_ZERO_CALLBACK_MODEL_SOURCE",
+    "ordinary_PNH_full_restore": "NOT_RUN_PENDING_ORIGINAL_38"
+  },
+  "remaining": [
+    "Ordinary PNH Service full pipeline38 still awaiting terminal event; not accepted from wrapper start.",
+    "M1 complete source/medical/browser and true correction case not closed.",
+    "M2 independent reference classification/unique units not sealed; no recall result.",
+    "M3 source-backed Chinese names/MAH/group and complete A remain; no renderer translations invented.",
+    "M4-M6 full release gates remain; this component cannot be combined with old candidates to claim delivery."
+  ],
+  "resume": "PNH38 uses frozen36 recovery01 unchanged; waiter42 uses kernel NOTE_EXIT once, progress_polls=0. Preserve AD151/780 and all original failures."
+}
