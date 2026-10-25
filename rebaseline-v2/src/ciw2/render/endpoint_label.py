@@ -12,7 +12,9 @@ _ABBREVIATION = r'[a-z]?[A-Z]{2,}[a-z0-9]?(?:[ -](?:[A-Z]{2,}|[0-9]+))*'
 _SCOPED = re.compile(
     r'\b(?:without|with|except|not|versus|vs|participants|patients|subjects|placebo|only|subgroups?'
     r'|during|before|after|rescue|treatment|grade|stage|among|when|until'
-    r'|percent|improvements?|responses?|reductions?)\b|[0-9<>=≤≥]', re.IGNORECASE)
+    r'|percent(?:age|ile)?|zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve'
+    r'|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty'
+    r'|sixty|seventy|eighty|ninety|hundred|thousand|improvements?|responses?|reductions?)\b|[0-9<>=≤≥]', re.IGNORECASE)
 _CHANGE = (('Absolute Change From Baseline in ', '较基线绝对变化'),
            ('Percent Change From Baseline in ', '较基线百分比变化'),
            ('Change From Baseline in ', '较基线变化'))
@@ -31,9 +33,15 @@ def _measure(text: str) -> str | None:
 
 def _atomic_measure(text: str) -> str | None:
     text = re.sub(r' Scores?$', '', text, flags=re.IGNORECASE)
+    nrs = re.fullmatch(r'(?:(Average|Peak|Worst) )?(Pruritus|Pain|Sleep Disturbance) '
+                       r'(?:NRS|Numeric Rating Scale(?: \(NRS\))?)', text, re.IGNORECASE)
+    if nrs:
+        intensity = {'average': '平均', 'peak': '峰值', 'worst': '最严重', '': ''}[(nrs[1] or '').lower()]
+        symptom = {'pruritus': '瘙痒', 'pain': '疼痛', 'sleep disturbance': '睡眠障碍'}[nrs[2].lower()]
+        return intensity + symptom + 'NRS'
     expanded = re.fullmatch(r'([^()]+)\(('+_ABBREVIATION+r')\)', text)
     if expanded:
-        if _SCOPED.search(expanded[1]):
+        if _SCOPED.search(expanded[1]) or expanded[2] == 'NRS':
             return None
         return expanded[2]
     return text if re.fullmatch(_ABBREVIATION, text) else None

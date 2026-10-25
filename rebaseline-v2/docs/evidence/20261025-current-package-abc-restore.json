@@ -1,0 +1,68 @@
+{
+  "scope": "296944F5_PACKAGE_FRESH_OFFLINE_INSTALL_AND_ABC_DB_CAS_RESTORE_NOT_FULL_M6",
+  "source_manifest_sha256": "1885fcde212bc0c0df43896424e22f4e2222bff559b96adb9f5db98b4bce2195",
+  "commit": "296944f5e938f26afb0448f081255ceeae3e04d4",
+  "wheel_sha256": "367acc08cd664445a94020d44ca9fa789898c6d5e81834144ec2f5d2f442010a",
+  "sdist_sha256": "9b3743f886cd1ecfb536c9affed5338d3e6a64c7507433138faacde4f9344e08",
+  "installed_source_modules_match": true,
+  "assets": 22,
+  "skills": {
+    "universe-global": "c40fc334fae2de953f50facc7d036765f7e8170f29f5a11f2ed656887c0269e3",
+    "universe-china": "3875993f07b87144410e4a56ac6e84e772e35afb956eb740b8afcbaf8314deaf",
+    "extract-design": "267bf66f309c1b980e8d717fcc754cb5491211cc9c769fb38c3dd9e3be33222a",
+    "analysis-b": "c2090f4656155936644129166854c6e096293deeaa6abed97dff54827cc08356",
+    "analysis-c": "c5152025094419c29badc7f23136f9807c39ce8468aea388d45677786f656af7",
+    "intake": "613c5949387c99fae780192a418bc693b231dea666bfdd697c8fbdd656d3e69a",
+    "coverage-review": "be148323a9c9fec17b94ff6db3739d3ea40fb53bc55a41ed6cf49039b549c4fa",
+    "extract-results": "39c4a4995d89a965b7b8f098d7213912f99aa12513d23c8cd7707073eefebaf1",
+    "analysis-a": "6cf6dbefbb1428e5f1c86a897db01a1e1c891716dc033095837681812defe230"
+  },
+  "isolated_python": true,
+  "outside_project_cwd": true,
+  "cli_skill_lines": 9,
+  "bad_explicit_skill_override_exit": 2,
+  "bad_override_created_data": false,
+  "external_downloads": 0,
+  "AC": {
+    "expected_html": {
+      "A": "ad8d2625d01cf70c536d86cffc95cb82729cde47e814103f37f3463d2e45c815",
+      "C": "a8577c77fb641a6fcb2eca6bbaa8b23008576ff5ad6882bd7a3a8de0f902bb54"
+    },
+    "installed_html": {
+      "A": "ad8d2625d01cf70c536d86cffc95cb82729cde47e814103f37f3463d2e45c815",
+      "C": "a8577c77fb641a6fcb2eca6bbaa8b23008576ff5ad6882bd7a3a8de0f902bb54"
+    },
+    "sources": 19,
+    "current_facts": 269,
+    "raw_facts": 510,
+    "original_science_unchanged": true
+  },
+  "B": {
+    "facts_sha256": "eb4067d24feb5f0950a6e6eb37a401a23e682ccd27cebfcd31206d80bb160d54",
+    "raw_facts": 708,
+    "current_facts": 708,
+    "results": 668,
+    "groups": 34,
+    "html_sha256": "57faecdbc697be748eeb2371d821d1ddafd24e3b5c4508312ea7c22d9b21ec61"
+  },
+  "B_html_equal_table02_http": true,
+  "original_sources_unchanged": true,
+  "new_source_calls": 0,
+  "model_calls": 0,
+  "not_covered": [
+    "Current09 NRS-label increment after this frozen package",
+    "Full normal research pipeline",
+    "Medical completeness",
+    "All M6 network/cost/stop controls"
+  ],
+  "rebuild_commands": [
+    "uv build --offline --directory <frozen-build-copy> --out-dir ../dist",
+    "uv venv <fresh-env> --python <configured-python>",
+    "uv pip install --offline --python <fresh-env>/bin/python <wheel>"
+  ],
+  "private_evidence_files": [
+    "install-current-20261025-06/owner-acceptance.json",
+    "install-current-20261025-06/ac-restore-render-acceptance.json",
+    "install-current-20261025-06/b-restore-render-acceptance.json"
+  ]
+}

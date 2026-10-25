@@ -61,3 +61,28 @@ def test_identical_reading_names_never_merge_scientific_groups_or_change_values(
     assert {p['fact_id'] for g in projected for p in g['points']}==set(ids)
     assert [{k:v for k,v in g.items() if k!='label'} for g in original]==[
         {k:v for k,v in g.items() if k!='label'} for g in projected]
+
+
+@pytest.mark.parametrize(('raw','reading'),[
+    ('Absolute Change From Baseline in Weekly Average of Average Pruritus NRS Score','平均瘙痒NRS（每周均值） · 较基线绝对变化'),
+    ('Percent Change From Baseline in Weekly Average of Sleep Disturbance NRS Score','睡眠障碍NRS（每周均值） · 较基线百分比变化'),
+    ('Change From Baseline in Worst Pain Numeric Rating Scale (NRS) Score','最严重疼痛NRS · 较基线变化'),
+    ('Change From Baseline in Peak Pruritus NRS Score','峰值瘙痒NRS · 较基线变化'),
+])
+def test_complete_generic_nrs_metric_keeps_intensity_and_aggregation(raw,reading):
+    from ciw2.render.endpoint_label import endpoint_label
+    assert endpoint_label(raw)==reading
+
+
+@pytest.mark.parametrize('raw',[
+    'Change From Baseline in Seventy Five (EASI)',
+    'Change From Baseline in Twenty Item Clinical Assessment (TICA)',
+    'Change From Baseline in Percentile Index (PI)',
+    'Change From Baseline in Percentage Index (PI)',
+    'Change From Baseline in Average Pruritus NRS after rescue',
+    'Change From Baseline in Sleep Disturbance NRS and Pain NRS',
+    'Change From Baseline in Worst Anxiety Numeric Rating Scale (NRS) Score',
+])
+def test_spelled_thresholds_statistical_modifiers_and_unparsed_nrs_stay_verbatim(raw):
+    from ciw2.render.endpoint_label import endpoint_label
+    assert endpoint_label(raw)==raw

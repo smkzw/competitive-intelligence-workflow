@@ -1,3 +1,15 @@
+## 2026-10-25 当前节点 NRS完整语义阅读与新版安装
+
+方法direct：完整原源字段/同一数值投影提供决定性检查，只修共享读名，不做新的科学归并；不为相同单研究再派全页模型审美循环。8真RED显示Average/SleepNRS不读中文及generic NRS吞掉症状/强度、拼写阈值被缩写遮蔽。完整generic症状/强度语法优先，明确周平均保留，未知NRS展开不猜，数字词和Percentile/Percentage守卫；无适应症/药名特殊字典。67相关PASS0.48s后固定09 manifest591ea52dc5f6eeed2f6ac23e7e14e489a75f9dcfc7dc5b85d839ba80cf221555，一次全v2 1703PASS11.04s/Ruff/10JS/208Python600-80/272输入不变。668观察/34组/全部图属性除label外与08完全相同；真实4指标×4宽16组查询/图表/表/原始定义DOM核对，8图，owner实看1440平均瘙痒/1600睡眠/2560平均瘙痒。截图输入框的英文是刻意检索原源标题，不是默认正文；未新增原文dialog点击测试，旧组件证据不改绑。B09 PID12144/50835，Ego84。全M4跨试验/论文与其余中文仍未接受。
+
+原失败32包当前04真实过：实际DeepSeek-V4.1-Flash-1017三model事件，GLM HTTP502后按授权备用；这不证明本次GLM cap恢复已真实触发，cap反例由离线生产协议测试证明。5要点完整字段/引用资格，原31/科学表/780/runtime不变，medical仍pending。已在同run_32c2b8ad6478继续remaining（60935/PID13173），前32合格单元复用，不再建run，不重做151。控制器/冻结2969字节不热改。
+
+新版296944f5实际离线包：wheel367acc08cd664445a94020d44ca9fa789898c6d5e81834144ec2f5d2f442010a，sdist9b3743f886cd1ecfb536c9affed5338d3e6a64c7507433138faacde4f9344e08。新venv以uv--offline缓存安装0下载，全部模块/22资产/9Skill字节一致；/tmp -I及CLI9条，坏override exit2/无data创建。安装后真实DB+CAS恢复，AC19源/278current/510raw，对本次冻结renderer A ad8d2625…/C a8577c77…同字节，不借05旧HTTP；B708事实/668结果/34组/全ID，HTML57faecdb…同表格02HTTP，原科学四表未改。此2969包不覆盖随后09标签修改，下一集成节点再包，不每标签重装；全M6未验。
+
+## 2026-10-25 当前恢复启动
+
+296944f5e938f26afb0448f081255ceeae3e04d4已push（首table节点874ac5d0）。当前PRD/架构同步真实输出耗尽识别，不让架构旧“非length不恢复”与实现冲突。新私有04唯一run_32c2b8ad6478：只读备份原03，49CAS逐SHA硬链接、原780及科学四表完整；新旧科学schema和reducer/context/harness字节一致，Skill只清晰化已存在字段/选择范围，31历史输出按原task+旧签名找到，再用新schema/科学源/生产后检验合格，单独留来源/新签名资格回执，0新模型，不伪称原模型按新prompt执行。109代码/Skill与已通过1692门的296944f5同字节。当前只实际启动原失败packet32（73363/PID9778），成功后才可同run继续，不再创建额外run或重跑31/151。SIGTERM/SIGINT用原RunControl，等待真实安全边界终态后才能称已停。私有controller/starter均py_compile过，runner按phase分别留activation/started/terminalreceipt，不改历史。
+
 ## 2026-10-25 当前节点 提交合同与参照源核验
 
 当前owner本地direct修精确输出耗尽；已有2RED/7PASS后69相关PASS0.65s，固定1885fcde212bc0c0df43896424e22f4e2222bff559b96adb9f5db98b4bce2195全v2 1692PASS11.03s/Ruff/10JS/208Python600-80/272输入无变。只扩现有一次输出恢复的识别条件：明确usage到budget且chosen submit字段不完整，即便finish_reason=tool_calls，8192→16384同输入同模型一次；真实结束原因/usage不改，valid submission不重做，4Agent步/路由/科学验证不增。三Skill给完整title/bullets/fact_refs形状且只核保留观察所需引用，不自动批删refs或代填。后续先单包32真实运行通过再继续，不能盲开整个归并。

@@ -94,7 +94,7 @@ Service复用标准库Condition/deque及一个执行锁，在同一服务进程�
 - 模型按明确环境配置顺序备用；错误或缺失的实际模型身份拒绝采用，返回的真实模型与使用量留痕，不用请求名冒充响应身份。
 - 按[GLM官方工具协议](https://docs.z.ai/guides/capabilities/thinking-mode)，reasoning_content只在内存中随同一工具会话续接，assistant持久日志/回执不保存该正文。官方明确GLM-5.3/Flash强制thinking，本轮不尝试不受支持的关闭参数，不改指定模型或effort。
 - 必需submit_result不只检查函数名/JSON可解析；缺少该工具schema的顶层required字段也属协议未完成，回执仅存缺失字段名、reasoning字符数及安全用量，不把空对象交付。其余完整Pydantic校验仍在harness；错误反馈不重复输入原文。
-- finish_reason=length一律不接受；同输入、同模型最多一次增加输出预算至min(原预算×2,16384)。非length/身份不符不触发扩容，不改全局模型参数或effort，后续调用仍从原预算开始。output_recovery仅记录预算、前次安全错误/用量；成功model事件或最终model_error均保留，reasoning正文不入库。只在相同模型上恢复，不把新增请求冒充新模型意见。
+- finish_reason=length一律不接受；模型明确报告completion_tokens达到本次上限且所选submit_result缺少顶层required字段/无有效对象时，也按实际输出耗尽处理，即使finish_reason=tool_calls。两者都只在同输入、同模型上最多一次增加输出预算至min(原预算×2,16384)，保留真实结束原因及output_budget_exhausted，不把它改写成length。合格提交即使到上限也不重复；其余低用量结构错误仍交既有Pydantic反馈，身份不符不扩容，不改全局模型参数或effort，后续调用仍从原预算开始。output_recovery仅记录预算、前次安全错误/用量；成功model事件或最终model_error均保留，reasoning正文不入库。只在相同模型上恢复，不把新增请求冒充新模型意见。
 - 真实主模型曾在144.583s返回，产品主请求改为300s而非120s；显式配置备用时主路仅尝试一次，然后按用户顺序切换，避免三次取消同样慢请求。独立无备用保留3次策略，DGX仍用显式路由时限，不改全局服务/effort。
 - harness任务/assistant/工具记录超过20k时先写现有CAS，agent_steps只记有效JSON指针（digest/format/字符数），不截成破损JSON；assistant先排除reasoning正文。诊断读取验证CAS摘要，旧截断日志仅在固定数据重建及原前缀吻合时兼容，不重写历史。
 - 只有思考信息、没有可用正文/工具结果，或必需提交未履行，属于协议未完成：立即记录并仅走已配置备用，不把它当作正常回复耗尽整个工作单元。错误回执保留类别、实际模型与可用用量，不记录服务原始错误正文或凭据。

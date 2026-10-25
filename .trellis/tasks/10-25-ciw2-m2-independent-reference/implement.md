@@ -1,3 +1,11 @@
+# 当前状态 2026-10-25
+
+初采集+恢复总128turn已耗尽，recovery69149终态拒绝（59turns/2758.911s/max_turn_requests），不是运行中。资料原41/recovery129文件SHA均核对，登记六查询464/97/71CTR页集合与唯一分配过，1266 source对象逐字引用加39独立locator引文均逐字/文件SHA通过（共1305）；首次通用审核器未识别CTR文本及独立记录locator路径，原失败保留，正确按来源类型和显式定位处理，无改源。分母仍未封存，创新/别名/对照/组合/中国适应症须审核。
+
+新C03 fresh source-only身份审阅11363已preflight0warning并启动，48turns/7200s，原生产输出不披露、禁止浏览/改源；primary同Grok有模型族独立性限制，不声称新模型意见。不是重置采集预算或重派全量研究，owner另做摘要恢复/前端不重复审同身份。终态/实际模型/核源裁决尚待。
+
+# 初轮与恢复启动历史（原文保留）
+
 # 当前执行
 
 2026-10-25：初轮终态，actualgrok/grok-build/grok-4.7/CLI high/session0fac4122-bf69-441d-a7db-44dd0f0d7a91，1906.37s/69turns/return0，无fallback。原报告SHAe79d1649dc013ee2def93393c23bbb54eef64ddd07492c9ffb2a99af1740ffa7。AD91/IgAN41/PNH20为PROVISIONAL_NOT_OWNER_ACCEPTED，原41文件owner哈希实核全同，7984956字节，manifestbef0b8ce7a44e97762d7b27a61881985dbb4d3e659bcfdaedab8843eccbf999c。未核完中国登记，仅AD20/464导出，其他页和别名缺口，不封存、不计算95%。实际来源和范围/创新性科学核验仍未完成。

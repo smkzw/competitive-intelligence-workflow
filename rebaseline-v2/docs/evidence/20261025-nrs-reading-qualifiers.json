@@ -1,0 +1,76 @@
+{
+  "scope": "GENERIC_NRS_READING_AND_LOSSLESS_QUALIFIER_GUARD_NOT_FULL_M4",
+  "base_commit": "296944f5e938f26afb0448f081255ceeae3e04d4",
+  "manifest_sha256": "591ea52dc5f6eeed2f6ac23e7e14e489a75f9dcfc7dc5b85d839ba80cf221555",
+  "html_sha256": "8ff40a2c14eb1168b797e6b44e42ece0400aa090c287f17e9aaa3b20265e3a73",
+  "facts_sha256": "eb4067d24feb5f0950a6e6eb37a401a23e682ccd27cebfcd31206d80bb160d54",
+  "changes": [
+    {
+      "group": "b6e37fb929e3af19",
+      "old": "Absolute Change From Baseline in Weekly Average of Average Pruritus NRS Score",
+      "new": "平均瘙痒NRS（每周均值） · 较基线绝对变化"
+    },
+    {
+      "group": "82d61069400f14ae",
+      "old": "Absolute Change From Baseline in Weekly Average of Sleep Disturbance NRS Score",
+      "new": "睡眠障碍NRS（每周均值） · 较基线绝对变化"
+    },
+    {
+      "group": "55b45f725f0f769d",
+      "old": "Percent Change From Baseline in Weekly Average of Average Pruritus NRS Score",
+      "new": "平均瘙痒NRS（每周均值） · 较基线百分比变化"
+    },
+    {
+      "group": "753319752b3d1c39",
+      "old": "Percent Change From Baseline in Weekly Average of Sleep Disturbance NRS Score",
+      "new": "睡眠障碍NRS（每周均值） · 较基线百分比变化"
+    }
+  ],
+  "medical_data": "668 source results/34 groups/668 plotted IDs; all group properties except display labels equal08. Raw titles, observations, scientific identities, visit units and formulas unchanged.",
+  "root_causes": [
+    "Average Pruritus NRS and Sleep Disturbance NRS were long raw labels; generic NRS could swallow intensity/symptom.",
+    "Spelled number and percentile/percentage qualifiers could be dropped by parenthesized-abbreviation fallback."
+  ],
+  "implementation": "Only complete generic NRS symptom/intensity grammar; source abbreviations retained; unknown expanded NRS not shortened. Spelled-number/statistical qualifiers reject abbreviation shortening. No drug/indication dictionary or network translation.",
+  "validation": {
+    "red": "8 FAIL/19 PASS",
+    "related": "67 PASS in 0.48s",
+    "full_v2": "1703 PASS in 11.04s, 1 existing warning",
+    "ruff": "PASS",
+    "javascript": 10,
+    "python_600_80": 208,
+    "frozen_files": 272,
+    "frozen_changed": false
+  },
+  "browser": {
+    "ego_space": 84,
+    "widths": [
+      1440,
+      1600,
+      1920,
+      2560
+    ],
+    "label_filter_table_chart_checks": 16,
+    "screens": 8,
+    "body_font_px": 18,
+    "raw_titles_searched_intentionally": true,
+    "original_definitions_present": true,
+    "new_original_dialog_interaction": "NOT_RUN_UNCHANGED_COMPONENT",
+    "owner_viewed": [
+      {
+        "path": "docs/screenshots/nrs-reading-20261025/B-1440-average-pruritus.png",
+        "sha256": "a3b76e1575337bf07bba611ef73c4d16e5cd86106d3ec0e74850e158b64f78ad"
+      },
+      {
+        "path": "docs/screenshots/nrs-reading-20261025/B-1600-sleep.png",
+        "sha256": "8bdf43939aad27435d75f7b938cb249679c5f7baa10a6f4acaae53a26844282d"
+      },
+      {
+        "path": "docs/screenshots/nrs-reading-20261025/B-2560-average-pruritus.png",
+        "sha256": "e92f277c98d9cb1ff0f9f5854cb27d5ec02486bba613b6213e30aec7a95f2379"
+      }
+    ],
+    "disposition": "BOUNDED_READING_COMPONENT_ACCEPTED; remaining untranslated PK/response concepts/cross-trial semantic acceptance pending."
+  },
+  "current_installation": "This09 label increment is not in the preceding296944f5 package; repeat packaging only at next integrated milestone."
+}
