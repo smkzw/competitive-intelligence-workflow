@@ -1,0 +1,196 @@
+{
+  "scope": "FIXED12_SOURCE_OWNER_REVIEW_NOT_FULL_REFERENCE_OR_RECALL_ACCEPTANCE",
+  "input_manifest_sha256": "4e8c4b2cd5cbd584b96dd9f2d873023a4bd48ecfc446f788b806066658a5ffa1",
+  "qualification_sha256": "e4953673d14b33faa3790ab6d624abe4c141501096d1e07d395fcc84e774f324",
+  "verified_original_inputs": 17,
+  "verified_citations": 46,
+  "owner_locator_correction": {
+    "source_id": "NCT06004050-COND",
+    "worker_record_key": "NCT06004050-COND",
+    "verified_registry_record": "NCT06004050",
+    "basis": "Exact source study has Delgocitinib intervention and CHE conditions; original worker bytes retained"
+  },
+  "entries": [
+    {
+      "ref_id": "AD-001",
+      "worker_proposed_class": "core",
+      "owner_disposition": "POSITIVE_CLASS_SOURCE_SUPPORTED_PROVISIONAL",
+      "source_ids": [
+        "NCT07767253",
+        "NCT06554847",
+        "CTR20242920",
+        "SG-611-NDA",
+        "SG-611-NDA-2"
+      ],
+      "reason": "Product-specific issuer/regulatory/government source supports originator/innovative development; this is not a regulator-class or complete China-universe acceptance.",
+      "final_reference_acceptance": false
+    },
+    {
+      "ref_id": "AD-004",
+      "worker_proposed_class": "core",
+      "owner_disposition": "POSITIVE_CLASS_SOURCE_SUPPORTED_PROVISIONAL",
+      "source_ids": [
+        "CTR20263748",
+        "CTR20244319",
+        "ZEROONE-AD101",
+        "ZEROONE-AD101-2"
+      ],
+      "reason": "Product-specific issuer/regulatory/government source supports originator/innovative development; this is not a regulator-class or complete China-universe acceptance.",
+      "final_reference_acceptance": false
+    },
+    {
+      "ref_id": "AD-006",
+      "worker_proposed_class": "core",
+      "owner_disposition": "POSITIVE_CLASS_SOURCE_SUPPORTED_PROVISIONAL",
+      "source_ids": [
+        "NCT06241118",
+        "NCT05492578",
+        "CTR20241420",
+        "SANOFI-AMLI-20260724",
+        "SANOFI-AMLI-MOA"
+      ],
+      "reason": "Product-specific issuer/regulatory/government source supports originator/innovative development; this is not a regulator-class or complete China-universe acceptance.",
+      "final_reference_acceptance": false
+    },
+    {
+      "ref_id": "AD-007",
+      "worker_proposed_class": "core",
+      "owner_disposition": "POSITIVE_CLASS_SOURCE_SUPPORTED_PROVISIONAL",
+      "source_ids": [
+        "NCT06094179",
+        "CTR20233045",
+        "BIOTHERA-BAT6026-ANN"
+      ],
+      "reason": "Product-specific issuer/regulatory/government source supports originator/innovative development; this is not a regulator-class or complete China-universe acceptance.",
+      "final_reference_acceptance": false
+    },
+    {
+      "ref_id": "AD-012",
+      "worker_proposed_class": "pending",
+      "owner_disposition": "PENDING_NOT_REMOVED",
+      "source_ids": [
+        "NCT04800315",
+        "CTR20222885"
+      ],
+      "reason": "Identity/source observations retained. No positive class statement returned; source class remains pending.",
+      "final_reference_acceptance": false
+    },
+    {
+      "ref_id": "AD-015",
+      "worker_proposed_class": "core",
+      "owner_disposition": "POSITIVE_CLASS_SOURCE_SUPPORTED_PROVISIONAL",
+      "source_ids": [
+        "NCT06947980",
+        "CTR20251647",
+        "KEYMED-CM512-NEWS",
+        "KEYMED-PIPELINE"
+      ],
+      "reason": "Product-specific issuer/regulatory/government source supports originator/innovative development; this is not a regulator-class or complete China-universe acceptance.",
+      "final_reference_acceptance": false
+    },
+    {
+      "ref_id": "AD-016",
+      "worker_proposed_class": "core",
+      "owner_disposition": "POSITIVE_CLASS_SOURCE_SUPPORTED_PROVISIONAL",
+      "source_ids": [
+        "NCT07465120",
+        "CTR20260084",
+        "CMS-CMSD001-HKEX",
+        "CMS-CMSD001-MOA"
+      ],
+      "reason": "Product-specific issuer/regulatory/government source supports originator/innovative development; this is not a regulator-class or complete China-universe acceptance.",
+      "final_reference_acceptance": false
+    },
+    {
+      "ref_id": "AD-018",
+      "worker_proposed_class": "core",
+      "owner_disposition": "POSITIVE_CLASS_SOURCE_SUPPORTED_PROVISIONAL",
+      "source_ids": [
+        "NCT06744569",
+        "CTR20242851",
+        "CUTIA-CU10101-HKEX"
+      ],
+      "reason": "Product-specific issuer/regulatory/government source supports originator/innovative development; this is not a regulator-class or complete China-universe acceptance.",
+      "final_reference_acceptance": false
+    },
+    {
+      "ref_id": "AD-019",
+      "worker_proposed_class": "core",
+      "owner_disposition": "PENDING_NOT_REMOVED",
+      "source_ids": [
+        "NCT06004050",
+        "NCT06004050-COND",
+        "EMA-ANZUPGO",
+        "LEO-9M2025",
+        "LEO-9M2025-CHE"
+      ],
+      "reason": "Quoted EMA authorised indication alone is not a new-active-substance classification. China records here are CHE, not AD; product class and China-AD eligibility remain distinct unresolved fields.",
+      "final_reference_acceptance": false
+    },
+    {
+      "ref_id": "AD-023",
+      "worker_proposed_class": "core",
+      "owner_disposition": "PENDING_NOT_REMOVED",
+      "source_ids": [
+        "NCT06947993",
+        "CTR20253287",
+        "NOVARTIS-Q1-2026"
+      ],
+      "reason": "Issuer pipeline presence and phase alone do not settle innovative class. Preserve issuer innovation-table context as a lead; do not adopt worker core assignment.",
+      "final_reference_acceptance": false
+    },
+    {
+      "ref_id": "AD-027",
+      "worker_proposed_class": "pending",
+      "owner_disposition": "PENDING_NOT_REMOVED",
+      "source_ids": [
+        "NCT05999799",
+        "NCT06447506",
+        "CTR20240627",
+        "GSK-PIPELINE"
+      ],
+      "reason": "Terminated studies retained; absent current pipeline entry is not class exclusion and does not remove this candidate.",
+      "final_reference_acceptance": false
+    },
+    {
+      "ref_id": "AD-028",
+      "worker_proposed_class": "core",
+      "owner_disposition": "POSITIVE_CLASS_SOURCE_SUPPORTED_PROVISIONAL",
+      "source_ids": [
+        "NCT05769946",
+        "CTR20222690",
+        "GANZHOU-HEMAY005",
+        "GANZHOU-HEMAY005-2"
+      ],
+      "reason": "Product-specific issuer/regulatory/government source supports originator/innovative development; this is not a regulator-class or complete China-universe acceptance.",
+      "final_reference_acceptance": false
+    }
+  ],
+  "summary": {
+    "POSITIVE_CLASS_SOURCE_SUPPORTED_PROVISIONAL": 8,
+    "PENDING_NOT_REMOVED": 4
+  },
+  "actual_executor": "CodeBuddy/deepseek-v4.1-flash:max requested; declared Pi/zai/glm-5.3:high fallback supplied final report",
+  "runtime_identity_observed": [
+    "zai/glm-5.3"
+  ],
+  "report_claim_of_glm_5_2": "UNSUPPORTED_BY_RUNTIME_RECEIPT_NOT_ADOPTED",
+  "execution_permission": "Runner actually adjusted plan to bypassPermissions for execution; no missing-write recovery required",
+  "fetch_log_anomalies": [
+    "JT fetch failed",
+    "registry detail JS gate",
+    "LEO missing HTML log row; cited PDF bytes retained"
+  ],
+  "original_lists_sources_unchanged": true,
+  "denominator_frozen": false,
+  "recall_calculated": false,
+  "production_universe_rerun": false,
+  "source_receipt": {
+    "path": "ciw-data/reference-goldens-20261025/core-positive12-owner-28-recovery01/receipt.json",
+    "sha256": "6dfb58a0c1188fba3dda6488d124126bea413bc7e3e048e770507b88f5aabb6a"
+  },
+  "citation_ledger": {
+    "path": "ciw-data/reference-goldens-20261025/core-positive12-owner-28-recovery01/citation-checks.json",
+    "sha256": "2bba78f2d9846122e24b3fffa694cb6e2d408f85963a685bd4d1099a7d6326bf"
+  }
+}

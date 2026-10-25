@@ -1,0 +1,113 @@
+{
+  "scope": "SUMMARY_INPUT_INTEGRITY_AND_CURRENT_OFFLINE_INSTALL_COMPONENT_NOT_FULL_M1_M6",
+  "base_commit": "43c32c03b3a303f9969b75d49f49224fef079852",
+  "source_audit": {
+    "scope": "ALL_OLD_REFERENCE_SOURCE_ADMISSION_ONLY_NOT_OLD_NARRATIVE_OR_FULL_C_ACCEPTANCE",
+    "original_findings_sha256": "295f9be691f80c9cc414d95f99f45e9e787e51105c66cb147621d65a6b0c34a5",
+    "original_db_sha256": "4d9594e32529ff9e2f0b8195714b4a047926e24910ebf7f7a30f2f54d8e0d6fc",
+    "original_db_unchanged": true,
+    "findings": 780,
+    "fact_refs": 5212,
+    "source_bytes_verified": 45,
+    "study_containers_verified": 260,
+    "fact_dispositions": {
+      "SOURCE_EXACT_CURRENT_CONTEXT": 4713,
+      "HELD_NOT_MODEL_INPUT": 499
+    },
+    "issues": {
+      "scientific_context_differs:locations_complete": 244,
+      "scientific_context_differs:geographic_scope": 255,
+      "current_parser_value_or_type_differs": 14
+    },
+    "candidate_dispositions": {
+      "SOURCE_BOUND_LEAD_NOT_MEDICAL_ACCEPTED": 632,
+      "HELD_FOR_REPAIR": 148
+    },
+    "model_or_source_fetch_calls": 0,
+    "old_research_batches_reexecuted": 0,
+    "old_cache_or_current_source_rows_modified": 0,
+    "medical_narrative_approval": false,
+    "China_innovation_and_universe_acceptance": false
+  },
+  "measurement": {
+    "whole780_unqualified_cache_full_fact_24k_packets": 437,
+    "proposed_observation_view_packets": 528,
+    "whole780_full_fact_existing72k_packets": 159,
+    "observation_view_implemented": false,
+    "complete_evidence_preserved": true,
+    "limit_is": "PLANNED_FULL_FACT_EXPANSION_ESTIMATE_NOT_ACTUAL_RUNTIME_CONTEXT_OR_TOKEN_HARD_CAP"
+  },
+  "changes": [
+    "Existing72k full-evidence packets without extra24k split",
+    "Narrative IDs rejected in normal submission and cache validation",
+    "Summary reads limited to this packet alias or corresponding real fact ID; ordinary reads unchanged"
+  ],
+  "tests": {
+    "full_pytest": "1901 passed in13.07s; one existing Starlette warning",
+    "ruff": "PASS",
+    "python_structure": "237 files <=600 lines/functions <=80, existing create_app exception",
+    "js_syntax": 13,
+    "frozen_inputs": 355,
+    "red_cases": "Packet count; narrative ID; packet-scope rejection; originals retained"
+  },
+  "frozen_manifest": {
+    "path": "ciw-data/summary-integrity-frozen-20261025-25/manifest.json",
+    "sha256": "f45785417d2301a4ecec7b6a3cefb656d7ce56278c99a472aa6544498277d302"
+  },
+  "install": {
+    "wheel": {
+      "path": "ciw-data/install-summary-integrity-20261025-27/dist/ciw2-0.2.0.dev0-py3-none-any.whl",
+      "sha256": "dc2d7f10795cd8fa2d4caaa20cbcdafef9aa818ac32dc5ed9eb1aa5f88486b71"
+    },
+    "sdist": {
+      "path": "ciw-data/install-summary-integrity-20261025-27/dist/ciw2-0.2.0.dev0.tar.gz",
+      "sha256": "fa6d7f49032851af1633e10a0cc2011d0fa3c9677ca7898a06cb91faaa5efde5"
+    },
+    "source_binding": {
+      "path": "ciw-data/install-summary-integrity-20261025-27/source-binding.json",
+      "sha256": "95f65ff443e6ab1607bd3545a7d63f301ba96c770cba7fa41fa05a644fd43169"
+    },
+    "offline_external_downloads": 0,
+    "fresh_venv_byte_cli_audit": "PASS_all_current_modules_23_assets_9_Skills",
+    "standard_backup_restore": {
+      "scope": "ACTUAL_B_DATA_STANDARD_BACKUP_RESTORE_RENDER_COMPONENT_NOT_FULL_PIPELINE_OR_MEDICAL_ACCEPTANCE",
+      "frozen_manifest_sha256": "f45785417d2301a4ecec7b6a3cefb656d7ce56278c99a472aa6544498277d302",
+      "input_run": "run_1e2e2c33b90a",
+      "real_facts": 708,
+      "result_ids_preserved": 668,
+      "prior_runtime_receipt_invalidated_by_actual_tools_change": true,
+      "old_receipt_missing_artifacts_rerendered": true,
+      "new_receipt_restored_without_html_rerendered": true,
+      "unchanged_page_not_rewritten": true,
+      "tampered_page_repaired": true,
+      "intake_callbacks_for_changed_shared_tool_runtime": 1,
+      "model_source_calls": 0,
+      "same_runtime_resume_intake_callbacks": 0,
+      "scientific_tables_unchanged": true,
+      "history_receipts_unchanged_and_no_duplicate": true,
+      "restored_html_sha256": "70345102191022717fa4f5b09326ff68f4b1cfb9695e92bcb1f53dc28653968b",
+      "frozen_inputs_unchanged": 355
+    },
+    "legacy_refusal": {
+      "scope": "INSTALLED27_REAL_LEGACY_REFUSAL_ONLY",
+      "status": "failed_before_callbacks",
+      "model_source_calls": 0,
+      "all_stage_unit_agent_science_rows_unchanged": true,
+      "original_backup_unchanged": true,
+      "whole_goal_complete": false
+    }
+  },
+  "initial_install_restore_assertion": "FAIL_RETAINED: old probe expected zero intake callbacks despite a changed shared tools module; actual old/current receipt code digests differ. Recovery asserts exactly one controlled callback on version transition, zero on same-version restores. No product or historical receipt modified to obtain pass.",
+  "known_recovery_cost": "Shared harness.tools module currently invalidates every Skill stage. This conservative broad invalidation is not zero-research upgrade acceptance; narrow dependencies before claiming whole-pipeline upgrade recovery.",
+  "real_probes": "metric_context returned content under owner review; large_complete_packet running, not fullC",
+  "conference": {
+    "owner_disposition": {
+      "path": "ciw-data/summary-observation-contract-20261025-23/owner-disposition.json",
+      "sha256": "33fc7653606933ea86d52fe75369b5cc59d21450260882f89acad7641053205b"
+    },
+    "verdict": "REVISE_observation_view_not_implemented",
+    "limitation": "Read-only code review; Bash denied, no independent all-source/hash/test traversal"
+  },
+  "full_medical_visual_pipeline_acceptance": "NOT_RUN",
+  "whole_goal_complete": false
+}

@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_serializer
+from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 
 Region = Literal["china", "global"]
 Phase = Literal["preclinical", "phase1", "phase1_2", "phase2", "phase2_3", "phase3", "nda_bla",
@@ -116,9 +117,16 @@ class ExtractionResult(Strict):
 
 
 class Finding(Strict):
-    title: str = Field(description="中文临床问题式标题")
+    title: str = Field(description="中文临床问题式标题；内部事实编号只放fact_refs，不写入正文")
     bullets: list[str]
     fact_refs: list[str] = Field(min_length=1)
+
+    @model_validator(mode='after')
+    def _no_internal_reference_in_narrative(self) -> Finding:
+        marker = r'(?<![A-Za-z0-9_])(?:fct_[0-9a-f]{12}|summary_ref_[0-9]+)(?![A-Za-z0-9_])'
+        if any(re.search(marker, text) for text in (self.title, *self.bullets)):
+            raise ValueError('内部事实编号应只放在fact_refs，不进入摘要标题或正文')
+        return self
 
 
 class AnalysisResult(Strict):

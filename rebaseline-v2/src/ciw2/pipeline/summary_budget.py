@@ -7,7 +7,6 @@ from typing import Any
 
 from ciw2.pipeline.context import RunContext
 
-TARGET_CONTEXT_CHARS=24000
 MAX_CONTEXT_CHARS=72000  # Full evidence allowance plus the existing 8k narrative/metadata envelope.
 
 
@@ -45,7 +44,7 @@ def packets(tasks: list[dict], costs: dict[str,int], cached: Callable[[dict],boo
             if context_chars(one,costs)>MAX_CONTEXT_CHARS:
                 raise ValueError('单条完整要点的证据上下文超预算；保留原文和已完成单元，不截断事实')
             candidate=_packet(original,[*pending,row])
-            if pending and context_chars(candidate,costs)>TARGET_CONTEXT_CHARS:
+            if pending and context_chars(candidate,costs)>MAX_CONTEXT_CHARS:
                 planned.append(_packet(original,pending));pending=[]
             pending.append(row)
         if pending:planned.append(_packet(original,pending))

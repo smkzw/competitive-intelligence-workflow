@@ -127,7 +127,10 @@ class ReadFactArgs(BaseModel):
 def read_project_fact(ctx: ToolContext, args: ReadFactArgs) -> Any:
     if ctx.db is None or not ctx.project_id:
         return {'status': 'tool_failed', 'error': '缺少当前项目'}
-    fact_id = (ctx.extra or {}).get('summary_fact_refs', {}).get(args.fact_id, args.fact_id)
+    allowed = (ctx.extra or {}).get('summary_fact_refs')
+    if allowed is not None and args.fact_id not in allowed and args.fact_id not in allowed.values():
+        return {'status': 'tool_failed', 'error': '该事实不属于本次摘要工作单元'}
+    fact_id = (allowed or {}).get(args.fact_id, args.fact_id)
     fact = next((fact for fact in ctx.db.current_facts(ctx.project_id) if fact['id'] == fact_id), None)
     if fact is None:
         return {'status': 'tool_failed', 'error': '该事实不属于本项目当前事实集合'}
