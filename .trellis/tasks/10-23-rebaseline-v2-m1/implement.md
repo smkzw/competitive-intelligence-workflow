@@ -1,3 +1,9 @@
+## 2026-10-26 82终态/87核源/86执行
+
+82原第二批30候选真实复核成功，GLM8+Qwen1/1114.86s，完整缓存，无上游/科学表重写；26相关不是26核心。88标准备份147文件/manifest4e7dc26a…；保持原61失败。84/87真实CDE行及官方原PDF表11支持CM313/CM338治疗用生物class1，不从多受理扩计产品。89原ALXN2050完整1行另存，普通collector故障未关闭。M1/M2尚未通过。公共精简证据：rebaseline-v2/docs/evidence/20261026-scope-unit-and-cde-class.json。
+
+选择execution：86有限源上下文投影独立写集，owner核证来源并行；无新的临床解释会商。CodeBuddy live E03/DS4.1flash:max及声明fallback，真实预检0warning后启动11698/native58039，工具启用，kernel等待终态；只写scope/helper/新测试/coverageSkill，不能修改_scope裁决/预算/原DB/历史缓存。第一次准备cwd错误未落文件/派发，改正合同后才启动；已有原模板预检PASS不算实施许可。
+
 ## 2026-10-25 当前60安装64与45测试环境退役
 
 64从固定370输入离线构建、新venv0下载、全模块/23资产/9Skill/普通CLI同字节，wheel233d5c93…/sdiste4c28195…/source-binding9bc03755…。标准DB/CAS恢复B708事实668结果、缺失/篡改HTML修复、正确不重写、同版本0重放、旧legacy0调用拒绝，全真实运行回执在install-current60-20261025-64；仅真实资料+受控回调组件，不称完整普通PNH或全M6。63事件等待器67353继续监听真实61/child61824，不查进度、不改冻结60。64已替代45且45无进程/打开文件，只退役45venv1868文件/28006129逻辑字节；原wheel/sdist/版本/源码/备份/回执/重建命令全保留，物理释放未测。精简公共证据docs/evidence/20261025-current60-install-and-recovery61-start.json。当前M1未过、非RC，66独立IgAN来源另行只写source-only目录，不碰PNH或浏览器。

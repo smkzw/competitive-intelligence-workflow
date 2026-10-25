@@ -1,3 +1,9 @@
+## 2026-10-26 82终态/87核源/86执行
+
+82原第二批30候选真实复核成功，GLM8+Qwen1/1114.86s，完整缓存，无上游/科学表重写；26相关不是26核心。88标准备份147文件/manifest4e7dc26a…；保持原61失败。84/87真实CDE行及官方原PDF表11支持CM313/CM338治疗用生物class1，不从多受理扩计产品。89原ALXN2050完整1行另存，普通collector故障未关闭。M1/M2尚未通过。公共精简证据：rebaseline-v2/docs/evidence/20261026-scope-unit-and-cde-class.json。
+
+选择execution：86有限源上下文投影独立写集，owner核证来源并行；无新的临床解释会商。CodeBuddy live E03/DS4.1flash:max及声明fallback，真实预检0warning后启动11698/native58039，工具启用，kernel等待终态；只写scope/helper/新测试/coverageSkill，不能修改_scope裁决/预算/原DB/历史缓存。第一次准备cwd错误未落文件/派发，改正合同后才启动；已有原模板预检PASS不算实施许可。
+
 ## 47流程审计格式失败保留
 
 audit-execution实际FAIL：owner重写上下文/提示词时漏了可解析immutable provider/model标签；不是工具执行或35源字节失败。原context/prompt不事后改写以造PASS，runner实际Grok4.7/high与schedule manifest另核，端点身份限制仍保留。仅owner直接来源检查可复用，完整M2/流程审计未通过。下一派发应保留初始化的路线元数据，不重复此格式损失；不以重新跑全部源来掩盖本次准备失误。

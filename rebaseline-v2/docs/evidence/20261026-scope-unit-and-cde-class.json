@@ -1,0 +1,114 @@
+{
+  "scope": "SOURCE_AND_REAL_SCOPE_UNIT_PROGRESS_NOT_FULL_M1_OR_M2_ACCEPTANCE",
+  "pnh_scope82": {
+    "project_id": "prj_fc03997a59c5",
+    "run_id": "run_fd9a5c6c4fcf",
+    "unit_ordinal": 2,
+    "candidate_count": 30,
+    "task_sha256": "3cda83cb4f2946a709f745f1f6269a2f5ef74d2f790223e94923a93da995f0be",
+    "key": "scope_batch:a1ad4f186560fa99b9ba5393f9f3bbd75e6e18a9a2730f81dccec444100e3876",
+    "status": "RETURNED_PRODUCTION_SCOPE_RESULT_NOT_MEDICAL_APPROVAL",
+    "elapsed_seconds": 1114.86,
+    "actual_successful_models": {
+      "glm-5.3-flash": 8,
+      "Qwen3.8-Flash-Next": 1
+    },
+    "successful_reply_tokens_not_all_attempts": 235070,
+    "source_versions": 171,
+    "science_tables_unchanged": true,
+    "upstream_stages_unchanged": true,
+    "original_failed61_db_unchanged": true,
+    "runtime_inputs_unchanged": 374
+  },
+  "scope_result": {
+    "applied": 30,
+    "issues": [],
+    "relevance_true": 26,
+    "relevance_false": 4,
+    "core_count_not_adopted": true
+  },
+  "terminal_backup": {
+    "scope": "STANDARD_BACKUP_OF_TERMINAL82_NOT_STAGE_ACCEPTANCE",
+    "backup_manifest_sha256": "4e7dc26a07d9c080ad5360d3ebb81aa748afe3f0b204ce2d115011b3a7ff5c2e",
+    "files": 147,
+    "data_counts": {
+      "facts": 44,
+      "entities": 539,
+      "links": 429,
+      "sources": 171
+    },
+    "completed_scope_decisions": 30,
+    "scientific_or_full_M1_acceptance": false,
+    "model_calls": 0,
+    "network_calls": 0
+  },
+  "cde_class87": {
+    "qualification_sha256": "87192ef8c0388548acb26ab232e0f1290354e4621319aac874b183c50528371e",
+    "definition": {
+      "authority": "NMPA/CDE original official annual report",
+      "url": "https://www.nmpa.gov.cn/directory/web/nmpa/images/1707039824076019627.pdf",
+      "raw_sha256": "df9aa6972c0ff0ebae30f1858bbcceab2811bc048b3f533f78148502d00eea38",
+      "text_sha256": "216db76675e5b02a9079bdaf93e09a10078bac36069e36cb2ad1a978ff8cba2c",
+      "pdf_page": 38,
+      "printed_page": 35,
+      "table": 11,
+      "verbatim_quote": "创新型生物制品        1                695             510",
+      "char_offset": 47740,
+      "byte_offset": 64216,
+      "line": 1780,
+      "page_image_sha256": "191585e83516b3c8fa0d4f5b4479ae05977a3ad4e22e0dfd25671926e3b018fb",
+      "owner_actual_image_review": true,
+      "domain": "治疗用生物制品; not vaccine or chemical classifications"
+    },
+    "entries": [
+      {
+        "ref_id": "IGAN-007",
+        "canonical_raw": "CM313",
+        "state": "supported_regulatory_registration_class",
+        "source_id": "src_e7b6bb025916",
+        "raw_digest": "8a48b343cc3271fc4a63e155f521f5b96566ebd6f958ba4ab38cde86641ad49a",
+        "filters": {
+          "year": "",
+          "drug_name": "CM313",
+          "applicant": "",
+          "acceptance_number": "",
+          "drug_type": "",
+          "application_type": ""
+        },
+        "total_captured_rows": 12,
+        "matching_original_form_acceptance_numbers": [
+          "CXSL2200131",
+          "CXSL2200042",
+          "CXSL2000252"
+        ]
+      },
+      {
+        "ref_id": "IGAN-008",
+        "canonical_raw": "CM338",
+        "state": "supported_regulatory_registration_class",
+        "source_id": "src_15ccfaf98fef",
+        "raw_digest": "37aaa493d9458ed7fbf8e278b01b7ace28da6d2b81f2a1d90f181f104739906f",
+        "filters": {
+          "year": "",
+          "drug_name": "CM338",
+          "applicant": "",
+          "acceptance_number": "",
+          "drug_type": "",
+          "application_type": ""
+        },
+        "total_captured_rows": 1,
+        "matching_original_form_acceptance_numbers": [
+          "CXSL2101251"
+        ]
+      }
+    ]
+  },
+  "limitations": [
+    "One source-bound scope batch only, not ordinary pipeline or clinical approval",
+    "Scope relatedness is not innovation/core classification",
+    "CDE query collection timed out despite loaded results; unchanged helper recovered source only, generic collector not fixed",
+    "Reference denominator and recall not sealed/computed",
+    "Current80 code gate is separate from frozen71 actual unit; candidate_triage binding equal proven before run"
+  ],
+  "next": "86 minimal source-bound registry context projection; preserve upstream work and actual source versions"
+}
