@@ -1,3 +1,7 @@
+## 2026-10-25 四项正向来源47执行
+
+选择execution：4条独立参照的正向分类/中国AD范围与当前C前端、PNH完整链无共享写资源，可释放核源上下文。E08 live route Grok4.7/high及声明Pi备用，64turn/7200s全预算；仅core-four-positive-47可写，不读生产/旧裁决、不用浏览器。17原source SHA及新输入f6e4ca43…已核，起始实际runner37028/native21590，尚未终态/核源。不预封分母或算召回。最初preflight缺read-set/runner输出，在dispatch前修正为3文件/1输出/0warning；初次进程过滤器误用小写python，实际Python，纠正单次初始化核验并留activation01，未查进度。
+
 ## 2026-10-25 身份续接终态及owner采用范围
 
 原9237终态8turns/301.771s/return0，无备用；Grok4.7/high runtime grok-4.7-build/sessionc468e86c…，总58/64turn。manifest2a026380…8文件全SHA正确，18source块/30逐字通过；FDA原PDF及文本分别核hash。阿布昔替尼品牌+片剂和吉卡昔替尼ZGJAK025/026协议号桥接被owner有限接受，Pfizer原URL由相同已存文件的原抓取log补证，不猜URL；中国给药途径/规格/适应症批准等未采纳。原三列表和所有来源字节不动。未解四跨语言/六分类以新鲜E08源工作单元94075定向补证，56turn/7200s总预算，无全量重新发现、无生产候选读，不把其输出当医学审批或已冻结分母。

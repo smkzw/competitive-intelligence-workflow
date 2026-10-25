@@ -1,0 +1,355 @@
+{
+  "scope": "SUMMARY_FIRST_AND_INLINE_FULL_REGIONS_COMPONENT_NOT_MEDICAL_OR_RELEASE_ACCEPTANCE",
+  "base_commit": "be25dfe93b8c96f0dff76f67bbcc55e4aae183fc",
+  "frozen_manifest": {
+    "path": "ciw-data/reader-entry-hierarchy-frozen-20261025-50/manifest.json",
+    "sha256": "f1bae971e688ed72f32b6cec20291988cc04152c8081a7550806537ea209e758",
+    "files": 367
+  },
+  "gate": {
+    "pytest": "1922 passed in14.31s",
+    "ruff": "PASS",
+    "python_structure_files": 242,
+    "javascript_syntax_files": 14,
+    "frozen_inputs_unchanged": 367,
+    "current_source_test_skill_bytes_bound": 269
+  },
+  "red_and_related": "5 production RED cases (A/B/C summary order, two long region lists) then51 related PASS; no per-line full rerun",
+  "reader_changes": [
+    "Default summary before report-specific full comparison; absent summary does not make an empty section.",
+    "Existing cards use two desktop columns, three at2560. Full model narrative retained; no source/interpretation acceptance implied.",
+    "Long region list shows original list item count and explicitly named mainland/HK/Macao/Taiwan if present; every original region remains in native keyboard-expandable details, same field-level source entry. No geographical reclassification."
+  ],
+  "browser": {
+    "path": "ciw-data/summary-reader-preview-20261025-40/browser-hierarchy49-41.json",
+    "sha256": "48a7f0b87ef5c7f58835c263d1fa959c025556e702aa87a75aa5a3118ee8c352",
+    "html_sha256": "1d471387d069e7e7f2ef3a67f9fcbd8bd2879babed2c4a15ce2ad580e37c68ab",
+    "receipt": {
+      "scope": "REAL_SOURCE_C_COMPONENT_FOUR_WIDTH_GEOMETRY_QUERY_SOURCE_KEYBOARD_NOT_FULL_M1",
+      "space": 7,
+      "page": "p2",
+      "motion": "reduced",
+      "states": [
+        {
+          "entry": {
+            "width": 1440,
+            "summary_first": true,
+            "count": 6,
+            "columns": 2,
+            "overflow": false
+          },
+          "dense": {
+            "width": 1440,
+            "height": 900,
+            "points": 282,
+            "first": 0,
+            "last": 4,
+            "overflow": false
+          },
+          "filtered": {
+            "points": 14,
+            "query": "14 / 284 项研究"
+          },
+          "regions": {
+            "open": false,
+            "summary": "站点地区 22 项",
+            "full": [
+              "Australia",
+              "Austria",
+              "Belgium",
+              "Bulgaria",
+              "Canada",
+              "Czechia",
+              "Estonia",
+              "France",
+              "Georgia",
+              "Germany",
+              "Hungary",
+              "Italy",
+              "Latvia",
+              "Lithuania",
+              "Netherlands",
+              "New Zealand",
+              "Poland",
+              "Singapore",
+              "South Korea",
+              "Spain",
+              "United Kingdom",
+              "United States"
+            ]
+          },
+          "regionOpen": true,
+          "sparse": {
+            "points": 1,
+            "height": 120,
+            "source": "NCT07762833"
+          },
+          "source": {
+            "title": "Nemolizumab 30 mg · III 期 · 样本量依据",
+            "source": "NCT07762833",
+            "dialog_width": 760
+          },
+          "focusReturned": true
+        },
+        {
+          "entry": {
+            "width": 1600,
+            "summary_first": true,
+            "count": 6,
+            "columns": 2,
+            "overflow": false
+          },
+          "dense": {
+            "width": 1600,
+            "height": 900,
+            "points": 282,
+            "first": 0,
+            "last": 4,
+            "overflow": false
+          },
+          "filtered": {
+            "points": 14,
+            "query": "14 / 284 项研究"
+          },
+          "regions": {
+            "open": false,
+            "summary": "站点地区 22 项",
+            "full": [
+              "Australia",
+              "Austria",
+              "Belgium",
+              "Bulgaria",
+              "Canada",
+              "Czechia",
+              "Estonia",
+              "France",
+              "Georgia",
+              "Germany",
+              "Hungary",
+              "Italy",
+              "Latvia",
+              "Lithuania",
+              "Netherlands",
+              "New Zealand",
+              "Poland",
+              "Singapore",
+              "South Korea",
+              "Spain",
+              "United Kingdom",
+              "United States"
+            ]
+          },
+          "regionOpen": true,
+          "sparse": {
+            "points": 1,
+            "height": 120,
+            "source": "NCT07762833"
+          },
+          "source": {
+            "title": "Nemolizumab 30 mg · III 期 · 样本量依据",
+            "source": "NCT07762833",
+            "dialog_width": 760
+          },
+          "focusReturned": true
+        },
+        {
+          "entry": {
+            "width": 1920,
+            "summary_first": true,
+            "count": 6,
+            "columns": 2,
+            "overflow": false
+          },
+          "dense": {
+            "width": 1920,
+            "height": 1080,
+            "points": 282,
+            "first": 0,
+            "last": 4,
+            "overflow": false
+          },
+          "filtered": {
+            "points": 14,
+            "query": "14 / 284 项研究"
+          },
+          "regions": {
+            "open": false,
+            "summary": "站点地区 22 项",
+            "full": [
+              "Australia",
+              "Austria",
+              "Belgium",
+              "Bulgaria",
+              "Canada",
+              "Czechia",
+              "Estonia",
+              "France",
+              "Georgia",
+              "Germany",
+              "Hungary",
+              "Italy",
+              "Latvia",
+              "Lithuania",
+              "Netherlands",
+              "New Zealand",
+              "Poland",
+              "Singapore",
+              "South Korea",
+              "Spain",
+              "United Kingdom",
+              "United States"
+            ]
+          },
+          "regionOpen": true,
+          "sparse": {
+            "points": 1,
+            "height": 120,
+            "source": "NCT07762833"
+          },
+          "source": {
+            "title": "Nemolizumab 30 mg · III 期 · 样本量依据",
+            "source": "NCT07762833",
+            "dialog_width": 760
+          },
+          "focusReturned": true
+        },
+        {
+          "entry": {
+            "width": 2560,
+            "summary_first": true,
+            "count": 6,
+            "columns": 3,
+            "overflow": false
+          },
+          "dense": {
+            "width": 2560,
+            "height": 1440,
+            "points": 282,
+            "first": 0,
+            "last": 4,
+            "overflow": false
+          },
+          "filtered": {
+            "points": 14,
+            "query": "14 / 284 项研究"
+          },
+          "regions": {
+            "open": false,
+            "summary": "站点地区 22 项",
+            "full": [
+              "Australia",
+              "Austria",
+              "Belgium",
+              "Bulgaria",
+              "Canada",
+              "Czechia",
+              "Estonia",
+              "France",
+              "Georgia",
+              "Germany",
+              "Hungary",
+              "Italy",
+              "Latvia",
+              "Lithuania",
+              "Netherlands",
+              "New Zealand",
+              "Poland",
+              "Singapore",
+              "South Korea",
+              "Spain",
+              "United Kingdom",
+              "United States"
+            ]
+          },
+          "regionOpen": true,
+          "sparse": {
+            "points": 1,
+            "height": 120,
+            "source": "NCT07762833"
+          },
+          "source": {
+            "title": "Nemolizumab 30 mg · III 期 · 样本量依据",
+            "source": "NCT07762833",
+            "dialog_width": 760
+          },
+          "focusReturned": true
+        }
+      ],
+      "long": {
+        "index": 71,
+        "id": "NCT04875169"
+      },
+      "longAfter": {
+        "points": 282,
+        "first": 71,
+        "last": 71,
+        "height": 260
+      },
+      "identityHeaders": [
+        "Ruxolitinib Cream / Vehicle Cream · III 期 · Atopic Dermatitis\n\n\n\n申办方 Incyte Corporation",
+        "Ruxolitinib Cream / Vehicle Cream · III 期 · Atopic Dermatitis\n\n\n\n申办方 Incyte Corporation",
+        "Ruxolitinib Cream / Vehicle Cream · III 期 · Atopic Dermatitis\n\n\n\n申办方 Incyte Corporation",
+        "Ruxolitinib Cream / Vehicle Cream · III 期 · Atopic Dermatitis\n\n\n\n申办方 Incyte Corporation",
+        "Ruxolitinib Cream / Vehicle Cream · III 期 · Atopic Dermatitis\n\n\n\n申办方 Incyte Corporation",
+        "Ruxolitinib Cream / Vehicle Cream · III 期 · Atopic Dermatitis\n\n\n\n申办方 Incyte Corporation"
+      ]
+    },
+    "owner_images_inspected": [
+      "hierarchy49-entry-1440.png",
+      "hierarchy49-entry-2560.png",
+      "hierarchy49-filtered-2560.png"
+    ],
+    "screenshot_hashes": {
+      "hierarchy49-entry-1440.png": "047dfdfd49fc2110e1e5aa7529858ba113caf7da1628f15ef0d3c859b32fe795",
+      "hierarchy49-dense-1440.png": "abaf050051e681e771f372344fc20d0a62aaa14801d079919156b216bc4662ae",
+      "hierarchy49-filtered-1440.png": "10e0f8d8271c2461c356fba4e80908250fe3dd3ee9e0aa71f3985451d5771189",
+      "hierarchy49-sparse-1440.png": "117124f25d8626958ff0bba9a13c9c62a6d548fec8aa32e05a80d37800f45dfb",
+      "hierarchy49-source-1440.png": "ba63848b5a7358903c5c246b55571d48c322df83ad0de1a238d30cf05177303c",
+      "hierarchy49-entry-1600.png": "14f8f204faeab14e5bb128749f6d83578f988c16dd249ff299c07c836a877f0a",
+      "hierarchy49-dense-1600.png": "dfd14415d1beb99a742ab9f909fd8c1a6b4017141532b946252fc70ceefa714e",
+      "hierarchy49-filtered-1600.png": "9839a769319d6a5e55f04291b4d3ef0ec41c9196dd43bce30f7cfad190a2203c",
+      "hierarchy49-sparse-1600.png": "8159311519b1f79699444f748c738829a6267e995b49de61762d5ab7fe7ed13d",
+      "hierarchy49-source-1600.png": "47c0486bfaedf1c856f63dddd2a781f7981574814f3bc4261b4ffe9cb1d35902",
+      "hierarchy49-entry-1920.png": "0232ed3d4731e3b425238cef80edbbb4f15f8fffc2bad458619d27eaaf625bd0",
+      "hierarchy49-dense-1920.png": "1855c2eb8f86fa09111fd84b33f272d98ef866aaa8f25c7f474cfe188d8a7dbb",
+      "hierarchy49-filtered-1920.png": "ca7af97b2ae3ca287c66fb6d190ec43812693900300b4615456ffe99ace55713",
+      "hierarchy49-sparse-1920.png": "0f4cf975d90b3f93615a0c801d183a6cc0df39f311dd6b90a111ed3b189b599f",
+      "hierarchy49-source-1920.png": "6669efe36c4774a9334e23ec64dc2ec4d8aaade8fab03a50d5c9638ff4606998",
+      "hierarchy49-entry-2560.png": "64f6e072fad1cb377c679a5e073be6449a306a356884e4f1268b8ac4ec6d099a",
+      "hierarchy49-dense-2560.png": "f9f93ab3603f06e2db6640d439c464a3215a7d1929018ab08e81337dc1091b76",
+      "hierarchy49-filtered-2560.png": "e4348aee9e6af35d5c0fb7249b9eb98fbde639cb4924a8d56de7f39debda252f",
+      "hierarchy49-sparse-2560.png": "d0fd585cb4d7035fe6626be164090843cf31a61e5bad4d44d1b68d146bde49f9",
+      "hierarchy49-source-2560.png": "15e15e579ae08ba8b7115f73824ce7f58717c025f2549f43827acda601ad9ad1"
+    },
+    "motion": "reduced for geometry; not full normal-motion aesthetic approval"
+  },
+  "source_facts_chart_data": "source31 unchanged; all282 plot points/284 studies and complete chart JSON exact equal to candidate43;0 model/source calls, no ordinary analysis adoption",
+  "failures_preserved": [
+    "Original browser space6 disappeared; normal PNH38 config not hot-edited. Replacement7/p2 agent-owned created under standing user authorization; no profile/login/cache change.",
+    "First replacement script tried to fill below-fold comparison input while summary was now first. Actual snapshot checked; recovery uses visible design comparison navigation before fill. No assertions weakened or product data changed."
+  ],
+  "retired_reproducible_env27": {
+    "scope": "ONLY_OWN_REPLACED_INSTALL27_VENV_AFTER_INSTALL43_ACCEPTANCE",
+    "removed": "install-summary-integrity-20261025-27/venv",
+    "logical_regular_file_bytes": 27993674,
+    "regular_file_count": 1866,
+    "physical_bytes_reclaimed": "NOT_MEASURED",
+    "verified_processes_or_open_files": 0,
+    "preserved_archives": {
+      "install-summary-integrity-20261025-27/dist/ciw2-0.2.0.dev0-py3-none-any.whl": "dc2d7f10795cd8fa2d4caaa20cbcdafef9aa818ac32dc5ed9eb1aa5f88486b71",
+      "install-summary-integrity-20261025-27/dist/ciw2-0.2.0.dev0.tar.gz": "fa6d7f49032851af1633e10a0cc2011d0fa3c9677ca7898a06cb91faaa5efde5"
+    },
+    "replacement_wheel_sha256": "fcab42578d9aff4681c3892a0d0dbc0b46a01da8302b03bbf49ed69c3cbbe873",
+    "DB_CAS_sources_reports_screens_receipts_sessions_untouched": true,
+    "rebuild": "python -m venv ciw-data/install-summary-integrity-20261025-27/venv; uv pip install --offline --python ciw-data/install-summary-integrity-20261025-27/venv/bin/python ciw-data/install-summary-integrity-20261025-27/dist/ciw2-0.2.0.dev0-py3-none-any.whl",
+    "checked_at": "2026-10-25T14:52:10.440846+00:00",
+    "state": "RETIRED_REBUILDABLE_ENV_ONLY"
+  },
+  "remaining": [
+    "Probe37 narrative still medical/reader REVISE; moving it is not acceptance.",
+    "Ordinary PNH38 full C still awaits terminal event42; do not query progress or replay AD151.",
+    "Source47 four-item E08 running awaiting terminal; source qualification and China scope not adopted.",
+    "Latest offline package45 covers43 only; new50 source not yet installed as final whole-product package.",
+    "M1-M6 full gates remain, non-RC."
+  ]
+}

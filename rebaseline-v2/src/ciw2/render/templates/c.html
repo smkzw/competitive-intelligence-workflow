@@ -20,7 +20,10 @@
 {% elif role in ('allocation','masking') %}<span data-original-value="{{ ref.value }}">{{ ref.value|registry_label(role) }}</span>
 {% elif role == 'eligibility_age' %}{{ ref.value.min|age_label }} ~ {{ ref.value.max|age_label }}
 {% elif role == 'eligibility_sex' %}{{ ref.value|registry_label('sex') }}
-{% elif role == 'countries' %}站点地区 {% if ref.value is iterable and ref.value is not string %}{% for country in ref.value %}<span class="region-name" data-original-value="{{ country }}">{{ country|registry_label('country') }}</span>{% if not loop.last %}、{% endif %}{% endfor %}{% else %}—{% endif %}
+{% elif role == 'countries' %}{% if ref.value is iterable and ref.value is not string %}
+{% if ref.value|length > 3 %}<details class="site-regions"><summary>站点地区 {{ ref.value|length }} 项{% for country in ref.value if country in ('China','Hong Kong','Macao','Macau','Taiwan') %} · {{ country|registry_label('country') }}{% endfor %}</summary>{% else %}站点地区 {% endif %}
+{% for country in ref.value %}<span class="region-name" data-original-value="{{ country }}">{{ country|registry_label('country') }}</span>{% if not loop.last %}、{% endif %}{% endfor %}
+{% if ref.value|length > 3 %}</details>{% endif %}{% else %}站点地区 —{% endif %}
 {% elif role == 'china_site' %}中国大陆站点 {{ '是' if ref.value is sameas true else ('否' if ref.value is sameas false else (ref.value if ref.value is not none else '—')) }}
 {% elif role == 'eligibility_healthy_volunteers' %}健康受试者：{{ ref.value }}
 {% elif role == 'arms' %}{% if ref.value %}<details><summary>分组详情（{{ ref.value|length }}组）</summary>

@@ -90,7 +90,9 @@ p,li,td,th{text-wrap:pretty} h1,h2,h3,.brand,nav a{text-wrap:balance}
 .kpi{flex:0 1 auto;width:max-content;max-width:100%;min-width:0;padding:8px 14px}
 .kpi b{display:block;font-size:var(--kz-type-kpi);color:var(--ink);line-height:1.25}
 .kpi span{color:var(--muted);font-size:var(--report-font-body)}
-.finding{padding:8px 14px;margin:10px 0}
+.findings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
+.finding{padding:8px 14px;margin:0;min-width:0}
+@media(min-width:2200px){.findings-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .finding-identity .trial-company{display:inline-block;margin:0 0 0 12px}
 .finding h3{margin:0 0 4px} .finding ul{margin:4px 0 0 18px;padding:0}
 table{border-collapse:collapse;width:100%;background:var(--kz-data-plane);font-size:var(--kz-type-site-body)}
