@@ -1,0 +1,64 @@
+{
+  "schema_version": "ciw2-owner-reference-evidence-v1",
+  "scope": "INDEPENDENT_REFERENCE_REPAIR_SOURCE_CHECK_NOT_BENCHMARK_FREEZE_OR_RECALL",
+  "requested_route": {
+    "requested_agent": "grok",
+    "requested_provider": "grok-build",
+    "requested_model": "grok-4.7",
+    "requested_effort": "high"
+  },
+  "effective_route": {
+    "effective_agent": "grok",
+    "effective_provider": "grok-build",
+    "effective_model": "grok-4.7",
+    "effective_effort": "high"
+  },
+  "actual_models": [
+    "grok-4.7-build"
+  ],
+  "session": "c468e86c-0ec7-4758-ba36-c09d4b6f0962",
+  "turns": 50,
+  "seconds": 1506.787,
+  "returncode": 0,
+  "fallback": null,
+  "manifests": [
+    {
+      "manifest": "manifest.json",
+      "files": 41,
+      "reused": 0,
+      "mismatch": [],
+      "sha256": "bef0b8ce7a44e97762d7b27a61881985dbb4d3e659bcfdaedab8843eccbf999c"
+    },
+    {
+      "manifest": "recovery-01/manifest.json",
+      "files": 129,
+      "reused": 0,
+      "mismatch": [],
+      "sha256": "246fb3d0c69c2fb7df962b2f7d92b21fc61bf3c7926056b1c025ac59f1558046"
+    },
+    {
+      "manifest": "identity-revision-01/manifest.json",
+      "files": 40,
+      "reused": 9,
+      "mismatch": [],
+      "sha256": "8a7e64ef9cc5222f1df4263e33d07212d456a3753a5c57b2d19de58b6f9ff85c"
+    }
+  ],
+  "new_source_objects_checked": 27,
+  "new_literal_quotes_checked": 57,
+  "source_hash_or_quote_issues": [],
+  "all_original_fields_preserved": true,
+  "audit_representation": "Verbatim raw JSON fragments and decoded source strings are distinguished, both permitted by the source contract.",
+  "independence": "No production candidates/Skills/DB disclosed to source worker; fresh repair context, same Grok family as collector and source reviewer. Full professional approval not claimed.",
+  "denominator_frozen": false,
+  "recall_computed": false,
+  "remaining": "Cross-language identity/formulation and scientific eligibility need closure. Source verification alone cannot freeze the denominator.",
+  "continuation": {
+    "same_session": true,
+    "remaining_turns": 14,
+    "remaining_seconds": 5693,
+    "task": "six targeted cross-language families only; new small source patches; pending actual terminal receipt",
+    "fallback_allowed": false
+  },
+  "private_audit_sha256": "29d86ab5d543f44337bfafc5681f56a4a6bf6050a726900b7f71a51bf93f818c"
+}

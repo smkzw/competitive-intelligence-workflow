@@ -159,3 +159,7 @@ Service复用标准库Condition/deque及一个执行锁，在同一服务进程�
 - 失败捕获在确认官方无凭据URL后保留原始JSON至既有CAS及source_capture_rejected指针，accepted=false；它不是合格来源或成功缓存。有效分页另以complete=false来源保全。缺首锚时重新核查完整目录，不能把新首锚补进旧捕获来冒充可恢复。普通trial_evidence复用china_evidence入口，按全部已证明受理ID批量读取两个新报序列及纳入优先目录；一个栏目一次完整捕获，不逐药重复抓全站。cde_evidence沿用stages来源绑定回执，规则/代码/证明集合与源版本共同决定同run复用；新run重新浏览。栏目失败单独pending，继续其他栏目与CTgov。受理证明必须经完整CAS与原行药名/受理号/页行/企业角色及日期核对；持有真实source_id不等于属于另一药物。
 
 - priority_proposed复用同一cde_priority.py/.mjs的两个已观察栏目参数，不建新框架；列名/字段映射、tbody/控件及请求上下文均显式分离。parser默认仍为priority_included，另一栏目必须显式选择，错误列合同拒绝；同一source_id不得跨栏目缓存。拟优先原行无受理号时ID=null、原字节保留，只能成为未解来源，不按名自动借用接受关系。cde_priority_proposed_refs独立于已纳入引用；普通collector固定调度四个已验证范围。
+
+- endpoint_label沿用显示专用完整语法，支持明确的应答阈值列表及较基线改善阈值；不读取药物/适应症字典。量表代码与备选阈值须一致，未知限定/统计/条件不缩写；原endpoint、frame hash、fact_id及原始数值不变，图/表共用，完整题目在原定义保留。该投影不参与科学匹配或共轴资格。
+
+- 多阈值父题若有且仅有一个源分面代码与完整阈值列表印证，图题用该分面+较基线应答；完整表的父题短名和原定义仍保留全部备选阈值。不让EASI-50曲线的标题同时突出50/75/90三个结局；未知/冲突分面不猜。只改变label，不改变frame/id/分面集合或事实。

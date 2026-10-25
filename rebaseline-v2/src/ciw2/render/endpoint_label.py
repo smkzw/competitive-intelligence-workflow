@@ -47,6 +47,38 @@ def _atomic_measure(text: str) -> str | None:
     return text if re.fullmatch(_ABBREVIATION, text) else None
 
 
+def _response(text: str) -> str | None:
+    single=re.fullmatch(r'Percentage of Participants With an Improvement of (>=|<=|>|<|≥|≤) '
+                        r'([0-9]+(?:\.[0-9]+)?) From Baseline in (.+)',text,re.IGNORECASE)
+    if single:
+        name=_measure(single[3])
+        return f'{name} · 较基线改善{_OP[single[1]]}{single[2]} · 受试者比例' if name else None
+    parts=_composite_response(text)
+    if not parts:return None
+    a,b,c,measure=parts
+    return f'{measure} · 较基线应答{a}%、{b}%或{c}%'
+
+
+def _composite_response(text: str) -> tuple[str,str,str,str] | None:
+    composite=re.fullmatch(r'(?:Number|Percentage) of Participants Achieving ([0-9]+(?:\.[0-9]+)?) '
+                           r'Percent \(%\), ([0-9]+(?:\.[0-9]+)?)% or ([0-9]+(?:\.[0-9]+)?)% '
+                           r'Response From Baseline in ('+_ABBREVIATION+r') \(([^()]+)\)',text)
+    if not composite:return None
+    a,b,c,measure,codes=composite.groups()
+    if codes!=f'{measure}-{a}, {measure}-{b} and {measure}-{c}':return None
+    return a,b,c,measure
+
+
+def response_facet_label(raw: str, facets: list[str]) -> str | None:
+    """Use one explicitly corroborated source facet, leaving the full parent title intact."""
+    if not isinstance(raw,str) or len(raw)>2000:return None
+    parts=_composite_response(' '.join(raw.split()))
+    if not parts:return None
+    a,b,c,measure=parts;codes={f'{measure}-{v}' for v in (a,b,c)}
+    matching={re.sub(r'\s+','',facet) for facet in facets} & codes
+    return ' · '.join([*facets,'较基线应答']) if len(matching)==1 else None
+
+
 def endpoint_label(value: object) -> str:
     if not isinstance(value, str) or not value:
         return '—'
@@ -54,6 +86,8 @@ def endpoint_label(value: object) -> str:
     if len(raw)>2000:
         return raw
     text=' '.join(raw.split())
+    response=_response(text)
+    if response:return response
     for prefix, change in _CHANGE:
         if not text.casefold().startswith(prefix.casefold()):
             continue

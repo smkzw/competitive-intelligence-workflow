@@ -10,7 +10,7 @@ from typing import Any
 
 from ciw2.domain.identity import name_key
 from ciw2.domain.outcomes import DOMAIN_LABELS
-from ciw2.render.endpoint_label import endpoint_label
+from ciw2.render.endpoint_label import endpoint_label, response_facet_label
 from ciw2.render.labels import registry_label
 
 VISIT = re.compile(r'(?:at\s+)?(week|day|month)s?\s*(\d+)|第\s*(\d+)\s*(周|天|月)', re.IGNORECASE)
@@ -144,7 +144,7 @@ def _group(frame: tuple, items: list[tuple[dict, tuple | None]], positions: set[
     axes = frame[6]
     group_id = hashlib.sha256(json.dumps(frame, ensure_ascii=False).encode()).hexdigest()[:16]
     facets = _facets(rows[0], frame)
-    label = ' · '.join([*facets, endpoint_label(rows[0]['endpoint'])])
+    label = response_facet_label(rows[0]['endpoint'],facets) or ' · '.join([*facets, endpoint_label(rows[0]['endpoint'])])
     return {'id': group_id, 'title': rows[0]['endpoint'], 'label': label, 'facets': facets,
             'subtitle': rows[0].get('timepoint') or '',
             'domain': frame[-1],

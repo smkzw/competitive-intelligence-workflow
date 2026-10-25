@@ -1,0 +1,94 @@
+{
+  "schema_version": "ciw2-owner-component-evidence-v1",
+  "scope": "RESPONSE_FACET_CHINESE_READING_NOT_FULL_M4_OR_PRODUCT",
+  "base_commit": "e432e2516aaf1540d62b0889860a6f6302d43c91",
+  "manifest_sha256": "e1229c1e39ba96130bd272c6d189acfc42c56d0433df663a17561ca82995644a",
+  "html_sha256": "e147fd6ec000d1b30d0e4d88f9877ac68ba957131690d13311d6efd28de27377",
+  "facts_sha256": "eb4067d24feb5f0950a6e6eb37a401a23e682ccd27cebfcd31206d80bb160d54",
+  "label_changes": [
+    {
+      "group": "d1cfb574768e4200",
+      "old": "EASI - 50 · Number of Participants Achieving 50 Percent (%), 75% or 90% Response From Baseline in EASI (EASI-50, EASI-75 and EASI-90)",
+      "new": "EASI - 50 · 较基线应答"
+    },
+    {
+      "group": "9d9c33505b2459f1",
+      "old": "EASI - 75 · Number of Participants Achieving 50 Percent (%), 75% or 90% Response From Baseline in EASI (EASI-50, EASI-75 and EASI-90)",
+      "new": "EASI - 75 · 较基线应答"
+    },
+    {
+      "group": "ccb24a47aecb717f",
+      "old": "EASI - 90 · Number of Participants Achieving 50 Percent (%), 75% or 90% Response From Baseline in EASI (EASI-50, EASI-75 and EASI-90)",
+      "new": "EASI - 90 · 较基线应答"
+    },
+    {
+      "group": "01b7e9479739dacf",
+      "old": "Percentage of Participants With an Improvement of >= 4 From Baseline in Weekly Average of PP NRS",
+      "new": "PP NRS（每周均值） · 较基线改善≥4 · 受试者比例"
+    }
+  ],
+  "source_results": 668,
+  "groups": 34,
+  "points": 668,
+  "dispersion_points": 449,
+  "all_scientific_group_fields_except_display_label_equal_to_09": true,
+  "group_IDs_scientific_values_arms_series_trials_and_all_point_ids_unchanged": true,
+  "root_tests": {
+    "initial_red_failures": 5,
+    "source_facet_red_failures": 1,
+    "related_passed": 189,
+    "related_seconds": 0.49
+  },
+  "development_gate": {
+    "pytest_passed": 1749,
+    "pytest_seconds": 12.03,
+    "ruff": "PASS",
+    "JS_files": 11,
+    "python_files": 214,
+    "size_600_80_violations": [],
+    "fixed_inputs": 305,
+    "changed_inputs": []
+  },
+  "actual_browser": {
+    "widths_css": [
+      1440,
+      1600,
+      1920,
+      2560
+    ],
+    "response_query_chart_table_source_checks": 16,
+    "screens": 9,
+    "font": "18px",
+    "page_overflow": false,
+    "one_real_glyph_to_fact_and_keyboard_original_definition": true,
+    "Chinese_query": {
+      "query": "改善≥4",
+      "count": "39 / 668 条结果 · 1 组",
+      "group": "01b7e9479739dacf",
+      "points": 39,
+      "rows": 39,
+      "width": 1600,
+      "pageWidth": 1600
+    },
+    "owner_viewed": [
+      "1440 EASI50",
+      "1600 NRS4 raw search",
+      "2560 EASI50",
+      "1600 NRS4 Chinese search"
+    ]
+  },
+  "screenshots": [
+    {
+      "path": "docs/screenshots/response-reading-20261025/B-1440-EASI50.png",
+      "sha256": "e4ec74eafb91cb6186bb891510d7d46cde1562eaf0d55b9bc74e54d5d069461b"
+    },
+    {
+      "path": "docs/screenshots/response-reading-20261025/B-1600-NRS4-Chinese-query.png",
+      "sha256": "22e34d1de25ba59f98164a409756c22bbdd1474dc64f55c1fdfe2dad0c77db22"
+    }
+  ],
+  "preliminary_candidate10": "1747 development pass; structured render still repeated three thresholds in a selected single-response graph; not final visual acceptance",
+  "remaining": "Unknown PK/complex safety titles, broader Chinese coverage, cross-study semantic comparison, publications, full M4 and latest installation remain separate work.",
+  "external_source_model_calls": 0,
+  "final_product_acceptance": "NOT_RUN"
+}
