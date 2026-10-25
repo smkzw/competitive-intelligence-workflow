@@ -21,7 +21,7 @@ from ciw2.render.drug_profile import drug_profiles
 from ciw2.render.endpoint_label import endpoint_label
 from ciw2.render.labels import PHASE_ZH, age_label, phase_label, registry_label
 from ciw2.render.result_identity import bind_result_drugs
-from ciw2.render.results import arm_label, dispersion_text, result_groups
+from ciw2.render.results import arm_tokens, dispersion_text, result_groups, visit_label
 from ciw2.render.trial_identity import trial_identities, verified_holders
 from ciw2.store.db import DB
 
@@ -39,7 +39,8 @@ _env.filters['registry_label'] = registry_label
 _env.filters['age_label'] = age_label
 _env.filters['endpoint_label'] = endpoint_label
 _env.filters['dispersion_text'] = dispersion_text
-_env.filters['arm_label'] = arm_label
+_env.filters['arm_tokens'] = arm_tokens
+_env.filters['visit_label'] = visit_label
 
 
 def _trial_drugs(db: DB, pid: str) -> dict[str, list[str]]:

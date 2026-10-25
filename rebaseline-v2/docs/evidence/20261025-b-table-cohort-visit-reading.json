@@ -1,0 +1,229 @@
+{
+  "scope": "B_TABLE_COHORT_AND_VISIT_READING_NOT_FULL_M4",
+  "candidate": "b-table-reading-20261025-02",
+  "manifest_sha256": "e33d7b662c4018160abdcc91e7c7d2dceec0f9bd289bec5939ada206785d351a",
+  "base_commit": "b76d2553970290a65ec45e1ec57260f22dcb7424",
+  "html_sha256": "57faecdbc697be748eeb2371d821d1ddafd24e3b5c4508312ea7c22d9b21ec61",
+  "facts_sha256": "eb4067d24feb5f0950a6e6eb37a401a23e682ccd27cebfcd31206d80bb160d54",
+  "observations": 668,
+  "plotted_ids": 668,
+  "groups": 34,
+  "chart_projection_equal_candidate08": true,
+  "body_font_px": 18,
+  "visits": "Full single-visit grammar translated; unknown ranges and suffixes retained; original class/category folded in place.",
+  "cohorts": "Age token indivisible; unknown arm names retain normal wrapping; same chart label path.",
+  "original1600": {
+    "arm_column_px": 101.8828125,
+    "age_split": true,
+    "selected_row_px": 115.78125
+  },
+  "new1600": {
+    "selected_row_px": 96.5859375,
+    "age_split": false,
+    "single_visit_split": false
+  },
+  "development": {
+    "pytest": "1689 passed, 1 existing warning in 10.54s",
+    "ruff": "PASS",
+    "javascript_files": 10,
+    "python_files_600_80": 208,
+    "frozen_files": 272,
+    "input_changed": false
+  },
+  "browser": {
+    "ego_space": 84,
+    "screens": 8,
+    "states": [
+      {
+        "state": "dense",
+        "width": 1440,
+        "pageWidth": 1440,
+        "font": "18px",
+        "total": 668,
+        "visible": 602,
+        "ageTokens": 602,
+        "brokenAgeTokens": 0,
+        "visitTokens": 482,
+        "brokenVisits": 0,
+        "selected": "fct_b86b28f200b0",
+        "selectedSummary": "队列1.1（7–11岁）",
+        "selectedRowHeight": 96.5859375,
+        "armColumnWidth": 137.984375,
+        "statisticColumnWidth": 201.7265625,
+        "chartPoints": 39
+      },
+      {
+        "state": "filtered-original",
+        "width": 1440,
+        "pageWidth": 1440,
+        "font": "18px",
+        "total": 668,
+        "visible": 200,
+        "ageTokens": 200,
+        "brokenAgeTokens": 0,
+        "visitTokens": 160,
+        "brokenVisits": 0,
+        "selected": "fct_b86b28f200b0",
+        "selectedSummary": "队列1.1（7–11岁）",
+        "selectedRowHeight": 140.4765625,
+        "armColumnWidth": 160.8828125,
+        "statisticColumnWidth": 198.78125,
+        "chartPoints": 13,
+        "original": {
+          "open": true,
+          "summary": "队列1.1（7–11岁）",
+          "raw": "队列1.1（7–11岁）Cohort 1.1: Participants Aged 7-11 Years",
+          "value": "-66.1SD 32.089"
+        }
+      },
+      {
+        "state": "dense",
+        "width": 1600,
+        "pageWidth": 1600,
+        "font": "18px",
+        "total": 668,
+        "visible": 602,
+        "ageTokens": 602,
+        "brokenAgeTokens": 0,
+        "visitTokens": 482,
+        "brokenVisits": 0,
+        "selected": "fct_b86b28f200b0",
+        "selectedSummary": "队列1.1（7–11岁）",
+        "selectedRowHeight": 96.5859375,
+        "armColumnWidth": 145.2265625,
+        "statisticColumnWidth": 220.3515625,
+        "chartPoints": 39
+      },
+      {
+        "state": "filtered-original",
+        "width": 1600,
+        "pageWidth": 1600,
+        "font": "18px",
+        "total": 668,
+        "visible": 200,
+        "ageTokens": 200,
+        "brokenAgeTokens": 0,
+        "visitTokens": 160,
+        "brokenVisits": 0,
+        "selected": "fct_b86b28f200b0",
+        "selectedSummary": "队列1.1（7–11岁）",
+        "selectedRowHeight": 140.4765625,
+        "armColumnWidth": 184.6875,
+        "statisticColumnWidth": 215.2734375,
+        "chartPoints": 13,
+        "original": {
+          "open": true,
+          "summary": "队列1.1（7–11岁）",
+          "raw": "队列1.1（7–11岁）Cohort 1.1: Participants Aged 7-11 Years",
+          "value": "-66.1SD 32.089"
+        }
+      },
+      {
+        "state": "dense",
+        "width": 1920,
+        "pageWidth": 1920,
+        "font": "18px",
+        "total": 668,
+        "visible": 602,
+        "ageTokens": 602,
+        "brokenAgeTokens": 0,
+        "visitTokens": 482,
+        "brokenVisits": 0,
+        "selected": "fct_b86b28f200b0",
+        "selectedSummary": "队列1.1（7–11岁）",
+        "selectedRowHeight": 96.5859375,
+        "armColumnWidth": 159.6953125,
+        "statisticColumnWidth": 257.609375,
+        "chartPoints": 39
+      },
+      {
+        "state": "filtered-original",
+        "width": 1920,
+        "pageWidth": 1920,
+        "font": "18px",
+        "total": 668,
+        "visible": 200,
+        "ageTokens": 200,
+        "brokenAgeTokens": 0,
+        "visitTokens": 160,
+        "brokenVisits": 0,
+        "selected": "fct_b86b28f200b0",
+        "selectedSummary": "队列1.1（7–11岁）",
+        "selectedRowHeight": 96.0859375,
+        "armColumnWidth": 232.3125,
+        "statisticColumnWidth": 248.265625,
+        "chartPoints": 13,
+        "original": {
+          "open": true,
+          "summary": "队列1.1（7–11岁）",
+          "raw": "队列1.1（7–11岁）Cohort 1.1: Participants Aged 7-11 Years",
+          "value": "-66.1SD 32.089"
+        }
+      },
+      {
+        "state": "dense",
+        "width": 2560,
+        "pageWidth": 2560,
+        "font": "18px",
+        "total": 668,
+        "visible": 602,
+        "ageTokens": 602,
+        "brokenAgeTokens": 0,
+        "visitTokens": 482,
+        "brokenVisits": 0,
+        "selected": "fct_b86b28f200b0",
+        "selectedSummary": "队列1.1（7–11岁）",
+        "selectedRowHeight": 96.5859375,
+        "armColumnWidth": 188.6328125,
+        "statisticColumnWidth": 332.125,
+        "chartPoints": 39
+      },
+      {
+        "state": "filtered-original",
+        "width": 2560,
+        "pageWidth": 2560,
+        "font": "18px",
+        "total": 668,
+        "visible": 200,
+        "ageTokens": 200,
+        "brokenAgeTokens": 0,
+        "visitTokens": 160,
+        "brokenVisits": 0,
+        "selected": "fct_b86b28f200b0",
+        "selectedSummary": "队列1.1（7–11岁）",
+        "selectedRowHeight": 96.0859375,
+        "armColumnWidth": 327.546875,
+        "statisticColumnWidth": 314.25,
+        "chartPoints": 13,
+        "original": {
+          "open": true,
+          "summary": "队列1.1（7–11岁）",
+          "raw": "队列1.1（7–11岁）Cohort 1.1: Participants Aged 7-11 Years",
+          "value": "-66.1SD 32.089"
+        }
+      }
+    ],
+    "owner_viewed": [
+      {
+        "path": "docs/screenshots/b-table-reading-20261025/B-1440-dense.png",
+        "sha256": "02337d7aa386f1ebea398dc27106e1c3a4a52ef53e0b0049ccee31ef8dcaa2ac"
+      },
+      {
+        "path": "docs/screenshots/b-table-reading-20261025/B-1600-filtered-original.png",
+        "sha256": "45880fde47b1e0e61d1ed5738aa38cbe025a63548982d9a05619f884c7cd2b68"
+      },
+      {
+        "path": "docs/screenshots/b-table-reading-20261025/B-2560-dense.png",
+        "sha256": "f8d8a37aa98118fab44a65be9db9801a2223bff00d144cf1400844f779314072"
+      }
+    ],
+    "acceptance": "BOUNDED_TABLE_COMPONENT_ACCEPTED; unknown clinical English/cross-trial semantics/full M4 remain pending."
+  },
+  "prior_candidates": {
+    "01": "1681 PASS; age fixed, owner screenshot found Week broken; retained as incomplete visit reading.",
+    "02_cli_instrument": "Positional filename rejected before browser work; corrected documented stdin form, no browser upgrade."
+  },
+  "source_calls": 0,
+  "model_calls": 0,
+  "new_installation_acceptance": "NOT_RUN"
+}

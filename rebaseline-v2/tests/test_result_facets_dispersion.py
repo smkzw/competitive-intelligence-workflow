@@ -6,7 +6,7 @@ import pytest
 from test_result_presentation import project
 
 from ciw2.render.portal import data_b, render_report
-from ciw2.render.results import dispersion_text
+from ciw2.render.results import arm_label, arm_tokens, dispersion_text, visit_label
 
 
 @pytest.mark.parametrize(('raw','label'), [('Standard Deviation','SD'),('Standard Error','SE'),
@@ -16,6 +16,15 @@ def test_exact_source_dispersion_text_and_original_scalar_type(raw,label):
     row={'dispersion_type':raw,'spread':'0'}
     assert dispersion_text(row)==label+' 0'
     assert row=={'dispersion_type':raw,'spread':'0'}
+
+
+@pytest.mark.parametrize(('raw','parts'),[
+    ('Cohort 1.1: Participants Aged 7-11 Years',['队列1.1','（7–11岁）']),
+    ('Cohort 2: Participants Aged 2-6 Years',['队列2','（2–6岁）']),
+    ('Source cohort with a longer, unknown age expression',['Source cohort with a longer, unknown age expression']),
+])
+def test_cohort_tokens_share_the_chart_label_without_reparsing_or_changing_unknown_names(raw,parts):
+    assert arm_tokens(raw)==parts and arm_label(raw)==''.join(parts)
 
 
 def test_compound_visit_strata_form_separate_longitudinal_curves_without_losing_facts(settings):
@@ -61,7 +70,7 @@ def test_source_cohorts_are_legible_and_the_original_arm_names_remain(settings):
     assert [p['arm_label'] for p in points]==['队列1（7–11岁）','队列1.1（7–11岁）','队列2（2–6岁）']
     assert all(p['arm_label'] in p['axis_label'] for p in points)
     html=render_report(db,pid,'B')
-    assert '<summary>队列1.1（7–11岁）</summary>' in html
+    assert '<span class="arm-token">队列1.1</span><wbr><span class="arm-token">（7–11岁）</span>' in html
     assert 'Cohort 1.1: Participants Aged 7-11 Years' in html
 
 
@@ -94,3 +103,22 @@ def test_exact_day_week_conversion_retains_source_visit_labels(settings):
     assert len(groups)==1 and groups[0]['kind']=='line'
     assert groups[0]['display_axis']=='weeks'
     assert {p['visit'] for p in groups[0]['points']}=={'第4周','第8周','第28天','第56天'}
+
+
+@pytest.mark.parametrize(('raw','label'),[
+    ('Week 4','第4周'),('Day 28','第28天'),('Month 12','第12月'),
+    ('Baseline','基线'),('Week 4: EASI - 75','第4周 · EASI - 75'),
+    ('Weeks 4 to 12: Response A','Weeks 4 to 12: Response A'),
+    ('At Week 12 after rescue','At Week 12 after rescue'),
+])
+def test_table_visit_translation_consumes_only_a_complete_single_visit(raw,label):
+    assert visit_label(raw)==label
+
+
+def test_table_visit_reading_preserves_original_class_and_source_context(settings):
+    db,pid,ids=project(settings,[{'context':{'class_title':'Week 4: EASI - 75','category':'Day 28'}}])
+    before=db.current_facts(pid);html=render_report(db,pid,'B')
+    row=re.search(r'<tr data-fact-id="'+ids[0]+r'".*?</tr>',html,re.DOTALL)[0]
+    assert '<td class="result-visit">' in row and '第4周 · EASI - 75' in row and '第28天' in row
+    assert 'Week 4: EASI - 75' in row and 'Day 28' in row
+    assert db.current_facts(pid)==before

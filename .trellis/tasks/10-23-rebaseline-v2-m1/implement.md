@@ -1,4 +1,24 @@
+## 2026-10-25 当前节点 B表格阅读收口与真实终态
+
+方法direct：实际截图提供年龄孤字/Week破行的决定性证据；只改同一阅读投影和列权重，不另派全页会商。Kangzhe7.1.1正文18px不降，原组名/单访视/分层/科学值保留。01实际8图年龄已正但1440Week破行；原失败图/1681门保留，追加完整单访视读法和8rem列，未知区间不误译。59相关PASS后02一次全v2 1689PASS10.54s/Ruff/10JS/208Python600-80/272输入无变；manifest e33d7b662c4018160abdcc91e7c7d2dceec0f9bd289bec5939ada206785d351a。四宽8实图，602/筛200行与39/13图点状态一致，age/visit断裂0，Enter原文及回焦通过；owner实看3原图。1600所选闭合行115.78→96.59px；668事实/34组及整个charts JSON与08相同。表格组件接受，未知英文/跨研究/M4仍未签收。实际Ego84/p1，B02 PID4899/63747；误用CLI位置文件先被拒，改文档规定stdin后运行，无升级/权限变化。
+
+归并03/88768已自然failed：实际4个glm-5.3-flash成功事件、0备用、0新来源，31资格行/科学四表/冻结b76运行时均未变。当前run筛查（不混历史agent_steps）：step1读取47短引用、step2读取17；step3工具空对象且8192输出tokens/finish_reason=tool_calls，step4五要点缺bullets，4步耗尽。仅必填refs未解决输出合同/供应端耗尽，下一步须改变假设，先准确记录耗尽信号及完整字段，不加预算盲重跑。原780/151/31完整，最终findings0，不能称C全流程。
+
+M2 recovery69149同会话2758.911s/59turns/return1，max_turn_requests、无fallback、正式输出缺失；原41与新六关键词全部分页资料保留，当前AD464/IgAN97/PNH71唯一CTR，分母仍未封存。独立工作产物不因runner失败删除，也不因文件存在当accepted。owner先校验manifest/页集合/原文/身份与别名，再决定有界下一单元；不重置原128turns总预算或重派整个研究。
+
 # Execution checkpoint
+
+## 2026-10-25 当前B原表年龄/列宽阅读
+
+方法direct：同一source cohort已在图和表共享，现为可从真实几何决定的断行/空间分配问题；owner单写HTML/CSS与shared reading helper，省去额外UI worker和全页会商，保留原读集/科学投影。先以08实际1600图/DOM年龄多行作RED，合批将已识别队列与年龄设为可换行的两个语义token，年龄值+单位不可拆，长未知原组名继续原样换行；不全表nowrap、不缩字/隐藏溢出/另造框架。仅受影响B原表四宽及查询/原文/键盘验收，图形数据若完全相等则绑定旧图面，不重复全ABC。80空间实际消失，按用户永久授权替代84/p1，不夺回别任务空间、不改登录/缓存/版本、不再Ask。运行中b76/88768和M2/69149不热改或进度轮询。
+
+## 2026-10-25 当前唯一恢复run已启动
+
+已提交b76d2553970290a65ec45e1ec57260f22dcb7424（Finding必填引用，1678开发门）；其English root Git archive/runtime109 src/skill与required-refs01逐字节相同，模型输出schema SHA6e5e5ef6…与31资格准备一致。沿用已准备run_d510975298a3，实际启动句柄88768/PID93857，目录real-synthesis-20261025-03，原780/31合格单元/151源/原失败run都保留，不另造run。请求cms-router/glm-5.3-flash→DGX/deepseek→DGX/qwen，actual_model仍null待响应终态，不伪称实际GLM。
+
+启动前失败均保留：首次archive工作目录未指向仓库root，只有本人空runtime目录，显式验证empty再从确认英文root archive；private runner else0/else1语法由py_compile拒绝后纠正，0模型。首次实际启动前置assert误把DB.path(str)当Path，started未创建、prepared run仍queued、0model/model_error事件；原controller/activation原字节保留，新recovery01仅Path转换，独立activation SHA后实际启动成功。运行中的runner/starter已固定，禁止再热改；SIGTERM/SIGINT调用已有RunControl请求合作停止、当前请求完成后安全边界终态，取消以receipt为准，不复现旧finally假成功。原31准备cache的来源/task/schema资格在前条回执，不把它叫新模型执行或医学接受。
+
+下一安全动作：等待88768终态后对最终摘要逐条核源、当前UI渲染，当前不固定轮询或重派；M2 recovery69149仍按原source-only句柄，未封存/95%未验。其间继续不依赖两者的构建；新代码只进下一冻结，不改b76runtime。未知v1/untracked runs/logs不清理或无差别提交；6旧预览已按前回执终止，只保留当前A/C和B，原资料完整。
 
 ## 2026-10-25 当前Finding必填引用与31单元恢复
 

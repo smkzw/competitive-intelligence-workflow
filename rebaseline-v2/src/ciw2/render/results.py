@@ -60,10 +60,20 @@ def _visit_facet(value: Any) -> tuple[tuple[str, int, str] | None, str]:
     return None, raw
 
 
-def arm_label(value: Any) -> str:
+def visit_label(value: Any) -> str:
+    raw = str(value or '')
+    visit, suffix = _visit_facet(value)
+    return ' · '.join(filter(None, (visit[2], suffix))) if visit else raw
+
+
+def arm_tokens(value: Any) -> list[str]:
     raw = str(value or '')
     match = re.fullmatch(r'Cohort ([0-9]+(?:\.[0-9]+)?): Participants Aged ([0-9]+)-([0-9]+) Years?', raw)
-    return f'队列{match[1]}（{match[2]}–{match[3]}岁）' if match else raw
+    return [f'队列{match[1]}', f'（{match[2]}–{match[3]}岁）'] if match else [raw]
+
+
+def arm_label(value: Any) -> str:
+    return ''.join(arm_tokens(value))
 
 
 def dispersion_text(row: dict[str, Any]) -> str:

@@ -27,15 +27,15 @@
 </section>
 <section id="measurements" class="kz-section">
 <details class="result-table"><summary>完整数据表（{{ data.results|length }}条）</summary>
-<div class="card table-card kz-data"><table id="tbl-b"><thead><tr><th>药物</th><th>研究</th><th>终点</th><th>访视与分层</th>
-<th>组别</th><th>值</th><th>单位/统计</th><th>N</th><th>状态</th><th>来源</th></tr></thead><tbody>
+<div class="card table-card kz-data"><table id="tbl-b"><thead><tr><th>药物</th><th>研究</th><th>终点</th><th class="result-visit">访视与分层</th>
+<th class="result-arm">组别</th><th>值</th><th class="result-statistic">单位/统计</th><th>N</th><th>状态</th><th>来源</th></tr></thead><tbody>
 {% for r in data.results %}<tr data-fact-id="{{ r.id }}" data-domain="{{ r.domain }}"><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td>
 <td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td><details><summary>{{ r.endpoint|endpoint_label }}</summary>{{ r.endpoint }}</details></td>
-<td>{% if r.class_title %}<div>{{ r.class_title }}</div>{% endif %}{% if r.category %}<div>{{ r.category }}</div>{% endif %}
-<details><summary>时间与人群</summary><p>{{ r.timepoint or '—' }}</p><p>{{ r.population or '—' }}</p></details></td>
-<td>{% set readable_arm = r.arm|arm_label %}{% if readable_arm != r.arm and r.arm %}<details><summary>{{ readable_arm }}</summary>{{ r.arm }}</details>{% else %}{{ r.arm or '—' }}{% endif %}</td><td class="numeric"><b>{{ '—' if r.value is none else r.value }}</b>{% if r|dispersion_text %}<div class="muted">{{ r|dispersion_text }}</div>{% endif %}</td>
-<td>{{ r.unit|registry_label('measure_unit') }}<div class="muted">{{ r.stat_type|registry_label('statistic') }}</div>
-<details><summary>原始单位与统计</summary>{{ r.unit or '—' }} · {{ r.stat_type or '—' }}</details></td><td class="numeric">{{ r.denominator if r.denominator is not none else '—' }}</td>
+<td class="result-visit">{% if r.class_title %}<div>{{ r.class_title|visit_label }}</div>{% endif %}{% if r.category %}<div>{{ r.category|visit_label }}</div>{% endif %}
+<details><summary>时间与人群</summary>{% if r.class_title %}<p>{{ r.class_title }}</p>{% endif %}{% if r.category %}<p>{{ r.category }}</p>{% endif %}<p>{{ r.timepoint or '—' }}</p><p>{{ r.population or '—' }}</p></details></td>
+<td class="result-arm">{% set tokens = r.arm|arm_tokens %}{% if tokens|join('') != r.arm and r.arm %}<details><summary>{% for token in tokens %}<span class="arm-token">{{ token }}</span>{% if not loop.last %}<wbr>{% endif %}{% endfor %}</summary>{{ r.arm }}</details>{% else %}{{ r.arm or '—' }}{% endif %}</td><td class="numeric"><b>{{ '—' if r.value is none else r.value }}</b>{% if r|dispersion_text %}<div class="muted">{{ r|dispersion_text }}</div>{% endif %}</td>
+<td class="result-statistic">{{ r.unit|registry_label('measure_unit') }}<span class="muted"> · {{ r.stat_type|registry_label('statistic') }}</span>
+<details><summary>原单位与统计</summary>{{ r.unit or '—' }} · {{ r.stat_type or '—' }}</details></td><td class="numeric">{{ r.denominator if r.denominator is not none else '—' }}</td>
 <td><span class="badge {{ r.status }}">{{ r.status|status }}</span></td>
 <td>{% if r.source_url %}<a href="{{ r.source_url }}" target="_blank" rel="noopener">原文</a>{% endif %}
 {% if r.quote or r.verdict_note %}<details><summary>原文值</summary>{% if r.status != 'verified' and r.verdict_note %}<p class="muted">{{ r.verdict_note }}</p>{% endif %}<div class="quote">{{ r.quote or '' }}</div></details>{% endif %}</td></tr>{% endfor %}

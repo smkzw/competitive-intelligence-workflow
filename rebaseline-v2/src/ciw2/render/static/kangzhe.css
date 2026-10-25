@@ -98,6 +98,9 @@ td{border-bottom:1px solid var(--border);padding:7px 10px;vertical-align:top;ove
 td.numeric{white-space:nowrap;font-variant-numeric:tabular-nums}
 .result-table td:first-child{min-width:14ch;overflow-wrap:normal;word-break:normal}.result-table .trial-identity{min-width:17ch}
 .result-table .registry-id{white-space:nowrap}.result-table td:last-child{min-width:6rem}
+.result-table .result-arm{min-width:8rem}.result-arm .arm-token{white-space:nowrap}
+.result-table .result-statistic{min-width:11rem}
+.result-table .result-visit{min-width:8rem;overflow-wrap:normal;word-break:normal}
 tr:hover td{background:#FFF8EE}
 .tag{display:inline-block;border-radius:999px;padding:0 8px;font-size:var(--report-font-body);margin:1px 2px;background:var(--ops-bg);color:var(--ops)}
 .tag.med{background:var(--med-bg);color:#A35F00} .tag.stat{background:var(--stat-bg);color:var(--stat)}
