@@ -97,3 +97,30 @@ def test_recovered_request_logs_failed_budget_usage_but_not_private_reasoning(se
                    for row in db.query('SELECT content FROM agent_steps WHERE run_id=?', (rid,)))
     finally:
         client._client.close()
+
+
+@pytest.mark.parametrize('optional_tools',[False,True])
+def test_budget_exhausted_empty_submit_recovers_despite_tool_calls_finish_reason(optional_tools):
+    calls=[];bad=response('tool_calls',{});bad['usage']['completion_tokens']=8192
+    tools=([{'type':'function','function':{'name':'read_project_fact','parameters':{'type':'object'}}}] if optional_tools else [])+TOOLS
+    client=client_for([bad,response('tool_calls',{'report':'C','findings':[]})],calls)
+    try:
+        result=client.chat([{'role':'user','content':'Original bounded task'}],tools)
+        assert result.tool_calls[0].arguments=={'report':'C','findings':[]}
+        assert [c['max_tokens'] for c in calls]==[8192,16384]
+        assert calls[0]['messages']==calls[1]['messages'] and calls[0]['tools']==calls[1]['tools']
+        error=result.raw['_ciw_output_recovery']['previous_error']
+        assert error['finish_reason']=='tool_calls' and error['output_budget_exhausted'] is True
+        assert error['missing_required']==['report','findings']
+    finally:
+        client._client.close()
+
+
+def test_valid_submission_at_the_budget_does_not_repeat_a_completed_model_call():
+    calls=[];valid=response('tool_calls',{'report':'C','findings':[]});valid['usage']['completion_tokens']=8192
+    client=client_for([valid],calls)
+    try:
+        assert client.chat([],TOOLS).tool_calls[0].arguments['findings']==[]
+        assert len(calls)==1
+    finally:
+        client._client.close()

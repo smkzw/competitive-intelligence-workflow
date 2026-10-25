@@ -1,0 +1,171 @@
+{
+  "scope": "REFERENCE_SOURCE_HASH_PAGE_AND_QUOTE_AUDIT_NOT_DENOMINATOR_FREEZE",
+  "private_audit_sha256": "4691c8676939b768bb8b6c026426fe0adc27722c76396511012f01b892810995",
+  "original_manifest": {
+    "manifest": "manifest.json",
+    "sha256": "bef0b8ce7a44e97762d7b27a61881985dbb4d3e659bcfdaedab8843eccbf999c",
+    "files": 41,
+    "mismatched": []
+  },
+  "recovery_manifest": {
+    "manifest": "recovery-01/manifest.json",
+    "sha256": "246fb3d0c69c2fb7df962b2f7d92b21fc61bf3c7926056b1c025ac59f1558046",
+    "files": 129,
+    "mismatched": []
+  },
+  "families": {
+    "atopic_dermatitis": {
+      "entries": 127,
+      "uncertain": 27,
+      "exclusions": 102,
+      "queries": {
+        "ad-teyingxingshizhen": {
+          "total": 6,
+          "pages": 1,
+          "seen_pages": [
+            1
+          ],
+          "row_count": 6,
+          "page_set_complete": true,
+          "record_count_matches": true
+        },
+        "ad-teyingxingpiyan": {
+          "total": 464,
+          "pages": 24,
+          "seen_pages": [
+            10,
+            6,
+            7,
+            11,
+            20,
+            16,
+            1,
+            17,
+            21,
+            18,
+            22,
+            2,
+            14,
+            15,
+            3,
+            23,
+            19,
+            4,
+            12,
+            8,
+            24,
+            9,
+            13,
+            5
+          ],
+          "row_count": 464,
+          "page_set_complete": true,
+          "record_count_matches": true
+        }
+      },
+      "unique_ctr": 464,
+      "assigned": 464,
+      "duplicate_assignments": 0,
+      "unassigned": [],
+      "foreign_assignments": [],
+      "missing_entry_bindings": [],
+      "quotes_checked": 753,
+      "quote_errors": [],
+      "china_flag_errors": []
+    },
+    "igan": {
+      "entries": 57,
+      "uncertain": 15,
+      "exclusions": 62,
+      "queries": {
+        "igan-mianyiqiudanba": {
+          "total": 41,
+          "pages": 3,
+          "seen_pages": [
+            3,
+            2,
+            1
+          ],
+          "row_count": 41,
+          "page_set_complete": true,
+          "record_count_matches": true
+        },
+        "igan-igashenbing": {
+          "total": 56,
+          "pages": 3,
+          "seen_pages": [
+            1,
+            2,
+            3
+          ],
+          "row_count": 56,
+          "page_set_complete": true,
+          "record_count_matches": true
+        }
+      },
+      "unique_ctr": 97,
+      "assigned": 97,
+      "duplicate_assignments": 0,
+      "unassigned": [],
+      "foreign_assignments": [],
+      "missing_entry_bindings": [],
+      "quotes_checked": 314,
+      "quote_errors": [],
+      "china_flag_errors": []
+    },
+    "pnh": {
+      "entries": 28,
+      "uncertain": 7,
+      "exclusions": 11,
+      "queries": {
+        "pnh-xuehongdanbaizheng": {
+          "total": 57,
+          "pages": 3,
+          "seen_pages": [
+            2,
+            3,
+            1
+          ],
+          "row_count": 57,
+          "page_set_complete": true,
+          "record_count_matches": true
+        },
+        "pnh-xuehongdanbai": {
+          "total": 71,
+          "pages": 4,
+          "seen_pages": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "row_count": 71,
+          "page_set_complete": true,
+          "record_count_matches": true
+        }
+      },
+      "unique_ctr": 71,
+      "assigned": 71,
+      "duplicate_assignments": 0,
+      "unassigned": [],
+      "foreign_assignments": [],
+      "missing_entry_bindings": [],
+      "quotes_checked": 199,
+      "quote_errors": [],
+      "china_flag_errors": []
+    }
+  },
+  "qualifications": "CTR uses saved China-registry row evidence; NCT China-location flags checked against locations. Literal quotes not a substitute for drug-indication-arm identity.",
+  "first_audit_instrument_error": "Tried to treat all CTR text evidence as NCT JSON; original audit retained, corrected source-type audit has zero location-flag errors.",
+  "producer_recovery": {
+    "status": "REJECTED_MAX_TURNS",
+    "turns": 59,
+    "seconds": 2758.911,
+    "fallback": null,
+    "formal_final_report": false
+  },
+  "independent_review": "Fresh-context source-only C03 started; 48 turns/7200s; model-family independence reduced if same Grok primary; actual model and disposition pending.",
+  "owner_denominator_accepted": false,
+  "recall_computed": false,
+  "new_source_calls": 0
+}

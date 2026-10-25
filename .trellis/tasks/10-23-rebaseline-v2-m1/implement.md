@@ -1,3 +1,11 @@
+## 2026-10-25 当前节点 提交合同与参照源核验
+
+当前owner本地direct修精确输出耗尽；已有2RED/7PASS后69相关PASS0.65s，固定1885fcde212bc0c0df43896424e22f4e2222bff559b96adb9f5db98b4bce2195全v2 1692PASS11.03s/Ruff/10JS/208Python600-80/272输入无变。只扩现有一次输出恢复的识别条件：明确usage到budget且chosen submit字段不完整，即便finish_reason=tool_calls，8192→16384同输入同模型一次；真实结束原因/usage不改，valid submission不重做，4Agent步/路由/科学验证不增。三Skill给完整title/bullets/fact_refs形状且只核保留观察所需引用，不自动批删refs或代填。后续先单包32真实运行通过再继续，不能盲开整个归并。
+
+参照owner读原41/recovery129文件逐SHA均相同，六查询分页与464/97/71CTR覆盖/唯一分配通过，1266逐字quote/源hash正确。初检查器将所有China flag当CTgov locations而误报CTR文本不可读，原失败/错误audit保留，按NCT/CTR来源类型修正后的owner-recovery01-audit-source-types.json为有效证据，零location flag错误。字面匹配不证明别名/创新/组合关系；分母仍不封存。新conference C03已完整preflight0warning后实际启动句柄11363，48turns/7200s，只看独立源、禁止生产输出与外网或改文件；模型族可能同Grok，记录独立性限制。不是原采集任务128turns预算重置；当前owner继续提交协议/恢复，不重复独立查同样身份。三次prompt预检先后格式缺输出、误认说明为文件，全部在dispatch前纠正，原模型尚无实际终态结论。
+
+表格节点874ac5d0已push成功；本次源/运行/临床全目标仍未交付，不设置阶段暂停。
+
 ## 2026-10-25 当前节点 B表格阅读收口与真实终态
 
 方法direct：实际截图提供年龄孤字/Week破行的决定性证据；只改同一阅读投影和列权重，不另派全页会商。Kangzhe7.1.1正文18px不降，原组名/单访视/分层/科学值保留。01实际8图年龄已正但1440Week破行；原失败图/1681门保留，追加完整单访视读法和8rem列，未知区间不误译。59相关PASS后02一次全v2 1689PASS10.54s/Ruff/10JS/208Python600-80/272输入无变；manifest e33d7b662c4018160abdcc91e7c7d2dceec0f9bd289bec5939ada206785d351a。四宽8实图，602/筛200行与39/13图点状态一致，age/visit断裂0，Enter原文及回焦通过；owner实看3原图。1600所选闭合行115.78→96.59px；668事实/34组及整个charts JSON与08相同。表格组件接受，未知英文/跨研究/M4仍未签收。实际Ego84/p1，B02 PID4899/63747；误用CLI位置文件先被拒，改文档规定stdin后运行，无升级/权限变化。

@@ -1,0 +1,42 @@
+{
+  "scope": "MODEL_SUBMISSION_CONTRACT_AND_BOUNDED_OUTPUT_RECOVERY_NOT_REPORT_ACCEPTANCE",
+  "base_commit": "874ac5d0",
+  "manifest_sha256": "1885fcde212bc0c0df43896424e22f4e2222bff559b96adb9f5db98b4bce2195",
+  "production_failure": {
+    "run": "run_d510975298a3",
+    "actual_models": {
+      "glm-5.3-flash": 4
+    },
+    "new_sources": 0,
+    "step1_fact_reads": 47,
+    "step2_fact_reads": 17,
+    "step3": {
+      "finish_reason": "tool_calls",
+      "completion_tokens": 8192,
+      "submitted_fields": []
+    },
+    "step4": {
+      "findings": 5,
+      "missing_fields": [
+        "bullets"
+      ]
+    },
+    "status": "AgentBudgetExceeded",
+    "original780_science_qualified31_runtime_unchanged": true
+  },
+  "change": "Only invalid or incomplete chosen submissions at an explicit usage cap use existing once-only same-input/model 8192-to-16384 recovery. Preserve original finish_reason and safe usage; valid submissions never repeat. Normal low-budget schema corrections remain inside the Agent. No extra Agent steps or new fallback route.",
+  "skill_contract": "A/B/C show exact submission field shape; selective fact inspection and existing real reference checks remain.",
+  "tests": {
+    "red": "2 FAIL/7 PASS against production transport",
+    "related": "69 PASS in 0.65s",
+    "full_v2": "1692 PASS, 1 existing warning in 11.03s",
+    "ruff": "PASS",
+    "javascript_files": 10,
+    "python_600_80": 208,
+    "unchanged_frozen_files": 272
+  },
+  "real_failed_packet_rerun": "NOT_RUN_AT_THIS_COMMIT",
+  "medical_acceptance": "PENDING",
+  "new_browser": "NOT_NEEDED_UNCHANGED_RENDERER_TABLE02",
+  "new_installation": "NOT_RUN"
+}
