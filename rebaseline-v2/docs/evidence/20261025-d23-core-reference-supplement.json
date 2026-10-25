@@ -1,0 +1,30 @@
+{
+  "scope": "D23_REFERENCE_CORE_ELIGIBILITY_SOURCE_CLOSURE_NOT_COMPLETE_RECALL_OR_PRODUCTION",
+  "manifest_sha256": "900830f8091aa6f8cc21fce0cfddb9893e14be759368b59c0bf5a37c3ebcf0ce",
+  "program": "D23",
+  "formal_zh": "布地奈德迟释片",
+  "indication": "原发性IgA肾病",
+  "registry_id": "CTR20253975",
+  "registered_protocol": "D23-201",
+  "core_eligibility": "SOURCE_SUPPORTED_UNDER_USER_20261025_POLICY",
+  "primary_sources": [
+    {
+      "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistdetail.dhtml",
+      "sha256": "9e6cbcffc72db37ab33fd02e3384d6518a9871603b865c7c56a0d32fafe2020e"
+    },
+    {
+      "url": "https://www.triastek.com/detail/39.html",
+      "sha256": "11fd7476ec4e46360781b0eb0a454affab3d490d0518c00c2b7523e0e020696c"
+    }
+  ],
+  "primary_HTTP": 1,
+  "model_calls": 0,
+  "originals_unchanged": true,
+  "exact_code_absent_in_prior57": true,
+  "full_identity_dedup_before_final_denominator": true,
+  "CTR_acceptance_join_created": false,
+  "clinical_superiority_or_approval_claim": false,
+  "final_denominator_frozen": false,
+  "recall_computed": false,
+  "production_adoption": "NOT_PERFORMED"
+}

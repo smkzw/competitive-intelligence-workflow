@@ -36,3 +36,6 @@ C03源身份独立新context审阅已终态REVISE，Grok4.7/high/modelUsage4.7-b
 ## 2026-10-25 用户核心口径已锁定，替代上文“待选择”状态
 
 用户通过原生Ask明确选：创新药及有独立临床开发改良剂型计核心，生物类似药单列不计核心分母。原identity-revision三清单未改，owner-core-policy11以原SHA+独立覆盖层记录；官方CDE保存原行的IBI3027/QL2108代码产品治生3.3和NMPA定义证据固定，未把空补充类填满、未建立CTR受理等号，原范围/中国适应症资格继续核。GS101分类、D23/TLL独立开发/唯一计数及其他身份缺口尚未清，分母不封存/不算召回，生产分面/核心统计尚未完成。第一次raw列检查遗漏序号位置而断言失败，未写分类；看原行后修列，只补该检查，未修改任何来源。当前仍PROVISIONAL/in_progress，不重跑原发现或旧会商。
+
+- 用户新政策后有界补证12：不读取生产候选，复用07原官方CTR20253975完整capture，经当前china_detail.parse_capture身份/完整性重验证；D23-201患者原发IgANⅡ期、试验药表中文布地奈德迟释片/英文D23与申请人均直接来源。新公开Triastek官网https://www.triastek.com/detail/39.html 一次HTTP200保存原HTML/完整文字/2025-02-20页日期标签和实际获取时间（不倒证历史），明确D23为3D printed budesonide delayed-release tablet/IgAN开发。只有产品/独立患者开发资格采纳，不采营销疗效优势、不合并Nefecon/D23A、不建CTR受理号关系。
+- owner-core-eligibility12共3文件SHA复核，manifest900830f8091aa6f8cc21fce0cfddb9893e14be759368b59c0bf5a37c3ebcf0ce；0模型/1新官网HTTP，原来源与三清单SHA未变。旧57中未见确切D23 code，记录为补充候选并待全量身份去重，不直接把57+1作分母。GS101搜索只有二级线索，未据其生物类似药标签接受；原CTgov两记录只说明比较/相似性，不视为分类直接证明。初原始basic字段误按dict诊断命令失败，改用已存在生产parser，不改原源。
