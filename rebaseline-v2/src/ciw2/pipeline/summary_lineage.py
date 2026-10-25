@@ -14,6 +14,27 @@ def summary_chars(findings: list[dict[str, Any]]) -> int:
     return len(json.dumps([{k: v for k, v in f.items() if k != 'fact_refs'} for f in findings], ensure_ascii=False))
 
 
+def _clinical_studies(rc: RunContext, findings: list[dict[str, Any]]) -> list[list[dict[str, Any]]]:
+    from ciw2.render.trial_identity import trial_identities
+
+    facts = {f['id']: f for f in rc.db.current_facts(rc.project_id)}
+    identities = trial_identities(rc.db, rc.project_id)
+    rows = []
+    for finding in findings:
+        studies = []
+        tids = dict.fromkeys(facts[fid]['entity_id'] for fid in finding['fact_refs'] if fid in facts)
+        for tid in tids:
+            identity = identities.get(tid)
+            if not identity or not any(identity.get(k) for k in ('drugs', 'indication', 'phase_label')):
+                continue
+            studies.append({**{k: identity[k] for k in
+                               ('registry_id', 'drug_label', 'indication', 'phase_label')},
+                            'companies': [{k: company[k] for k in ('role', 'name')}
+                                          for company in identity['companies']]})
+        rows.append(studies)
+    return rows
+
+
 def summary_basis(rc: RunContext, findings: list[dict[str, Any]], verified: set[str]
                   ) -> tuple[list[dict[str, Any]], dict[str, list[str]], str]:
     if any(not f.get('fact_refs') or not set(f['fact_refs']) <= verified for f in findings):
@@ -21,10 +42,11 @@ def summary_basis(rc: RunContext, findings: list[dict[str, Any]], verified: set[
     original_ids = list(dict.fromkeys(r for f in findings for r in f['fact_refs']))
     refs = {f'summary_ref_{i}': [ref] for i, ref in enumerate(original_ids)}
     aliases = {ref: key for key, values in refs.items() for ref in values}
-    digest = fingerprint({'findings': findings, 'reference_map': refs})
-    lineage = {'schema_version': 'ciw2-summary-basis-v2', 'digest': digest, 'reference_map': refs,
+    studies = _clinical_studies(rc, findings)
+    digest = fingerprint({'findings': findings, 'reference_map': refs, 'clinical_studies': studies})
+    lineage = {'schema_version': 'ciw2-summary-basis-v3', 'digest': digest, 'reference_map': refs,
                'reference_granularity': 'one_fact_per_alias', 'input_sha256': fingerprint(findings),
-               'scope': 'REFERENCE_MAPPING_NOT_SCIENTIFIC_ACCEPTANCE'}
+               'scope': 'REFERENCE_MAPPING_NOT_SCIENTIFIC_ACCEPTANCE', 'clinical_studies': studies}
     key = f'analysis_basis:{digest}'
     existing = rc.db.stage_output(rc.run_id, key)
     if existing is None:
@@ -33,7 +55,10 @@ def summary_basis(rc: RunContext, findings: list[dict[str, Any]], verified: set[
         raise ValueError('摘要引用映射检查点与输入不符，不覆盖历史')
     rc.db.log_step(rc.run_id, rc.stage, 'synthesis', 0, 'synthesis_basis', {
         'digest': digest, 'basis_stage': key, 'input_sha256': lineage['input_sha256']})
-    return [{**f, 'fact_refs': [aliases[r] for r in dict.fromkeys(f['fact_refs'])]} for f in findings], refs, digest
+    return [{**{k: v for k, v in f.items() if k != 'studies'},
+             **({'studies': context} if context else {}),
+             'fact_refs': [aliases[r] for r in dict.fromkeys(f['fact_refs'])]}
+            for f, context in zip(findings, studies, strict=True)], refs, digest
 
 
 def normalize_references(rc: RunContext, task: dict[str, Any], result: AnalysisResult) -> AnalysisResult:

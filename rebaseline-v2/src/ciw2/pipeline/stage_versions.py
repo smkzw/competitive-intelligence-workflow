@@ -27,6 +27,7 @@ from pathlib import Path
 from types import CodeType
 from typing import Any
 
+from ciw2.pipeline import tool_versions
 from ciw2.pipeline.stage_dependencies import (
     _ASSETS,
     _CONST,
@@ -36,8 +37,6 @@ from ciw2.pipeline.stage_dependencies import (
     _MODULES,
     _STAGE_CODE,
     _STAGE_SKILLS,
-    _TOOL_FILES,
-    _TOOL_MODULES,
 )
 
 SCHEMA_VERSION = 'ciw2-stage-runtime-v1'
@@ -179,11 +178,12 @@ def _constant_payload(value: Any) -> Any:
     return None
 
 
-def module_digest(module_name: str) -> str:
-    """Digest functions/classes and data constants defined by one loaded module."""
+def _module_entries(module_name: str, skipped: set[str]) -> str:
     module = importlib.import_module(module_name)
     entries = []
     for name, value in sorted(vars(module).items()):
+        if name in skipped:
+            continue
         if inspect.isfunction(value) and getattr(value, '__module__', None) == module.__name__:
             entries.append([name, function_digest(value)])
         elif inspect.isclass(value) and getattr(value, '__module__', None) == module.__name__:
@@ -193,6 +193,16 @@ def module_digest(module_name: str) -> str:
             if payload is not None:
                 entries.append([name, payload])
     return _digest(entries)
+
+
+def module_digest(module_name: str) -> str:
+    """Digest functions/classes and data constants defined by one loaded module."""
+    return _module_entries(module_name, set())
+
+
+def module_digest_excluding(module_name: str, exclude: Iterable[str]) -> str:
+    """Digest one module without its registered tool entry points."""
+    return _module_entries(module_name, set(exclude))
 
 
 def assets_digest(root: Path, names: Iterable[str]) -> str:
@@ -264,10 +274,9 @@ def code_binding(stage_name: str) -> dict[str, Any] | None:
         else:  # pragma: no cover - development guard for the explicit table
             raise RuntimeError(f'未知代码组件类型：{kind}')
     if _STAGE_SKILLS.get(stage_name):
-        # The minimal harness executes every Skill; its loop and tool schema
-        # policy are part of the stage behavior even when no source parser changed.
-        for module_name in ('ciw2.harness.agent', 'ciw2.harness.tools'):
-            parts.append([f'module:{module_name}', module_digest(module_name)])
+        # Bind the shared execution surface once, not every tool implementation:
+        # a tool the Skill cannot call does not change the stage behavior.
+        parts.append(['harness:execution', tool_versions.shared_execution_digest()])
     return {'components': [part[0] for part in parts], 'digest': _digest(parts)}
 
 
@@ -319,25 +328,6 @@ def _callable_config(fn: Any, seen: set[int] | None = None) -> dict[str, Any]:
     return config
 
 
-def _tool_binding(rc: Any, name: str) -> dict[str, Any]:
-    try:
-        tool = rc.registry.get(name)
-    except KeyError:
-        return {'name': name, 'missing': True}
-    module_name = getattr(tool.fn, '__module__', None)
-    dependencies = _TOOL_MODULES.get(name, ())
-    files = _TOOL_FILES.get(name, ())
-    return {
-        'name': name,
-        'schema': _digest(tool.schema()),
-        'module': module_name,
-        'code': module_digest(module_name) if module_name else function_digest(tool.fn),
-        'dependencies': [[module, module_digest(module)] for module in dependencies],
-        'files': {'components': list(files), 'digest': package_files_digest(_PACKAGE_ROOT, files)}
-        if files else None,
-    }
-
-
 def _skill_bindings(rc: Any, names: Sequence[str]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     items, tools = [], []
     for name in names:
@@ -345,7 +335,7 @@ def _skill_bindings(rc: Any, names: Sequence[str]) -> tuple[list[dict[str, Any]]
         if skill is None:
             items.append({'name': name, 'missing': True})
             continue
-        tool_bindings = [_tool_binding(rc, tool) for tool in skill.tools]
+        tool_bindings = [tool_versions.tool_binding(rc, tool) for tool in skill.tools]
         tools.extend(tool_bindings)
         items.append({
             'name': skill.name,

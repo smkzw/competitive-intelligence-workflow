@@ -1,0 +1,140 @@
+{
+  "scope": "TWO_SOURCE_BOUND_REAL_SUMMARY_PROBES_AND_ONE_FRESH_SOURCE_REVIEW_NOT_FULL_C",
+  "base_commit": "f326bb9fe196b5c0b2d461f39e23b1d98d5b9dc1",
+  "probe_receipt": {
+    "path": "ciw-data/summary-real-probes-20261025-26/receipt.json",
+    "sha256": "92b893d1c30ae9e259d203cd95a6a8bdb31b5e33a1d524ebfad874c929aa57e0"
+  },
+  "elapsed_seconds": 593.774,
+  "actual_models": {
+    "glm-5.3-flash": 1,
+    "DeepSeek-V4.1-Flash-1017": 1
+  },
+  "route_events": [
+    {
+      "requested_model": "glm-5.3-flash",
+      "actual_model": "glm-5.3-flash",
+      "usage": {
+        "prompt_tokens": 3372,
+        "completion_tokens": 7919,
+        "total_tokens": 11291,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "text_tokens": 0,
+          "audio_tokens": 0,
+          "image_tokens": 0
+        },
+        "completion_tokens_details": {
+          "text_tokens": 0,
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        }
+      },
+      "route": {
+        "index": 0,
+        "model": "glm-5.3-flash",
+        "previous_failures": [],
+        "failure_details": []
+      },
+      "finish_reason": "tool_calls",
+      "output_recovery": null
+    },
+    {
+      "requested_model": "deepseek",
+      "actual_model": "DeepSeek-V4.1-Flash-1017",
+      "usage": {
+        "prompt_tokens": 5674,
+        "completion_tokens": 12281,
+        "total_tokens": 17955,
+        "prompt_tokens_details": {
+          "cached_tokens": 4096
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 9981
+        }
+      },
+      "route": {
+        "index": 1,
+        "model": "deepseek",
+        "previous_failures": [
+          "glm-5.3-flash"
+        ],
+        "failure_details": [
+          {
+            "requested_model": "glm-5.3-flash",
+            "error_type": "LLMError",
+            "transport_error": "HTTPStatusError",
+            "attempts": 1,
+            "http_status": 502
+          }
+        ]
+      },
+      "finish_reason": "tool_calls",
+      "output_recovery": {
+        "from_tokens": 8192,
+        "to_tokens": 16384,
+        "previous_error": {
+          "actual_model": "DeepSeek-V4.1-Flash-1017",
+          "finish_reason": "length",
+          "max_output_tokens": 8192,
+          "output_budget_exhausted": false,
+          "missing_required": [],
+          "reasoning_chars": 18931,
+          "usage": {
+            "prompt_tokens": 5674,
+            "completion_tokens": 8192,
+            "total_tokens": 13866
+          }
+        }
+      }
+    }
+  ],
+  "usage_accounting": "29246 tokens in successful replies; additional13866 in one recorded length-limited attempt. This does not prove total billed usage; failed502 usage unknown.",
+  "source_model_research_replay": {
+    "new_source_calls": 0,
+    "original151_batches": 0,
+    "original_science_and_prior_stage_rows_unchanged": true
+  },
+  "independent_review": {
+    "report_path": "ciw-data/runs/conference/ciw2-summary-real-source-review-20261025/evidence_single_object.md",
+    "sha256": "4cd7b6627c6067897211d83704b45a95c0851e87a557620e5350d33efec29b83",
+    "requested_runtime": "codebuddy/codebuddy-cli/deepseek-v4.1-flash:max",
+    "elapsed_seconds": 405.362,
+    "fallback": null,
+    "fresh_source_context": true,
+    "model_family_limit": "Second probe used DeepSeek family too; fresh source/context review is not a second model-family opinion.",
+    "facts_checked": 43,
+    "cas_versions_checked": 5,
+    "reviewer_did_not_verify": "Full backup DB/frozenmanifest and any HTML/browser, outside review scope"
+  },
+  "verdicts": {
+    "metric_context": {
+      "science": "PASS_FOR_SIX_SELECTED_OBSERVATIONS_ONLY",
+      "reader": "REVISE_identity_first_and_remove_methodological_aside",
+      "visual": "NOT_RUN"
+    },
+    "large_complete_packet": {
+      "science": "REVISE_PROMIS_interval_pairing_primary_secondary_and_VC_LTS_scope",
+      "reader": "REVISE_identity_and_conciseness",
+      "visual": "NOT_RUN"
+    }
+  },
+  "owner_accepted_findings": [
+    "MC1 clinical identity absent in reducer input and output",
+    "LP1 both PROMIS forms have both windows; respectively is false",
+    "LP2 immunogenicity secondary not primary readout",
+    "LP3 dual core unsupported by primary/secondary source roles",
+    "LP4 VC application rule must not apply to LTS",
+    "Short Chinese source-driven observations without copied definitions, inferred reasons or method caveats"
+  ],
+  "repair_status": {
+    "production": "Identity projection plus identity-bound basis and C Skill selected-source-reading/brief-copy changed; not yet final wide gate",
+    "related_tests": "2RED then56PASS",
+    "real_rerun": "NOT_RUN",
+    "old_outputs_edited": false,
+    "same_old_large_packet_after_identity": "8437 task chars/73031 full-expansion estimate, above existing8000/72000; must replan complete records, not raise bounds or trim observations"
+  },
+  "original_cases_preserved": true,
+  "M1_M6": "INCOMPLETE_NOT_RC"
+}

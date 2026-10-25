@@ -1,0 +1,75 @@
+{
+  "scope": "CLINICAL_IDENTITY_INPUT_AND_NARROW_TOOL_RUNTIME_DEVELOPMENT_GATE_NOT_FULL_GOAL",
+  "base_commit": "f326bb9fe196b5c0b2d461f39e23b1d98d5b9dc1",
+  "frozen_manifest": {
+    "path": "ciw-data/summary-clinical-runtime-frozen-20261025-36-recovery01/manifest.json",
+    "sha256": "bb086ce27a8a4de245a8e205831e2ef78909970d20e10ecc04dfaedda35b8543",
+    "files": 360
+  },
+  "gate": {
+    "pytest": "1915 passed in12.02s",
+    "ruff": "PASS",
+    "python_structure_files": 240,
+    "javascript_syntax_files": 13,
+    "frozen_inputs_unchanged": 360,
+    "existing_warning": "Starlette TestClient httpx deprecation"
+  },
+  "repairs": {
+    "clinical_identity": "Existing trial_identities carried per cited study; formal source-backed name/indication/phase/company role; basis includes identities, current facts unchanged.",
+    "summary_source_language": "C Skill checks chosen original facts and metric-window/period mapping, concise1-3 Chinese bullets, no unsupported primary hierarchy or cause. Original failed outputs not patched.",
+    "tool_runtime": "Allowed-tool implementation and explicit parser/scripts retained; shared dispatch/schema/Tool/registry/paging execution bound separately, unrelated read-tool change leaves intake/universe valid. One conservative transition for old binding layout; no receipt relabel or historical cache rewrite."
+  },
+  "root_tests": {
+    "primary_worker_family": "4RED+5originalPASS, artifacts retained, final family11PASS",
+    "owner_extra": "Registered function name from unrelated module hid a source helper; oneRED, same-module exclusion fixed, final tool family12cases in full gate",
+    "identity": "2RED then56relatedPASS; source identity and basis invalidation, original facts preserved"
+  },
+  "execution_provenance": {
+    "requested": "CodeBuddy/deepseek-v4.1-flash:max",
+    "actual_declared_final": "Pi/openai-codex/gpt-6-luna:max after CodeBuddy artifacts, ZCode failure and MTPLX empty output",
+    "final_report_limit": "Fallback correctly saw already-changed files and reports no edits in its own pass. Owner inspected actual diff and primary family RED artifacts, not final report alone.",
+    "ruff_owner": "Worker fallback lacked Ruff; owner pinned .venv and complete frozen Ruff passed"
+  },
+  "preparation_failures_preserved": [
+    "First36 pytest1915PASS but fixture import alias RuffFAIL; reused source fixture through explicit wrapper, recovery01 current full gate passed.",
+    "Initial prompt preflight missing Hard boundaries header corrected before actual dispatch."
+  ],
+  "real_current_runs": {
+    "source_counterexamples": {
+      "scope": "Same original6+8 records; added identity made old large task8437chars/73031 expansion, so ordinary planner produced complete54556/18890 chunks; no bound increase or truncation",
+      "native_handle": 53008,
+      "pid": 14897,
+      "data": "ciw-data/summary-counterexample-repair-20261025-37",
+      "state": "RUNNING_NOT_ACCEPTED"
+    },
+    "ordinary_PNH_C": {
+      "native_handle": 46331,
+      "pid": 15536,
+      "project_id": "prj_fc03997a59c5",
+      "run_id": "run_fd9a5c6c4fcf",
+      "data": "ciw-data/normal-pnh-c-20261025-38",
+      "scope": "New ordinary Service pipeline, no seeded sources, no stages/monkeypatch",
+      "browser": "Ego Lite dedicated agent space6/p1; replacement already authorized",
+      "search": "none, missing web search must remain an explicit route result, not a claimed success",
+      "state": "RUNNING_NOT_ACCEPTED"
+    }
+  },
+  "original_AD151_and780_preserved": true,
+  "no_visual_or_full_medical_acceptance_implied": true,
+  "resource_retirement": {
+    "scope": "ONLY_OWN_REPLACED_TEST_VENV22_REMOVED_AFTER_INSTALLED27_COMPONENT_ACCEPTANCE",
+    "path": "ciw-data/install-render-artifact-20261025-22/venv",
+    "replacement": "ciw-data/install-summary-integrity-20261025-27",
+    "regular_files_removed": 1866,
+    "logical_bytes_removed": 27990437,
+    "physical_bytes_freed": "NOT_MEASURED",
+    "verified_live_executables_or_open_files": 0,
+    "old_wheel_sdist_unchanged": {
+      "ciw-data/install-render-artifact-20261025-22/dist/ciw2-0.2.0.dev0.tar.gz": "e65ea11bbea0a1f89a386106957299f53d9eddb07626555ff20b15b4a7c7e042",
+      "ciw-data/install-render-artifact-20261025-22/dist/ciw2-0.2.0.dev0-py3-none-any.whl": "50cd7d99847c5a38e7abec00181649614db4c4aec274b0067791cad69d39bd83"
+    },
+    "original_db_cas_failure_evidence_sessions_untouched": true,
+    "preparation_failure": "First package-count assertion included uv dist/.gitignore; failed before deletion. Recovery selected actual wheel/sdist; metadata preserved.",
+    "rebuild": "python -m venv ciw-data/install-render-artifact-20261025-22/venv; uv pip install --offline --python ciw-data/install-render-artifact-20261025-22/venv/bin/python ciw-data/install-render-artifact-20261025-22/dist/ciw2-0.2.0.dev0-py3-none-any.whl"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "scope": "ISOLATED_APPEND_ONLY_CURRENT_NATIVE_SOURCE_CONTEXT_UPGRADE_NOT_SUMMARY_OR_M1_ACCEPTANCE",
+  "original_db_sha256": "4d9594e32529ff9e2f0b8195714b4a047926e24910ebf7f7a30f2f54d8e0d6fc",
+  "original_db_unchanged": true,
+  "source_hashes_checked": 46,
+  "study_containers_checked": 284,
+  "native_facts_checked": 6580,
+  "other_facts_retained": 0,
+  "previous_current_facts": 6580,
+  "current_facts": 6580,
+  "appended_versions": 568,
+  "changes_by_field": {
+    "trial.china_site": 284,
+    "trial.countries": 284
+  },
+  "value_changes": 15,
+  "second_check_changes": 0,
+  "all_old_fact_rows_unchanged": true,
+  "all_old_stage_and_cache_rows_unchanged": true,
+  "ordinary_scope_or_analysis_certified": false,
+  "run_id": "run_db599e7862b3",
+  "source_model_calls": 0,
+  "original_research151_reexecuted": 0,
+  "backup_db_sha256": "2120dbfc3fd9fc8eb58de601166bce81dc900aa04e4967656edc9508fb0c9ce7",
+  "held_parent_narratives": "148 retained; still require fresh interpretation, not accepted through reference remap",
+  "source_entity_link_tables_exactly_unchanged": true,
+  "fact_version_map": {
+    "path": "ciw-data/captured-design-context-20261025-31/fact-version-map.json",
+    "sha256": "a36371d88495d7edde4a75e0d077749ff8291f4ade3990140d23c572e56a66a2"
+  },
+  "private_receipt_sha256": "00ce3744b185e218dbb52f8408847be42839fb7d009ce25940e77e98398defda"
+}

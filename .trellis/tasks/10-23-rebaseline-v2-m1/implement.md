@@ -819,3 +819,16 @@ ff69abd3已push并远端实核一致。20先完成离线安装/23资产/9Skill/C
 
 - 终态整合：E07自动执行权限实际被runner调到bypassPermissions，前文“可能无法写”只是假设，不是事实。CodeBuddy有产物后声明Pi/zai/glm-5.3:high收尾；报告自称glm-5.2无运行回执不采，实际glm-5.3。owner17原源hash/46引用字段核验，发现AD019的source后缀被误当record_key，只在owner28-recovery01覆盖层核正。8源支持provisional/4待核，未封分母。
 - 当前27包已离线新装与实际恢复。初次旧probe假定无入口回调FAIL；定位是共享tools模块实际改变导致intake保守失效，原失败保留，未改产品/历史回执。恢复01验证一次受控intake（0模型/来源），以后同版本备份恢复/改HTML仅重绘、不重复入口；708facts/668IDs保全。共享tool指纹过粗属M6恢复成本待修，不能声称升级全链零研究重跑。2组真实probe中第一组已返实际内容，第二组由kqueue52495等待child99270退出，0进度轮询。
+
+- 新节点选择execution：工具版本依赖根因写集独立（stage_versions/dependencies/一个新测试），有真实installed27反例，交一个有限执行worker；owner并行审摘要实际内容及源148恢复，减少共享上下文压力。无新增会商/平台/权限流程；E03实际路由按新manifest。先RED族再完整修复及相关批，owner稳定候选才宽门。
+
+- 26两个真实probe已终态，593.774s；实际GLM5.3flash1成功+DGX/DeepSeek-V4.1-Flash-1017一成功，后者主模型HTTP502后声明备用并8192→16384输出预算恢复，成功事件总token29246但另有13866被截断尝试usage，不能仅按成功事件当全部消耗。无新source/151研究重跑、原stage/science/frozen字节保全。第一组区分人数/比例、AND/Part/时间，仍待读者契约；第二组有疑似无源解释且冗长。故新鲜单源会商32只看固定两输出和43原始观察/完整共同研究上下文，不给owner意见、不修代码；可能同DS模型族明确限制。
+- 隔离31对全部6580当前native事实/46CAS/284研究容器重新作确定性解析，568地域上下文以supersedes追加，15个值变化；当前数6580不变，旧facts/stages/cache/source原件未改，第二次差异0。未接收旧148父摘要/不赋analysis或ordinary成功，仅新component与标准备份；原研究0重跑。
+
+- 32终态405.362s/CodeBuddy DS4.1flash:max/无fallback，实际Read+Bash源hash/path核43条5CAS，science小包PASS/readerREVISE，大包PROMIS配对P1及源主次/VC-LTS范围P2，视觉NOT_RUN。模型族对第二包重合已披露，不当多模型票。owner不手改JSON冒充模型修复；35先2个生产调用RED再接既有身份输入与basis失效，C Skill收紧所选源读取、完整配对和短中文表达；56相关PASS，尚无新模型/宽门接受。
+- M1正常链下一拟用原已规划PNH（唯一PRD要求一个适应症，不限定AD），可检验完整可用产品，AD780/151历史及M2三病仍保留、继续合格恢复；不把单包归并反复审视作为全系统永久前置。30工作单元仍pending，不读未完成结果，不热改其写集。
+- 27安装组件替代22后，仅自建22venv精确无运行/无lsof打开文件退役（1866常规文件/27,990,437逻辑字节，物理未测），原wheel/sdist/backup/失败与会话均保留；首次dist计数误含uv.gitignore断言在删除前失败，修为真实包类型后继续。
+
+- 30链终态：原主链有实际4RED/5PASS→11PASS产物；final report由声明Pi/openai-codex/gpt-6-luna:max续接，所说“无修改”只适用其接续阶段。ZCode失败/MTPLX空输出/实际会话切换保留，不冒称DS独立完成。owner读完整实现，再造同模块外同名registry fn会误排除真实helper的1RED，收窄name集合只匹配相同模块。共享Tool/schema/registry/page、used-tool、unrelated-tool均保留测试；未改旧receipt/unit键。
+- 合并35身份/语义与30代码后36首次1915PASS但fixture同名alias触发Ruff PLC0414，原FAIL保留；改为显式复用fixture wrapper，固定recovery01完整1915PASS12.02s/Ruff/240Python600/80/13JS/360SHA无变。未每行全仓，都是稳定候选与真实门失败修复。
+- 实际37新子进程14897/原生53008：同6+8源记录，身份补入后旧大包8437/73031超过既有预算，生产完整重分54556/18890，不抬门/不截记录；用同production merge，原输出保留，0研究重跑。实际38新PNH普通项目prj_fc03997a59c5/run_fd9a5c6c4fcf、child15536/原生46331，正常Service全链，未seed/mock，24全局agent上限服从各Skill预算，信号调用既有cancel_run安全停止。Ego6/p1为授权替代空间，之后复用；无search如实保留路线失败，不能冒充全源已成功。两个均pending，36冻结运行时不热改。
