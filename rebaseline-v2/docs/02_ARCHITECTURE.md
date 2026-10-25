@@ -165,3 +165,11 @@ Service复用标准库Condition/deque及一个执行锁，在同一服务进程�
 - 多阈值父题若有且仅有一个源分面代码与完整阈值列表印证，图题用该分面+较基线应答；完整表的父题短名和原定义仍保留全部备选阈值。不让EASI-50曲线的标题同时突出50/75/90三个结局；未知/冲突分面不猜。只改变label，不改变frame/id/分面集合或事实。
 
 - summary_budget是既有摘要计划的确定性辅助模块，以当前事实完整工具响应和任务元数据计算预计展开量；软目标用于包装多个完整观察，硬上限允许单个完整观察。原始事实、引用映射、全文、报告分组不改。全量父任务若已有同签名合格回执，保持原任务并由_analysis_call原后检验复用；未完成父任务按完整要点拆，仍用原stages表及原子缓存。最终短正文亦检查展开量，新模块字节进入ANALYSIS_CODE_HASH；跨版本缓存须显式验证task/schema/Skill/source及后检验，不静默把旧key当新key。
+
+### 站点地域口径
+
+CT.gov countries原值保留；新trial.china_site带geographic_scope=mainland_china，countries保留locations_complete。只要明确有China即有大陆站点；不含China且部分地点缺失时为unknown，非false。A大陆站点计数仅用明确当前scope或来源国家列表的正向/完整性证据；C分别显示大陆/香港/澳门/台湾。旧宽域记录进入legacy_geography依据及内部遗漏ID记录，不进入当前大陆计数/摘要输入，原数据不改。地域标记不判定中国开发纳排。
+
+### 来源后研究范围审查
+
+现有药物纳排继续由coverage_review执行。trial_evidence后新增轻量trial_scope_review阶段，调用scope.review_orphan_trials；仅零项目drug-trial父关联的研究进入，不重复评判已有药物父项的研究。沿用9 Skills、ScopeResult和同一身份绑定/完整分批/缓存/事务，无新平台或schema。输入candidate_kind=trial明确研究语义，既有wire字段drug承载原研究登记名。显式false影响该研究的共享报告查询，null与缺失/重复/错误身份保留待核；不变更源层事实或链接。

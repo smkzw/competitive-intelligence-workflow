@@ -1,4 +1,7 @@
-"""Complete, bounded scope review with literal candidate identity and same-run recovery."""
+"""Complete, bounded scope review with literal candidate identity and same-run recovery.
+
+Drug review stays on drug entities. Trials with no drug parent are a separate candidate_kind='trial' pass.
+"""
 from __future__ import annotations
 
 import hashlib
@@ -102,19 +105,32 @@ def _review_batch(rc: RunContext, task: dict[str, Any], sources: list[dict[str, 
     return normalized
 
 
-def review_scope(rc: RunContext, indication: str) -> dict[str, Any]:
-    drugs = rc.db.entities(rc.project_id, 'drug')
-    owners = name_owners(drugs)
-    base = {'indication': indication, 'focus': rc.project['focus'],
-            'ambiguous_names': sorted(name for name, ids in owners.items() if len(ids) > 1), 'coverage': rc.db.query(
+def _coverage(rc: RunContext) -> list[dict[str, Any]]:
+    return rc.db.query(
         'SELECT route_id, region, status, SUM(hits) hits, COUNT(*) n FROM coverage '
-        'WHERE run_id=? GROUP BY route_id, region, status ORDER BY route_id, region, status', (rc.run_id,))}
-    tasks = _tasks(base, drugs)  # Validate every complete input before the first model call.
-    sources = rc.db.query('SELECT id, digest, text_digest FROM sources WHERE project_id=? ORDER BY id',
-                          (rc.project_id,))
+        'WHERE run_id=? GROUP BY route_id, region, status ORDER BY route_id, region, status', (rc.run_id,))
+
+
+def _sources(rc: RunContext) -> list[dict[str, Any]]:
+    return rc.db.query('SELECT id, digest, text_digest FROM sources WHERE project_id=? ORDER BY id', (rc.project_id,))
+
+
+def _orphan_trials(rc: RunContext) -> list[dict[str, Any]]:
+    """Trials with zero project drug parents. An excluded drug parent is still a parent."""
+    drugs = {row['id'] for row in rc.db.entities(rc.project_id, 'drug')}
+    linked = {edge['dst'] for edge in rc.db.query(
+        "SELECT src,dst FROM links WHERE project_id=? AND rel='drug-trial'", (rc.project_id,))
+        if edge['src'] in drugs}
+    return [trial for trial in rc.db.entities(rc.project_id, 'trial') if trial['id'] not in linked]
+
+
+def _apply(rc: RunContext, tasks: list[dict[str, Any]], sources: list[dict[str, Any]], *,
+           empty: bool, bounded: bool) -> dict[str, Any]:
     output = {'decisions': 0, 'in_scope': 0, 'excluded': 0, 'pending': 0,
-              'issues': [], 'batches': len(tasks), 'input_empty': not drugs}
+              'issues': [], 'batches': len(tasks), 'input_empty': empty}
     for task in tasks:
+        if bounded:
+            rc.check_cancelled()  # Stop before the next model call; completed batches stay committed.
         result = _review_batch(rc, task, sources)
         output['decisions'] += result['applied']
         output['issues'].extend(result['issues'])
@@ -124,3 +140,27 @@ def review_scope(rc: RunContext, indication: str) -> dict[str, Any]:
                 key = 'pending' if decision['in_scope'] is None else 'in_scope' if decision['in_scope'] else 'excluded'
                 output[key] += 1
     return output
+
+
+def _review(rc: RunContext, indication: str, entities: list[dict[str, Any]], *,
+            candidate_kind: str | None) -> dict[str, Any]:
+    owners = name_owners(entities)
+    base = {'indication': indication, 'focus': rc.project['focus'],
+            'ambiguous_names': sorted(name for name, ids in owners.items() if len(ids) > 1),
+            'coverage': _coverage(rc)}
+    if candidate_kind:
+        base['candidate_kind'] = candidate_kind
+    tasks = _tasks(base, entities)  # Validate every complete input before the first model call.
+    output = _apply(rc, tasks, _sources(rc), empty=not entities, bounded=candidate_kind is not None)
+    if candidate_kind:
+        output['candidate_kind'] = candidate_kind
+    return output
+
+
+def review_scope(rc: RunContext, indication: str) -> dict[str, Any]:
+    return _review(rc, indication, rc.db.entities(rc.project_id, 'drug'), candidate_kind=None)
+
+
+def review_orphan_trials(rc: RunContext, indication: str) -> dict[str, Any]:
+    """Scope-review trials that have no project drug-trial parent. Counts stay separate from drug review."""
+    return _review(rc, indication, _orphan_trials(rc), candidate_kind='trial')

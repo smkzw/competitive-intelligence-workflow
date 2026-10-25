@@ -38,3 +38,5 @@ mode=expansion_results 时只整理程序已实际检索得到的 source_hits：
 - 已观察的纳入优先审评目录可用cde_section=priority_included，query_kind=acceptance_number及完整受理号；先闭合完整公开目录，再按该受理号字面查询。同run共享完整目录缓存，不能为每个受理号重取全表。保留注册申请人、承办/申请/公示日期、原目录状态和罕见病标记，不把“已纳入”写成上市批准、MAH或项目适应症批准。栏目不是拟优先名单。原列“无”受理号保留原行与未解析ID，不删除研究或猜号；精确查询仍返回该次目录未解号数量，不将其当成全部中国范围已核实。已有受理来源绑定的候选只追加cde_priority_refs，不凭名猜绑或新增临床事实。拟优先目录已单独接通为priority_proposed；突破/默示许可仍须逐项验证。
 
 - 拟优先审评品种公示用cde_section=priority_proposed，仍只接受完整受理号精确查询；与priority_included严格分开。原栏目为注册申请人、申请/公示/公示截止日期、罕见病标记和提出异议原列，不补承办日期、已纳入状态或批准关系。受理号“无”按原行保留，不按药名猜号或关联临床事实。独立栏目来源/缓存/恢复，合法受理绑定只追加cde_priority_proposed_refs；不要为每药重复抓整表。正常trial_evidence已自动对已证明受理号批量核查两个新报和两个优先栏目，发现阶段不重复代跑这些目录。
+
+站点地区与中国开发资格分开：ctgov_search返回的china_site_scope=mainland_china仅指大陆站点；Hong Kong/Macao/Macau/Taiwan分别保留。没有大陆站点不能推出没有中国开发、申报或权益，相关资格须另用中国登记/CDE/NMPA或明确辖区的官方权益来源核实，不因单个地域标记删除候选。

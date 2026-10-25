@@ -125,7 +125,8 @@ def test_ordinary_same_run_replay_retries_recovered_pinned_source_without_new_fa
 def test_c_prominent_design_value_carries_current_unverified_status(env,field,value):
     svc,rc,pid,trial=env
     sid=_source(rc)
-    fid=_legacy(rc,trial,sid,field='design.'+field,value=value)
+    fid=_legacy(rc,trial,sid,field='design.'+field,value=value,
+                context={'geographic_scope':'mainland_china'} if field=='china_site' else None)
     html=render_report(svc.db,pid,'C')
     body=html.split('<tbody>',1)[1].split('</tbody>',1)[0]
     cell=body.split('<td>')[4 if field in {'allocation','masking','arms'} else 6]
@@ -146,7 +147,8 @@ def test_eligibility_highlights_do_not_drop_current_status(env):
 def test_unknown_site_is_not_displayed_as_false(env):
     svc,rc,pid,trial=env
     sid=_source(rc)
-    _legacy(rc,trial,sid,field='design.china_site',value=None,status='unknown',extracted_by='code:fixture')
+    _legacy(rc,trial,sid,field='design.china_site',value=None,status='unknown',extracted_by='code:fixture',
+            context={'geographic_scope':'mainland_china'})
     html=render_report(svc.db,pid,'C')
     body=html.split('<tbody>',1)[1].split('</tbody>',1)[0]
-    assert '中国站点 否' not in body and '中国站点 —' in body
+    assert '中国大陆站点 否' not in body and '中国大陆站点 —' in body

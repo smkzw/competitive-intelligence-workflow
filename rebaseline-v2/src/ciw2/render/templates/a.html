@@ -25,14 +25,14 @@
 <h2>竞品管线</h2>
 <div class="card table-card kz-data"><table id="tbl-a"><thead><tr>
 <th>药物</th><th>靶点</th><th>类型</th><th>相关企业</th><th>中国 MAH</th><th>中国阶段</th><th>全球阶段</th>
-<th>试验数（含中国站点）</th><th>纳入</th></tr></thead><tbody>
+<th>试验数（含中国大陆站点）</th><th>纳入</th></tr></thead><tbody>
 {% for r in data.rows %}<tr data-entity-id="{{ r.id }}" data-reading-label="{{ r.name_zh or r.name }}">
 <td><b>{{ r.name_zh or r.name }}</b>{% if r.name_zh and r.name_zh != r.name %}<div class="muted">{{ r.name }}</div>{% endif %}
 {{ identity_evidence(r,r.mah_refs,'药物身份依据') }}</td>
 <td>{% for t in r.targets %}<span class="tag{{ ' target-token' if t|length<=12 else '' }}">{{ t }}</span>{% endfor %}</td>
 <td>{% for value in r.profile_refs|selectattr('field','equalto','identity.modality')|map(attribute='value')|map('registry_label','drug_modality')|unique(case_sensitive=true) %}{{ value }}{% if not loop.last %} / {% endif %}{% else %}—{% endfor %}</td><td>{{ companies_summary(r.companies) }}</td><td>{% if r.group_refs %}{% for group in r.group_refs %}<div><span class="muted">{{ group.role }}</span> {{ group.name }}</div>{% endfor %}<details><summary>持有人法律实体</summary>{{ r.china_mah }}</details>{% else %}{{ r.china_mah or '—' }}{% endif %}</td>
 <td>{{ development_status(r.phase_china_refs) }}</td><td>{{ development_status(r.phase_global_refs) }}</td>
-<td>{{ r.n_trials }}（中国 {% if r.n_china_trials is none %}—{% elif r.n_china_trials_unknown %}≥{{ r.n_china_trials }}{% else %}{{ r.n_china_trials }}{% endif %}）{% if r.trials %}<details><summary>研究列表</summary>{% for trial in r.trials %}{{ clinical_trial(trial) }}{% endfor %}</details>{% endif %}</td>
+<td>{{ r.n_trials }}（大陆 {% if r.n_china_trials is none %}—{% elif r.n_china_trials_unknown %}≥{{ r.n_china_trials }}{% else %}{{ r.n_china_trials }}{% endif %}）{% if r.trials %}<details><summary>研究列表</summary>{% for trial in r.trials %}{{ clinical_trial(trial) }}{% endfor %}</details>{% endif %}</td>
 <td>{% if r.in_scope is none %}<span class="badge unknown">待定</span>{% else %}<span class="badge verified">纳入</span>{% endif %}
 {% if r.scope_reason %}<div class="quote">{{ r.scope_reason }}</div>{% endif %}
 {% for u in r.evidence_urls[:3] %}<div><a href="{{ u }}" target="_blank" rel="noopener">来源{{ loop.index }}</a></div>{% endfor %}</td>

@@ -2,7 +2,7 @@
 
 DAG（按报告类型裁剪）：
  intake → universe_china → universe_global → candidate_triage → universe_expand → coverage_review → trial_evidence(code)
-       → extract_results(B) → extract_design(C) → verify(code) → analysis_A/B/C → render(code)
+       → trial_scope_review → extract_results(B) → extract_design(C) → verify(code) → analysis_A/B/C → render(code)
 """
 from __future__ import annotations
 
@@ -103,6 +103,12 @@ def universe_expand(rc: RunContext) -> dict[str, Any]:
 def coverage_review(rc: RunContext) -> dict[str, Any]:
     from ciw2.pipeline.scope import review_scope
     return review_scope(rc, _intake(rc)["indication"])
+
+
+def trial_scope_review(rc: RunContext) -> dict[str, Any]:
+    """Review source-collected orphan studies before their facts reach report analysis."""
+    from ciw2.pipeline.scope import review_orphan_trials
+    return review_orphan_trials(rc, _intake(rc)["indication"])
 
 
 # ------------------------------------------------------------------ trial evidence (code)
@@ -303,7 +309,7 @@ def _compact(data: Any) -> Any:
         return data
     out = {}
     for key, value in data.items():
-        if key in {'charts', 'endpoint_groups', 'eligibility_criteria', 'eligibility_reading', 'eligibility_clauses', 'quote'}:
+        if key in {'charts', 'endpoint_groups', 'eligibility_criteria', 'eligibility_reading', 'eligibility_clauses', 'quote', 'legacy_geography_ids'}:
             continue
         if 'fact_id' in data and key in {'source_id', 'url', 'locator'}:
             continue  # Stable fact_id resolves original provenance; not clinical definition.
@@ -317,7 +323,7 @@ def _compact(data: Any) -> Any:
             out[key] = _compact_observations(data, value)
         elif key == 'sources':
             out[key] = {field: [{k: ref[k] for k in ('fact_id', 'status') if k in ref} for ref in refs]
-                        for field, refs in value.items()}
+                        for field, refs in value.items() if field!='legacy_geography'}
         elif key == 'value' and 'fact_id' in data and isinstance(value, dict) and all(
                 name in data and data[name] == item for name, item in value.items()):
             continue  # The same primary endpoint is already present as named fields.
@@ -521,6 +527,7 @@ STAGES: list[Stage] = [
     Stage('universe_expand', universe_expand, blocking=False),
     Stage("coverage_review", coverage_review),
     Stage("trial_evidence", trial_evidence, blocking=False),
+    Stage("trial_scope_review", trial_scope_review),
     Stage('enrich_drugs',enrich,blocking=False),
     Stage("extract_results", _extract("extract-results", _results_extra), frozenset({"B"}), blocking=False),
     Stage("extract_design", _extract("extract-design", _design_extra), frozenset({"C"}), blocking=False),

@@ -1,0 +1,166 @@
+{
+  "scope": "MAINLAND_GEOGRAPHY_AND_MEASURED_C_LABELS_COMPONENT_NOT_FULL_PRODUCT",
+  "base_commit": "4f5d4283223acaaf495b7d9cc1060aa6c97df5da",
+  "geography_candidate": "b2518f38dd48bc8ac5d17ec41184b82b5cd9d78c813ee485b2e69805f953aa9e",
+  "ui_candidate": "187508862206e06e7220085136fadd2d46b0b10dd8407654520051c57ed5bd64",
+  "current_scope_candidate": "1394e709ca57fd5a18d32429fe1ef370105750f13b523d7e972dddf7a93be62f",
+  "all_render_files_same_between_ui_and_scope_candidates": 27,
+  "source_cases": [
+    {
+      "study": "NCT07693400",
+      "url": "https://clinicaltrials.gov/api/v2/studies/NCT07693400",
+      "sha256": "d526836c4a46feaac7ba6a530208a8dc77a83806b2397d40bdc571584e170408",
+      "country": "Taiwan",
+      "mainland": false,
+      "registered_intervention_type": "DRUG",
+      "innovation_scope": "UNRESOLVED_NOT_AN_ACCEPTED_DRUG_COMPETITOR"
+    },
+    {
+      "study": "NCT07445919",
+      "url": "https://clinicaltrials.gov/api/v2/studies/NCT07445919",
+      "sha256": "d34895798756e451ef33d45e4e790fd1428060a3d903dc21818b99f5a1a02165",
+      "country": "China",
+      "mainland": true,
+      "registered_intervention_type": "BIOLOGICAL"
+    }
+  ],
+  "region_policy": "Mainland separate; Hong Kong, Macao, Taiwan separately retained. Development eligibility verified separately. Legacy broad flags not relabelled.",
+  "states": [
+    {
+      "width": 1440,
+      "mode": "all",
+      "chart_height": 202,
+      "visible_rows": 2,
+      "overlaps": 0,
+      "data": [
+        44,
+        200
+      ],
+      "page_overflow": false
+    },
+    {
+      "width": 1440,
+      "mode": "filtered",
+      "chart_height": 128,
+      "visible_rows": 1,
+      "overlaps": 0,
+      "data": [
+        200
+      ],
+      "page_overflow": false
+    },
+    {
+      "width": 1600,
+      "mode": "all",
+      "chart_height": 202,
+      "visible_rows": 2,
+      "overlaps": 0,
+      "data": [
+        44,
+        200
+      ],
+      "page_overflow": false
+    },
+    {
+      "width": 1600,
+      "mode": "filtered",
+      "chart_height": 128,
+      "visible_rows": 1,
+      "overlaps": 0,
+      "data": [
+        200
+      ],
+      "page_overflow": false
+    },
+    {
+      "width": 1920,
+      "mode": "all",
+      "chart_height": 202,
+      "visible_rows": 2,
+      "overlaps": 0,
+      "data": [
+        44,
+        200
+      ],
+      "page_overflow": false
+    },
+    {
+      "width": 1920,
+      "mode": "filtered",
+      "chart_height": 128,
+      "visible_rows": 1,
+      "overlaps": 0,
+      "data": [
+        200
+      ],
+      "page_overflow": false
+    },
+    {
+      "width": 2560,
+      "mode": "all",
+      "chart_height": 202,
+      "visible_rows": 2,
+      "overlaps": 0,
+      "data": [
+        44,
+        200
+      ],
+      "page_overflow": false
+    },
+    {
+      "width": 2560,
+      "mode": "filtered",
+      "chart_height": 128,
+      "visible_rows": 1,
+      "overlaps": 0,
+      "data": [
+        200
+      ],
+      "page_overflow": false
+    }
+  ],
+  "owner_viewed": [
+    "1440-all",
+    "2560-all",
+    "1600-filtered"
+  ],
+  "scoped_visual_result": "PASS_LABEL_SPACING_ONLY_NOT_COMPLETE_CHINESE_OR_REPORT_VISUAL",
+  "source_dialog": "REAL_ORIGINAL_LINK_AND_ESCAPE_FOCUS_PASS_ON_GEOGRAPHY02_UNCHANGED_DIALOG_COMPONENT",
+  "screens": [
+    {
+      "path": "docs/evidence/c-long-labels-mainland-1440-20261025.png",
+      "sha256": "b506a55d3b25f470b01515a9e463042fe514d48864ee8133e608eeec4837548f"
+    },
+    {
+      "path": "docs/evidence/c-long-labels-filtered-1600-20261025.png",
+      "sha256": "d3d5cde5bac7b7f03b36ef4fd62aa3b76b36f97bcf743fb6d666d26d7796d9df"
+    }
+  ],
+  "first_model_scope": "REVISE_SOURCE_REASON_WRONG_PRIMARY_SECONDARY_CONTEXT",
+  "first_scope_model_calls": 7,
+  "first_scope_source_fetches": 4,
+  "first_scope_original_sources_preserved": true,
+  "first_scope_original_facts_and_links_unchanged": true,
+  "followup_real_scope": {
+    "verdict": "PASS_SCOPED_RELEVANCE_AND_UNKNOWN_PRESERVATION",
+    "in_scope": 1,
+    "pending": 1,
+    "excluded": 0,
+    "actual_models": {
+      "glm-5.3-flash": 7
+    },
+    "additional_fetch_sources": 4,
+    "facts_links_and_old_sources_unchanged": true,
+    "underlying_science_not_newly_classified": true
+  },
+  "full_product_acceptance": "NOT_COMPLETE",
+  "current_development_gate": {
+    "manifest": "1394e709ca57fd5a18d32429fe1ef370105750f13b523d7e972dddf7a93be62f",
+    "pytest": "1805 passed, 1 warning in 11.73s",
+    "ruff_exit": 0,
+    "javascript_files": 11,
+    "python_files": 222,
+    "size_violations": [],
+    "immutable_input_changes": []
+  }
+}

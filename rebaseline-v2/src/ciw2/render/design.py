@@ -90,6 +90,7 @@ def design_data(db: DB, pid: str, phase_zh: dict[str, str]) -> dict[str, Any]:
         if link['src'] in drugs:
             names[link['dst']].append(drugs[link['src']])
     rows: dict[str, dict[str, Any]] = {}
+    legacy_geography = []
     for fact in sorted(db.current_facts(pid), key=lambda f: (f['entity_id'], f['field'], f['id'])):
         tid, field = fact['entity_id'], fact['field']
         if tid not in trials or not field.startswith(('design.', 'trial.', 'status.trial')):
@@ -113,11 +114,13 @@ def design_data(db: DB, pid: str, phase_zh: dict[str, str]) -> dict[str, Any]:
         if history:
             ref['supersedes'], ref['history'] = history[0], history
         key = 'trial_status' if field == 'status.trial' else field.split('.', 1)[1].replace('.', '_')
+        if key=='china_site' and fact['context'].get('geographic_scope')!='mainland_china':
+            key='legacy_geography';legacy_geography.append(fact['id'])
         row['sources'].setdefault(key, []).append(ref)
         if field in {'design.primary_endpoint', 'design.secondary_endpoint'}:
             value = fact['value'] if isinstance(fact['value'], dict) else {'measure': fact['value']}
             row[f'{key}s'].append({**value, **ref})
-        else:
+        elif key!='legacy_geography':
             row['observations'].setdefault(key, []).append(ref)
         if fact['tier'] == 'critical' and fact['status'] != 'verified':
             row['unverified'].append(field)
@@ -130,7 +133,7 @@ def design_data(db: DB, pid: str, phase_zh: dict[str, str]) -> dict[str, Any]:
     for row in ordered:
         if row.get('phase_status') == 'verified':
             counts[phase_label(row.get('phase'))] += 1
-    return {'rows': ordered, 'endpoint_groups': endpoint_groups(ordered), 'charts': {
+    return {'rows': ordered, 'endpoint_groups': endpoint_groups(ordered), 'legacy_geography_ids': legacy_geography, 'charts': {
         'size': {'labels': [r['trial'] for r in sized], 'values': [r['sample_size'] for r in sized],
                  'identities': [{k: r['identity'][k] for k in ('registry_id', 'axis_label', 'label')} for r in sized]},
         'phase': [{'name': key, 'value': count} for key, count in counts.items()]}}

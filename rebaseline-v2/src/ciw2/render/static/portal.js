@@ -48,7 +48,7 @@
   var dataNode = el("charts");
   var D = dataNode ? JSON.parse(dataNode.textContent || "{}") : {};
   var DESIGN_MAX_HEIGHT = 336, DESIGN_MIN_HEIGHT = 120, DESIGN_VISIBLE_ROWS = 12;
-  var DESIGN_ROW_HEIGHT = 24, DESIGN_PANEL_CHROME = 48, PHASE_MIN_HEIGHT = 72;
+  var DESIGN_ROW_HEIGHT = 30, DESIGN_PANEL_CHROME = 54, PHASE_MIN_HEIGHT = 72;
   var designIdentities = new Map((D.size && D.size.identities || []).map(function (identity) { return [identity.registry_id, identity]; }));
   var designLabelCounts = new Map();
   designIdentities.forEach(function (identity) {
@@ -65,17 +65,47 @@
     return safeText(identity ? identity.label : id) + "<br>样本量 " + safeText(point.value) +
       (identity ? "<br>" + safeText(identity.registry_id) : "");
   }
-  function designZoom(count) {
-    var shown = Math.max(1, Math.min(DESIGN_VISIBLE_ROWS, count || 0));
+  function designZoom(count, visibleRows) {
+    var shown = Math.max(1, Math.min(visibleRows, count || 0));
     var end = Math.max(0, Math.min(count - 1, shown - 1));
     return [{ type: "slider", yAxisIndex: 0, right: 0, width: 16,
-      show: count > DESIGN_VISIBLE_ROWS, startValue: 0, endValue: end, filterMode: "filter" },
+      show: count > visibleRows, startValue: 0, endValue: end, filterMode: "filter" },
       { type: "inside", yAxisIndex: 0, startValue: 0, endValue: end,
         filterMode: "filter", zoomOnMouseWheel: false, moveOnMouseWheel: true }];
   }
-  function designPanelHeight(count) {
-    var rows = Math.max(1, Math.min(DESIGN_VISIBLE_ROWS, count || 0));
-    return Math.min(DESIGN_MAX_HEIGHT, Math.max(DESIGN_MIN_HEIGHT, rows * DESIGN_ROW_HEIGHT + DESIGN_PANEL_CHROME));
+  function designLayout(labels) {
+    var tallest = 0;
+    labels.forEach(function (id) {
+      var text = designLabel(id), height;
+      if (window.echarts && echarts.graphic && echarts.graphic.Text) {
+        var label = new echarts.graphic.Text({ style: { text: text, width: 290, overflow: 'break',
+          lineHeight: 22, font: readingSize + 'px ' + readingFont } });
+        height = label.getBoundingRect().height;
+      } else {
+        height = text.split('\n').reduce(function (sum, line) {
+          var units = Array.from(line).reduce(function (n, ch) { return n + (ch.charCodeAt(0) > 255 ? 1 : 0.6); }, 0);
+          return sum + Math.max(1, Math.ceil(units * readingSize / 290)) * 22;
+        }, 0);
+      }
+      tallest = Math.max(tallest, height);
+    });
+    var row = Math.max(DESIGN_ROW_HEIGHT, tallest + 8);
+    var capacity = Math.max(1, Math.min(DESIGN_VISIBLE_ROWS, Math.floor((DESIGN_MAX_HEIGHT - DESIGN_PANEL_CHROME) / row)));
+    var shown = Math.max(1, Math.min(capacity, labels.length));
+    return { visibleRows: capacity, height: Math.max(DESIGN_MIN_HEIGHT, shown * row + DESIGN_PANEL_CHROME) };
+  }
+  function drawDesignSize(labels, values) {
+    var layout = designLayout(labels);
+    setPanelHeight('chart-size', layout.height);
+    chart('chart-size', {
+      tooltip: { trigger: 'axis', formatter: designTooltip },
+      grid: { left: designIdentities.size ? 320 : 130, right: 70, top: 24, bottom: 30 },
+      dataZoom: designZoom(labels.length, layout.visibleRows),
+      yAxis: { type: 'category', data: labels, inverse: true,
+        axisLabel: { formatter: designLabel, interval: 0, width: 290, overflow: 'break', lineHeight: 22 } },
+      xAxis: { type: 'value', name: '样本量' },
+      series: [{ type: 'bar', data: values, barMaxWidth: 22, label: { show: true, position: 'right' } }]
+    });
   }
   function phasePanelHeight(count) {
     return Math.min(DESIGN_MAX_HEIGHT, Math.max(PHASE_MIN_HEIGHT, 32 + Math.max(1, count || 0) * 32));
@@ -355,17 +385,7 @@
     });
     updateResultQuery(el("tbl-b"));
   }
-  if (D.size) {
-    setPanelHeight("chart-size", designPanelHeight(D.size.labels.length));
-    chart("chart-size", {
-      tooltip: { trigger: "axis", formatter: designTooltip }, grid: { left: designIdentities.size ? 320 : 130, right: 70, top: 24, bottom: 30 },
-      dataZoom: designZoom(D.size.labels.length),
-      yAxis: { type: "category", data: D.size.labels, inverse: true,
-        axisLabel: { formatter: designLabel, interval: 0, width: 290, overflow: "break", lineHeight: 22 } }, xAxis: { type: "value", name: "样本量" },
-      series: [{ type: "bar", data: D.size.values, barMaxWidth: 22,
-        label: { show: true, position: "right" } }]
-    });
-  }
+  if (D.size) drawDesignSize(D.size.labels, D.size.values);
   if (D.phase) {
     setPanelHeight("chart-phase-pie", phasePanelHeight(D.phase.length));
     chart("chart-phase-pie", phaseOption(D.phase));
@@ -402,10 +422,7 @@
       var node = el("chart-size");
       if (node.closest(".card")) node.closest(".card").hidden = !indices.length;
       if (indices.length) {
-        setPanelHeight("chart-size", designPanelHeight(indices.length));
-        instances["chart-size"].setOption({ yAxis: { data: indices.map(function (i) { return labels[i]; }) },
-          dataZoom: designZoom(indices.length),
-          series: [{ data: indices.map(function (i) { return values[i]; }) }] });
+        drawDesignSize(indices.map(function (i) { return labels[i]; }), indices.map(function (i) { return values[i]; }));
       }
     }
     var phases = {};

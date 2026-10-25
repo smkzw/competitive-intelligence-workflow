@@ -39,4 +39,4 @@ def test_a_explicit_domestic_source_and_unknown_neighbor_show_lower_bound(worksp
     svc.db.link(pid,drug,'drug-trial',second)
     row=report_data(svc.db,pid,'A')['rows'][0]
     assert row['n_china_trials']==1 and row['n_china_trials_unknown']==1
-    assert '中国 ≥1' in render_report(svc.db,pid,'A')
+    assert '大陆 ≥1' in render_report(svc.db,pid,'A')

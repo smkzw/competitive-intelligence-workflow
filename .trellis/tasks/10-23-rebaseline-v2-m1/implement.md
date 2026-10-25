@@ -2,7 +2,7 @@
 
 生产parameter_reading是通用完整参数语法，不含药物/适应症字典。完整原题仍在表/定义，安全parent成员经精确匹配才缩为当前facet；PK/ADA/PKPD域、统计、单位和科学身份未改。13真RED，完整族含8未解析限定反例及7分面例；109→121相关PASS。实际12/13 owner实屏未签：12单点长条，13极端数值字形top=-1.7px。生产复用同一ECharts实例与fact_id，单点用无坐标轴原数值字形（不是补假点/归一长条），真0仍0；线图按字高留标值顶边，所有值/图点/来源不变。单点/极值各1真RED，修复并保留原生命周期/查询/tooltip/来源断言。
 
-14整库1782PASS/Ruff/JS过，但旧场景内嵌JS使Python测试函数超80行，尺寸门FAIL；服务器未启动，原失败不改。将完整JS场景移到小fixture、不删断言。15先局部/实屏，再一次宽门：1782PASS11.05s/Ruff/11JS/218Python600-80/315输入未变，manifest38568419941f0573c5873a3c40b7dc4fc6260094d22abafd3b52a5ee97ff2dfb，HTML7770ffe345ada574c11e7a35b810686047e23e5b739afce1ff9ac89ddd879903，原facts eb4067d2…/668/34/449逐项同。全部四宽历时+单点8几何/8图，5950字形top6.2px；真实零fct_e4bbb27015ba的实际字形bounds点击回同事实行，并Enter原题/真实外链。owner看两当前原图。参数16标签的28/16场景在12/13，其参数代码与15相同；不宣称全当前语料/跨研究/全M4。
+14整库1782PASS/Ruff/JS过，但旧场景内嵌JS使Python测试函数超80行，尺寸门FAIL；服务器未启动，原失败不改。将完整JS场景移到小fixture、不删断言。15先局部/实屏，再一次宽门：1782PASS11.05s/Ruff/11JS/218Python600-80/315输入未变，manifest38568419941f0573c5873a3c40b7dc4fc6260094d22abafd3b52a5ee97ff2dfb，HTML50b6c575a966b82f4c65e38866111609b9bed4c34b56974b78e49c3569674872，原facts eb4067d2…/668/34/449逐项同。全部四宽历时+单点8几何/8图，5950字形top6.2px；真实零fct_e4bbb27015ba的实际字形bounds点击回同事实行，并Enter原题/真实外链。owner看两当前原图。参数16标签的28/16场景在12/13，其参数代码与15相同；不宣称全当前语料/跨研究/全M4。
 
 Ego原84不在，永久授权替代空间3/p1，无Ask/登录/缓存/版本变动。另owner官方源补证两边：ChiCTR219928配对题名仅证明分子名称，SEC2022发行人说明TARPEYO为Nefecon美国商业名，字面引文/定位/分层表示入owner-scope-alias-03，不借公开检索snippet、不推中国批准、不改原golden。直接HTTP失败保留，普通Ego访问ChiCTR成功且只保存公开身份行，未持久联系人电话。
 
@@ -707,3 +707,23 @@ Method changed to execution because one independently writable source-replay hel
 - 最终frozen04 manifestd202dfbc54545dc1641ddc43f1182d584d651f4fcc35d6a2e42e8de10328649f，202文件/193旧不可变文件硬链接；当前完整v2 1268PASS/8.78s、Ruff全src/tests/scripts/portalJS PASS，1既有TestClient警告。nmpa-identity-current-04按相同两真实源新规则采用6新历史fact、当前仍254且重试0，原03及原项目不变，0来源/模型访问。owner-binding-06/acceptance.json绑定实际CAS/quote/HTTP/HTML；A b178bc526e0005b2c22dbc040f02dfec3e804e28afcb95dde3c0cea05c60cfc7、B2d96365d1d7101424ec7af081ca5267dd3662018157ee93a41c3820a7915dd3b、C481d126440138d0278c8bb062011e98ba3f33f3e9648bc13face858d0644ee6d。
 - current04/browser-final-05两图实际逐张查看：一张明确“组件测试·非真实临床数据”的空持有人负向，只2名称facts/0MAH/0来源访问；另一张真实NMPA名称证据日期阳性。两者不混作真实报告；B本实际中国切片无结果，只有生产HTML/单测正反向，不借历史B范围签收。03五张日期四宽及02九张阅读四宽旧证据各保留精确候选，不拼成04全报告美学PASS。两个guard review-gate已过，仅记录完整性；首轮因说明文字含占位关键字/缺Boundary标题失败，改准确文字/边界后过，不重跑模型或掩盖原报告。
 - 本组件owner有界接受；整体Goal active/M1–M6未完成。本次白名单提交后继续M3直接来源富集。下一来源线索（仅搜索命中、尚未采纳）：Sanofi2025年20-F官方principal consolidated subsidiaries表；Keymed官网honor/aboutus及HKEX2024/0326/2024032602014_c.pdf有关成都康诺行股权的披露。需实际抓取+定位、核最新有效范围再采用，不拿2023旧股权事件当当前全部集团关系或适应症批准。不得扩展renderer药物/企业字典。
+
+
+## 2026-10-25 大陆地域口径、来源后研究纳排与长标签实屏
+
+- 本节点选择execution：未关联研究范围路径是可并行的有界代码单元，owner保留共享阶段/Skill/地域/前端与最终源审阅；无需再派全页会商。全局方法学与v2规则保持，不触碰中文旧根或未知v1文件。
+- 用户明确：大陆站点单列，港澳台分别保留，中国开发资格另核。完整源地点不足不作false；legacy宽域china_site保留于原事实及展开依据，不改写为mainland_china，也不进入新摘要。生产反例族先RED，相关141PASS；实际两CT.gov源NCT07693400/Taiwan与NCT07445919/China各15/35事实，0模型，源hashd526836c…/d3489579…。
+- 重要纠错：owner早先把NCT07693400叫作DEVICE是错误概括。直接复核原始protocol确认两干预均DRUG，主要为治疗瘙痒，外泌体仅次要评估。历史描述不改写；本次明确撤回器械称呼与基于此的接受。真实7次GLM/4次fetch给出的第一版排除理由也混淆主次，scope-owner-adjudication记REVISE；原4源不可变，新4源仅追加，50事实/2链接不变，原项目和05运行时不动。新Skill明确登记类型/创新资格/主次目的不能凭直觉，04新鲜真实有界验证2623进行中，未接受其输出。
+- orphan worker70891已终态，Pi/cursor/default/runtime同selector，底层Auto模型未披露；session01a17276-2813-7000-bb23-df9296f38b3b/482.397s/142tools/exit0/no fallback。只scope.py及新test_orphan_trial_scope.py，owner核完整实现/测试后补正常trial_evidence之后的trial_scope_review与9内嵌Skill的研究输入合同。无父药物≠排除；明确false只改对应研究范围，null/缺失/重复/外项目绑定保留未知；不删事实/实体/链接。集成真1RED→69相关PASS；冻结15e14ccf…全1804PASS/Ruff/11JS/221Python600-80/321输入不变。guard audit-execution零警告过，仅代码组件，不冒充医学/产品接受。
+- 地域02四宽×3页面12几何检查已执行，来源打开因selector两目标仪器失败保留，单独source-recovery01实跑正确API链接/关闭/Esc回焦，没有重跑12页。owner实看三图发现C长标签碰撞，明确不接受整页美学。
+- 长标签1生产JS RED→30相关PASS；用ECharts自身Text测量完整标签高度决定行距/分页可见项，筛后同路重算，不截名字/缩字号，表和全部图点不删。旧测试的固定12可见行改为真实行距/全量可达合同，原零值/恢复/全部值断言保留。初Ruff导入顺序/check=False失败保留后修；03manifest187508862206e06e7220085136fadd2d46b0b10dd8407654520051c57ed5bd64，1805PASS11.27s/Ruff/11JS/222Python600-80/323文件未变。四宽×全量/SM17筛后8实屏，实际两长标签图高202px、筛后128px，0碰撞/0裁切/0页溢出；owner实看1440/2560全量、1600筛后。仅此几何组件通过，不是完整中文/全M4。
+- 04manifest1394e709ca57fd5a18d32429fe1ef370105750f13b523d7e972dddf7a93be62f，更新源审规则，27个render文件与实际03实屏同字节，新的独立源规则不被说成旧版已验。最终04开发门25100已终态，待汇总实际结果。
+- 安装08代码4f5d4283，wheelc3ecf2f4864fda93bc047218d0243e5f13e57fdd0a19eb6534216de15640cc89/sdist55fb49755064f0661adfaca4963b824ab175374008935350339b8fb0b357b6ed。标准离线隔离构建/新venv/23资产/9Skills逐字节，0下载；最初no-build-isolation缺setuptools失败保留，声明构建依赖后按标准隔离构建成功。A/C实际receipt是19源/269当前/510历史，早前沿抄278现在纠正；B708/668/34/全部ID与HTML50b6c575…同15HTTP。不得把candidate13的7770ffe3…误作15HTML，当前已纠正。
+- 安装08真实4CDE范围捕获：化药431/9、生物15/1、纳入优先1920/39、拟优先9/1，受理精确0/0/1/0，源4→8、旧source不变/事实链接及实体数不变。随后标准备份恢复四范围0浏览器/0模型复用；非完整M2/M6且不含本次地域/范围新规则。
+- 独立closure02实际Grok4.7/high/runtimegrok-4.7-build，session8908d754-b6fd-4394-8d69-0325bfbf0781/34turns/1104.338s/exit0/no fallback；24文件/42引文/PDF和DOCX重提取通过，fd66f047…，原218文件hash不变。窄接受芦可替尼盐乳膏品牌边、本维莫德/苯烯莫德物质边，不推许可/项目合并。另owner-scope-alias03保留ChiCTR乌帕替尼成对标题与SEC的TARPEYO/Nefecon；owner-scope-alias04-recovery01按NHSA正文“阿曲生坦ALIGN研究”+原研究英文题名+FDA标签ALIGN/NCT04573478补阿曲生坦↔atrasentan有限名称边，manifest76adecc1…/0网络0模型，不接受中国品牌/许可。原worker未解建议保留，说明为何原文可支持更窄结论；初审脚本误把manifest.files列表当dict失败保留，只修仪器不重抓源。三病参照仍未封存，召回未算。
+- 自建11–14副本只在完整tar.gz逐文件hash复核后归档并删除可重建源目录；逻辑44,154,657→33,634,611bytes，物理释放未测。源/HTML/截图/失败/当前15/08安装/05健康运行均保留；旧07venv/08构建副本尚未清。旧11/12/13预览精确PID+命令+cwd核实后SIGTERM且exit143，02地域6806尚待03接受后收口。
+- 下一条：汇总04真实源纳排终态并核原文→当前组件白名单提交/push→普通C全流程及05最终归并源审/M2剩余身份范围，不重跑151研究、无人工暂停或整体交付声明。
+
+- 本节点收尾补证：04模型2623自然终态exit0，实际GLM7成功、0fallback，新4次公开fetch；两研究1纳入/1null/0排除，薄荷醇登记DRUG与次要外泌体恢复正确层级、创新资格不猜，SM17相关生物治疗研究保留但不新认证创新注册分类/药物父关联。owner只接受此有界来源与未知保留；旧REVISE、源事实与原生产项目不改。04最终1805PASS11.73s/Ruff/11JS/222Python600-80/323输入无变。新fetch导致来源集合变化后的模型零调用恢复未实跑；现有全项目签名可能失效，作为后续M6根因包，不报已解决。
+- 独立参照owner-targeted-china05用既有普通浏览器列表/详情代码、专用空间5，精确两query各1列表+1详情，0模型/4源、不读生产。CTR20242150原文成对中文阿塞西普/英文Atacicept、协议VT-001-0050；CTR20201869原题明确SB12为“拟定依库珠单抗生物类似药”、协议SB12-3003。四CAS哈希/请求范围/原始捕获重解析通过，manifestc58269674cd7969e87d70d04bb97967efe5f4e1a01188f80b8f0cbd28536d4fd，原列表不改、不并参照品/不推许可/分母不封存。避免重复全文资料检索，仅解两个已知缺口。
+- 资源：旧地域02精确PID6806/命令/cwd确认后退役，原生26250 exit143；保留03当前server及所有02证据。旧07venv核08替代安装/ABC/CDE恢复、旧wheel/sdist/无活跃进程后，仅移除993常规文件/17,497,643逻辑字节；完整包版本清单/重建路线与旧包SHA保留，物理释放未测。原05/151批/780资料/当前08环境/未知文件均未动。

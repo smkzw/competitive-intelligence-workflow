@@ -28,6 +28,7 @@ def phase_label(value: object) -> str:
     return text[:-1]+' 期' if match else PHASE_ZH.get(text,text)
 
 _REGISTRY_LABELS: dict[str, dict[str, str]] = {
+    'country': {'China':'中国大陆','Hong Kong':'香港','Macao':'澳门','Macau':'澳门','Taiwan':'台湾'},
     'dispersion': {'STANDARD_DEVIATION': 'SD', 'STANDARD_ERROR': 'SE',
                    'CONFIDENCE_INTERVAL': 'CI', 'FULL_RANGE': '范围',
                    'INTER_QUARTILE_RANGE': '四分位距',

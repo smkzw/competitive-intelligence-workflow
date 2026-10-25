@@ -46,8 +46,14 @@ def china_trial_sites(db: DB, pid: str) -> dict[str, bool | None]:
     for fact in db.current_facts(pid):
         if fact['status']!='verified' or fact['source_id'] not in sources:
             continue
-        if fact['field']=='trial.china_site' and type(fact['value']) is bool:
+        if (fact['field']=='trial.china_site' and type(fact['value']) is bool
+                and fact['context'].get('geographic_scope')=='mainland_china'):
             observed[fact['entity_id']].add(fact['value'])
+        elif fact['field']=='trial.countries' and isinstance(fact['value'],list):
+            if 'China' in fact['value']:
+                observed[fact['entity_id']].add(True)
+            elif fact['value'] and fact['context'].get('locations_complete') is True:
+                observed[fact['entity_id']].add(False)
         elif fact['field']=='design.trial_scope' and fact['value']=='国内试验':
             observed[fact['entity_id']].add(True)
     return {tid:next(iter(values)) if len(values)==1 else None for tid,values in observed.items()}

@@ -1,0 +1,136 @@
+{
+  "scope": "INSTALL08_AND_REFERENCE_SOURCE_COMPONENTS_NOT_CURRENT_GEOGRAPHY_PACKAGE_OR_PRODUCT_DELIVERY",
+  "commit": "4f5d4283223acaaf495b7d9cc1060aa6c97df5da",
+  "installation": {
+    "wheel_sha256": "c3ecf2f4864fda93bc047218d0243e5f13e57fdd0a19eb6534216de15640cc89",
+    "sdist_sha256": "55fb49755064f0661adfaca4963b824ab175374008935350339b8fb0b357b6ed",
+    "current_module_bytes_match_wheel": true,
+    "assets_checked": 23,
+    "cli_skill_lines": 9,
+    "invalid_explicit_override_exit": 2,
+    "source_model_browser_calls": 0,
+    "external_package_downloads": 0
+  },
+  "skill_count": 9,
+  "AC": {
+    "sources": 19,
+    "current_facts": 269,
+    "historical_facts": 510,
+    "html_sha256": {
+      "A": "fff14e3c8e37c1353826f20f9c09ed2ea0cff399c505e3705f1adf0151fb3480",
+      "C": "b4f238cf5ab10b55d0e2262175fa83f0eb45ec70a95fbd9b0424a87ff816e1b3"
+    },
+    "original_science_unchanged": true
+  },
+  "B": {
+    "facts_sha256": "eb4067d24feb5f0950a6e6eb37a401a23e682ccd27cebfcd31206d80bb160d54",
+    "raw_facts": 708,
+    "current_facts": 708,
+    "results": 668,
+    "groups": 34,
+    "html_sha256": "50b6c575a966b82f4c65e38866111609b9bed4c34b56974b78e49c3569674872",
+    "all_plotted_fact_ids_count": 668,
+    "same_http_html": true,
+    "source_science_before_after_equal": true
+  },
+  "CDE": {
+    "old_sources_immutable": true,
+    "facts_links_and_entity_count_unchanged": true,
+    "source_counts": [
+      4,
+      8
+    ],
+    "model_calls": 0,
+    "all_source_CAS_hashes_valid": true,
+    "restored": {
+      "sections": [
+        "new_review_task_chemical_ind",
+        "new_review_task_biological_trial",
+        "priority_included",
+        "priority_proposed"
+      ],
+      "actual_new_browser_calls": 0,
+      "actual_model_calls": 0,
+      "science_unchanged": true
+    },
+    "directory_scope_counts": [
+      {
+        "section": "new_review_task_chemical_ind",
+        "rows": 431,
+        "pages": 9,
+        "precise_match": 0
+      },
+      {
+        "section": "new_review_task_biological_trial",
+        "rows": 15,
+        "pages": 1,
+        "precise_match": 0
+      },
+      {
+        "section": "priority_included",
+        "rows": 1920,
+        "pages": 39,
+        "precise_match": 1
+      },
+      {
+        "section": "priority_proposed",
+        "rows": 9,
+        "pages": 1,
+        "precise_match": 0
+      }
+    ]
+  },
+  "reference_closure02": {
+    "actual_model": "grok-4.7-build",
+    "effort": "high",
+    "turns": 34,
+    "seconds": 1104.338,
+    "fallback": null,
+    "manifest_sha256": "fd66f04747dc776c4e6fcbe18853e68965cff6a901ae90f0f490e7b1c6869da8",
+    "files": 24,
+    "quote_records": 42,
+    "source_issues": [],
+    "old_file_count": 218,
+    "old_mismatches": [],
+    "accepted_edges": [
+      "ruxolitinib phosphate cream / Chinese cream name with named brand scope",
+      "Benvitimod / 本维莫德 / 苯烯莫德 substance name only"
+    ],
+    "denominator_frozen": false,
+    "recall_computed": false
+  },
+  "owner_extra_edges": [
+    "Upadacitinib / 乌帕替尼 from paired ChiCTR study titles",
+    "TARPEYO / Nefecon from issuer SEC filing",
+    "阿曲生坦 / atrasentan from named ALIGN context and FDA label"
+  ],
+  "atrasentan_source_manifest_sha256": "76adecc1a74e07de65b8c81a0b2e8f7a053cfe63fb6381142f2dc0aea87c3a95",
+  "current_mainland_orphan_rules_in_install08": false,
+  "full_acceptance": "NOT_COMPLETE",
+  "owner_targeted_china05": {
+    "manifest_sha256": "c58269674cd7969e87d70d04bb97967efe5f4e1a01188f80b8f0cbd28536d4fd",
+    "model_calls": 0,
+    "source_count": 4,
+    "edges": [
+      {
+        "registry": "CTR20242150",
+        "protocol": "VT-001-0050",
+        "name_pair": [
+          "阿塞西普",
+          "Atacicept"
+        ],
+        "proof": "Official paired intervention names in the same trial detail"
+      },
+      {
+        "registry": "CTR20201869",
+        "protocol": "SB12-3003",
+        "program": "SB12",
+        "classification": "Proposed eculizumab biosimilar as explicitly stated by registry title",
+        "not_merged_with_reference": true
+      }
+    ],
+    "old_lists_modified": false,
+    "denominator_frozen": false,
+    "recall_computed": false
+  }
+}

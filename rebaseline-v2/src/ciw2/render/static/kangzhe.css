@@ -174,3 +174,5 @@ html:has(#design-evidence-dialog[open]){overflow:hidden}
 .result-frame p,.result-frame .result-studies{margin:0 0 8px}
 .result-studies,.source-study{font-size:var(--report-font-body);color:var(--muted);overflow-wrap:anywhere}
 #result-study-list p{margin:4px 0}.source-study{margin-top:4px}
+
+.region-name{display:inline-block;max-width:100%}

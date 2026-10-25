@@ -20,7 +20,8 @@
 {% elif role in ('allocation','masking') %}<span data-original-value="{{ ref.value }}">{{ ref.value|registry_label(role) }}</span>
 {% elif role == 'eligibility_age' %}{{ ref.value.min|age_label }} ~ {{ ref.value.max|age_label }}
 {% elif role == 'eligibility_sex' %}{{ ref.value|registry_label('sex') }}
-{% elif role == 'china_site' %}中国站点 {{ '是' if ref.value is sameas true else ('否' if ref.value is sameas false else (ref.value if ref.value is not none else '—')) }}
+{% elif role == 'countries' %}站点地区 {% if ref.value is iterable and ref.value is not string %}{% for country in ref.value %}<span class="region-name" data-original-value="{{ country }}">{{ country|registry_label('country') }}</span>{% if not loop.last %}、{% endif %}{% endfor %}{% else %}—{% endif %}
+{% elif role == 'china_site' %}中国大陆站点 {{ '是' if ref.value is sameas true else ('否' if ref.value is sameas false else (ref.value if ref.value is not none else '—')) }}
 {% elif role == 'eligibility_healthy_volunteers' %}健康受试者：{{ ref.value }}
 {% elif role == 'arms' %}{% if ref.value %}<details><summary>分组详情（{{ ref.value|length }}组）</summary>
 {% for a in ref.value %}<div class="arm-detail"><strong>{{ a.label }}</strong>
@@ -30,7 +31,7 @@
 {% if ref.context.enrollment_type %}<span class="muted">{{ {'ESTIMATED':'计划','ACTUAL':'实际'}.get(ref.context.enrollment_type, ref.context.enrollment_type) }}</span>{% endif %}
 {% for key in ('arm','timepoint','population') %}{% if ref.context.get(key) %}<span class="muted">{{ ref.context[key] }}</span>{% endif %}{% endfor %}
 {% if ref.status != 'verified' %}<span class="badge {{ ref.status }}">{{ ref.status|status }}</span>{% endif %}
-{% if show_evidence %}{% set label={'sample_size':'样本量','allocation':'随机分组','masking':'设盲','arms':'研究组别','eligibility_age':'年龄','eligibility_sex':'性别','eligibility_healthy_volunteers':'健康受试者','trial_scope':'试验范围','china_site':'中国站点'}.get(role,'资料') %}{{ evidence([ref], none, label ~ '依据', false, true) }}{% endif %}</div>{% endmacro %}
+{% if show_evidence %}{% set label={'sample_size':'样本量','allocation':'随机分组','masking':'设盲','arms':'研究组别','eligibility_age':'年龄','eligibility_sex':'性别','eligibility_healthy_volunteers':'健康受试者','trial_scope':'试验范围','china_site':'中国大陆站点','countries':'站点地区','legacy_geography':'原始地域记录'}.get(role,'资料') %}{{ evidence([ref], none, label ~ '依据', false, true) }}{% endif %}</div>{% endmacro %}
 {% macro scalar(row, key) %}{% set refs=row.observations.get(key, []) %}
 {% set verified=refs|selectattr('status','equalto','verified')|list %}
 {% if verified %}{% for ref in verified %}{{ observation(ref,key,key not in ('phase','trial_status')) }}{% endfor %}
@@ -74,7 +75,7 @@
 <div>{{ e.measure }}{% if e.status != 'verified' %} <span class="badge {{ e.status }}">{{ e.status|status }}</span>{% endif %}</div>{% if e.description %}<p class="quote">{{ e.description }}</p>{% endif %}
 {{ evidence([e], e.measure) }}</details>{% endfor %}</details>{% endif %}{% endfor %}</td>
 <td>{{ scalar(r,'eligibility_age') }}
-{% if r.observations.get('trial_scope') %}{{ scalar(r,'trial_scope') }}{% else %}{{ scalar(r,'china_site') }}{% endif %}
+{{ scalar(r,'trial_scope') }}{% if r.observations.get('countries') %}{{ scalar(r,'countries') }}{% else %}{{ scalar(r,'china_site') }}{% endif %}
 {{ scalar(r,'eligibility_sex') }}{{ scalar(r,'eligibility_healthy_volunteers') }}
 {% if r.eligibility_thresholds %}<details class="eligibility-key"><summary>入排要点{% if r.eligibility_criteria_status != 'verified' %} <span class="badge {{ r.eligibility_criteria_status }}">{{ r.eligibility_criteria_status|status }}</span>{% endif %}</summary>
 {{ criteria_index(r.eligibility_clauses, true) }}</details>{% endif %}
@@ -82,8 +83,8 @@
 <td><details class="design-evidence"><summary data-reading-title="{{ '入排与依据' if r.eligibility_criteria else '研究依据' }}">{{ '完整入排与依据' if r.eligibility_criteria else '研究依据' }}</summary><div class="{{ 'design-evidence-content' if r.eligibility_criteria else 'source-evidence-content' }}">
 {% if r.eligibility_criteria %}<section>{% if r.eligibility_clauses %}<h3>评分与检验阈值</h3>{{ criteria_index(r.eligibility_clauses, true) }}{% endif %}
 <h3>完整入排原文</h3>{% if r.eligibility_criteria_status != 'verified' %}<span class="badge {{ r.eligibility_criteria_status }}">{{ r.eligibility_criteria_status|status }}</span>{% endif %}<pre class="criteria">{{ annotated(r.eligibility_reading.segments) }}</pre></section>{% endif %}
-<section><h3>事实依据</h3>{% set source_labels = {'sample_size':'样本量','enrolled_to_date':'入组进度','phase':'研究期别','allocation':'随机分组','masking':'设盲','arms':'研究组别','eligibility_age':'年龄','eligibility_sex':'性别','eligibility_healthy_volunteers':'健康受试者','trial_scope':'试验范围','applicant':'登记申请人','eligibility_criteria':'完整入排','primary_endpoint':'主要终点','secondary_endpoint':'次要终点','trial_status':'研究状态','countries':'研究国家','china_site':'中国站点','start_date':'研究启动日期'} %}
-{% for name, refs in r.sources.items() %}{{ evidence(refs, r.eligibility_criteria, source_labels.get(name, '资料') ~ '依据', name in r.observations and r.get(name) is none) }}{% endfor %}</section>
+<section><h3>事实依据</h3>{% set source_labels = {'sample_size':'样本量','enrolled_to_date':'入组进度','phase':'研究期别','allocation':'随机分组','masking':'设盲','arms':'研究组别','eligibility_age':'年龄','eligibility_sex':'性别','eligibility_healthy_volunteers':'健康受试者','trial_scope':'试验范围','applicant':'登记申请人','eligibility_criteria':'完整入排','primary_endpoint':'主要终点','secondary_endpoint':'次要终点','trial_status':'研究状态','countries':'站点地区','china_site':'中国大陆站点','legacy_geography':'原始地域记录','start_date':'研究启动日期'} %}
+{% for name, refs in r.sources.items() %}{{ evidence(refs, r.eligibility_criteria, source_labels.get(name, '资料') ~ '依据', (name in r.observations and r.get(name) is none) or name=='legacy_geography') }}{% endfor %}</section>
 </div></details></td>
 </tr>{% endfor %}
 </tbody></table></div>

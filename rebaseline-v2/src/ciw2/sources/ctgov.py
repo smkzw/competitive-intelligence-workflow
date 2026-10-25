@@ -93,8 +93,8 @@ def parse_study(study: dict[str, Any]) -> dict[str, Any]:
             for a in arms_mod.get("armGroups", [])
         ],
         "countries": countries or None,
-        "china_site": any(c in {"China", "Hong Kong", "Taiwan", "Macao", "Macau"} for c in countries)
-                      if countries else None,
+        "china_site": True if "China" in countries else False if locs and all(loc.get("country") for loc in locs) else None,
+        "locations_complete": bool(locs and all(loc.get("country") for loc in locs)),
         "primary_outcomes": _g(ps, "outcomesModule", "primaryOutcomes", default=[]),
         "secondary_outcomes": _g(ps, "outcomesModule", "secondaryOutcomes", default=[]),
         "eligibility": {"min_age": elig.get("minimumAge"), "max_age": elig.get("maximumAge"),
@@ -123,8 +123,10 @@ def design_facts(s: dict[str, Any]) -> list[dict[str, Any]]:
         _fact("design.eligibility.criteria", s["eligibility"]["criteria"],
               quote=s["eligibility"]["criteria"], path="eligibilityModule.eligibilityCriteria"),
         _fact("status.trial", s["overall_status"], path="statusModule.overallStatus"),
-        _fact("trial.countries", s["countries"], path="contactsLocationsModule.locations[].country"),
-        _fact("trial.china_site", s["china_site"], path="contactsLocationsModule.locations[].country"),
+        _fact("trial.countries", s["countries"], path="contactsLocationsModule.locations[].country",
+              locations_complete=s["locations_complete"]),
+        _fact("trial.china_site", s["china_site"], path="contactsLocationsModule.locations[].country",
+              geographic_scope="mainland_china"),
         _fact("trial.start_date", s["start_date"], path="statusModule.startDateStruct.date"),
     ]
     for i, o in enumerate(s["primary_outcomes"]):
@@ -294,7 +296,7 @@ def _activate_trial(ctx: ToolContext, nct: str, study: dict[str, Any], sid: str 
 def _trial_attrs(s: dict[str, Any]) -> dict[str, Any]:
     return {k: s[k] for k in ("title", "sponsor", "overall_status", "phase", "enrollment", "countries",
                               "china_site", "interventions", "conditions", "has_results", "start_date")} | {
-        "url": STUDY_URL.format(nct=s["nct"]), "registry": "ctgov"}
+        "url": STUDY_URL.format(nct=s["nct"]), "registry": "ctgov", "china_site_scope": "mainland_china"}
 
 
 def search(ctx: ToolContext | None, *, condition: str = "", term: str = "", intervention: str = "",
@@ -410,7 +412,8 @@ def _ctgov_search(ctx: ToolContext, a: SearchArgs) -> Any:
     return {'count': len(rows), 'collection_scope': 'full' if a.max_results is None else 'explicit_bounded',
             'requested_limit': a.max_results, 'interventions': list(interventions.values()),
             'sponsors': sorted({s['sponsor'] for s in rows if s.get('sponsor')}),
-            'studies': [{'nct': s['nct'], 'phase': s['phase'], 'china_site': s['china_site']}
+            'studies': [{'nct': s['nct'], 'phase': s['phase'], 'china_site': s['china_site'],
+                         'china_site_scope': 'mainland_china', 'countries': s['countries']}
                         for s in rows],
             'details_tool': 'ctgov_get', 'source_url_template': STUDY_URL}
 
