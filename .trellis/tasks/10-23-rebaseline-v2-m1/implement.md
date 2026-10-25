@@ -772,3 +772,10 @@ Method changed to execution because one independently writable source-replay hel
 - 当前latest-summary08稳定宽门1847PASS11.73s（总进程12.08s），Ruff/11JSsyntax/226Python600-80/337输入无变，manifest0e7ec822b172a16eb342c5a2e631f04f38c53c5fc39ba77dc9869e2885ab81c4。service与16例新测试字节同冻结；后续仅记录不再全仓复跑。公开receipt分别标代码门/HTTP实屏/新运行隔离，未借用四宽旧视觉或f700安装09冒充本次全包通过。
 - 自建install08旧venv用原08wheel逐模块比对、与新09所有包版本一致、旧wheel/sdist哈希完整、ps引用0/lsof打开0后，精确仅退役997普通文件/17,523,155逻辑字节，symlink不跟随；旧环境版本及逐文件hash/rebuild路线保留retired-venv-manifest，物理空间释放未测。原来源/DB/CAS/代码包/报告/日志/当前09环境和所有会话记录均未清理。
 - 下一步：白名单commit/push本节点；07恢复前沿126单元/554原输入/297中间输出和141单元/226输入已查明，未冒充新规则资格。M6整stage升级跳过仍未修，下一根因需同时限制受影响阶段并保留合格单元，不用全包hash变化盲重跑151研究。M1完整C、M2召回、M3身份、M4跨研究/论文、M5历史和综合交付仍未过，Goal保持active。
+
+
+## 2026-10-25 当前包10与用户核心范围裁决
+
+3aa1f559已push确认。当前10包以该HEAD Git archive+唯一已核ECharts构建，337源/7fbf3424…；标准离线隔离build/newvenv0下载，wheel8eb2b8bbcfced289f9f6d564b664695da78e800ef82a3517fcadb0c78d7e483d/sdistd1554dc7bf12aff538b97cdf838e5660cf3b9191a419cf95894bfa4205bad335。全部模块/23资产/9Skill同字节、/tmp-I/9CLI/override exit2无数据。标准恢复并真正渲染当前A/C19源269当前510历史+B708事实668结果，HTML与固定当前源一致；已安装普通ASGI B两状态/668ID/科学四表，11ID实际旧提交离线回放及同key第二次缓存、161历史不改；普通scope恢复零模型/来源、10条CDE proof恢复均过。仅已安装组件，不是医学/全页浏览器/新四目录/全M6。首组件命令又在/tmp相对创建/执行失败，未产生资料或测试；绝对apply_patch创建+绝对-I恢复该单步，错误保留。没有源码变更/全仓重跑。
+
+用户新回复锁定核心范围：创新药+有独立临床开发改良剂型；生物类似药单列不计核心。已更新唯一PRD/PLAN/STATUS与M2任务，policy11覆盖层保持原127/57/28三清单SHA，未封存分母/算召回。两条明确代码产品IBI3027/QL2108的CDE治疗用生物3.3处置，核原始CAS row/已目视NMPA定义，QL空补充不填、不建CTR受理等号。第一次检查raw列忽略序号导致断言失败，未写分类；核完整保存原行后改明确列再过，失败不改成PASS。GS101/改良剂型独立开发/唯一计数/中国适应症仍待源闭合；生产相关分面/核心计数尚未实现。

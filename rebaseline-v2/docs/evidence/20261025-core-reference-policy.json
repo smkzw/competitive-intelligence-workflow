@@ -1,0 +1,30 @@
+{
+  "policy_version": "ciw2-core-reference-policy-20261025",
+  "authority": "explicit native user choice on2026-10-25",
+  "core": [
+    "innovative drug with source-supported identity and indication/China eligibility",
+    "modified formulation with source-supported independent clinical development and indication/China eligibility"
+  ],
+  "separate_display_not_core": [
+    "confirmed biosimilar"
+  ],
+  "unknown": "retain as unresolved; do not silently include or exclude; resolve before denominator freeze",
+  "geography": "mainland sites separate from Hong Kong/Macao/Taiwan; China development eligibility is separately sourced",
+  "counts": "do not multiply variants, codes or aliases without distinct development identity; final unique product/program units require source adjudication",
+  "old_lists_immutable": true,
+  "denominator_frozen": false,
+  "recall_computed": false,
+  "classification_overlay_sha256": "56a19102ba0f2fc9351827347641b52a54a01912d72ad4da07f5718a632f7e10",
+  "fixed_source_dispositions": [
+    {
+      "program": "IBI3027",
+      "disposition": "separate_biosimilar_not_core"
+    },
+    {
+      "program": "QL2108",
+      "disposition": "separate_biosimilar_not_core"
+    }
+  ],
+  "old_reference_lists_unchanged": true,
+  "production_classification_UI": "NOT_YET_IMPLEMENTED"
+}

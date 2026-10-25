@@ -1,0 +1,84 @@
+{
+  "scope": "INSTALL10_CURRENT_CODE_AND_RECOVERY_COMPONENTS_NOT_FULL_M1_M6_DELIVERY",
+  "commit": "3aa1f559068cc772d02f5a7aec33c7d89116d1ef",
+  "source_binding_sha256": "7fbf342414365af9b36fae5051cad7bd7ad9a8762d5f3602baeeeef8fe83b627",
+  "wheel_sha256": "8eb2b8bbcfced289f9f6d564b664695da78e800ef82a3517fcadb0c78d7e483d",
+  "sdist_sha256": "d1554dc7bf12aff538b97cdf838e5660cf3b9191a419cf95894bfa4205bad335",
+  "offline_new_venv": true,
+  "external_downloads": 0,
+  "module_bytes_match": true,
+  "assets": 23,
+  "skills": 9,
+  "isolated_cwd": "/tmp",
+  "cli_skill_lines": 9,
+  "invalid_explicit_override_exit": 2,
+  "components": {
+    "A": {
+      "html_sha256": "3a13c23125da82842345eff928404a81f92446d75c144526cf7366c56f9cda72",
+      "standard_DB_CAS_restore_rendered": true
+    },
+    "C": {
+      "html_sha256": "fc2d18cad23d07703b396b69ec653150ad9026278ffcbf10509ec2e7cdfb0d23",
+      "standard_DB_CAS_restore_rendered": true
+    },
+    "AC_counts": {
+      "sources": 19,
+      "current_facts": 269,
+      "historical_facts": 510
+    },
+    "B": {
+      "html_sha256": "70345102191022717fa4f5b09326ff68f4b1cfb9695e92bcb1f53dc28653968b",
+      "raw_facts": 708,
+      "result_ids": 668,
+      "ordinary_ASGI_route_both_states": true,
+      "science_unchanged": true,
+      "markers": "CONTROLLED_NOT_CLINICAL",
+      "browser": "NOT_REPEATED_UNCHANGED_RESOURCE_BYTES"
+    },
+    "summary": {
+      "task": 5509,
+      "recorded_submit": 5524,
+      "references": 11,
+      "exact_output_preserved": true,
+      "second_same_key_cached": true,
+      "science_unchanged": true,
+      "historical_cache_rows_preserved": 161,
+      "mode": "RECORDED_OUTPUT_REPLAY_NOT_NEW_MEDICAL_ACCEPTANCE"
+    }
+  },
+  "scope_class_restore": [
+    {
+      "mode": "scope",
+      "result": {
+        "decisions": 2,
+        "in_scope": 1,
+        "excluded": 0,
+        "pending": 1,
+        "issues": [],
+        "batches": 1,
+        "input_empty": false,
+        "candidate_kind": "trial"
+      },
+      "science_unchanged": true,
+      "new_model_calls": 0,
+      "new_source_calls": 0,
+      "original_db_unchanged": true
+    },
+    {
+      "mode": "class",
+      "result": {
+        "IBI3027": 2,
+        "QL2108注射液": 5,
+        "布地奈德迟释片": 3
+      },
+      "science_unchanged": true,
+      "new_model_calls": 0,
+      "new_source_calls": 0,
+      "original_db_unchanged": true
+    }
+  ],
+  "new_research_source_model_calls": 0,
+  "research_batches_reexecuted": 0,
+  "four_directory_current_refresh": "NOT_RUN",
+  "full_medical_or_visual_or_goal": "INCOMPLETE"
+}
