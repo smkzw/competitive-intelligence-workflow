@@ -1,0 +1,81 @@
+{
+  "schema_version": "ciw2-owner-install-evidence-v1",
+  "scope": "CURRENT_INSTALL_AND_REAL_DB_CAS_RESTORE_NOT_FULL_M6_OR_MEDICAL",
+  "code_commit": "fff5f88b",
+  "candidate_manifest_sha256": "4f4bd65b9db9d79270491efd86a439a5e74c440e98d209064e4cc36c76a64027",
+  "wheel_sha256": "dc97c3bc85836bad43989742745638016e11de086a5f985b6e356c1f930a9636",
+  "sdist_sha256": "24fb270cf134d3bdd64757640f9fe05b8161a0a340d8753df6c2e64fdac8c431",
+  "modules_match_frozen": true,
+  "assets_checked": 23,
+  "skills_checked": 9,
+  "fresh_isolated_install": true,
+  "external_package_downloads": 0,
+  "CLI_skill_lines": 9,
+  "invalid_explicit_override_exit": 2,
+  "bad_override_data_created": false,
+  "ABC_restore": {
+    "A_C_html": {
+      "A": "ad8d2625d01cf70c536d86cffc95cb82729cde47e814103f37f3463d2e45c815",
+      "C": "a8577c77fb641a6fcb2eca6bbaa8b23008576ff5ad6882bd7a3a8de0f902bb54"
+    },
+    "A_C_sources": 19,
+    "A_C_current_facts": 269,
+    "B_html": "8ff40a2c14eb1168b797e6b44e42ece0400aa090c287f17e9aaa3b20265e3a73",
+    "B_current_facts": 708,
+    "B_results": 668,
+    "B_groups": 34,
+    "source_scientific_rows_unchanged": true,
+    "B_same_current_HTTP": true
+  },
+  "CDE_restore": {
+    "completed": [
+      {
+        "section": "new_review_task_chemical_ind",
+        "source_id": "src_588f4ec7cc76",
+        "acceptance_numbers": [
+          "JXHS2600124"
+        ],
+        "matched_count": 0,
+        "linked_refs": 0,
+        "complete": true
+      },
+      {
+        "section": "new_review_task_biological_trial",
+        "source_id": "src_d77aa24c56a8",
+        "acceptance_numbers": [
+          "JXHS2600124"
+        ],
+        "matched_count": 0,
+        "linked_refs": 0,
+        "complete": true
+      },
+      {
+        "section": "priority_included",
+        "source_id": "src_0e5c3bfcefdd",
+        "acceptance_numbers": [
+          "JXHS2600124"
+        ],
+        "matched_count": 1,
+        "linked_refs": 1,
+        "complete": true
+      }
+    ],
+    "source_scientific_rows_unchanged": true,
+    "new_browser_calls": 0,
+    "model_calls": 0
+  },
+  "source_or_model_calls_during_install": 0,
+  "full_product_acceptance": "NOT_RUN",
+  "receipt_sha256": {
+    "owner-acceptance.json": "a3cbed54f65c37ba464265375954f994f6b85f48f6d449a7506d3d16facbb122",
+    "ac-restore-render-acceptance.json": "adc59c24cd1ea7bbea7197c55738d12422528b8a6f67f4e135b130402e72dd6a",
+    "b-restore-render-acceptance.json": "9a0aa43f1efc8c37cb480309c81f96b2f283d19da1ce7ee80deb022cee1bc8d7",
+    "cde-restore-acceptance.json": "a625179031e1b946c028b5edbf059c039f27922bfbb2a801f8d9260de8abef8b"
+  },
+  "cleanup": {
+    "only_owned_superseded_build_and_old_venv": true,
+    "logical_bytes_removed": 27390168,
+    "physical_bytes_freed": "NOT_MEASURED",
+    "current_environment_and_all_evidence_kept": true
+  }
+}

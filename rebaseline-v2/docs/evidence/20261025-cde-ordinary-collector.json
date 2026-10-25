@@ -28,7 +28,107 @@
     "Failed directory remains pending without cancelling global research",
     "No clinical, indication, approval or MAH facts inferred"
   ],
-  "real_source_slice": "PENDING",
+  "real_source_slice": {
+    "state": "passed_source_slice",
+    "source_rows": [
+      {
+        "source_id": "src_42f1d1c1534b",
+        "digest": "8ee377e4543cc574adcb07fc50fdbe1b104ee1a779c722eaa4b3c9feaac98281",
+        "section": "acceptance",
+        "filters": {
+          "year": "",
+          "drug_name": "",
+          "applicant": "",
+          "acceptance_number": "JXHS2600124",
+          "drug_type": "",
+          "application_type": ""
+        },
+        "complete": true,
+        "total_records": 1,
+        "pages": 1
+      },
+      {
+        "source_id": "src_588f4ec7cc76",
+        "digest": "7343b6bd6e3db426b0bc437bece33fb1eb4e55cf58f3d09bdf3708219f20ed72",
+        "section": "new_review_task",
+        "filters": {
+          "sequence": "化药",
+          "task_type": "IND",
+          "ui_acceptance_number": ""
+        },
+        "complete": true,
+        "total_records": 431,
+        "pages": 9
+      },
+      {
+        "source_id": "src_d77aa24c56a8",
+        "digest": "4e88da541adec1700c6e67057926d8d4c8ed44c4e3ff06307410ee35bb26f0c6",
+        "section": "new_review_task",
+        "filters": {
+          "sequence": "生物",
+          "task_type": "LCSYSQ",
+          "ui_acceptance_number": ""
+        },
+        "complete": true,
+        "total_records": 15,
+        "pages": 1
+      },
+      {
+        "source_id": "src_0e5c3bfcefdd",
+        "digest": "f5c3a1d7429a419b0d0aba4f66ad43e66ea740e45bbe2b67b517ca68ee5b0e1d",
+        "section": "priority_included",
+        "filters": {
+          "acceptance_number": "",
+          "drug_name": "",
+          "applicant": ""
+        },
+        "complete": true,
+        "total_records": 1920,
+        "pages": 39
+      }
+    ],
+    "completed": [
+      {
+        "section": "new_review_task_chemical_ind",
+        "source_id": "src_588f4ec7cc76",
+        "acceptance_numbers": [
+          "JXHS2600124"
+        ],
+        "matched_count": 0,
+        "linked_refs": 0,
+        "complete": true
+      },
+      {
+        "section": "new_review_task_biological_trial",
+        "source_id": "src_d77aa24c56a8",
+        "acceptance_numbers": [
+          "JXHS2600124"
+        ],
+        "matched_count": 0,
+        "linked_refs": 0,
+        "complete": true
+      },
+      {
+        "section": "priority_included",
+        "source_id": "src_0e5c3bfcefdd",
+        "acceptance_numbers": [
+          "JXHS2600124"
+        ],
+        "matched_count": 1,
+        "linked_refs": 1,
+        "complete": true
+      }
+    ],
+    "pending": [],
+    "source_cas_verified": true,
+    "runtime_unchanged": true,
+    "model_calls": 0,
+    "clinical_facts": 0,
+    "trials": 0,
+    "same_run_reuse_new_browser_calls": 0,
+    "same_run_reuse_scientific_tables_unchanged": true,
+    "receipt_sha256": "93399eab5047d2c041788457f3e3ea24e20fbd2fe5ba02569e711bdfeaedbb05"
+  },
   "medical_or_universe_acceptance": "NOT_RUN",
   "private_receipts": "ciw-data/cde-pipeline-development-20261025-01; cde-pipeline-related-20261025-01.log; cde-automatic-source-real-20261025-01/02",
   "instrument_failures": [
