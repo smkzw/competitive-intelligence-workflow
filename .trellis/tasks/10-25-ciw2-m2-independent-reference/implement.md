@@ -62,3 +62,17 @@ C03源身份独立新context审阅已终态REVISE，Grok4.7/high/modelUsage4.7-b
 原生62090已实际终态：CodeBuddy/codebuddy-cli/deepseek-v4.1-flash:max选择器，778.636s/return0/无备用；底层身份未额外暴露，不冒充不同模型族。owner新审查16核217输入/31输出SHA、212成员一一覆盖、373原文逐字与SHA全过。但131组用“非生物类似药/剂型/期别/无参照”反推核心、5组按医院申办排除，无用户授权且非正向分类证据；CC-93538/Cendakimab已在引用原题直接桥接，GS101具体受理映射仍不足，不能采worker错误概括。保留原15及其原始报告，结构保全通过、分类与分母REVISE，不算95%。用户政策未变；PRD已补足证据规则，避免后来照搬推断。下一步只修具体覆盖层及补正向来源，不重做原发现、不把未知静默删分母。
 
 - owner17为非破坏覆盖层（SHA3f7170c9…），137无充分依据组退回待核，原15不改、不认为待核即非创新/排除；CC-93538/Cendakimab原登记题名直接桥接、既有阿曲生坦ALIGN/FDA物质名证据复核，分别限定身份层次。未封分母/未算召回/0生产变更，后续逐个正向源补证，不把缺口数量包装成验收失败率。
+
+
+## 2026-10-26 八项IgAN来源66终态与独立判断74
+
+source66实际Grok4.7选择器/high、无备用；endpoint身份仅banner，未另证。owner73核6原始输入与4派发输入SHA不变、49产物hash/45引文char-byte-line全部精确、10完整登记上下文另存；dispatch审计PASS。原资格均provisional，未封分母/算召回。工作者曾创建后删除本任务临时NMPA cookie jar，与no-deletion字面不符，记录边界偏差，不冒称完美遵循/删除原资料。0owner模型/取网核查。
+
+选择conference：创新正向证据与中国监管分类是否被混同、已存企业novel/申报class1及中英文身份/中国IgAN范围存在实质解释不确定；不能仅凭hash/45精确引文关闭。一个独立C03对象，和source66实际Grok作路线去重、CodeBuddy DS4.1flash:max主及明示备用；仅37固定原源+现行用户政策，无owner73结论、私有推理、生产DB/CAS或新检索，不添chair或重复八产品发现。74 input manifest1b9f0881e2fab661815763eb1c7e4068d1d08c8f378ab9a3858a8b6766e3484e；64turn/7200s总预算，终态后owner采用，不重新问已定核心政策。
+
+- 74首次独立review已终态（365.137s/46工具calls，CodeBuddy DS4.1flash请求/max，无fallback）。受plan-mode Bash拒绝，reviewer未自算hash，owner73已另实核；reviewer一次广域grep命中被禁owner17片段，主动披露并未打开，独立上下文受此降低。37原源/5派发输入事后hash仍完全相同。原意见对正向创新与注册分类区分有帮助，但误称issuer字段缺失、将公司51项句与另CM313页混淆、把原China3计数改2/预测当实绩等不采。
+- 同session补充一轮8turn/900s，原session01a173e4-33b0-73dd-b9f5-6ec180e2b2ad，原报告与原manifest均不重写。补4份原输入引用的独立supplemental-manifest，不伪称原37已含全部原始链。owner错误：preflight返回1（缺明确输出边界等），仍连续调用runner启动，未将非零返回作为后续准入条件；记录followup-start-deviation原样，当前prompt不热改/不回填虚假PASS。补轮只作带限制意见，不计完整流程门。今后依赖门必须先实核exit_code再启动。
+
+- 74补轮实核与首轮同session，113.189s/11toolcalls，始终无fallback；两轮共31唯一assistant消息ID/57calls/478.326s，不冒称provider计费或完整流程门。owner原纠正里issuer键“all8”本身错，补轮确认仅2/8，已在77统一字段而原66不改。补轮撤回原China3→真实2、研发预期当实绩、化药code硬门槛、许可方/CTR/中国获批/单病种前置、公式唯一双语证明等。
+- 77覆盖层依原源：ADX-038和EVER001发行人级正向创新候选、未知监管类别另列；阿曲生坦中文资格支持但英语canonical跨语待证；5其余primary缺口保留，未封分母/算召回。78沿已保存PRNewswire的实际英文href单次200补到“Novel BTK Inhibitor EVER001”原文，raw6196711787620fafb346373ce62b10ba0f22b92ada30dbf4474f7e345e69463a/text031e7fd47bbaec70656c11ed965ee8ca021cf5740db040c9197eb379d9c98ef3，非新全域搜索，0模型/生产摄取；FDA/NHSA分子式聚合只作线索，不强并中英文身份。
+- 79有限新execution处理原IGAN002/007/008/010/017各一手创新声明、004一个真实双语关联源；原清单/原源SHA固定，新manifest cbd514135d68d5d991ea3e795d80764980db964d99467b488bd3420eee3a4578。新预检PASS0warning已确认后才启动（修正74调用次序失误），Grok4.7/high及显式备用、48turn/5400s总预算/每目标1新策略，原生31984核runner92154。禁读生产/owner资格结论/旧review，禁Ego/安装/Git/删除/猜链接，不新建分母或复搜全宇宙。终态前不采用不轮询。下步79终态核源，再接既有facts内的分类/核心消费，不只编参照清单称生产已完。

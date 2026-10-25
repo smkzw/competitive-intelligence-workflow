@@ -886,3 +886,6 @@ ff69abd3已push并远端实核一致。20先完成离线安装/23资产/9Skill/C
 
 - 69已终态，实际CodeBuddy/deepseek-v4.1-flash selector/max、无fallback，endpoint身份未另证。只改websearch.py+新test_ctgov_document_fetch.py。原11RED/10PASS、1次错误网络计数假设/SIM117失败保留；最终176相关PASS2.98s。owner读全部定义/测试/差分/原红输出；四份派发输入SHA不变，audit-execution已PASS，无重写旧47/54审计。
 - 固定71完整374输入，manifest5a826c7b231ed57d24eebd3c1ed6cb22a118bad6ecff5f99b3468c8841cbeec5；一次1965PASS15.42s、Ruff、244Python600/80、14JS及SHA不变。72 actual生产_fetch_url真实读同原study，56380字符5分页/1network+4cache，同API/raw/text/source/requested URL，0模型/事实/实体摄取，374运行字节不变。旧shell/历史query/源与冻结证据不改。此为工具接受，不是PNH全流程/M1医学/视觉；64安装只验60。下一步白名单commit/push绑定字节，再继续未终态66来源核验与有新依据后的普通研究恢复。
+
+- 80是同一正向来源规则/身份措辞批次：DrugCandidate.innovative不再定义为“非仿制/类似”，明确产品正向来源；name允许完整中文/复合名，china Skill分开MAH与权益/代理/责任人等，两个universe Skill保留有独立开发改良/未知并按实际权威级别，不把一期/招募/原研持有者当隐性前置。无新增执行分支，因此未写镜像文字断言/未重测浏览器；新模型遵循尚未实际跑，不称行为科学已验。
+- 80仅manifest+Git重建指针，不造新整仓副本/venv；376输入manifestd546be7240e012fd387f491265ef5223ceb4baabacc3e1d05856308ac3a1e553，稳定一次1965PASS15.03s/Ruff/244Python600-80/14JS，检查期间全SHA不变。71来源工具与72实际网络行为保留其版本范围；64安装仍仅60，不冒称80新安装或M1。76只读实核新71恢复会回universe_china，未写新成功回执/热改原38/61或重跑全部研究；模型路线限流仍真实阻断普通报告。

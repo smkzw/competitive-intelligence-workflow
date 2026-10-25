@@ -38,7 +38,7 @@ class IntakeResult(Strict):
 
 
 class DrugCandidate(Strict):
-    name: str = Field(description="INN 或研发代号（英文）")
+    name: str = Field(description="来源正式药名、INN或研发代号；仅中文或复合名完整保留，不强造英文或只取首项")
     name_zh: str | None = Field(default=None, description="已核实的正式中文名；未核实留空，禁止音译猜测")
     aliases: list[str] = Field(default_factory=list)
     targets: list[str] = Field(default_factory=list)
@@ -48,7 +48,9 @@ class DrugCandidate(Strict):
     china_mah_group: str | None = None
     highest_phase_global: Phase = "unknown"
     highest_phase_china: Phase = "unknown"
-    innovative: bool | None = Field(default=None, description="是否创新药（非仿制/生物类似药）")
+    innovative: bool | None = Field(default=None, description=(
+        "有具体产品的正向创新/原研来源时为true，明确仿制/生物类似时为false，未知为null；"
+        "不能由非类似、在研或临床期别反推。独立临床开发的改良剂型仍须保留及记录来源"))
     evidence_urls: list[str] = Field(default_factory=list)
     route_id: str = Field(description="发现该候选的检索路线")
 

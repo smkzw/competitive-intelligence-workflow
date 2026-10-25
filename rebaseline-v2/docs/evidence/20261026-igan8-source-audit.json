@@ -1,0 +1,27 @@
+{
+  "scope": "OWNER_EXACT_SOURCE_AUDIT_NOT_FINAL_CLASSIFICATION_OR_DENOMINATOR",
+  "qualification_sha256": "9c83f1dbf9bcc1611d7778157571cf8eb166f2287cfed8de679de0e251919819",
+  "worker_manifest_sha256": "f076bb4edec49cff42223e0e9a00a20bafc7237c86abf2a608c0fd43d8b8fdbf",
+  "original_inputs_verified": 6,
+  "manifest_artifacts_hash_verified": 49,
+  "claim_quotes_exact": 45,
+  "registry_documents_read": 10,
+  "dispatch_audit": "PASS",
+  "dispatch_input_hashes_unchanged": true,
+  "route": "grok/grok-build/grok-4.7:high",
+  "fallback": null,
+  "served_model_identity": "SESSION_BANNER_ONLY_NOT_ENDPOINT_ATTESTATION",
+  "source_collection": "PARTIALLY_REUSABLE_NOT_BLANKET_SCIENTIFIC_ACCEPTANCE",
+  "class_qualification": "PENDING_SEPARATE_OWNER_SOURCE_LEVEL_EVALUATION",
+  "final_reference_sealed": false,
+  "recall_computed": false,
+  "models_or_sources_called_by_owner_audit": 0,
+  "boundary_deviation": "Worker created then deleted its own temporary NMPA cookie jar despite no-deletion dispatch wording. No original scientific artifact deletion claimed; do not claim perfect boundary conformance.",
+  "independent_review74": {
+    "status": "PENDING",
+    "original_source_files": 37,
+    "input_manifest_sha256": "1b9f0881e2fab661815763eb1c7e4068d1d08c8f378ab9a3858a8b6766e3484e",
+    "new_source_queries": false,
+    "owner73_conclusions_provided": false
+  }
+}

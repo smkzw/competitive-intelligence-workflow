@@ -1,0 +1,87 @@
+{
+  "scope": "SOURCE_GUIDANCE_AND_PARTIAL_ELIGIBILITY_NOT_M1_M2_OR_RC",
+  "code_scope": [
+    "domain/models.py descriptions",
+    "universe-china and universe-global embedded Skill instructions"
+  ],
+  "changes": [
+    "Do not infer innovative from non-biosimilar/phase/status",
+    "Keep complete Chinese/compound names, no fabricated English",
+    "Separate China MAH from rights/developer/manufacturer roles",
+    "Primary positive product evidence at actual authority level, regulatory class separate"
+  ],
+  "new_executable_branches": false,
+  "mirrored_wording_tests_added": false,
+  "stable_gate": {
+    "passed": 1965,
+    "seconds": 15.03,
+    "ruff": "PASS",
+    "python_files": 244,
+    "javascript_files": 14,
+    "inputs_unchanged": 376,
+    "manifest_sha256": "d546be7240e012fd387f491265ef5223ceb4baabacc3e1d05856308ac3a1e553"
+  },
+  "actual_new_model_adherence": "NOT_RUN",
+  "new_browser_or_package_acceptance": "NOT_RUN_NOT_REQUIRED_FOR_METADATA_ONLY_BATCH",
+  "source66_owner73": {
+    "original_inputs": 6,
+    "artifact_hashes": 49,
+    "exact_quotes": 45,
+    "registry_documents": 10,
+    "dispatch_audit": "PASS"
+  },
+  "review74": {
+    "scope": "OWNER_CONFERENCE_INTEGRATION_PARTIAL_EVIDENCE_NOT_FULL_WORKFLOW_GATE",
+    "primary_output_sha256": "1f1952f237ec380b807ca49ae19dddb15b17491ac3bffc0f66c2d0b6af302aee",
+    "addendum_output_sha256": "b1115454a3d218e3e805993f10669d13d6c4515e8e0f100f278595a611a2bae6",
+    "original_input_hashes_unchanged": true,
+    "same_session_verified": "01a173e4-33b0-73dd-b9f5-6ec180e2b2ad",
+    "selector": "codebuddy/codebuddy-cli/deepseek-v4.1-flash:max",
+    "fallback": null,
+    "observed_unique_assistant_message_ids": 31,
+    "observed_tool_calls": 57,
+    "elapsed_seconds": 478.326,
+    "first_preflight": "PASS",
+    "followup_preflight": "FAIL_LAUNCHED_BY_OWNER_ERROR_NOT_RETROACTIVELY_REPAIRED",
+    "reviewer_hash_execution": "NOT_RUN_BASH_DENIED_OWNER73_CHECKED_SEPARATELY",
+    "context_independence": "REDUCED_BY_ONE_BROAD_GREP_OWNER17_FRAGMENT",
+    "initial_false_claims_corrected": [
+      "issuer-level field wholly absent",
+      "CM313 company51items sentence false because other CM313 pages exist",
+      "raw China3 to true2",
+      "forecast-as-completed",
+      "unstated approval/originator/single-disease requirements",
+      "chemical formula convergence as unique bilingual proof"
+    ],
+    "owner_false_claim_corrected": "issuer_level_only existed2/8, not all8; overlay77 normalizes without rewriting source66",
+    "adopted": "Primary product-specific affirmative innovation at actual issuer level, separate regulatory class; retain source geography/forecast/name uncertainty. Exact corrected source qualifiers only.",
+    "full_reference_sealed": false,
+    "recall_computed": false,
+    "professional_or_product_approval": false
+  },
+  "owner77_overlay_sha256": "13240a0318977ce083b6c2d6c506acde21edc9994a43b5edfec5b71ea7b088be",
+  "owner77_statuses": {
+    "IGAN-001": "CORE_CANDIDATE_NOT_FROZEN",
+    "IGAN-002": "PENDING",
+    "IGAN-004": "PENDING_CROSS_MARKET_IDENTITY",
+    "IGAN-007": "PENDING",
+    "IGAN-008": "PENDING",
+    "IGAN-009": "CORE_CANDIDATE_NOT_FROZEN",
+    "IGAN-010": "PENDING",
+    "IGAN-017": "PENDING"
+  },
+  "actual_source78": {
+    "status": "PASS_LINKED_PRIMARY_RELEASE_SOURCE",
+    "source_url": "https://www.prnewswire.com/news-releases/everest-medicines-presents-positive-results-in-preliminary-analysis-of-phase-1b2a-clinical-trial-of-novel-btk-inhibitor-ever001-at-the-62nd-congress-of-the-european-renal-association-302476219.html",
+    "http_status": 200,
+    "raw_sha256": "6196711787620fafb346373ce62b10ba0f22b92ada30dbf4474f7e345e69463a",
+    "text_sha256": "031e7fd47bbaec70656c11ed965ee8ca021cf5740db040c9197eb379d9c98ef3",
+    "quote": "Novel BTK Inhibitor EVER001",
+    "authority": "ISSUER_PRESS_RELEASE_NOT_REGULATORY_CLASS",
+    "observed_at": "2026-10-25T16:39:56.436948+00:00",
+    "model_calls": 0
+  },
+  "source79": "PENDING_NOT_ADOPTED",
+  "production_classification_facets_and_core_counts": "NOT_YET_IMPLEMENTED",
+  "recall_denominator": "NOT_SEALED"
+}
