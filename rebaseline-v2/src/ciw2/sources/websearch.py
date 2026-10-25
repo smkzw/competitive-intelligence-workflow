@@ -6,13 +6,16 @@
 from __future__ import annotations
 
 import json
+import re
 from typing import Any
+from urllib.parse import urlsplit
 
 import httpx
 from pydantic import BaseModel, Field
 
 from ciw2.harness.tools import REGISTRY, ToolContext
-from ciw2.sources.http import UA, fetch
+from ciw2.sources.ctgov import API as CTGOV_STUDY_API
+from ciw2.sources.http import UA, Fetched, fetch, public_url
 
 
 class SearchBlocked(RuntimeError):
@@ -113,12 +116,60 @@ class FetchUrlArgs(BaseModel):
     offset: int = Field(default=0, ge=0)
 
 
+CTGOV_STUDY_HOSTS = frozenset({"clinicaltrials.gov", "www.clinicaltrials.gov"})
+CTGOV_STUDY_PATH = re.compile(r"/study/(NCT\d{8})/?")
+SCHEME_DEFAULT_PORT = {"http": 80, "https": 443}
+
+
+def _study_document_url(url: str) -> tuple[str, str] | None:
+    """Map only an explicit current official study page to its authoritative JSON document.
+
+    History/query pages, other endpoints, lookalike hosts, credentials and nonstandard
+    ports keep the generic webpage path: a current document must never be presented as
+    proof of a past page state.
+    """
+    parsed = urlsplit(url)
+    try:
+        port = parsed.port
+    except ValueError:
+        return None
+    if (parsed.scheme not in SCHEME_DEFAULT_PORT or parsed.hostname not in CTGOV_STUDY_HOSTS
+            or parsed.query or '@' in parsed.netloc
+            or port not in (None, SCHEME_DEFAULT_PORT[parsed.scheme])):
+        return None
+    match = CTGOV_STUDY_PATH.fullmatch(parsed.path)
+    return (f"{CTGOV_STUDY_API}/{match.group(1)}", match.group(1)) if match else None
+
+
+def _verified_study_text(f: Fetched, nct: str) -> str:
+    """Accept only the complete current document for exactly the requested registry ID."""
+    try:
+        study = json.loads(f.text)  # The text handed to the caller must itself be the document.
+    except ValueError:
+        raise ValueError(f"ClinicalTrials.gov 未返回研究 JSON 文档（{f.url}），未作为研究证据") from None
+    protocol = study.get("protocolSection") if isinstance(study, dict) else None
+    identification = protocol.get("identificationModule") if isinstance(protocol, dict) else None
+    if not isinstance(identification, dict) or identification.get("nctId") != nct:
+        raise ValueError(f"ClinicalTrials.gov 研究文档登记号与请求不一致（{nct}），未作为研究证据")
+    return f.text
+
+
 @REGISTRY.register("fetch_url", "读取网页或文本PDF并登记原件与正文来源。PDF保留页码；长文用offset分页。", FetchUrlArgs)
 def _fetch_url(ctx: ToolContext, a: FetchUrlArgs) -> Any:
     if not a.url.startswith(("http://", "https://")):
         raise ValueError("只支持 http(s) URL")
-    f = fetch(ctx, a.url, kind=a.kind)
-    return {"source_url": f.url, "source_id": f.source_id, "text": f.text[a.offset:a.offset + 12000],
-            "offset":a.offset,"total_chars": len(f.text),
-            "next_offset":a.offset+12000 if a.offset+12000<len(f.text) else None,
-            "pages":f.meta.get('pages',[]),'text_parser_id':f.meta.get('text_parser_id')}
+    document = _study_document_url(a.url)
+    f = fetch(ctx, document[0] if document else a.url, kind="ctgov" if document else a.kind)
+    text = f.text
+    if document:
+        try:
+            text = _verified_study_text(f, document[1])
+        except ValueError:
+            # Keep the fetched source for audit, but a rejected document is not readable evidence.
+            (ctx.extra or {}).get("source_ids_read", set()).discard(f.source_id)
+            raise
+    return {"source_url": f.url, "source_id": f.source_id, "text": text[a.offset:a.offset + 12000],
+            "offset":a.offset,"total_chars": len(text),
+            "next_offset":a.offset+12000 if a.offset+12000<len(text) else None,
+            "pages":f.meta.get('pages',[]),'text_parser_id':f.meta.get('text_parser_id'),
+            **({"requested_url": public_url(a.url)} if document else {})}

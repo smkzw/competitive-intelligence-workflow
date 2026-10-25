@@ -1,0 +1,53 @@
+{
+  "scope": "BOUNDED_CURRENT_DOCUMENT_FETCH_FIX_NOT_FULL_REPORT_OR_M1",
+  "base_commit": "59cbcbfe2de718be6ee20357f56421663b43d01a",
+  "production_files": [
+    "src/ciw2/sources/websearch.py",
+    "tests/test_ctgov_document_fetch.py"
+  ],
+  "input_hashes": {
+    "src/ciw2/sources/websearch.py": "911b83b4b548612722e9daeea195110d96caf38309f84b55e7c9e4c431461228",
+    "tests/test_ctgov_document_fetch.py": "d46b1d0affb73b4c5ecd339aa1581790258ca50f6d02dd25e4a13299b1287c1f"
+  },
+  "RED": {
+    "failed": 11,
+    "passed": 10
+  },
+  "related_tests": {
+    "passed": 176,
+    "seconds": 2.98
+  },
+  "stable_gate": {
+    "passed": 1965,
+    "seconds": 15.42,
+    "ruff": "PASS",
+    "python_files": 244,
+    "javascript_files": 14,
+    "inputs_unchanged": 374,
+    "manifest_sha256": "5a826c7b231ed57d24eebd3c1ed6cb22a118bad6ecff5f99b3468c8841cbeec5"
+  },
+  "dispatch_audit": "PASS",
+  "route_selector": "codebuddy/codebuddy-cli/deepseek-v4.1-flash:max",
+  "fallback": null,
+  "served_endpoint_identity": "NOT_INDEPENDENTLY_ATTESTED",
+  "actual_production_source_probe": {
+    "status": "PASS_ACTUAL_CURRENT_DOCUMENT_PAGINATION_AND_SOURCE_IDENTITY",
+    "actual_nct": "NCT03181633",
+    "total_chars": 56380,
+    "source_digest": "35cc37468aee980a2f1eb9d444a046abc3aa95512d2f31401d3c0f26b4f2a639",
+    "pages_read": 5,
+    "network_observations": 1,
+    "cached_offset_reads": 4,
+    "model_calls": 0,
+    "facts_ingested": 0,
+    "entities_ingested": 0,
+    "observed_at": "2026-10-25T16:23:07.457207+00:00"
+  },
+  "old_sources_and_frozen_receipts": "UNCHANGED",
+  "historical_queries": "NOT_MAPPED_TO_CURRENT_DOCUMENT",
+  "source_binding": "actual API URL + raw/text CAS; requested URL in tool receipt",
+  "source66": "PENDING_NOT_ACCEPTED",
+  "ordinary_PNH_complete_report": "NOT_GENERATED",
+  "current71_installation": "NOT_RUN",
+  "clinical_visual_full_delivery": "NOT_ACCEPTED"
+}

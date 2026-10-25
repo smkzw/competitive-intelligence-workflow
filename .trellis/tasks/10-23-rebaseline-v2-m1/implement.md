@@ -883,3 +883,6 @@ ff69abd3已push并远端实核一致。20先完成离线安装/23资产/9Skill/C
 对61终态只读核发现33个CT.gov /study/文档均182字导航/词汇表，非研究正文。有界E03 worker只修websearch._fetch_url和一个成族测试，明确当前无query研究URL读取官方JSON，保留请求与实际URL/版本/分页，错误/历史query不伪造当前；不得科学摄取/改DB。保留生成route元数据，先RED再相关批；无网络/包安装。source66仍待终态，不轮询进度。
 
 - 68终态备份137文件，manifest5590353395ad50548d2031a3ad2dca496b5d32161bb0749132f65f49a05880ff；只在memory DB调用生产get_unit核1/3/4/5/6五批共150候选仍合格，2/7/8未成。实际第一批新成功后第二批失败，不是四旧资格key失效。原61/38主DB SHA不变，0模型/源。70对NCT03181633官方API单次200、56380字完整JSON/同ID，原件35cc37468aee980a2f1eb9d444a046abc3aa95512d2f31401d3c0f26b4f2a639；0摄取/模型，不倒证历史或宣称工具修复通过。私有重放命令见ciw-data/audit-pnh-recovery-terminal-20261026-68.py及ciw-data/scripts/smoke_ctgov_document-20261026-70.py；不重复实际取网。
+
+- 69已终态，实际CodeBuddy/deepseek-v4.1-flash selector/max、无fallback，endpoint身份未另证。只改websearch.py+新test_ctgov_document_fetch.py。原11RED/10PASS、1次错误网络计数假设/SIM117失败保留；最终176相关PASS2.98s。owner读全部定义/测试/差分/原红输出；四份派发输入SHA不变，audit-execution已PASS，无重写旧47/54审计。
+- 固定71完整374输入，manifest5a826c7b231ed57d24eebd3c1ed6cb22a118bad6ecff5f99b3468c8841cbeec5；一次1965PASS15.42s、Ruff、244Python600/80、14JS及SHA不变。72 actual生产_fetch_url真实读同原study，56380字符5分页/1network+4cache，同API/raw/text/source/requested URL，0模型/事实/实体摄取，374运行字节不变。旧shell/历史query/源与冻结证据不改。此为工具接受，不是PNH全流程/M1医学/视觉；64安装只验60。下一步白名单commit/push绑定字节，再继续未终态66来源核验与有新依据后的普通研究恢复。
