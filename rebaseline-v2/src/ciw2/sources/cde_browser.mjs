@@ -74,7 +74,8 @@ try {
   }
   phase = "query";
   await watch(page);
-  await page.click("loc=role:button[name='查询']",{label:"search public CDE records"});
+  await page.click('button[onclick="defaultObj.methods.getAcceptList()"]',
+    {label:"search public CDE records",timeout:30000});
   await settled(page);
   let id = await pagerId(page);
   if (id) {

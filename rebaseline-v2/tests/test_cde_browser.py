@@ -75,6 +75,15 @@ def test_cde_explicit_empty_ui_without_pagination_is_not_a_fabricated_zero_foote
     assert '共 0 条' not in ctx.cas.get_text(source['text_digest'])
 
 
+def test_failed_query_reports_safe_phase_without_claiming_zero(ctx,monkeypatch):
+    marker={'status':'failed','phase':'query','error_type':'ElementResolutionError'}
+    monkeypatch.setattr(china_browser,'_invoke',lambda *a,**k:(
+        'CIW_CHINA_END:'+json.dumps(marker),True))
+    with pytest.raises(china_browser.BrowserFailed,match='query.*ElementResolutionError'):
+        cde_browser.browser_search(ctx,'原药','drug_name')
+    assert ctx.db.query('SELECT * FROM sources')==[]
+
+
 def test_generic_production_tool_adopts_only_provisional_drug_labels(ctx,monkeypatch):
     def blocked(*a,**k):
         raise china.RegistryBlocked('public direct interface unavailable')

@@ -1,0 +1,75 @@
+{
+  "scope": "PRIMARY_SOURCE_ELIGIBILITY_PROGRESS_NOT_REFERENCE_SEAL_OR_MEDICAL_APPROVAL",
+  "qualification_sha256": "f10920c3958e50a473c5a53ee3fa436bff670e154d1792a72427f7b73009c242",
+  "entries": [
+    {
+      "ref_id": "IGAN-010",
+      "canonical_raw": "Felzartamab",
+      "positive_innovation_state": "supported_issuer_potential_first_in_class_claim",
+      "owner_status": "CORE_CANDIDATE_NOT_FINAL_REFERENCE",
+      "regulatory_class_separate": "UNKNOWN",
+      "interpretation": "Preserve potential; this is issuer developmental class, not proven first-in-class efficacy, regulatory innovative code or new approval. Discovery TJ202 string is not an automatic alias merge."
+    },
+    {
+      "ref_id": "IGAN-017",
+      "canonical_raw": "Mezagitamab",
+      "positive_innovation_state": "supported_issuer_nme_category",
+      "owner_status": "CORE_CANDIDATE_NOT_FINAL_REFERENCE",
+      "regulatory_class_separate": "UNKNOWN",
+      "interpretation": "Issuer explicitly places the molecule in NME milestones; Phase3startFY2024 remains a contemporaneous plan, not proof it occurred or a current phase. No Chinese registration code inferred."
+    }
+  ],
+  "sources": {
+    "biogen": {
+      "url": "https://investors.biogen.com/news-releases/news-release-details/biogen-present-new-data-across-nephrology-portfolio-including",
+      "method": "normal public browser after directHTTP403",
+      "text_sha256": "d0f3248f2044dff846b97df8291ba44e9b212e7017a295d15e742ef02301b13d",
+      "quote": "Felzartamab is a potential first-in-class therapeutic candidate",
+      "char_offset": 7383
+    },
+    "takeda": {
+      "url": "https://assets-dam.takeda.com/image/upload/v1715307386/Global/Investor/Financial-Results/FY2023/Q4/qr2023_q4_p01_en.pdf",
+      "raw_sha256": "7531413757720fb0d6d90ec7272c3e659f02ff9de5e2fe537aa7d7afa6b6a459",
+      "text_sha256": "37158c835b820efd336f39d5b3c4c476e8fd0b7278d1096e6ea1cd6fff32233b",
+      "pdf_page": 13,
+      "page_image_sha256": "5e2ddbad8fcd0e6a1d9102261e7e5d35e00fb26c5ce3401313cc3c217b84f08e",
+      "owner_actual_page_image_read": true,
+      "visual_relation": "Right-hand MAJOR GLOBAL NME MILESTONES section, third row right: mezagitamab (TAK-079), distinct from left NME APPROVALS and LIFE CYCLE APPROVALS sections.",
+      "text_locators": [
+        {
+          "quote": "MAJOR GLOBAL NME MILESTONES",
+          "char_offset": 35539,
+          "byte_offset": 35808,
+          "line": 324
+        },
+        {
+          "quote": "mezagitamab (TAK-079)",
+          "char_offset": 37949,
+          "byte_offset": 38218,
+          "line": 341
+        }
+      ]
+    }
+  },
+  "scope_projection_first_pass": {
+    "scope": "MEMORY_ONLY_CURRENT_PROJECTION_VS_CURRENT_SEARCH_SNAPSHOTS_NO_MODEL_SOURCE_OR_PRODUCT_DB_WRITES",
+    "drug_candidates": 211,
+    "project_ncts": 217,
+    "per_nct_projection_studies": 17,
+    "project_drugs_with_projection": 38,
+    "current_search_urls": 20,
+    "project_ncts_present_in_current_search_snapshots": 217,
+    "bulk_studies_absent_from_projection": 200,
+    "entity_rows_unchanged": true,
+    "runtime_data_dir_not_created": true,
+    "model_calls": 0,
+    "network_calls": 0
+  },
+  "remaining": [
+    "86 targeted same-session completion for bulk sources and portable tests",
+    "104 fresh one-name source chain review pending",
+    "Complete reference unique-unit/country/indication qualification and denominator not yet closed"
+  ],
+  "production_facts_adopted": 0,
+  "recall_computed": false
+}

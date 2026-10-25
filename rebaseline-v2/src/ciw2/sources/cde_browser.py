@@ -112,7 +112,14 @@ def browser_search(ctx: ToolContext, query: str, query_kind: str) -> dict[str, A
     if not pages:
         if end.get('status') in {'blocked','user_control'}:
             raise china_browser.BrowserBlocked('CDE浏览器空间不可用或需要用户交接')
-        raise china_browser.BrowserFailed('CDE浏览器未取得可核验的公开目录')
+        phase = end.get('phase')
+        if phase not in {'start','navigate','filters','query','page_size','pages'}:
+            phase = 'unknown'
+        error_type = end.get('error_type')
+        if error_type not in {'Error','ElementResolutionError','TimeoutError','PageNavigationTimeoutError',
+                              'ElementNotFoundError'}:
+            error_type = 'Error'
+        raise china_browser.BrowserFailed(f'CDE浏览器未取得可核验的公开目录（{phase}: {error_type}）')
     try:
         parse_capture(pages,filters=filters,allow_partial=True)
         pages, recovery = merge_capture(prior, pages, end)

@@ -68,6 +68,7 @@ Service复用标准库Condition/deque及一个执行锁，在同一服务进程�
 - C标量投影汇集每个字段的完整observations，唯一已核实语义值才进入概览数值轴；待核候选不遮盖已核实值，多值并列与完整来源均保留。引用可沿supersedes只读追溯历史值、原文及版本，含循环防护，不改历史记录。不新增事实库、审批流或缓存计划框架。
 - `coverage`：每条检索路线的状态（ok/failed/blocked）、命中、新增实体。
 - 发现工具逐批保存登记原名与药物—试验关系，最终模型提交失败不抹掉已读来源；不据此推断创新属性或监管身份。
+- 范围复核前，scope_context只读本项目已链接研究及孤立研究的当前CT.gov来源：源URL经既有source_by_url选当前版本，CAS原件SHA/精确NCT/JSON路径核对后提取conditions、studyType、primaryPurpose、healthyVolunteers。逐研究和批量检索JSON共用每次调用的轻量索引；相同原观察归组但全部研究/来源定位保留，冲突不强行裁决，false与缺字段分开。投影不写DB或实体attrs，不改变范围规则/预算；完整候选输入显式预算失败，不截断。新增helper字节纳入scope.CODE_HASH，嵌套source_id/URL进入既有批回执；无关源不使该批失效。它是复核输入，不是已采用临床事实或创新分类。
 - 同一RunContext的相同GET复用已抓CAS字节；新上下文再次调用fetch时不沿用旧HTTP缓存。已完成单元的恢复回执是固定来源复用，不声称发生新HTTP核查；新调研run不沿用上次单元回执。工具结果授权仍限定当前Skill。
 - CT.gov代码事实按来源ID+解析器及其语义/分级代码hash形成snapshot；事实context保留stamp，links的ctgov-current仅作同项目/研究的可变当前指针（不是临床关系推断）。全量解析/源hash及登记号核对后，一个DB.tx完成实体元数据、事实、指针和append-only source_activation回执；失败完整回滚并记录source_rejection。源/事实不删改，普通登记版本不生成supersedes或科学撤回。current_facts仅按指针过滤code:ctgov；无指针的旧项目保持原读取行为，论文/LLM事实独立。
 - 沿用links而不是把指针混进entities.attrs，是owner的最小实现选择；共同读取在DB中，其他消费者不各自解释。source_by_url优先采用最新网络/导入观察，不把缓存读取变成新鲜度；无观察的历史来源继续旧排序兼容。M5仍须完成历史资格、旧源延迟重放策略及跨来源消费冲突，不由当前指针自动解决。

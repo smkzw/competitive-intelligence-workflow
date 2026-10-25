@@ -1,0 +1,136 @@
+{
+  "scope": "CDE_QUERY_COMPONENT_REAL_SOURCE_AND_RELATED_REGRESSION_NOT_FULL_M1_M2_OR_RC",
+  "failure90": {
+    "phase": "query",
+    "error_type": "ElementResolutionError",
+    "raw_marker_sha256": "5cc38de2e4981cbc4d250acbdb2893be1739f68e706a651796a516848c320860"
+  },
+  "initial_selector_only_actual93": "FAILED; exact source failure retained, selector alone did not close real defect",
+  "fix": "Exact observed acceptance-section action with explicit30s bounded native action readiness; whitelist safe failure phase/type rather than ambiguous no-results diagnostic",
+  "root_precision": "Many same-name hidden section controls were observed. Historical transient action-resolution micro-timing is not independently proved; do not claim selector change alone fully explained all prior failures.",
+  "actual96": {
+    "scope": "ACTUAL_REPAIRED_PRODUCTION_CDE_QUERY_NOT_FULL_PROJECT_ACCEPTANCE",
+    "query": "TJ202",
+    "model_calls": 0,
+    "cde_code_hash": "c538fb37c55ee3a5d86ec6ff2596fbaf59925622e6618058b2c55f060bd17b6c",
+    "status": "CAPTURED_SOURCE_ONLY",
+    "capture": {
+      "section": "acceptance",
+      "filters": {
+        "year": "",
+        "drug_name": "TJ202",
+        "applicant": "",
+        "acceptance_number": "",
+        "drug_type": "",
+        "application_type": ""
+      },
+      "page_size": 50,
+      "total_pages": 1,
+      "total_records": 3,
+      "pages_read": [
+        1
+      ],
+      "pending_pages": [],
+      "complete": true,
+      "results": [
+        {
+          "acceptance_number": "JXSL1900127",
+          "drug_name": "注射用TJ202",
+          "drug_type": "治疗用生物制品",
+          "application_type": "进口",
+          "registration_class": "",
+          "company_text": "I-MAB BIOPHARMA HONGKONG LIMITED;",
+          "handled_date_text": "2019-11-26",
+          "row_number": 1,
+          "page": 1,
+          "source_url": "https://www.cde.org.cn/main/xxgk/listpage/9f9c74c73e0f8f56a8bfbc646055026d",
+          "raw_cells": [
+            "1",
+            "JXSL1900127",
+            "注射用TJ202",
+            "治疗用生物制品",
+            "进口",
+            "",
+            "I-MAB BIOPHARMA HONGKONG LIMITED;",
+            "2019-11-26"
+          ],
+          "source_id": "src_ffe5e346f5f9"
+        },
+        {
+          "acceptance_number": "JXSL1800027",
+          "drug_name": "注射用TJ202",
+          "drug_type": "治疗用生物制品",
+          "application_type": "进口",
+          "registration_class": "",
+          "company_text": "I-MAB BIOPHARMA HONGKONG LIMITED;",
+          "handled_date_text": "2018-09-05",
+          "row_number": 2,
+          "page": 1,
+          "source_url": "https://www.cde.org.cn/main/xxgk/listpage/9f9c74c73e0f8f56a8bfbc646055026d",
+          "raw_cells": [
+            "2",
+            "JXSL1800027",
+            "注射用TJ202",
+            "治疗用生物制品",
+            "进口",
+            "",
+            "I-MAB BIOPHARMA HONGKONG LIMITED;",
+            "2018-09-05"
+          ],
+          "source_id": "src_ffe5e346f5f9"
+        },
+        {
+          "acceptance_number": "JXSL1800024",
+          "drug_name": "注射用TJ202",
+          "drug_type": "治疗用生物制品",
+          "application_type": "进口",
+          "registration_class": "",
+          "company_text": "I-MAB BIOPHARMA HONGKONG LIMITED;",
+          "handled_date_text": "2018-08-31",
+          "row_number": 3,
+          "page": 1,
+          "source_url": "https://www.cde.org.cn/main/xxgk/listpage/9f9c74c73e0f8f56a8bfbc646055026d",
+          "raw_cells": [
+            "3",
+            "JXSL1800024",
+            "注射用TJ202",
+            "治疗用生物制品",
+            "进口",
+            "",
+            "I-MAB BIOPHARMA HONGKONG LIMITED;",
+            "2018-08-31"
+          ],
+          "source_id": "src_ffe5e346f5f9"
+        }
+      ],
+      "source_id": "src_ffe5e346f5f9",
+      "query_kind": "drug_name"
+    },
+    "source_files": {
+      "src/ciw2/sources/cde_browser.py": "42627a8fd9a0f24e46902b8dd515115f13a12c72d024e1043374fe085cd0841f",
+      "src/ciw2/sources/cde_browser.mjs": "cc50f9077675ca0a67e12b54bf2b6fba73c5c65c3d5cbe24ab4448f84e215406"
+    }
+  },
+  "regression": {
+    "red": "2 actual production-driver/error tests failed in0.18s before changes",
+    "related_first": "39PASS1.83s; actual93 still failed, not acceptance",
+    "related_final_output_sha256": "c056adde984436b47687916002a433141a5a70e767b34706268299c48fd5ac82",
+    "final_text": ".......................................                                  [100%]\n39 passed in 1.05s"
+  },
+  "alxn95": {
+    "qualification_sha256": "e0985d0973552e9ed44ed4e9b243a222311a61e7b6a99e3ba1e9b3292be82169",
+    "source_id": "src_6e4cc3646ae0",
+    "acceptance_number": "JXHL2200120",
+    "drug_name": "ALXN2050片",
+    "drug_type": "化药",
+    "registration_class": "1",
+    "definition": "NMPA2020 chemicalClass1 effective2020-07-01; filing2022-05-25",
+    "core_reference_not_sealed": true
+  },
+  "limitations": [
+    "TJ202 original class empty preserved, not inferred as1 or biosimilar",
+    "Alias search lead not automatic Felzartamab identity merge",
+    "Only exact source query component verified; full clinical project and ordinary pipeline still pending",
+    "Original failed records and sources not rewritten"
+  ]
+}

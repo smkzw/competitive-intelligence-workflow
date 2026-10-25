@@ -19,6 +19,9 @@ const page={goto:async()=>{current=1;sequence='化药';taskType='IND';},waitForS
   selectOption:async()=>{current=1;},fill:async(s,v)=>{if(s.includes('laypage-skip'))jump=Number(v);},
   click:async(s)=>{
     clicks.push(s);
+    if(input.strictAcceptance && s==="loc=role:button[name='查询']"){
+      const e=new Error('Multiple CDE section buttons');e.name='ElementResolutionError';throw e;
+    }
     if(s.includes('laypage-next'))current++;
     else if(s.includes('laypage-btn')){current=jump;jumps.push(jump);}
     else if(s.includes('layui-form-select')){
@@ -30,7 +33,7 @@ const page={goto:async()=>{current=1;sequence='化药';taskType='IND';},waitForS
         if(value)taskType=value;
       }
     }
-    else if(!s.includes('查询')&&!s.includes('审评任务公示'))throw Error('Unexpected click '+s);
+    else if(!s.includes('查询')&&!s.includes('审评任务公示')&&!s.includes('getAcceptList'))throw Error('Unexpected click '+s);
   },evaluate:async(fn,arg)=>{
     const code=fn.toString();
     if(code.includes('MutationObserver')||code.includes('Observer.disconnect')||code.includes('Observer?.disconnect'))return;
@@ -67,17 +70,25 @@ def pages(section):
     return result
 
 
-def run_driver(section,captures,resume):
+def run_driver(section,captures,resume,*,strict_acceptance=False):
     node=shutil.which('node')
     if not node:pytest.skip('Node unavailable: real collector protocol not tested')
     source=Path(__file__).parents[1]/'src/ciw2/sources'/('cde_review_browser.mjs' if section.startswith('new_review_task') else 'cde_browser.mjs')
     config={'space':63,'filters':captures[0]['filters'],'resume':resume}
-    result=subprocess.run([node,'-e',DRIVER,str(source)],input=json.dumps({'pages':captures,'config':config}),
+    result=subprocess.run([node,'-e',DRIVER,str(source)],input=json.dumps({
+        'pages':captures,'config':config,'strictAcceptance':strict_acceptance}),
                           capture_output=True,text=True,check=False,timeout=10)
     assert result.returncode==0,result.stderr
     out=json.loads(result.stdout)
     raw,end=_read_output('\n'.join(out['messages']))
     return out,raw,end
+
+
+def test_acceptance_query_does_not_resolve_hidden_section_buttons():
+    # Actual CDE has 20+ named query buttons, only one acceptance action.
+    _,captured,end=run_driver('acceptance',pages('acceptance'),None,strict_acceptance=True)
+    assert end['status']=='ok',end
+    assert sum(len(p['rows'])for p in captured)==101
 
 
 @pytest.mark.parametrize('section',['acceptance','new_review_task','new_review_task_biological'])

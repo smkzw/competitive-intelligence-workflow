@@ -1,0 +1,82 @@
+{
+  "scope": "OWNER_CODE_ACCEPTANCE_WITH_EXPLICIT_WORKFLOW_FORMAT_DEVIATION_NOT_PRODUCT_RELEASE",
+  "product_code": "ACCEPTED_AFTER_OWNER_REVIEW_AND_DECISIVE_CHECKS",
+  "workflow_audit": "FAIL_FORMAT_NOT_REWRITTEN",
+  "workflow_errors": [
+    "unregistered worker prompt: worker_01_recovery01.md",
+    "worker_01: output is not bound to the runner receipt"
+  ],
+  "workflow_explanation": "Follow-up was named recovery01 instead of guard worker_01_followup_01 format; generic audit also selected latest follow-up stdout for original output. Both actual output SHA/session/route checked independently; do not rewrite files or call full mechanism PASS.",
+  "owner_removed": "Self-source private-path string assertion removed; actual out-of-tree family passed25 with tracked Skills/source and no private inputs.",
+  "owner_related_tests": "186PASS3.45s/Ruff",
+  "full_gate": "1992PASS14.68s/Ruff/246Python/14JS;382inputsunchanged during gate",
+  "real_data": {
+    "scope": "MEMORY_ONLY_CURRENT_PROJECTION_VS_CURRENT_SEARCH_SNAPSHOTS_NO_MODEL_SOURCE_OR_PRODUCT_DB_WRITES",
+    "full_task_count": 9,
+    "full_task_chars": [
+      36907,
+      46260,
+      44212,
+      53109,
+      29314,
+      59835,
+      56544,
+      51257,
+      35791
+    ],
+    "all_candidate_ids_preserved": true,
+    "largest_candidate_chars": 21717,
+    "drug_candidates": 211,
+    "project_ncts": 217,
+    "per_nct_projection_studies": 175,
+    "project_drugs_with_projection": 156,
+    "current_search_urls": 20,
+    "project_ncts_present_in_current_search_snapshots": 217,
+    "bulk_studies_absent_from_projection": 42,
+    "entity_rows_unchanged": true,
+    "runtime_data_dir_not_created": true,
+    "model_calls": 0,
+    "network_calls": 0
+  },
+  "orphan_context": {
+    "scope": "MEMORY_ONLY_ORPHAN_CONTEXT_TARGET_CLOSURE",
+    "orphan_trials": 42,
+    "orphan_nct_count": 42,
+    "projected_orphan_ncts": 42,
+    "all_orphan_ncts_in_context": true,
+    "no_new_drug_binding_or_identity": true,
+    "model_or_network_calls": 0,
+    "original_backups_read_only": true
+  },
+  "frozen_runtime_manifest_sha256": "3731fb0e20ad8abe70655a4e2a7af4f712d1f57975b682b141dd4afeea3bbe0c",
+  "runner_results": [
+    {
+      "output_sha256": "b7120a96d20adbc9f99bb9409c8d4eadfa63281349249c08c32812b21076d64c",
+      "duration_seconds": 575.604,
+      "tools": 112,
+      "provider": "codebuddy-cli",
+      "model": "deepseek-v4.1-flash",
+      "effort": "max",
+      "fallback": null
+    },
+    {
+      "output_sha256": "32802177b51ed4df29810624a3ddf6ee575187a13cba8543628f769108f8750a",
+      "duration_seconds": 223.672,
+      "tools": 21,
+      "provider": "codebuddy-cli",
+      "model": "deepseek-v4.1-flash",
+      "effort": "max",
+      "fallback": null
+    }
+  ],
+  "gate_manifest_sha256": "e9b2780aeb1a0cfab14bc6fc4f56aa4bd337faa2ebb79a40fdf8614452f915ce",
+  "name_chain_104": {
+    "owner_decision_sha256": "ec7b7756f96d1648f6085a33345183de34adefd5c5988c8728b2099049b4147b",
+    "accepted": "ingredient-name association only",
+    "original7_source_hashes_checked": true,
+    "owner_actual_page7_viewed": true,
+    "reviewer_pdf_and_full_registry_limitations_preserved": true,
+    "initial_repeated_citation_page6_locator_corrected_in_new_record": true
+  },
+  "full_M1_or_RC": false
+}

@@ -1,6 +1,7 @@
 """Complete, bounded scope review with literal candidate identity and same-run recovery.
 
 Drug review stays on drug entities. Trials with no drug parent are a separate candidate_kind='trial' pass.
+Each candidate carries only exact source-bound registry observations read from this project's CAS.
 """
 from __future__ import annotations
 
@@ -13,11 +14,12 @@ from ciw2.domain.identity import CODE_HASH as IDENTITY_CODE_HASH
 from ciw2.domain.identity import literal_names, name_key, name_owners
 from ciw2.domain.models import ScopeResult
 from ciw2.harness.agent import HARNESS_RULES
-from ciw2.pipeline import stage_versions, tool_versions
+from ciw2.pipeline import scope_context, stage_versions, tool_versions
 from ciw2.pipeline.context import RunContext
 from ciw2.pipeline.recovery import get_unit, put_unit
 
-CODE_HASH = hashlib.sha256(Path(__file__).read_bytes() + IDENTITY_CODE_HASH.encode()).hexdigest()
+CODE_HASH = hashlib.sha256(Path(__file__).read_bytes() + Path(scope_context.__file__).read_bytes()
+                           + IDENTITY_CODE_HASH.encode()).hexdigest()
 TASK_CHARS = 60000
 BATCH_SIZE = 30
 RECEIPT_LAYOUT = 'scope-batch-dependencies-v1'
@@ -190,7 +192,8 @@ def _review(rc: RunContext, indication: str, entities: list[dict[str, Any]], *,
             'coverage': _coverage(rc)}
     if candidate_kind:
         base['candidate_kind'] = candidate_kind
-    tasks = _tasks(base, entities)  # Validate every complete input before the first model call.
+    # Validate every complete input before the first model call.
+    tasks = _tasks(base, scope_context.attach(rc, entities))
     output = _apply(rc, tasks, empty=not entities, bounded=candidate_kind is not None)
     if candidate_kind:
         output['candidate_kind'] = candidate_kind

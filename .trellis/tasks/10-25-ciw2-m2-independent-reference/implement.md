@@ -1,3 +1,25 @@
+## 2026-10-26 109当前开发门/110名称链/114真实验证
+
+86/100已终态，同DS4.1flash:max无备用，共799.276s/133工具（非计费），owner完整源码/测试审阅后采产品修改。175关联NCT+42孤立NCT全覆盖，211候选9完整包max59835/60k，投影只读；25out-of-tree无私件PASS0.39s、186相关PASS3.45s，109一次稳定1992PASS14.68s/Ruff/246Python/14JS/382检查输入稳定。source gate manifest e9b2780a…，111仅120源码/Skill/资产1.93MB冻结/manifest3731fb0e…，无新venv或数据库副本。
+
+机制audit-execution仍FAIL：续接提示词命名recovery01非guard followup登记形式，同时latest log被误配原output；原件/失败保留，不改历史造PASS。owner逐两报告实际SHA/同session/批准路线核对，code采用与流程格式缺陷分开。后续先遵循guard明确续接命名/声明/role，不用预检替代dispatch审计。
+
+104单对象独立会商已终态SUPPORTED_LIMITED，265.818s/15工具/11唯一assistantID、DS4.1flash:max/no fallback，7原源owner SHA核/真实PPT第7页已目视、完整registry含Zigakibart亚研究已另读。110只采阿曲生坦-atrasentan成分名来源链，不采R2/R3扩张、公式证明、独家推唯一制造商、概率自信或读者warning-box建议。重复引文初global index误指第6页，保留原owner回执，新增corrected逐第7页范围定位；原源/66/77不改，参照/分母仍未封。
+
+114已实际启动child26876/native86239，固定111同原30候选/46260字元，GLM5.3flash→DGXdeepseek→qwen，凭据仅子进程env。复用82已提交DB/CAS、88不可变备份保全，无上游重跑、seed、整stage假成功；现在kernel等待，不轮询。不提前说模型省量/普通M1已过。当前剩余M1–M6按03_PLAN/STATUS继续，未暂停、非RC。
+
+## 2026-10-26 101–105指定类别及名称链
+
+101原Takeda两文件HTTP200，原PDF第13页NME里程碑列mezagitamab，owner实际原渲染核读；只采类别，Phase3FY2024保留当时计划。Biogen直HTTP403未绕过，正常Ego8新p2能读公开正文，102原可见文字/URL/精确quote/hash固定，103两项发行人级资格层新增，保留potential/不当监管类或临床优越。未写生产、封分母/算召回。
+
+选择conference：阿曲生坦跨语名称链有实质解释不确定，仅一个新上下文C03审阅7原NHSA/FDA/完整NCT文件，24turn/7200s；不看生产/owner裁决，不重做全8项/全目录。104 live DS4.1flash:max及声明fallback，20958/native6803实际启动，kernel一次退出等待；首preflight因app与ciw-data层级错返回missing，修显式workspace后PASS才派发，历史未掩盖。同模型族曾74，新上下文不等新模型族。结果未返不当通过。
+
+## 2026-10-26 92–98来源根因及当前计划
+
+92由owner直接执行：既有浏览器由owner独占，明确一组真实失败，无需另增执行/会商。90回执实际query/ElementResolutionError；两个生产driver/错误诊断RED。特定受理按钮单改93实际仍失败保留，再按现有30s等待边界明确原生action timeout；96普通browser_search完整取得TJ202三原行，类空不补。39相关PASS/Ruff/JS只作组件门，完整开发宽门等86稳定后一次运行。历史微时序未独立证明，不写“所有失败都是同名按钮”。
+
+95实际ALXN2050/CDE JXHL2200120化药1与官方2020分类定义正向支持，源类与适应症/身份/MAH分别核。87/95仅新增来源资格，不重写66/77旧件/最终分母。cc440cf2记录已推并核远端，当前产品源未误提交。03替换当前在途清单，04测试规则按用户要求成族/里程碑，来源原件/失败保全。下一安全动作：等86kernel退出终态，不查其进度；验代码+真实反例+一次稳定宽门，再实际模型及普通C。
+
 ## 2026-10-26 82终态/87核源/86执行
 
 82原第二批30候选真实复核成功，GLM8+Qwen1/1114.86s，完整缓存，无上游/科学表重写；26相关不是26核心。88标准备份147文件/manifest4e7dc26a…；保持原61失败。84/87真实CDE行及官方原PDF表11支持CM313/CM338治疗用生物class1，不从多受理扩计产品。89原ALXN2050完整1行另存，普通collector故障未关闭。M1/M2尚未通过。公共精简证据：rebaseline-v2/docs/evidence/20261026-scope-unit-and-cde-class.json。
