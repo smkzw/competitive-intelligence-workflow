@@ -79,8 +79,8 @@ class ChinaArgs(BaseModel):
     route_id: str = Field(description="如 china:cde:indication")
     query_kind: Literal['keyword','drug_name','company','acceptance_number','indication','target'] = Field(
         default='keyword',description='CDE公开目录需明确药名、企业或受理号；不能将适应症/靶点误作药名')
-    cde_section: Literal['acceptance','new_review_task_chemical_ind','new_review_task_biological_trial'] = Field(
-        default='acceptance',description='CDE受理目录或化药IND/生物临床试验申请新报序列；新报需精确受理号')
+    cde_section: Literal['acceptance','new_review_task_chemical_ind','new_review_task_biological_trial','priority_included'] = Field(
+        default='acceptance',description='CDE受理目录、化药IND/生物临床试验申请新报序列或纳入优先审评目录；后三者需精确受理号')
 
 
 @REGISTRY.register("china_registry_search",
@@ -107,8 +107,8 @@ def _china(ctx: ToolContext, a: ChinaArgs) -> Any:
                     ctx.db.log_coverage(ctx.run_id,f'{a.route_id}:browser','china',a.query,'ok',hits=len(captured['results']))
                 return {**captured,'mode':'browser','persisted':True,'registry':reg['label'],'count':len(captured['results'])}
         if a.registry == 'cde' and ctx.settings.china_ego_space_id is not None:
-            from ciw2.sources import cde_browser, cde_review_browser
-            adapter=cde_browser if a.cde_section=='acceptance' else cde_review_browser
+            from ciw2.sources import cde_browser, cde_priority, cde_review_browser
+            adapter={'acceptance':cde_browser,'priority_included':cde_priority}.get(a.cde_section,cde_review_browser)
             try:
                 captured = (adapter.browser_search(ctx,a.query,a.query_kind,section=a.cde_section)
                             if a.cde_section=='new_review_task_biological_trial'
@@ -120,7 +120,8 @@ def _china(ctx: ToolContext, a: ChinaArgs) -> Any:
                 if a.cde_section=='acceptance':
                     cde_browser.persist_candidates(ctx,captured,a.route_id)
                 else:
-                    captured['linked_refs']=cde_review_browser.persist_refs(ctx,captured,a.route_id)
+                    captured['linked_refs']=cde_review_browser.persist_refs(ctx,captured,a.route_id,
+                        ref_attribute='cde_priority_refs' if a.cde_section=='priority_included' else 'cde_review_refs')
                 ctx.db.log_coverage(ctx.run_id,f'{a.route_id}:browser','china',a.query,'ok',hits=len(captured['results']))
                 persisted=a.cde_section=='acceptance' or captured['linked_refs']>0
                 return {**captured,'mode':'browser','persisted':persisted,'registry':reg['label'],'count':len(captured['results'])}

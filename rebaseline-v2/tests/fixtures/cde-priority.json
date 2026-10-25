@@ -1,0 +1,62 @@
+{
+  "url": "https://www.cde.org.cn/main/xxgk/listpage/9f9c74c73e0f8f56a8bfbc646055026d",
+  "section": "priority_included",
+  "filters": {
+    "acceptance_number": "",
+    "drug_name": "",
+    "applicant": ""
+  },
+  "headers": [
+    "序号",
+    "受理号",
+    "药品名称",
+    "注册申请人",
+    "承办日期",
+    "申请日期",
+    "公示日期",
+    "状态",
+    "是否为罕见病药物"
+  ],
+  "rows": [
+    [
+      "1",
+      "JXHS2600124",
+      "玛伐凯泰胶囊",
+      "百时美施贵宝（中国）投资有限公司",
+      "2026-10-10",
+      "2026-09-18",
+      "2026-10-12",
+      "已纳入",
+      "是"
+    ],
+    [
+      "2",
+      "JXHS2600125",
+      "玛伐凯泰胶囊",
+      "百时美施贵宝（中国）投资有限公司",
+      "2026-10-10",
+      "2026-09-18",
+      "2026-10-12",
+      "已纳入",
+      "是"
+    ],
+    [
+      "3",
+      "JXHS2600126",
+      "玛伐凯泰胶囊",
+      "百时美施贵宝（中国）投资有限公司",
+      "2026-10-10",
+      "2026-09-18",
+      "2026-10-12",
+      "已纳入",
+      "是"
+    ]
+  ],
+  "pagination": {
+    "current": 1,
+    "page_size": 3,
+    "text": "共 3 条"
+  },
+  "observed_at": "2026-10-25",
+  "fixture_note": "First three genuine captured public rows; pagination is explicitly synthetic for offline adversarial checks, not a full source dump."
+}

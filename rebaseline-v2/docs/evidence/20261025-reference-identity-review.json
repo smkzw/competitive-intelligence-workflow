@@ -1,0 +1,48 @@
+{
+  "scope": "FRESH_CONTEXT_M2_REFERENCE_IDENTITY_REVIEW_AND_OWNER_ADJUDICATION_NOT_DENOMINATOR_FREEZE",
+  "report_sha256": "3200f92a3e54a1e5b7b8866df45458f694dcad88496369cf60a8b966f90450f7",
+  "actual_route": "grok/grok-build/grok-4.7/high",
+  "actual_model_usage": "grok-4.7-build",
+  "session_id": "946e242d-6d44-4b54-accf-b9653a9ca1bb",
+  "seconds": 805.613,
+  "turns": 25,
+  "returncode": 0,
+  "fallback": null,
+  "disposition": "REVISE",
+  "independence": "New clean context; same Grok model family as collector, not independent model-family opinion; production outputs not provided, full tool-boundary audit still limited.",
+  "issue_counts": {
+    "High": 8,
+    "Medium": 6,
+    "Low": 1
+  },
+  "owner_adjudication": [
+    {
+      "root": "Unresolved alias families occupy duplicate entry slots and stale source-gap prose contradicts saved pages",
+      "decision": "Adopt; repair new revision, never rewrite originals or freeze summed127/57/28."
+    },
+    {
+      "root": "TLL-018 BE-only arm split, explicit GLR1044 biosimilarity",
+      "decision": "Adopt source-grounded eligibility correction; retain source records."
+    },
+    {
+      "root": "IBI3027/SB12/QL2108/GS101 classification from equivalence/comparator wording",
+      "decision": "Require explicit product classification or keep unresolved. Equivalence study design alone does not establish biosimilarity/non-innovation."
+    },
+    {
+      "root": "Regimen versus component, disease-country and control-arm co-occurrence",
+      "decision": "Retrieve only disputed full official trial records; saved minimal dumps omit armGroups. Do not infer roles from arrays/pharmacology; retain actual granularity."
+    },
+    {
+      "root": "Sponsor roles from unrelated trial aggregates",
+      "decision": "Adopt role correction. Owner checked NCT05624112 and NCT05680298 lead sponsors are Sanofi; no inferred MAH."
+    },
+    {
+      "root": "D23 patient formulation, early healthy-phase programs",
+      "decision": "Hold scientific eligibility pending evidence; neither auto-exclude ordinary budesonide nor auto-certify innovation."
+    }
+  ],
+  "follow_on": "One bounded source-only repair worker54559 started after preflight0warnings,64turn/7200s/no fallback; new identity-revision-01 only; no full-discovery reset or production comparison.",
+  "denominator_accepted": false,
+  "recall_computed": false,
+  "remaining": "Alias/form/regimen/classification/China-scope source closure and owner freeze."
+}

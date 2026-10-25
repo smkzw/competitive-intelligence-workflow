@@ -18,7 +18,7 @@ def source_hashes(module: Path) -> dict[str,str]:
     files=('config.py','sources/china.py','sources/china_capture.py','sources/china_browser.py',
            'sources/china_browser.mjs','sources/http.py','sources/cde_browser.py',
            'sources/cde_browser.mjs','sources/cde_capture.py','sources/cde_resume.py','sources/cde_review_browser.py',
-           'sources/cde_review_browser.mjs','sources/cde_review_capture.py')
+           'sources/cde_review_browser.mjs','sources/cde_review_capture.py','sources/cde_priority.py','sources/cde_priority.mjs')
     return {name:hashlib.sha256((module/name).read_bytes()).hexdigest() for name in files}
 
 
@@ -28,7 +28,7 @@ def main() -> int:
     parser.add_argument('--query',required=True)
     parser.add_argument('--registry',choices=['chinadrugtrials','cde'],default='chinadrugtrials')
     parser.add_argument('--cde-section',choices=['acceptance','new_review_task_chemical_ind',
-                        'new_review_task_biological_trial'],default='acceptance')
+                        'new_review_task_biological_trial','priority_included'],default='acceptance')
     parser.add_argument('--query-kind',choices=['keyword','drug_name','company','acceptance_number','indication','target'],
                         default='keyword')
     parser.add_argument('--output',type=Path,required=True)

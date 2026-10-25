@@ -110,7 +110,10 @@ def browser_search(ctx: ToolContext, query: str, query_kind: str, *,
         'results':[{**row,'source_id':source} for row in parsed['results']]}
 
 
-def persist_refs(ctx: ToolContext, result: dict[str,Any], route: str) -> int:
+def persist_refs(ctx: ToolContext, result: dict[str,Any], route: str, *,
+                 ref_attribute: str='cde_review_refs') -> int:
+    if ref_attribute not in {'cde_review_refs','cde_priority_refs'}:
+        raise china_browser.BrowserFailed('未定义的CDE引用类别')
     if not result.get('complete') or not ctx.db.one('SELECT id FROM sources WHERE id=? AND project_id=?',
                                                  (result['source_id'],ctx.project_id)):
         raise china_browser.BrowserFailed('不完整或跨项目审评来源不可关联')
@@ -123,12 +126,12 @@ def persist_refs(ctx: ToolContext, result: dict[str,Any], route: str) -> int:
                                  (ref.get('source_id'),ctx.project_id))
                 if source and source['kind']=='cde' and json.loads(source['meta']).get('request_context',{}).get('section')=='acceptance':
                     applications.add(ref['acceptance_number'])
-            refs=list(drug['attrs'].get('cde_review_refs',[]))
+            refs=list(drug['attrs'].get(ref_attribute,[]))
             before=len(refs)
             for row in result['results']:
                 if row['acceptance_number'] in applications and row not in refs:
                     refs.append(row)
             if len(refs)>before:
-                ctx.db.upsert_entity(ctx.project_id,'drug',drug['name'],attrs={'cde_review_refs':refs},route_id=route)
+                ctx.db.upsert_entity(ctx.project_id,'drug',drug['name'],attrs={ref_attribute:refs},route_id=route)
                 count+=len(refs)-before
     return count

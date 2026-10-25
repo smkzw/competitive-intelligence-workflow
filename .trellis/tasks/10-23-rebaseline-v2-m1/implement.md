@@ -1,3 +1,17 @@
+## 2026-10-25 当前源工具节点完成与参照裁决
+
+CDEpriority01真实失败：28有效页保留在source0e6e4070…，首等11页因官方受理号“无”未接受；读取首页完整50原行确认并非分页或CSS缺失。新fixture11725字节来自真实完整首50行（实际1920/39元数据），原小夹具另明示合成分页。修正为原受理文本+parsed ID null+具体issue，保留所有九列/行；初次nullable比较strip错误留存并修，102相关PASS1.06s。原01无可比首锚，不能拼新首页冒充恢复，02同run全39页新核，原28源不变：1920行/25未解号/精确JXHS2600124一命中、source2203ff28aa13cb815a8ba57f7efae74ba05944b0f0f96f2774b098fc373ab30c。0模型/0新药物/试验/临床事实，真实原角色日期和状态保留。增加未来失败原捕获的CAS指针accepted=false，官方URL校验后才存，不当已采纳来源或成功缓存。
+
+固定开发d985a3d80a808fb844cbf55107f2544c563223a52c4089d51666e97f5404ecd8，全v2 1723PASS10.79s/Ruff/11JS/210Python600-80/277输入无变。源代码全程hash未改；owner实看官方末页截图1920/39，公共精简回执/样图在docs。第一批相关命令猜了不存在test_cde_browser_js.py为NOT_RUN，随后按实际文件清单执行；合法绑定测试最初未同步查询filter而被正确源守卫拒绝，修fixture不削断言。所有原失败/受理源/未完来源保留。下一源任务是普通流水线按已证明受理ID自动调度目录，工具可执行不当已完成生产闭环；其他拟优先/突破/默示许可未实现。
+
+参照C03 actualgrok/grok-build/grok-4.7/high，modelUsage grok-4.7-build，fresh session946e242d-6d44-4b54-accf-b9653a9ca1bb，805.613s/25turns/return0/no fallback，报告SHA3200f92a3e54a1e5b7b8866df45458f694dcad88496369cf60a8b966f90450f7，REVISE。全报告已读，原170源hash/逐字审核不代表医学身份合格；127/57/28仍非分母。Owner核原CTgov NCT05945810确为健康BE、NCT05624112/05680298实际lead Sanofi、NCT05133531组合标题，但原最简dump没有armGroups。采纳重复/BE/显式biosimilarity/错误角色及旧ledger修正；等效性设计不充分证明IBI3027等biosimilar，具体控制药关系须取完整官方组，不按熟悉药理/数组顺序猜。新的E08只对列明身份族在identity-revision-01修订，54559已完整preflight0warning后启动，64turn/7200s/no fallback，原128采集预算不延长、不重跑全量源、不看生产输出；原170文件不可改。独立性为新context、同模型族限制，原tool边界全审计仍有限，不能伪称专业批准。源/模型终态、修订核源、封存和95%仍pending。
+
+## 2026-10-25 继续源目录节点与资源收口
+
+Owner direct：CDE正常公开UI实际显示纳入优先审评目录九列、默认1920条；拟优先/已纳入分开，不能将申请人/日期/已纳入推为MAH/批准。当前补priority_included有界源模块，复用原Ego传输/CAS/缓存/部分恢复，不加平台；TDD10缺功能RED，70/74相关PASS及一次测试import排序Ruff失败留存后修。追加partial恢复/非法页结构/合法受理号绑定族待同批最终回归。生产smoke_china_browser已新增显式栏目与新源码hash，实际冒烟98526在Ego84串行源读取；期间不改来源模块或抢浏览器，不签收未完成来源。原图面09已1703全门并commit/push da44ca4d，不把正在运行2969归并热更新成新UI/源工具。
+
+资源：06构建/离线安装/ABC恢复均终态成功，dryrun验证272冻结源字节、wheel hash/三回执后仅删除本人06 build-source，278文件/逻辑6366284字节，保留wheel/sdist/venv/恢复DB+CAS及所有源/失败/冻结，物理释放量未测。旧B01/02/08精确PID1008/4899/73665和对应脚本ps核对后TERM，再ps无活记录；当前B09 PID12144、A/C05、归并13173、C03审阅不动。新运行不因整理去重跑原研究。
+
 ## 2026-10-25 当前节点 NRS完整语义阅读与新版安装
 
 方法direct：完整原源字段/同一数值投影提供决定性检查，只修共享读名，不做新的科学归并；不为相同单研究再派全页模型审美循环。8真RED显示Average/SleepNRS不读中文及generic NRS吞掉症状/强度、拼写阈值被缩写遮蔽。完整generic症状/强度语法优先，明确周平均保留，未知NRS展开不猜，数字词和Percentile/Percentage守卫；无适应症/药名特殊字典。67相关PASS0.48s后固定09 manifest591ea52dc5f6eeed2f6ac23e7e14e489a75f9dcfc7dc5b85d839ba80cf221555，一次全v2 1703PASS11.04s/Ruff/10JS/208Python600-80/272输入不变。668观察/34组/全部图属性除label外与08完全相同；真实4指标×4宽16组查询/图表/表/原始定义DOM核对，8图，owner实看1440平均瘙痒/1600睡眠/2560平均瘙痒。截图输入框的英文是刻意检索原源标题，不是默认正文；未新增原文dialog点击测试，旧组件证据不改绑。B09 PID12144/50835，Ego84。全M4跨试验/论文与其余中文仍未接受。

@@ -21,6 +21,6 @@
   "children": [],
   "parent": "10-23-rebaseline-v2-m1",
   "relatedFiles": [],
-  "notes": "Original discovery128turns exhausted; recovery rejected max-turns after59turns/2758.911s; preserve original41 + recovery129 SHA verified. Owner page/1266quote/type-specific China checks passed, no denominator freeze/recall. Fresh source-only identity C03 review handle11363 pending,48turns/7200s; not discovery reset. Actual model/independent limitations to verify.",
+  "notes": "Discovery128turns exhausted,170 source files hash/1305quotes verified; source-only C03 fresh Grok4.7high25turn805.613s REVISE report3200f92a. No denominator freeze/recall. Bounded E08 targeted identity revision54559 pending64turn7200s/no fallback/new directory only, not discovery reset; owner adjudication and actual model evidence pending.",
   "meta": {}
 }

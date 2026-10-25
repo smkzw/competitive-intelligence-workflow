@@ -151,3 +151,9 @@ Service复用标准库Condition/deque及一个执行锁，在同一服务进程�
 - 摘要复用现有read_project_fact；RunContext从当前run的analysis_basis检查点注入本包一对一短引用，只在该工具上下文解析。完整值和来源由已有工具分页返回，缓存不伪造医学语义接受。
 - 前端复用现有Jinja/JS/ECharts。官方Kangzhe7.1.1的Logo/tokens/motion原字节与hash登记在static/kangzhe-assets.json；一个kz-site生命周期只挂环境光场和摘要/KPI指针光，不接管导航/图表/下钻、不旋转数据平面。pagehide释放、pageshow重挂，减少动态/打印正常阅读。
 - 本产品是临床查阅任务，使用紧凑标题/统计栏、图表/表格/原文入口；不插入占据首屏的装饰电影或虚构进程。桌面1440/1600/1920/2560按实际可视区检验，正文18px、辅助16px；原文与证据完整保留。
+
+### 纳入优先审评来源增量
+
+- cde_priority.py/.mjs复用现有china_registry_search、Ego传输、CAS、同run fetch_cache及cde_resume/merge_capture；一个固定公开栏目和九列解析，不加执行器/表/权限/DSL。完整首锚和分页集合闭合后才精确查受理号；新run重新核查，同run缓存仅代表已读资料，不冒充新浏览器访问。
+- 受理号缺失为来源字段级问题：原始文本和完整行保留，解析ID为null、记录具体原因；不删除整页，不用“无”当实体ID，也不伪造匹配。受理来源绑定成立才将原行和来源ID追加到cde_priority_refs，与cde_review_refs分离；不生成药物/试验/批准事实。
+- 失败捕获在确认官方无凭据URL后保留原始JSON至既有CAS及source_capture_rejected指针，accepted=false；它不是合格来源或成功缓存。有效分页另以complete=false来源保全。缺首锚时重新核查完整目录，不能把新首锚补进旧捕获来冒充可恢复。正常流水线对已证明受理ID的自动目录调度仍是下一有界单元，当前工具切片不冒称已接通全部生产路线。

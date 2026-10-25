@@ -1,0 +1,58 @@
+{
+  "scope": "CDE_INCLUDED_PRIORITY_PRODUCTION_SOURCE_TOOL_NOT_FULL_M2_OR_AUTOMATED_PIPELINE",
+  "base_commit": "da44ca4d",
+  "manifest_sha256": "d985a3d80a808fb844cbf55107f2544c563223a52c4089d51666e97f5404ecd8",
+  "official_url": "https://www.cde.org.cn/main/xxgk/listpage/9f9c74c73e0f8f56a8bfbc646055026d",
+  "source_sha256": "2203ff28aa13cb815a8ba57f7efae74ba05944b0f0f96f2774b098fc373ab30c",
+  "source_id": "src_0a4cf8a84ff6",
+  "scope_section": "priority_included",
+  "records": 1920,
+  "complete_pages": 39,
+  "unresolved_acceptance_count": 25,
+  "exact_lookup": {
+    "query": "JXHS2600124",
+    "matches": 1,
+    "source_locator": "$.pages[0].rows[0]"
+  },
+  "source_fields": [
+    "registration_applicant",
+    "handled_date",
+    "application_date",
+    "publicity_date",
+    "directory_status",
+    "rare_disease_flag"
+  ],
+  "scientific_adoption": "NONE; no new drug/trial/approval/MAH/indication facts; lookup references only for an existing source-proven application binding.",
+  "failure_and_recovery": {
+    "first_attempt": "28 valid pages retained, incomplete; genuine source rows with acceptance number 无 were rejected by the original strict field parser.",
+    "root_fix": "Preserve all nine source cells, original acceptance text and missing/unparsed identity issue; parsed number null where not proven. Exact query matches only a parsed identifier.",
+    "second_attempt": "All39 pages freshly checked because prior capture lacked comparable first-page anchor; original partial source retained unchanged, not falsely claimed reused.",
+    "future_rejected_captures": "Keep validated-official-URL raw JSON in CAS with source_capture_rejected accepted=false; never qualified source/cache."
+  },
+  "test_evidence": {
+    "initial": "10 missing-feature RED; subsequent related failures include wrong test query filter and nullable-ID path, retained in private logs.",
+    "related": "102 PASS in 1.06s",
+    "full_v2": "1723 PASS, 1 existing warning in 10.79s",
+    "ruff": "PASS",
+    "javascript_files": 11,
+    "python_600_80": 210,
+    "frozen_files": 277,
+    "frozen_changes": false
+  },
+  "browser": {
+    "ego_space": 84,
+    "source_last_page": {
+      "page": 39,
+      "last_ordinal": 1920,
+      "pager_total": 1920
+    },
+    "owner_viewed": true,
+    "image": "docs/screenshots/cde-priority-20261025/source-last-page.png",
+    "sha256": "71d0653ea4a4bf2551cfeac2266be16a5a2445391aebd53a311a2a3174e6e147",
+    "portal_visual_acceptance": "UNCHANGED_NO_NEW_PORTAL_RENDERER"
+  },
+  "next": "Wire proven CDE application IDs through normal pipeline directory scheduling; other priority/proposed/breakthrough/tacit routes still pending.",
+  "model_calls": 0,
+  "M2_recall": "NOT_RUN",
+  "package_for_this_increment": "NOT_RUN"
+}
