@@ -1,3 +1,11 @@
+## 2026-10-25 当前60安装64与45测试环境退役
+
+64从固定370输入离线构建、新venv0下载、全模块/23资产/9Skill/普通CLI同字节，wheel233d5c93…/sdiste4c28195…/source-binding9bc03755…。标准DB/CAS恢复B708事实668结果、缺失/篡改HTML修复、正确不重写、同版本0重放、旧legacy0调用拒绝，全真实运行回执在install-current60-20261025-64；仅真实资料+受控回调组件，不称完整普通PNH或全M6。63事件等待器67353继续监听真实61/child61824，不查进度、不改冻结60。64已替代45且45无进程/打开文件，只退役45venv1868文件/28006129逻辑字节；原wheel/sdist/版本/源码/备份/回执/重建命令全保留，物理释放未测。精简公共证据docs/evidence/20261025-current60-install-and-recovery61-start.json。当前M1未过、非RC，66独立IgAN来源另行只写source-only目录，不碰PNH或浏览器。
+
+## 2026-10-25 当前普通PNH61真实续接启动
+
+b8a5c1a1已push/远端同SHA；冻结60对当前270源/Skill/测试（269Git+固定忽略ECharts）逐SHA一致。原生53769/实际child61824，真实默认Service在标准恢复61同project/run继续，四旧资格批缓存基线事件574之前明确区分，所有实际新模型/来源/cache命中只取基线以后。正常前缀入口/中国/全球宇宙已版本兼容，未在脚本中替换阶段或seed来源；实际是否复用由终态事件验。请求仍CMS GLM5.3flash→DGX deepseek→qwen，凭据内存/子env；空间7/p1留给来源，owner只用p2。63单次kqueue NOTE_EXIT（原生67353，7200s、0进度poll），不读在途DB或杀慢任务。原38失败现场保留。独立64当前60离线安装/组件恢复原生29945，0模型/浏览器任务，不接触61数据；医学/完整C/安装综合分别验。54 packet-format audit因原提示词/上下文route解析标签缺失FAIL保留，实际runner链/owner源码和1943 gate独立核，不改旧prompt伪过。
+
 ## 2026-10-25 批次读集60与61真实恢复准备完成
 
 54原worker12RED/2PASS前置，新增源码和测试族后经CodeBuddy→ZCode失败→MTPLX空输出→Pi/openai-codex/gpt6luna:max声明续接结束；最终agent说明无prior session/history工具，只据合同与既有源码验证26PASS，无新edit，Ruff不可用。不把它记DS独立全验。owner审实际scope.py全函数与完整测试：复用get_unit/put_unit、完整显式URL/sourceID及实际last_skill_source_ids；项目/run/task/code/rules/Skill/schema/model独立、无关后续来源不重做、相关版本/缺口变化仍失效、错误结果不缓存、旧全池keys不改。worker另改窄授权外两相邻tests（scope_batches/orphan_trial_scope），owner审后采纳明确引用源变化的正确断言，记录越界，不追认历史派发范围。

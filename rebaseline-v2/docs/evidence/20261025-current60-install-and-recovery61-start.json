@@ -1,0 +1,73 @@
+{
+  "scope": "FROZEN60_OFFLINE_INSTALL_AND_RESTORE_COMPONENT_NOT_FULL_RELEASE",
+  "commit_binding": {
+    "scope": "POST_COMMIT_FROZEN60_SOURCE_TEST_SKILL_BINDING_NOT_FULL_PRODUCT",
+    "commit": "b8a5c1a15a35493be8af025ea241e13a9f90bba8",
+    "current_source_test_skill_files": 270,
+    "committed_files": 269,
+    "ignored_pinned_asset": [
+      "src/ciw2/render/static/echarts.min.js"
+    ],
+    "manifest_sha256": "e245723f7cb3619afdbf393a5546bb67fff748657ae9a87ee04e49574344660d"
+  },
+  "install64": {
+    "scope": "ACTUAL_FROZEN60_OFFLINE_INSTALL_AND_COMPONENT_RESTORE_NOT_FULL_M6",
+    "wheel_sha256": "233d5c931d630f78ebc57a606bfb687e4d4715a37807bb80b7aea770d1ed0fd5",
+    "sdist_sha256": "e4c28195cdaea859a3611d36326c56386769e385e9f792b132724e5300830503",
+    "source_binding_sha256": "9bc0375596daf07a9562093a4222480d0fad3f0b603d2acd1adc5287dacd3b87",
+    "external_downloads": 0,
+    "python_modules_23_assets_9skills_cli": "PASS",
+    "standard_restore": "PASS_708_facts_668_ids_unchanged_repaired_reports_exact_new_version",
+    "legacy_scope_refusal": "PASS_ZERO_CALLBACK_MODEL_SOURCE",
+    "ordinary_PNH_full_restore": "NOT_RUN_RUNNING_RECOVERY61"
+  },
+  "component_restore": {
+    "scope": "ACTUAL_B_DATA_STANDARD_BACKUP_RESTORE_RENDER_COMPONENT_NOT_FULL_PIPELINE_OR_MEDICAL_ACCEPTANCE",
+    "frozen_manifest_sha256": "e245723f7cb3619afdbf393a5546bb67fff748657ae9a87ee04e49574344660d",
+    "input_run": "run_1e2e2c33b90a",
+    "real_facts": 708,
+    "result_ids_preserved": 668,
+    "prior_runtime_receipt_invalidated_by_actual_tools_change": true,
+    "old_receipt_missing_artifacts_rerendered": true,
+    "new_receipt_restored_without_html_rerendered": true,
+    "unchanged_page_not_rewritten": true,
+    "tampered_page_repaired": true,
+    "intake_callbacks_for_changed_shared_tool_runtime": 1,
+    "model_source_calls": 0,
+    "same_runtime_resume_intake_callbacks": 0,
+    "scientific_tables_unchanged": true,
+    "history_receipts_unchanged_and_no_duplicate": true,
+    "restored_html_sha256": "4835299c595e8a5cbbd9d8c298e6eaf91cd02f3ac3b6960a8dc99357ba963010",
+    "frozen_inputs_unchanged": 370
+  },
+  "original_failed38_preserved": "aea110a568ea684603d61a9c8bdf3a2cac4480a2f503b155b09f5e51449c8119",
+  "ongoing_ordinary61": {
+    "native_handle": 53769,
+    "child_pid": 61824,
+    "project_id": "prj_fc03997a59c5",
+    "run_id": "run_fd9a5c6c4fcf",
+    "baseline_last_event": 574,
+    "kernel_wait_handle": 67353,
+    "state": "STARTED_AWAITING_TERMINAL_NOT_ACCEPTED",
+    "receipt_after_exit": "ciw-data/normal-pnh-c-recovery-20261025-61/receipt.json"
+  },
+  "old_install45_venv_retirement": {
+    "scope": "ONLY_OWN_REPLACED_INSTALL45_VENV_AFTER_INSTALL60_ACCEPTANCE",
+    "removed": "install-current43-20261025-45/venv",
+    "logical_regular_file_bytes": 28006129,
+    "regular_file_count": 1868,
+    "physical_bytes_reclaimed": "NOT_MEASURED",
+    "verified_processes_or_open_files": 0,
+    "preserved_archives": {
+      "install-current43-20261025-45/dist/ciw2-0.2.0.dev0-py3-none-any.whl": "fcab42578d9aff4681c3892a0d0dbc0b46a01da8302b03bbf49ed69c3cbbe873",
+      "install-current43-20261025-45/dist/ciw2-0.2.0.dev0.tar.gz": "c73db64e5e15bc475882f8cee2c016bfe8fb723268ac70a7e72db485ae7cb0cb"
+    },
+    "replacement_wheel_sha256": "233d5c931d630f78ebc57a606bfb687e4d4715a37807bb80b7aea770d1ed0fd5",
+    "DB_CAS_sources_reports_screens_receipts_sessions_untouched": true,
+    "rebuild": "python -m venv ciw-data/install-current43-20261025-45/venv; uv pip install --offline --python ciw-data/install-current43-20261025-45/venv/bin/python ciw-data/install-current43-20261025-45/dist/ciw2-0.2.0.dev0-py3-none-any.whl",
+    "checked_at": "2026-10-25T15:52:23.347673+00:00",
+    "state": "RETIRED_REBUILDABLE_ENV_ONLY"
+  },
+  "original_151_780_source_DB_CAS_failures_sessions_unchanged": true,
+  "full_M1_M6": "NOT_COMPLETED"
+}
