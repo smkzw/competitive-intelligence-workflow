@@ -130,6 +130,10 @@ def test_shared_alias_needs_explicit_candidate_id(settings, monkeypatch):
 
 def test_source_change_invalidates_scope_cache(settings, monkeypatch):
     rc = setup_scope(settings, ['DrugA'])
+    # A source at a URL this exact task cites is a real dependency. The retired
+    # whole-pool key also invalidated for unrelated sources; that is no longer reused.
+    rc.db.upsert_entity(rc.project_id, 'drug', 'DrugA', attrs={
+        'evidence_urls': ['https://clinicaltrials.gov/study/NCT00000001']})
     seen = []
 
     def review(name, task):

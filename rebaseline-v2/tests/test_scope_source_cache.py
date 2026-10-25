@@ -1,17 +1,22 @@
-"""Scope-batch receipts bind the source set present after the review call."""
+"""Scope-batch receipts bind this batch's own read/cited sources, not the whole pool.
 
-import hashlib
+The historical key hashed every project source. That made an unrelated source registered
+by a later batch invalidate every earlier batch. These tests keep the raw/text/failure
+protections and replace only that implementation-specific whole-pool assertion with
+explicit used-versus-unrelated behavior.
+"""
 
 import pytest
 
 from ciw2.domain.identity import name_owners
 from ciw2.domain.models import ScopeDecision, ScopeResult
-from ciw2.harness.agent import HARNESS_RULES
 from ciw2.harness.llm import LLMError, ScriptedLLM
 from ciw2.pipeline import scope
 from ciw2.pipeline.queries import intake_data
 from ciw2.pipeline.stages import coverage_review
 from ciw2.service import Service
+
+URL = 'https://clinicaltrials.gov/study/NCT00000001'
 
 
 def setup_scope(settings, names):
@@ -37,12 +42,8 @@ def succeeded_batches(rc):
         (rc.run_id,))['n']
 
 
-def signature_key(rc, task, sources):
-    """Expected whole-project signature. Production lookup must use this, not a source count."""
-    skill = rc.skills['coverage-review']
-    signature = {'task': task, 'sources': sources, 'code': scope.CODE_HASH, 'rules': HARNESS_RULES,
-                 'skill': skill.body, 'schema': ScopeResult.model_json_schema(), 'model': rc.settings.llm_model}
-    return 'scope_batch:' + hashlib.sha256(scope._json(signature).encode()).hexdigest()
+def batch_key(rc, task):
+    return scope._batch_key(rc, task)
 
 
 def planned_tasks(rc):
@@ -54,8 +55,14 @@ def planned_tasks(rc):
     return scope._tasks(base, entities)
 
 
-def fetch(rc, digest, url='https://clinicaltrials.gov/study/NCT00000001', text='text-1'):
+def fetch(rc, digest, url=URL, text='text-1'):
     return rc.db.add_source(rc.project_id, 'ctgov', url, digest, text_digest=text)
+
+
+def receipt_sources(rc, task):
+    cached = rc.db.stage_output(rc.run_id, batch_key(rc, task))
+    assert cached is not None
+    return cached['sources']
 
 
 def stored_batches(rc):
@@ -64,34 +71,40 @@ def stored_batches(rc):
         (rc.run_id,))}
 
 
-def test_same_run_reuses_scope_batch_after_it_fetches_a_source(settings, monkeypatch):
+def test_same_run_reuses_scope_batch_after_it_reads_a_source(settings, monkeypatch):
     rc, scripted = setup_scope(settings, ['DrugA'])
     calls = []
 
     def review(name, task):
         calls.append(task)
         if len(calls) == 1:
-            fetch(rc, 'fetched-digest', text='fetched-text')
+            sid = fetch(rc, 'fetched-digest', text='fetched-text')
+            rc.cache['last_skill_source_ids'] = [sid]
         return decisions(task)
 
     monkeypatch.setattr(rc, 'skill', review)
     assert coverage_review(rc)['in_scope'] == 1
     assert coverage_review(rc)['in_scope'] == 1
     assert len(calls) == 1 and scripted.calls == []
-    post = scope._sources(rc)
-    assert signature_key(rc, calls[0], post) in stored_batches(rc)
-    assert signature_key(rc, calls[0], []) not in stored_batches(rc)
+    assert [source['url'] for source in receipt_sources(rc, calls[0])] == [URL]
+    assert batch_key(rc, calls[0]) in stored_batches(rc)
     assert rc.db.one("SELECT COUNT(*) n FROM agent_steps WHERE role='cache'")['n'] == 1
+    # Retired assertion: this batch used to miss because the whole project source pool
+    # was part of the key. A source it did not read must not force another model call.
+    fetch(rc, 'unrelated-digest', 'https://clinicaltrials.gov/study/NCT00000002', 'unrelated-text')
+    assert coverage_review(rc)['in_scope'] == 1
+    assert len(calls) == 1
 
 
-def test_added_source_or_changed_digest_invalidates_cached_scope_batch(settings, monkeypatch):
+def test_unrelated_source_does_not_invalidate_but_used_source_changes_do(settings, monkeypatch):
     rc, scripted = setup_scope(settings, ['DrugA'])
-    calls = []
+    calls, used = [], {}
 
     def review(name, task):
         calls.append(task)
-        if len(calls) == 1:
-            fetch(rc, 'digest-a', text='text-a')
+        if 'sid' not in used:
+            used['sid'] = fetch(rc, 'digest-a', text='text-a')
+        rc.cache['last_skill_source_ids'] = [used['sid']]
         return decisions(task)
 
     monkeypatch.setattr(rc, 'skill', review)
@@ -100,67 +113,67 @@ def test_added_source_or_changed_digest_invalidates_cached_scope_batch(settings,
     assert len(calls) == 1
     fetch(rc, 'digest-b', 'https://clinicaltrials.gov/study/NCT00000002', 'text-b')
     coverage_review(rc)
-    coverage_review(rc)
-    assert len(calls) == 2
+    assert len(calls) == 1  # retired: an unrelated source used to invalidate every batch
     count = rc.db.one('SELECT COUNT(*) n FROM sources WHERE project_id=?', (rc.project_id,))['n']
     rc.db.execute('UPDATE sources SET digest=? WHERE project_id=? AND digest=?',
                   ('digest-a-changed', rc.project_id, 'digest-a'))
     assert rc.db.one('SELECT COUNT(*) n FROM sources WHERE project_id=?', (rc.project_id,))['n'] == count
     coverage_review(rc)
+    assert len(calls) == 2
     rc.db.execute('UPDATE sources SET text_digest=? WHERE project_id=? AND digest=?',
                   ('text-a-changed', rc.project_id, 'digest-a-changed'))
     coverage_review(rc)
-    assert len(calls) == 4 and scripted.calls == []
+    assert len(calls) == 3 and scripted.calls == []
 
 
-def test_same_run_reuses_both_batches_after_first_batch_fetches_source(settings, monkeypatch):
+def test_same_run_reuses_both_batches_after_first_batch_reads_its_own_source(settings, monkeypatch):
     rc, scripted = setup_scope(settings, [f'Drug{i:03}' for i in range(31)])
     calls = []
 
     def review(name, task):
         calls.append(task)
         if len(calls) == 1:
-            fetch(rc, 'fetched-31', 'https://clinicaltrials.gov/study/NCT00000031', 'text-31')
+            sid = fetch(rc, 'fetched-31', 'https://clinicaltrials.gov/study/NCT00000031', 'text-31')
+            rc.cache['last_skill_source_ids'] = [sid]
         return decisions(task)
 
     monkeypatch.setattr(rc, 'skill', review)
     assert coverage_review(rc)['in_scope'] == 31
     assert coverage_review(rc)['in_scope'] == 31
     assert [len(task['candidates']) for task in calls] == [30, 1]
-    post = scope._sources(rc)
-    stored = stored_batches(rc)
-    assert signature_key(rc, calls[0], post) in stored and signature_key(rc, calls[1], post) in stored
-    assert signature_key(rc, calls[0], []) not in stored and signature_key(rc, calls[1], []) not in stored
+    assert len(receipt_sources(rc, calls[0])) == 1
+    assert receipt_sources(rc, calls[1]) == []
     assert rc.db.one("SELECT COUNT(*) n FROM agent_steps WHERE role='cache'")['n'] == 2
     assert scripted.calls == []
 
 
-def test_later_batch_reads_sources_registered_by_the_previous_batch(settings, monkeypatch):
+def test_later_batch_reads_the_source_registered_by_the_previous_batch(settings, monkeypatch):
     rc, scripted = setup_scope(settings, [f'Drug{i:03}' for i in range(31)])
-    tasks = planned_tasks(rc)
     calls = []
 
     def review(name, task):
         calls.append(task)
-        if len(calls) > 1:
-            return decisions(task)
-        assert task == tasks[0]
-        fetch(rc, 'fetched-31', 'https://clinicaltrials.gov/study/NCT00000031', 'text-31')
-        rows = [{'entity_id': item['entity_id'], 'in_scope': True, 'reason': '符合本次研究范围'}
-                for item in tasks[1]['candidates']]
-        rc.db.set_stage(rc.run_id, signature_key(rc, tasks[1], scope._sources(rc)), 'succeeded',
-                        output={'decisions': rows, 'applied': len(rows), 'issues': []})
+        if task['candidates'][0]['name'] == 'Drug000':
+            sid = fetch(rc, 'fetched-31', 'https://clinicaltrials.gov/study/NCT00000031', 'text-31')
+        else:
+            row = rc.db.one('SELECT id FROM sources WHERE project_id=? AND url=?',
+                            (rc.project_id, 'https://clinicaltrials.gov/study/NCT00000031'))
+            assert row is not None
+            sid = row['id']
+        rc.cache['last_skill_source_ids'] = [sid]
         return decisions(task)
 
     monkeypatch.setattr(rc, 'skill', review)
-    result = coverage_review(rc)
-    assert [len(task['candidates']) for task in calls] == [30]
-    assert result['in_scope'] == 31 and result['decisions'] == 31
-    assert rc.db.one("SELECT COUNT(*) n FROM agent_steps WHERE role='cache'")['n'] == 1
+    assert coverage_review(rc)['in_scope'] == 31
+    assert len(calls) == 2
+    assert receipt_sources(rc, calls[0]) == receipt_sources(rc, calls[1])
+    coverage_review(rc)
+    assert len(calls) == 2
+    assert rc.db.one("SELECT COUNT(*) n FROM agent_steps WHERE role='cache'")['n'] == 2
     assert scripted.calls == []
 
 
-def test_resume_reuses_batch_cached_with_sources_it_fetched(settings, monkeypatch):
+def test_resume_reuses_batch_cached_with_the_source_it_read(settings, monkeypatch):
     rc, scripted = setup_scope(settings, [f'Drug{i:03}' for i in range(31)])
     calls = []
     fail = {'armed': True}
@@ -168,7 +181,8 @@ def test_resume_reuses_batch_cached_with_sources_it_fetched(settings, monkeypatc
     def review(name, task):
         calls.append(task['candidates'][0]['name'])
         if calls[-1] == 'Drug000' and len(calls) == 1:
-            fetch(rc, 'fetched-partial', 'https://clinicaltrials.gov/study/NCT00000031', 'text-partial')
+            sid = fetch(rc, 'fetched-partial', 'https://clinicaltrials.gov/study/NCT00000031', 'text-partial')
+            rc.cache['last_skill_source_ids'] = [sid]
         if calls[-1] == 'Drug030' and fail['armed']:
             fail['armed'] = False
             raise LLMError('later batch unavailable')
@@ -177,6 +191,7 @@ def test_resume_reuses_batch_cached_with_sources_it_fetched(settings, monkeypatc
     monkeypatch.setattr(rc, 'skill', review)
     with pytest.raises(LLMError):
         coverage_review(rc)
+    assert succeeded_batches(rc) == 1
     assert rc.db.one('SELECT in_scope FROM entities WHERE project_id=? AND name=?',
                      (rc.project_id, 'Drug000'))['in_scope'] == 1
     assert rc.db.one('SELECT in_scope FROM entities WHERE project_id=? AND name=?',
@@ -186,7 +201,7 @@ def test_resume_reuses_batch_cached_with_sources_it_fetched(settings, monkeypatc
     assert calls == ['Drug000', 'Drug030', 'Drug030'] and scripted.calls == []
 
 
-def test_source_fetched_by_later_batch_refreshes_earlier_batch_only(settings, monkeypatch):
+def test_later_batch_unrelated_source_does_not_refresh_earlier_batch(settings, monkeypatch):
     rc, scripted = setup_scope(settings, [f'Drug{i:03}' for i in range(31)])
     calls = []
 
@@ -200,7 +215,9 @@ def test_source_fetched_by_later_batch_refreshes_earlier_batch_only(settings, mo
     coverage_review(rc)
     coverage_review(rc)
     coverage_review(rc)
-    assert calls == ['Drug000', 'Drug030', 'Drug000'] and scripted.calls == []
+    # Retired assertion: this used to be ['Drug000', 'Drug030', 'Drug000'] because the
+    # whole project pool was hashed. Drug000 never read the source fetched by Drug030.
+    assert calls == ['Drug000', 'Drug030'] and scripted.calls == []
 
 
 @pytest.mark.parametrize('kind', ['missing', 'duplicate', 'wrong_identity'])

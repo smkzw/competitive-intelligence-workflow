@@ -1,3 +1,19 @@
+## 2026-10-25 批次读集60与61真实恢复准备完成
+
+54原worker12RED/2PASS前置，新增源码和测试族后经CodeBuddy→ZCode失败→MTPLX空输出→Pi/openai-codex/gpt6luna:max声明续接结束；最终agent说明无prior session/history工具，只据合同与既有源码验证26PASS，无新edit，Ruff不可用。不把它记DS独立全验。owner审实际scope.py全函数与完整测试：复用get_unit/put_unit、完整显式URL/sourceID及实际last_skill_source_ids；项目/run/task/code/rules/Skill/schema/model独立、无关后续来源不重做、相关版本/缺口变化仍失效、错误结果不缓存、旧全池keys不改。worker另改窄授权外两相邻tests（scope_batches/orphan_trial_scope），owner审后采纳明确引用源变化的正确断言，记录越界，不追认历史派发范围。
+
+owner补5真RED：缺失/跨项目ID被静默丢弃成空缓存，以及实际工具/共同执行/来源恢复规则变化旧key仍命中。小补现有tool_versions/module_digest指纹与缺失ID不缓存，无新框架。第一相关69PASS1FAIL：旧测试希望删除缺失指针，改为保留原envelope但get_unit拒绝、再调仍重核，未弱化行为；最终70PASS1.43s/Ruff。60一次宽门1943PASS16.29s/Ruff/243Python600-80/14JS/370输入SHA未变，manifeste245723f…。前端资产与50同字节，不为纯后端重复四宽，后续真实PNH新内容仍实屏。
+
+61从52标准DB/CAS恢复单一隔离副本；首helper假定snapshots/fact_verdicts可选表存在，失败在资格写前，10原/副本表全等。原失败保留，recovery01复用同目录、查实际存在表，不再复制资料。当前8业务函数AST、ScopeResult schema/coverage Skill对36字节不变，完整显式+实际源版本再核，资格追加3–6四批工作缓存及明确来源/旧key/原result/task哈希记录；1/2有相关源新出现不迁移。所有旧stage行与科学表保持、原38DBaea110a5…不变，0模型/来源/造stage成功；resume_boundary=3 candidate_triage，前三阶段兼容。不是实际普通恢复或医学接受。下一白名单提交绑定60，然后用原声明模型/Service在61恢复同run；不得重做原宇宙或AD151。详docs/evidence/20261025-scope-readset-and-qualified-recovery.json。
+
+## 2026-10-25 普通PNH38自然失败与受控恢复52–57
+
+execution+owner核验：PNH完整链真实4330.153s终态candidate_triage失败，主502→DS429三次→Qwen429三次；42 kernel NOTE_EXIT无轮询捕获，46331exit1。143源/44事实/211药/288研究/32公司/8靶点保存，0设计行/HTML，不能勾M1。62成功回复（GLM15/DS47）、成功tokens1473496，失败用量未知；36原360输入与151AD保持。原DBaea110a5…，标准备份manifest795dcb75…/123文件、DB62bd35e…完整；0额外agent_step_payload缺口。
+
+owner实53逐7原task当前全等，6缓存各精确对应63/73/81/91/100/126源池，最终143使全MISS，根因已证明而非猜测。57用原冻结36只读验证原6submit经_resolve与原输出完全相同；全部实际读源+显式/请求URL核后，3–6四批无变化可技术资格复用，1/2分别1/2相关URL此前无现有而需再核，7失败/8未执行。没有补cache/改历史/赋医学接受，原失败原样保留。54 finite单worker（84821/runner45886）修按每批实际和显式源依赖，明确used源变化/缺口变可读仍失效、无关后来来源不重做，不改Skill/科学或自动迁移旧缓存；64turn/7200s全预算，不热改或轮询其在途输出。owner核47源与真实恢复准备可并行，非新框架。
+
+56声明产品路线一次最小GLM同名200/2.539s/92tokens，只作容量信号，不冒充完整恢复；无备用/来源调用，凭据内存。原Ego6消失后7专用p1可供恢复、p2预览，恢复配置须显式设置，不改原38现场。下一：54终态→成族代码/相关验→固定候选宽门→旧未变单元有证据资格复用与普通resume，不直接重跑6批。a9239501已推送，269当前源/测试/Skill对冻结50绑定（268Git+固定ECharts）；最新50安装另验。详docs/evidence/20261025-pnh-terminal-and-scope-recovery.json。
+
 ## 2026-10-25 要点前置与原文收展49/50完成
 
 direct：同一公共模板/C原文层的小型根因族，不再派整页审查；新47 E08四项核源独立执行，owner保留源/身份/渲染共同权威。5真RED（A/B/C顺序、两长地区例）→51邻接PASS。要点在完整比较之前，2/3列宽屏利用；C长地区原项数+明确大陆/港澳台入口、全原文原位展开。无新数据/框架/药名表、无缩字号/假点/原文截断。实际7/p2四宽×首屏/密集/筛后/稀疏/依据20图，22地区键盘开合、同查询282点/284研究、来源Enter/Esc回焦及长标签范围全保留，owner看1440/2560首屏和2560筛后。37摘要仍长文/英文/措辞REVISE，不把布局通过当医学/最终审美接受。

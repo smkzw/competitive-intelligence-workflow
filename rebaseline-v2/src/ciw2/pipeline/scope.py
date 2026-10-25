@@ -13,11 +13,15 @@ from ciw2.domain.identity import CODE_HASH as IDENTITY_CODE_HASH
 from ciw2.domain.identity import literal_names, name_key, name_owners
 from ciw2.domain.models import ScopeResult
 from ciw2.harness.agent import HARNESS_RULES
+from ciw2.pipeline import stage_versions, tool_versions
 from ciw2.pipeline.context import RunContext
+from ciw2.pipeline.recovery import get_unit, put_unit
 
 CODE_HASH = hashlib.sha256(Path(__file__).read_bytes() + IDENTITY_CODE_HASH.encode()).hexdigest()
 TASK_CHARS = 60000
 BATCH_SIZE = 30
+RECEIPT_LAYOUT = 'scope-batch-dependencies-v1'
+_SOURCE_ID_KEYS = frozenset({'source_id', 'source_ids', 'registry_source_id', 'registry_source_ids'})
 
 
 def _json(value: Any) -> str:
@@ -88,25 +92,60 @@ def _resolve(result: ScopeResult, candidates: list[dict[str, Any]], ambiguous_na
     return {'decisions': normalized, 'applied': applied, 'issues': issues}
 
 
-def _batch_key(rc: RunContext, task: dict[str, Any], sources: list[dict[str, Any]]) -> str:
+def _dependencies(task: dict[str, Any]) -> tuple[list[str], list[str]]:
+    """Explicit candidate evidence URLs and source ids carried by this exact task."""
+    urls: set[str] = set()
+    source_ids: set[str] = set()
+
+    def walk(value: Any, key: str = '') -> None:
+        if isinstance(value, dict):
+            for child_key, child in value.items():
+                walk(child, str(child_key))
+        elif isinstance(value, list):
+            for child in value:
+                walk(child, key)
+        elif isinstance(value, str):
+            text = value.strip()
+            if text.startswith(('http://', 'https://')):
+                urls.add(text)
+            elif key in _SOURCE_ID_KEYS and text:
+                source_ids.add(text)
+
+    for candidate in task.get('candidates', []):
+        walk(candidate.get('attrs') or {})
+    return sorted(source_ids), sorted(urls)
+
+
+def _batch_key(rc: RunContext, task: dict[str, Any]) -> str:
+    """Same-run identity only. Source versions are checked by the receipt, not the key."""
     skill = rc.skills['coverage-review']
-    signature = {'task': task, 'sources': sources, 'code': CODE_HASH, 'rules': HARNESS_RULES,
-                 'skill': skill.body, 'schema': ScopeResult.model_json_schema(), 'model': rc.settings.llm_model}
+    signature = {'layout': RECEIPT_LAYOUT, 'run': rc.run_id, 'project': rc.project_id, 'task': task,
+                 'code': CODE_HASH, 'rules': HARNESS_RULES, 'skill': skill.body,
+                 'schema': ScopeResult.model_json_schema(), 'model': rc.settings.llm_model,
+                 'execution': tool_versions.shared_execution_digest(),
+                 'tools': [tool_versions.tool_binding(rc, name) for name in skill.tools],
+                 'source_policy': stage_versions.module_digest('ciw2.pipeline.recovery')}
     return 'scope_batch:' + hashlib.sha256(_json(signature).encode()).hexdigest()
 
 
 def _review_batch(rc: RunContext, task: dict[str, Any]) -> dict[str, Any]:
     skill = rc.skills['coverage-review']
-    cached_key = _batch_key(rc, task, _sources(rc))
-    cached = rc.db.stage_output(rc.run_id, cached_key)
+    key = _batch_key(rc, task)
+    cached = get_unit(rc, key)
     if cached is not None:
-        rc.db.log_step(rc.run_id, rc.stage, skill.name, 0, 'cache', {'reused_stage': cached_key})
         return cached
+    # A failed or mocked call must not lend its read set to the next batch.
+    rc.cache.pop('last_skill_source_ids', None)
     result = ScopeResult.model_validate(rc.skill(skill.name, task))
     normalized = _resolve(result, task['candidates'], set(task['ambiguous_names']))
-    if not normalized['issues']:
-        # The call may register sources. Bind the receipt to the set present after it returns.
-        rc.db.set_stage(rc.run_id, _batch_key(rc, task, _sources(rc)), 'succeeded', output=normalized)
+    if normalized['issues']:
+        return normalized
+    cited_ids, cited_urls = _dependencies(task)
+    read_ids = sorted(set(cited_ids) | set(rc.cache.get('last_skill_source_ids', [])))
+    if any(rc.db.one('SELECT id FROM sources WHERE project_id=? AND id=?',
+                     (rc.project_id, sid)) is None for sid in read_ids):
+        return normalized  # Missing/foreign pointers must not disappear into an empty reusable receipt.
+    put_unit(rc, key, normalized, source_ids=read_ids, urls=cited_urls)
     return normalized
 
 
@@ -114,10 +153,6 @@ def _coverage(rc: RunContext) -> list[dict[str, Any]]:
     return rc.db.query(
         'SELECT route_id, region, status, SUM(hits) hits, COUNT(*) n FROM coverage '
         'WHERE run_id=? GROUP BY route_id, region, status ORDER BY route_id, region, status', (rc.run_id,))
-
-
-def _sources(rc: RunContext) -> list[dict[str, Any]]:
-    return rc.db.query('SELECT id, digest, text_digest FROM sources WHERE project_id=? ORDER BY id', (rc.project_id,))
 
 
 def _orphan_trials(rc: RunContext) -> list[dict[str, Any]]:

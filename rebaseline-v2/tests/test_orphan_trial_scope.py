@@ -212,10 +212,12 @@ def test_partial_failure_resumes_and_source_change_recalls(settings, monkeypatch
     result = review_orphan_trials(rc, '适应症')
     assert [len(batch) for batch in calls] == [30, 1, 1] and calls[1] == calls[2] == [names[30]]
     assert result['in_scope'] == 31 and result['pending'] == 0
-    rc.db.add_source(rc.project_id, 'ctgov', 'https://clinicaltrials.gov/study/NCT00000030', 'digest-30')
+    # Only the batch that cites this URL (NCT00000030's task attrs) depends on it.
+    # The retired whole-pool key re-ran all 30 earlier trials for any new source.
+    rc.db.add_source(rc.project_id, 'ctgov', 'https://example.test/NCT00000030', 'digest-30')
     review_orphan_trials(rc, '适应症')
-    assert [len(batch) for batch in calls] == [30, 1, 1, 30, 1] and calls[3] == calls[0]
-    assert rc.db.one("SELECT COUNT(*) n FROM agent_steps WHERE role='cache'")['n'] == 1
+    assert [len(batch) for batch in calls] == [30, 1, 1, 1] and calls[3] == calls[2]
+    assert rc.db.one("SELECT COUNT(*) n FROM agent_steps WHERE role='cache'")['n'] == 2
     assert rc.db.query('SELECT id,entity_id,value,quote FROM facts WHERE project_id=? ORDER BY id',
                        (rc.project_id,)) == facts
     assert rc.db.query('SELECT src,rel,dst FROM links WHERE project_id=? ORDER BY src,rel,dst',

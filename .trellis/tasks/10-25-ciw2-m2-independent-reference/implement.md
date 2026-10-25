@@ -1,3 +1,11 @@
+## 47流程审计格式失败保留
+
+audit-execution实际FAIL：owner重写上下文/提示词时漏了可解析immutable provider/model标签；不是工具执行或35源字节失败。原context/prompt不事后改写以造PASS，runner实际Grok4.7/high与schedule manifest另核，端点身份限制仍保留。仅owner直接来源检查可复用，完整M2/流程审计未通过。下一派发应保留初始化的路线元数据，不重复此格式损失；不以重新跑全部源来掩盖本次准备失误。
+
+## 2026-10-25 四项源47终态，owner55逐原文审查
+
+原生21590终态return0，Grok4.7/high selector、769.042s、无备用；报告见header4.7/profile4.6故不把文本当另证runtime。17原输入/22输出SHA、35 quote的char/end/byte/line实际全核。Delgocitinib EC明确new active substance仅解决产品类，中国源CHE不当AD；GSK公司作者first-in-class支持issuer层创新声明，原中国SC与IV不同研究/终止保留，不推批准。CC93538/GHZ339类仍pending。worker错误说输入清单无cendakimab，owner用原p20 CTR20222885逐字纠正：AD适应症药健康PK中国开发登记，不是AD患者疗效；country/city疑点不凭常识改原值。manifest对owner activation/preflight“worker产生”标签不采，但文件hash正确。所有原件保留、无分母/召回封存，source artifacts可复用不等于全M2通过。55receipt/citation-checks及现行公共证据有固定hash；无再搜索/模型调用。
+
 ## 2026-10-25 四项正向来源47执行
 
 选择execution：4条独立参照的正向分类/中国AD范围与当前C前端、PNH完整链无共享写资源，可释放核源上下文。E08 live route Grok4.7/high及声明Pi备用，64turn/7200s全预算；仅core-four-positive-47可写，不读生产/旧裁决、不用浏览器。17原source SHA及新输入f6e4ca43…已核，起始实际runner37028/native21590，尚未终态/核源。不预封分母或算召回。最初preflight缺read-set/runner输出，在dispatch前修正为3文件/1输出/0warning；初次进程过滤器误用小写python，实际Python，纠正单次初始化核验并留activation01，未查进度。

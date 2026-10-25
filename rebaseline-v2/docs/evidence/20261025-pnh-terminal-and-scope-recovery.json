@@ -1,0 +1,166 @@
+{
+  "scope": "ACTUAL_ORDINARY_PNH_FAILED_AND_SOURCE_REFERENCE_OWNER_CHECK_NOT_FULL_M1_OR_M2",
+  "base_commit": "a9239501915dda139b33170f85aa271b767cc945",
+  "PNH38": {
+    "project_id": "prj_fc03997a59c5",
+    "run_id": "run_fd9a5c6c4fcf",
+    "result": "failed",
+    "elapsed_seconds": 4330.153,
+    "failed_stage": "candidate_triage",
+    "failure": {
+      "skill": "coverage-review",
+      "requested_model": "qwen",
+      "error_type": "LLMError",
+      "metadata": {
+        "transport_error": "HTTPStatusError",
+        "attempts": 3,
+        "http_status": 429
+      },
+      "route_failures": [
+        {
+          "requested_model": "glm-5.3-flash",
+          "error_type": "LLMError",
+          "transport_error": "HTTPStatusError",
+          "attempts": 1,
+          "http_status": 502
+        },
+        {
+          "requested_model": "deepseek",
+          "error_type": "LLMError",
+          "transport_error": "HTTPStatusError",
+          "attempts": 3,
+          "http_status": 429
+        },
+        {
+          "requested_model": "qwen",
+          "error_type": "LLMError",
+          "transport_error": "HTTPStatusError",
+          "attempts": 3,
+          "http_status": 429
+        }
+      ]
+    },
+    "facts": 44,
+    "design_rows": 0,
+    "source_versions": 143,
+    "entities": {
+      "company": 32,
+      "drug": 211,
+      "target": 8,
+      "trial": 288
+    },
+    "html_files": 0,
+    "actual_success_models": {
+      "glm-5.3-flash": 15,
+      "DeepSeek-V4.1-Flash-1017": 47
+    },
+    "successful_reply_tokens": 1473496,
+    "billing_total": "UNKNOWN_FAILED_ATTEMPT_USAGE_NOT_ASSUMED_ZERO",
+    "runtime_files_unchanged": 360,
+    "original_AD151_replayed": 0,
+    "backup_manifest_sha256": "795dcb757fced099c32c245a3f3d178e78fa7a8f9f923fc84fab11097d391776",
+    "original_db_sha256": "aea110a568ea684603d61a9c8bdf3a2cac4480a2f503b155b09f5e51449c8119",
+    "backup_sha256": "62bd35e36b79e5808659767f8fdf70a08854c9da80aca8bc3268bd51a61212d6",
+    "source_only_backup_files": 123,
+    "agent_large_payload_refs": 0
+  },
+  "scope_recovery_audit": {
+    "path": "ciw-data/normal-pnh-c-terminal-audit-20261025-52/scope-original-input-comparison53.json",
+    "sha256": "80ef4d9f58b52795b9788f4340cf675b4fd0e4f6fd0cee56b5c4cba2bbe8fc2f",
+    "seven_original_task_payloads": "EXACT_EQUAL_CURRENT_INPUTS",
+    "six_old_receipts_match_historical_source_pools": [
+      63,
+      73,
+      81,
+      91,
+      100,
+      126
+    ],
+    "final_project_sources": 143,
+    "current_legacy_cache_hits": 0,
+    "legacy_qualification": {
+      "path": "ciw-data/normal-pnh-c-terminal-audit-20261025-52/scope-provenance-qualification57.json",
+      "sha256": "3b37887c51416d351aa5e03d5e63e658f51ae13ddb588a9fdd4f172c44c0396c",
+      "original_submissions_normalize_to_six_stored_results": "EXACT_EQUAL",
+      "technical_reuse_candidates": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "related_URL_changed_batches": [
+        1,
+        2
+      ],
+      "changed_dependency_counts": [
+        1,
+        2
+      ],
+      "failed_or_unexecuted": [
+        7,
+        8
+      ],
+      "new_cache_or_receipts_written": 0,
+      "medical_acceptance": false
+    }
+  },
+  "source47": {
+    "selector": "grok/grok-build/grok-4.7:high",
+    "runner_effective_model": "grok-4.7",
+    "duration_seconds": 769.042,
+    "fallback": null,
+    "returncode": 0,
+    "requested_internal_turns": 64,
+    "underlying_model_limit": "Worker observed CLI header4.7 and stale operating-principles line4.6; no separate endpoint model identity proven. Do not call profile prose runtime identity.",
+    "qualification_sha256": "6586219cbdb650833a4df338d9bf3d21178eeb53827943833959bf9d97541683",
+    "original_inputs_sha_verified": 17,
+    "outputs_sha_verified": 22,
+    "claims_exact_char_byte_line_verified": 35,
+    "owner_dispositions": {
+      "AD-019": "EU Commission explicitly records delgocitinib new active substance; product-level positive class supported. China AD not established; sourced China CHE must not be used as AD.",
+      "AD-027": "Issuer-authored congress abstract explicitly novel first-in-class antiIL18; issuer-level positive innovation source supported. SC phase2 China AD and IV phase1b remain separate studies; termination retained, no approval inference.",
+      "AD-012": "Class still pending. Worker missed supplied CTR20222885: original exact row supports Chinese registry AD-indicated drug PK development in healthy participants; not an AD patient efficacy study or approval. Raw country=China objects with Ichikawa/Matsudo are retained as a geographic inconsistency concern, no inferred country correction.",
+      "AD-023": "Positive class/modality still pending. Original GHZ339 China AD registration evidence retained; phase or pipeline alone does not assign class."
+    },
+    "owner_corrections": "activation.json/activation01.json and preparation-failure file are owner-generated before dispatch. Worker manifest hashes them correctly but produced_by_worker_01=true must not be treated as authorship proof.",
+    "formal_reference_or_recall": "NOT_ACCEPTED_NOT_COMPUTED",
+    "packet_format_audit": {
+      "scope": "POST_TERMINAL_PACKET_FORMAT_AUDIT_NOT_SOURCE_OR_RUNTIME_REJECTION",
+      "status": "FAIL_PRESERVED",
+      "errors": [
+        "execution context has no parseable immutable worker route",
+        "worker_01 prompt has no parseable provider/model identity"
+      ],
+      "cause": "Owner replaced generated prompt/context with bounded source contract but omitted audit-parser identity labels. Actual immutable schedule manifest and runner JSON independently declare Grok4.7/high and terminal no-fallback metadata. Do not rewrite dispatched context/prompt after the fact or call audit PASS.",
+      "source35_quote_and_hash_checks": "PASS_SCOPED_OWNER_CHECK_ONLY",
+      "formal_M2": "NOT_ACCEPTED"
+    }
+  },
+  "current_runtime_probe56": {
+    "scope": "MINIMAL_CAPACITY_ONLY_NOT_RESEARCH_OR_FULL_ROUTE_ACCEPTANCE",
+    "credential_storage": "MEMORY_ONLY",
+    "fresh_source_or_research_calls": 0,
+    "routes": [
+      {
+        "provider": "cms-router",
+        "requested_model": "glm-5.3-flash",
+        "started_at": "2026-10-25T15:12:02.024098+00:00",
+        "attempts": 1,
+        "http_status": 200,
+        "retry_after_seconds": null,
+        "actual_model": "glm-5.3-flash",
+        "identity_matches": true,
+        "finish_reason": "stop",
+        "nonempty_message": true,
+        "usage": {
+          "prompt_tokens": 16,
+          "completion_tokens": 76,
+          "total_tokens": 92
+        },
+        "capacity_signal": "ACTUAL_MINIMAL_REPLY",
+        "elapsed_seconds": 2.539
+      }
+    ]
+  },
+  "next_bounded_work": "54 finite executor per-scope actual/input source dependencies, no legacy retag or science change. Owner integrates once, verifies true used-source invalidation, qualifies only unchanged historical subset then ordinary resume in isolated copy. No universe or AD151 replay."
+}

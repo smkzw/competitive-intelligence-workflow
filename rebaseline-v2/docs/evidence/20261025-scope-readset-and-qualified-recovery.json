@@ -1,0 +1,122 @@
+{
+  "scope": "PER_BATCH_SOURCE_RECOVERY_AND_QUALIFIED_REAL_RESTORE_DEVELOPMENT_NOT_FULL_M1_M6",
+  "base_commit": "a9239501915dda139b33170f85aa271b767cc945",
+  "frozen_manifest": {
+    "path": "ciw-data/scope-readset-frozen-20261025-60/manifest.json",
+    "sha256": "e245723f7cb3619afdbf393a5546bb67fff748657ae9a87ee04e49574344660d",
+    "files": 370
+  },
+  "development_gate": {
+    "pytest": "1943 passed in16.29s",
+    "ruff": "PASS",
+    "python_structure_files": 243,
+    "javascript_syntax_files": 14,
+    "all_frozen_hashes_unchanged": 370,
+    "current_source_test_skill_files_bound": 270,
+    "existing_warning": "Starlette TestClient httpx deprecation"
+  },
+  "repairs": [
+    "Existing get_unit/put_unit track only this batch input references and actual read versions including request_context. Unrelated later sources no longer invalidate prior work.",
+    "Null URL dependencies invalidate when actual source appears; raw/text/current representation changes remain failures. Missing/foreign explicit IDs never silently produce an empty reusable receipt.",
+    "Signature reuses existing allowed-tool/shared-execution/source-recovery fingerprints as well as task/run/project/Skill/schema/requested model; no source count heuristic.",
+    "No automatic legacy migration; all old keys remain unchanged. Scope business decision functions/schema/Skill unchanged against36 AST/bytes."
+  ],
+  "tests": {
+    "worker_red": "12FAILED2PASS pre-repair preserved; implementation came before final fallback continuation",
+    "worker_final": "Pi/openai-codex/gpt-6-luna:max after declared CodeBuddy/ZCode/MTPLX chain; final agent made no edits and verified existing26 cases. Ruff unavailable there, now owner full Ruff passed.",
+    "owner_extra": "5RED for missing/foreign pointer and tool/shared/source-policy changes; one coherent guard/fingerprint patch. First related69PASS1FAIL revealed old expectation silently dropping missing source; corrected to retain old envelope but reject repeated reuse; final70PASS1.43s.",
+    "boundary_deviation": "Worker also edited two adjacent tests outside its narrower assigned path list: test_scope_batches and test_orphan_trial_scope. Owner inspected and adopts their explicit used-vs-unrelated source contract assertions under overall user scope; not retroactively called authorized worker paths."
+  },
+  "real_preparation61": {
+    "scope": "STANDARD_RESTORE_PLUS_QUALIFIED_UNCHANGED_LEGACY_UNITS_NOT_PIPELINE_OR_MEDICAL_SUCCESS",
+    "project_id": "prj_fc03997a59c5",
+    "run_id": "run_fd9a5c6c4fcf",
+    "frozen_manifest_sha256": "e245723f7cb3619afdbf393a5546bb67fff748657ae9a87ee04e49574344660d",
+    "original_failed_db_unchanged": "aea110a568ea684603d61a9c8bdf3a2cac4480a2f503b155b09f5e51449c8119",
+    "backup_manifest_sha256": "795dcb757fced099c32c245a3f3d178e78fa7a8f9f923fc84fab11097d391776",
+    "resume_boundary": {
+      "index": 3,
+      "name": "candidate_triage",
+      "legacy_refusals": [],
+      "compatible_prefix": [
+        "intake",
+        "universe_china",
+        "universe_global"
+      ]
+    },
+    "history_units": [
+      {
+        "ordinal": 1,
+        "old_receipt": "scope_batch:62a6c226aef329c3d5dc62d899af50a6e74c28e135bf963525e854400926e1e4",
+        "new_key": "scope_batch:916b4e2590e72eb06a4876043eaadfce443da737af44db79725f22ca5ae40d0c",
+        "task_sha256": "27e91cf968b9414c6d06086f8b23e96f83d39256480ec3dedf62265abe3793e7",
+        "input_sources": 37,
+        "raw_normalized_result_unchanged": true,
+        "status": "HOLD_RELEVANT_SOURCE_CHANGED"
+      },
+      {
+        "ordinal": 2,
+        "old_receipt": "scope_batch:f761e787d1d6cb49d4640c3278fff87e9d820de3bc1457d41589cc76a7c57d65",
+        "new_key": "scope_batch:3138c311758b7d7d1fcf4f00db92de8b76f7e6112e3232537148d41e67ed07bf",
+        "task_sha256": "3cda83cb4f2946a709f745f1f6269a2f5ef74d2f790223e94923a93da995f0be",
+        "input_sources": 33,
+        "raw_normalized_result_unchanged": true,
+        "status": "HOLD_RELEVANT_SOURCE_CHANGED"
+      },
+      {
+        "ordinal": 3,
+        "old_receipt": "scope_batch:f238896101f059ac23fcc794c835e91b2794c728f2f5363bcff51ddf58e8052e",
+        "new_key": "scope_batch:834132675b815d3d18a5a4396a93a750e1508a6d0f650a800f1df9c4676e32a6",
+        "task_sha256": "f790b906866878763b9988ebc142825c8bbb59ba8547337de430f4f8b546593a",
+        "input_sources": 21,
+        "raw_normalized_result_unchanged": true,
+        "status": "QUALIFIED_CACHED_TECHNICAL_REUSE"
+      },
+      {
+        "ordinal": 4,
+        "old_receipt": "scope_batch:860ce4a54c57e717ace216a72c6802f89dfc03369f2b617aefc2e262d5618356",
+        "new_key": "scope_batch:640158bb72efe4641e3f11c1bf195b767368785915ba22116c6d13d81b132fbc",
+        "task_sha256": "748ae29bb966ede58525736cf36e0ebb9475a0f59c103150e6eb1651a5e27446",
+        "input_sources": 32,
+        "raw_normalized_result_unchanged": true,
+        "status": "QUALIFIED_CACHED_TECHNICAL_REUSE"
+      },
+      {
+        "ordinal": 5,
+        "old_receipt": "scope_batch:7d048726bdd034d12eec231e134e0214461d0e2e4a0951024e65289f84256170",
+        "new_key": "scope_batch:b257fef34b06fe8a3e41f4491b56a8a2e00a8c63eef9ba2f4bcfbda00edf53b3",
+        "task_sha256": "191089d78e06183d44cad0622c1142c4bb986e225dfb78012d728d70d6865f1a",
+        "input_sources": 29,
+        "raw_normalized_result_unchanged": true,
+        "status": "QUALIFIED_CACHED_TECHNICAL_REUSE"
+      },
+      {
+        "ordinal": 6,
+        "old_receipt": "scope_batch:593c71369eb938e5600988895aedf2182ce377042cbbee7f67415b0449a090be",
+        "new_key": "scope_batch:5feba0cbaf1b00293d609932e028e4d461d3615e567e975ae02aae1569e805a9",
+        "task_sha256": "e3c2515b6b94c31d35bae83578d5e1d7cab0b71da05f22e5c493563b16dc8794",
+        "input_sources": 44,
+        "raw_normalized_result_unchanged": true,
+        "status": "QUALIFIED_CACHED_TECHNICAL_REUSE"
+      }
+    ],
+    "qualified_count": 4,
+    "scientific_tables_and_all_old_stage_rows_unchanged": true,
+    "source_model_calls": 0,
+    "seeded_sources_or_fabricated_stage_success": false,
+    "ordinary_pipeline_run_status": "failed",
+    "browser_space": 7,
+    "next": "Use actual default Service with same frozen60 and declared routes, resume same run in this recovery copy; original38 remains failed and untouched."
+  },
+  "preparation_failure_preserved": "First owner helper assumed optional snapshots/fact_verdicts tables before verify. It failed before qualifying/cache writes. All10 original/restored tables were exact equal. Recovery01 reused same data copy, selected existing science tables; no second data copy or source/model call.",
+  "ordinary_recovery_execution": "NOT_STARTED_AT_THIS_RECEIPT",
+  "full_medical_visual_install_acceptance": "NOT_COMPLETED",
+  "packet_format_audit": {
+    "ok": false,
+    "errors": [
+      "execution context has no parseable immutable worker route",
+      "worker_01: prompt has no parseable provider/model identity"
+    ],
+    "disposition": "Preserve original dispatched prompt/context. Runner actual declared route/fallback separately checked; owner direct source/diff/RED/GREEN/frozen gate are the code evidence. Do not claim full packet-format audit PASS or rewrite old prompt to manufacture it."
+  }
+}
