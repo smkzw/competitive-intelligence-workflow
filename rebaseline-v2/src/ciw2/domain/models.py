@@ -14,6 +14,7 @@ StatType = Literal[
     "count_events",         # 事件次数（不可除以人数当比例）
     "proportion",           # 受试者比例 (%)
     "mean", "median", "ls_mean", "ls_mean_change", "mean_change", "percent_change",
+    "geometric_mean", "geometric_ls_mean",
     "hazard_ratio", "odds_ratio", "risk_difference", "rate_per_patient_year",
     "number",               # 来源仅给出数值，统计形式未知
     "text",

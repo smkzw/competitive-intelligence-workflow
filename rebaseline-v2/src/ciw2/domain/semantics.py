@@ -9,6 +9,7 @@
 
 from __future__ import annotations
 
+import math
 import re
 from dataclasses import dataclass, field
 from typing import Literal
@@ -16,18 +17,33 @@ from typing import Literal
 # ---------------------------------------------------------------- 数值与比例
 
 def parse_number(raw: object) -> float | None:
-    """来源数值解析；无法解析或缺失返回 None（不是 0）。"""
+    """Only finite exact scalars; censoring is not equality to its threshold."""
     if raw is None:
         return None
     if isinstance(raw, bool):
         return None
     if isinstance(raw, (int, float)):
-        return float(raw)
-    text = str(raw).strip().replace(",", "")
+        try:
+            value = float(raw)
+        except OverflowError:
+            return None
+        return value if math.isfinite(value) else None
+    text = str(raw).strip()
     if text in {"", "NA", "N/A", "NE", "--", "-", "None", "null"}:
         return None
-    m = re.fullmatch(r"[<>≤≥]?\s*(-?\d+(?:\.\d+)?)", text)
-    return float(m.group(1)) if m else None
+    if not re.fullmatch(r'[+-]?(?:(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?', text):
+        return None
+    value = float(text.replace(',', ''))
+    return value if math.isfinite(value) else None
+
+
+def parse_observation(raw: object) -> float | str | None:
+    """Keep a valid censored source expression verbatim, outside exact axes."""
+    if isinstance(raw, str):
+        match = re.fullmatch(r'\s*(?:[<>]=?|[≤≥])\s*(.+?)\s*', raw)
+        if match and parse_number(match[1]) is not None:
+            return raw
+    return parse_number(raw)
 
 
 def derive_proportion(count: object, denominator: object, stat_type: str) -> float | None:

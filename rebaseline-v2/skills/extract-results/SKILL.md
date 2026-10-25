@@ -23,7 +23,8 @@ source_context只记录原文明确的legal_entity、relationship、as_of（YYYY
      safety.sae.any / safety.discontinuation / safety.death.all_cause / safety.ae.term
    - entity：试验号（NCT/CTR）优先，没有就写药物名
    - endpoint：终点原文名称；timepoint：原文时间点；arm：原文组名（不得改写）；population：分析人群原文
-   - stat_type：count_participants（人数）/ count_events（事件次数）/ proportion（%）/ mean / ls_mean_change / hazard_ratio 等
+   - stat_type：保留来源明确统计形式；count_participants（人数）/ count_events（事件次数）/ proportion（受试者比例）/ mean / geometric_mean / geometric_ls_mean / ls_mean_change / hazard_ratio 等；单位为%本身不改变统计形式。
+   - value：明确“<、>、≤、≥”的报告值保留完整原表达，不只提取阈值数字；如“<5”不能写成5。原统计量、组别人群和单位仍照录，不做比例或均值转换。
    - denominator：仅当原文明确给出该组 N
    - quote：**从读取文本中逐字复制**、包含该数值的一段（≤400 字）
 4. 原文没有的写进 gaps（例如「III 期 52 周数据未公开」），不要推断、不要换算、不要把未报告写成 0。

@@ -29,9 +29,12 @@ def test_missing_quote():
 def test_clinical_inequalities_are_plain_source_text_not_html_tag_delimiters():
     source='入选标准：ALT < 3；EASI > 16。\n主要终点：IGA ≥2 分改善。'
     assert '< 3' in normalize(source) and '> 16' in normalize(source)
-    assert check_quote(source,'ALT < 3',3).ok
-    assert check_quote(source,'EASI > 16',16).ok
-    assert check_quote(source,'主要终点：IGA ≥2 分改善。',2).ok
+    assert check_quote(source,'ALT < 3','< 3').ok
+    assert check_quote(source,'EASI > 16','> 16').ok
+    assert check_quote(source,'主要终点：IGA ≥2 分改善。','≥2').ok
+    assert not check_quote(source,'ALT < 3',3).ok
+    assert not check_quote(source,'EASI > 16',16).ok
+    assert not check_quote(source,'主要终点：IGA ≥2 分改善。',2).ok
 
 
 def test_removing_intervening_inequalities_must_not_manufacture_an_unsupported_quote():

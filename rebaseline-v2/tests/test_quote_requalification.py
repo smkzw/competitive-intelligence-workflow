@@ -23,8 +23,8 @@ from ciw2.service import Service
 from ciw2.sources.http import register_text
 from ciw2.verify.quote import check_quote
 
-ALT_SOURCE = '入选标准：ALT < 3；EASI > 16。\n主要终点：IGA ≥2 分改善。'
-GENUINE_QUOTE = 'ALT < 3'
+ALT_SOURCE = '入选标准：ALT < 3；EASI > 16。\n主要终点：IGA ≥2 分改善。\nALT observed value 3.'
+GENUINE_QUOTE = 'ALT observed value 3.'
 FABRICATED_QUOTE = 'ALT 16'
 RESULT_CONTEXT = {'endpoint': 'ALT change', 'timepoint': 'Week 16', 'unit': 'U/L',
                   'stat_type': 'mean', 'population': 'ITT', 'arm': 'Treatment A'}
@@ -114,16 +114,19 @@ def test_verify_accepts_genuine_inequality_quotes_end_to_end(env):
     svc, rc, pid, _ = env
     url = 'https://example.org/criteria'
     _source(rc, url=url)
-    _adopt(rc, [_proposal(rc, url, value=3, quote=GENUINE_QUOTE),
-                _proposal(rc, url, value=16, quote='EASI > 16')])
+    _adopt(rc, [_proposal(rc, url, value='< 3', quote='ALT < 3'),
+                _proposal(rc, url, value='> 16', quote='EASI > 16')])
     facts = [f for f in svc.db.current_facts(pid) if f['extracted_by'].startswith('llm:')]
-    assert {f['value'] for f in facts} == {3, 16}
+    assert {f['value'] for f in facts} == {'< 3', '> 16'}
     assert all(f['status'] == 'verified' for f in facts)
     receipts = _receipts(svc.db)
     assert {r['verdict'] for r in receipts} == {'confirmed'} and len(receipts) == 2
     rule = _assessment().rule_identity()
     assert all(r['rule'] == rule and r['source_digest'] and r['text_digest'] for r in receipts)
     assert all(r['coordinate'] == 'normalized' and r['quote_start'] is not None for r in receipts)
+    data = report_data(svc.db,pid,'B')
+    assert set(data['plot_exclusions'].values()) == {'non_numeric'}
+    assert data['charts']['groups'] == []
 
 
 # --------------------------------------------------------------------------- B
@@ -235,7 +238,7 @@ def test_finding_and_chart_use_effective_not_stored_status(env):
 def test_requalification_uses_pinned_older_source_not_later_url_version(env):
     svc, rc, pid, trial = env
     url = 'https://example.org/registry'
-    older = _source(rc, text='入选标准：ALT < 3。', url=url)
+    older = _source(rc, text='入选标准：ALT < 3。'+GENUINE_QUOTE, url=url)
     config = svc.context(pid, svc.db.create_run(pid))
     newer = register_text(config.tool_ctx(), kind='web', url=url, text='入选标准：ALT < 3；修订后 ALT < 2。')
     assert newer and newer != older
@@ -300,7 +303,7 @@ def test_requalification_distinguishes_source_failures(env, case, verdict):
 
 def test_unreadable_source_is_retried_after_cas_recovery(env):
     svc, rc, pid, trial = env
-    text = '入选标准：ALT < 3。'
+    text = '入选标准：ALT < 3。'+GENUINE_QUOTE
     raw, encoded = text.encode(), text.encode()
     sid = svc.db.add_source(pid, 'web', 'https://example.org/recovered',
                             hashlib.sha256(raw).hexdigest(),

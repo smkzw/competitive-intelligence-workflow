@@ -1,5 +1,16 @@
 # Execution checkpoint
 
+## 2026-10-25 当前来源标量包与真实归并终态
+
+方法direct：来源明确比较符/统计标签与数值等式可由固定原文及生产反例决定；共享数值/来源/类型由owner单写，不为确定性词法再开模型会商。现有B独立06窄复核44085、M2源清单recovery69149仍按原句柄待终态，不轮询或重派。571ae777已push且fresh remote同值。
+
+根因整族24例18RED/6PASS，修改后86邻接PASS；继续查共享quote，六符号均把阈值认证为确数，6真RED。旧正例ALT<3→mean3不成立，改用完整表达/结构验证不等式原文仍可读，其他恢复/回滚/幂等/版本正例补真正ALT实测3，并新增legacy阈值确数只降级且原事实不变反例，不删旧保障、不改冻结历史。131相关PASS0.87s/Ruff过，当前全门/真实影响审计未跑。StatType/源parser/显示label及作者Skill同期修，raw/0/未知均保留，无新库/新框架。
+
+当前source-scalars03 manifestc88449474e32d431e6387bb2267a855061c2fcbaec13ea36edfe6df4cebd3cd1，1674PASS12.52s/Ruff全/10JS/207Python600-80/269字节后核无变。01有1661PASS/1旧错误文案断言FAIL及608行；保留FAIL，数值缺失仍用兼容原文案，阈值丢失给准确专属原因，新增legacy负例移至已建标量模块，不删恢复断言。02完整1662PASS后邻接数字字符串绕过12真RED，同一标量守卫处理int/float/numeric-string，完整符号字符串/结构阈值继续接受，153邻接PASS；03最终门不借02旧PASS。
+实际CAS50bc0483…study14的668结果前后完全相等，01与03parser/semantics字节相同，有绑定不重复提取；03只读原B渲染87330c0e…精确等于08，故不重复24几何截图。只读原失败run数据6580code事实、0stored-verified LLM需重签；原780/5212引用资格0受影响，七表逻辑SHA全同，0新回执/模型/来源，这是资格非医学签收。31缓存仍待精确task/schema兼容。公共回执20261025-source-scalar-and-synthesis-failure.json；B公共回执仅本地venv警告路径漏出，当前副本已遮蔽并留原私有字节，不改旧manifest/截图/测试hash、不重写Git历史。准备白名单提交push后只修Finding必填引用，不重做151或31。
+
+91108已自然终态exit1，不再等：ValueError摘要引用不属于本次完整输入；精确审计第32包9要点/62别名/step3提交5项，5项全部缺fact_refs，无实际foreign_refs。Finding默认[]使Agent内提交成功、外部合同才拒绝；31合格归并单元保全。原151批/780/46源/四科学表/62runtime全部不变，0新来源。请求GLM→DeepSeek→Qwen，实际GLM成功事件2/DeepSeek-V4.1-Flash-1017事件84；GLM502切授权备用，无Qwen；模型事件数不是单元数/费用。receipt/failure-root-audit.json保留，未生成合格最终摘要，非完整流水线。先核新quote规则影响及31缓存，不新启另一780或151运行；下一最小修复仅Finding必填非空引用，复用已有第4步纠正，不重造执行器。
+
 ## 2026-10-25 当前阅读整合与独立REVISE待收口
 
 当前合批：5生产RED/17PASS后复合访视分层、真实队列/年龄、SD/区间及拼写阈值拒绝；144相关PASS。真实只读668点保持原value/arm/series/trial及完整fact ID；原current事实SHAeb4067d2…未变，70→34有逐事实old/newgroup映射2bdd3fe4…。06 manifest078bc0c8…全v2 1624PASS11.55s/Ruff/10JS/206Python600-80/268输入未变；原9JS计数漏记一mjs，当前实际10项逐个exit0，不改旧回执。

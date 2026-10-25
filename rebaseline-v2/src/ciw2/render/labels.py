@@ -55,6 +55,7 @@ _REGISTRY_LABELS: dict[str, dict[str, str]] = {
     },
     'statistic': {
         'mean': '均值', 'median': '中位数', 'ls_mean': '最小二乘均值',
+        'geometric_mean': '几何均值', 'geometric_ls_mean': '几何最小二乘均值',
         'ls_mean_change': '最小二乘均值变化', 'mean_change': '均值变化',
         'percent_change': '百分比变化', 'proportion': '受试者比例',
         'count_participants': '受试者人数', 'count_events': '事件次数',

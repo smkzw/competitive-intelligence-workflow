@@ -17,7 +17,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from ciw2.domain.identity import CONTROL_LABELS, research_aliases
-from ciw2.domain.semantics import derive_proportion, parse_number
+from ciw2.domain.semantics import derive_proportion, parse_number, parse_observation
 from ciw2.domain.tiers import tier_of
 from ciw2.harness.tools import REGISTRY, ToolContext
 from ciw2.sources.http import fetch
@@ -142,13 +142,14 @@ def design_facts(s: dict[str, Any]) -> list[dict[str, Any]]:
 
 def stat_type_of(param_type: str | None, unit: str | None) -> str:
     u = (unit or "").lower()
-    p = (param_type or "").upper()
-    if "percent" in u and "participant" in u or u.strip() in {"%", "percentage"}:
+    p = (param_type or "").strip().upper().replace(' ', '_')
+    if p in {'NUMBER', ''} and "percent" in u and "participant" in u:
         return "proportion"
     return {
         "COUNT_OF_PARTICIPANTS": "count_participants", "COUNT_OF_UNITS": "count_events",
         "MEAN": "mean", "MEDIAN": "median", "LEAST_SQUARES_MEAN": "ls_mean",
-        "GEOMETRIC_MEAN": "mean", "NUMBER": "number",
+        "GEOMETRIC_MEAN": "geometric_mean", "GEOMETRIC_LEAST_SQUARES_MEAN": "geometric_ls_mean",
+        "NUMBER": "number",
     }.get(p, "number")
 
 
@@ -176,7 +177,7 @@ def result_facts(study: dict[str, Any]) -> list[dict[str, Any]]:
             for ki, cat in enumerate(cls.get("categories", [])):
                 for m in cat.get("measurements", []):
                     gid = m.get("groupId")
-                    val = parse_number(m.get("value"))
+                    val = parse_observation(m.get("value"))
                     out.append(_fact(
                         f"{kind}.value", val, quote=m.get("value"),
                         path=f"outcomeMeasures[{mi}].classes[{ci}].categories[{ki}]",

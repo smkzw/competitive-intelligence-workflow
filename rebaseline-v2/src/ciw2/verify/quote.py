@@ -84,7 +84,7 @@ def _missing_labels(value: object, quote: str) -> bool:
         r'(?<![A-Za-z0-9_α-ωΑ-Ω/-])'+re.escape(normalize(value))+r'(?![A-Za-z0-9_α-ωΑ-Ω/-])',quote) is None
 
 
-def _number_in(num: str, text: str) -> bool:
+def _number_in(num: str, text: str, *, exact_scalar: bool = False) -> bool:
     try:
         target = Decimal(num.replace(',', ''))
     except InvalidOperation:
@@ -92,10 +92,12 @@ def _number_in(num: str, text: str) -> bool:
     if not target.is_finite():return False
     if any(
         Decimal(match[0].replace(',', '')) == target and _numeric_suffix(text,match.end())
+        and (not exact_scalar or not re.search(r'[<>]=?\s*$', text[:match.start()]))
         for match in re.finditer(_NUMBER, text)):return True
     # An unsigned upper endpoint is not a negative number or a digit inside 4-1BB.
     ranges=re.finditer(r'(?<![\w.+/-])\d+(?:\.\d+)?\s*-\s*(?P<upper>\d+(?:\.\d+)?)(?![\d.-])',text)
-    return any(Decimal(match['upper'])==target and _numeric_suffix(text,match.end()) for match in ranges)
+    return any(Decimal(match['upper'])==target and _numeric_suffix(text,match.end())
+               and (not exact_scalar or not re.search(r'[<>]=?\s*$',text[:match.start()])) for match in ranges)
 
 
 def _numeric_suffix(text: str,end: int) -> bool:
@@ -119,9 +121,14 @@ def check_quote(source_text: str, quote: str | None, value: object = None) -> Qu
         return QuoteCheck(False, None, None, "原文中找不到该片段")
     if _missing_labels(value,q):
         return QuoteCheck(False,idx,idx+len(q),'原文片段缺少完整科学标识')
-    missing = [n for n in _numbers(value,q) if not _number_in(n, q)]
+    exact_scalar = ((isinstance(value, (int, float)) and not isinstance(value, bool))
+                    or isinstance(value, str) and re.fullmatch(_NUMERIC_TOKEN, normalize(value)) is not None)
+    numbers = [str(value)] if exact_scalar else _numbers(value,q)
+    missing = [n for n in numbers if not _number_in(n, q, exact_scalar=exact_scalar)]
     if missing:
         sample=', '.join(n[:80] for n in missing[:5])
         extra=f'（另{len(missing)-5}项）' if len(missing)>5 else ''
-        return QuoteCheck(False, idx, idx + len(q), f"数值未出现在片段中：{sample}{extra}")
+        reason = ('原文比较符未保留，不能支持确定数值' if exact_scalar and any(_number_in(n,q) for n in missing)
+                  else '数值未出现在片段中')
+        return QuoteCheck(False, idx, idx + len(q), f"{reason}：{sample}{extra}")
     return QuoteCheck(True, idx, idx + len(q))

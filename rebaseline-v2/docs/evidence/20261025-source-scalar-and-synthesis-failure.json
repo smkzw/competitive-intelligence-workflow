@@ -1,0 +1,189 @@
+{
+  "scope": "SOURCE_SCALAR_AND_TYPED_STATISTIC_COMPONENT_NOT_FULL_DELIVERY",
+  "base_commit": "571ae777da835f4663bf9cca916ed5c106096a71",
+  "candidate": "ciw-data/source-scalars-20261025-03",
+  "manifest_sha256": "c88449474e32d431e6387bb2267a855061c2fcbaec13ea36edfe6df4cebd3cd1",
+  "development_gate": {
+    "scope": "EXPLICIT_FROZEN_V2_DEVELOPMENT_NOT_MEDICAL_OR_FINAL_PRODUCT",
+    "manifest_sha256": "c88449474e32d431e6387bb2267a855061c2fcbaec13ea36edfe6df4cebd3cd1",
+    "pytest": {
+      "exit": 0,
+      "seconds": 12.969,
+      "tail": [
+        "..................                                                       [100%]",
+        "=============================== warnings summary ===============================",
+        "../../../.venv/lib/python3.13/site-packages/fastapi/testclient.py:1",
+        "  rebaseline-v2/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.",
+        "    from starlette.testclient import TestClient as TestClient  # noqa",
+        "",
+        "-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html",
+        "1674 passed, 1 warning in 12.52s"
+      ]
+    },
+    "ruff": {
+      "exit": 0,
+      "seconds": 0.022,
+      "tail": [
+        "All checks passed!"
+      ]
+    },
+    "javascript": [
+      {
+        "path": "src/ciw2/render/static/kz-motion.js",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/render/static/portal.js",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/render/static/kz-site.js",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/render/static/kz-tokens.js",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/render/static/echarts.min.js",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/sources/cde_browser.mjs",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/sources/china_browser.mjs",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/sources/cde_review_browser.mjs",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/sources/china_detail.mjs",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/sources/nmpa_detail.mjs",
+        "exit": 0
+      }
+    ],
+    "python_files": 207,
+    "size_600_80_violations": [],
+    "immutable_input_changes": []
+  },
+  "red_groups": {
+    "initial_source_family": [
+      18,
+      6
+    ],
+    "scalar_comparison_symbols": [
+      6,
+      25
+    ],
+    "numeric_string_bypass": [
+      12,
+      32
+    ]
+  },
+  "contract": [
+    "finite exact decimals/exponents/zero preserved; malformed/nonfinite not invented",
+    "valid censored source expressions remain verbatim, not exact plotted points",
+    "numeric string uses same scalar relation guard; full operator expressions and structures retained",
+    "explicit mean/geometric/LS types precede percent unit; percent alone not participant proportion",
+    "old facts, source bytes and historical verdicts never overwritten"
+  ],
+  "real_source_replay": {
+    "scope": "OFFLINE_CAPTURED_REAL_SOURCE_PRODUCTION_PARSER_REPLAY_NOT_NEW_SOURCE_OR_ADOPTION",
+    "source_sha256": "50bc0483d2b3cfb6ebe207a71afe94575ca15e30acc707dbb4634ab56532dee2",
+    "locator": "$.studies[14] / NCT04921345",
+    "before_extractor": "d2f851a1c949117cae6c5672e290ffede7669a2270eca8f8c785d3a4d01420f4",
+    "after_extractor": "cbeb8eb0dd7929fb582e8112f3caacb92ff4f5c9ac890b1415ad2453ef0aed7b",
+    "facts_before": 668,
+    "facts_after": 668,
+    "numeric_value_changes": 0,
+    "statistic_transitions": {},
+    "changed_records": [],
+    "source_bytes_after_sha256": "50bc0483d2b3cfb6ebe207a71afe94575ca15e30acc707dbb4634ab56532dee2",
+    "source_calls": 0,
+    "model_calls": 0,
+    "source_db_writes": 0
+  },
+  "replay_binding": "01 and03 ctgov.py/domain/semantics.py equal bytes; replay unchanged, no invented real censored/geometric trigger",
+  "qualification_impact": {
+    "scope": "CURRENT_QUOTE_RULE_READ_ONLY_IMPACT_NOT_MEDICAL_ACCEPTANCE",
+    "manifest_sha256": "c88449474e32d431e6387bb2267a855061c2fcbaec13ea36edfe6df4cebd3cd1",
+    "quote_rule": "quote-bd77e1050adcd448",
+    "current_facts": 6580,
+    "llm_stored_verified_checked": 0,
+    "verdicts": {},
+    "original_findings": 780,
+    "original_unique_refs": 5212,
+    "original_refs_not_currently_qualifiable": 0,
+    "affected_original_findings": 0,
+    "invalid_ref_ids": [],
+    "issues": [],
+    "rows_before_after_equal": true,
+    "model_calls": 0,
+    "source_calls": 0,
+    "original_db_mode": "ro",
+    "new_receipts_written": 0
+  },
+  "exact_browser_binding": {
+    "scope": "EXACT_RENDERED_COMPONENT_BINDING_NOT_NEW_BROWSER_RUN",
+    "candidate_manifest_sha256": "c88449474e32d431e6387bb2267a855061c2fcbaec13ea36edfe6df4cebd3cd1",
+    "current_html_sha256": "87330c0e56f61a82d8f0d77f87c9b70fccf337e223e7753cdba99737c0ba6da9",
+    "browser08_html_sha256": "87330c0e56f61a82d8f0d77f87c9b70fccf337e223e7753cdba99737c0ba6da9",
+    "html_exactly_equal": true,
+    "source_facts_before_after_equal": true,
+    "new_browser_screens": 0,
+    "new_source_or_model_calls": 0,
+    "browser_evidence": "endpoint-reading-20261025-08/browser/receipt.json (24screens,owner4images)",
+    "limitations": "This actual source does not exercise geometric means or censored scalars; those are explicit synthetic extraction/ingestion/quote negatives and positives, not invented clinical data."
+  },
+  "test_migration": "Old ALT<3 -> mean3 acceptance was false. Inequality source tests use literal expressions or structures; ordinary positive verdict controls use actual observed ALT3. Source pinning, rollback, idempotency, concurrent and revision guards retained. New legacy-scalar negative requires demotion without fact mutation.",
+  "preserved_failures": [
+    "01 1661PASS/1 existing error-text assertion FAIL, plus600line violation",
+    "02 1662PASS then adjacent numeric-string bypass uncovered and12RED; not accepted as coverage for that bypass",
+    "03 current1674PASS closes numeric scalar and numeric-string paths"
+  ],
+  "synthesis_terminal": {
+    "run_id": "run_8e357c79edf6",
+    "component_status": "failed",
+    "actual_models": {
+      "glm-5.3-flash": 2,
+      "DeepSeek-V4.1-Flash-1017": 84
+    },
+    "original151_hashes_unchanged": true,
+    "science_unchanged": true
+  },
+  "synthesis_failure_root": {
+    "scope": "TERMINAL_SYNTHESIS_FAILURE_ROOT_AUDIT_NO_MODEL_OR_RESEARCH_RERUN",
+    "run_id": "run_8e357c79edf6",
+    "component_status": "failed",
+    "input_findings": 780,
+    "completed_synthesis_units": 31,
+    "failing_packet_input_findings": 9,
+    "failing_packet_alias_count": 62,
+    "failing_packet_limit": 5,
+    "last_submission_step": 3,
+    "submitted_findings": 5,
+    "missing_fact_refs": 5,
+    "empty_fact_refs": 5,
+    "foreign_refs": [],
+    "raw_submission_sha256": "1f17c17051c88730c4eec6e05fb9aa2d4b8a790f1547ba51c315a52dd2fa4ec9",
+    "schema_current_default": "Finding.fact_refs defaults to [], schema does not require it; production post-check rejects empty references outside Agent retry. No source discarded or accepted.",
+    "next_safe_action": "Make summary references required nonempty in schema, bounded existing Agent repair and cache compatibility qualification before new model calls; audit current quote-rule qualification first."
+  },
+  "primary_field_sources": [
+    "https://www.reginfo.gov/public/do/DownloadDocument?objectID=97968101 (archival definitions, not current legal advice)",
+    "https://clinicaltrials.gov/study/NCT04454918?tab=results (explicit geometric LS mean, percent unit, not adopted into project)"
+  ],
+  "remaining": [
+    "Finding schema mandatory citations and31-cache qualification",
+    "M2 reference source recovery/owner audit/recall",
+    "current whole-flow/medical/installation acceptance",
+    "Chinese endpoint coverage and table column geometry"
+  ]
+}
