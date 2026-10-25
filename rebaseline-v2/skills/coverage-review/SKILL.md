@@ -5,7 +5,7 @@ tools: [fetch_url]
 output: ScopeResult
 max_steps: 10
 ---
-输入：完整候选清单的一批（含 entity_id、原名、已知别名、属性、发现路线）、各检索路线统计、用户关注点。分批只是执行预算，不是范围截断。
+输入：完整候选清单的一批（含 entity_id、原名、已知别名、属性、发现路线）、各检索路线统计（coverage 按路线族与状态给出完整数量，逐条路线明细保留在运行数据库）、用户关注点。分批只是执行预算，不是范围截断。
 
 对本批每个候选恰好给出一个 decision，复制其 entity_id，drug 使用该候选原名或已知别名，reason 简明描述依据（通常120字以内）：
 - in_scope=true：针对本适应症的治疗药物，且符合用户关注点限定。
@@ -15,7 +15,7 @@ max_steps: 10
 注意：
 - 不合并、删除或新造候选ID；相似拼写、去连字符、共享别名均不证明是同一实体。疑似重复仍分别返回，理由中说明关系待核。
 - 不返回其他批的候选；不得因信息不足遗漏本批候选。保留全部候选与未知项。
-- attrs.registry_observations 是本项目已登记 CT.gov JSON 的原文摘录：conditions、studyType、primaryPurpose、healthyVolunteers；每组 studies 保留全部 NCT、source_id 与 JSON 位置。与本次判断相关的观测直接使用，不要为同一 conditions 重复抓取；字段缺失、各组冲突或仍不足以判断时再查证或返回 null。
+- attrs.registry_observations 是本项目已登记 CT.gov JSON 的原文摘录：conditions、studyType、primaryPurpose、healthyVolunteers；sources 给出 source_id 到登记 URL 的对应，每组 studies 保留全部 NCT、source_id 与 JSON 位置。与本次判断相关的观测直接使用，不要为同一 conditions 重复抓取；字段缺失、各组冲突或仍不足以判断时再查证或返回 null。
 - 分组只做原文归类：不证明药物身份、创新性、审批或 MAH；不同组的差异必须保留，不能合并成单一结论。
 - 不要因为「只有中国来源」或「只有早期阶段」就排除——除非用户关注点明确要求。适应症相关、期别或干预类型为 DRUG 都不等于创新性证据。
 - 中国路线的 blocked/failed 已作为 coverage 数据保留；不要在每个 reason 重复同一句提示，只有该候选结论确实依赖缺失的中国资料时才说明。

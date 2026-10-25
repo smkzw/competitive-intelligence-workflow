@@ -12,8 +12,9 @@ current search snapshot is evidence in its own right. Sources are never ranked a
 each other, and picking the newest stored version at one URL only keeps that source
 current; it says nothing about publication or clinical precedence. Observations are
 grouped losslessly by their selected raw fields, so repeated values collapse while
-every exact study, source version and JSON location is retained. Different current
-values stay in different groups.
+every exact study, source version and JSON location is retained. A source dictionary
+declares each registered URL once per source_id; every study reference points to it.
+Different current values stay in different groups.
 """
 from __future__ import annotations
 
@@ -184,7 +185,15 @@ def _trial_ncts(candidate: dict[str, Any], links: dict[str, list[str]]) -> list[
 
 
 def _observations(ncts: list[str], index: dict[str, list[_Entry]]) -> dict[str, Any]:
+    """Selected raw fields plus an explicit source dictionary for every provenanced study.
+
+    A current source version has one URL for all of its observations, so the URL is
+    declared once per source_id.  Every study reference still names the exact NCT,
+    source version and JSON location; the association round-trips without ranking,
+    merging or dropping a group.
+    """
     groups: dict[str, dict[str, Any]] = {}
+    sources: dict[str, str] = {}
     seen: set[tuple[str, str, str, str]] = set()
     for nct in ncts:
         for entry, selected in index.get(nct, ()):
@@ -193,12 +202,16 @@ def _observations(ncts: list[str], index: dict[str, list[_Entry]]) -> dict[str, 
             mark = (entry['nct'], entry['source_id'], entry['json'], entry['url'])
             if mark not in seen:
                 seen.add(mark)
-                group['studies'].append(dict(entry))
+                sources[entry['source_id']] = entry['url']
+                group['studies'].append(
+                    {'nct': entry['nct'], 'source_id': entry['source_id'], 'json': entry['json']})
     if not groups:
         return {}
     for group in groups.values():
-        group['studies'].sort(key=lambda item: (item['nct'], item['url'], item['source_id'], item['json']))
-    return {'registry': 'ctgov', 'groups': [groups[key] for key in sorted(groups)]}
+        group['studies'].sort(key=lambda item: (item['nct'], sources[item['source_id']],
+                                                item['source_id'], item['json']))
+    return {'registry': 'ctgov', 'sources': {sid: sources[sid] for sid in sorted(sources)},
+            'groups': [groups[key] for key in sorted(groups)]}
 
 
 def attach(rc: RunContext, candidates: Sequence[dict[str, Any]]) -> list[dict[str, Any]]:

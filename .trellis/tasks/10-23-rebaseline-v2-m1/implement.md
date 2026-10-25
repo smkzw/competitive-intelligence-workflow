@@ -931,3 +931,17 @@ ff69abd3已push并远端实核一致。20先完成离线安装/23资产/9Skill/C
 123仅120运行时冻结/manifestfaf50b80…，不造新venv/整仓副本。124标准备份147文件19528622逻辑字节/manifest60f92805…；1个46651字节可选trace另外内容寻址保留，无资料删除。125使用固定123普通Service全C计划，恢复同项目prj_fc03997a59c5/run_fd9a5c6c4fcf，从universe_china实际重执行（工具与指引变更），intake兼容，不改stage计划、不seed或伪造上游成功。原启动器链式替换生成错误子文件名，activation前就失败/0模型来源；保存原启动器与launcher-pre-dispatch-correction，再用精确实际子文件启动recovery01。child40909/原生13798已确认所有权，Ego8不由owner抢用；等kernel退出事件，不轮询。
 
 当前源码/测试待白名单提交，1999仅开发门；普通M1/科学/四宽/当前安装尚待。37摘要旧REVISE保留。M2原三清单/核心分母未封，不借正向类别子集宣布95%。下一安全动作：等125终态→核完整阶段/真实来源/设计/HTML→实际Ego报告和科学审阅；失败则保全并只修根因，不盲重跑。
+
+## 2026-10-26 125终态与130有界根因执行
+
+125已自然exit1，实际4768.883s；14 GLM5.3flash+31 DeepSeek1017成功回复/1181297成功回复tokens，不是所有尝试/计费。中国/全球/triage/expand成功，coverage_review规划前ValueError：空候选base352856字符，其中3068 coverage行350692字符；最大完整候选77234字符（registry74102），双根因而非模型限流。791来源/90当前事实/0设计HTML，M1未过。intake/原61/120运行时不变；一次kernel退出事件4674.865s，0进度轮询。127标准备份335文件52744348逻辑字节/manifestf4911aaf…，另12 trace573559字节，资料不删。128/129只在备份memory DB查完整失败输入，0模型/网络。
+
+采用execution：130代码/portable测试写集与owner的终态备份、真实memory恢复审计不相交；一个E03执行节点（无chair/会商），科学裁决不在该修复。先RED族、完整最小投影/规划压缩，再相关回归；不得抬60000/30预算、裁原文/候选/来源或改历史兼容门。owner随后独立核全243候选/完整source关联/实际恢复边界及一次稳定宽门；不盲重跑中国全球，不把3068展开路线当3068独立来源或报道。
+
+130实际已启动runner69805/原生9744，原manifest/4输入SHA固定，96turn7200s，live E03 CodeBuddy DS4.1flash:max及声明备用；preflight先实核PASS0warning。无全仓/真实研究许可给worker，owner保有DB/CAS/恢复边界。d4894f4f已推并核远端，273 Git源/Skill/测试+固定ECharts逐SHA同122；下一次稳定宽门等待130完整小改，不因文档改动重跑。
+
+130终态实际432.172s/82工具calls，CodeBuddy DS4.1flash:max选择器/无备用、session01a174b0-0224-7baf-b07c-c86ec0cf49de，原4输入SHA不变、audit-execution PASS。worker原报告输出bcc002d4…保留；“最大route45”不是最小/全体45，不能据其下界算138K，实际350692字符才是证据；RED5失败分别3生产规划/2形状访问错误，原报告计数叙述不全采。其目录列名超窄读集的披露保留，无真实DB/CAS/凭据读写证据。
+
+owner读完整源码/新276行测试及3处合同迁移；发现任意16hex段被删，与仅expand声明不符，3真实未知route反例RED后仅按已观测china/global expand(alias/company/target)布局和browser/site后缀fullmatch；6成族route例纳入，141相关PASS2.37s/Ruff。132从127备份只读→memory逐一完整还原旧123 _observations：243药物190有上下文/302组4587精确ref；44孤立研究44组186ref；4773 NCT/source/JSON/URL与每组raw字段完全等同。最大eculizumab291ref registry74102→42115，base352856→6713；药物28包/孤立2包全部≤60000/≤30，候选恰好一次、0模型来源/原备份不写。当前stage_versions实测candidate_triage，入口/中国/全球兼容；不假改旧receipt、不得重跑这三成功前置。新scope上下文/形状实际已变，需要真实新资格，非原10批自动重标。
+
+133一次稳定2011PASS15.02s/Ruff/248Python600/80/14JS/388输入SHA不变，manifest62ac8fec1fbf813a18ed5ae483b52f487282c4e8798151bb9c96ae1275bc3f6f；134只120运行时1934945bytes/manifest132bd33665d2f1c46e150bcc70e28f24655a42a3ae0cf31bfd16e2a0385f0e4c，无新venv/整仓源测试副本。130原派发4SHA不变/audit-execution与review-gate均PASS；不是独立科学会商或最终M1。准备白名单提交后普通candidate_triage恢复，当前安装64不能借给134。

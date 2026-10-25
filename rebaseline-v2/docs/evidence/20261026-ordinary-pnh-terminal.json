@@ -1,0 +1,70 @@
+{
+  "scope": "ACTUAL_ORDINARY_SERVICE_RESUME_FULL_UNCHANGED_C_PLAN_NOT_COMPONENT",
+  "project_id": "prj_fc03997a59c5",
+  "run_id": "run_fd9a5c6c4fcf",
+  "runtime_manifest_sha256": "faf50b802ee88ed736b29be8fdd417ac010f001575a4799e3d1ea4d5422524d0",
+  "expected_resume_stage": "universe_china",
+  "actual_entry": "Service.start_run(project_id,resume_run=run_id,background=False)",
+  "requested_route": [
+    "cms-router/glm-5.3-flash",
+    "DGX/deepseek",
+    "DGX/qwen"
+  ],
+  "seed_or_plan_override": false,
+  "elapsed_seconds": 4768.883,
+  "run_status": "failed",
+  "actual_successful_models": {
+    "glm-5.3-flash": 14,
+    "DeepSeek-V4.1-Flash-1017": 31
+  },
+  "successful_reply_tokens_not_all_attempts": 1181297,
+  "model_errors": [],
+  "actual_stage_task_counts": {
+    "universe_china": 1,
+    "universe_global": 1,
+    "candidate_triage": 10
+  },
+  "cache_hits": 0,
+  "source_versions": 791,
+  "current_facts": 90,
+  "current_verified": 0,
+  "design_rows": 0,
+  "html_files": [],
+  "intake_unchanged": true,
+  "original_failed61_db_unchanged": true,
+  "runtime_inputs_unchanged": 120,
+  "independent_scientific_or_browser_acceptance": "NOT_RUN_ON_RETURN",
+  "full_M1_acceptance": false,
+  "actual_terminal_receipt_sha256": "f4cd00734b8a635639d05cf56d8eb143bf6073240e974c6c31876a29415d399f",
+  "failure": {
+    "stage": "coverage_review",
+    "reason": "Complete scope input planning exceeds fixed60000char budget before model invocation.",
+    "coverage_rows": 3068,
+    "coverage_chars": 350692,
+    "empty_candidate_base_chars": 352856,
+    "largest_candidate_chars": 77234,
+    "largest_registry_context_chars": 74102,
+    "candidate_count": 243,
+    "trial_count": 342
+  },
+  "backup": {
+    "scope": "STANDARD_TERMINAL125_BACKUP_NOT_FULL_M1_ACCEPTANCE",
+    "backup_manifest_sha256": "f4911aaf9a6de09941a2e7f2fe245408e1e51682feb64510f0f9a5dae22d71a6",
+    "backup_files": 335,
+    "backup_logical_bytes": 52744348,
+    "trace_payloads": 12,
+    "trace_bytes": 573559,
+    "trace_manifest_sha256": "20dc0356bd35c44d534922a996c41bbdafa89c68624792108c962f3c44822721",
+    "model_or_source_calls": 0,
+    "original_data_unchanged": true,
+    "not_skill_or_share_package": true
+  },
+  "new_bounded_worker130": {
+    "task": "ciw2-scope-base-budget-20261026",
+    "status": "STARTED_NOT_ACCEPTED",
+    "requested_primary": "codebuddy/codebuddy-cli/deepseek-v4.1-flash:max",
+    "max_turns": 96,
+    "hard_wait_seconds": 7200,
+    "acceptance": "Portable source-complete budget regression, owner exact fixed-data planning and unaffected upstream recovery verification; no budget increase or evidence drop."
+  }
+}

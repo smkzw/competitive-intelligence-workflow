@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -24,6 +25,8 @@ TASK_CHARS = 60000
 BATCH_SIZE = 30
 RECEIPT_LAYOUT = 'scope-batch-dependencies-v1'
 _SOURCE_ID_KEYS = frozenset({'source_id', 'source_ids', 'registry_source_id', 'registry_source_ids'})
+_EXPANSION_ROUTE = re.compile(
+    r'((?:china|global):expand:(?:alias|target|company)):[0-9a-f]{16}((?::(?:browser|site))?)')
 
 
 def _json(value: Any) -> str:
@@ -151,10 +154,34 @@ def _review_batch(rc: RunContext, task: dict[str, Any]) -> dict[str, Any]:
     return normalized
 
 
-def _coverage(rc: RunContext) -> list[dict[str, Any]]:
-    return rc.db.query(
+def _route_group(route_id: str) -> str:
+    """Fold only the per-query expansion digest; keep region, tool and transport exact."""
+    match = _EXPANSION_ROUTE.fullmatch(route_id)
+    return ''.join(match.groups()) if match else route_id
+
+
+def _coverage(rc: RunContext) -> dict[str, Any]:
+    """Bounded route statistics for the review input; the exact coverage table stays intact.
+
+    A terminal run records one row per expanded query, so the literal rows outgrow every
+    task by themselves.  The Skill only needs to know which route families ran, with what
+    status, and how many queries/hits they produced; every exact row remains queryable in
+    this run's coverage table.  Totals and per-group counts are exact, not sampled.
+    """
+    rows = rc.db.query(
         'SELECT route_id, region, status, SUM(hits) hits, COUNT(*) n FROM coverage '
         'WHERE run_id=? GROUP BY route_id, region, status ORDER BY route_id, region, status', (rc.run_id,))
+    groups: dict[tuple[str, str, str], dict[str, Any]] = {}
+    for row in rows:
+        key = (_route_group(row['route_id']), row['region'], row['status'])
+        group = groups.setdefault(key, {'group': key[0], 'region': key[1], 'status': key[2],
+                                        'routes': 0, 'rows': 0, 'hits': 0})
+        group['routes'] += 1
+        group['rows'] += row['n']
+        group['hits'] += row['hits']
+    return {'layout': 'route-groups-v1', 'route_rows': len(rows),
+            'rows': sum(row['n'] for row in rows), 'hits': sum(row['hits'] for row in rows),
+            'groups': [groups[key] for key in sorted(groups)]}
 
 
 def _orphan_trials(rc: RunContext) -> list[dict[str, Any]]:

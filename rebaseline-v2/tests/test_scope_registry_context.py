@@ -106,8 +106,8 @@ def test_linked_drug_candidate_receives_only_the_exact_registered_fields(setting
     assert group['conditions'] == ['Diabetic Peripheral Neuropathy', 'Pain']
     assert group['studyType'] == 'INTERVENTIONAL' and group['primaryPurpose'] == 'TREATMENT'
     assert group['healthyVolunteers'] is False
-    assert group['studies'] == [{'nct': 'NCT01533428', 'source_id': sid, 'json': 'protocolSection',
-                                 'url': nct_url('NCT01533428')}]
+    assert group['studies'] == [{'nct': 'NCT01533428', 'source_id': sid, 'json': 'protocolSection'}]
+    assert projection['sources'] == {sid: nct_url('NCT01533428')}
     assert candidate['entity_id'] == drug and result['in_scope'] == 1
     assert 'not forwarded outcome' not in scope._json(tasks[0])
 
@@ -123,10 +123,12 @@ def test_search_endpoint_snapshot_alone_produces_source_bound_context(settings, 
 
     scope.review_scope(rc, '适应症')
 
-    group = observations(tasks[0]['candidates'][0])['groups'][0]
+    projection = observations(tasks[0]['candidates'][0])
+    group = projection['groups'][0]
     assert group['conditions'] == ['Search-only condition']
     assert group['studies'] == [{'nct': 'NCT00000001', 'source_id': sid,
-                                 'json': 'studies[1].protocolSection', 'url': SEARCH}]
+                                 'json': 'studies[1].protocolSection'}]
+    assert projection['sources'] == {sid: SEARCH}
 
 
 def test_conflicting_current_sources_are_both_kept_without_ranking(settings, monkeypatch):
@@ -218,13 +220,15 @@ def test_identical_observations_keep_every_study_and_every_source(settings, monk
     scope.review_scope(rc, '适应症')
 
     task = tasks[0]
-    groups = observations(task['candidates'][0])['groups']
+    projection = observations(task['candidates'][0])
+    groups = projection['groups']
     assert len(groups) == 1
     entries = groups[0]['studies']
     assert sorted(item['nct'] for item in entries) == sorted([*names, 'NCT00000002'])
     assert {item['source_id'] for item in entries} == {search, per_nct}
     assert len({(item['nct'], item['source_id'], item['json']) for item in entries}) == 4
-    assert entries == sorted(entries, key=lambda item: (item['nct'], item['url'], item['source_id'], item['json']))
+    assert entries == sorted(entries, key=lambda item: (
+        item['nct'], projection['sources'][item['source_id']], item['source_id'], item['json']))
     assert len(scope._json(task)) <= scope.TASK_CHARS
 
 
