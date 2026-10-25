@@ -27,6 +27,9 @@ def workspace(settings,monkeypatch):
                 ['2','JXHS2600124','原药B','生物制品','NDA','','原企业','2026-01-01']])
             return invoke([raw])
         if script=='cde_priority.mjs':
+            if kw['options']['section']=='priority_proposed':
+                from test_cde_priority_proposed import page
+                return invoke([page()])
             if fail['priority']:raise china_browser.BrowserFailed('source unavailable')
             return invoke(captures())
         return invoke(biological_pages() if kw['options']['filters']['sequence']=='生物' else pages())
@@ -38,17 +41,17 @@ def workspace(settings,monkeypatch):
     return rc,calls,fail,searches
 
 
-def test_normal_stage_schedules_three_directories_for_all_proven_applications_and_reuses_same_run(settings,monkeypatch):
+def test_normal_stage_schedules_four_directories_for_all_proven_applications_and_reuses_same_run(settings,monkeypatch):
     rc,calls,_,_=workspace(settings,monkeypatch)
     trial_evidence(rc)
-    assert sorted(calls)==['cde_priority.mjs','cde_review_browser.mjs','cde_review_browser.mjs']
+    assert sorted(calls)==['cde_priority.mjs','cde_priority.mjs','cde_review_browser.mjs','cde_review_browser.mjs']
     drugs=rc.db.entities(rc.project_id,'drug')
     assert any(d['attrs'].get('cde_review_refs') for d in drugs)
     assert any(d['attrs'].get('cde_priority_refs') for d in drugs)
     assert not rc.llm.calls and not rc.db.current_facts(rc.project_id)
-    trial_evidence(rc);assert len(calls)==3
+    trial_evidence(rc);assert len(calls)==4
     rc.run_id=rc.db.create_run(rc.project_id);trial_evidence(rc)
-    assert len(calls)==6
+    assert len(calls)==8
 
 
 def test_one_unavailable_directory_keeps_completed_neighbors_and_global_research(settings,monkeypatch):
@@ -60,7 +63,7 @@ def test_one_unavailable_directory_keeps_completed_neighbors_and_global_research
     assert set(pending[0]['acceptance_numbers'])=={'CYHL2600085','JXHS2600124'}
     assert set(searches)=={'原药A','原药B'}
     fail['priority']=False;trial_evidence(rc)
-    assert calls.count('cde_review_browser.mjs')==2 and calls.count('cde_priority.mjs')==2
+    assert calls.count('cde_review_browser.mjs')==2 and calls.count('cde_priority.mjs')==3
 
 
 def test_forged_reference_does_not_trigger_remote_queries_or_link_another_product(settings,monkeypatch):

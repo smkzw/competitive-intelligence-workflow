@@ -48,7 +48,7 @@ scripts/     fetch_assets.sh、smoke_live.py、run_live.py、replay_design_sourc
 
 中国来源可配置 `CIW_CHINA_EGO_SPACE_ID` 为已授权专用Ego空间ID，复用p1；工具不自动创建或接管空间，不改登录或读凭据。未配置时如实记录受阻并尝试已配置的site备用。
 
-用 `python scripts/smoke_china_browser.py --space SPACE_ID --query 特应性皮炎 --output NEW_OUTPUT_DIR` 验证生产来源工具，保存全页来源及回执，不调用模型。CDE受理目录加 `--registry cde --query-kind drug_name --query 度普利尤单抗`；也支持明确company/acceptance_number，不把疾病塞到药名框。化药IND新报审评任务改用 `--registry cde --cde-section new_review_task_chemical_ind --query-kind acceptance_number --query 完整受理号`：读取全序列后精确取匹配，其他序列仍待接通。结果中的source_total_records与rows分别是原序列总数和精确匹配数。
+用 `python scripts/smoke_china_browser.py --space SPACE_ID --query 特应性皮炎 --output NEW_OUTPUT_DIR` 验证生产来源工具，保存全页来源及回执，不调用模型。CDE受理目录加 `--registry cde --query-kind drug_name --query 度普利尤单抗`；也支持明确company/acceptance_number，不把疾病塞到药名框。化药IND新报审评任务改用 `--registry cde --cde-section new_review_task_chemical_ind --query-kind acceptance_number --query 完整受理号`：生物临床试验申请用new_review_task_biological_trial；纳入优先/拟优先分别用priority_included/priority_proposed。均完整读取所选栏目后按受理号精确匹配；原“无”受理号保留未解行，不猜号。正常trial_evidence对已证明受理号按栏目自动批量核查，失败分开恢复。结果中的source_total_records与rows分别是原序列总数和精确匹配数。
 
 中国登记与已接通CDE栏目失败冒烟可加`--resume-output PREVIOUS_OUTPUT_DIR`在原run按已验证范围补缺页，回执另存新目录。当前阶段、恢复点与未完成项统一见`docs/STATUS.md`；不把来源切片成功当作整个报告验收。
 

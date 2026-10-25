@@ -145,7 +145,7 @@ def proven_acceptance_refs(ctx: ToolContext, drug: dict) -> list[dict]:
 
 def persist_refs(ctx: ToolContext, result: dict[str,Any], route: str, *,
                  ref_attribute: str='cde_review_refs') -> int:
-    if ref_attribute not in {'cde_review_refs','cde_priority_refs'}:
+    if ref_attribute not in {'cde_review_refs','cde_priority_refs','cde_priority_proposed_refs'}:
         raise china_browser.BrowserFailed('未定义的CDE引用类别')
     if not result.get('complete') or not ctx.db.one('SELECT id FROM sources WHERE id=? AND project_id=?',
                                                  (result['source_id'],ctx.project_id)):

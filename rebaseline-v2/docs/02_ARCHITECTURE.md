@@ -157,3 +157,5 @@ Service复用标准库Condition/deque及一个执行锁，在同一服务进程�
 - cde_priority.py/.mjs复用现有china_registry_search、Ego传输、CAS、同run fetch_cache及cde_resume/merge_capture；一个固定公开栏目和九列解析，不加执行器/表/权限/DSL。完整首锚和分页集合闭合后才精确查受理号；新run重新核查，同run缓存仅代表已读资料，不冒充新浏览器访问。
 - 受理号缺失为来源字段级问题：原始文本和完整行保留，解析ID为null、记录具体原因；不删除整页，不用“无”当实体ID，也不伪造匹配。受理来源绑定成立才将原行和来源ID追加到cde_priority_refs，与cde_review_refs分离；不生成药物/试验/批准事实。
 - 失败捕获在确认官方无凭据URL后保留原始JSON至既有CAS及source_capture_rejected指针，accepted=false；它不是合格来源或成功缓存。有效分页另以complete=false来源保全。缺首锚时重新核查完整目录，不能把新首锚补进旧捕获来冒充可恢复。普通trial_evidence复用china_evidence入口，按全部已证明受理ID批量读取两个新报序列及纳入优先目录；一个栏目一次完整捕获，不逐药重复抓全站。cde_evidence沿用stages来源绑定回执，规则/代码/证明集合与源版本共同决定同run复用；新run重新浏览。栏目失败单独pending，继续其他栏目与CTgov。受理证明必须经完整CAS与原行药名/受理号/页行/企业角色及日期核对；持有真实source_id不等于属于另一药物。
+
+- priority_proposed复用同一cde_priority.py/.mjs的两个已观察栏目参数，不建新框架；列名/字段映射、tbody/控件及请求上下文均显式分离。parser默认仍为priority_included，另一栏目必须显式选择，错误列合同拒绝；同一source_id不得跨栏目缓存。拟优先原行无受理号时ID=null、原字节保留，只能成为未解来源，不按名自动借用接受关系。cde_priority_proposed_refs独立于已纳入引用；普通collector固定调度四个已验证范围。

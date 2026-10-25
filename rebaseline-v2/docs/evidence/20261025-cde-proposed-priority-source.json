@@ -1,0 +1,111 @@
+{
+  "schema_version": "ciw2-owner-component-evidence-v1",
+  "scope": "PROPOSED_INCLUDED_SOURCE_SEPARATION_NOT_FULL_M2_OR_INSTALL",
+  "base_commit": "49df0467a63505f7e91402975c974f2058d9bd9c",
+  "final_candidate_manifest_sha256": "4514761cbfd0eb6a901fc236c0ab53859a0484f3956dd8a0ce1c470b3a660fad",
+  "source_execution_candidate_manifest_sha256": "c0e46cd26c4167267346f2b1051cb22f63d0704641e288606724bec5ee9e52a3",
+  "executed_source_code_matches_final_candidate": true,
+  "red": {
+    "failures": 3
+  },
+  "related": {
+    "passed": 572,
+    "seconds": 3.4
+  },
+  "final_gate": {
+    "pytest_passed": 1736,
+    "seconds": 11.113,
+    "ruff": "PASS",
+    "javascript_files": 11,
+    "python_files": 213,
+    "size_600_80_violations": [],
+    "fixed_files": 302,
+    "changed_fixed_files": []
+  },
+  "real_sources": [
+    {
+      "cde_section": "priority_proposed",
+      "query": "JXHS2600124",
+      "mode": "browser",
+      "complete": true,
+      "rows": 0,
+      "source_total_records": 9,
+      "pages": [
+        1
+      ],
+      "source_id": "src_d7a90c5da49b",
+      "source_sha256": "591734dbc86a10aadd737f30bc7e3b806747f825443ee62b90ce2f90ce2e5cf3",
+      "model_calls": 0,
+      "code_unchanged_during_run": true
+    },
+    {
+      "cde_section": "priority_included",
+      "query": "JXHS2600124",
+      "mode": "browser",
+      "complete": true,
+      "rows": 1,
+      "source_total_records": 1920,
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "source_id": "src_4d7534b0a7c3",
+      "source_sha256": "24b2ead91533411aa8d5e3f1402e090386d2befcb9a49e65177df325ce8eb3bf",
+      "model_calls": 0,
+      "code_unchanged_during_run": true
+    }
+  ],
+  "proposed_missing_acceptance_rows_preserved": 9,
+  "source_screen": {
+    "path": "docs/evidence/cde-proposed-source-table-20261025.png",
+    "sha256": "328c438df86d31f655ce537791eaebd4b7e9b505db4bba569718f3477f60dac4",
+    "owner_viewed": true,
+    "viewport_css": [
+      1600,
+      1000
+    ]
+  },
+  "owner_also_viewed_included_final_page": true,
+  "new_drug_trial_clinical_approval_MAH_facts": 0,
+  "ordinary_four_scope_collect": "OFFLINE_PRODUCTION_STAGE_TESTED; prior three-scope real collector remains a distinct candidate",
+  "current_install07_scope": "fff5f88b; does not include this proposed-directory increment",
+  "full_product_acceptance": "NOT_RUN",
+  "instruction_gate_order": "Initial code gate1736 passed; author Skill and README then synchronized; final integrated gate rerun once with those changed product inputs, not per-line retesting."
+}
