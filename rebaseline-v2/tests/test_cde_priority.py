@@ -163,3 +163,45 @@ def test_rejected_raw_pages_are_retained_as_unaccepted_evidence(ctx,monkeypatch)
     event=json.loads(ctx.db.one("SELECT content FROM agent_steps WHERE role='source_capture_rejected'")['content'])
     assert json.loads(ctx.cas.get(event['digest']))['pages']==pages and event['accepted'] is False
     assert not ctx.db.current_facts(ctx.project_id)
+
+
+def test_another_product_cannot_borrow_a_real_source_application_reference(ctx,monkeypatch):
+    from test_cde_browser import capture
+    acceptance=capture();acceptance['filters']['drug_name']='玛伐凯泰胶囊'
+    acceptance['rows'][0][1]='JXHS2600124';acceptance['rows'][0][2]='玛伐凯泰胶囊'
+    monkeypatch.setattr(china_browser,'_invoke',lambda *a,**kw:invoke([acceptance]) if kw['script_path'].name=='cde_browser.mjs' else invoke(captures()))
+    china._china(ctx,china.ChinaArgs(registry='cde',query='玛伐凯泰胶囊',query_kind='drug_name',route_id='acceptance'))
+    original=ctx.db.entities(ctx.project_id,'drug')[0]
+    forged,_=ctx.db.upsert_entity(ctx.project_id,'drug','另一个无关产品',attrs={
+        'cde_acceptance_refs':deepcopy(original['attrs']['cde_acceptance_refs'])})
+    out=china._china(ctx,china.ChinaArgs(registry='cde',query='JXHS2600124',query_kind='acceptance_number',
+        cde_section='priority_included',route_id='priority'))
+    assert out['linked_refs']==1
+    other=next(d for d in ctx.db.entities(ctx.project_id,'drug') if d['id']==forged)
+    assert 'cde_priority_refs' not in other['attrs']
+
+
+@pytest.mark.parametrize('fault',['wrong_row','wrong_company','corrupt_cas','partial_source'])
+def test_application_proof_requires_original_row_and_qualified_bytes(ctx,monkeypatch,fault):
+    from test_cde_browser import capture
+
+    from ciw2.sources import cde_browser, cde_review_browser
+    acceptance=capture()
+    monkeypatch.setattr(china_browser,'_invoke',lambda *a,**kw:invoke([acceptance]))
+    found=cde_browser.browser_search(ctx,'原药','drug_name');cde_browser.persist_candidates(ctx,found,'acceptance')
+    drug=ctx.db.entities(ctx.project_id,'drug')[0]
+    assert len(cde_review_browser.proven_acceptance_refs(ctx,drug))==1
+    ref=drug['attrs']['cde_acceptance_refs'][0]
+    if fault=='wrong_row':ref['row_number']=999
+    if fault=='wrong_company':ref['company_text']='不同企业'
+    if fault=='corrupt_cas':
+        source=ctx.db.one('SELECT digest FROM sources WHERE id=?',(ref['source_id'],))
+        ctx.cas._path(source['digest']).write_bytes(b'corrupt owned test data')
+    if fault=='partial_source':
+        # A partial capture is a different source, never a successful previous proof.
+        from ciw2.sources.http import register_text
+        sid=register_text(ctx,kind='cde',url=acceptance['url'],title='partial',
+            text=json.dumps({'section':'acceptance','filters':acceptance['filters'],'pages':[acceptance]}),
+            meta={'complete':False,'request_context':{'section':'acceptance','filters':acceptance['filters']}})
+        ref['source_id']=sid
+    assert cde_review_browser.proven_acceptance_refs(ctx,drug)==[]

@@ -1,0 +1,43 @@
+{
+  "schema_version": "ciw2-owner-component-evidence-v1",
+  "scope": "CDE_ORDINARY_COLLECTOR_COMPONENT_NOT_FULL_PIPELINE_OR_M2",
+  "base_commit": "d8c487b482bd1fbca342e9c00f7691976d121098",
+  "candidate_manifest_sha256": "4f4bd65b9db9d79270491efd86a439a5e74c440e98d209064e4cc36c76a64027",
+  "red": {
+    "source_reference_borrowing_failures": 1,
+    "ordinary_stage_failures": 3
+  },
+  "related": {
+    "passed": 567,
+    "seconds": 3.02
+  },
+  "frozen_gate": {
+    "pytest_passed": 1731,
+    "seconds": 12.21,
+    "ruff": "PASS",
+    "javascript_files": 11,
+    "python_files": 212,
+    "size_600_80_violations": [],
+    "immutable_files": 298,
+    "immutable_input_changes": []
+  },
+  "checks": [
+    "Exact original acceptance row and CAS required, not just a legitimate source ID",
+    "One directory acquisition for all proven applications",
+    "Completed same-run neighbors reused; new run checks sources again",
+    "Failed directory remains pending without cancelling global research",
+    "No clinical, indication, approval or MAH facts inferred"
+  ],
+  "real_source_slice": "PENDING",
+  "medical_or_universe_acceptance": "NOT_RUN",
+  "private_receipts": "ciw-data/cde-pipeline-development-20261025-01; cde-pipeline-related-20261025-01.log; cde-automatic-source-real-20261025-01/02",
+  "instrument_failures": [
+    "First real controller requested matched_count absent from acceptance API; valid source retained and reused without another acceptance fetch."
+  ],
+  "source_files": {
+    "src/ciw2/pipeline/china_evidence.py": "c54d34568a85720cd36145d0aeda631830167d5971d93b6c1cb13322c8ee33f6",
+    "src/ciw2/pipeline/cde_evidence.py": "041a5d544b6ffe318c6598e8d080a0c37d5931cc3e108dff3321390db8ed1332",
+    "src/ciw2/sources/cde_review_browser.mjs": "204a172df7ac47cbe39e7bdd4b361677cf07993fa14b11e0899d85e4ebdc6e15",
+    "src/ciw2/sources/cde_review_browser.py": "f98baf07bc5e88898cbdd6f74442f8b94327318ddd4baaccc78c66d9800eb4c2"
+  }
+}

@@ -10,6 +10,7 @@ from typing import Any
 from ciw2.harness.tools import ToolContext
 from ciw2.sources import china_browser
 from ciw2.sources.cde_browser import merge_capture, resume_capture, resume_options
+from ciw2.sources.cde_capture import parse_capture as parse_acceptance
 from ciw2.sources.cde_review_capture import SCOPES, CaptureError, parse_review_capture
 from ciw2.sources.http import register_text
 
@@ -110,6 +111,38 @@ def browser_search(ctx: ToolContext, query: str, query_kind: str, *,
         'results':[{**row,'source_id':source} for row in parsed['results']]}
 
 
+def proven_acceptance_refs(ctx: ToolContext, drug: dict) -> list[dict]:
+    """Reconcile provisional application refs with their exact original public rows."""
+    if ctx.extra is None:ctx.extra={}
+    cache=ctx.extra.setdefault('fetch_cache',{})
+    proven=[]
+    for ref in drug['attrs'].get('cde_acceptance_refs',[]):
+        if not isinstance(ref,dict):continue
+        source=ctx.db.one('SELECT * FROM sources WHERE id=? AND project_id=? AND kind=?',
+                          (ref.get('source_id'),ctx.project_id,'cde'))
+        if not source:continue
+        try:
+            raw=ctx.cas.get(source['digest'])
+            if hashlib.sha256(raw).hexdigest()!=source['digest']:continue
+            key=f'cde_acceptance_proof:{source["id"]}:{source["digest"]}'
+            if key not in cache:
+                meta=json.loads(source['meta']);scope=meta.get('request_context',{})
+                payload=json.loads(raw)
+                if (meta.get('complete') is not True or scope.get('section')!='acceptance' or
+                        payload.get('section')!='acceptance' or payload.get('filters')!=scope.get('filters')):
+                    continue
+                cache[key]=parse_acceptance(payload['pages'],filters=scope['filters'])['results']
+            matches=[row for row in cache[key] if row['drug_name']==drug['name'] and
+                     row['acceptance_number']==ref.get('acceptance_number') and
+                     all(ref[k]==row[k] for k in ('page','row_number','company_text','application_type',
+                                                  'handled_date_text') if k in ref)]
+            if len(matches)==1:
+                proven.append({**matches[0],'source_id':source['id']})
+        except (OSError,ValueError,KeyError,TypeError):
+            continue  # A bad provisional proof remains unadopted; other source rows still work.
+    return proven
+
+
 def persist_refs(ctx: ToolContext, result: dict[str,Any], route: str, *,
                  ref_attribute: str='cde_review_refs') -> int:
     if ref_attribute not in {'cde_review_refs','cde_priority_refs'}:
@@ -120,12 +153,7 @@ def persist_refs(ctx: ToolContext, result: dict[str,Any], route: str, *,
     count=0
     with ctx.db.tx():
         for drug in ctx.db.entities(ctx.project_id,'drug'):
-            applications=set()
-            for ref in drug['attrs'].get('cde_acceptance_refs',[]):
-                source=ctx.db.one('SELECT kind,meta FROM sources WHERE id=? AND project_id=?',
-                                 (ref.get('source_id'),ctx.project_id))
-                if source and source['kind']=='cde' and json.loads(source['meta']).get('request_context',{}).get('section')=='acceptance':
-                    applications.add(ref['acceptance_number'])
+            applications={ref['acceptance_number'] for ref in proven_acceptance_refs(ctx,drug)}
             refs=list(drug['attrs'].get(ref_attribute,[]))
             before=len(refs)
             for row in result['results']:

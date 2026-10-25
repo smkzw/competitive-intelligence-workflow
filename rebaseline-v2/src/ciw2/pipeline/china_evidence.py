@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import re
 
+from ciw2.pipeline import cde_evidence
 from ciw2.pipeline.context import RunContext, work_limit
 from ciw2.pipeline.queries import scoped_trials
 from ciw2.pipeline.recovery import fingerprint, get_unit, put_unit
@@ -14,8 +15,9 @@ def collect(rc: RunContext) -> dict:
                    if re.fullmatch(r'CTR[0-9]{8}',t['name'])),key=lambda t:t['name'])
     limit=work_limit(rc.cache.get('max_china_trials'))
     started=ingested=0
-    pending=[]
-    errors=[]
+    regulatory=cde_evidence.collect(rc)
+    pending=list(regulatory['pending_trials'])
+    errors=list(regulatory['errors'])
     for trial in trials:
         rc.check_cancelled()
         binding={k:trial['attrs'].get(k) for k in ('registry_detail_id','registry_source_id')}
@@ -36,4 +38,4 @@ def collect(rc: RunContext) -> dict:
             errors.append(f'{trial["name"]}: {exc}')
             pending.append({'trial_id':trial['id'],'ctr':trial['name'],'reason':'source_ingestion_failed'})
             rc.db.log_coverage(rc.run_id,'trial:chinadrugtrials:detail','china',trial['name'],'failed',note=str(exc)[:300])
-    return {'ingested':ingested,'errors':errors,'pending_trials':pending}
+    return {'ingested':ingested,'errors':errors,'pending_trials':pending,'regulatory':regulatory}
