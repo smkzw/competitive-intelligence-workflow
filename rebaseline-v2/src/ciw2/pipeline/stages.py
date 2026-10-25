@@ -138,7 +138,9 @@ def trial_evidence(rc: RunContext) -> dict[str, Any]:
     for d in scoped_drugs(rc):
         rc.check_cancelled()
         try:
-            rows = ctgov.search(ctx, condition=cond, intervention=d["name"], max_results=None)
+            # Registered isotope labels are literal names, not Essie bracket operators.
+            query_name = json.dumps(d["name"], ensure_ascii=False) if any(c in d["name"] for c in '[]') else d["name"]
+            rows = ctgov.search(ctx, condition=cond, intervention=query_name, max_results=None)
             rc.db.log_coverage(rc.run_id, "trial:ctgov:intervention", "global", f"{cond} × {d['name']}",
                                "ok", hits=len(rows))
         except Exception as exc:  # noqa: BLE001 - 独立来源边界记录失败并继续其他路线

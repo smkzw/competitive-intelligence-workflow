@@ -1,0 +1,162 @@
+{
+  "scope": "SOURCE_CLOSURE_RECOVERY_COMPONENTS_WHILE_ORDINARY135_CONTINUES",
+  "ordinary135_wait_boundary": {
+    "after_seconds": 7200.027,
+    "status": "RUNNING_NOT_KILLED_OR_REDISPATCHED",
+    "previous_budget_failure_stage": "coverage_review succeeded",
+    "expansion_cached_queries": 522,
+    "trial_evidence": "FAILED_INCOMPLETE_WORK72_UNITS_DOWNSTREAM_STILL_RUNNING",
+    "source_failures": {
+      "missing_ctr_detail": 71,
+      "bracketed_intervention_http400": 1
+    },
+    "no_final_design_HTML_or_medical_acceptance_claim": true
+  },
+  "ego_replacement": {
+    "old_id": 8,
+    "actual_error": "task space not found:8",
+    "replacement_id": 9,
+    "authority": "User standing authorization to replace dedicated spaces without asking; no profiles/logins/cache/version changed",
+    "old135_runtime_environment_not_modified": true
+  },
+  "actual_component138": {
+    "scope": "ACTUAL_PRODUCTION_DETAIL_AND_NATIVE_INGEST_IN_MEMORY_ONLY",
+    "ctr": "CTR20201869",
+    "replacement_ego_space": 9,
+    "old_space8_actual_result": "task space not found:8",
+    "source_list_id": "src_db141a32a333",
+    "result": {
+      "entity_id": "tri_32d14a6f1c16",
+      "source_id": "src_f4b03aef4543",
+      "snapshot": "a00b0831f94c0fed22e6f19ab76b1a235deb5c256f786ef782ac14ed7924dc26",
+      "facts_added": 25,
+      "fact_count": 25,
+      "gaps": [
+        {
+          "field": "design.eligibility.age",
+          "bound": "max",
+          "reason": "non_numeric_age_bound",
+          "raw_age_bound": "无上限"
+        },
+        {
+          "field": "design.arms",
+          "source_role": "对照药",
+          "reason": "not_reported"
+        },
+        {
+          "field": "design.sample_size",
+          "population": "国内",
+          "source_label": "目标入组人数",
+          "reason": "not_reported"
+        },
+        {
+          "field": "design.sample_size",
+          "population": "国际",
+          "source_label": "实际入组总人数",
+          "reason": "not_reported"
+        }
+      ]
+    },
+    "prior_memory_facts": 90,
+    "after_memory_facts": 115,
+    "backup_db_unchanged": true,
+    "production_database_written_by_component": false,
+    "new_model_calls": 0,
+    "full_M1_or_all71_CTR_acceptance": false
+  },
+  "actual_ctgov137": [
+    {
+      "variant": "unquoted",
+      "parameters": {
+        "pageSize": 100,
+        "countTotal": "true",
+        "query.cond": "Paroxysmal Nocturnal Hemoglobinuria",
+        "query.intr": "[14C]HS-10542"
+      },
+      "url": "https://clinicaltrials.gov/api/v2/studies?pageSize=100&countTotal=true&query.cond=Paroxysmal+Nocturnal+Hemoglobinuria&query.intr=%5B14C%5DHS-10542",
+      "status": 400,
+      "bytes": 593,
+      "sha256": "d798ccb91ecc02556c6dc343af9336d6306872ae16d4de06155a71985e6eaaed",
+      "error_excerpt": "Error parsing query in Intervention / treatment: extraneous input '[' expecting {<EOF>, '(', ',', 'NOT', 'SEARCH', 'AREA', 'RANGE', 'DISTANCE', Coverage, Expansion, 'TILT', 'ALL', 'MISSING', 'MIN', 'MAX', EscapedKeyword, BooleanLiteral, DecimalLiteral, DateLiteral, TimeLiteral, RadiusLiteral, StringLiteral, Term}\nmismatched input ']' expecting {<EOF>, '(', ',', 'NOT', 'AND', 'OR', 'SEARCH', 'AREA', 'RANGE', 'DISTANCE', Coverage, Expansion, 'TILT', 'ALL', 'MISSING', 'MIN', 'MAX', EscapedKeyword, BooleanLiteral, DecimalLiteral, DateLiteral, TimeLiteral, RadiusLiteral, StringLiteral, Term}"
+    },
+    {
+      "variant": "literal_phrase",
+      "parameters": {
+        "pageSize": 100,
+        "countTotal": "true",
+        "query.cond": "Paroxysmal Nocturnal Hemoglobinuria",
+        "query.intr": "\"[14C]HS-10542\""
+      },
+      "url": "https://clinicaltrials.gov/api/v2/studies?pageSize=100&countTotal=true&query.cond=Paroxysmal+Nocturnal+Hemoglobinuria&query.intr=%22%5B14C%5DHS-10542%22",
+      "status": 200,
+      "bytes": 31,
+      "sha256": "b54968c05ff881a1ef7ce604b6a340248f8e2aee8637bef06da0f5693f520df8",
+      "total": 0,
+      "ncts": []
+    }
+  ],
+  "literal_patch139": {
+    "path": "src/ciw2/pipeline/stages.py:trial_evidence",
+    "scope": "Only square-bracket-bearing registered names are encoded as a quoted literal; ordinary searches retain original semantics, names and known studies unchanged.",
+    "initial_unit_preparation": "Wrong helper mocked websearch.fetch rather than native ctgov.fetch; original5FAILED2PASS27.95s not accepted RED; real public HTTP attempts possible/count unmeasured. Test ended before targeted interrupt, no signal sent.",
+    "valid_red": "2FAILED5PASS0.18s",
+    "related": "100PASS1.51s",
+    "ruff": "InitialSIM117test_style_fixed; currentPASS",
+    "production_component": {
+      "scope": "ACTUAL_PRODUCTION_TRIAL_EVIDENCE_BRACKET_QUERY_COMPONENT_NOT_FULL_M1",
+      "source": {
+        "id": "src_bab3c9659820",
+        "url": "https://clinicaltrials.gov/api/v2/studies?pageSize=100&countTotal=true&query.cond=Paroxysmal+Nocturnal+Hemoglobinuria&query.intr=%22%5B14C%5DHS-10542%22",
+        "kind": "ctgov",
+        "digest": "b54968c05ff881a1ef7ce604b6a340248f8e2aee8637bef06da0f5693f520df8"
+      },
+      "result": {
+        "linked": 0,
+        "ingested": 0,
+        "errors": [],
+        "pending_trials": [],
+        "nmpa": {
+          "adopted": 0,
+          "source_ids": [],
+          "unresolved": [],
+          "pending_records": [],
+          "errors": []
+        },
+        "pending_identity_links": 0,
+        "identity_ambiguities": []
+      },
+      "drug_original_unchanged": true,
+      "new_model_calls": 0,
+      "original_pnh_production_database_written": false,
+      "zero_result_is_query_specific_not_drug_scope_exclusion": true
+    },
+    "completed_prefix_memory_compatibility": {
+      "scope": "CLOSED_COMPLETED_PREFIX_COMPATIBILITY_AFTER_LITERAL_FIX_AND_BROWSER9_MEMORY_ONLY",
+      "resume_stage": "trial_evidence",
+      "legacy": [],
+      "new_browser_space": 9,
+      "universe_and_scope_prefix_compatible": true,
+      "model_or_source_calls": 0,
+      "production_db_modified": false,
+      "not_a_progress_poll": "Only compatibility of already-completed prefix checked, no live stage/task/model status queried",
+      "full_M1": false
+    }
+  },
+  "full_M1_or_RC": false,
+  "remaining": "135 still runs on frozen134; do not hot patch or claim these source-only components repaired its old-environment failures. After terminal preserve current report/evidence, resume ordinary at trial_evidence with current fix and live replacement space. Full71CTR/actual report/visual/science remain unaccepted.",
+  "stable_gate140": {
+    "pytest": "2018PASS12.15s",
+    "ruff": "PASS",
+    "python_files": 249,
+    "javascript_files": 14,
+    "inputs_unchanged": 390,
+    "manifest_sha256": "3c945fd1ad9ad7547e01fd1ed2cda5d7277df71a3bbc2a15e54a5b4d04892129"
+  },
+  "frozen_runtime141": {
+    "files": 120,
+    "bytes": 1935153,
+    "manifest_sha256": "d1fc9754b253a0ee82ef4a8ae2e8bb3169154a6ba2536857ea55dd0ad2ac3a6d",
+    "new_venv": false,
+    "source_fix_not_hot_loaded_in_135": true
+  }
+}

@@ -945,3 +945,17 @@ ff69abd3已push并远端实核一致。20先完成离线安装/23资产/9Skill/C
 owner读完整源码/新276行测试及3处合同迁移；发现任意16hex段被删，与仅expand声明不符，3真实未知route反例RED后仅按已观测china/global expand(alias/company/target)布局和browser/site后缀fullmatch；6成族route例纳入，141相关PASS2.37s/Ruff。132从127备份只读→memory逐一完整还原旧123 _observations：243药物190有上下文/302组4587精确ref；44孤立研究44组186ref；4773 NCT/source/JSON/URL与每组raw字段完全等同。最大eculizumab291ref registry74102→42115，base352856→6713；药物28包/孤立2包全部≤60000/≤30，候选恰好一次、0模型来源/原备份不写。当前stage_versions实测candidate_triage，入口/中国/全球兼容；不假改旧receipt、不得重跑这三成功前置。新scope上下文/形状实际已变，需要真实新资格，非原10批自动重标。
 
 133一次稳定2011PASS15.02s/Ruff/248Python600/80/14JS/388输入SHA不变，manifest62ac8fec1fbf813a18ed5ae483b52f487282c4e8798151bb9c96ae1275bc3f6f；134只120运行时1934945bytes/manifest132bd33665d2f1c46e150bcc70e28f24655a42a3ae0cf31bfd16e2a0385f0e4c，无新venv/整仓源测试副本。130原派发4SHA不变/audit-execution与review-gate均PASS；不是独立科学会商或最终M1。准备白名单提交后普通candidate_triage恢复，当前安装64不能借给134。
+
+135已实际启动child74351/原生83367，同project/run/固定134/备份127，普通Service.start_run(resume_run,background=False)完整C计划，baseline1635；首次启动即成功无重派。当前预检实际边界candidate_triage/legacy空，记录终态需逐字核intake/中国/全球前置不变，原61DB及120运行时不变。d279b9c8已推，136核274 Git源/Skill/测试+固定ECharts同133门。按一次kernel退出等待，不查stage/模型进度、不抢Ego8/p1；后续真实源/设计/摘要/视觉门未完成，Goal保持active/non-RC。
+
+## 2026-10-26 135等待边界与137–139来源故障单元
+
+第一轮kernel7200.027s返回PENDING_TIMEOUT_NOT_FAILURE，0过程中进度轮询。仅此等待边界一次只读快照：135在运行，triage/expand/coverage_review成功；expand522缓存，triage28/coverage29实际任务，不借stage成功称医学/核心分类；trial_evidence完成但IncompleteWork72（71CTR详情/1语法），下游仍继续。原135/134不热改、不终止/重派。读取该已关闭失败节点首误用output列导致只读SQL失败，按完整row的真实output_json纠正，未写DB。
+
+采用direct：两个确定性来源/环境问题仅需owner现场与工具检查，2行query转义不够覆盖派发成本；与135有恢复成本的DB全部由原135单一owner运行，当前检查/采用仅新isolated memory/component。Ego8实际task space not found；按永久授权建9/p1，profile/login/cache/版本未动。普通公开查询CTR20201869真实1行SB12，与127列表binding一致，实际详情可展开全部入排/主次终点；manual popup的openedBy非agent未关闭，保护未知来源标签。138使用同生产china_detail/ingest函数、仅复制2个所需CAS原件到隔离组件+memoryDB，原127不变、0模型、25设计事实（缺上限/国内N等仍缺，不造0）。并未把71旧失败改成功或写135。
+
+137真实官方API裸[14C]HS-10542 HTTP400正文明确query.intr方括号语法；quoted原样字面请求200/PNH条件0结果，raw与SHA保全。139只在trial_evidence将含[]原登记名JSONquoted，普通/多词原检索不改，原名/已知NCT关系不删除；失败仍source_search_failed。初测试误用仅mock websearch.fetch的helper导致5FAIL2PASS27.95s、可能真实公共HTTP请求/次数未测，保留原件、不当有效RED；计划精准中断前该pytest已自然退出，ps未找到，实际未发送信号。改为ctgov.fetch原生MockTransport后2FAIL5PASS0.18s成族RED→最小2行修复→100相关PASS1.51s；首次Ruff SIM117仅修测试with合并，现PASS，未逐行全仓。实际生产trial_evidence组件同API200/0结果且原药名不变、0模型/原135DB不写。
+
+139另将135已成功前缀复制到memory、只核版本不查运行进度，新Ego9/2行改动仍实际恢复trial_evidence，前六stage兼容、legacy空。先等135自然终态，再以活的专用空间和新源码恢复后续；禁止重跑中国/全球/已成功scope或给旧134回填新接受。
+
+140一次稳定完整门2018PASS12.15s/Ruff/249Python/14JS/390输入SHA不变，manifest3c945fd1ad9ad7547e01fd1ed2cda5d7277df71a3bbc2a15e54a5b4d04892129；141仅120运行时1935153bytes、manifestd1fc9754b253a0ee82ef4a8ae2e8bb3169154a6ba2536857ea55dd0ad2ac3a6d。无新venv/整仓测试拷贝，原134运行字节不动。当前仅改trial_evidence查询构造，actual memory兼容核无需重跑前六成功前置。等待135自然结束后保全当次模型/设计/渲染/失败，再用141/live专用9从trial_evidence普通恢复。不得为提前修源终止健康135、在其活DB并发采用新源或伪称72已通过。
