@@ -21,10 +21,10 @@
   "children": [],
   "parent": null,
   "relatedFiles": [],
-  "notes": "Paused by explicit user request 2026-10-24; not complete or RC. Product base f268b192 pushed; convergence WIP uncommitted, latest development gate1563. User approved ending old nonconvergent reducer; exact task processes stopped after verified SQLite/CAS preservation. 151 research batches,780 findings,300 cached stages retained. Resume only with new user authority; read rebaseline-v2/docs/PAUSE_HANDOFF_20261024_SYNTHESIS.md. No study-batch rerun, v1 cleanup or retired workspace access.",
+  "notes": "User resumed2026-10-25; actualGoal active; HEAD021b96d9. Owner closes summary failure/ref-lineage family (6RED,58relatedPASS), E03 frontend Kangzhe7.1 implementation handle1753 pending. Preserve151research batches/780findings and all pause snapshots. New real synthesis and integrated UI/clinical acceptance not yet done; no v1 cleanup/retired root access.",
   "meta": {
-    "workflow_state": "paused",
+    "workflow_state": "in_progress",
     "pause_checkpoint": "rebaseline-v2/docs/PAUSE_HANDOFF_20261024_SYNTHESIS.md",
-    "goal_status": "paused"
+    "goal_status": "active"
   }
 }

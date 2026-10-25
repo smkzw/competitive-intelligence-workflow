@@ -95,5 +95,8 @@ def fake_llm_responder(messages: list[dict[str, Any]]) -> LLMReply:
         return _submit({"facts": [], "gaps": []})
     if skill.startswith("analysis-"):
         rep = skill[-1].upper()
-        return _submit({"report": rep, "findings": [{"title": f"{rep} 要点", "bullets": ["示例"]}]})
+        task = json.loads(messages[1]['content'])
+        refs = task['verified_fact_ids']
+        return _submit({"report": rep, "findings": [
+            {"title": f"{rep} 要点", "bullets": ["示例"], "fact_refs": refs[:1]}] if refs else []})
     raise AssertionError(f"unexpected skill {skill}")

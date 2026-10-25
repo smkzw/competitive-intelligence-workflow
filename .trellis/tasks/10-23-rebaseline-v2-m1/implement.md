@@ -1,5 +1,19 @@
 # Execution checkpoint
 
+## 2026-10-25 恢复实施 归并收口与Kangzhe7.1并行
+
+当前整族实证：新增生产8场景先6FAIL/2PASS，修空普通批/未知引用静默过滤/拒绝层succeeded/无限正文/实际HTML发布链；随后集中邻接58PASS1.04s及Ruff。新增1:1短事实引用正例在旧冻03真实FAIL（旧结果错误带上第二事实）。首次只设PYTHONPATH的probe被pytest pythonpath=src覆盖而PASS，是仪器失配，不算旧代码通过；用-o pythonpath指向冻结目录后才计真实RED。summary_lineage.py54行复用现有stages，无新表/DB/接口；选/未选事实留审计，不强迫六条引用全体。stages代码签名绑定helper，拒绝层带accepted=false与failed且旧层字节保留；空final/有核实输入的空batch缓存前拒绝，取消含缓存循环。
+
+隔离资料summary-lineage-20261025：原151SHA逐个匹配，原780SHA295f9…、5212currentrefs/46CAS及四科学表expected==actual；参考映射18文件review manifest98298c…/analysiscode7552dc…，新1:1首层76包（非旧1:多50包）/最大8000字符，全部正文/引用还原，0新来源模型。新C03句柄21321实际派发单次，Grok首认证网络超时由runner处理允许备用，未强停或重复派发；实际终态/model/session仍待核，不接受占位报告。E03前端句柄1753已真实派发pi/cursor/default首路，default非确认实际模型，等实际回执，未重复执行其写集。
+
+单独后端候选summary-component-frozen-20261025由HEAD021b96d9 archive+明确后端/测试/Skill覆盖+固定ECharts构成，不读取活跃前端writer未完代码。manifest58d7ed1c8cd67d7426e6b35acd09017cc9b4b7bfdcafac61fce709d04fa4efe8，239文件；完整该候选1575PASS10.89s/Ruff全/JS/195Python600-80过，1既有TestClient警告；检查后239字节全部相同，未污染冻结构建元数据。gate.json限定BACKEND_WITH_COMMITTED_BASELINE_UI，不伪称整个可变工作树/KZ7.1/真实模型/科学门通过。准备本有界开发节点白名单提交，独立review和实际模型归并仍pending，不宣称M1完成。
+
+前端baseline真实先发现file URL引用/static无法装载，首图排除非产品问题；改用完整旧UI冻结生产HTTP+新克隆资料，19源625实体510事实478links，0模型/来源/原写。Ego68明确missing，既有授权创建替代80/p1，不询问/升级/清缓存/登录。C1920×940实图已看：宽度确为1920、16px、sample312px/phase192px，完整表行可达；已有全宽不能误报仍被1100锁死，新重点是信息层级/材质/首屏任务与稀疏空间。baseline server70469/61405只服务新副本，不是新UI验收。
+
+用户明确恢复，实际Goal active；前轮为真实保全/终态/引用差异的progress。HEAD021b96d9，原pipeline/Skill/PRD/测试WIP与未知v1保留。execution-plus-conference：owner持有归并/缓存/事实合同关键路径，E03前端独立写集有实质并行收益；医学摘要及主观视觉涉及解释不确定性，冻结实际候选后单一独立review，不三路全页循环。当前前端包初始化不是已派发/完成，后记实际句柄/返回。
+
+权威仍v2合同和用户当前要求；kangzhe-design实际7.1，父线程已读site必读及图表/下钻/质量门。功能/真实宽屏任务优先，不加空电影或新发布平台；四宽及完整可达事实不变。下一动作集中空批/拒绝层/引用选择/实际publish/多层来源/输出预算的同族RED，最小完整修改后相关批，稳定候选一次宽门。E03并行普通ABC布局，不逐行宽测、不重跑151研究批。
+
 ## 2026-10-24 最新状态：用户无损暂停，非完成/非RC
 
 唯一恢复入口：rebaseline-v2/docs/PAUSE_HANDOFF_20261024_SYNTHESIS.md；STATUS替换更新，以下旧“在途/pending/Goal active”段落是当时历史，不是当前授权。实际Goal已实查paused并再次按用户要求确认paused。当前owner直接保全/停止/记录：这些操作共享同一数据库与顺序恢复边界，不新派执行或会商。

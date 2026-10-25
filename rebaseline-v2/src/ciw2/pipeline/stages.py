@@ -18,14 +18,17 @@ from ciw2.domain.identity import literal_names, name_key, name_owners, possible_
 from ciw2.domain.models import AnalysisResult, IntakeResult, UniverseResult
 from ciw2.domain.tiers import tier_of
 from ciw2.harness.agent import HARNESS_RULES
+from ciw2.pipeline import summary_lineage
 from ciw2.pipeline.context import IncompleteWork, RunContext, work_limit
 from ciw2.pipeline.profile import enrich
 from ciw2.pipeline.queries import drug_trials, scoped_drugs
 from ciw2.pipeline.queries import intake_data as _intake
 from ciw2.pipeline.recovery import fingerprint, get_unit, put_unit
+from ciw2.pipeline.summary_lineage import summary_basis as _summary_basis
+from ciw2.pipeline.summary_lineage import summary_chars as _summary_chars
 from ciw2.sources import ctgov
 
-ANALYSIS_CODE_HASH = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+ANALYSIS_CODE_HASH = hashlib.sha256(Path(__file__).read_bytes() + Path(summary_lineage.__file__).read_bytes()).hexdigest()
 ANALYSIS_TASK_CHARS = 24000
 SYNTHESIS_TASK_CHARS = 8000  # Dense narrative reduction is not a raw-record extraction task.
 CTGOV_CODE_HASH = hashlib.sha256(Path(ctgov.__file__).read_bytes()).hexdigest()
@@ -257,8 +260,11 @@ def _analysis(report: str) -> Callable[[RunContext], dict[str, Any]]:
         tasks = _analysis_tasks(core, base, verified)
         findings = []
         for task in tasks:
+            rc.check_cancelled()
             res = _analysis_call(rc, report, task)
             findings.extend(f.model_dump() for f in res.findings)
+        if not findings and any(task['verified_fact_ids'] for task in tasks):
+            raise ValueError('有已核实资料但摘要要点为空，保留原资料供恢复')
         if len(tasks) <= 1 or not findings:
             return {'report': report, 'findings': findings}
         return _analysis_merge(rc, report, findings, base, verified)
@@ -430,30 +436,63 @@ def _analysis_call(rc: RunContext, report: str, task: dict[str, Any]) -> Analysi
         raise ValueError('摘要返回的报告类型与任务不一致')
     if len(result.findings) > task.get('finding_limit', 6):
         raise ValueError('摘要条数超过本次归并上限，不缓存超量结果')
-    result = result.model_copy(update={'findings': [f for f in result.findings
-        if f.fact_refs and set(f.fact_refs) <= set(task['verified_fact_ids'])]})
+    if any(not f.fact_refs or not set(f.fact_refs) <= set(task['verified_fact_ids']) for f in result.findings):
+        raise ValueError('摘要引用不属于本次完整输入，不缓存或静默删除')
+    if not result.findings and task['verified_fact_ids'] and (task['mode'] == 'batch' or task.get('final_summary')):
+        raise ValueError('有已核实资料但摘要要点为空，不缓存空成功')
+    if _summary_chars(result.model_dump()['findings']) > SYNTHESIS_TASK_CHARS:
+        raise ValueError('归并输出正文超过摘要预算，不缓存膨胀的结果')
     if cached is None:
         rc.db.set_stage(rc.run_id, key, 'succeeded', output=result.model_dump())
     return result
 
 
+def _summary_resolve(rc: RunContext, report: str, task: dict[str, Any], refs: dict[str, list[str]]) -> dict[str, Any]:
+    return summary_lineage.resolve_summary(rc, report, task, refs, _analysis_call)
+
+
 def _analysis_merge(rc: RunContext, report: str, findings: list[dict[str, Any]],
                     base: dict[str, Any], verified: set[str]) -> dict[str, Any]:
-    while findings:
-        synthesis = {**base, 'mode': 'synthesis', 'data': {'candidate_findings': findings},
-                     'verified_fact_ids': sorted({ref for f in findings for ref in f['fact_refs']})}
+    if not findings:
+        return {'report': report, 'findings': []}
+    for level in range(12):
+        rc.check_cancelled()
+        projected, refs, basis = _summary_basis(rc, findings, verified)
+        scoped = {**base, 'finding_basis_sha256': basis}
+        synthesis = {**scoped, 'mode': 'synthesis', 'finding_limit': 6, 'final_summary': True,
+                     'data': {'candidate_findings': projected}, 'verified_fact_ids': sorted(refs)}
         if len(json.dumps(synthesis, ensure_ascii=False)) <= SYNTHESIS_TASK_CHARS:
-            result = _analysis_call(rc, report, synthesis)
-            return result.model_dump()
-        packets = _analysis_tasks({'candidate_findings': findings}, {**base, 'finding_limit': 2}, verified,
+            result = _summary_resolve(rc, report, synthesis, refs)
+            if not result['findings']:
+                raise ValueError('非空摘要输入返回空结果，保留原输入供恢复')
+            return result
+        packets = _analysis_tasks({'candidate_findings': projected}, {**scoped, 'finding_limit': 1}, set(refs),
                                   max_chars=SYNTHESIS_TASK_CHARS, mode='synthesis')
         merged = []
         for packet in packets:
-            merged.extend(f.model_dump() for f in _analysis_call(rc, report, packet).findings)
-        if len(json.dumps(merged, ensure_ascii=False)) >= len(json.dumps(findings, ensure_ascii=False)):
+            rc.check_cancelled()
+            packet['finding_limit'] = min(6, (len(packet['data']['candidate_findings']) + 1) // 2)
+            merged.extend(_summary_resolve(rc, report, packet, refs)['findings'])
+        if not merged:
+            raise ValueError('非空中间归并返回空结果，保留上一完整层')
+        before, after = _summary_chars(findings), _summary_chars(merged)
+        accepted = (len(merged) <= len(findings) and after < before
+                    and (len(merged) * 4 <= len(findings) * 3 or after * 20 <= before * 17))
+        signature = fingerprint([basis, ANALYSIS_CODE_HASH, HARNESS_RULES, rc.skills[f'analysis-{report.lower()}'].body,
+                                 AnalysisResult.model_json_schema(), rc.settings.llm_model])
+        rc.db.set_stage(rc.run_id, f'analysis_{report}:merge_layer:{signature}',
+            'succeeded' if accepted else 'failed', output={
+            'schema_version': 'ciw2-summary-layer-v2', 'accepted': accepted,
+            'code_sha256': ANALYSIS_CODE_HASH, 'rules_sha256': fingerprint(HARNESS_RULES),
+            'skill_sha256': fingerprint(rc.skills[f'analysis-{report.lower()}'].body),
+            'schema_sha256': fingerprint(AnalysisResult.model_json_schema()), 'requested_model': rc.settings.llm_model,
+            'scope': 'INTERMEDIATE_NOT_FINAL_REPORT', 'report': report, 'level': level, 'findings': merged,
+            'input_sha256': fingerprint(findings), 'basis_sha256': basis,
+            'input_count': len(findings), 'output_count': len(merged), 'chars_in': before, 'chars_out': after})
+        if not accepted:
             raise ValueError('摘要输入归并未收敛，保留已完成结果供恢复')
         findings = merged
-    return {'report': report, 'findings': []}
+    raise ValueError('摘要归并超过12层，保留完整检查点，不继续模型调用')
 
 
 def render(rc: RunContext) -> dict[str, Any]:

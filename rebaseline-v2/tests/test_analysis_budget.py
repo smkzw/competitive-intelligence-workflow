@@ -132,7 +132,11 @@ def test_synthesis_uses_smaller_complete_packets_not_the_raw_research_budget(set
     assert result['findings'] and len(calls)>1
     assert all(len(json.dumps(t,ensure_ascii=False))<=8000 for t in calls)
     originals=[f for t in calls for f in t['data']['candidate_findings'] if f['title'].startswith('原始先例')]
-    assert originals==findings  # Every complete input, not a representative/Top-N sample.
+    basis=json.loads(rc.db.query("SELECT content FROM agent_steps WHERE role='synthesis_basis' ORDER BY id")[0]['content'])
+    if 'basis_stage' in basis:basis=rc.db.stage_output(rc.run_id,basis['basis_stage'])
+    resolved=[{**f,'fact_refs':list(dict.fromkeys(r for key in f['fact_refs'] for r in basis['reference_map'][key]))}
+              for f in originals]
+    assert resolved==findings  # Complete clinical text and source refs, only transport IDs are shortened.
     assert all(t['overview']['rows']==284 for t in calls)
     assert json.dumps(findings,ensure_ascii=False)==before
 

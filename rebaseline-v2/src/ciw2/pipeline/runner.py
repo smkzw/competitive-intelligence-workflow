@@ -67,7 +67,7 @@ def execute(rc: RunContext) -> str:
             detail = msg if isinstance(exc, AgentBudgetExceeded) else msg + "\n" + traceback.format_exc()[-3000:]
             rc.db.set_stage(rc.run_id, st.name, "failed", error=detail,
                             output=exc.output if isinstance(exc, IncompleteWork) else None)
-            unfinished_work |= isinstance(exc, IncompleteWork)
+            unfinished_work |= isinstance(exc, IncompleteWork) or st.name in {'analysis_A', 'analysis_B', 'analysis_C'}
             if st.blocking:
                 rc.db.set_run(rc.run_id, "failed", error=f"阶段 {st.name} 失败：{msg}")
                 return "failed"
