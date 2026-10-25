@@ -236,8 +236,11 @@ class Service:
                            (project_id,))
 
     def latest_findings(self, project_id: str, report: str) -> dict[str, Any] | None:
+        """只取当前运行内成功的分析阶段；当前运行没有有效分析时空着返回，不回退旧运行。"""
         row = self.db.one(
-            "SELECT s.output_json FROM stages s JOIN runs r ON r.id=s.run_id WHERE r.project_id=? AND s.name=? "
-            "AND s.status='succeeded' ORDER BY r.created_at DESC, r.rowid DESC LIMIT 1", (project_id, f"analysis_{report}"))
+            "SELECT s.output_json FROM stages s WHERE s.run_id=("
+            "SELECT id FROM runs WHERE project_id=? ORDER BY created_at DESC, rowid DESC LIMIT 1) "
+            "AND s.name=? AND s.status='succeeded' AND s.output_json IS NOT NULL AND s.output_json<>''",
+            (project_id, f"analysis_{report}"))
         import json
-        return json.loads(row["output_json"]) if row and row["output_json"] else None
+        return json.loads(row["output_json"]) if row else None

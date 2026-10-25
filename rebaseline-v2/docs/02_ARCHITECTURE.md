@@ -177,3 +177,9 @@ CT.gov countries原值保留；新trial.china_site带geographic_scope=mainland_c
 ### 范围缓存与CDE分类传递
 
 复用现有scope_batch阶段记录，不加新schema或表。每批查缓存前取当前项目来源集合，模型/工具结束且结果身份检查无问题后按调用后的源集合记录；完整task、source id/digest/text_digest、code、Skill、schema、model、harness仍参与签名。后批新增来源使前批保守失效的行为保留，不声称逐来源依赖优化。CDE临时候选引用完整保留drug_type/registration_class，按同source_id+acceptance_number补全原引用；proven_acceptance_refs回查原始CAS时校验可选新增字段，旧引用不凭空补类别、返回原始行的真实字段。
+
+### 当前摘要运行隔离与引用往返
+
+Service.latest_findings在同一SQL中按project_id选created_at DESC,rowid DESC的最新run，再取该run对应analysis_<report>的succeeded/nonempty output；不跨run回退。当前run其他阶段failed仍可读取已成功对应分析；静态历史页与旧stage不改写。此修复不代表整stage源码/Skill升级失效已实现。
+
+summary_lineage.normalize_references读取本run的basis，只对task.verified_fact_ids的一对一map反查工具返回真实ID，转为该包短引用、去重同一事实；外来/其他包引用原样交成员校验拒绝，不静默过滤。新结果/缓存对象均不原地变更，resolve_summary恢复原科学ID及选择记录。旧schema/Skill缓存不改键伪装当前资格。

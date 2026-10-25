@@ -1,0 +1,69 @@
+{
+  "scope": "LATEST_RUN_SUMMARY_ISOLATION_COMPONENT_NOT_CODE_UPGRADE_OR_FULL_MEDICAL_VISUAL_ACCEPTANCE",
+  "base_commit": "63288251",
+  "service_sha256": "6f6038bbe2363eb0314011b180b0f4a192f982cb14c1fb93489029cd9ffd13b2",
+  "worker": {
+    "harness": "CodeBuddy",
+    "selector_model": "deepseek-v4.1-flash",
+    "effort": "max",
+    "provider_backend_identity": "NOT_INDEPENDENTLY_EXPOSED",
+    "session_id": "01a172bf-2f5f-7fd1-aa4c-b7db473c9cb7",
+    "seconds": 96.055,
+    "tools": 24,
+    "exit": 0,
+    "fallback": null,
+    "root_RED": 8,
+    "existing_PASS_in_RED": 8,
+    "focused_GREEN": 16,
+    "related_PASS": 65
+  },
+  "actual_http": {
+    "scope": "REAL_708_FACTS_CONTROLLED_SUMMARY_MARKERS",
+    "missing_new_analysis_old_summary_absent": true,
+    "latest_analysis_success_current_marker_present": true,
+    "other_stage_failed_does_not_hide_successful_current_analysis": true,
+    "old_stage_preserved": true,
+    "science_before_after_unchanged": true,
+    "model_source_calls": 0,
+    "http_before_sha256": "32106ecc76aba3a917fe0fad761bee6234678b6a8686603ed00d41ae414782cb",
+    "http_after_sha256": "deca0021bb1084b66d3e4cc7d1cb9bfc3b7669e9c50f9acf4c2b78f6278823d3"
+  },
+  "browser": {
+    "name": "Ego Lite dedicated5/p1",
+    "viewport": [
+      1440,
+      1080
+    ],
+    "old_marker_absent_when_current_missing": true,
+    "current_marker_absent_when_current_missing": true,
+    "only_current_marker_after_current_analysis_success": true,
+    "all_raw_result_IDs_unchanged": true,
+    "result_ids": 668,
+    "chart_instances": [
+      1,
+      1
+    ],
+    "screenshots_sha256": {
+      "1440-current-no-summary.png": "3cca63ed77c022e3688a44d0450eea8c32a1635c0068e2774cb187dd44cc8ae5",
+      "1440-current-valid-summary.png": "4dbb80296fd440ff1b1a1057b4482e653fb8aac9cb3ae5495f080dfe68786194"
+    },
+    "owner_viewed_both_states": true,
+    "full_four_width_or_aesthetic_acceptance": "NOT_PERFORMED_NO_CHART_GEOMETRY_OR_STYLE_CHANGE"
+  },
+  "real_fact_count": 708,
+  "facts_sources_entities_links_unchanged": true,
+  "new_source_model_calls": 0,
+  "whole_stage_runtime_skill_invalidation": "NOT_IMPLEMENTED",
+  "ephemeral_test_server_retired": true,
+  "development_gate": {
+    "manifest_sha256": "0e7ec822b172a16eb342c5a2e631f04f38c53c5fc39ba77dc9869e2885ab81c4",
+    "files": 337,
+    "pytest_passed": 1847,
+    "pytest_seconds": 11.73,
+    "ruff": 0,
+    "javascript_files": 11,
+    "python_files": 226,
+    "size_600_80_violations": [],
+    "input_changes": []
+  }
+}

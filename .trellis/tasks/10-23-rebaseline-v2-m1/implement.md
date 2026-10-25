@@ -757,3 +757,18 @@ Method changed to execution because one independently writable source-replay hel
 - 当前冻结首命令再次犯app cwd下git archive相对路径错误，无snapshot/未执行测试却继续启动门脚本也失败，两个NOT_EXECUTED原错误保留；改显式repo cwd与新06-recovery01目录，334文件manifest80956640283e99b1cee7b7ae71f636f7e29f6daf90e1a08627ced1ca6d18e9a2，稳定候选一轮宽门进行中。不是产品失败或新测试通过，不隐去重复工具错误。
 
 - 06-recovery01当前宽门自然exit0：1831PASS13.14s（总进程13.572s），Ruff/11JSsyntax/225Python600-80/334固定输入未变；1既有Starlette TestClient弃用warning，未额外安装/升级依赖。新增9例包含真实工具读取完整ID→submit→缓存重放及歧义/包外引用拒绝。源2文件及9例测试与冻结hash一致；后续仅状态/公共精简回执更新不重复全仓。没有新增UI/临床结果，f700安装09与此代码门分开记账。下一步白名单commit/push，再做有界恢复和升级失效，仍Goal active。
+
+
+## 2026-10-25 下一有界组件：当前动态报告的摘要运行隔离
+
+63288251代码/回执已commit并push确认。本组件选execution：Service.latest_findings查询是与归并数据审计分离的有限改动，worker仅该函数/新离线测试，owner并行核原摘要恢复输入与计划；共享阶段版本设计不交给它。实时guard新packet路由按非高峰读取，不手动沿用旧Cursor/Grok表。只修最新run无合格摘要时错误回退旧run，不新增平台/表/审批，不声称整stage升级已修；先预检布尔ok再实际启动，保留真实终态/模型证据。
+
+- 新execution已实际启动27443：实时非高峰CodeBuddy/codebuddy-cli/deepseek-v4.1-flash:max，40turn/7200s，prompt/context/plan相对ciw-data路径在启动前preflight解析ok/0warnings过，所有fallback由live manifest生成。仅latest_findings函数+新test，owner未改同文件；暂无终态/接受。
+- owner独立只读07恢复审计使用原5d冻结代码与readonly SQLite重建267计划，完整780顺序/文字无变；126旧key均结构合格，覆盖554原点并产297中间点；141未完对应226原点。0DB/cache写、0模型/来源、原DB/780/回执/冻结所有文件hash未变。限定结构前沿，不将旧prompt的297叙事当新规则科学资格，不复制当前缓存key，也不启动整包重试。机器完整frontier及精简公共receipt可恢复，旧失败不重跑。
+
+- latest-summary-run27443已自然exit0，CodeBuddy/codebuddy-cli/deepseek-v4.1-flash:max selector，96.055s/24tools/session01a172bf-2f5f-7fd1-aa4c-b7db473c9cb7/no fallback；backend实际身份未由适配器独立暴露，不伪称另行认证。8真实根因RED/8既有正例→16GREEN/65相关PASS1.44s/Ruff，owner读完完整定义与168行测试，SQL单查询锁project最新run并按报告/stage success取输出，其他阶段失败不抹合法分析，历史不动。guard audit-execution ok/0warnings。
+- owner普通Web B验收用09标准备份恢复708真实事实+合成摘要标记，普通HTTP/Ego5p1 1440两状态实际查看：最新run无合格分析不混旧run文本，同run分析succeeded仅现当前标记，668原结果ID/科学四表一致，0新增模型/来源，旧succeeded历史未改。不是临床结论或整页视觉。首HTTP脚本误用系统python导致import失败，DB写/HTTP尚未执行，改既有.venv后只补该步；资料定位命令又有cwd相对路径错，未影响源/测试，后续Git命令显式repo、资料命令显式app。验证后精确PID49885/cwd/命令退役，52533 exit143；2截图/完整私有回执及公共摘要保留。PRD/ARCH同步本任务ID往返及最新run规则，不另造产品权威。
+
+- 当前latest-summary08稳定宽门1847PASS11.73s（总进程12.08s），Ruff/11JSsyntax/226Python600-80/337输入无变，manifest0e7ec822b172a16eb342c5a2e631f04f38c53c5fc39ba77dc9869e2885ab81c4。service与16例新测试字节同冻结；后续仅记录不再全仓复跑。公开receipt分别标代码门/HTTP实屏/新运行隔离，未借用四宽旧视觉或f700安装09冒充本次全包通过。
+- 自建install08旧venv用原08wheel逐模块比对、与新09所有包版本一致、旧wheel/sdist哈希完整、ps引用0/lsof打开0后，精确仅退役997普通文件/17,523,155逻辑字节，symlink不跟随；旧环境版本及逐文件hash/rebuild路线保留retired-venv-manifest，物理空间释放未测。原来源/DB/CAS/代码包/报告/日志/当前09环境和所有会话记录均未清理。
+- 下一步：白名单commit/push本节点；07恢复前沿126单元/554原输入/297中间输出和141单元/226输入已查明，未冒充新规则资格。M6整stage升级跳过仍未修，下一根因需同时限制受影响阶段并保留合格单元，不用全包hash变化盲重跑151研究。M1完整C、M2召回、M3身份、M4跨研究/论文、M5历史和综合交付仍未过，Goal保持active。
