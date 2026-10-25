@@ -874,3 +874,12 @@ ff69abd3已push并远端实核一致。20先完成离线安装/23资产/9Skill/C
 - 30链终态：原主链有实际4RED/5PASS→11PASS产物；final report由声明Pi/openai-codex/gpt-6-luna:max续接，所说“无修改”只适用其接续阶段。ZCode失败/MTPLX空输出/实际会话切换保留，不冒称DS独立完成。owner读完整实现，再造同模块外同名registry fn会误排除真实helper的1RED，收窄name集合只匹配相同模块。共享Tool/schema/registry/page、used-tool、unrelated-tool均保留测试；未改旧receipt/unit键。
 - 合并35身份/语义与30代码后36首次1915PASS但fixture同名alias触发Ruff PLC0414，原FAIL保留；改为显式复用fixture wrapper，固定recovery01完整1915PASS12.02s/Ruff/240Python600/80/13JS/360SHA无变。未每行全仓，都是稳定候选与真实门失败修复。
 - 实际37新子进程14897/原生53008：同6+8源记录，身份补入后旧大包8437/73031超过既有预算，生产完整重分54556/18890，不抬门/不截记录；用同production merge，原输出保留，0研究重跑。实际38新PNH普通项目prj_fc03997a59c5/run_fd9a5c6c4fcf、child15536/原生46331，正常Service全链，未seed/mock，24全局agent上限服从各Skill预算，信号调用既有cancel_run安全停止。Ego6/p1为授权替代空间，之后复用；无search如实保留路线失败，不能冒充全源已成功。两个均pending，36冻结运行时不热改。
+
+
+## 2026-10-26 实际恢复61终态及明确网页壳根因
+
+继续Goal，不设阶段性暂停。采用execution：CT.gov明确研究URL的只读工具修复有独立源码/测试写集；owner并行保全61实际失败与核M2来源，产品科学规则/缓存资格由owner控制。61实际704.643秒后在第二批candidate_triage因主502/两备429终止；第一批已成功保存，第三批前未到四个资格缓存，0hits不证明缓存失效。10次成功DeepSeek回复、154来源/44事实、0设计行/HTML；上游前缀/原38失败DB/370冻结输入均不变。不得无限重试模型服务或重跑宇宙。
+
+对61终态只读核发现33个CT.gov /study/文档均182字导航/词汇表，非研究正文。有界E03 worker只修websearch._fetch_url和一个成族测试，明确当前无query研究URL读取官方JSON，保留请求与实际URL/版本/分页，错误/历史query不伪造当前；不得科学摄取/改DB。保留生成route元数据，先RED再相关批；无网络/包安装。source66仍待终态，不轮询进度。
+
+- 68终态备份137文件，manifest5590353395ad50548d2031a3ad2dca496b5d32161bb0749132f65f49a05880ff；只在memory DB调用生产get_unit核1/3/4/5/6五批共150候选仍合格，2/7/8未成。实际第一批新成功后第二批失败，不是四旧资格key失效。原61/38主DB SHA不变，0模型/源。70对NCT03181633官方API单次200、56380字完整JSON/同ID，原件35cc37468aee980a2f1eb9d444a046abc3aa95512d2f31401d3c0f26b4f2a639；0摄取/模型，不倒证历史或宣称工具修复通过。私有重放命令见ciw-data/audit-pnh-recovery-terminal-20261026-68.py及ciw-data/scripts/smoke_ctgov_document-20261026-70.py；不重复实际取网。
