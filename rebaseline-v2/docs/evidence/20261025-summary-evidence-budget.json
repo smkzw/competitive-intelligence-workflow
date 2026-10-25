@@ -1,0 +1,75 @@
+{
+  "schema_version": "ciw2-owner-component-evidence-v1",
+  "scope": "COMPLETE_EVIDENCE_BUDGET_AND_MEMORY_CACHE_QUALIFICATION_NOT_LIVE_OR_MEDICAL_ACCEPTANCE",
+  "base_commit": "cdff41aa5903877de7889ce63a3b1290abb476fa",
+  "candidate_manifest_sha256": "00971c72d11b6a3f4fa100de6e055f58c125c733738f91159b8196191ee0bcd6",
+  "analysis_code_sha256": "fd64d6025ad88401a56614f99074f30996e5bc7706bbd5631ad2eafab6ddb887",
+  "root_tests": {
+    "red_failures": 3,
+    "related_passed": 77,
+    "related_seconds": 0.84
+  },
+  "frozen_gate": {
+    "pytest_passed": 1754,
+    "seconds": 11.09,
+    "ruff": "PASS",
+    "JS_files": 11,
+    "python_files": 216,
+    "size_600_80_violations": [],
+    "fixed_inputs": 311,
+    "changed_inputs": []
+  },
+  "real_input_planning": {
+    "original_science_unchanged": true,
+    "research_batches_reexecuted": 0,
+    "model_calls": 0,
+    "code_sha256": "fd64d6025ad88401a56614f99074f30996e5bc7706bbd5631ad2eafab6ddb887",
+    "input_findings": 780,
+    "old_coarse_packets": 76,
+    "qualified_cached_parents": 35,
+    "new_first_level_packets": 267,
+    "pending_packets": 232,
+    "input_findings_order_and_all_refs_preserved": true,
+    "cached35_tasks_and_outputs_preserved": true,
+    "max_pending_context_chars": 50160,
+    "failed36_previous_estimated_context_chars": 100693,
+    "failed36_new_packets": [
+      {
+        "findings": 2,
+        "refs": 14,
+        "estimated_context_chars": 19236
+      },
+      {
+        "findings": 1,
+        "refs": 18,
+        "estimated_context_chars": 25551
+      },
+      {
+        "findings": 2,
+        "refs": 14,
+        "estimated_context_chars": 16758
+      },
+      {
+        "findings": 3,
+        "refs": 11,
+        "estimated_context_chars": 22306
+      },
+      {
+        "findings": 2,
+        "refs": 12,
+        "estimated_context_chars": 17970
+      }
+    ],
+    "actual_migration": "NOT_RUN",
+    "actual_recovery": "NOT_RUN"
+  },
+  "complete_observations_retained": true,
+  "science_source_tables_modified": false,
+  "research_batches_reexecuted": 0,
+  "model_calls_during_planning": 0,
+  "qualification": "Only an in-memory copy was used to validate old/new task keys and unchanged source/schema/Skill/postchecks; original failed runtime and database remain untouched.",
+  "next": "Freeze committed code; prepare a separate recovery snapshot with the same logical run, qualify35 caches explicitly, then execute only the first child of old failed36 before continuing.",
+  "actual_migration": "NOT_RUN",
+  "actual_recovery": "NOT_RUN",
+  "final_product_acceptance": "NOT_RUN"
+}

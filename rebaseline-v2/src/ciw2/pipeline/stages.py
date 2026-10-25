@@ -18,7 +18,7 @@ from ciw2.domain.identity import literal_names, name_key, name_owners, possible_
 from ciw2.domain.models import AnalysisResult, IntakeResult, UniverseResult
 from ciw2.domain.tiers import tier_of
 from ciw2.harness.agent import HARNESS_RULES
-from ciw2.pipeline import summary_lineage
+from ciw2.pipeline import summary_budget, summary_lineage
 from ciw2.pipeline.context import IncompleteWork, RunContext, work_limit
 from ciw2.pipeline.profile import enrich
 from ciw2.pipeline.queries import drug_trials, scoped_drugs
@@ -28,7 +28,7 @@ from ciw2.pipeline.summary_lineage import summary_basis as _summary_basis
 from ciw2.pipeline.summary_lineage import summary_chars as _summary_chars
 from ciw2.sources import ctgov
 
-ANALYSIS_CODE_HASH = hashlib.sha256(Path(__file__).read_bytes() + Path(summary_lineage.__file__).read_bytes()).hexdigest()
+ANALYSIS_CODE_HASH = hashlib.sha256(Path(__file__).read_bytes() + Path(summary_lineage.__file__).read_bytes() + Path(summary_budget.__file__).read_bytes()).hexdigest()
 ANALYSIS_TASK_CHARS = 24000
 SYNTHESIS_TASK_CHARS = 8000  # Dense narrative reduction is not a raw-record extraction task.
 CTGOV_CODE_HASH = hashlib.sha256(Path(ctgov.__file__).read_bytes()).hexdigest()
@@ -418,14 +418,19 @@ def _analysis_tasks(data: dict[str, Any], base: dict[str, Any], verified: set[st
     return tasks
 
 
-def _analysis_call(rc: RunContext, report: str, task: dict[str, Any]) -> AnalysisResult:
-    _analysis_budget(task, SYNTHESIS_TASK_CHARS if task['mode'] == 'synthesis' else ANALYSIS_TASK_CHARS)
+def _analysis_cache_key(rc: RunContext, report: str, task: dict[str, Any]) -> str:
     skill = rc.skills[f'analysis-{report.lower()}']
     signature = {'task': task, 'code': ANALYSIS_CODE_HASH, 'rules': HARNESS_RULES,
                  'skill': skill.body, 'schema': AnalysisResult.model_json_schema(),
                  'model': rc.settings.llm_model}
     digest = hashlib.sha256(json.dumps(signature, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
-    key = f'analysis_{report}:{task["mode"]}:{digest}'
+    return f'analysis_{report}:{task["mode"]}:{digest}'
+
+
+def _analysis_call(rc: RunContext, report: str, task: dict[str, Any]) -> AnalysisResult:
+    _analysis_budget(task, SYNTHESIS_TASK_CHARS if task['mode'] == 'synthesis' else ANALYSIS_TASK_CHARS)
+    skill = rc.skills[f'analysis-{report.lower()}']
+    key = _analysis_cache_key(rc,report,task)
     cached = rc.db.stage_output(rc.run_id, key)
     if cached is not None:
         result = AnalysisResult.model_validate(cached)
@@ -464,13 +469,17 @@ def _analysis_merge(rc: RunContext, report: str, findings: list[dict[str, Any]],
         scoped = {**base, 'finding_basis_sha256': basis}
         synthesis = {**scoped, 'mode': 'synthesis', 'finding_limit': 6, 'final_summary': True,
                      'data': {'candidate_findings': projected}, 'verified_fact_ids': sorted(refs)}
-        if len(json.dumps(synthesis, ensure_ascii=False)) <= SYNTHESIS_TASK_CHARS:
+        costs=summary_budget.read_costs(rc,refs)
+        cached=lambda task: rc.db.stage_output(rc.run_id,_analysis_cache_key(rc,report,task)) is not None
+        if (len(json.dumps(synthesis, ensure_ascii=False)) <= SYNTHESIS_TASK_CHARS and
+                (cached(synthesis) or summary_budget.context_chars(synthesis,costs)<=summary_budget.MAX_CONTEXT_CHARS)):
             result = _summary_resolve(rc, report, synthesis, refs)
             if not result['findings']:
                 raise ValueError('非空摘要输入返回空结果，保留原输入供恢复')
             return result
         packets = _analysis_tasks({'candidate_findings': projected}, {**scoped, 'finding_limit': 1}, set(refs),
                                   max_chars=SYNTHESIS_TASK_CHARS, mode='synthesis')
+        packets=summary_budget.packets(packets,costs,cached)
         merged = []
         for packet in packets:
             rc.check_cancelled()
