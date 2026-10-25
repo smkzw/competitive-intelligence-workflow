@@ -85,6 +85,8 @@ def test_official_study_page_registers_the_complete_current_json_document(settin
     f"https://www.clinicaltrials.gov/study/{NCT}/",
     f"https://clinicaltrials.gov:443/study/{NCT}#results",
     f"https://CLINICALTRIALS.GOV/study/{NCT}",
+    API,
+    f"http://clinicaltrials.gov/api/v2/studies/{NCT}",
 ])
 def test_equivalent_official_page_forms_resolve_to_the_same_document(settings, monkeypatch, page):
     ctx = context(settings)
@@ -101,7 +103,7 @@ def test_equivalent_official_page_forms_resolve_to_the_same_document(settings, m
     f"https://clinicaltrials.gov/study/{NCT}?tab=history",
     f"https://clinicaltrials.gov/study/{NCT}/history",
     f"https://clinicaltrials.gov/ct2/show/{NCT}",
-    f"https://clinicaltrials.gov/api/v2/studies/{NCT}",
+    f"https://clinicaltrials.gov/api/v2/studies/{NCT}?format=json",
     f"https://example.org/study/{NCT}",
     f"https://clinicaltrials.gov.evil.example/study/{NCT}",
     f"https://clinicaltrials.gov@evil.example/study/{NCT}",

@@ -1,0 +1,113 @@
+{
+  "scope": "REAL_SAME30_MODEL_VALIDATION_AND_TYPED_SOURCE_CACHE_REPAIR_NOT_FULL_M1",
+  "actual114": {
+    "project_id": "prj_fc03997a59c5",
+    "run_id": "run_fd9a5c6c4fcf",
+    "candidate_count": 30,
+    "task_sha256": "ff545b8e98281aa29bf3d9a8ac466873d68baa7bbff33555d6fda1d5b7cb3bab",
+    "task_chars": 46260,
+    "runtime_manifest_sha256": "3731fb0e20ad8abe70655a4e2a7af4f712d1f57975b682b141dd4afeea3bbe0c",
+    "elapsed_seconds": 403.612,
+    "actual_successful_models": {
+      "DeepSeek-V4.1-Flash-1017": 2
+    },
+    "successful_reply_tokens_not_all_attempts": 45775,
+    "fetch_url_tool_results": 1,
+    "science_tables_unchanged": true,
+    "upstream_stages_unchanged": true,
+    "original_failed61_db_unchanged": true,
+    "current_unit_cached": false
+  },
+  "same30_observed_comparison": {
+    "before82": {
+      "seconds": 1114.86,
+      "successful_replies": 9,
+      "successful_reply_tokens": 235070,
+      "fetch_url_results": 17
+    },
+    "after114": {
+      "seconds": 403.612,
+      "successful_replies": 2,
+      "successful_reply_tokens": 45775,
+      "fetch_url_results": 1
+    },
+    "not_universal_or_causal_benchmark": "Actual serving model mix differed; successful reply usage excludes unknown failed-attempt/billing usage."
+  },
+  "cache_root117": {
+    "url": "https://clinicaltrials.gov/api/v2/studies/NCT06412497",
+    "same_raw_text_digest": "4c262b6e187c0f3ed7c66181a708f3a3d8463467c62cb8ebc7f71a5180764d16",
+    "original_typed_id": "src_fd170be67724",
+    "legacy_web_id": "src_142671e1e488",
+    "cause": "Direct official API URL bypassed current-study adapter and reused legacy web namespace; explicit and read dependencies at one URL had two IDs, so strict get_unit correctly missed."
+  },
+  "code_change118": "Current official study page and exact study API URL share verified typed ctgov identity. History/query/unofficial paths remain generic. No generic get_unit weakening or history rewrite.",
+  "regression118": {
+    "initial_red": "5FAILED0.22s",
+    "related": "110PASS1.83s/Ruff",
+    "old_test_migration": "Direct API generic-web case moved to verified current-document contract; queried API still generic; old frozen tests preserved in historical Git/runtime."
+  },
+  "actual119": {
+    "scope": "ACTUAL_CANONICAL_CURRENT_STUDY_API_SOURCE_ONLY_NO_MODEL_OR_FACT_ACCEPTANCE",
+    "source_id": "src_fd170be67724",
+    "url": "https://clinicaltrials.gov/api/v2/studies/NCT06412497",
+    "kind": "ctgov",
+    "raw_sha256": "4c262b6e187c0f3ed7c66181a708f3a3d8463467c62cb8ebc7f71a5180764d16",
+    "raw_bytes": 16613,
+    "same_bytes_as114": true,
+    "legacy_web_source_unchanged": true,
+    "science_tables_unchanged": true,
+    "model_calls": 0,
+    "source_files": {
+      "src/ciw2/sources/websearch.py": "e7d7b0d76ecb2f217e5f12aa182f11f531b83102e0131f7086655bc2d469176e"
+    }
+  },
+  "qualification121": {
+    "scope": "EXPLICIT_ONE_UNIT_SOURCE_NAMESPACE_QUALIFICATION_NO_NEW_MEDICAL_DECISION",
+    "original_actual114_receipt_sha256": "76eb36bd14a594fa57cb2b8d856b491d1e744007614c241bb4bc0f4cf523db12",
+    "original_actual_model_calls_replayed": 0,
+    "old_key": "scope_batch:dcc71b72226ad21100f6119f6461e26ccb0e5560dc0ea2f7710e4697171d4d6f",
+    "new_key": "scope_batch:fedc6973e209b4fa1c8934d0ef64b396dda97a9202464f373fe51a4807ce6b97",
+    "same_complete_task_sha256": "ff545b8e98281aa29bf3d9a8ac466873d68baa7bbff33555d6fda1d5b7cb3bab",
+    "same_other119_runtime_files": 119,
+    "only_runtime_change": "fetch_url recognizes current official study API with same typed validation as study page",
+    "namespace_map": [
+      {
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT06412497",
+        "original_read_source_id": "src_142671e1e488",
+        "current_typed_source_id": "src_fd170be67724",
+        "raw_digest": "4c262b6e187c0f3ed7c66181a708f3a3d8463467c62cb8ebc7f71a5180764d16",
+        "text_digest": "4c262b6e187c0f3ed7c66181a708f3a3d8463467c62cb8ebc7f71a5180764d16"
+      }
+    ],
+    "old_and_current_raw_text_request_context_exact": true,
+    "current_source_verified_by_real119": "9f3050dd149fe9bb71384368be9278498c8f60fd0504db6e06f87614f6f1729f",
+    "no_scientific_facts_entities_links_sources_or_coverage_changed": true,
+    "no_fake_network_model_or_planned_stage_success": true,
+    "status": "QUALIFIED_APPEND_ONLY_CURRENT_UNIT_CACHE",
+    "new_model_calls": 0,
+    "new_source_calls": 0,
+    "production_review_batch_replays": 2,
+    "original114_record_and_old_cache_not_rewritten": true,
+    "full_M1_or_ordinary_pipeline_acceptance": false
+  },
+  "qualification_receipt_sha256": "8118dc89b962e6d43aac729b7893efe63c12e14442ab9b6453f876aca299270f",
+  "remaining": "Ordinary full C pipeline and report/scientific/browser acceptance still pending. No full-stage or RC signal.",
+  "current_gate122": {
+    "pytest": "1999PASS15.41s",
+    "ruff": "PASS",
+    "python_files": 247,
+    "javascript_files": 14,
+    "inputs_unchanged": 385,
+    "manifest_sha256": "0bbc874d4a8e5dd0dea701483ec4cd733a1501171546cda582afb327ac50cf5e",
+    "runtime123_manifest_sha256": "faf50b802ee88ed736b29be8fdd417ac010f001575a4799e3d1ea4d5422524d0"
+  },
+  "ordinary125_start": {
+    "actual_entry": "Service.start_run(project_id,resume_run=run_id,background=False)",
+    "resume_stage": "universe_china",
+    "prior_intake_compatible": true,
+    "plan_overrides_or_seed": false,
+    "pre_resume_backup_manifest_sha256": "60f92805acd8ed38688117852037ee63f49bbaa1b406bb46cf5dfeb59e8d597e",
+    "status": "STARTED_NOT_ACCEPTED",
+    "full_M1_or_RC": false
+  }
+}

@@ -1,3 +1,11 @@
+## 2026-10-26 114真实收益/117–121恢复根因闭合
+
+114已终态：同原30候选，2次DGX DeepSeek-V4.1-Flash-1017成功/403.612s/45775成功tokens/1fetch，相对82的9成功/1114.86s/235070/17fetch仅作实测对照，模型组合不同、不作普遍因果。0上游重跑/科学表变化，但原receipt current_unit_cached=false保留。
+
+选择Direct：这是同一owner控制的source读集/严格恢复契约，已定位唯一API类型分叉，另派发会增加共享状态协调成本。117只读内存诊断显示同URL/SHA有web与ctgov两ID，fetch直接API绕过typed验证导致旧web最新观察。118五根因RED→110相关PASS1.83s/Ruff，当前API与study页共typed/nct验证；历史/query/unofficial保持，旧generic API断言明确迁移，旧冻结不改。119真实API16613bytes与114相同/typedfd，旧web/source/science不改。
+
+121未重跑模型：完整task精确ff545b8e…；111仅websearch regex/docstring变，其他119运行时相同，逐所有来源版本和raw/text摘要/元数据核验，只有同官方NCT JSON、原web→当前typed完全同字节才追加显式新缓存，原114及旧缓存保留。生产_review_batch两次0模型/0来源命中，science/旧stages/source未改，不伪造整stage/医学/RC接受。公开记录docs/evidence/20261026-current-scope-recovery.json。下一有界动作：固定当前候选、真实普通Service恢复，最早UniverseChina确有工具/Skill变化必须按新版本执行，不盲覆写旧成功。
+
 ## 2026-10-26 109当前开发门/110名称链/114真实验证
 
 86/100已终态，同DS4.1flash:max无备用，共799.276s/133工具（非计费），owner完整源码/测试审阅后采产品修改。175关联NCT+42孤立NCT全覆盖，211候选9完整包max59835/60k，投影只读；25out-of-tree无私件PASS0.39s、186相关PASS3.45s，109一次稳定1992PASS14.68s/Ruff/246Python/14JS/382检查输入稳定。source gate manifest e9b2780a…，111仅120源码/Skill/资产1.93MB冻结/manifest3731fb0e…，无新venv或数据库副本。
@@ -104,3 +112,9 @@ source66实际Grok4.7选择器/high、无备用；endpoint身份仅banner，未�
 - 74补轮实核与首轮同session，113.189s/11toolcalls，始终无fallback；两轮共31唯一assistant消息ID/57calls/478.326s，不冒称provider计费或完整流程门。owner原纠正里issuer键“all8”本身错，补轮确认仅2/8，已在77统一字段而原66不改。补轮撤回原China3→真实2、研发预期当实绩、化药code硬门槛、许可方/CTR/中国获批/单病种前置、公式唯一双语证明等。
 - 77覆盖层依原源：ADX-038和EVER001发行人级正向创新候选、未知监管类别另列；阿曲生坦中文资格支持但英语canonical跨语待证；5其余primary缺口保留，未封分母/算召回。78沿已保存PRNewswire的实际英文href单次200补到“Novel BTK Inhibitor EVER001”原文，raw6196711787620fafb346373ce62b10ba0f22b92ada30dbf4474f7e345e69463a/text031e7fd47bbaec70656c11ed965ee8ca021cf5740db040c9197eb379d9c98ef3，非新全域搜索，0模型/生产摄取；FDA/NHSA分子式聚合只作线索，不强并中英文身份。
 - 79有限新execution处理原IGAN002/007/008/010/017各一手创新声明、004一个真实双语关联源；原清单/原源SHA固定，新manifest cbd514135d68d5d991ea3e795d80764980db964d99467b488bd3420eee3a4578。新预检PASS0warning已确认后才启动（修正74调用次序失误），Grok4.7/high及显式备用、48turn/5400s总预算/每目标1新策略，原生31984核runner92154。禁读生产/owner资格结论/旧review，禁Ego/安装/Git/删除/猜链接，不新建分母或复搜全宇宙。终态前不采用不轮询。下步79终态核源，再接既有facts内的分类/核心消费，不只编参照清单称生产已完。
+
+## 2026-10-26 当前整合记录（历史原件不改）
+
+87/95/103独立新增源资格已支持CM313/CM338类1、ALXN2050化药1、felzartamab potential first-in-class发行人声明、mezagitamab NME发行人类别。104 fresh C03/DS4.1flash:max265.818s/15工具/11唯一assistant ID/no fallback仅支持阿曲生坦↔atrasentan成分名，owner实核7SHA/原PPT第7页/完整登记，定位初错保留原件并以owner-decision-corrected新回执纠正。未推MAH/批准/同臂/临床优越；原66/77与三表不改，AD指定类/中国资格及唯一单位仍待，不封分母/不算95%。
+
+owner同时完成118–122 typed API缓存根因与1999代码门，125普通C按新源工具真实从universe_china恢复；这不改变参照盲性或把30候选相关性当核心类别。项目仍active/non-RC，不新增医学硬门或要求用户重选已锁定口径。

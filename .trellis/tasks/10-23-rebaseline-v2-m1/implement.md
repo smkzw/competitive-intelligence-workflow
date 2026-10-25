@@ -1,3 +1,11 @@
+## 2026-10-26 114真实收益/117–121恢复根因闭合
+
+114已终态：同原30候选，2次DGX DeepSeek-V4.1-Flash-1017成功/403.612s/45775成功tokens/1fetch，相对82的9成功/1114.86s/235070/17fetch仅作实测对照，模型组合不同、不作普遍因果。0上游重跑/科学表变化，但原receipt current_unit_cached=false保留。
+
+选择Direct：这是同一owner控制的source读集/严格恢复契约，已定位唯一API类型分叉，另派发会增加共享状态协调成本。117只读内存诊断显示同URL/SHA有web与ctgov两ID，fetch直接API绕过typed验证导致旧web最新观察。118五根因RED→110相关PASS1.83s/Ruff，当前API与study页共typed/nct验证；历史/query/unofficial保持，旧generic API断言明确迁移，旧冻结不改。119真实API16613bytes与114相同/typedfd，旧web/source/science不改。
+
+121未重跑模型：完整task精确ff545b8e…；111仅websearch regex/docstring变，其他119运行时相同，逐所有来源版本和raw/text摘要/元数据核验，只有同官方NCT JSON、原web→当前typed完全同字节才追加显式新缓存，原114及旧缓存保留。生产_review_batch两次0模型/0来源命中，science/旧stages/source未改，不伪造整stage/医学/RC接受。公开记录docs/evidence/20261026-current-scope-recovery.json。下一有界动作：固定当前候选、真实普通Service恢复，最早UniverseChina确有工具/Skill变化必须按新版本执行，不盲覆写旧成功。
+
 ## 2026-10-26 109当前开发门/110名称链/114真实验证
 
 86/100已终态，同DS4.1flash:max无备用，共799.276s/133工具（非计费），owner完整源码/测试审阅后采产品修改。175关联NCT+42孤立NCT全覆盖，211候选9完整包max59835/60k，投影只读；25out-of-tree无私件PASS0.39s、186相关PASS3.45s，109一次稳定1992PASS14.68s/Ruff/246Python/14JS/382检查输入稳定。source gate manifest e9b2780a…，111仅120源码/Skill/资产1.93MB冻结/manifest3731fb0e…，无新venv或数据库副本。
@@ -915,3 +923,11 @@ ff69abd3已push并远端实核一致。20先完成离线安装/23资产/9Skill/C
 
 - 80是同一正向来源规则/身份措辞批次：DrugCandidate.innovative不再定义为“非仿制/类似”，明确产品正向来源；name允许完整中文/复合名，china Skill分开MAH与权益/代理/责任人等，两个universe Skill保留有独立开发改良/未知并按实际权威级别，不把一期/招募/原研持有者当隐性前置。无新增执行分支，因此未写镜像文字断言/未重测浏览器；新模型遵循尚未实际跑，不称行为科学已验。
 - 80仅manifest+Git重建指针，不造新整仓副本/venv；376输入manifestd546be7240e012fd387f491265ef5223ceb4baabacc3e1d05856308ac3a1e553，稳定一次1965PASS15.03s/Ruff/244Python600-80/14JS，检查期间全SHA不变。71来源工具与72实际网络行为保留其版本范围；64安装仍仅60，不冒称80新安装或M1。76只读实核新71恢复会回universe_china，未写新成功回执/热改原38/61或重跑全部研究；模型路线限流仍真实阻断普通报告。
+
+## 2026-10-26 当前typed API根因118–125与普通完整C
+
+本单元采用direct：已实测来源ID歧义是确定性工具身份故障，由owner控制共同source/cache；现成114真实模型答复不再重派会商或重算。117核同URL/相同原件却web与ctgov双ID；118最小regex统一当前study/API入口，历史/query等不改。5成族RED→110相关PASS1.83s/Ruff→稳定候选122一次1999PASS15.41s/Ruff/247Python/14JS/385输入SHA不变。119实际生产API16613bytes同原SHA、typed ID正确，旧源/科学表不改；121完整task与其他119运行时/源raw-text-meta逐一相同才追加一个显式namespace资格缓存，两次生产review0模型/来源复用。原114/历史key/原源/失败不重写，不迁移所有旧记录。
+
+123仅120运行时冻结/manifestfaf50b80…，不造新venv/整仓副本。124标准备份147文件19528622逻辑字节/manifest60f92805…；1个46651字节可选trace另外内容寻址保留，无资料删除。125使用固定123普通Service全C计划，恢复同项目prj_fc03997a59c5/run_fd9a5c6c4fcf，从universe_china实际重执行（工具与指引变更），intake兼容，不改stage计划、不seed或伪造上游成功。原启动器链式替换生成错误子文件名，activation前就失败/0模型来源；保存原启动器与launcher-pre-dispatch-correction，再用精确实际子文件启动recovery01。child40909/原生13798已确认所有权，Ego8不由owner抢用；等kernel退出事件，不轮询。
+
+当前源码/测试待白名单提交，1999仅开发门；普通M1/科学/四宽/当前安装尚待。37摘要旧REVISE保留。M2原三清单/核心分母未封，不借正向类别子集宣布95%。下一安全动作：等125终态→核完整阶段/真实来源/设计/HTML→实际Ego报告和科学审阅；失败则保全并只修根因，不盲重跑。

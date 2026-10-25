@@ -117,12 +117,12 @@ class FetchUrlArgs(BaseModel):
 
 
 CTGOV_STUDY_HOSTS = frozenset({"clinicaltrials.gov", "www.clinicaltrials.gov"})
-CTGOV_STUDY_PATH = re.compile(r"/study/(NCT\d{8})/?")
+CTGOV_STUDY_PATH = re.compile(r"/(?:study|api/v2/studies)/(NCT\d{8})/?")
 SCHEME_DEFAULT_PORT = {"http": 80, "https": 443}
 
 
 def _study_document_url(url: str) -> tuple[str, str] | None:
-    """Map only an explicit current official study page to its authoritative JSON document.
+    """Give an explicit current study page or study API URL one typed JSON identity.
 
     History/query pages, other endpoints, lookalike hosts, credentials and nonstandard
     ports keep the generic webpage path: a current document must never be presented as
