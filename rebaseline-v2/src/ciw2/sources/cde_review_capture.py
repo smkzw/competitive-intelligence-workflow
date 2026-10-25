@@ -2,8 +2,8 @@
 
 The native acceptance input locates/highlights a row in an unfiltered sequence.
 Exact host lookup therefore follows complete source validation, not page count.
-Only the observed chemical IND scope is currently enabled; other scopes need
-their real filters/columns captured before this contract is extended.
+Only observed chemical IND and biological trial-application scopes are enabled.
+The biological public UI uses LCSYSQ, not the hidden chemical IND control.
 """
 from __future__ import annotations
 
@@ -14,6 +14,8 @@ from ciw2.sources.cde_capture import CaptureError, _check_url, _expected_rows, _
 
 COLUMNS=('序号','受理号','药品名称','进入中心时间','审评状态','药理毒理','临床','药学','统计','临床药理','合规','备注')
 SCOPE={'sequence':'化药','task_type':'IND','ui_acceptance_number':''}
+SCOPES={'new_review_task_chemical_ind':SCOPE,
+        'new_review_task_biological_trial':{'sequence':'生物','task_type':'LCSYSQ','ui_acceptance_number':''}}
 
 
 def _legend(entries: Any) -> tuple[dict[str,str], str | None]:
@@ -105,8 +107,8 @@ def _page(value: Any, index: int, filters: dict[str,str]) -> dict[str,Any]:
 
 def parse_review_capture(pages: list[dict[str,Any]], *, filters: dict[str,str],
                          acceptance_number: str | None = None, allow_partial: bool = False) -> dict[str,Any]:
-    if filters!=SCOPE:
-        raise CaptureError('当前仅启用已观察的化药IND新报任务完整序列，不把定位框当筛选')
+    if filters not in SCOPES.values():
+        raise CaptureError('当前只启用已观察的化药IND/生物临床试验申请序列，不把定位框当筛选')
     if type(allow_partial) is not bool or not isinstance(pages,list) or not pages:
         raise CaptureError('来源页或未完成标记不合法')
     wanted=None

@@ -1,4 +1,5 @@
 const URL='https://www.cde.org.cn/main/xxgk/listpage/9f9c74c73e0f8f56a8bfbc646055026d';
+const filters=config.filters||{sequence:'化药',task_type:'IND',ui_acceptance_number:''};
 const {createHash}=await import('node:crypto');
 function anchor(c){
   const rows=c.rows.map(row=>row.map(cell=>typeof cell==='string'?cell:[cell.text,cell.images]));
@@ -24,8 +25,11 @@ async function collect(p){return await p.evaluate(()=>{
   const pager=[...document.querySelectorAll('.layui-laypage')].find(e=>e.getBoundingClientRect().height>0);
   const legend=[...document.querySelectorAll('p')].find(e=>e.getBoundingClientRect().height>0&&e.innerText.includes('本专业'));
   if(!pager||!legend||!tbody.getBoundingClientRect().height)throw Error('Review source not ready');
+  const controls=[...document.querySelectorAll('select[name="applytypecde"]')]
+    .filter(n=>/^applytypecdeNewReport(?:Zy|Sw)?$/.test(n.id)&&n.parentElement.getBoundingClientRect().height>0);
+  if(controls.length!==1)throw Error('Official review application filter is not unique');
   return {url:location.href,section:'new_review_task',filters:{sequence:document.getElementById('splxtype').value,
-    task_type:document.getElementById('applytypecdeNewReport').value,ui_acceptance_number:document.getElementById('acceptid2').value},
+    task_type:controls[0].value,ui_acceptance_number:document.getElementById('acceptid2').value},
     headers:[...table.rows[0].cells].map(c=>c.innerText),
     rows:[...tbody.rows].map(r=>[...r.cells].map(c=>({text:c.innerText,images:[...c.querySelectorAll('img')].map(i=>i.getAttribute('src'))}))),
     legend:[...legend.querySelectorAll('span')].map(s=>({text:s.innerText,images:[...s.querySelectorAll('img')].map(i=>i.getAttribute('src'))})),
@@ -33,15 +37,23 @@ async function collect(p){return await p.evaluate(()=>{
     observed_at:new Date().toISOString()};
 });}
 try{
+  if(filters.ui_acceptance_number!==''||!(filters.sequence==='化药'&&filters.task_type==='IND'||
+     filters.sequence==='生物'&&filters.task_type==='LCSYSQ'))throw Error('Unobserved public review scope');
   const p=(await taskSpace(config.space)).page('p1');
   try{await p.goto(URL,{waitUntil:'domcontentloaded'});}
   catch(e){if(control(e)||e?.name!=='PageNavigationTimeoutError')throw e;}
   await p.click('text=审评任务公示',{label:'进入公开审评任务序列'});
   await p.waitForFunction(()=>!!document.getElementById('newReportTbody')&&!document.body.innerText.includes('拼命加载中'),undefined,{timeout:30000});
-  // Newly loaded official page defaults are checked, never assumed or silently
-  // treated as other sequences. Unsupported scope is not an empty result.
-  const scope=await p.evaluate(()=>[document.getElementById('splxtype').value,document.getElementById('applytypecdeNewReport').value]);
-  if(scope[0]!=='化药'||scope[1]!=='IND')throw Error('Unsupported review sequence');
+  // Native selects are hidden by Layui. Use the observed visible UI, then read
+  // the active sequence-specific control rather than the hidden chemical one.
+  const sequence=await p.evaluate(()=>document.getElementById('splxtype').value);
+  if(sequence!==filters.sequence){
+    await p.click('#splxtype + .layui-form-select .layui-select-title',{label:'展开公开审评序列'});
+    await p.click('#splxtype + .layui-form-select dd[lay-value="'+filters.sequence+'"]',{label:'选择公开审评序列'});
+  }
+  const task=filters.sequence==='生物'?'applytypecdeNewReportSw':'applytypecdeNewReport';
+  await p.click('#'+task+' + .layui-form-select .layui-select-title',{label:'展开公开申请类型'});
+  await p.click('#'+task+' + .layui-form-select dd[lay-value="'+filters.task_type+'"]',{label:'选择公开申请类型'});
   await p.fill('#acceptid2','');await watch(p);
   await p.click('loc=role:button[name=查询]',{label:'读取完整化药IND审评序列'});await settled(p);
   let id=await pagerId(p);if(!id)throw Error('Review paginator missing');
@@ -49,7 +61,8 @@ try{
   let total;
   for(let page=1;;){
     const c=await collect(p),n=Number(c.pagination.text.match(/共\s*(\d+)\s*条/)[1]);
-    if(c.pagination.current!==page||c.pagination.page_size!==50||c.filters.sequence!=='化药'||c.filters.task_type!=='IND'||c.filters.ui_acceptance_number!=='')throw Error('Review scope drift');
+    if(c.pagination.current!==page||c.pagination.page_size!==50||
+      Object.keys(filters).some(key=>c.filters[key]!==filters[key]))throw Error('Review scope drift');
     if(total!==undefined&&n!==total)throw Error('Review total drift');total=n;
     if(c.rows.length!==Math.min(50,n-(page-1)*50))throw Error('Review page gap');
     if(page===1 && config.resume){

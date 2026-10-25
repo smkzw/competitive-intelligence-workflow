@@ -3,7 +3,7 @@
 无法用 httpx 直接抓取；CDE/NMPA 列表页大量依赖前端渲染。因此：
 - M0（本包）：`china_registry_search` 先尝试直连；识别到反爬/挑战页 → 记为 blocked，
   并自动退回到 site: 限定的全网搜索（需配置搜索提供方），结果标注为「线索」。
-- M2：显式专用空间启用Ego登记列表及CDE受理目录；登记详情、CDE审评/许可及NMPA专属采集仍待实现。
+- M2：专用空间已接登记列表/详情、CDE受理及已观察的新报序列、NMPA证书；其他栏目未闭合。
 任何时候都不得把 blocked 当成「中国无此药/无试验」。
 """
 from __future__ import annotations
@@ -79,8 +79,8 @@ class ChinaArgs(BaseModel):
     route_id: str = Field(description="如 china:cde:indication")
     query_kind: Literal['keyword','drug_name','company','acceptance_number','indication','target'] = Field(
         default='keyword',description='CDE公开目录需明确药名、企业或受理号；不能将适应症/靶点误作药名')
-    cde_section: Literal['acceptance','new_review_task_chemical_ind'] = Field(default='acceptance',
-        description='CDE默认受理目录；已验证的化药IND新报审评序列需明确受理号，非全部公示/批准状态')
+    cde_section: Literal['acceptance','new_review_task_chemical_ind','new_review_task_biological_trial'] = Field(
+        default='acceptance',description='CDE受理目录或化药IND/生物临床试验申请新报序列；新报需精确受理号')
 
 
 @REGISTRY.register("china_registry_search",
@@ -110,7 +110,9 @@ def _china(ctx: ToolContext, a: ChinaArgs) -> Any:
             from ciw2.sources import cde_browser, cde_review_browser
             adapter=cde_browser if a.cde_section=='acceptance' else cde_review_browser
             try:
-                captured = adapter.browser_search(ctx,a.query,a.query_kind)
+                captured = (adapter.browser_search(ctx,a.query,a.query_kind,section=a.cde_section)
+                            if a.cde_section=='new_review_task_biological_trial'
+                            else adapter.browser_search(ctx,a.query,a.query_kind))
             except (BrowserBlocked,BrowserFailed) as exc:
                 status = 'blocked' if isinstance(exc,BrowserBlocked) else 'failed'
                 ctx.db.log_coverage(ctx.run_id,f'{a.route_id}:browser','china',a.query,status,note=str(exc))

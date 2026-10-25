@@ -1,0 +1,186 @@
+{
+  "schema": "ciw2.component-evidence.v1",
+  "scope": "OBSERVED_CDE_SEQUENCE_EXTENSION_AND_PRIOR_UI05_B_INSTALLED_RECOVERY_NOT_FINAL_PRODUCT",
+  "base_commit": "f61921b08da95262dd758ecb2fdd05e450643f0e",
+  "source_manifest_sha256": "aea8ddf059229f1731c4df59961715dd49b9038f127dc7df0057cbdea2dea5cb",
+  "source_files": {
+    "src/ciw2/sources/cde_review_capture.py": "2c19b94b19db541bf97d773318e2b414ba349d5c2898798b98c46c1c889f55da",
+    "src/ciw2/sources/cde_review_browser.py": "1b2df4d03566f8cbacc59b50e2261dff77974d8d49e5603fed88c4cac0e1fc33",
+    "src/ciw2/sources/cde_review_browser.mjs": "204a172df7ac47cbe39e7bdd4b361677cf07993fa14b11e0899d85e4ebdc6e15",
+    "src/ciw2/sources/china.py": "de3428a918322bfeb3df1b1523a1427c91a33356c944303b62705a936656f6b9",
+    "scripts/smoke_china_browser.py": "fe1d5eddaee608504087175f20b1300786f187c834be21d56c511f42db8cc38f",
+    "scripts/smoke_cde_review_scope.py": "d8aa143f1aaf8a8c42aeae0715d2ff05c7ae6f526339096b90fb9c4d26ce0212",
+    "tests/test_cde_biological_review.py": "1ffbc25139e9f5f5d906cd0ebf49d313a8e92228d017148cee0a5bc335ee927d",
+    "tests/test_cde_scope_smoke.py": "bcc306867790397d0dde5f134bcf775a75cb353856aed16f9e568251daed400b",
+    "tests/test_cde_recovery_driver.py": "60e47fb57d715cac32c914e9665f87c965c00272d0226db8a3516298380b11a7",
+    "tests/fixtures/cde-biological-review.json": "ee894c791aba3885f24b432fa15874f30cc25e467003a3a9c435086d2f8d1c07",
+    "skills/universe-china/SKILL.md": "3875993f07b87144410e4a56ac6e84e772e35afb956eb740b8afcbaf8314deaf"
+  },
+  "development": {
+    "pytest": {
+      "exit": 0,
+      "seconds": 15.087,
+      "tail": [
+        "-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html",
+        "1602 passed, 1 warning in 14.56s"
+      ]
+    },
+    "ruff": {
+      "exit": 0,
+      "seconds": 0.04,
+      "tail": [
+        "All checks passed!"
+      ]
+    },
+    "scope": "CURRENT_V2_DEVELOPMENT_GATE_NOT_SOURCE_MEDICAL_OR_FINAL_PRODUCT",
+    "manifest_sha256": "aea8ddf059229f1731c4df59961715dd49b9038f127dc7df0057cbdea2dea5cb",
+    "javascript_files": 9,
+    "python_files": 203,
+    "size_600_80": "PASS_create_app_exception",
+    "immutable_input_changes": []
+  },
+  "actual_source_records": [
+    {
+      "scope": "REAL_CHINA_SOURCE_TOOL_ONLY",
+      "query": "JXSL2600209",
+      "space": 80,
+      "registry": "cde",
+      "query_kind": "acceptance_number",
+      "cde_section": "new_review_task_biological_trial",
+      "entrypoint_sha256": "fe1d5eddaee608504087175f20b1300786f187c834be21d56c511f42db8cc38f",
+      "project_id": "prj_b6b4fd72bf8b",
+      "run_id": "run_d11648f349bc",
+      "mode": "browser",
+      "complete": true,
+      "rows": 1,
+      "source_total_records": 15,
+      "pages": [
+        1
+      ],
+      "source_id": "src_fbb493de7922",
+      "source_sha256": "78467e469ab51949291de9b8da4ea7f6b2072ca765abb7de62af2ecc10318f66",
+      "code_unchanged_during_run": true,
+      "model_calls": 0,
+      "clinical_universe_accepted": false,
+      "M2_acceptance": "NOT_RUN",
+      "pipeline_acceptance": "NOT_RUN",
+      "filters": {
+        "sequence": "生物",
+        "task_type": "LCSYSQ",
+        "ui_acceptance_number": ""
+      },
+      "local_receipt": "ciw-data/cde-biological-trial-live-20261025-01/receipt.json",
+      "local_cas": "ciw-data/cde-biological-trial-live-20261025-01/data/cas/78/78467e469ab51949291de9b8da4ea7f6b2072ca765abb7de62af2ecc10318f66"
+    },
+    {
+      "scope": "REAL_CHINA_SOURCE_TOOL_ONLY",
+      "query": "CYHL2600085",
+      "space": 80,
+      "registry": "cde",
+      "query_kind": "acceptance_number",
+      "cde_section": "new_review_task_chemical_ind",
+      "entrypoint_sha256": "fe1d5eddaee608504087175f20b1300786f187c834be21d56c511f42db8cc38f",
+      "project_id": "prj_9d4ea6a4460c",
+      "run_id": "run_ea27da5506b0",
+      "mode": "browser",
+      "complete": true,
+      "rows": 1,
+      "source_total_records": 431,
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "source_id": "src_d425eadc9d51",
+      "source_sha256": "ca71e19e235c2442a9f63d6ac6ab51d0e56eab193170eb6683715cea3f37d254",
+      "code_unchanged_during_run": true,
+      "model_calls": 0,
+      "clinical_universe_accepted": false,
+      "M2_acceptance": "NOT_RUN",
+      "pipeline_acceptance": "NOT_RUN",
+      "filters": {
+        "sequence": "化药",
+        "task_type": "IND",
+        "ui_acceptance_number": ""
+      },
+      "local_receipt": "ciw-data/cde-chemical-current-20261025-01/receipt.json",
+      "local_cas": "ciw-data/cde-chemical-current-20261025-01/data/cas/ca/ca71e19e235c2442a9f63d6ac6ab51d0e56eab193170eb6683715cea3f37d254"
+    }
+  ],
+  "installed_B_recovery_for_UI05": {
+    "scope": "INSTALLED_CURRENT_WHEEL_B_REAL_SOURCE_BACKUP_RESTORE_RENDER_NOT_FULL_M4_OR_M6",
+    "source_manifest_sha256": "bb8b44a47c5cdf5f26f0a2f059cdba568d21d1ba13ed0ba3dce1110bf7980e3b",
+    "wheel_sha256": "14ada4667292e2712bdd9bf86ad3244f48d012ee978ae572b50ad04b8a15fddb",
+    "source_science_before_after_equal": true,
+    "raw_source_table_hashes": {
+      "sources": {
+        "rows": 1,
+        "sha256": "a86ab56936ad6baffabe2f6d787d7b5ff3852947d9d67f18a0dc000e735e5429"
+      },
+      "entities": {
+        "rows": 2,
+        "sha256": "b9d26befe9377cf3b5f09d572c9db28d004020dc381b980eb88c0c0070b5e118"
+      },
+      "facts": {
+        "rows": 708,
+        "sha256": "7f702e09d4bab486b10c77d09e5b4d82c480244ac4856d641a352593fc1bac69"
+      },
+      "links": {
+        "rows": 1,
+        "sha256": "21c563171d1823f5fdd2f46d311980e87965dbdb26d2d2e27d3e7d6d7a45c891"
+      }
+    },
+    "cas_digests": {
+      "50bc0483d2b3cfb6ebe207a71afe94575ca15e30acc707dbb4634ab56532dee2": 1216538
+    },
+    "source_locator": "$.studies[14]",
+    "registry_id": "NCT04921345",
+    "same_http_html": true,
+    "cwd": "/tmp",
+    "isolated_python": true,
+    "network_calls": "LOCALHOST_HTTP_ONLY",
+    "external_source_calls": 0,
+    "model_calls": 0,
+    "full_medical_semantics": "NOT_ACCEPTED",
+    "full_product_acceptance": "NOT_RUN",
+    "installed_result": {
+      "project": "prj_1b83f10181e4",
+      "facts_sha256": "eb4067d24feb5f0950a6e6eb37a401a23e682ccd27cebfcd31206d80bb160d54",
+      "raw_facts": 708,
+      "current_facts": 708,
+      "results": 668,
+      "groups": 70,
+      "html_sha256": "85c6de1dba31f0ff4671ed068ceeac5a849c976abd3fa175d9fd789df24b9077"
+    },
+    "plotted_fact_count": 668,
+    "all_result_ids_plotted": true
+  },
+  "failures_retained": [
+    "Scope01 observed output on stderr not stdout; 1offlineRED repaired and original failure retained",
+    "Scope03 native select hidden; changed method to visible Layui UI",
+    "Scope05 chemical application selector hidden in biology; read actual visible biological LCSYSQ control, never normalize blank to IND",
+    "First development snapshot1598PASS/2FAIL: old driver model returned array for now-scalar UI and rejected explicit clicks; updated model retained recovery assertions and added biological cases,79relatedPASS",
+    "Source screenshot initially minimized; BrowserCDP target restore unavailable; exposed native Raise restored only Ego window, actual source screenshot viewed"
+  ],
+  "independent_reference": "Separate blind AD/IgAN/PNH node pending; not a recall result",
+  "current_real_synthesis": "run_8e357c79edf6 pending, frozen62e6355f; no151research rerun",
+  "remaining": [
+    "Other CDE columns/application types and all-indication closure",
+    "Independent references owner verification/freeze and recall evaluation",
+    "M1 ordinary full pipeline and final summary meaning/source review",
+    "M3 complete product profiles, M4 Chinese clinical labels/cross-study/50critical",
+    "New CDE candidate final installed package and full M5/M6; no release accepted"
+  ],
+  "actual_source_screenshot": {
+    "local_path": "ciw-data/cde-chemical-current-20261025-01/source-ui.png",
+    "sha256": "7b9900f5721613f6acb61c83bffc9eba5b1fb6e0fddc93add6ad35c6ae28a03f",
+    "owner_viewed": true,
+    "scope": "CHEMICAL431_LASTPAGE9_AND_LEGEND_ONLY_NOT_PORTAL_VISUAL_ACCEPTANCE"
+  }
+}

@@ -1,0 +1,224 @@
+{
+  "url": "https://www.cde.org.cn/main/xxgk/listpage/9f9c74c73e0f8f56a8bfbc646055026d",
+  "observed_at": "2026-10-25T05:15:06.308Z",
+  "section": "new_review_task",
+  "filters": {
+    "sequence": "生物",
+    "task_type": "LCSYSQ",
+    "ui_acceptance_number": ""
+  },
+  "headers": [
+    "序号",
+    "受理号",
+    "药品名称",
+    "进入中心时间",
+    "审评状态",
+    "药理毒理",
+    "临床",
+    "药学",
+    "统计",
+    "临床药理",
+    "合规",
+    "备注"
+  ],
+  "legend": [
+    {
+      "text": "：本专业正在审评",
+      "images": [
+        "/main/img/lamp.gif"
+      ]
+    },
+    {
+      "text": "：本专业排队待审评",
+      "images": [
+        "/main/img/lamp_y.jpg"
+      ]
+    },
+    {
+      "text": "：本专业已完成审评",
+      "images": [
+        "/main/img/lamp_shut.gif"
+      ]
+    },
+    {
+      "text": "空：本专业未启动",
+      "images": []
+    },
+    {
+      "text": "所有专业结束后将进入综合审评阶段。",
+      "images": []
+    }
+  ],
+  "rows": [
+    [
+      {
+        "text": "1",
+        "images": []
+      },
+      {
+        "text": "JXSL2600209",
+        "images": []
+      },
+      {
+        "text": "艰难梭菌佐剂疫苗",
+        "images": []
+      },
+      {
+        "text": "2026-08-17",
+        "images": []
+      },
+      {
+        "text": "排队待审评",
+        "images": []
+      },
+      {
+        "text": "",
+        "images": [
+          "/main/img/lamp_shut.gif"
+        ]
+      },
+      {
+        "text": "",
+        "images": [
+          "/main/img/lamp_shut.gif"
+        ]
+      },
+      {
+        "text": "",
+        "images": [
+          "/main/img/lamp_shut.gif"
+        ]
+      },
+      {
+        "text": "",
+        "images": []
+      },
+      {
+        "text": "",
+        "images": []
+      },
+      {
+        "text": "",
+        "images": []
+      },
+      {
+        "text": "",
+        "images": []
+      }
+    ],
+    [
+      {
+        "text": "2",
+        "images": []
+      },
+      {
+        "text": "JXSL2600221",
+        "images": []
+      },
+      {
+        "text": "20价肺炎球菌多糖结合疫苗",
+        "images": []
+      },
+      {
+        "text": "2026-08-21",
+        "images": []
+      },
+      {
+        "text": "排队待审评",
+        "images": []
+      },
+      {
+        "text": "",
+        "images": [
+          "/main/img/lamp_shut.gif"
+        ]
+      },
+      {
+        "text": "",
+        "images": [
+          "/main/img/lamp_shut.gif"
+        ]
+      },
+      {
+        "text": "",
+        "images": [
+          "/main/img/lamp_y.jpg"
+        ]
+      },
+      {
+        "text": "",
+        "images": []
+      },
+      {
+        "text": "",
+        "images": []
+      },
+      {
+        "text": "",
+        "images": []
+      },
+      {
+        "text": "",
+        "images": []
+      }
+    ],
+    [
+      {
+        "text": "3",
+        "images": []
+      },
+      {
+        "text": "JXSL2600227",
+        "images": []
+      },
+      {
+        "text": "13价肺炎球菌多糖结合疫苗",
+        "images": []
+      },
+      {
+        "text": "2026-08-24",
+        "images": []
+      },
+      {
+        "text": "排队待审评",
+        "images": []
+      },
+      {
+        "text": "",
+        "images": [
+          "/main/img/lamp_y.jpg"
+        ]
+      },
+      {
+        "text": "",
+        "images": [
+          "/main/img/lamp_shut.gif"
+        ]
+      },
+      {
+        "text": "",
+        "images": [
+          "/main/img/lamp_y.jpg"
+        ]
+      },
+      {
+        "text": "",
+        "images": []
+      },
+      {
+        "text": "",
+        "images": []
+      },
+      {
+        "text": "",
+        "images": []
+      },
+      {
+        "text": "",
+        "images": []
+      }
+    ]
+  ],
+  "fixture_scope": "THREE_OBSERVED_ROWS_WITH_SYNTHETIC_SMALL_PAGINATION",
+  "capture_sha256": "2be3c0e880238cec70f8ac343cea4a7f456dcf18dcb64a13f6698bab6d06580f"
+}

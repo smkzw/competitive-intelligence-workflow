@@ -27,7 +27,8 @@ def main() -> int:
     parser.add_argument('--space',type=int,required=True,help='已授权专用Ego空间，不自动创建或接管')
     parser.add_argument('--query',required=True)
     parser.add_argument('--registry',choices=['chinadrugtrials','cde'],default='chinadrugtrials')
-    parser.add_argument('--cde-section',choices=['acceptance','new_review_task_chemical_ind'],default='acceptance')
+    parser.add_argument('--cde-section',choices=['acceptance','new_review_task_chemical_ind',
+                        'new_review_task_biological_trial'],default='acceptance')
     parser.add_argument('--query-kind',choices=['keyword','drug_name','company','acceptance_number','indication','target'],
                         default='keyword')
     parser.add_argument('--output',type=Path,required=True)

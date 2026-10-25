@@ -14,18 +14,33 @@ from ciw2.sources.china_browser import _read_output
 
 DRIVER = r'''
 const fs=require('fs');const input=JSON.parse(fs.readFileSync(0,'utf8'));
-const messages=[],captures=[],jumps=[];let current=1,jump=1;
-const page={goto:async()=>{current=1;},waitForSelector:async()=>{},waitForFunction:async()=>{},
+const messages=[],captures=[],jumps=[],clicks=[];let current=1,jump=1,sequence='化药',taskType='IND';
+const page={goto:async()=>{current=1;sequence='化药';taskType='IND';},waitForSelector:async()=>{},waitForFunction:async()=>{},
   selectOption:async()=>{current=1;},fill:async(s,v)=>{if(s.includes('laypage-skip'))jump=Number(v);},
   click:async(s)=>{
+    clicks.push(s);
     if(s.includes('laypage-next'))current++;
     else if(s.includes('laypage-btn')){current=jump;jumps.push(jump);}
+    else if(s.includes('layui-form-select')){
+      const value=s.match(/dd\[lay-value="([^"]+)"\]/)?.[1];
+      if(s.startsWith('#splxtype')){if(value){sequence=value;taskType=sequence==='生物'?'LCSYSQ':'IND';}}
+      else{
+        const active=sequence==='生物'?'#applytypecdeNewReportSw ':'#applytypecdeNewReport ';
+        if(!s.startsWith(active))throw Error('Attempted hidden application control');
+        if(value)taskType=value;
+      }
+    }
     else if(!s.includes('查询')&&!s.includes('审评任务公示'))throw Error('Unexpected click '+s);
   },evaluate:async(fn,arg)=>{
     const code=fn.toString();
     if(code.includes('MutationObserver')||code.includes('Observer.disconnect')||code.includes('Observer?.disconnect'))return;
-    if(code.includes('const tbody=')||code.includes('const tbody =')){captures.push(current);return structuredClone(input.pages[current-1]);}
-    if(code.includes("getElementById('splxtype')"))return ['化药','IND'];
+    if(code.includes('const tbody=')||code.includes('const tbody =')){
+      const captured=structuredClone(input.pages[current-1]);
+      if(captured.section==='new_review_task'&&
+        (captured.filters.sequence!==sequence||captured.filters.task_type!==taskType))throw Error('Wrong active scope');
+      captures.push(current);return captured;
+    }
+    if(code.includes("getElementById('splxtype')"))return sequence;
     if(code.includes('getElementById(id).value'))return '';
     if(code.includes("querySelectorAll('.layui-laypage')")||code.includes('querySelectorAll(".layui-laypage")'))return 'pager-'+current;
     throw Error('Unexpected evaluate callback');
@@ -33,16 +48,18 @@ const page={goto:async()=>{current=1;},waitForSelector:async()=>{},waitForFuncti
 const taskSpace=async()=>({page:()=>page});
 const AsyncFunction=Object.getPrototypeOf(async function(){}).constructor;
 new AsyncFunction('config','taskSpace','console',fs.readFileSync(process.argv[1],'utf8'))(
- input.config,taskSpace,{log:s=>messages.push(s)}).then(()=>console.log(JSON.stringify({messages,captures,jumps}))).catch(e=>{throw e;});
+ input.config,taskSpace,{log:s=>messages.push(s)}).then(()=>console.log(JSON.stringify({messages,captures,jumps,clicks}))).catch(e=>{throw e;});
 '''
 
 
 def pages(section):
     result=[]
     for number,span in enumerate((range(1,51),range(51,101),range(101,102)),1):
-        if section=='new_review_task':
+        if section.startswith('new_review_task'):
             p=page([row(i) for i in span],number,101)
             p['pagination']['page_size']=50
+            if section=='new_review_task_biological':
+                p['filters']={'sequence':'生物','task_type':'LCSYSQ','ui_acceptance_number':''}
         else:
             p=capture(total=101,rows=[[str(i),f'CXSL2600{i:03}','药','化药','新药','','企业','2026-01-01'] for i in span])
             p['pagination']['current']=number
@@ -53,7 +70,7 @@ def pages(section):
 def run_driver(section,captures,resume):
     node=shutil.which('node')
     if not node:pytest.skip('Node unavailable: real collector protocol not tested')
-    source=Path(__file__).parents[1]/'src/ciw2/sources'/('cde_review_browser.mjs' if section=='new_review_task' else 'cde_browser.mjs')
+    source=Path(__file__).parents[1]/'src/ciw2/sources'/('cde_review_browser.mjs' if section.startswith('new_review_task') else 'cde_browser.mjs')
     config={'space':63,'filters':captures[0]['filters'],'resume':resume}
     result=subprocess.run([node,'-e',DRIVER,str(source)],input=json.dumps({'pages':captures,'config':config}),
                           capture_output=True,text=True,check=False,timeout=10)
@@ -63,7 +80,7 @@ def run_driver(section,captures,resume):
     return out,raw,end
 
 
-@pytest.mark.parametrize('section',['acceptance','new_review_task'])
+@pytest.mark.parametrize('section',['acceptance','new_review_task','new_review_task_biological'])
 @pytest.mark.parametrize('changed',[False,True])
 def test_actual_driver_jumps_missing_pages_or_discards_changed_anchor(section,changed):
     original=pages(section)
@@ -81,6 +98,8 @@ def test_actual_driver_jumps_missing_pages_or_discards_changed_anchor(section,ch
     assert end['new_pages_checked']==out['captures']
     assert end['reused_pages']==([] if changed else [2])
     assert [p['pagination']['current'] for p in captured]==out['captures']
+    if section=='new_review_task_biological':
+        assert '#applytypecdeNewReportSw + .layui-form-select dd[lay-value="LCSYSQ"]' in out['clicks']
 
 
 def test_actual_acceptance_driver_keeps_explicit_empty_page_zero():
