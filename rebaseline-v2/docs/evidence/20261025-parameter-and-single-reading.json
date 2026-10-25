@@ -1,0 +1,71 @@
+{
+  "scope": "PARAMETER_LABEL_AND_SINGLE_VALUE_GEOMETRY_COMPONENT_NOT_M4_COMPLETION",
+  "candidate_manifest_sha256": "38568419941f0573c5873a3c40b7dc4fc6260094d22abafd3b52a5ee97ff2dfb",
+  "html_sha256": "50b6c575a966b82f4c65e38866111609b9bed4c34b56974b78e49c3569674872",
+  "facts_sha256": "eb4067d24feb5f0950a6e6eb37a401a23e682ccd27cebfcd31206d80bb160d54",
+  "source_facts_and_grouping_unchanged": true,
+  "results": 668,
+  "groups": 34,
+  "plotted_facts": 668,
+  "dispersion_observations": 449,
+  "changed_generic_reading_labels": 16,
+  "original_definitions_and_external_links_retained": true,
+  "root_cause_red": {
+    "complete_labels": 13,
+    "single_observation_bar": 1,
+    "extreme_marker_headroom": 1
+  },
+  "related_regression": {
+    "passed": 121,
+    "scope": "result/filter/lifecycle/parameter/response/reading family"
+  },
+  "development_gate": {
+    "pytest": {
+      "exit": 0,
+      "seconds": 11.389,
+      "result": "1782 passed, 1 warning in 11.05s"
+    },
+    "ruff": {
+      "exit": 0,
+      "seconds": 0.018,
+      "tail": [
+        "All checks passed!"
+      ]
+    },
+    "js_files": 11,
+    "python_files": 218,
+    "size_violations": [],
+    "fixed_inputs": 315,
+    "changed_fixed_inputs": []
+  },
+  "actual_browser": {
+    "widths": [
+      1440,
+      1600,
+      1920,
+      2560
+    ],
+    "final_geometry_checks": 8,
+    "final_screens": 8,
+    "first_label_min_top_css_px": 6.200000762939453,
+    "single_has_no_axes": true,
+    "actual_zero_click_to_same_fact_and_original_definition": true,
+    "owner_viewed": [
+      "B-1440-line.png",
+      "B-2560-single.png"
+    ],
+    "screens": {
+      "b-parameter-line-20261025.png": "ddda4706ded5f763797d484757ef47d59c9ae98ae098c86d4d1177a09f514763",
+      "b-single-observation-20261025.png": "e4b39f6ff00b24331feed6159bda1e9a17ad9f679861a0333568e7f682754912"
+    }
+  },
+  "earlier_candidate_results": {
+    "12": "development passed; owner requested single observation fix",
+    "13": "development passed; owner found clipped extreme marker",
+    "14": "tests1782 passed; size gate failed because long JS test fixture embedded in a Python function; server not run",
+    "15": "JS scenario moved intact to fixture; final component accepted"
+  },
+  "scientific_corpus_acceptance": "PENDING",
+  "full_pipeline_acceptance": "PENDING",
+  "model_or_source_requests_for_UI": 0
+}

@@ -210,12 +210,30 @@
     var visible = Math.max(1, Math.min(6, points.length, Math.floor(276 / rowHeight)));
     return { labels: labels, visible: visible, height: Math.max(120, visible * rowHeight + 60) };
   }
+  function singleResultOption(point) {
+    var label = [point.axis_label || point.label || point.arm || point.series_name,
+      point.visit, point.dispersion_text].filter(Boolean).join(" · ");
+    return { animation: false, tooltip: { formatter: resultTooltip },
+      series: [{ type: "custom", coordinateSystem: "none", data: [point],
+        renderItem: function () {
+          var width = Math.max(120, (el("chart-result").clientWidth || 600) - 48);
+          return { type: "group", children: [
+            { type: "text", x: 24, y: 12, style: { text: String(point.value),
+              fill: '#101216', font: '700 28px ' + readingFont } },
+            { type: "text", x: 24, y: 56, style: { text: label,
+              fill: C.muted, font: readingSize + 'px ' + readingFont,
+              width: width, overflow: 'break', lineHeight: 22 } }
+          ] };
+        } }] };
+  }
   function resultOption(group, points) {
+    if (points.length === 1) return singleResultOption(points[0]);
     // Clinical observations appear immediately, including their true final values.
     var option = { animation: false, tooltip: { formatter: resultTooltip },
       grid: { left: 72, right: 48, top: 24, bottom: 72 } };
     var order = Array.from(new Set(group.points.map(function (p) { return p.series_key; })));
     if (group.kind === "line") {
+      option.grid.top = readingSize * 2;
       var series = new Map();
       points.forEach(function (p) {
         if (!series.has(p.series_key)) series.set(p.series_key, []);
@@ -303,7 +321,7 @@
     var points = group.points.filter(function (p) { return selected.has(p.fact_id); });
     resultStudyContext(points);
     var viewGroup = Object.assign({}, group, { kind: group.kind === "line" && new Set(points.map(function (p) { return p.x; })).size > 1 ? "line" : "bar" });
-    var height = viewGroup.kind === "line" ? 320 : resultBars(points).height;
+    var height = points.length === 1 ? 128 : viewGroup.kind === "line" ? 320 : resultBars(points).height;
     setPanelHeight("chart-result", height);
     el("result-definition").textContent = [group.title].concat(group.facets || [],
       [group.population, group.unit, group.stat_type]).filter(Boolean).join(" · ");

@@ -1,3 +1,7 @@
+## 2026-10-25 身份续接终态及owner采用范围
+
+原9237终态8turns/301.771s/return0，无备用；Grok4.7/high runtime grok-4.7-build/sessionc468e86c…，总58/64turn。manifest2a026380…8文件全SHA正确，18source块/30逐字通过；FDA原PDF及文本分别核hash。阿布昔替尼品牌+片剂和吉卡昔替尼ZGJAK025/026协议号桥接被owner有限接受，Pfizer原URL由相同已存文件的原抓取log补证，不猜URL；中国给药途径/规格/适应症批准等未采纳。原三列表和所有来源字节不动。未解四跨语言/六分类以新鲜E08源工作单元94075定向补证，56turn/7200s总预算，无全量重新发现、无生产候选读，不把其输出当医学审批或已冻结分母。
+
 # 当前状态 2026-10-25 source repair completed; follow-up pending
 
 E08/54559已return0，实际grok/grok-build/grok-4.7/high/runtime grok-4.7-build/sessionc468e86c-0ec7-4758-ba36-c09d4b6f0962，50turns/1506.787s/no fallback。identity-revision-01共40文件/9复用，SHA8a7e64ef9cc5222f1df4263e33d07212d456a3753a5c57b2d19de58b6f9ff85c；原41+129源SHA全未变、各原行/字段和source前缀未变，27新增source/57原文逐字过。owner初审计ref_id/JSON表示假阴性已按源表示纠正，历史仪器结果保留；并非worker改字节。21ledger和完整三组记录已读，仍PROVISIONAL、无分母/召回。

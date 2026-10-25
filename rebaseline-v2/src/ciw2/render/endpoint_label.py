@@ -8,6 +8,8 @@ from __future__ import annotations
 
 import re
 
+from ciw2.render.parameter_reading import parameter_label, relationship_parts
+
 _ABBREVIATION = r'[a-z]?[A-Z]{2,}[a-z0-9]?(?:[ -](?:[A-Z]{2,}|[0-9]+))*'
 _SCOPED = re.compile(
     r'\b(?:without|with|except|not|versus|vs|participants|patients|subjects|placebo|only|subgroups?'
@@ -86,6 +88,11 @@ def endpoint_label(value: object) -> str:
     if len(raw)>2000:
         return raw
     text=' '.join(raw.split())
+    parameter=parameter_label(text)
+    if parameter:return parameter
+    relation=relationship_parts(text)
+    if relation and (measure:=_measure(relation[1])):
+        return f'PK/PD关系 · {relation[0]}血清浓度与{measure}变化'
     response=_response(text)
     if response:return response
     for prefix, change in _CHANGE:
