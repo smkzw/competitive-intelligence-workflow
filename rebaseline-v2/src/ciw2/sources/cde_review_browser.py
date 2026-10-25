@@ -135,7 +135,7 @@ def proven_acceptance_refs(ctx: ToolContext, drug: dict) -> list[dict]:
             matches=[row for row in cache[key] if row['drug_name']==drug['name'] and
                      row['acceptance_number']==ref.get('acceptance_number') and
                      all(ref[k]==row[k] for k in ('page','row_number','company_text','application_type',
-                                                  'handled_date_text') if k in ref)]
+                                                  'handled_date_text','drug_type','registration_class') if k in ref)]
             if len(matches)==1:
                 proven.append({**matches[0],'source_id':source['id']})
         except (OSError,ValueError,KeyError,TypeError):

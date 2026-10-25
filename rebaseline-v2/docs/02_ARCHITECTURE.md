@@ -173,3 +173,7 @@ CT.gov countries原值保留；新trial.china_site带geographic_scope=mainland_c
 ### 来源后研究范围审查
 
 现有药物纳排继续由coverage_review执行。trial_evidence后新增轻量trial_scope_review阶段，调用scope.review_orphan_trials；仅零项目drug-trial父关联的研究进入，不重复评判已有药物父项的研究。沿用9 Skills、ScopeResult和同一身份绑定/完整分批/缓存/事务，无新平台或schema。输入candidate_kind=trial明确研究语义，既有wire字段drug承载原研究登记名。显式false影响该研究的共享报告查询，null与缺失/重复/错误身份保留待核；不变更源层事实或链接。
+
+### 范围缓存与CDE分类传递
+
+复用现有scope_batch阶段记录，不加新schema或表。每批查缓存前取当前项目来源集合，模型/工具结束且结果身份检查无问题后按调用后的源集合记录；完整task、source id/digest/text_digest、code、Skill、schema、model、harness仍参与签名。后批新增来源使前批保守失效的行为保留，不声称逐来源依赖优化。CDE临时候选引用完整保留drug_type/registration_class，按同source_id+acceptance_number补全原引用；proven_acceptance_refs回查原始CAS时校验可选新增字段，旧引用不凭空补类别、返回原始行的真实字段。

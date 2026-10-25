@@ -727,3 +727,20 @@ Method changed to execution because one independently writable source-replay hel
 - 本节点收尾补证：04模型2623自然终态exit0，实际GLM7成功、0fallback，新4次公开fetch；两研究1纳入/1null/0排除，薄荷醇登记DRUG与次要外泌体恢复正确层级、创新资格不猜，SM17相关生物治疗研究保留但不新认证创新注册分类/药物父关联。owner只接受此有界来源与未知保留；旧REVISE、源事实与原生产项目不改。04最终1805PASS11.73s/Ruff/11JS/222Python600-80/323输入无变。新fetch导致来源集合变化后的模型零调用恢复未实跑；现有全项目签名可能失效，作为后续M6根因包，不报已解决。
 - 独立参照owner-targeted-china05用既有普通浏览器列表/详情代码、专用空间5，精确两query各1列表+1详情，0模型/4源、不读生产。CTR20242150原文成对中文阿塞西普/英文Atacicept、协议VT-001-0050；CTR20201869原题明确SB12为“拟定依库珠单抗生物类似药”、协议SB12-3003。四CAS哈希/请求范围/原始捕获重解析通过，manifestc58269674cd7969e87d70d04bb97967efe5f4e1a01188f80b8f0cbd28536d4fd，原列表不改、不并参照品/不推许可/分母不封存。避免重复全文资料检索，仅解两个已知缺口。
 - 资源：旧地域02精确PID6806/命令/cwd确认后退役，原生26250 exit143；保留03当前server及所有02证据。旧07venv核08替代安装/ABC/CDE恢复、旧wheel/sdist/无活跃进程后，仅移除993常规文件/17,497,643逻辑字节；完整包版本清单/重建路线与旧包SHA保留，物理释放未测。原05/151批/780资料/当前08环境/未知文件均未动。
+
+
+## 2026-10-25 下一节点 scope新来源缓存绑定
+
+前一组件已提交并push eea5154e。当前选execution：缓存签名修复可独立限制在scope.py与一个离线测试文件，owner并行处理M2剩余直接来源分类/参照整合，不复制worker实现。当前缺陷是模型fetch新增source后成功结果仍按调用前source集合缓存，实际模型零调用恢复未过。使用实时guard finite_code_task的一名worker，不新建平台/源级依赖DSL，不改健康05冻结运行时/阶段runner/真实DB。源变更必须继续保守失效；失败/错误身份不可缓存。待实际启动与终态后核元数据、最小相关回归；不逐行全门或再派全页审阅。
+
+- 缓存执行实际原生87306已启动（40turns/7200s、单名finite_code_executor）；旧05健康运行不动。第一次preflight自动生成相对context/plans/runs路径落错root，ok=false且未派发；补ciw-data前缀后ok=true/0warnings，再启动runner，保留两份回执。此问题此前发生过，本次承认重复的工具配置失误，后续统一在生成packet后先规范路径、解析ok布尔再启动，不以CLI exit0推断预检过。
+- owner并行M2新增：独立来源查到HKEX发行人草稿与PAGE2024原始海报，可直接证TLL-018 ER/IR为同一分子制剂分支；HKEX PDF4069ff9e…第187页保留单剂量/稳态两种BE叙述，不推剂量可互换；海报47e7d95a…，source manifest20cc1ba145a139dfe99da47140bf3d7bff7dc2d26de8430afd572f1fdc005928。原参照不改/分母未封存，AD患者试验未猜ER/IR。
+- 现63150为新owner-targeted-class07，独立新source-only DB，仅D23→CTR20253975公开列表/详情，加布地奈德迟释片/IBI3027/QL2108/GS101四个CDE药名分类查询，0模型，不读生产/不并研究、不依据受理号前缀推分类。待终态按实际类别及适用官方定义核，不依二级搜索标签。用户原生Ask未答：创新/改良剂型/生物类似药核心统计范围。它是现行文档缺失的新分母决定，不重问已锁大陆地域等决策，等待选择不阻塞源收集或缓存执行。
+
+- scope-postfetch-cache87306已自然终态，Pi/cursor/default/runtime同selector、底层Auto模型未知，session01a17293-f824-7000-bbd7-932b792ba99e/587.493s/165tools/exit0/no fallback。完整scope定义和249行新测试由owner读核，6真实根因RED+4既有正确场景；另一次7失败含重复条目断言仪器错误，不算7缺陷。worker31相关PASS，Ruff在系统解释器缺失并未安装，owner用既有app.venv全Ruff过；38综合相关PASS。原始task/schema/model/Skill/code/完整source id/digest/text_digest保持；每批查当前源，调用后只存无身份问题结果。后批新源可使前批保守失效，未建依赖平台/新表/新审批。guard audit-execution零警告。
+- 同族owner实际数据发现CDE候选ref丢drug_type/registration_class，伪改类仍可借真实source当合法proof，生产5RED；补同source/受理号旧ref升级会重复的1RED。只改cde_browser持久字段和cde_review_browser来源字段校验/新测试；保留旧缺字段引用读原源，补全不丢原无关meta，空类别不默认0/新药不自动创新。当前246CDE族PASS/38跨组件PASS；不因一个字段每次全仓回归。
+- 合并冻结scope-cache-classification05 manifest0b6d96a732272e9c887d0475b8d1b96c48d246c9891c0002689a0649ba0faf4f，eea基线+明确写集，1822PASS11.86s/Ruff/11JS/224Python600-80/329固定输入无变。实际43717自然终态：GLM6成功、新4公开fetch，原4源/50事实/2链接/原地理项目不变；下一次普通trial_scope_review将所有providers替换为禁止调用，0模型/0来源、1cache、同决定/科学四表不变。两研究1纳入/1创新待核/0排除，仅此来源范围接受。旧05大型归并仍健康，未热改/轮询DB/强杀。
+- 10真实CDE源观察使用frozen05生产persist/proven函数，在07原项目只读克隆上实际保存/二次幂等，错registration_class配真实source_id均拒绝；旧source/fact/link及原07DBSHAe0e1c303…不变、0模型/网络。源码分类字段传递不是采用临床注册身份或批准的新fact。公共精简证据20261025-scope-cache-and-cde-classification.json。
+- 源07主运行63150初D23详情及QL失败，1276只补两失单元均成功，原3成功CDE不重抓、原FAIL不改。D23-201/CTR20253975药物名布地奈德迟释片/南京三迭纪；CDE同名同企业3条化药2.2。IBI3027两条治疗用生物3.3；QL2108一条3.3及4条空类别补充记录，空类不填。GS101药名确切空结果不当药不存在；源09原生22555以07只读克隆采QL/GS两列表、CTR20250820/20260166/20260514三详情、两原文公司查询，0模型，原07不改。公司表包含原研/其他产品，绝不把整表赋给GS101或把申办者作MAH。
+- 3.3定义源：NMPA/CDE2023年报原PDFdf9aa697…，普通公开HTTP200取回，PDF文本漏首段、web查找/截图超时未过；pdftoppm第38物理页(印刷35)实际目视明确“生物类似药(3.3类)”，不虚称text-substring。化药2.2用官方英文2020HTML1f231667…，首次raw-markup断言失败后只修HTMLParser文字节点解析，不重复HTTP；原始字节不变、不是OCR引擎。定义manifestcea6f021…，只解治疗用生物3.3，不推疫苗或已获批/临床优势。
+- 分类身份判断触发一次独立conference：新C03 ciw2-program-class-links20261025/原生53590，Grok4.7/high实时manifest、fresh上下文，单一对象40turns/7200s无额外chair；预检先纠正ciw-data相对路径后零警告才启动。只G1 GS101、D1 D23、Q1 QL三产品身份/类别桥，不看前worker私有理由、不搜全宇宙/不修改源/不定义分母。Grok模型族与早期参照研究相同，独立性减弱已明示；现待终态，不接受未验证推断。原生Ask核心统计仍未答，来源事实收集与无关代码继续。

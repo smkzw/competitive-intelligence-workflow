@@ -1,0 +1,177 @@
+{
+  "scope": "SCOPE_POSTFETCH_CACHE_AND_LITERAL_CDE_CLASS_REFS_NOT_FULL_M6_OR_M2",
+  "base_commit": "eea5154e9ec72679e5693e72d884f2a90ffe11e7",
+  "candidate_manifest_sha256": "0b6d96a732272e9c887d0475b8d1b96c48d246c9891c0002689a0649ba0faf4f",
+  "development": {
+    "pytest": "1822 passed,1 warning in11.86s",
+    "ruff_exit": 0,
+    "javascript_files": 11,
+    "python_files": 224,
+    "size_violations": [],
+    "immutable_input_changes": []
+  },
+  "execution": {
+    "adapter": "pi",
+    "provider": "cursor",
+    "model_selector": "default",
+    "underlying_model": "UNDISCLOSED_AUTO",
+    "session": "01a17293-f824-7000-bbd7-932b792ba99e",
+    "seconds": 587.493,
+    "tools": 165,
+    "fallback": null,
+    "root_cause_red": 6,
+    "worker_related_pass": 31,
+    "owner_scope_and_class_related_pass": 38
+  },
+  "live_scope": {
+    "run_id": "run_d1a427513ad2",
+    "actual_models": {
+      "glm-5.3-flash": 6
+    },
+    "source_appends": 4,
+    "in_scope": 1,
+    "pending": 1,
+    "excluded": 0,
+    "facts_links_and_old_sources_unchanged": true,
+    "original_project_unchanged": true
+  },
+  "same_run_cache": {
+    "scope": "LIVE_FIRST_PASS_THEN_PROVIDERS_FORBIDDEN_CACHE_RECOVERY",
+    "first_model_success_events": 6,
+    "second_model_calls": 0,
+    "second_source_calls": 0,
+    "science_unchanged_on_recovery": true,
+    "same_decisions": true,
+    "cache_events": 1
+  },
+  "CDE_literal_projection": {
+    "real_source_observations": 10,
+    "projections": {
+      "IBI3027": [
+        {
+          "acceptance_number": "CXSL2600083",
+          "drug_type": "治疗用生物制品",
+          "registration_class": "3.3",
+          "application_type": "新药",
+          "company_text": "信达生物制药（苏州）有限公司;",
+          "source_id": "src_0c1664e68ac2",
+          "page": 1,
+          "row_number": 1
+        },
+        {
+          "acceptance_number": "CXSL2600082",
+          "drug_type": "治疗用生物制品",
+          "registration_class": "3.3",
+          "application_type": "新药",
+          "company_text": "信达生物制药（苏州）有限公司;",
+          "source_id": "src_0c1664e68ac2",
+          "page": 1,
+          "row_number": 2
+        }
+      ],
+      "QL2108注射液": [
+        {
+          "acceptance_number": "CXSB2500066",
+          "drug_type": "治疗用生物制品",
+          "registration_class": "",
+          "application_type": "补充申请",
+          "company_text": "齐鲁制药有限公司;齐鲁制药有限公司;",
+          "source_id": "src_b392ff0f48e9",
+          "page": 1,
+          "row_number": 1
+        },
+        {
+          "acceptance_number": "CXSB2500065",
+          "drug_type": "治疗用生物制品",
+          "registration_class": "",
+          "application_type": "补充申请",
+          "company_text": "齐鲁制药有限公司;齐鲁制药有限公司;",
+          "source_id": "src_b392ff0f48e9",
+          "page": 1,
+          "row_number": 2
+        },
+        {
+          "acceptance_number": "CXSB2500064",
+          "drug_type": "治疗用生物制品",
+          "registration_class": "",
+          "application_type": "补充申请",
+          "company_text": "齐鲁制药有限公司;齐鲁制药有限公司;",
+          "source_id": "src_b392ff0f48e9",
+          "page": 1,
+          "row_number": 3
+        },
+        {
+          "acceptance_number": "CXSB2500063",
+          "drug_type": "治疗用生物制品",
+          "registration_class": "",
+          "application_type": "补充申请",
+          "company_text": "齐鲁制药有限公司;齐鲁制药有限公司;",
+          "source_id": "src_b392ff0f48e9",
+          "page": 1,
+          "row_number": 4
+        },
+        {
+          "acceptance_number": "CXSL2400221",
+          "drug_type": "治疗用生物制品",
+          "registration_class": "3.3",
+          "application_type": "新药",
+          "company_text": "齐鲁制药有限公司;",
+          "source_id": "src_b392ff0f48e9",
+          "page": 1,
+          "row_number": 5
+        }
+      ],
+      "布地奈德迟释片": [
+        {
+          "acceptance_number": "CXHL2400038",
+          "drug_type": "化药",
+          "registration_class": "2.2",
+          "application_type": "新药",
+          "company_text": "南京三迭纪医药科技有限公司;",
+          "source_id": "src_8fab7930c8ad",
+          "page": 1,
+          "row_number": 1
+        },
+        {
+          "acceptance_number": "CXHL2400037",
+          "drug_type": "化药",
+          "registration_class": "2.2",
+          "application_type": "新药",
+          "company_text": "南京三迭纪医药科技有限公司;",
+          "source_id": "src_8fab7930c8ad",
+          "page": 1,
+          "row_number": 2
+        },
+        {
+          "acceptance_number": "CXHL2400036",
+          "drug_type": "化药",
+          "registration_class": "2.2",
+          "application_type": "新药",
+          "company_text": "南京三迭纪医药科技有限公司;",
+          "source_id": "src_8fab7930c8ad",
+          "page": 1,
+          "row_number": 3
+        }
+      ]
+    },
+    "forged_class_rejected": {
+      "IBI3027": "REJECTED_CHANGED_CLASS_WITH_REAL_SOURCE_ID",
+      "QL2108注射液": "REJECTED_CHANGED_CLASS_WITH_REAL_SOURCE_ID",
+      "布地奈德迟释片": "REJECTED_CHANGED_CLASS_WITH_REAL_SOURCE_ID"
+    },
+    "second_adoption_idempotent": true,
+    "sources_facts_links_unchanged": true,
+    "original_source_db_unchanged": true,
+    "network_calls": 0,
+    "model_calls": 0,
+    "new_drug_application_not_automatically_innovative": true,
+    "specific_acceptance_not_automatically_bound_to_CTR": true
+  },
+  "limits_of_verification": {
+    "whole_project_source_conservative_invalidation_retained": true,
+    "stage_skip_on_upgrade": "NOT_YET_FIXED",
+    "program_class_link_independent_review": "PENDING_THREE_CASES",
+    "core_denominator_scope": "AWAITING_NATIVE_USER_CHOICE",
+    "full_goal": "NOT_COMPLETE"
+  }
+}

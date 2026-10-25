@@ -146,10 +146,15 @@ def persist_candidates(ctx: ToolContext, result: dict[str, Any], route: str) -> 
     with ctx.db.tx():
         for row in result['results']:
             name = row['drug_name']
-            reference = {key:row[key] for key in ('acceptance_number','company_text','application_type',
+            reference = {key:row[key] for key in ('acceptance_number','company_text','application_type','drug_type','registration_class',
                 'handled_date_text','source_id','page','row_number')}
             refs = list(existing.get(name,{}).get('attrs',{}).get('cde_acceptance_refs',[]))
-            if reference not in refs:
+            prior = next((ref for ref in refs if isinstance(ref, dict) and
+                          ref.get('source_id') == source_id and
+                          ref.get('acceptance_number') == row['acceptance_number']), None)
+            if prior is None:
                 refs.append(reference)
+            else:
+                prior.update(reference)  # Enrich one provisional source observation, retaining unrelated metadata.
             ctx.db.upsert_entity(ctx.project_id,'drug',name,route_id=route,attrs={'cde_acceptance_refs':refs})
             existing.setdefault(name,{'attrs':{}})['attrs']['cde_acceptance_refs'] = refs

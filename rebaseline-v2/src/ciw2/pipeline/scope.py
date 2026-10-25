@@ -88,20 +88,25 @@ def _resolve(result: ScopeResult, candidates: list[dict[str, Any]], ambiguous_na
     return {'decisions': normalized, 'applied': applied, 'issues': issues}
 
 
-def _review_batch(rc: RunContext, task: dict[str, Any], sources: list[dict[str, Any]]) -> dict[str, Any]:
+def _batch_key(rc: RunContext, task: dict[str, Any], sources: list[dict[str, Any]]) -> str:
     skill = rc.skills['coverage-review']
     signature = {'task': task, 'sources': sources, 'code': CODE_HASH, 'rules': HARNESS_RULES,
                  'skill': skill.body, 'schema': ScopeResult.model_json_schema(), 'model': rc.settings.llm_model}
-    digest = hashlib.sha256(_json(signature).encode()).hexdigest()
-    key = f'scope_batch:{digest}'
-    cached = rc.db.stage_output(rc.run_id, key)
+    return 'scope_batch:' + hashlib.sha256(_json(signature).encode()).hexdigest()
+
+
+def _review_batch(rc: RunContext, task: dict[str, Any]) -> dict[str, Any]:
+    skill = rc.skills['coverage-review']
+    cached_key = _batch_key(rc, task, _sources(rc))
+    cached = rc.db.stage_output(rc.run_id, cached_key)
     if cached is not None:
-        rc.db.log_step(rc.run_id, rc.stage, skill.name, 0, 'cache', {'reused_stage': key})
+        rc.db.log_step(rc.run_id, rc.stage, skill.name, 0, 'cache', {'reused_stage': cached_key})
         return cached
     result = ScopeResult.model_validate(rc.skill(skill.name, task))
     normalized = _resolve(result, task['candidates'], set(task['ambiguous_names']))
     if not normalized['issues']:
-        rc.db.set_stage(rc.run_id, key, 'succeeded', output=normalized)
+        # The call may register sources. Bind the receipt to the set present after it returns.
+        rc.db.set_stage(rc.run_id, _batch_key(rc, task, _sources(rc)), 'succeeded', output=normalized)
     return normalized
 
 
@@ -124,14 +129,14 @@ def _orphan_trials(rc: RunContext) -> list[dict[str, Any]]:
     return [trial for trial in rc.db.entities(rc.project_id, 'trial') if trial['id'] not in linked]
 
 
-def _apply(rc: RunContext, tasks: list[dict[str, Any]], sources: list[dict[str, Any]], *,
+def _apply(rc: RunContext, tasks: list[dict[str, Any]], *,
            empty: bool, bounded: bool) -> dict[str, Any]:
     output = {'decisions': 0, 'in_scope': 0, 'excluded': 0, 'pending': 0,
               'issues': [], 'batches': len(tasks), 'input_empty': empty}
     for task in tasks:
         if bounded:
             rc.check_cancelled()  # Stop before the next model call; completed batches stay committed.
-        result = _review_batch(rc, task, sources)
+        result = _review_batch(rc, task)
         output['decisions'] += result['applied']
         output['issues'].extend(result['issues'])
         with rc.db.tx():
@@ -151,7 +156,7 @@ def _review(rc: RunContext, indication: str, entities: list[dict[str, Any]], *,
     if candidate_kind:
         base['candidate_kind'] = candidate_kind
     tasks = _tasks(base, entities)  # Validate every complete input before the first model call.
-    output = _apply(rc, tasks, _sources(rc), empty=not entities, bounded=candidate_kind is not None)
+    output = _apply(rc, tasks, empty=not entities, bounded=candidate_kind is not None)
     if candidate_kind:
         output['candidate_kind'] = candidate_kind
     return output
