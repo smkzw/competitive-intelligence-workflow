@@ -5,6 +5,7 @@ import json
 from collections.abc import Callable
 from typing import Any
 
+from ciw2.domain.models import AnalysisResult
 from ciw2.pipeline.context import RunContext
 from ciw2.pipeline.recovery import fingerprint
 
@@ -33,6 +34,31 @@ def summary_basis(rc: RunContext, findings: list[dict[str, Any]], verified: set[
     rc.db.log_step(rc.run_id, rc.stage, 'synthesis', 0, 'synthesis_basis', {
         'digest': digest, 'basis_stage': key, 'input_sha256': lineage['input_sha256']})
     return [{**f, 'fact_refs': [aliases[r] for r in dict.fromkeys(f['fact_refs'])]} for f in findings], refs, digest
+
+
+def normalize_references(rc: RunContext, task: dict[str, Any], result: AnalysisResult) -> AnalysisResult:
+    """Accept full IDs returned by the fact tool only through this packet's exact mapping.
+
+    This changes transport notation, never the cited fact or narrative. Unknown
+    references stay visible to the caller's rejection guard; no fuzzy join/filter.
+    Existing model objects and historical cached output are not rewritten.
+    """
+    digest = task.get('finding_basis_sha256')
+    if not digest:
+        return result
+    basis = rc.db.stage_output(rc.run_id, 'analysis_basis:' + digest)
+    if not basis or basis.get('digest') != digest:
+        raise ValueError('摘要引用缺少本次完整映射依据')
+    mapping = basis.get('reference_map', {})
+    supplied = set(task['verified_fact_ids'])
+    if any(alias not in mapping or len(mapping[alias]) != 1 for alias in supplied):
+        raise ValueError('摘要引用必须具备本任务一对一映射')
+    reverse = {mapping[alias][0]: alias for alias in supplied}
+    if len(reverse) != len(supplied):
+        raise ValueError('摘要引用映射不是一对一，不猜测归属')
+    return result.model_copy(update={'findings': [finding.model_copy(update={
+        'fact_refs': list(dict.fromkeys(ref if ref in supplied else reverse.get(ref, ref)
+                                       for ref in finding.fact_refs))}) for finding in result.findings]})
 
 
 def resolve_summary(rc: RunContext, report: str, task: dict[str, Any], refs: dict[str, list[str]],

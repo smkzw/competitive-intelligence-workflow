@@ -1,0 +1,85 @@
+{
+  "scope": "CURRENT_INSTALL09_COMPONENT_ACCEPTANCE_NOT_FULL_M6_OR_RC",
+  "commit": "f7004413c12345bdba4419f83cd1aa051b615037",
+  "wheel_sha256": "f6dce98dbdb76fa32c19653204462c57d5388dc0611e417ffdda3a281ed8f0a0",
+  "sdist_sha256": "e32271961f5b68cac64cbe8162373e7be30406827b475cf5abe78bab6019c48c",
+  "source_manifest_sha256": "5576eceb0166810435a659de184adff2607a76a2829e9a12d8d3460b1f834ac0",
+  "assets": 23,
+  "skills": 9,
+  "offline_new_venv": true,
+  "external_package_downloads": 0,
+  "isolated_cli_outside_checkout": true,
+  "invalid_explicit_override_exit": 2,
+  "AC": {
+    "sources": 19,
+    "current_facts": 269,
+    "historical_facts": 510,
+    "A_html_sha256": "3a13c23125da82842345eff928404a81f92446d75c144526cf7366c56f9cda72",
+    "C_html_sha256": "fc2d18cad23d07703b396b69ec653150ad9026278ffcbf10509ec2e7cdfb0d23",
+    "source_science_unchanged": true
+  },
+  "B": {
+    "raw_facts": 708,
+    "results": 668,
+    "groups": 34,
+    "facts_sha256": "eb4067d24feb5f0950a6e6eb37a401a23e682ccd27cebfcd31206d80bb160d54",
+    "html_sha256": "70345102191022717fa4f5b09326ff68f4b1cfb9695e92bcb1f53dc28653968b",
+    "same_frozen_runtime_html": true,
+    "old_visual_relabelled": false
+  },
+  "scope_restored": {
+    "science_unchanged": true,
+    "new_model_calls": 0,
+    "new_source_calls": 0,
+    "original_db_unchanged": true
+  },
+  "CDE_restored": {
+    "raw_proven_observations": 10,
+    "blank_registration_classes_preserved": true,
+    "science_unchanged": true,
+    "new_model_calls": 0,
+    "new_source_calls": 0,
+    "original_db_unchanged": true
+  },
+  "web": {
+    "scope": "INSTALLED_WEB_BOOTSTRAP_REAL_HTTP_AND_ONE_DESKTOP_PAGE_NOT_RESEARCH_OR_FULL_VISUAL",
+    "resources": [
+      {
+        "path": "/static/kangzhe.css",
+        "status": 200,
+        "sha256": "40126379ce528dfe3d141cfb647fb240ddebe1bb97dfe259f7f6e5ac7c65a386"
+      },
+      {
+        "path": "/static/logo_bot.svg",
+        "status": 200,
+        "sha256": "8d16d3ae8353dd31f46a50d401e66f9e62af40be6cc42cdf5050866a4e6e1cae"
+      },
+      {
+        "path": "/static/echarts.min.js",
+        "status": 200,
+        "sha256": "b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0"
+      }
+    ],
+    "counts": {
+      "projects": 1,
+      "runs": 0,
+      "agent_steps": 0,
+      "sources": 0,
+      "facts": 0
+    },
+    "project_create_start_false": true,
+    "actual_model_calls": 0,
+    "actual_source_calls": 0,
+    "viewport": [
+      1440,
+      1080
+    ],
+    "screenshot_sha256": "71336449652613df77e799516ee550090c6235053b5f3bb9c28b1b20478fd229",
+    "all_desktop_widths": "NOT_RUN_FOR_THIS_BOOTSTRAP",
+    "report_visual_or_medical_acceptance": "NOT_RUN"
+  },
+  "web_smoke_server_retired": true,
+  "first_web_attempt": "inline HTTP succeeded, child absent after controller returned, following browser request refused; managed supervisor recovered same project, original failure retained",
+  "CDE_four_directory_refresh": "NOT_RUN_ON_CURRENT_CODE",
+  "full_M6": "INCOMPLETE"
+}

@@ -1,0 +1,30 @@
+{
+  "scope": "THREE_SOURCE_IDENTITY_CLASS_LINKS_NOT_DENOMINATOR_OR_RC",
+  "requested": "grok/grok-build/grok-4.7:high",
+  "final_observed": "openai-codex/gpt-6.1-sol",
+  "effort": "high",
+  "session_id": "01a172ab-6536-7000-9ebe-e19e7d93fd78",
+  "seconds_final_continuation": 117.257,
+  "tool_calls_final_continuation": 4,
+  "returncode": 0,
+  "initial_failure": "Grok native TLS handshake EOF",
+  "second_attempt": "Pi Cursor Grok selector, runtime_identity_mismatch",
+  "fallback_authorized_by_frozen_manifest": true,
+  "same_session_continuation": true,
+  "independence": "Fresh reviewer context, but model switch retained prior attempt artifacts; not an additional independent-model vote",
+  "report_sha256": "a6724e0499a9a6121b70977574076e6f5b7db3e741a071b7a28b7563cd8fb6ee",
+  "owner_source_checks": [
+    "raw current registry_id separately from related-registration table row",
+    "D23 name/code/form and applicant, not comparator Nefecon",
+    "QL2108 code name/form and applicant, blank CDE supplemental classes",
+    "GS101-01 registry name/old name/test drug and related GS101-03 record; applicant query includes unrelated products"
+  ],
+  "G1": "QUALIFIED_PRODUCT_LINK_ONLY_NO_DEFINITE_CLASS_OR_ACCEPTANCE_BINDING",
+  "D1": "DIRECT_D23_NAME_LINK_QUALIFIED_PRODUCT_CLASS_LINK_NO_ACCEPTANCE_BINDING",
+  "Q1": "SUPPORTED_PRODUCT_NAME_APPLICANT_CLASS_LINK_NOT_CTR_ACCEPTANCE_BINDING",
+  "rejected_review_statement": "Existing OCR corroboration not evidenced by a verifiable receipt; retain owner visual original-image check only",
+  "reference_originals_modified": false,
+  "production_facts_written": false,
+  "denominator_frozen": false,
+  "recall_computed": false
+}

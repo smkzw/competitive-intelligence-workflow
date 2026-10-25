@@ -744,3 +744,16 @@ Method changed to execution because one independently writable source-replay hel
 - 源07主运行63150初D23详情及QL失败，1276只补两失单元均成功，原3成功CDE不重抓、原FAIL不改。D23-201/CTR20253975药物名布地奈德迟释片/南京三迭纪；CDE同名同企业3条化药2.2。IBI3027两条治疗用生物3.3；QL2108一条3.3及4条空类别补充记录，空类不填。GS101药名确切空结果不当药不存在；源09原生22555以07只读克隆采QL/GS两列表、CTR20250820/20260166/20260514三详情、两原文公司查询，0模型，原07不改。公司表包含原研/其他产品，绝不把整表赋给GS101或把申办者作MAH。
 - 3.3定义源：NMPA/CDE2023年报原PDFdf9aa697…，普通公开HTTP200取回，PDF文本漏首段、web查找/截图超时未过；pdftoppm第38物理页(印刷35)实际目视明确“生物类似药(3.3类)”，不虚称text-substring。化药2.2用官方英文2020HTML1f231667…，首次raw-markup断言失败后只修HTMLParser文字节点解析，不重复HTTP；原始字节不变、不是OCR引擎。定义manifestcea6f021…，只解治疗用生物3.3，不推疫苗或已获批/临床优势。
 - 分类身份判断触发一次独立conference：新C03 ciw2-program-class-links20261025/原生53590，Grok4.7/high实时manifest、fresh上下文，单一对象40turns/7200s无额外chair；预检先纠正ciw-data相对路径后零警告才启动。只G1 GS101、D1 D23、Q1 QL三产品身份/类别桥，不看前worker私有理由、不搜全宇宙/不修改源/不定义分母。Grok模型族与早期参照研究相同，独立性减弱已明示；现待终态，不接受未验证推断。原生Ask核心统计仍未答，来源事实收集与无关代码继续。
+
+
+## 2026-10-25 安装09与归并05终态后的下一根因
+
+- f7004413已commit/push；安装09源码5576eceb…/330文件，wheel f6dce98d…、sdist e3227196…、离线0下载。9Skill/23资产/模块同字节，/tmp CLI，标准DB/CAS恢复当前ABC、真实同run scope零模型/零来源缓存、10条CDE原始proof全通过。Web普通创建start=false/项目页/3静态资源200同字节，Ego5/p1实际1440实看；仅启动验收，不是报告视觉或完整M6。首控制器结束后子进程消失/浏览器拒绝保留，managed监督恢复同项目后成功；验完精确PID38885/cwd/private/tmp/安装09命令核验SIGTERM，97502 exit241，启动回执与截图保留。
+- 归并05 remaining98293自然exit1：267首层126缓存、历史161行不改；模型GLM27/DeepSeek-V4.1-Flash-1017 161，usage记录总tokens1,224,328，原151批/780点/科学四表/旧缓存/冻结5d运行时均不变。最终0要点，严禁succeeded或继续等旧PID。最后实际工具读取summary_ref_3493…3503，模型submit使用同11条真实fct_id，外层只接受短别名而失败；先核一对一映射，不视为模型编造、不静默删除引用。
+- 本节点选direct：引用表示转换/当前任务精确成员关系可用原始task、basis、submit和生产断言决定，且共享summary/stages由owner持有；不用新临床推断或额外模型票。先根因反例→最小无损转换→相关summary回归→真实失败离线重放；不立刻再跑267包或151研究。仍需医学REVISE及后续升级stage失效另闭合。
+- 窄会商53590终态exit0：原GrokTLS失败；Cursor Grok selector被runner检测runtime不匹配；按已批准fallback转Pi/openai-codex/gpt-6.1-sol:high同session01a172ab…续接。不能记Grok或全新独立模型票，原始日志/意见保留。owner尚未采用任何CTR=受理号关系；复核“既有OCR佐证”没有可核执行回执不采信，已有owner原图目视证据仍有效。后续仅原源定位裁决，不扩全页/全宇宙会商。
+
+- 引用根因3RED+4原边界正向先复现；最小改动只summary_lineage.normalize_references及stages调用，不更改模型route、原事实、数据库schema或引用科学内容。68相关PASS/Ruff后，再补真实工具→submit→cache集成和歧义反例。06真实失败备份/标准恢复副本重放5509/5524：11实际ID严格对应11短引用，正文与最终11科学ID完全同原提交，第二次同新key0调用。原161历史缓存逐行/原DB与780/原回执/运行时不改；仅STRUCTURAL_RECOVERY，不接受医学文本、不复跑151/267包。
+- 当前冻结首命令再次犯app cwd下git archive相对路径错误，无snapshot/未执行测试却继续启动门脚本也失败，两个NOT_EXECUTED原错误保留；改显式repo cwd与新06-recovery01目录，334文件manifest80956640283e99b1cee7b7ae71f636f7e29f6daf90e1a08627ced1ca6d18e9a2，稳定候选一轮宽门进行中。不是产品失败或新测试通过，不隐去重复工具错误。
+
+- 06-recovery01当前宽门自然exit0：1831PASS13.14s（总进程13.572s），Ruff/11JSsyntax/225Python600-80/334固定输入未变；1既有Starlette TestClient弃用warning，未额外安装/升级依赖。新增9例包含真实工具读取完整ID→submit→缓存重放及歧义/包外引用拒绝。源2文件及9例测试与冻结hash一致；后续仅状态/公共精简回执更新不重复全仓。没有新增UI/临床结果，f700安装09与此代码门分开记账。下一步白名单commit/push，再做有界恢复和升级失效，仍Goal active。

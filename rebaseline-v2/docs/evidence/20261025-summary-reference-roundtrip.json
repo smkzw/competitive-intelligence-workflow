@@ -1,0 +1,65 @@
+{
+  "scope": "EXACT_05_FAILED_SUBMIT_OFFLINE_PRODUCTION_REPLAY_NOT_NEW_MEDICAL_ACCEPTANCE",
+  "base_commit": "f7004413c12345bdba4419f83cd1aa051b615037",
+  "source_hashes": {
+    "src/ciw2/pipeline/stages.py": "6bfce2c804122f91b8d08ac5c7b103b8939d4f1ce50142a53274b31058ca7eb2",
+    "src/ciw2/pipeline/summary_lineage.py": "047a58cadd3c7e8d0bf3006828aa783dde9e1ecabf83b029f913decca17e50a1"
+  },
+  "run_id": "run_32c2b8ad6478",
+  "original_task_event": 5509,
+  "original_submit_event": 5524,
+  "original_receipt_sha256": "f46fa2256846f49352ef8ea0562c7a3a583c8f9300bd300299e92df7a2ea376b",
+  "actual_original_model": "DeepSeek-V4.1-Flash-1017",
+  "raw_fact_ids": 11,
+  "allowed_aliases": 11,
+  "exact_one_to_one_membership": true,
+  "ordinary_summary_resolve_replayed": true,
+  "output_text_and_cited_scientific_ids_identical": true,
+  "same_new_key_cached_replay": true,
+  "previous_cache_rows_preserved": 161,
+  "science_unchanged": true,
+  "original_files_unchanged": true,
+  "original_findings_sha256": "295f9be691f80c9cc414d95f99f45e9e787e51105c66cb147621d65a6b0c34a5",
+  "new_model_calls": 0,
+  "new_source_calls": 0,
+  "research_batches_reexecuted": 0,
+  "remaining_267_work": "NOT_RESUMED",
+  "final_summary": "NOT_PRODUCED",
+  "medical_acceptance": "NOT_PERFORMED",
+  "related_tests": {
+    "new_root_RED": 3,
+    "existing_boundary_cases_passed_in_RED_batch": 4,
+    "related_after_change": 68
+  },
+  "original_terminal": {
+    "state": "failed",
+    "actual_models": {
+      "glm-5.3-flash": 27,
+      "DeepSeek-V4.1-Flash-1017": 161
+    },
+    "qualified_current_first_level_after": 126,
+    "historical_cache_rows_after": 161,
+    "science_unchanged": true,
+    "previous_qualified_unchanged": true,
+    "runtime_unchanged": true
+  },
+  "original_recorded_usage": {
+    "prompt_tokens": 978151,
+    "completion_tokens": 246177,
+    "total_tokens": 1224328
+  },
+  "new_test_cases": 9,
+  "development_gate": {
+    "manifest_sha256": "80956640283e99b1cee7b7ae71f636f7e29f6daf90e1a08627ced1ca6d18e9a2",
+    "fixed_files": 334,
+    "pytest_passed": 1831,
+    "pytest_seconds": 13.14,
+    "ruff": 0,
+    "javascript_files": 11,
+    "python_files": 225,
+    "size_600_80_violations": [],
+    "immutable_input_changes": [],
+    "known_warning": "Starlette TestClient httpx deprecation, not product failure",
+    "full_medical_or_product": "NOT_ACCEPTED"
+  }
+}

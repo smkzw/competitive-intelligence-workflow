@@ -443,6 +443,7 @@ def _analysis_call(rc: RunContext, report: str, task: dict[str, Any]) -> Analysi
         rc.db.log_step(rc.run_id, rc.stage, skill.name, 0, 'cache', {'reused_stage': key})
     else:
         result = rc.skill(skill.name, task)
+    result = summary_lineage.normalize_references(rc, task, result)
     if result.report != report:
         raise ValueError('摘要返回的报告类型与任务不一致')
     if len(result.findings) > task.get('finding_limit', 6):
