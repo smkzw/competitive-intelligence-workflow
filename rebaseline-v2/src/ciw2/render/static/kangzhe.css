@@ -95,6 +95,9 @@ p,li,td,th{text-wrap:pretty} h1,h2,h3,.brand,nav a{text-wrap:balance}
 table{border-collapse:collapse;width:100%;background:var(--kz-data-plane);font-size:var(--kz-type-site-body)}
 th{background:var(--th);color:var(--ink);text-align:left;padding:8px 10px;font-weight:700;position:sticky;top:0}
 td{border-bottom:1px solid var(--border);padding:7px 10px;vertical-align:top;overflow-wrap:anywhere}
+td.numeric{white-space:nowrap;font-variant-numeric:tabular-nums}
+.result-table td:first-child{min-width:14ch;overflow-wrap:normal;word-break:normal}.result-table .trial-identity{min-width:17ch}
+.result-table .registry-id{white-space:nowrap}.result-table td:last-child{min-width:6rem}
 tr:hover td{background:#FFF8EE}
 .tag{display:inline-block;border-radius:999px;padding:0 8px;font-size:var(--report-font-body);margin:1px 2px;background:var(--ops-bg);color:var(--ops)}
 .tag.med{background:var(--med-bg);color:#A35F00} .tag.stat{background:var(--stat-bg);color:var(--stat)}
@@ -164,3 +167,7 @@ html:has(#design-evidence-dialog[open]){overflow:hidden}
 .result-panel details{margin-top:8px}.result-panel #result-definition{overflow-wrap:anywhere}
 .result-series-row{margin:4px 0}.result-table,.safety-table{margin-top:12px}
 #result-count{margin:8px 0}.result-table>summary,.safety-table>summary{font-weight:600}
+.result-frame{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.result-frame p,.result-frame .result-studies{margin:0 0 8px}
+.result-studies,.source-study{font-size:var(--report-font-body);color:var(--muted);overflow-wrap:anywhere}
+#result-study-list p{margin:4px 0}.source-study{margin-top:4px}

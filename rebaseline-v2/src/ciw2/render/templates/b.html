@@ -18,7 +18,8 @@
 </div>
 <p id="result-count" aria-live="polite">{{ data.results|length }} 条结果</p>
 {% if data.charts.groups %}<div class="card result-panel kz-data" id="result-panel">
-<p id="result-unit" class="muted"></p>
+<div class="result-frame"><p id="result-unit" class="muted"></p>
+<details id="result-study-context" class="result-studies" hidden><summary id="result-study-reference"></summary><div id="result-study-list"></div></details></div>
 <div id="chart-result" class="chart"></div>
 <details><summary>指标定义与研究组别</summary><p id="result-definition"></p><div id="result-series"></div></details>
 </div>{% endif %}
@@ -32,9 +33,9 @@
 <td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td><details><summary>完整终点</summary>{{ r.endpoint }}</details></td>
 <td>{% if r.class_title %}<div>{{ r.class_title }}</div>{% endif %}{% if r.category %}<div>{{ r.category }}</div>{% endif %}
 <details><summary>时间与人群</summary><p>{{ r.timepoint or '—' }}</p><p>{{ r.population or '—' }}</p></details></td>
-<td>{{ r.arm or '—' }}</td><td><b>{{ '—' if r.value is none else r.value }}</b></td>
+<td>{{ r.arm or '—' }}</td><td class="numeric"><b>{{ '—' if r.value is none else r.value }}</b></td>
 <td>{{ r.unit|registry_label('measure_unit') }}<div class="muted">{{ r.stat_type|registry_label('statistic') }}</div>
-<details><summary>原始单位与统计</summary>{{ r.unit or '—' }} · {{ r.stat_type or '—' }}</details></td><td>{{ r.denominator if r.denominator is not none else '—' }}</td>
+<details><summary>原始单位与统计</summary>{{ r.unit or '—' }} · {{ r.stat_type or '—' }}</details></td><td class="numeric">{{ r.denominator if r.denominator is not none else '—' }}</td>
 <td><span class="badge {{ r.status }}">{{ r.status|status }}</span></td>
 <td>{% if r.source_url %}<a href="{{ r.source_url }}" target="_blank" rel="noopener">原文</a>{% endif %}
 {% if r.quote or r.verdict_note %}<details><summary>原文值</summary>{% if r.status != 'verified' and r.verdict_note %}<p class="muted">{{ r.verdict_note }}</p>{% endif %}<div class="quote">{{ r.quote or '' }}</div></details>{% endif %}</td></tr>{% endfor %}
@@ -44,8 +45,8 @@
 <details class="safety-table"><summary>安全性数据表（<span id="safety-count">{{ data.safety|length }}</span>条）</summary>
 <div class="card table-card kz-data"><table id="tbl-b-safety"><thead><tr><th>药物</th><th>研究</th><th>组别</th><th>类别</th><th>n</th><th>N</th><th>%</th><th>时间窗</th><th>状态</th><th>来源</th></tr></thead><tbody>
 {% for r in data.safety %}<tr data-fact-id="{{ r.id }}"><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td><td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td>{{ r.arm or '—' }}</td>
-<td>{{ 'SAE' if r.field == 'safety.sae.any' else '全因死亡' }}</td><td>{{ '—' if r.value is none else r.value }}</td>
-<td>{{ r.denominator if r.denominator is not none else '—' }}</td><td>{{ r.proportion if r.proportion is not none else '—' }}</td>
+<td>{{ 'SAE' if r.field == 'safety.sae.any' else '全因死亡' }}</td><td class="numeric">{{ '—' if r.value is none else r.value }}</td>
+<td class="numeric">{{ r.denominator if r.denominator is not none else '—' }}</td><td class="numeric">{{ r.proportion if r.proportion is not none else '—' }}</td>
 <td><details><summary>时间窗</summary>{{ r.timepoint or '—' }}</details></td><td><span class="badge {{ r.status }}">{{ r.status|status }}</span></td>
 <td>{% if r.source_url %}<a href="{{ r.source_url }}" target="_blank" rel="noopener">原文</a>{% endif %}
 {% if r.quote or r.verdict_note %}<details><summary>原文值</summary>{% if r.status != 'verified' and r.verdict_note %}<p class="muted">{{ r.verdict_note }}</p>{% endif %}<div class="quote">{{ r.quote or '' }}</div></details>{% endif %}</td></tr>{% endfor %}

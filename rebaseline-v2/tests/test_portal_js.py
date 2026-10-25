@@ -29,13 +29,15 @@ const dialog={open:false,addEventListener(k,fn){events['dialog:'+k]=fn;},
 const body={appendChild(n){n.parentElement=this;}};
 const title={textContent:''};
 const close={addEventListener(k,fn){events['close:'+k]=fn;}};
-const elements={'design-evidence-dialog':dialog,'design-evidence-body':body,'design-evidence-title':title,'design-evidence-close':close};
+const study={hidden:true};
+const elements={'design-evidence-dialog':dialog,'design-evidence-body':body,'design-evidence-title':title,'design-evidence-close':close,'design-evidence-study':study};
 const document={getElementById:id=>elements[id],querySelectorAll:s=>s.includes(kind==='profile'?'shared-evidence > summary':'design-evidence > summary')?[trigger]:[]};
 vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window:{addEventListener(k,fn){life[k]=fn;}}});
 assert.equal(typeof events.click,'function');
 let prevented=false;events.click({preventDefault(){prevented=true;}});
 assert.equal(prevented,true);assert.equal(opened,1);assert.equal(content.parentElement,body);
 assert.ok(title.textContent.includes(short?'药物甲 · III 期':'Long disease and all legal entities'));
+assert.equal(study.textContent,'<untrusted-study>');assert.equal(study.hidden,false);
 if(short)assert.ok(!title.textContent.includes('all legal entities'));
 events['close:click']();assert.equal(content.parentElement,origin);assert.equal(focused,1);assert.equal(origin.open,false);
 events.click({preventDefault(){}});dialog.close();assert.equal(focused,2);assert.equal(content.parentElement,origin);

@@ -47,7 +47,7 @@
 
 </main>
 <dialog id="design-evidence-dialog" aria-labelledby="design-evidence-title">
-<header><h2 id="design-evidence-title">原文与依据</h2><button id="design-evidence-close" data-close-design-evidence autofocus>关闭</button></header>
+<header><div><h2 id="design-evidence-title">原文与依据</h2><div id="design-evidence-study" class="source-study" hidden></div></div><button id="design-evidence-close" data-close-design-evidence autofocus>关闭</button></header>
 <div id="design-evidence-body"></div></dialog>
 <script id="charts" type="application/json">{{ charts_json | tojson }}</script>
 {% if assets %}<script>{{ assets.echarts | safe }}</script><script>{{ assets.js | safe }}</script>

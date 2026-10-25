@@ -1,5 +1,17 @@
 # Execution checkpoint
 
+## 2026-10-25 当前组件收口与独立M2参照派发
+
+执行/一次独立视觉挑战后owner整合：原视觉报告8e878984…实际pi/openai-codex/gpt-6-luna/max，349.432s/91tools，仅冻结04图像/源码审阅。采纳B图旁及C原文详情的次级试验编号；A所谓单字断行经原图及9字Range同y未复现，不盲加样式。C排除22真实滚轮在1440/2560可读、关闭/回焦正常；B开合差异为捕获状态，非产品响应式缺陷。原报告/失败保留，没有第三轮全页会商。
+
+根因整族7RED→33相关PASS。冻结05 manifest bb8b44a47c5cdf5f26f0a2f059cdba568d21d1ba13ed0ba3dce1110bf7980e3b；完整v2 1591PASS11.01s、Ruff/5JS/200Python600-80通过，256输入字节后核未变。05受影响16实图、owner实看5原图；04完整48图仍绑定04，不当新05全矩阵。新鲜离线wheel 14ada4667292e2712bdd9bf86ad3244f48d012ee978ae572b50ad04b8a15fddb、sdist aa1be9d552853edc5733ad80b73a162729b368ba79b626e76a53d052a235455a，22资产/9Skill/全部模块同字节、/tmp隔离CLI及坏override检查通过；实际安装版DB+CAS备份恢复19源/278当前事实（510历史事实），普通A/C渲染逐字节相等当前HTTP。B安装渲染/全M6未运行。精简公共回执/样图在v2 docs/evidence和screenshots；私有完整冻结/截图/失败/模型回执保留。
+
+用户原生选择M2参照由独立Agent据权威来源建立、owner核源封存后再测召回，不再让用户提供清单或测试。新Trellis子任务10-25-ciw2-m2-independent-reference；单一盲读来源节点已preflight并dispatch（句柄50695），限定AD/IgAN/PNH，禁止读取生产代码/Skill/候选/结果，初稿PROVISIONAL_NOT_OWNER_ACCEPTED。全球only/未知中国范围不进中国分母；模型/终态/核源/封存/95%尚待。未启动第二研究者或新管理平台。
+
+原780真实归并run_8e357c79edf6/句柄91108仍按冻结62e6355f运行，原151批不重做；不固定轮询/重派/热改。source语义/全M1和M2–M6仍未交付。当前Goal active，不建阶段暂停。
+
+资源复盘：仅删除本人04测试venv和04/05可重建build-source；先核路径/无占用/保留wheel hash，dry-run和结果在ciw-data/install-cleanup[-result]-20261025.json。保留全部源、冻结候选、包、回执、当前05venv/原研究缓存与未知WIP；不宣称物理释放量。下一安全动作：白名单提交/推送本组件，等实际归并和独立清单终态核源；其他未依赖分支按03_PLAN继续。
+
 ## 2026-10-25 当前集成节点 归并含义读取及Kangzhe7.1.1
 
 方法execution-plus-conference：E03承担独立共享前端写集，C03挑战冻结摘要引用/恢复语义，owner统一事实与缓存合同并做实屏；没有额外chair或无限全页循环。

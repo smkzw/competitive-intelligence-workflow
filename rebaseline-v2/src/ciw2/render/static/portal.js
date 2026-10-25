@@ -102,7 +102,11 @@
     if (heatNode) heatNode.closest('.card').hidden = !heat.data.length;
     if (phaseNode) phaseNode.closest('.card').hidden = !phases.x.length;
     var grid = phaseNode && phaseNode.closest('.card').parentElement;
-    if (grid && grid.style) grid.style.gridTemplateColumns = heat.data.length && phases.x.length ? '' : '1fr';
+    if (grid && grid.style) grid.style.gridTemplateColumns = '';
+    var heatCard = heatNode && heatNode.closest('.card'), phaseCard = phaseNode && phaseNode.closest('.card');
+    if (heatCard && heatCard.style) heatCard.style.gridColumn = heat.y.length > 4 ? 'span 12' : 'span 6';
+    if (phaseCard && phaseCard.style) phaseCard.style.gridColumn =
+      phases.x.length > 4 || phases.series.length > 2 ? 'span 12' : 'span 6';
     if (heat.data.length) {
     var pageSize = heat.scoped ? 4 : 6, rowHeight = heat.scoped ? 88 : 40;
     setPanelHeight('chart-heat', Math.min(440, 88 + Math.min(pageSize, heat.y.length) * rowHeight));
@@ -240,6 +244,21 @@
     return option;
   }
   var resultPreferred, resultClickBound = false;
+  function resultStudyContext(points) {
+    var caption = el('result-study-reference'), list = el('result-study-list'), container = el('result-study-context');
+    if (!caption || !list) return;
+    var studies = new Map();
+    points.forEach(function (p) {
+      if (p.trial && !studies.has(p.trial)) studies.set(p.trial,
+        (p.trial_label && p.trial_label !== p.trial ? p.trial_label + ' · ' : '') + p.trial);
+    });
+    caption.textContent = studies.size === 1 ? Array.from(studies.values())[0] : '研究来源 ' + studies.size + ' 项';
+    if (container) container.hidden = !studies.size;
+    list.replaceChildren();
+    studies.forEach(function (label) {
+      var node = document.createElement('p'); node.textContent = label; list.appendChild(node);
+    });
+  }
   function updateResultQuery(table) {
     var rows = Array.from(table.querySelectorAll("tbody tr"));
     var domain = el('result-domain'), query = el('result-query');
@@ -261,6 +280,7 @@
     if (!group) return;
     selector.value = group.id;
     var points = group.points.filter(function (p) { return selected.has(p.fact_id); });
+    resultStudyContext(points);
     var viewGroup = Object.assign({}, group, { kind: group.kind === "line" && new Set(points.map(function (p) { return p.x; })).size > 1 ? "line" : "bar" });
     var height = viewGroup.kind === "line" ? 320 : Math.max(120, Math.min(336, Math.min(points.length, 6) * 44 + 60));
     setPanelHeight("chart-result", height);
@@ -395,6 +415,11 @@
         var row = summary.closest("tr");
         var readingTitle = summary.getAttribute && summary.getAttribute("data-reading-title") || "入排与依据";
         title.textContent = (row ? (row.dataset.readingLabel || row.dataset.trialLabel || row.dataset.trial) + " · " : "") + readingTitle;
+        var identity = summary.closest('.trial-identity'), study = el('design-evidence-study');
+        if (study) {
+          study.textContent = row && row.dataset.trial || identity && identity.dataset.clinicalTrial || '';
+          study.hidden = !study.textContent;
+        }
         body.appendChild(content);
         dialog.showModal();
       });

@@ -59,6 +59,8 @@ const elements={charts:{textContent:JSON.stringify({groups:[a,b]})},'result-grou
   'result-panel':{hidden:false},'result-empty':{hidden:true},'result-count':{},'result-definition':{},
   'result-series':{items:[],replaceChildren(){this.items=[];},appendChild(n){this.items.push(n);}},
   'chart-result':{id:'chart-result',style:{}}};
+elements['result-study-reference']={};
+elements['result-study-list']={items:[],replaceChildren(){this.items=[];},appendChild(n){this.items.push(n);}};
 const safetyRows=['first','other'].map(text=>({textContent:text,style:{}}));
 elements['tbl-b-safety']={querySelectorAll:()=>safetyRows};elements['safety-count']={};
 input.getAttribute=name=>name==='data-filter-extra'?'tbl-b-safety':'tbl-b';
@@ -76,6 +78,8 @@ assert.equal(option.series[0].data[0].x,28);
 assert.ok(option.tooltip.formatter({data:option.series[0].data[0]}).includes('&lt;img'));
 assert.ok(!option.tooltip.formatter({data:option.series[0].data[0]}).includes('<img'));
 assert.equal(option.xAxis.name,'周');
+assert.ok(elements['result-study-reference'].textContent.includes('NCT01'));
+assert.equal(elements['result-study-list'].items.length,1);
 input.value='last';events['input:input']();option=c.options.at(-1);
 assert.equal(elements['safety-count'].textContent,'0 / 2');assert.ok(safetyRows.every(r=>r.style.display==='none'));
 assert.equal(option.series[0].type,'bar');
@@ -88,6 +92,8 @@ assert.equal(elements['result-panel'].hidden,true);assert.equal(elements['result
 assert.equal(select.disabled,true);
 input.value='';events['input:input']();
 select.value='b';events['select:change'].call(select);assert.equal(c.options.at(-1).series[0].type,'bar');
+assert.ok(elements['result-study-reference'].textContent.includes('NCT02'));
+assert.ok(!elements['result-study-reference'].textContent.includes('NCT01'));
 assert.ok(c.options.at(-1).yAxis.data[0].includes('奈莫利珠单抗 · II 期'));
 assert.ok(!c.options.at(-1).yAxis.data[0].includes('NCT02'));
 assert.ok(c.options.at(-1).tooltip.formatter({data:c.options.at(-1).series[0].data[0]}).includes(b.points[0].visit));
