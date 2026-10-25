@@ -46,7 +46,8 @@ const rows=['first','other','last'].map((text,i)=>({dataset:{factId:'f'+i},style
   closest:()=>tableDetails,focus(){focusCount++;},scrollIntoView(){}}));
 const a={id:'a',title:'Clinical score <script>',population:'ITT',unit:'points',stat_type:'mean',
   kind:'line',display_axis:'weeks',axis_unit:'days',positions:[28,56,84],points:[
-    {fact_id:'f0',series_key:'s1',series_name:'<img src=x>',x:28,value:0,visit:'第4周',trial:'NCT01'},
+    {fact_id:'f0',series_key:'s1',series_name:'<img src=x>',x:28,value:0,visit:'第4周',trial:'NCT01',
+      arm_label:'队列1（7–11岁）',dispersion_text:'SD 0'},
     {fact_id:'f2',series_key:'s1',series_name:'<img src=x>',x:84,value:8,visit:'第12周',trial:'NCT01'}]};
 const b={id:'b',title:'Separate endpoint',kind:'bar',points:[
   {fact_id:'f1',series_key:'s2',series_name:'Other',axis_label:'奈莫利珠单抗 · II 期',x:null,value:3,
@@ -72,10 +73,14 @@ const window={echarts,addEventListener(){}};
 vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{document,window,echarts,ResizeObserver:class{
   observe(){observerCount++;}disconnect(){}},Map,Set,Math,Array,JSON});
 const c=charts['chart-result'];let option=c.options.at(-1);
+assert.equal(option.animation,false); // A clinical value never travels through invented intermediate values.
 assert.equal(option.series[0].type,'line');assert.equal(option.series[0].connectNulls,false);
+assert.equal(option.series[0].endLabel.formatter,'组1：8');
 assert.equal(JSON.stringify(option.series[0].data.map(p=>p.value)),JSON.stringify([[4,0],[8,null],[12,8]]));
 assert.equal(option.series[0].data[0].x,28);
 assert.ok(option.tooltip.formatter({data:option.series[0].data[0]}).includes('&lt;img'));
+assert.ok(option.tooltip.formatter({data:option.series[0].data[0]}).includes('SD 0'));
+assert.ok(option.legend.formatter('1').includes('队列1（7–11岁）'));
 assert.ok(!option.tooltip.formatter({data:option.series[0].data[0]}).includes('<img'));
 assert.equal(option.xAxis.name,'周');
 assert.ok(elements['result-study-reference'].textContent.includes('NCT01'));
@@ -83,6 +88,7 @@ assert.equal(elements['result-study-list'].items.length,1);
 input.value='last';events['input:input']();option=c.options.at(-1);
 assert.equal(elements['safety-count'].textContent,'0 / 2');assert.ok(safetyRows.every(r=>r.style.display==='none'));
 assert.equal(option.series[0].type,'bar');
+assert.equal(option.animation,false);
 assert.equal(option.xAxis.scale,false);
 assert.equal(JSON.stringify(option.series[0].data.map(p=>p.value)),JSON.stringify([8]));
 assert.equal(option.series[0].data[0].fact_id,'f2');
@@ -95,6 +101,7 @@ select.value='b';events['select:change'].call(select);assert.equal(c.options.at(
 assert.ok(elements['result-study-reference'].textContent.includes('NCT02'));
 assert.ok(!elements['result-study-reference'].textContent.includes('NCT01'));
 assert.ok(c.options.at(-1).yAxis.data[0].includes('奈莫利珠单抗 · II 期'));
+assert.ok(c.options.at(-1).yAxis.data[0].includes(b.points[0].visit));
 assert.ok(!c.options.at(-1).yAxis.data[0].includes('NCT02'));
 assert.ok(c.options.at(-1).tooltip.formatter({data:c.options.at(-1).series[0].data[0]}).includes(b.points[0].visit));
 input.value='first';events['input:input']();assert.equal(select.value,'a');

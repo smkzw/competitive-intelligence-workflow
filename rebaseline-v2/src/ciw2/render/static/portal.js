@@ -26,7 +26,7 @@
     instances[id] = c;
     option.color = option.color || palette;
     option.textStyle = { fontFamily: readingFont, fontSize: readingSize };
-    option.animation = !reducedMotion;
+    option.animation = option.animation !== false && !reducedMotion;
     ["xAxis", "yAxis"].forEach(function (key) {
       var axes = Array.isArray(option[key]) ? option[key] : option[key] ? [option[key]] : [];
       axes.forEach(function (axis) {
@@ -194,10 +194,26 @@
   function resultTooltip(p) {
     var point = p.data || {};
     return safeText(point.series_name || point.label || "") + "<br>" + safeText(point.visit || "") +
-      "：" + safeText(Array.isArray(point.value) ? point.value[1] : point.value);
+      "：" + safeText(Array.isArray(point.value) ? point.value[1] : point.value) +
+      (point.dispersion_text ? "<br>" + safeText(point.dispersion_text) : "");
+  }
+  function resultBars(points) {
+    var labels = points.map(function (p, i) {
+      return String(i + 1) + " · " + (p.axis_label || p.drug_label || p.arm || "研究观察") +
+        (p.visit ? " · " + p.visit : "");
+    });
+    // Same decision drives row spacing, visible count and figure height.
+    var units = Math.max.apply(null, labels.map(function (text) {
+      return Array.from(text).reduce(function (sum, ch) { return sum + (ch.charCodeAt(0) > 255 ? 1 : 0.6); }, 0);
+    }).concat([1]));
+    var rowHeight = Math.max(44, Math.ceil(units * readingSize / 280) * 22 + 12);
+    var visible = Math.max(1, Math.min(6, points.length, Math.floor(276 / rowHeight)));
+    return { labels: labels, visible: visible, height: Math.max(120, visible * rowHeight + 60) };
   }
   function resultOption(group, points) {
-    var option = { tooltip: { formatter: resultTooltip }, grid: { left: 72, right: 48, top: 24, bottom: 72 } };
+    // Clinical observations appear immediately, including their true final values.
+    var option = { animation: false, tooltip: { formatter: resultTooltip },
+      grid: { left: 72, right: 48, top: 24, bottom: 72 } };
     var order = Array.from(new Set(group.points.map(function (p) { return p.series_key; })));
     if (group.kind === "line") {
       var series = new Map();
@@ -208,34 +224,39 @@
       option.legend = { type: "scroll", bottom: 0, formatter: function (name) {
         var point = group.points.find(function (p) { return p.series_key === order[Number(name) - 1]; });
         return (point && point.drug_label ? point.drug_label + " · " : "") +
-          (point && point.phase_label ? point.phase_label + " · " : "") + "组" + name;
+          (point && point.phase_label ? point.phase_label + " · " : "") + "组" + name +
+          (point && point.arm_label ? " · " + point.arm_label : "");
       } };
       option.xAxis = { type: "value", scale: true, name: group.display_axis === "weeks" ? "周" : group.axis_unit === "months" ? "月" : "天" };
       option.yAxis = { type: "value", scale: true };
+      var labelCharacters = Math.max.apply(null, points.map(function (p) {
+        return String(p.value).length + String(order.indexOf(p.series_key) + 1).length + 2;
+      }));
+      option.grid.right = Math.max(112, Math.ceil(labelCharacters * readingSize * 0.7 + 16));
       option.series = Array.from(series.values()).map(function (items) {
         items.sort(function (a, b) { return a.x - b.x; });
         var index = order.indexOf(items[0].series_key), at = new Map(items.map(function (p) { return [p.x, p]; }));
         return { name: String(index + 1), type: "line", smooth: false, connectNulls: false, symbolSize: 7,
-          labelLayout: { hideOverlap: true },
+          labelLayout: { moveOverlap: "shiftY" },
+          endLabel: { show: true, formatter: "组" + (index + 1) + "：" + String(items[items.length - 1].value) },
           lineStyle: { color: palette[index % palette.length] }, itemStyle: { color: palette[index % palette.length] },
           data: (group.positions || items.map(function (p) { return p.x; })).map(function (x) {
             var p = at.get(x);
             var plottedX = group.display_axis === "weeks" ? x / 7 : x;
             return p ? Object.assign({}, p, { value: [plottedX, p.value],
-              label: { show: items.length <= 8 || p === items[items.length - 1],
+              label: { show: items.length <= 8 && p !== items[items.length - 1],
                 position: index % 2 ? 'bottom' : 'top', distance: 8 } }) : { value: [plottedX, null] };
           }),
           label: { formatter: function (p) { return p.value[1]; } } };
       });
     } else {
+      var bars = resultBars(points);
       option.grid.left = 310; option.grid.bottom = 32;
       option.xAxis = { type: "value", scale: false };
-      option.yAxis = { type: "category", inverse: true, data: points.map(function (p, i) {
-        return String(i + 1) + " · " + (p.axis_label || p.drug_label || p.arm || "研究观察") +
-          (p.visit && p.visit.length <= 16 ? " · " + p.visit : "");
-      }), axisLabel: { width: 280, overflow: "break", lineHeight: 22 } };
-      option.dataZoom = [{ type: "slider", yAxisIndex: 0, right: 0, width: 16, show: points.length > 6,
-        startValue: 0, endValue: Math.min(5, points.length - 1), filterMode: "filter" }];
+      option.yAxis = { type: "category", inverse: true, data: bars.labels,
+        axisLabel: { width: 280, overflow: "break", lineHeight: 22 } };
+      option.dataZoom = [{ type: "slider", yAxisIndex: 0, right: 0, width: 16, show: points.length > bars.visible,
+        startValue: 0, endValue: bars.visible - 1, filterMode: "filter" }];
       option.series = [{ type: "bar", barMaxWidth: 22, data: points.map(function (p) {
         return Object.assign({}, p, { itemStyle: { color: palette[order.indexOf(p.series_key) % palette.length] } });
       }),
@@ -282,11 +303,12 @@
     var points = group.points.filter(function (p) { return selected.has(p.fact_id); });
     resultStudyContext(points);
     var viewGroup = Object.assign({}, group, { kind: group.kind === "line" && new Set(points.map(function (p) { return p.x; })).size > 1 ? "line" : "bar" });
-    var height = viewGroup.kind === "line" ? 320 : Math.max(120, Math.min(336, Math.min(points.length, 6) * 44 + 60));
+    var height = viewGroup.kind === "line" ? 320 : resultBars(points).height;
     setPanelHeight("chart-result", height);
-    el("result-definition").textContent = [group.title, group.population, group.unit, group.stat_type].filter(Boolean).join(" · ");
+    el("result-definition").textContent = [group.title].concat(group.facets || [],
+      [group.population, group.unit, group.stat_type]).filter(Boolean).join(" · ");
     if (el("result-unit")) el("result-unit").textContent = [group.unit_label || group.unit,
-      group.stat_label || group.stat_type].filter(Boolean).join(" · ");
+      group.stat_label || group.stat_type].concat(group.facets || []).filter(Boolean).join(" · ");
     var series = new Map();
     points.forEach(function (p) { if (!series.has(p.series_key)) series.set(p.series_key, p.series_name); });
     el("result-series").replaceChildren();

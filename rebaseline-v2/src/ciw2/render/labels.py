@@ -28,6 +28,12 @@ def phase_label(value: object) -> str:
     return text[:-1]+' 期' if match else PHASE_ZH.get(text,text)
 
 _REGISTRY_LABELS: dict[str, dict[str, str]] = {
+    'dispersion': {'STANDARD_DEVIATION': 'SD', 'STANDARD_ERROR': 'SE',
+                   'CONFIDENCE_INTERVAL': 'CI', 'FULL_RANGE': '范围',
+                   'INTER_QUARTILE_RANGE': '四分位距',
+                   'Standard Deviation': 'SD', 'Standard Error': 'SE',
+                   'Confidence Interval': 'CI', 'Full Range': '范围',
+                   'Inter-Quartile Range': '四分位距'},
     'source_kind':{'company':'企业公告','regulator':'监管公告','nmpa':'NMPA登记','web':'网页资料'},
     'drug_modality': {
         'monoclonal antibody':'单克隆抗体','mAb':'单克隆抗体','ADC':'抗体偶联药物',

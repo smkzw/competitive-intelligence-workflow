@@ -10,12 +10,12 @@ def test_plot_identity_is_clinical_without_guessing_an_unresolved_arm():
          'identity':{'drug_label':'奈莫利珠单抗','label':'奈莫利珠单抗 · 特应性皮炎 · II 期',
                      'axis_label':'奈莫利珠单抗 · II 期','phase_label':'II 期'}}
     point=_point(row,None)
-    assert point['axis_label']=='奈莫利珠单抗 · II 期'
+    assert point['axis_label']=='奈莫利珠单抗 · II 期 · Original arm'
     assert point['trial']=='NCT00000001' and point['value']==0 and point['fact_id']=='fact'
     row['arm_drug_label']=''
     row['display_drugs']=[]
     point=_point(row,None)
-    assert point['drug_label']=='' and point['axis_label']=='研究：奈莫利珠单抗 · II 期'
+    assert point['drug_label']=='' and point['axis_label']=='研究：奈莫利珠单抗 · II 期 · Original arm'
 
 
 def project(settings, observations):

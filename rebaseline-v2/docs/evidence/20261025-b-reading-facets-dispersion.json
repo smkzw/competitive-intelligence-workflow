@@ -1,0 +1,155 @@
+{
+  "scope": "CURRENT_B_SOURCE_PRESERVING_READING_COMPONENT_NOT_COMPLETE_M4_OR_DELIVERY",
+  "base_commit": "f8bfcc8cf109e68043036fcc43d1db99a845b6e9",
+  "candidate": "ciw-data/endpoint-reading-20261025-08",
+  "manifest_sha256": "14e6ddeb01bc17cd5eec0ce09830e8393e889d38026fdd845c4595d14c426107",
+  "html_sha256": "87330c0e56f61a82d8f0d77f87c9b70fccf337e223e7753cdba99737c0ba6da9",
+  "raw_source_sha256": "50bc0483d2b3cfb6ebe207a71afe94575ca15e30acc707dbb4634ab56532dee2",
+  "source_study_locator": "$.studies[14] / NCT04921345",
+  "facts_sha256": "eb4067d24feb5f0950a6e6eb37a401a23e682ccd27cebfcd31206d80bb160d54",
+  "results": 668,
+  "plots": 668,
+  "previous_groups": 70,
+  "current_groups": 34,
+  "group_mapping_sha256": "2bdd3fe418e07c67148e56d2fd6bf24626a4a377c25889db75fec800f029f428",
+  "dispersion_observations": 449,
+  "source_or_model_calls": 0,
+  "source_db": "READ_ONLY_UNCHANGED",
+  "development": {
+    "scope": "EXPLICIT_FROZEN_V2_DEVELOPMENT_NOT_MEDICAL_OR_FINAL_PRODUCT",
+    "manifest_sha256": "14e6ddeb01bc17cd5eec0ce09830e8393e889d38026fdd845c4595d14c426107",
+    "pytest": {
+      "exit": 0,
+      "seconds": 12.234,
+      "tail": [
+        "..............................................                           [100%]",
+        "=============================== warnings summary ===============================",
+        "../../../.venv/lib/python3.13/site-packages/fastapi/testclient.py:1",
+        "  /Users/smkzw/Documents/AI Products/competitive-intelligence-workflow/rebaseline-v2/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.",
+        "    from starlette.testclient import TestClient as TestClient  # noqa",
+        "",
+        "-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html",
+        "1630 passed, 1 warning in 11.81s"
+      ]
+    },
+    "ruff": {
+      "exit": 0,
+      "seconds": 0.023,
+      "tail": [
+        "All checks passed!"
+      ]
+    },
+    "javascript": [
+      {
+        "path": "src/ciw2/render/static/kz-motion.js",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/render/static/portal.js",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/render/static/kz-site.js",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/render/static/kz-tokens.js",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/render/static/echarts.min.js",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/sources/cde_browser.mjs",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/sources/china_browser.mjs",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/sources/cde_review_browser.mjs",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/sources/china_detail.mjs",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/sources/nmpa_detail.mjs",
+        "exit": 0
+      }
+    ],
+    "python_files": 206,
+    "size_600_80_violations": [],
+    "immutable_input_changes": []
+  },
+  "browser": {
+    "receipt_sha256": "c1876e288215fe6247cf1f3f9a1473995831fd3b03ecfac9a604321763db7728",
+    "viewports": [
+      1440,
+      1600,
+      1920,
+      2560
+    ],
+    "captured_screens": 24,
+    "states": [
+      "default",
+      "threshold",
+      "filtered-cohort",
+      "adverse-bars",
+      "original-dispersion",
+      "same-chart-resize"
+    ],
+    "glyph_to_actual_fact_and_original_definition": true,
+    "sd_string_preserved_and_visible": true,
+    "all_line_end_labels_shown_without_overlap": true,
+    "table_unknowns_not_zero": true,
+    "owner_viewed_raw_screens": [
+      {
+        "path": "docs/screenshots/b-reading-20261025/B-1440-default.png",
+        "sha256": "251950d7bd748e08ff9a84b292ea35f33e0c23f3883234726a971eff302c6043"
+      },
+      {
+        "path": "docs/screenshots/b-reading-20261025/B-1600-original-dispersion.png",
+        "sha256": "6f5bd7fd552a4ad1d01c332ba4288cfe9e3dfab34d7aae35ba92bc62b3ce8a60"
+      },
+      {
+        "path": "docs/screenshots/b-reading-20261025/B-1920-adverse-bars.png",
+        "sha256": "772c74644921d6ffdeaf300d45eff34c1fef53dd3ff61f556eac4ef684d99d92"
+      },
+      {
+        "path": "docs/screenshots/b-reading-20261025/B-2560-filtered-cohort.png",
+        "sha256": "caae26784b11afb07357b4f2bff205b0b8796ac226ed3618dbacc01b999fa920"
+      }
+    ],
+    "acceptance": "RELATED_COMPONENT_GEOMETRY_AND_SOURCE_READING_CHECKED_NOT_FULL_AESTHETIC_OR_CHINESE_COVERAGE"
+  },
+  "independent_review": {
+    "original_verdict": "REVISE",
+    "actual_model": "grok/grok-build/grok-4.7",
+    "effort": "high",
+    "session": "084190aa-b592-4818-9cd4-1dd9c88d01b6",
+    "original_report_sha256": "6a53b452806488022e7bd724a845e43d5da34dac6e6814950f0e5f37f13c41a3",
+    "followup": "RUNNING_ON_FROZEN06_NOT_CURRENT08_ACCEPTANCE",
+    "remaining_total_budget_seconds_at_dispatch": 6429,
+    "remaining_turns_at_dispatch": 105,
+    "owner_preflight_sequence_error": "Initial path-format preflight failed but owner dispatched; actual16 paths subsequently expanded and verified, separate postdispatch preflight passed. Original prompt unmodified, no redispatch."
+  },
+  "preserved_failures": [
+    "03normal labels2of3",
+    "04/05prepaint geometry race",
+    "06clinical-domain-excluded AE selection test",
+    "06raw dispersion titleCase versus enum mismatch",
+    "07expected expanded endpoint not equal actual abbreviated source title",
+    "07Ruff import formatting failure"
+  ],
+  "remaining": [
+    "source parser inequality and geometric mean defects (not triggered by this real blob)",
+    "unknown English endpoint titles and long selector labels",
+    "full-table column density and age orphan wrapping",
+    "cross-study numeric comparison and independent publication",
+    "complete M1-M6, latest installation and medical acceptance"
+  ]
+}

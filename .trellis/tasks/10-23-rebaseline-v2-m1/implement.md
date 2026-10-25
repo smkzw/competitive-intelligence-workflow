@@ -1,5 +1,27 @@
 # Execution checkpoint
 
+## 2026-10-25 当前阅读整合与独立REVISE待收口
+
+当前合批：5生产RED/17PASS后复合访视分层、真实队列/年龄、SD/区间及拼写阈值拒绝；144相关PASS。真实只读668点保持原value/arm/series/trial及完整fact ID；原current事实SHAeb4067d2…未变，70→34有逐事实old/newgroup映射2bdd3fe4…。06 manifest078bc0c8…全v2 1624PASS11.55s/Ruff/10JS/206Python600-80/268输入未变；原9JS计数漏记一mjs，当前实际10项逐个exit0，不改旧回执。
+06浏览器第一失败为在clinical过滤仍试选被排除AE，产品正确回退；改仪器显式all领域。第二显示真实原源dispersionType为标题式Standard Deviation而非测试enum，且spread是原string；原失败保留，新增真实型与未知型6反例（5RED），精确词表兼容、不改科学原值。07冻结d258373e…/HTML6bf056a1…，四宽实屏和新宽门已实际启动（13161/93169），未观察终态前不记PASS。
+C03同Grok084190aa…窄续接44085，预算只用剩6429s/105turns，不新派或增加独立意见。owner错误在预检拒绝路径注释/brace语法后仍启动runner；原prompt不热改、不重派，另展开16个实际存在路径验证preflight零warning通过，事故endpoint-review-followup01-preflight-incident.json保留，不能称启动前通过。此为调度顺序失误，不是模型或来源缺失；后续启动必须显式看exit。原review只读06，不把其报告当07实屏或全医学签收。
+
+08最终本组件开发门1630PASS11.81s/Ruff全/10JS/206Python600-80/268输入无变；manifest14e6ddeb…/HTML87330c0e…。新增原表组名阅读复用（1RED→169邻接PASS），仍保留原文可查。08当前24真实截图四宽×默认/阈值/筛后/AE/原文SD及resize通过，owner已看4当前原图，不冒称全部中文/全美学：下拉未知长英文、原表年龄孤字和列密度仍列后续。07实屏原文断言失败为假设了来源未写的扩展量表名，改用当前源逐fact原endpoint等值，原失败保留；07Ruff1导入空行问题修后当前全Ruff过，新08gate真正重跑，不改07FAIL。公共证据与4原图已准备。只核实并SIGTERM本人6个替代B预览，保留A/C5367和当前B73665，源/包/模型/截图不动，无广泛清理。
+
+当前f8bfcc8cf109e68043036fcc43d1db99a845b6e9已push/fresh remote同值；本人后续端点label/JS/测试WIP及不可变01–05候选完整保留。原780归并仍按62冻结run_8e357c79edf6/91108，未观察终态，不热改或重跑151研究批。全Goal active，不建暂停。
+
+8实际短标签在02源码有4positiveRED/4语义条件丢失RED后通过16自身及49邻接；完整1618PASS14.23s/Ruff9JS/205Python600-80，267字节不变，manifest38d2f253…；负值/0/原单位/分组键/来源不改。01真实668结果70图组完全相同科学点集合、8组缩短，四宽原文/筛选/glyph共12图；02拒绝条件修复后同源HTML逐字节相等01，有单独绑定，不篡旧图候选身份。年龄测试首次2FAIL是HTML原文需解码的断言仪器问题，生产autoescape未关。
+
+实际近值曲线末值只显示2/3的ZRender几何RED后，03普通label.shiftY仍2/3，04官方endLabel+shiftY各源值均显示但resize测量有碰撞，05静态临床图+调用方animationfalse不被共享工厂覆盖（1真实JS RED→71相关PASS）。后发现尺寸同步不等于文字paint；同一次浏览器源原样探针两RAF前碰撞、后避让成立。最终05不改产品字节，仅修QA等待实际paint，四宽默认/筛选/glyph原文与同实例四次resize共16图全部几何通过，待最终实看；保留所有失败，不将瞬时读矩形宣称持久ECharts缺陷。新JS尚无最终宽门，源/图点668全同，PID53472/58035只B固定源预览，未新取网/模型。
+
+C03实际Grok4.7/high/session084190aa-b592-4818-9cd4-1dd9c88d01b6，770.457s/23turns/return0/no fallback；原6a53b452806488022e7bd724a845e43d5da34dac6e6814950f0e5f37f13c41a3 REVISE全读，独立sourcehash/8labels/668点/70frames/escapedHTML与源码probe，未pytest/browser。采纳P1图可见class身份与449SD缺口；不把严格bucket未合并当图已可懂。下一合批复合访视+临床分层（通用colon，不NCT/药名特判）保留原class，EASI50/75/90分别成真实历时曲线、保持全668观察；显式原离散量/区间表和tooltip，完整队列/年龄、拒绝拼写阈值被缩写吞掉。周/日一律拆开建议拒绝：合同允许明确7天精确换周、保留原访视与同序列碰撞守卫，不近似月份。latent parse_number比较符/GEOMETRIC_MEAN作为下一来源根因包，未冒称本真实blob触发或已修；整体发布前须处理。修后同会话一次窄复核，不新开全页模型。
+
+M2独立初稿与实际恢复见子任务10-25-ciw2-m2-independent-reference：原41hash全同但China不齐，AD91/IgAN41/PNH20非分母，不封存。初轮Grok4.7high1906.37s/69turns/return0，同session0fac4122…剩59turns/5293s实际recovery69149，无fallback、只source-only资料新目录。用户已永久授权替代Ego空间，不因81用户控制再Ask/夺回，准一个替代且禁读生产输出。原报告所提tmp外部builder未运行，恢复写集收窄，原资料不改；full盲读边界审计仍pending。初preflight缺输出被拒，修后PASS保留1readlist识别warning，实际名单文件均存在。下一owner动作先修临床facet/dispersion整族，不重跑已完成源和旧模型，不暂停等用户回答已决问题。
+
+## 2026-10-25 下一阅读单元进行中
+
+f8bfcc8cf109e68043036fcc43d1db99a845b6e9已push且fresh remote确认。当前direct：只为完整匹配的通用结果语法和来源明示缩写生成简洁中文阅读标签；raw终点/观察/数值/单位/人群/组键均不改，未知/复合/未完整匹配保持原文。解决B选择器长英文及表格只有“完整终点”而看不出指标的问题，不新增药名/适应症字典、翻译服务或科学分组许可。先生产HTML/数据反例，合批实现后相关回归与固定真实668结果浏览器，未完成前不签M4中文/医学接受。独立三病参照与原780归并按原句柄继续，不重派或热改。
+
 ## 2026-10-25 当前CDE双序列及安装B节点
 
 方法direct：共享来源身份/缓存由owner单写；公开控件、原始十二列/专业图例/完整页集合提供决定性证据，不在本单元裁决适应症/获批/医学结论；独立三病参照节点仍另行执行，不新派冗余chair或全页review。PRD/PLAN同步生物临床试验申请原值LCSYSQ。名称是公开源申请类型，不强换化药IND。
