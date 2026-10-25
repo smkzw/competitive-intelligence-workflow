@@ -1,0 +1,79 @@
+{
+  "scope": "RENDER_ARTIFACT_RECOVERY_AND_FRESH_INSTALL_COMPONENT_NOT_FULL_GOAL",
+  "base_commit": "ff69abd3adc5a9233344941c71daf63ff8ea17fc",
+  "runtime_source_files": {
+    "src/ciw2/pipeline/stage_versions.py": "5669ae061984d1809e9b556c4c05339c778f7c1ef3c13cdcbdf328deb9070f93",
+    "src/ciw2/pipeline/stage_dependencies.py": "1d558232a7c2d1ee44634cbeb846d8f7095ac3c42c25c0de8ac56f26695f9163",
+    "src/ciw2/pipeline/runner.py": "eb70b779b0acaef24cdd3efc8e764eb3e085176510cb85f8fdaa388df122b363"
+  },
+  "gate": {
+    "pytest_passed": 1892,
+    "seconds": 13.55,
+    "ruff_pass": true,
+    "warnings": 1,
+    "manifest_sha256": "98a73d7c03e01e4a442ec7ffa524f0e97967d53405f795792ea184c47a8ff345",
+    "files": 351,
+    "python_files": 234,
+    "js_files": 13,
+    "structure_600_80_pass": true,
+    "js_syntax_pass": true,
+    "all_frozen_files_unchanged": true
+  },
+  "red_cases": {
+    "missing_and_tampered_report": 2,
+    "initial_unchanged_positive": 1
+  },
+  "related_before_final_positive": 61,
+  "source_copy_proof": "ciw-data/render-restored-artifacts-20261025-21/receipt.json",
+  "installed_actual_restore": {
+    "scope": "ACTUAL_B_DATA_STANDARD_BACKUP_RESTORE_RENDER_COMPONENT_NOT_FULL_PIPELINE_OR_MEDICAL_ACCEPTANCE",
+    "frozen_manifest_sha256": "98a73d7c03e01e4a442ec7ffa524f0e97967d53405f795792ea184c47a8ff345",
+    "input_run": "run_1e2e2c33b90a",
+    "real_facts": 708,
+    "result_ids_preserved": 668,
+    "old_receipt_missing_artifacts_rerendered": true,
+    "new_receipt_restored_without_html_rerendered": true,
+    "unchanged_page_not_rewritten": true,
+    "tampered_page_repaired": true,
+    "intake_model_source_calls": 0,
+    "scientific_tables_unchanged": true,
+    "history_receipts_unchanged_and_no_duplicate": true,
+    "restored_html_sha256": "70345102191022717fa4f5b09326ff68f4b1cfb9695e92bcb1f53dc28653968b",
+    "frozen_inputs_unchanged": 351
+  },
+  "installed_legacy_scope": {
+    "scope": "INSTALLED22_REAL_LEGACY_REFUSAL_ONLY",
+    "status": "failed_before_callbacks",
+    "model_source_calls": 0,
+    "all_stage_unit_agent_science_rows_unchanged": true,
+    "original_backup_unchanged": true,
+    "whole_goal_complete": false
+  },
+  "installation": {
+    "wheel_sha256": "50cd7d99847c5a38e7abec00181649614db4c4aec274b0067791cad69d39bd83",
+    "sdist_sha256": "e65ea11bbea0a1f89a386106957299f53d9eddb07626555ff20b15b4a7c7e042",
+    "assets_checked": 23,
+    "cli_skill_lines": 9,
+    "invalid_explicit_override_exit": 2,
+    "data_created": false,
+    "external_package_downloads": 0
+  },
+  "source_binding_sha256": "cbb1210c8fc1a1f3974912d47fd6db2339f26660a6bd93b6c10a61550bca48b1",
+  "resource_cleanup": {
+    "owned_install20_regular_files_removed": 1805,
+    "logical_bytes_removed": 26869048,
+    "physical_bytes_reclaimed": "NOT_MEASURED",
+    "wheel_sdist_versions_receipts_and_original_sources_retained": true
+  },
+  "failures_retained": [
+    "20 direct build lacked setuptools; uv offline isolated build resumed same inputs successfully",
+    "20 package itself predates the artifact fix and is not artifact-recovery accepted"
+  ],
+  "not_accepted": [
+    "ordinary complete C pipeline",
+    "medical summary acceptance",
+    "M2 golden denominator/95% recall",
+    "complete A/B/C visual and clinical acceptance",
+    "RC"
+  ]
+}

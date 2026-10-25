@@ -37,3 +37,11 @@ def status(svc: Service, run_id: str) -> str:
 def snapshot(svc: Service) -> list[dict]:
     return svc.db.query(
         "SELECT name, status, output_json, error FROM stages ORDER BY name")
+
+
+def render_output(rc):
+    """Create a real small fixture file when a control test declares render outputs."""
+    root = rc.settings.portals_dir / rc.project_id
+    root.mkdir(parents=True, exist_ok=True)
+    (root / 'C.html').write_text('controlled stage runtime file')
+    return {'files': ['C.html']}

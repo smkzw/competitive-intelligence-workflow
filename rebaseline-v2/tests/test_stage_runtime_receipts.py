@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import json
 
-from runtime_resume_helpers import plan, receipts, service, snapshot, status
+from runtime_resume_helpers import plan, receipts, render_output, service, snapshot, status
 
 from ciw2.pipeline import runner, stage_versions
 from ciw2.pipeline.stages import Stage
@@ -259,7 +259,7 @@ def test_failed_stage_is_never_reused(settings, monkeypatch):
 
 def test_unit_cache_and_prior_receipts_survive_stage_rerun(settings, monkeypatch):
     svc = plan(settings, monkeypatch, [Stage('trial_evidence', lambda rc: {'rows': 1}),
-                                       Stage('render', lambda rc: {'files': ['C.html']})])
+                                       Stage('render', render_output)])
     pid = svc.create_project('单元缓存', ['C'])
     run_id = svc.db.create_run(pid)
     assert stage_versions.ensure_pipeline_scope(svc.context(pid, run_id))

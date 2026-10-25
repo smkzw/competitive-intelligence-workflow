@@ -8,7 +8,7 @@ from __future__ import annotations
 import json
 from dataclasses import replace
 
-from runtime_resume_helpers import plan, receipts, service, status
+from runtime_resume_helpers import plan, receipts, render_output, service, status
 
 from ciw2.pipeline import runner, stage_versions
 from ciw2.pipeline.runner import stages_for
@@ -132,7 +132,7 @@ def test_render_asset_change_reruns_render_without_replaying_research(settings, 
 
     def render(rc):
         calls.append('render')
-        return {'files': ['C.html']}
+        return render_output(rc)
 
     svc = plan(settings, monkeypatch, [Stage('analysis_C', analysis, frozenset({'C'})),
                                       Stage('render', render)])

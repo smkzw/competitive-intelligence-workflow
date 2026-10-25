@@ -387,25 +387,55 @@ def output_digest(output: Any) -> str:
     return _digest(output)
 
 
+def _render_artifacts(rc: Any, output: Any) -> list[dict[str, Any]] | None:
+    if not isinstance(output, dict) or 'files' not in output:
+        return None
+    names = output['files']
+    allowed = {f'{report}.html' for report in rc.project['reports']}
+    if not isinstance(names, list) or set(names) != allowed or len(names) != len(allowed):
+        raise ValueError('渲染文件集合与本项目报告不一致')
+    root = rc.settings.portals_dir / rc.project_id
+    artifacts = []
+    for name in sorted(names):
+        path = root / name
+        valid = path.is_file() and not path.is_symlink()
+        artifacts.append({'name': name, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()
+                          if valid else None})
+    return artifacts
+
+
+def _receipt_name(receipt: dict[str, Any]) -> str:
+    name = (f"{RECEIPT_PREFIX}{receipt['stage']}:"
+            f"{receipt['binding_sha256'][:16]}:{receipt['output_sha256'][:16]}")
+    if receipt.get('artifacts_sha256'):
+        name += ':' + receipt['artifacts_sha256'][:16]
+    return name
+
+
 def completion_receipt(rc: Any, stage: Any, output: Any,
                        predecessors: Sequence[str] = (), *,
                        expected_binding: dict[str, Any] | None = None) -> dict[str, Any]:
     binding = stage_binding(rc, stage, predecessors)
     if expected_binding is not None and binding != expected_binding:
         raise RuntimeError('阶段运行期间源码、Skill 或计划绑定发生变化；拒绝记录成功回执')
-    return {
+    receipt = {
         'schema': SCHEMA_VERSION,
         'stage': stage.name,
         'binding': binding,
         'binding_sha256': _digest(binding),
         'output_sha256': output_digest(output),
     }
+    artifacts = _render_artifacts(rc, output) if stage.name == 'render' else None
+    if artifacts is not None:
+        if any(item['sha256'] is None for item in artifacts):
+            raise RuntimeError('渲染文件不存在或不是普通文件，拒绝成功回执')
+        receipt.update(artifacts=artifacts, artifacts_sha256=_digest(artifacts))
+    return receipt
 
 
 def write_receipt(rc: Any, receipt: dict[str, Any]) -> None:
     """Append-only receipt row; the caller owns the surrounding success transaction."""
-    name = (f"{RECEIPT_PREFIX}{receipt['stage']}:"
-            f"{receipt['binding_sha256'][:16]}:{receipt['output_sha256'][:16]}")
+    name = _receipt_name(receipt)
     serialized = json.dumps(receipt, ensure_ascii=False)
     existing = rc.db.one("SELECT status, output_json FROM stages WHERE run_id=? AND name=?",
                          (rc.run_id, name))
@@ -449,7 +479,9 @@ def _receipt_index(rc: Any) -> dict[str, list[dict[str, Any]]]:
                 or not isinstance(output_sha256, str) or len(output_sha256) != 64
                 or any(char not in '0123456789abcdef' for char in output_sha256)):
             continue
-        expected_name = f'{RECEIPT_PREFIX}{stage}:{binding_sha256[:16]}:{output_sha256[:16]}'
+        if 'artifacts' in receipt and receipt.get('artifacts_sha256') != _digest(receipt['artifacts']):
+            continue
+        expected_name = _receipt_name(receipt)
         if row['name'] != expected_name:
             continue
         index.setdefault(stage, []).append(receipt)
@@ -466,6 +498,15 @@ def _verdict(rc: Any, stage: Any, predecessors: Sequence[str], row: dict[str, An
                 and receipt.get('output_sha256') == digest]
     if not matching:
         return 'incompatible'
+    if stage.name == 'render':
+        try:
+            artifacts = _render_artifacts(rc, _stored_output(row))
+        except (ValueError, OSError, TypeError):
+            return 'incompatible'
+        if artifacts is not None:
+            if any(item['sha256'] is None for item in artifacts):
+                return 'incompatible'
+            matching = [receipt for receipt in matching if receipt.get('artifacts') == artifacts]
     binding = stage_binding(rc, stage, predecessors)
     if any(receipt.get('binding') == binding for receipt in matching):
         return 'compatible'
