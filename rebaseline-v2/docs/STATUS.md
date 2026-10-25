@@ -6,9 +6,9 @@
 
 ## 当前活动与安全恢复
 
-- 已push并fresh remote确认 **571ae777da835f4663bf9cca916ed5c106096a71**，前序f61921b0/62e6355f/0a39e40d保留。仅英文工程rebaseline-v2，v1未知工作树/根HANDOFF不动，旧中文工程零接触；不reset/clean/add-all。
+- 已push并fresh remote确认 **c49700d38f7ff4a707430ca77c50bf35ba45735b**，前序f61921b0/62e6355f/0a39e40d保留。仅英文工程rebaseline-v2，v1未知工作树/根HANDOFF不动，旧中文工程零接触；不reset/clean/add-all。
 - **真实摘要run_8e357c79edf6已终态FAILED**（原prj_f21d0823b44a，62e6355f冻结，隔离real-synthesis-20261025-02）；不再等待91108、不冒作运行中。实际GLM glm-5.3-flash成功事件2、备用DGX DeepSeek-V4.1-Flash-1017事件84；GLM502后按授权备用，未使用Qwen。原151/780/四科学表/runtime均未变，0新来源，最终findings0，无报告接受。
-- 失败根因为第32个归并包输入9要点/62别名，step3提交5要点全部缺fact_refs，非实际外来引用；Finding旧schema默认空数组，使其在Agent内算已提交、外部再拒绝。31合格归并单元完整保留。下一修复为schema要求非空引用，复用现有4步纠正机会并先资格核对缓存，不新建执行器、不重跑151批或31合格单元。公开摘要不复制原模型正文；精确失败审计在该运行failure-root-audit.json。
+- 失败根因为第32个归并包输入9要点/62别名，step3提交5要点全部缺fact_refs，非实际外来引用；Finding旧schema默认空数组，使其在Agent内算已提交、外部再拒绝。31合格归并单元完整保留。该最小schema修复已56相关PASS，正式冻结与缓存资格迁移待做；复用现有4步纠正机会，不新建执行器、不重跑151批或31合格单元。公开摘要不复制原模型正文；精确失败审计在该运行failure-root-audit.json。
 - 只归并原780要点，不重跑151原研究批。原780 SHA295f9be691f80c9cc414d95f99f45e9e787e51105c66cb147621d65a6b0c34a5，5212 current引用、46CAS、四科学表及151输出哈希全部资格核对；原source/事实只读不改。原0a39准备目录01从未启动，已有superseded回执，旧manifest不改。
 - 旧句柄52075/旧ec32归并已获授权停止并有备份，不再等待。暂停原文/前后DB+46CAS/300缓存/303旧Qwen事件在PAUSE_HANDOFF_20261024_SYNTHESIS及ciw-data/pause-20261024-synthesis；不能把旧DB的running字段当活进程。
 - 隔离归并不是最终流水线接受，失败已记录；修复/恢复后仍须摘要逐项核源，再用当前UI重渲染；新UI不回写62冻结运行。原控制器未用SIGINT停止，不改其冻结字节；此次为自然失败而非人工中断。
@@ -43,9 +43,13 @@
 - 当前B阅读08 manifest14e6ddeb01bc17cd5eec0ce09830e8393e889d38026fdd845c4595d14c426107，HTML87330c0e56f61a82d8f0d77f87c9b70fccf337e223e7753cdba99737c0ba6da9；原source50bc0483…与current事实eb4067d2…不变，只读原DB。全668结果/668图点，70→34为复合访视按阈值形成各自曲线，不删观察；逐fact old/new映射2bdd3fe4…保留。449原离散量按原SD显示，0/单侧端点及raw string不改；队列/年龄图例与表复用同一阅读路径，原组名/完整定义可展开。
 - 08完整v2 **1630PASS11.81s**，Ruff全通过，实际10JS逐项语法过，206Python600/80过（create_app例外），268冻结输入复核不变。06完整1624PASS、07完整1630PASS但RuffFAIL均保留，不改历史；新冻结08是最终本组件开发门，不冒称M4完成。
 - 同08真实四宽default/阈值三队列/筛后单队列/AE条形/原文SD各5态，加同图四次resize共24截图，均为实际paint后几何/末值/无页溢/18px/真实glyph→原行/原文核对通过；owner实看4当前原图（1440默认、1600原文SD、1920AE、2560筛选）。未知英文标题、长选择器与完整表年龄孤字/列密度仍待后续，不宣称全前端美学或全中文接受。公共精简证据与4样图见docs/evidence/20261025-b-reading-facets-dispersion.json。
-- 原Grok4.7/high独立报告6a53b452…REVISE保留。采纳图阈值可见、SD、完整队列及拼写阈值拒绝；周/日一律拆开建议拒绝，合同保留精确7天换周、原访视与碰撞守卫。latent源比较符/GEOMETRIC_MEAN留下一根因包，非本真实blob触发。一次同会话084190aa…窄复核44085仍待终态，只审冻结06，不冒称08独立接受；无新全页循环。owner预检路径语法失败后仍dispatch是顺序失误，原prompt/事故保留，事后展开16实际路径并preflight零警告过，不伪称启动前通过。
+- 原Grok4.7/high独立报告6a53b452…REVISE保留。采纳图阈值可见、SD、完整队列及拼写阈值拒绝；周/日一律拆开建议拒绝，合同保留精确7天换周、原访视与碰撞守卫。latent源比较符/GEOMETRIC_MEAN留下一根因包，非本真实blob触发。一次同会话084190aa…窄复核44085已终态：实际grok-4.7-build/high、1469.406s/11turns/return0/no fallback；冻结06有界PASS、独立38PASS0.52s，原REVISE保留全中文等后续，只审06不冒称08独立接受；无新全页循环。owner预检路径语法失败后仍dispatch是顺序失误，原prompt/事故保留，事后展开16实际路径并preflight零警告过，不伪称启动前通过。
 - M2独立初稿实际grok/grok-build/grok-4.7/high/session0fac4122-bf69-441d-a7db-44dd0f0d7a91，1906.37s/69turns/return0/no fallback；AD91/IgAN41/PNH20是暂定条目，不是全集或分母。41文件7984956字节由owner逐哈希核对，manifestbef0b8ce7a44e97762d7b27a61881985dbb4d3e659bcfdaedab8843eccbf999c；中国AD仅20/464原导出，其余中国页缺失/别名未闭合，故不封存、不计算召回。
 - M2 recovery01已单独preflight通过后同Grok会话实际启动，句柄69149；仅补剩余中国公开源/范围及别名，禁止读生产候选/Skill/DB/报告。此前会话用69/128turns、1906.37/7200s，本续接限定剩59turns/5293s、同模型无备用，不重置总预算。用户永久授权替代专用空间，故允许新建一个替代研究空间，不夺回用户控制的81、不碰owner80；不再Ask。只写reference-goldens-20261025/recovery-01，原41文件不改。首preflight缺输出路径失败后修，第二通过有1文件列表识别warning；实际明确名单/原41文件存在。原报告提及tmp外部builder，未由owner执行，续接收回允许写集并保留该限制。全部初稿仍PROVISIONAL，独立性全工具边界审计尚未完成。
+
+## 当前引用schema恢复
+
+- 最小生产改动仅Finding.fact_refs为必填非空数组，第三步漏引用可由现有第四步纠正；4真RED→56相关PASS/Ruff。未延长预算、不改harness/路由/来源/归并算法。新固定manifest7c5a6c3d…全v2 **1678PASS11.60s**、Ruff/10JS/208Python600-80/271输入不变。实际隔离准备run_d510975298a3（real-synthesis-20261025-03）：原780、首层76包，经精确旧签名/task/源/新schema及生产后检验31原输出保全，原source/单元不改、49CAS校验链接、0模型/来源；待32–76包。状态PREPARED_NOT_STARTED，不当运行或接受。原4模型步不变，提交后绑定Git冻结runtime再启动此唯一run，不另造run。
 
 ## 当前来源标量纠偏
 

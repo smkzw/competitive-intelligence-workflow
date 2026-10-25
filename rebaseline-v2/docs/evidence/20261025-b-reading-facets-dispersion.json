@@ -132,10 +132,25 @@
     "effort": "high",
     "session": "084190aa-b592-4818-9cd4-1dd9c88d01b6",
     "original_report_sha256": "6a53b452806488022e7bd724a845e43d5da34dac6e6814950f0e5f37f13c41a3",
-    "followup": "RUNNING_ON_FROZEN06_NOT_CURRENT08_ACCEPTANCE",
+    "followup": "BOUNDED_PASS_ON_FROZEN06_NOT_CURRENT08_OR_FULL_PRODUCT_ACCEPTANCE",
     "remaining_total_budget_seconds_at_dispatch": 6429,
     "remaining_turns_at_dispatch": 105,
-    "owner_preflight_sequence_error": "Initial path-format preflight failed but owner dispatched; actual16 paths subsequently expanded and verified, separate postdispatch preflight passed. Original prompt unmodified, no redispatch."
+    "owner_preflight_sequence_error": "Initial path-format preflight failed but owner dispatched; actual16 paths subsequently expanded and verified, separate postdispatch preflight passed. Original prompt unmodified, no redispatch.",
+    "followup_runtime": {
+      "model": "grok-4.7",
+      "session_id": "084190aa-b592-4818-9cd4-1dd9c88d01b6",
+      "duration_seconds": 1469.406,
+      "returncode": 0,
+      "grok_reasoning_effort": "high",
+      "raw_model_keys": [
+        "grok-4.7-build"
+      ],
+      "raw_num_turns": 11,
+      "report_sha256": "e2bc01c0fe61c325f1fd32bb5ab965092bdc0eb4a0cdcb08f953cef163b43e5b"
+    },
+    "independent_related_tests": "38 passed in0.52s, frozen imports only; no browser/full gate",
+    "adjudication": "Threshold/cohort/dispersion/refusal repaired on06;07 exact source SD aliases and08 table cohort use owner source/negative/24screen evidence. OriginalREVISE retained for full Chinese and follow-ons; source inequalities/geometric mean later corrected in c49700d3 with separate production tests, not credited to this review.",
+    "p3_deferred": "Seventy Five(EASI) without a metric word, Percentage/Percentile suffixes can still shorten in unsupported future titles; absent29actual source titles; remains a follow-on lexical guard."
   },
   "preserved_failures": [
     "03normal labels2of3",

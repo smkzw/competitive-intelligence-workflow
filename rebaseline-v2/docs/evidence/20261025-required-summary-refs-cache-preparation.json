@@ -1,0 +1,165 @@
+{
+  "scope": "REQUIRED_CITATIONS_AND_QUALIFIED_CACHE_PREPARATION_NOT_REAL_RUN_OR_M1_ACCEPTANCE",
+  "base_commit": "c49700d38f7ff4a707430ca77c50bf35ba45735b",
+  "manifest_sha256": "7c5a6c3d249a17d9cfd2aac02a11c6ad203bcce2b1aec123ebe89fe79bd495fa",
+  "production_change": "One field: Finding.fact_refs now required minItems1, no default. Existing submit schema retry reused; no harness/route/algorithm change.",
+  "development_gate": {
+    "scope": "EXPLICIT_FROZEN_V2_DEVELOPMENT_NOT_MEDICAL_OR_FINAL_PRODUCT",
+    "manifest_sha256": "7c5a6c3d249a17d9cfd2aac02a11c6ad203bcce2b1aec123ebe89fe79bd495fa",
+    "pytest": {
+      "exit": 0,
+      "seconds": 12.077,
+      "tail": [
+        "......................                                                   [100%]",
+        "=============================== warnings summary ===============================",
+        "../../../.venv/lib/python3.13/site-packages/fastapi/testclient.py:1",
+        "  rebaseline-v2/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.",
+        "    from starlette.testclient import TestClient as TestClient  # noqa",
+        "",
+        "-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html",
+        "1678 passed, 1 warning in 11.60s"
+      ]
+    },
+    "ruff": {
+      "exit": 0,
+      "seconds": 0.022,
+      "tail": [
+        "All checks passed!"
+      ]
+    },
+    "javascript": [
+      {
+        "path": "src/ciw2/render/static/kz-motion.js",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/render/static/portal.js",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/render/static/kz-site.js",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/render/static/kz-tokens.js",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/render/static/echarts.min.js",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/sources/cde_browser.mjs",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/sources/china_browser.mjs",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/sources/cde_review_browser.mjs",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/sources/china_detail.mjs",
+        "exit": 0
+      },
+      {
+        "path": "src/ciw2/sources/nmpa_detail.mjs",
+        "exit": 0
+      }
+    ],
+    "python_files": 208,
+    "size_600_80_violations": [],
+    "immutable_input_changes": []
+  },
+  "red_cases": 4,
+  "related_passed": 56,
+  "real_failure_root": "Five findings omitted refs atstep3; previous outer post-check prevented using remainingstep4. Synthetic production loop now corrects on4 and repeated omission fails at4 with no success cache.",
+  "preparation": {
+    "state": "PREPARED_NOT_STARTED_NOT_ACCEPTED",
+    "scope": "SYNTHESIS_ONLY_NOT_PIPELINE",
+    "candidate_manifest_sha256": "7c5a6c3d249a17d9cfd2aac02a11c6ad203bcce2b1aec123ebe89fe79bd495fa",
+    "project_id": "prj_f21d0823b44a",
+    "prepared_run_id": "run_d510975298a3",
+    "origin_run": "run_8e357c79edf6",
+    "original_findings": 780,
+    "original_sha256": "295f9be691f80c9cc414d95f99f45e9e787e51105c66cb147621d65a6b0c34a5",
+    "first_layer_packets": 76,
+    "qualified_count": 31,
+    "pending_packets": [
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76
+    ],
+    "CAS_verified_linked": 49,
+    "original_source_and_unit_history_unchanged": true,
+    "old_schema_sha256": "54bf1e3186f3468a916efe12760cd854de56ab8611f3c1d6bae8b722ddd62b13",
+    "new_schema_sha256": "6e5e5ef6a43afc9306236e4593918364ac67fc0649d915239ba382ddf53e00ea",
+    "new_model_calls": 0,
+    "new_source_calls": 0,
+    "pipeline_acceptance": "NOT_RUN",
+    "medical_acceptance": "PENDING",
+    "next": "Commit required-ref code, bind committed runtime to same source/schema and qualified cache, then start only this prepared run with authorized routes. Do not create another run or rerun original151/31."
+  },
+  "preparation_sha256": "1f3ff1f7cb9258592453417911a20bd6f93899616e8a37faca32c371bce1d0a9",
+  "qualified_unit_evidence": {
+    "count": 31,
+    "first_layer_packets": 76,
+    "first_pending_packet": 32,
+    "old_schema_sha256": "54bf1e3186f3468a916efe12760cd854de56ab8611f3c1d6bae8b722ddd62b13",
+    "new_schema_sha256": "6e5e5ef6a43afc9306236e4593918364ac67fc0649d915239ba382ddf53e00ea",
+    "qualification": "Exact task hash + unchanged reducer/rules/analysis-c skill + original source science + new AnalysisResult + existing production post-check. Output equal, historical rows equal,0model/source calls. Source scientific tables unchanged.",
+    "old_run": "run_8e357c79edf6",
+    "prepared_run": "run_d510975298a3",
+    "state": "PREPARED_NOT_STARTED_NOT_ACCEPTED"
+  },
+  "current_browser": "No graph/template changes from08; this schema repair is not another browser or medical PASS.",
+  "remaining": [
+    "Commit and bind new runtime; start only prepared run with authorizedGLM->DGX backups",
+    "Final synthesis source review and normal M1 flow",
+    "M2 independent source references, Chinese reading and current full delivery"
+  ]
+}

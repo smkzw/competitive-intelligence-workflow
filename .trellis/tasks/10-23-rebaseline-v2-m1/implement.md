@@ -1,5 +1,14 @@
 # Execution checkpoint
 
+## 2026-10-25 当前Finding必填引用与31单元恢复
+
+方法direct：真实失败包step3/5要点均缺fact_refs，旧模型schema将其默认[]；是明确类型合同缺口，无医学解释争议。最小生产改动仅Finding.fact_refs从默认空数组改Field(min_length=1)，复用已有schema错误反馈及第四步，不改执行器、全局路由、来源或归并算法。
+新冻结required-refs01 manifest7c5a6c3d249a17d9cfd2aac02a11c6ad203bcce2b1aec123ebe89fe79bd495fa，1678PASS11.60s/Ruff/10JS/208Python600-80/271输入后核无变。实际准备恢复03：run_d510975298a3，复制旧failed终态DB，原780SHA295f9…/原科学四表相同，49CAS逐hash后硬链接，旧31synthesis unit全部按精确旧task签名找到；stage/summary_lineage/harness/context/analysis-c原字节不变，只输出schema升级。新schema+现生产后检查复验31输出精确同值，只在隔离new run写cache_qualification和新key，0模型/来源；原run所有阶段行与科学资料不变。首层76包，待32–76；prep状态NOT_STARTED，不能称恢复已运行。提交后Git archive绑定同源码/模型schema再启动唯一此run；不再建另一个run，不重做31或151。新公共精简回执20261025-required-summary-refs-cache-preparation.json。
+
+C03窄续接44085实际终态0，同grok/grok-build/grok-4.7/high/session084190aa…，raw modelUsage grok-4.7-build，1469.406s/11turns/no fallback，报告e2bc01c0fe61c325f1fd32bb5ab965092bdc0eb4a0cdcb08f953cef163b43e5b有界PASS。独立冻结06生产38PASS0.52s、668源字段逐项相等、34分组/0丢失、阈值及语义反例，无browser/fullgate。原REVISE仍保存，07/08只由owner映射/阴性/24图接受，源scalar修复由c497独立组件证据不借此review。P3未出现在原29标题的纯拼写数字/Percentage/Percentile漏拦保留后续，不为它新启全页循环。M2 recovery69149仍待终态，不轮询或重派。
+
+四场景先4真RED（另两初期FrozenInstanceError为测试仪器，改dataclasses.replace保留Settings冻结）；修schema后55PASS/1新测试误以为最后message必是tool，实际最后为保留一步的user提醒，改取最后tool、不删预算提示；最终56相关PASS0.65s/Ruff。真实既有script4步可在第三步漏引用后第四步修正，持续遗漏4步明确budgetfailed且无成功cache。源码/新测试尚未提交/运行新模型，原31缓存未修改。下一做固定全门及按旧/新schema+精确task/source/hash资格迁移至隔离新run，禁止无界重跑31/151。
+
 ## 2026-10-25 当前来源标量包与真实归并终态
 
 方法direct：来源明确比较符/统计标签与数值等式可由固定原文及生产反例决定；共享数值/来源/类型由owner单写，不为确定性词法再开模型会商。现有B独立06窄复核44085、M2源清单recovery69149仍按原句柄待终态，不轮询或重派。571ae777已push且fresh remote同值。

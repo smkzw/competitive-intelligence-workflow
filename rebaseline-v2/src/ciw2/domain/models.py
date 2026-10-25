@@ -118,7 +118,7 @@ class ExtractionResult(Strict):
 class Finding(Strict):
     title: str = Field(description="中文临床问题式标题")
     bullets: list[str]
-    fact_refs: list[str] = Field(default_factory=list)
+    fact_refs: list[str] = Field(min_length=1)
 
 
 class AnalysisResult(Strict):
