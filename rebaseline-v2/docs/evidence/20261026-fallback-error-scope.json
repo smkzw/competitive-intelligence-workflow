@@ -1,0 +1,81 @@
+{
+  "scope": "PER_CHAT_ERROR_RECEIPT_METADATA_ONLY_NOT_ROUTING_OR_SCIENTIFIC_CHANGE",
+  "base_commit": "fefafc806eb92443c10d987870268f3139df04fa",
+  "development": {
+    "scope": "PER_CHAT_ERROR_RECEIPT_METADATA_ONLY_NOT_ROUTING_OR_SCIENTIFIC_CHANGE",
+    "RED": 3,
+    "related_PASS": 52,
+    "related_seconds": 1.06,
+    "ruff": "PASS",
+    "runtime_version_probe": "13/13 C scientific stage bindings exactly same as frozen164; no DB/CAS/network/model writes",
+    "live135_hotpatched": false,
+    "prior_errors_rewritten": false,
+    "new_failure_detail_scope": "current_chat",
+    "prior_failed_models": "distinct route context only; not additional attempts",
+    "new_full_gate_or_install": "NOT_RUN_169_METADATA_DELTA",
+    "original_sources_modified": false
+  },
+  "observed_closed_data": {
+    "range": [
+      4011,
+      4983
+    ],
+    "baseline_event": 4003,
+    "baseline_cumulative_failure_entries": 1,
+    "model_error_events": 135,
+    "new_logged_route_failure_entries": 136,
+    "per_requested_model": [
+      {
+        "model": "deepseek",
+        "http_status": null,
+        "error_type": "LLMProtocolError",
+        "new_entries": 1
+      },
+      {
+        "model": "qwen",
+        "http_status": 429,
+        "error_type": "LLMError",
+        "new_entries": 135
+      }
+    ],
+    "exact_prefix_issues": [],
+    "last_closed_recovery_successes": {
+      "range": [
+        4881,
+        4983
+      ],
+      "successful_replies": 20,
+      "actual_model": "Qwen3.8-Flash-Next"
+    }
+  },
+  "counting_correction": "9180 Qwen appearances in repeated old arrays are not 9180 new calls. Fixed-range prefix differences identify 135 new Qwen failures and one DeepSeek failure; prior GLM failure is context before the range. Not provider billing or all-attempt usage.",
+  "storage": {
+    "scope": "LOSSLESS_COMPRESSION_OF_NEW_REDUNDANT_DERIVED_METADATA_ONLY",
+    "source": "metadata.json",
+    "source_sha256": "6ee9d128998a18eec612e5f983142f46780fc4d9aa459364b25c867bbbc6fbad",
+    "source_bytes": 1937125,
+    "stored": "metadata.json.gz",
+    "stored_sha256": "700e1528bb02a031e0906e574ce0c42f78db69898828cc25c1f082f2be5dac9d",
+    "stored_bytes": 10095,
+    "logical_bytes_reduced": 1927030,
+    "verification": "decompressed bytes exactly equal original before precise removal",
+    "original_run_database_or_events_modified": false,
+    "old_receipts_manifests_or_CAS_modified": false
+  },
+  "source166_167": {
+    "GS101_CDE_drug_query": "complete_zero_for_query_only; class unresolved",
+    "primary_registry": "https://clinicaltrials.gov/study/NCT07386743",
+    "primary_registry_get": "actual primary JSON retrieved; no explicit biosimilar declaration; similarity study not converted to class proof",
+    "independent_reference_sealed": false,
+    "recall_computed": false
+  },
+  "ordinary135_boundary03": {
+    "run_status": "running",
+    "tasks_enrich": 151,
+    "successful_model_replies_enrich": 359,
+    "error_events_enrich": 135,
+    "latest_observed_event": 5043,
+    "no_full_report_acceptance": true,
+    "fourth_kernel_wait": "native17428, exact74351 NOTE_EXIT,7200s; no periodic progress polling"
+  }
+}

@@ -25,6 +25,7 @@ class FallbackLLM:
         return self.routes[self.index].model
 
     def chat(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]] | None = None) -> LLMReply:
+        self.failure_details = []  # This call owns its evidence; old failures are not new attempts.
         while self.index < len(self.routes):
             if self._cancel_check is not None:
                 self._cancel_check()  # Do not enter another configured route after a stop request.
@@ -32,8 +33,10 @@ class FallbackLLM:
             try:
                 reply = route.chat(messages, tools)
             except LLMError as exc:
-                self.failures.append(route.model)
+                if route.model not in self.failures:
+                    self.failures.append(route.model)
                 self.failure_details.append({'requested_model': route.model, 'error_type': type(exc).__name__,
+                                             'call_scope': 'current_chat',
                                              **getattr(exc, 'metadata', {})})
                 if self.index + 1 == len(self.routes):
                     raise

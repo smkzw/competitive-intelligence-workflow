@@ -2,13 +2,13 @@
 
 **2026-10-26｜Goal ACTIVE｜rebaseline-v2｜M1–M6尚未全部交付，非RC**
 
-唯一产品合同：01_PRD、02_ARCHITECTURE、03_PLAN、04_AGENT_RULES。仅英文工程；旧中文工程零接触，未知v1工作树保留。本轮基线已推60adf30f，当前HEAD以Git为准。当前状态只在本文件；详细现场和失败保留根Trellis `10-23-rebaseline-v2-m1/implement.md`、M2任务及下列证据索引，不沿历史running文字重跑。
+唯一产品合同：01_PRD、02_ARCHITECTURE、03_PLAN、04_AGENT_RULES。仅英文工程；旧中文工程零接触，未知v1工作树保留。已推来源/前端批fefafc80，169错误元数据修复为后续增量，当前HEAD以Git为准。当前状态只在本文件；详细现场和失败保留根Trellis `10-23-rebaseline-v2-m1/implement.md`、M2任务及下列证据索引，不沿历史running文字重跑。
 
 ## 当前并行工作
 
 |单元|真实状态|下一安全动作|
 |---|---|---|
-|135 普通PNH完整C|同project/run、固定134仍运行；原生83367、child74351；无seed/短计划|第三次kernel退出事件，原生7686；不轮询DB/阶段或终止健康任务|
+|135 普通PNH完整C|同project/run、固定134仍运行；原生83367、child74351；无seed/短计划|第四次kernel退出事件，原生17428；不轮询DB/阶段或终止健康任务|
 |144 工作台前端|终态已收；CodeBuddy后进入声明备用，最终Pi/openai-codex/gpt-6-luna:max；原4派发SHA不变/audit PASS|owner已读差异/6便携用例，现36相关PASS及venv Ruff PASS；不把备用续接当独立审阅|
 |147 图表主题|当前token临床色板、文字/轴网格色；超五系列分面，共同数值域；成族RED后相关通过|与144/148合并一次完整门、当前实屏和独立视觉挑战|
 |148 入排上下文|真实页面发现裸IGA≤2标签可误读；现完整原条款优先、提取指标折叠、原文否定加粗；科学事实/规则不改|93相关PASS；继续实际页面/语义呈现核验，不称已完成医学接受|
@@ -28,7 +28,7 @@
 
 ## 普通研究与来源恢复
 
-- 两次kernel边界均PENDING_TIMEOUT_NOT_FAILURE，过程中0进度轮询；第二次实际elapsed12277.68s保留，不改写成7200s。边界快照已通过triage、expand、coverage_review、trial_scope_review；正在enrich_drugs，10任务/207成功model事件/17submit记录，不能当十任务全部采用。最新事件4010/02:01:16Z。下一次只等原生7686退出事件。
+- 三次kernel边界均PENDING_TIMEOUT_NOT_FAILURE，过程中0进度轮询；第二次实际elapsed12277.68s保留，不改写成7200s。第三边界快照已通过triage、expand、coverage_review、trial_scope_review；enrich151任务/359成功model事件/135错误事件，不能当151全部采用。最新5043/04:00:22Z；135错误的累积路由数组不能直接相加，见169。固定闭合4881–4983另有20条Qwen3.8-Flash-Next成功，已恢复，不停止健康任务。下一次只等原生17428退出事件。
 - 该旧候选trial_evidence仍IncompleteWork72：71CTR详情与`[14C]HS-10542`查询400。137真实API裸名400/quoted原样字面200且该条件0结果；139最小生产修复及7反例、100相关PASS，实际组件200。0结果不当范围排除。
 - Ego8实际不存在，长期授权替换9；9后来也不存在，当前持续复用14（12再次确证不存在，160失败不记零，永久授权替代），不动profile/login/cache/版本。138同生产采集器从原列表绑定SB12/CTR20201869详情，memory新增25设计事实，0模型/不写135；不是71项全闭合。未来普通恢复先核活空间与受控子进程环境一致。
 - 139实际memory版本核后续恢复边界trial_evidence，原六成功前置兼容；须等135终态与标准备份，才用新候选恢复。不重跑中国/全球/已合格scope，不给旧134补新通过。
@@ -68,4 +68,6 @@
 - 历史可提交摘要：`docs/evidence/20261026-source-closure-recovery.json`、`20261026-scope-payload-budget.json`、`20261026-ordinary-pnh-terminal.json`及其Git历史；旧详细STATUS保留Git ee7f31c0与Trellis，禁止改历史SHA成PASS。
 - 163一次稳定宽门2046PASS16.38s/Ruff，257Python/18JS、411输入SHA不变，manifest7f28be39…。164只124运行时1963261bytes/manifest6d94861d…；165在空target安装新wheel6d413e23…/sdistad9c1b7c…，25资产/9Skills/全部模块/隔离cwd CLI入口函数同字节，0下载/无新venv，复用157仅依赖且未修改157。不是新venv安装或普通135恢复。相对155实际13阶段中10同，变化只有trial_evidence/analysis_C/render，发现/范围六前置同。
 - C03对162独立挑战初始化被guard去重拒绝：源156已使用完该链全部合格变体，NOT_RUN_NO_UNUSED_ELIGIBLE_ROUTE，未派发/不静默替换；owner原件/代码/回归/实屏检查不冒充独立意见。C02仍NOT_RUN_AUTH_UNAVAILABLE。
-- 下一步：当前批白名单提交/推送；按135退出事件保全后从实际最早失效阶段恢复普通完整C，持续补M2唯一产品/中国资格与真实A/B。当前source-only分类事实不当已封核心/95%或完整A；不重派156、不重跑151研究、不建立阶段暂停点。
+- **169后续元数据增量**：135旧错误数组跨chat不断累积，导致同一错误被后续记录重复引用。3RED→52相关PASS1.06s/Ruff，当前chat明细重置/失败模型去重/显式call_scope；路由顺序、粘性选择、重试和临床输入不改。实际13/13科学阶段绑定与164同，0DB/源/模型探针；不为此重跑研究。169后的新全门/安装未跑，不能借163/165验新代码。旧记录原样保留，新固定区间分析证明新增136失败项（DeepSeek1/Qwen135，旧GLM在区间前），不是9180请求，不作完整计费。
+- 166具体药名GS101的CDE查询已完整0结果；167实际官方NCT07386743有比较研究，但无明确biosimilar声明。只有二级库标签、等效设计和同企业泛名不足以直接解决产品类别；保留具体产品/类别桥接待核，不另造排除或封分母。新重复审计元数据168无损压缩1937125→10095bytes，校验解压逐字节同，只移出该新派生未压缩副本；旧DB/CAS/历史不改，未测物理释放量。
+- 下一步：核Git及本地回执确认169提交状态后继续M2剩余正向分类/中国资格/唯一产品单位与真实A/B。普通135第四kernel结束后一次边界核验或终态保全，再按实际最早失效阶段恢复；不热改、重启已合格发现，不把source-only分类/测试当M1–M6。Goal持续ACTIVE，不建立阶段暂停点。
