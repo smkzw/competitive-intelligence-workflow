@@ -1,0 +1,82 @@
+{
+  "scope": "SHARED_B_ARM_READING_FOUR_DESKTOP_WIDTHS_NOT_M4_OR_FINAL_VISUAL_ACCEPTANCE",
+  "base_commit": "af4ec2361e702f5c61b1c497d3d866a5ee83d3ad",
+  "html_sha256": "1406fd464b5d917e6506e8c5530a41a2c5085b5ca3082d6a37f6f2c1b04e3df2",
+  "source_db_sha256": "f3eb183974ce1b0ea925999b0a325efa054683411600a051773f99b6e260abca",
+  "assets": {
+    "src/ciw2/render/portal.py": "72c9ebfbd94d648c3def631e1e7f04f5e03dea87be83906718d584d04cdf1828",
+    "src/ciw2/render/templates/_trial.html": "4a5d011a29ea97fda9d065ef6edd274cb574b0b42abfee38f4f701f46dfeec73",
+    "src/ciw2/render/templates/b.html": "3435a96d8360e4b88e02e39df1b094751f7372bfaaca8edef1d3b1ea11d987c0",
+    "src/ciw2/render/results.py": "f5ec8f09324630c24e82fe273e2501257d915102e97423a590c4f2cef1faab99",
+    "src/ciw2/render/static/portal.js": "43150254e5630c71e4a1d439dafcd5cbc3d8ce6471ead612023de3c751f6cdcf"
+  },
+  "root_cause": "B chart already used a source-preserving arm label, main and safety tables diverged and repeated raw English names",
+  "change": [
+    "Use existing arm_label for both B table consumers",
+    "Fold original arm name with keyboard-native details; unparsed qualifiers remain source text",
+    "Retain cohort identifier/age token wrap protection and autoescaped text; zero stays zero"
+  ],
+  "tests": {
+    "family_red": "3 FAIL /3 existing PASS after fixture context corrected",
+    "related_passed": 25,
+    "adjacent_cohort_passed": 28,
+    "first_full": "2146 PASS /1 FAIL: existing cohort token-wrap regression; original assertion retained",
+    "final_full": "2147 PASS /20.56s",
+    "ruff": "PASS",
+    "structure": {
+      "python_files": 278,
+      "javascript_files": 22,
+      "inputs_unchanged": 448,
+      "manifest_sha256": "7a1f3869e293d2f402dd5e39452a15978cde9a8e8bc449d46aa435699105610f"
+    },
+    "post_metadata_source_inputs_unchanged": 330
+  },
+  "browser": {
+    "task_space": 20,
+    "page": "p1",
+    "widths": [
+      1440,
+      1600,
+      1920,
+      2560
+    ],
+    "table_open_closed_keyboard_records": 16,
+    "cohort_records": 4,
+    "all_dom_fact_rows": {
+      "main": 3010,
+      "safety": 1571,
+      "folds": 1825,
+      "mismatches": [],
+      "zeros": 1662
+    },
+    "soc_consumer_counts": {
+      "tbl-b": 464,
+      "tbl-b-safety": 464
+    },
+    "threshold_counterexample": {
+      "fact_id": "fct_8babfc07fdba",
+      "n": 6,
+      "N": 321,
+      "pct": 1.9,
+      "module_threshold_pct": 5
+    },
+    "first_cohort_probe": "Resize sampled before ECharts ResizeObserver completed; preserved failure. Actual settled 1440 geometry 1425px <= viewport, then explicit chart width readiness waited for final four-width test. No CSS overflow hiding or source change.",
+    "screens": {
+      "20261026-b-cohort-reading-1440.png": "f5549e056e8b651fa3a3d4a6f24dba74d3870439fda5309ecc07bc35d481fb7e",
+      "20261026-b-arm-reading-1920.png": "25a472bc61c9597967cc6d51b847d6acaad448928dc388c08ca1abb9facf3fc6"
+    }
+  },
+  "unchanged": [
+    "source scientific data, DB, CAS and values",
+    "profile/quote/assessment scientific rules",
+    "active135 frozen134 ordinary research",
+    "query semantics and all source facts"
+  ],
+  "not_accepted": [
+    "overall table information density: repeated study identity still creates tall rows",
+    "formal Chinese drug names and source-backed arm-drug links incomplete",
+    "M1–M6 and final install/recovery/medical acceptance"
+  ],
+  "next": "Reduce repeated identity context and empty arm-drug columns without losing clinical role/source access; continue ordinary research and source qualification.",
+  "source_model_or_database_write_calls": 0
+}

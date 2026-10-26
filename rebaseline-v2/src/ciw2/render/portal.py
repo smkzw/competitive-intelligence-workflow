@@ -22,7 +22,7 @@ from ciw2.render.endpoint_label import endpoint_label
 from ciw2.render.labels import PHASE_ZH, age_label, phase_label, registry_label
 from ciw2.render.registration import registrations
 from ciw2.render.result_identity import bind_result_drugs
-from ciw2.render.results import arm_tokens, dispersion_text, result_groups, result_search_text, visit_label
+from ciw2.render.results import arm_label, arm_tokens, dispersion_text, result_groups, result_search_text, visit_label
 from ciw2.render.safety import safety_label
 from ciw2.render.study_catalog import study_catalog
 from ciw2.render.trial_identity import trial_identities, verified_holders
@@ -43,6 +43,7 @@ _env.filters['age_label'] = age_label
 _env.filters['endpoint_label'] = endpoint_label
 _env.filters['dispersion_text'] = dispersion_text
 _env.filters['arm_tokens'] = arm_tokens
+_env.filters['arm_label'] = arm_label
 _env.filters['visit_label'] = visit_label
 
 

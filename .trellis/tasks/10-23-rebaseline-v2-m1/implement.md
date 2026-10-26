@@ -1095,3 +1095,13 @@ host族7真实RED/1原PASS：identity输入无host ID、显式foreign/trial/wron
 189固定15实源property决定/36882bytes案例，8输入SHA（含3科学文件）始终同。C03 guard实际初始化/预检PASS，声明Grok4.7→Cursor/grok-4.7-high→Pi/openai-codex/gpt-6.1-sol:high；前两未建可用会话，fallback实际session01a17712-a0cd-7000-b637-adc24de78e84 54.866s/0tools/empty/Codex at capacity turn_rate_limit_exceeded。精确start检查时runner已终态，因此ps为空assert失败不是新运行失败；随后实际收原生22949确认，不能沿PENDING等旧PID。只有一次owner合并同会话恢复（原3600s预算内，实际24turn/1800s）；首preflight格式expectedoutput0被拒未派，按标准runner report行修后PASS才派13726/原生24007，56.323s仍同容量/0tools/0有效意见。runner内重复错误条目不当已知HTTP次数/计费；无临时换模型。189 NOT_RUN_PROVIDER_CAPACITY且无活runner，独立科学判断未完成，不把临床结果或正式接受写PASS；不立即重复派，待实际可用性/新边界再核声明路线。property规则未动，原失败/placeholder/两个真实回执保留，parent review/metrics如实标未运行。
 
 无前端字节改变，保留179四宽25态/当前B178source，不为host元数据重跑浏览器；188只安装187，不拿来验190新host代码，不每小改造新venv/包。已核无pytest活进程，只退役本app可重建.pytest_cache332020逻辑bytes，清理前清单SHA及后回执存189/cache-cleanup；原190结果/源/测试/DB/CAS/历史和Agent会话不动，不宣称APFS实际释放。PRD/Architecture/Plan/STATUS及public20261026-profile-host-identity.json更新，后置仅元数据不重跑全门。135第五kernel33850仍原事件等待，不查新进度、不热改/终止。M1–M6未全交付、GoalACTIVE，下一步真实来源/可证明名称桥接/语义规则根因与终态后的受控旧单位资格继续。
+
+
+## 2026-10-26 191阅读同源在途
+上一goal回合PROGRESS af4ec236已推。本回合先实际HEAD/当前应用干净面及精确74351仍11h46活跃核对，无新DB进度读。选择direct：图表已有arm_label确定性阅读投影，两个B表仍各自raw/arm_tokens导致长英文与不一致；单一模板/过滤器合同由owner修，真实原文/值/关联不变，不另派重复全页会商。功能优先Kangzhe7.1（版本实核）保持18px/四用户指定宽度，不机械加入电影/其他视口。source property189原审阅容量失败分支不重派；科学三个文件不动。共用临床组名+原文折叠，先成族生产render RED、完整最小修改、一次关联批，再同178真实3010事实宽屏表格/原文交互验证。135原第五kernel33850继续，仅退出/边界核，旧研究不重跑。
+
+191/192完成组名显示根因批。共享arm_label只作阅读投影；结果表与安全表原名details，Jinja自动转义，未知限定/真实0/原源不改。新族最初夹具把arm放顶层没入context，保留red.txt并修夹具后真RED3FAIL/3PASS；最小3生产文件+6用例，25相关PASS/Ruff。首次关联误猜test_trial_identity.py路径0tests，记NOT_RUN；改实际集合，非产品RED。首次宽门2146PASS/1FAIL为原有队列token换行保护回归，未改原断言；macro恢复span/wbr语义保护，28相邻PASS后192retry2147PASS20.56s/Ruff/278Python/22JS/448输入，manifest7a1f3869…5610f。后置文档/精简证据只核330源码/测试/Skill不变，不再宽门。
+
+同178固定真实17源/3010结果/1571安全只读memory渲染，无来源/模型/DB/CAS写。首次191 HTML5bb404…64000的16屏旧回执保留；补队列token后当前HTML1406fd46…e3df2，新191b四宽16表格开合/真实键盘focus+4真实队列年龄换行/原文开合，共20。全DOM3010+1571、1825短显逐fact和chart相同，1662消费者零值、SOC464/464，COVID原6/321=1.9%且5%module阈值不删。首队列探针resize后过早取样横溢，实际固定1440稳定scroll1425；保留失败/原截图，新增chart.getWidth==容器就绪条件再跑四宽，未遮overflow、缩字体或改数据。Ego18不存在，永久授权替换20/p1，不动登录/缓存/日常空间。owner实际看1440主表/队列、1600安全展开、1920主表展开等；仅组名阅读组件接受，不称整体美学/源医学通过。实屏仍见研究身份逐行高重复和药物空列浪费宽度，下一有界批处理，不靠缩字删除真实身份。
+
+PRD/Plan/STATUS/Trellis和public20261026-b-shared-arm-reading.json+两图留档。原189独立属性审阅capacity失败无活runner、科学三文件不变；当前安装188仍仅187，不当当前包验收，不每小改重装。135固定134/第五kernel33850原事件等，不轮询新DB或热改，旧151资料/原回执/未知v1保留。GoalACTIVE、M1–M6未全部交付，未建暂停点。

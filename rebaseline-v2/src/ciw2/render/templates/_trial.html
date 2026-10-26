@@ -50,3 +50,7 @@
 {{ identity_evidence(identity) }}
 {% if show_id %}<div class="registry-id">{% if identity.url %}<a href="{{ identity.url }}" target="_blank" rel="noopener">{{ identity.registry_id }}</a>{% else %}{{ identity.registry_id }}{% endif %}</div>{% endif %}
 </div>{% endif %}{% endmacro %}
+
+{% macro clinical_arm(arm) -%}
+{% set label=arm|arm_label %}{% if arm and label!=arm %}<details class="arm-reading"><summary>{% set tokens=arm|arm_tokens %}{% if tokens|length>1 %}{% for token in tokens %}<span class="arm-token">{{ token }}</span>{% if not loop.last %}<wbr>{% endif %}{% endfor %}{% else %}{{ label }}{% endif %}</summary><div class="quote">{{ arm }}</div></details>{% else %}{{ arm or '—' }}{% endif %}
+{%- endmacro %}

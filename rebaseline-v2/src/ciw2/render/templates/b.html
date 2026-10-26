@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from '_trial.html' import clinical_trial %}
+{% from '_trial.html' import clinical_trial, clinical_arm %}
 {% from '_b_studies.html' import study_catalog_nav, study_catalog_section, study_catalog_select %}
 {% block section_nav %}
 {{ study_catalog_nav(data.study_catalog) }}<a href="#comparison">结果横比</a><a href="#measurements">完整数据</a>
@@ -37,7 +37,7 @@
 <td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td><details><summary>{{ r.safety_label if r.safety_label else r.endpoint|endpoint_label }}</summary>{{ r.endpoint }}</details></td>
 <td class="result-visit">{% if r.class_title %}<div>{{ r.class_title|visit_label }}</div>{% endif %}{% if r.category %}<div>{{ r.category|visit_label }}</div>{% endif %}
 <details><summary>时间与人群</summary>{% if r.class_title %}<p>{{ r.class_title }}</p>{% endif %}{% if r.category %}<p>{{ r.category }}</p>{% endif %}<p>{{ r.timepoint or '—' }}</p><p>{{ r.population or '—' }}</p></details></td>
-<td class="result-arm">{% set tokens = r.arm|arm_tokens %}{% if tokens|join('') != r.arm and r.arm %}<details><summary>{% for token in tokens %}<span class="arm-token">{{ token }}</span>{% if not loop.last %}<wbr>{% endif %}{% endfor %}</summary>{{ r.arm }}</details>{% else %}{{ r.arm or '—' }}{% endif %}</td><td class="numeric"><b>{{ '—' if r.value is none else r.value }}</b>{% if r|dispersion_text %}<div class="muted">{{ r|dispersion_text }}</div>{% endif %}</td>
+<td class="result-arm">{{ clinical_arm(r.arm) }}</td><td class="numeric"><b>{{ '—' if r.value is none else r.value }}</b>{% if r|dispersion_text %}<div class="muted">{{ r|dispersion_text }}</div>{% endif %}</td>
 <td class="result-statistic">{{ r.unit|registry_label('measure_unit') }}<span class="muted"> · {{ r.stat_type|registry_label('statistic') }}</span>
 <details><summary>原单位与统计</summary>{{ r.unit or '—' }} · {{ r.stat_type or '—' }}</details></td><td class="numeric">{{ r.denominator if r.denominator is not none else '—' }}</td>
 <td><span class="badge {{ r.status }}">{{ r.status|status }}</span></td>
@@ -48,7 +48,7 @@
 {% if data.safety %}<section id="safety" class="kz-section"><h2>安全性</h2>
 <details class="safety-table"><summary>安全性数据表（<span id="safety-count">{{ data.safety|length }}</span>条）</summary>
 <div class="card table-card kz-data"><table id="tbl-b-safety"><thead><tr><th>药物</th><th>研究</th><th>组别</th><th>类别</th><th>n</th><th>N</th><th>%</th><th>事件次数</th><th>时间窗</th><th>状态</th><th>来源</th></tr></thead><tbody>
-{% for r in data.safety %}<tr data-fact-id="{{ r.id }}"{% if r.entity_id %} data-study-id="{{ r.entity_id }}"{% endif %} data-search-text="{{ r.search_text }}"><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td><td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td>{{ r.arm or '—' }}</td>
+{% for r in data.safety %}<tr data-fact-id="{{ r.id }}"{% if r.entity_id %} data-study-id="{{ r.entity_id }}"{% endif %} data-search-text="{{ r.search_text }}"><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td><td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td class="result-arm">{{ clinical_arm(r.arm) }}</td>
 <td>{{ r.safety_label }}{% if r.organ_system %}<details><summary>SOC</summary>{{ r.organ_system }}</details>{% endif %}</td><td class="numeric">{{ '—' if r.value is none else r.value }}</td>
 <td class="numeric">{{ r.denominator if r.denominator is not none else '—' }}</td><td class="numeric">{{ r.proportion if r.proportion is not none else '—' }}</td>
 <td class="numeric">{{ r.num_events if r.num_events is not none else '—' }}</td>
