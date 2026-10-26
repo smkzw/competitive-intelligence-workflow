@@ -1,0 +1,127 @@
+{
+  "scope": "CURRENT_WORKBENCH_AND_REPORT_PRESENTATION_DEVELOPMENT_MILESTONE_NOT_RELEASE",
+  "base_commit": "ee7f31c0d532ceff522290e2ba67cf7fff816861",
+  "goal": "ACTIVE",
+  "implementation": {
+    "workbench": "Actual GET templates; native Chinese labels, explicit forms and readable stages, complete expandable diagnostics; no backend action changes.",
+    "charts": "Shipped categorical/grid/axis/label tokens; stable original series order; >5 series in shared-domain panels; no fact, zero, negative or gap changed.",
+    "criteria": "Original clause precedes folded extracted metric; literal negative/context words emphasized, display duplicates folded, no medical interpretation or source rewrite."
+  },
+  "gate": {
+    "pytest": {
+      "returncode": 0,
+      "summary": "2029 passed,1 existing Starlette/httpx deprecation warning,13.33s"
+    },
+    "ruff": {
+      "returncode": 0,
+      "summary": "All checks passed:src/tests/scripts"
+    },
+    "structure": {
+      "python_files": 252,
+      "javascript_files": 16,
+      "inputs_unchanged": 397,
+      "manifest_sha256": "9e058340144bdc7c9f1f81b5341285a34bec965cd42152a11ea6ed6d3a7caa52"
+    },
+    "evidence_limit": "Current integrated workbench/report theme/clause projection development gate only; actual frozen-data browser and one independent visual review separate; ordinary135/science/current install/M1-M6 not accepted."
+  },
+  "gate_manifest_sha256": "9e058340144bdc7c9f1f81b5341285a34bec965cd42152a11ea6ed6d3a7caa52",
+  "runtime": {
+    "manifest_sha256": "c317b88cbc3a38419547daddf392e0a3061192cb564dba3a524cc66b30458c04",
+    "files": 122,
+    "bytes": 1952484,
+    "new_venv": false,
+    "tests_docs_or_logs_copied": false,
+    "ordinary135_hot_updated": false,
+    "installation": "NOT_RUN_FOR_THIS_CANDIDATE"
+  },
+  "browser": {
+    "engine": "Ego Lite",
+    "space": 12,
+    "widths": [
+      1440,
+      1600,
+      1920,
+      2560
+    ],
+    "current_report_states": 24,
+    "workbench_states": 12,
+    "page_horizontal_overflow": 0,
+    "C_design_rows": 284,
+    "C_sample_points": 282,
+    "C_filter_single": 1,
+    "C_keyboard": "Enter source reader / Escape returns actual trigger on all4 widths",
+    "B_rows": 668,
+    "B_studies": 1,
+    "B_groups": 34,
+    "B_default_match": 602,
+    "B_filtered_match": 202,
+    "B_drawn_points_default_and_filtered": [
+      39,
+      13
+    ],
+    "workbench_keyboard": "Tab order, associated checkbox label, Space restoration, full diagnostics expand; no POST",
+    "receipt_sha256": "3fed44318e6bcc9150558fc40a355c28958cf940a0069b0214388970e5517e53",
+    "workbench_receipt_sha256": "2f8ce6c916a6f44542bf1264fdfeadb87500b244db69a0b3eb48375fa4f4fb97",
+    "owner_selected_frames_inspected": [
+      "workbench-1440-index.png",
+      "workbench-2560-project.png",
+      "C-1440-evidence.png",
+      "B-2560-table.png",
+      "B1600previous_same3series_geometry",
+      "seven-series1440softwarefixture"
+    ],
+    "software7series_only": {
+      "panels": 2,
+      "shared_domain": [
+        -20,
+        0
+      ],
+      "test_points": 14,
+      "missing_positions": 7,
+      "end_labels": 7,
+      "clinical_evidence": false
+    }
+  },
+  "worker": {
+    "task": "ciw2-workbench-kangzhe-20261026",
+    "initial_selector": "codebuddy/codebuddy-cli/deepseek-v4.1-flash:max",
+    "declared_fallbacks_attempted": [
+      "zcode/zcode/GLM-5.3-Flash:max",
+      "pi/mtplx/mtplx-flash-next-optimized-speed:xhigh",
+      "pi/openai-codex/gpt-6-luna:max"
+    ],
+    "final_output": "Pi gpt-6-luna same-session continuation; final pass reports no edits, verifies existing produced changes. Not independent review.",
+    "original4_dispatch_SHA_unchanged": true,
+    "audit_execution": "PASS",
+    "primary_private_logs_RED": "4failed1passed",
+    "owner_related": "36passed1.16s/Ruff PASS in existing venv; no install",
+    "receipt_top_effective_model_is_not_final_identity_proof": true
+  },
+  "independent_visual": {
+    "status": "NOT_RUN_AUTHENTICATION_UNAVAILABLE",
+    "actual_attempt": "pi/google-antigravity/gemini-3.8-flash:high",
+    "reason": "No API key found for google-antigravity; no usable review output",
+    "fallback": "No disjoint permitted alternate left in frozen conference manifest; no silent model substitution",
+    "frozen22_SHA_unchanged": true,
+    "professional_or_final_visual_acceptance": false
+  },
+  "data": {
+    "C_original_db_sha256": "2120dbfc3fd9fc8eb58de601166bce81dc900aa04e4967656edc9508fb0c9ce7",
+    "B_original_db_sha256": "917f82b345beec7bf12366a76c025bbe0047e8c4ac3b108913e568baf92aef54",
+    "preview": "Memory copy only, all POST409, zero source/model calls; not ordinary135 deliverable",
+    "controlled_child_space": "Actual same protected environment allowlist can access12/p1, zero navigation/source queries"
+  },
+  "open_findings": {
+    "table_group_alignment": "Current B complete table follows all matched outcomes while figure selects one metric. Actual2560 frame has absolute-change plot with percent-change first table rows. Facts remain correct; paired-table reading needs an active metric view plus explicit all-matches reachability. Next bounded task, not marked fixed.",
+    "A": "No adopted profile in C fixture; not fullA acceptance.",
+    "C": "Original source language retained in source reader; final Chinese narrative remains pending.",
+    "full_M1_M6": "NOT_PASSED"
+  },
+  "retired_resources": "Only owned obsolete read-only preview processes146/40 stopped after149 worked; no DB/CAS/cache/history/research process deleted or stopped.",
+  "screenshots": {
+    "kangzhe-workbench-20261026.png": "8b8848cdc0aa71ea28048fb675167054bdd61af95ab37e300228304bf4939598",
+    "kangzhe-b-chart-20261026.png": "08cbe33def0baba2084bb4dc55bb154179a4d1fbb8e14bde5d83d2daf6b1f6a1",
+    "kangzhe-c-clause-20261026.png": "c41f0e426d0c2e26c7d38187170272fcc5cb69ef8a9962ffeac3a342d55c10a6"
+  },
+  "raw_receipts": "Private ciw-data retained by local checkpoint; no DB/CAS/fulltext/logs in Git."
+}

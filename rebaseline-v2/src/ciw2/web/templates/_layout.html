@@ -1,5 +1,12 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{% block title %}临床竞品调研平台{% endblock %}</title><link rel="stylesheet" href="/static/kangzhe.css">
-{% block head %}{% endblock %}</head><body>
-<header class="top"><a class="brand" href="/" style="text-decoration:none">临床竞品调研平台</a><span class="sub">医学经理工作台 · 单用户</span></header>
-<main>{% block content %}{% endblock %}</main></body></html>
+<title>{% block title %}临床竞品调研平台{% endblock %}</title>
+<link rel="stylesheet" href="/static/kz-tokens.css"><link rel="stylesheet" href="/static/kangzhe.css"><link rel="stylesheet" href="/static/workbench.css">
+{% block head %}{% endblock %}</head><body class="wb-body">
+<div class="kz-optical-field" aria-hidden="true"></div>
+<header class="top"><div class="kz-header-row">
+<a class="brand wb-brand" href="/"><img class="brand-logo" src="/static/logo_bot.svg" alt="康哲药业">临床竞品调研</a>
+<span class="sub wb-env">医学经理工作台 · 单用户</span>
+</div></header>
+<main class="wb-main">{% block content %}{% endblock %}</main>
+<script src="/static/kz-motion.js" defer></script><script src="/static/kz-site.js" defer></script>
+</body></html>

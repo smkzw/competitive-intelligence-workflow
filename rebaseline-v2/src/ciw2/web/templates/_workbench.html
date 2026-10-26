@@ -1,0 +1,54 @@
+{#- Shared workbench labels. Macros take explicit arguments; no invented clinical values. -#}
+{%- set RUN_LABELS = {'queued': '排队中', 'running': '执行中', 'succeeded': '已完成', 'failed': '失败', 'cancelled': '已取消'} -%}
+{%- set RUN_TONES = {'queued': 'wait', 'running': 'wait', 'succeeded': 'ok', 'failed': 'bad', 'cancelled': 'muted'} -%}
+{%- set STAGE_LABELS = {
+  'intake': '需求理解', 'universe_china': '中国竞品检索', 'universe_global': '全球竞品检索',
+  'candidate_triage': '候选初筛', 'universe_expand': '竞品范围扩展', 'coverage_review': '检索覆盖复核',
+  'trial_evidence': '试验证据采集', 'trial_scope_review': '试验范围复核', 'enrich_drugs': '药物资料补充',
+  'extract_results': '疗效与安全性提取', 'extract_design': '试验设计提取', 'verify': '事实核验',
+  'analysis_A': '竞争格局分析', 'analysis_B': '疗效与安全性分析', 'analysis_C': '试验设计先例分析',
+  'render': '报告生成'} -%}
+{%- set STAGE_STATES = {'pending': '等待', 'queued': '等待', 'running': '执行中', 'succeeded': '已完成',
+  'failed': '失败', 'cancelled': '已取消', 'skipped': '跳过'} -%}
+{%- set STATE_TONES = {'pending': 'muted', 'queued': 'muted', 'running': 'wait', 'succeeded': 'ok',
+  'failed': 'bad', 'cancelled': 'muted', 'skipped': 'muted'} -%}
+{%- set REPORT_LABELS = {'A': 'A 竞争格局', 'B': 'B 疗效与安全性', 'C': 'C 试验设计先例'} -%}
+{%- set REGION_LABELS = {'china': '中国', 'global': '全球'} -%}
+{%- set COVERAGE_LABELS = {'ok': '成功', 'failed': '失败', 'blocked': '受阻'} -%}
+
+{%- macro chip(label, tone) -%}
+<span class="wb-chip wb-chip--{{ tone }}">{{ label }}</span>
+{%- endmacro -%}
+
+{%- macro run_chip(status, stopping=false) -%}
+{{ chip('停止中' if stopping and status == 'running' else RUN_LABELS.get(status, '未知状态'), RUN_TONES.get(status, 'muted')) }}
+{%- endmacro -%}
+
+{%- macro stage_chip(status) -%}
+{{ chip(STAGE_STATES.get(status, '未知状态'), STATE_TONES.get(status, 'muted')) }}
+{%- endmacro -%}
+
+{%- macro report_name(code) -%}{{ REPORT_LABELS.get(code, code) }}{%- endmacro -%}
+
+{%- macro stage_name(name) -%}{{ STAGE_LABELS.get(name, '未知阶段') }}{%- endmacro -%}
+
+{%- macro region_name(region) -%}{{ REGION_LABELS.get(region, region) }}{%- endmacro -%}
+
+{%- macro coverage_state(status) -%}{{ COVERAGE_LABELS.get(status, status) }}{%- endmacro -%}
+
+{%- macro run_progress(run, stages) -%}
+{%- set total = stages | length -%}
+{%- set done = stages | selectattr('status', 'equalto', 'succeeded') | list | length -%}
+{%- set running = stages | selectattr('status', 'equalto', 'running') | list -%}
+{%- if run.status == 'queued' -%}
+排队中，尚未开始阶段。
+{%- elif run.status == 'running' -%}
+已完成 {{ done }} / {{ total }} 个阶段{% if running %}，当前 {{ stage_name(running[0].name) }}{% endif %}。
+{%- elif run.status == 'failed' -%}
+已完成 {{ done }} / {{ total }} 个阶段，运行未完成。
+{%- elif run.status == 'cancelled' -%}
+已完成 {{ done }} / {{ total }} 个阶段，运行已取消。
+{%- else -%}
+已完成 {{ done }} / {{ total }} 个阶段。
+{%- endif -%}
+{%- endmacro -%}

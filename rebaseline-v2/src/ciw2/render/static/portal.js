@@ -1,7 +1,9 @@
 /* 门户交互：ECharts 初始化 + 表格筛选。数据来自 <script id="charts" type="application/json">。 */
 (function () {
-  var C = { brand: "#FF9900", brand2: "#FFCC00", ops: "#407AAA", stat: "#587B3B", pv: "#A85F34", muted: "#64676B" };
-  var palette = [C.brand, C.ops, C.stat, C.pv, C.brand2, "#8E6FB5", "#2E9C9C"];
+  var tokens = window.KZ_TOKENS || {}, C = tokens.colors || { muted: "#64676B" };
+  var theme = tokens.charts || { categorical: ["#D46B08", "#008F8A", "#7B5CC7", "#B38A00", "#C4457C"],
+    grid: "#E7EBEE", axis: "#CED3D8", label: "#404040" };
+  var palette = theme.categorical;
   var readingSize = 16; // Kangzhe body_compact/chart_label; never shrink individual charts.
   var readingFont = '"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",Arial';
   if (window.getComputedStyle && document.documentElement) {
@@ -30,14 +32,19 @@
     ["xAxis", "yAxis"].forEach(function (key) {
       var axes = Array.isArray(option[key]) ? option[key] : option[key] ? [option[key]] : [];
       axes.forEach(function (axis) {
-        axis.axisLabel = Object.assign({}, axis.axisLabel, { fontSize: readingSize, lineHeight: 22 });
-        axis.nameTextStyle = Object.assign({}, axis.nameTextStyle, { fontSize: readingSize });
+        axis.axisLabel = Object.assign({}, axis.axisLabel, { fontSize: readingSize, lineHeight: 22, color: theme.label });
+        axis.nameTextStyle = Object.assign({}, axis.nameTextStyle, { fontSize: readingSize, color: theme.label });
+        axis.axisLine = Object.assign({}, axis.axisLine, { lineStyle: { color: theme.axis } });
+        axis.splitLine = Object.assign({}, axis.splitLine, { lineStyle: { color: theme.grid } });
       });
     });
     (option.series || []).forEach(function (series) {
-      series.label = Object.assign({}, series.label, { fontSize: readingSize });
+      series.label = Object.assign({}, series.label, { fontSize: readingSize, color: theme.label });
+      if (series.endLabel) series.endLabel.color = theme.label;
     });
-    if (option.legend) option.legend.textStyle = Object.assign({}, option.legend.textStyle, { fontSize: readingSize });
+    (Array.isArray(option.legend) ? option.legend : option.legend ? [option.legend] : []).forEach(function (legend) {
+      legend.textStyle = Object.assign({}, legend.textStyle, { fontSize: readingSize, color: theme.label });
+    });
     option.tooltip = Object.assign({}, option.tooltip, { textStyle: { fontSize: readingSize } });
     c.setOption(option, true);
     if (fresh) {
@@ -143,6 +150,39 @@
         data: items.map(function (item) { return item.value; }) }]
     };
   }
+  function seriesFrames(id, option) {
+    var frames = Array.from(new Set(option.series.map(function (s) { return s._frame || 0; }))).sort(function (a, b) { return a - b; });
+    if (frames.length > 1) {
+      var axes = ['xAxis', 'yAxis'].map(function (key, dimension) {
+        var axis = option[key];
+        if (axis.type !== 'value') return axis;
+        var values = option.series.flatMap(function (s) { return s.data.map(function (p) {
+          var value = p && typeof p === 'object' ? p.value : p;
+          return Array.isArray(value) ? value[dimension] : value;
+        }); }).filter(function (v) { return typeof v === 'number' && Number.isFinite(v); });
+        if (!axis.scale) values.push(0);
+        if (!values.length) return axis;
+        var min = Math.min.apply(null, values), max = Math.max.apply(null, values);
+        if (min === max) { var pad = Math.abs(min) * 0.05 || 1; min -= axis.scale ? pad : 0; max += pad; }
+        return Object.assign({}, axis, { min: min, max: max });
+      });
+      var legend = option.legend;
+      option.grid = frames.map(function (_, i) {
+        return { left: 72, right: 112, top: i * 300 + 32, height: 192 };
+      });
+      ['xAxis', 'yAxis'].forEach(function (key, dimension) {
+        option[key] = frames.map(function (_, i) { return Object.assign({}, axes[dimension], { gridIndex: i }); });
+      });
+      option.legend = frames.map(function (frame, i) {
+        return Object.assign({}, legend, { bottom: undefined, top: i * 300 + 248, left: 16, right: 16,
+          data: option.series.filter(function (s) { return (s._frame || 0) === frame; }).map(function (s) { return s.name; }) });
+      });
+      option.series.forEach(function (s) { s.xAxisIndex = s.yAxisIndex = frames.indexOf(s._frame || 0); });
+      setPanelHeight(id, frames.length * 300);
+    }
+    option.series.forEach(function (s) { delete s._frame; });
+    return option;
+  }
   function drawLandscape(heat, phases) {
     var heatNode = el('chart-heat'), phaseNode = el('chart-phase');
     if (heatNode) heatNode.closest('.card').hidden = !heat.data.length;
@@ -164,22 +204,22 @@
       dataZoom: [{ type: 'slider', yAxisIndex: 0, right: 0, width: 16, show: heat.y.length > pageSize,
         startValue: 0, endValue: Math.min(pageSize - 1, heat.y.length - 1), filterMode: 'filter' }],
       visualMap: { min: 0, max: Math.max.apply(null, heat.data.map(function (d) { return d.value[2]; }).concat([1])),
-        orient: "horizontal", left: "center", bottom: 0, inRange: { color: ["#FFF3E0", C.brand] } },
+        orient: "horizontal", left: "center", bottom: 0, inRange: { color: ["#FFF3E0", palette[0]] } },
       series: [{ type: "heatmap", data: heat.data, label: { show: true, formatter: function (p) { return p.value[2]; } } }]
     });
     }
     if (phases.x.length) {
     var compact = phases.x.length <= 2 && phases.series.length <= 2;
     setPanelHeight('chart-phase', compact ? 160 : 208);
-    chart("chart-phase", {
+    chart("chart-phase", seriesFrames("chart-phase", {
       tooltip: { trigger: "axis", formatter: function (items) { return items.map(function (p) {
         return safeText(p.seriesName) + '：' + safeText(p.value) + ' 个药物';
       }).join('<br>'); } }, legend: { type: 'scroll', top: 0 }, grid: { left: 48, right: 16, top: 48, bottom: compact ? 48 : 64 },
       xAxis: { type: "category", data: phases.x, axisLabel: { interval: 0, rotate: phases.x.length > 5 ? 30 : 0 } },
       yAxis: { type: "value", minInterval: 1 },
       series: phases.series.map(function (s) { return { name: s.name, type: "bar", data: s.data,
-        itemStyle: {color: s.color}, barMaxWidth: 28, label: {show: true, position: 'top'} }; })
-    });
+        _frame: s.frame, itemStyle: {color: s.color}, barMaxWidth: 28, label: {show: true, position: 'top'} }; })
+    }));
     }
   }
   function landscapeObservations(rows) {
@@ -227,7 +267,7 @@
       scoped: eligible.some(function (o) { return o.indication || o.as_of; }),
       data: Array.from(cells, function (pair) { return landscapePoint(pair[1], JSON.parse(pair[0]).concat(count(pair[1]))); })},
       {x: phases.map(function (p) { return labels[p]; }), series: activeFrames.map(function (f) {
-        return {name: f, color: palette[frames.indexOf(f) % palette.length], data: phases.map(function (p) {
+        return {name: f, frame: Math.floor(frames.indexOf(f) / palette.length), color: palette[frames.indexOf(f) % palette.length], data: phases.map(function (p) {
           var points = plotted.filter(function (o) { return o.frame === f && o.phase === p; });
           return landscapePoint(points, count(points));
         })};
@@ -300,7 +340,7 @@
       option.series = Array.from(series.values()).map(function (items) {
         items.sort(function (a, b) { return a.x - b.x; });
         var index = order.indexOf(items[0].series_key), at = new Map(items.map(function (p) { return [p.x, p]; }));
-        return { name: String(index + 1), type: "line", smooth: false, connectNulls: false, symbolSize: 7,
+        return { name: String(index + 1), _frame: Math.floor(index / palette.length), type: "line", smooth: false, connectNulls: false, symbolSize: 7,
           labelLayout: { moveOverlap: "shiftY" },
           endLabel: { show: true, formatter: "组" + (index + 1) + "：" + String(items[items.length - 1].value) },
           lineStyle: { color: palette[index % palette.length] }, itemStyle: { color: palette[index % palette.length] },
@@ -308,7 +348,7 @@
             var p = at.get(x);
             var plottedX = group.display_axis === "weeks" ? x / 7 : x;
             return p ? Object.assign({}, p, { value: [plottedX, p.value],
-              label: { show: items.length <= 8 && p !== items[items.length - 1],
+              label: { show: order.length <= 3 && items.length <= 8 && p !== items[items.length - 1],
                 position: index % 2 ? 'bottom' : 'top', distance: 8 } }) : { value: [plottedX, null] };
           }),
           label: { formatter: function (p) { return p.value[1]; } } };
@@ -322,11 +362,11 @@
       option.dataZoom = [{ type: "slider", yAxisIndex: 0, right: 0, width: 16, show: points.length > bars.visible,
         startValue: 0, endValue: bars.visible - 1, filterMode: "filter" }];
       option.series = [{ type: "bar", barMaxWidth: 22, data: points.map(function (p) {
-        return Object.assign({}, p, { itemStyle: { color: palette[order.indexOf(p.series_key) % palette.length] } });
+        return Object.assign({}, p, { itemStyle: { color: palette[0] } });
       }),
         label: { show: true, position: "right" } }];
     }
-    return option;
+    return seriesFrames('chart-result', option);
   }
   var resultPreferred, resultClickBound = false;
   function resultStudyContext(points) {

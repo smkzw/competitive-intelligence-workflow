@@ -135,6 +135,7 @@ button.secondary{background:var(--ops);color:#fff}
 .criteria-clause{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;padding:8px 0;border-bottom:1px solid var(--border)}
 .criteria-section{font-weight:700;color:var(--ink)}.criteria-values{display:flex;flex-wrap:wrap;gap:4px 16px;font-weight:700;color:var(--risk)}
 .criteria-clause-original{grid-column:1/-1;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.criteria-metrics{grid-column:1/-1;font-size:var(--report-font-body)}
 .criteria-scope{font-size:var(--report-font-body);color:var(--muted);margin:12px 0 0}
 .endpoint-entry{display:inline-block;margin:3px 12px 3px 0}
 .design-table{table-layout:fixed;min-width:1240px}

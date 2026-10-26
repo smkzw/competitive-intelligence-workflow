@@ -1,0 +1,112 @@
+/* Kangzhe 7.1 workbench layer. Scoped to body.wb-body; shared kangzhe.css is not redefined.
+   Desktop-only composition (1440/1600/1920/2560). No truncated text, fixed viewport
+   height, invented percentages or a second token set. */
+
+.wb-body .wb-main{padding:20px var(--kz-gutter) 40px}
+.wb-body .wb-page{width:100%;min-width:0}
+.wb-body .wb-brand{text-decoration:none}
+.wb-body .wb-env{margin-left:auto;white-space:nowrap}
+
+/* ---------- shared surfaces ---------- */
+.wb-body .wb-intro{margin:0 0 16px}
+.wb-body .wb-intro h1{margin:0}
+.wb-body .wb-intro .sub{margin:6px 0 0}
+.wb-body .wb-columns{display:grid;grid-template-columns:minmax(0,480px) minmax(0,1fr);gap:var(--kz-gap);align-items:start}
+.wb-body .wb-panel{margin:0;padding:18px 20px 20px;min-width:0}
+.wb-body .wb-panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 10px;min-width:0}
+.wb-body .wb-panel-head h2{margin:0}
+.wb-body .wb-section{margin:20px 0 0}
+.wb-body .wb-run{margin:20px 0 0;padding:18px 20px 20px;min-width:0}
+
+/* ---------- new research form ---------- */
+.wb-body .wb-form{margin:0}
+.wb-body .wb-field{display:grid;gap:6px;margin:0 0 14px;min-width:0}
+.wb-body .wb-field>label{font-size:16px;font-weight:600;color:var(--kz-ink);line-height:1.4}
+.wb-body .wb-form input:not([type="checkbox"]),
+.wb-body .wb-form textarea{margin:0;min-height:44px;width:100%;padding:9px 12px;font:18px/1.5 var(--font);
+  color:var(--kz-ink);background:var(--kz-data-plane);border:1px solid var(--border);border-radius:10px}
+.wb-body .wb-form textarea{min-height:96px;resize:vertical}
+.wb-body .wb-form input:disabled{color:var(--muted);background:#F4F2EE;cursor:not-allowed}
+.wb-body .wb-form input:focus-visible,
+.wb-body .wb-form textarea:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wb-body .wb-help{margin:2px 0 0;font-size:16px;line-height:1.5;color:var(--muted)}
+.wb-body .wb-fieldset{margin:0 0 14px;padding:10px 14px 12px;border:1px solid var(--border);
+  border-radius:12px;background:var(--kz-data-plane);min-width:0}
+.wb-body .wb-fieldset legend{padding:0 6px;font-size:16px;font-weight:600;color:var(--kz-ink)}
+.wb-body .wb-choices{display:flex;flex-wrap:wrap;gap:8px 20px;margin:2px 0 4px}
+.wb-body .wb-choice{display:inline-flex;align-items:center;gap:8px;min-height:32px}
+.wb-body .wb-choice input[type="checkbox"]{flex:0 0 auto;width:18px;height:18px;min-height:0;margin:0;padding:0;
+  accent-color:var(--brand);cursor:pointer}
+.wb-body .wb-choice label{font-size:18px;font-weight:500;color:var(--body);cursor:pointer;line-height:1.4}
+.wb-body .wb-primary{min-height:44px;padding:10px 26px;font-size:18px}
+.wb-body .wb-primary:hover{box-shadow:var(--kz-elev-rest)}
+
+/* ---------- project list ---------- */
+.wb-body .wb-table-wrap{min-width:0;max-width:100%;overflow-x:auto;border:1px solid var(--border);
+  border-radius:12px;background:var(--kz-data-plane)}
+.wb-body .wb-table{margin:0;font-size:var(--kz-type-site-body-floor);background:var(--kz-data-plane)}
+.wb-body .wb-table th{position:static;padding:9px 12px;font-size:16px}
+.wb-body .wb-table td{padding:9px 12px;vertical-align:top}
+.wb-body .wb-project-link{color:var(--kz-ink);font-weight:600;text-decoration:none}
+.wb-body .wb-project-link:hover{text-decoration:underline;text-underline-offset:3px}
+.wb-body .wb-time{white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--muted)}
+.wb-body .wb-empty{margin:4px 0 0;padding:30px 20px;border:1px dashed var(--border);border-radius:14px;
+  background:var(--kz-data-plane)}
+.wb-body .wb-empty-title{margin:0;font-size:20px;font-weight:700;color:var(--kz-ink)}
+.wb-body .wb-empty .sub{margin:6px 0 0}
+
+/* ---------- project detail ---------- */
+.wb-body .wb-project-head{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;
+  flex-wrap:wrap;margin:0 0 20px;min-width:0}
+.wb-body .wb-project-title{flex:1 1 420px;min-width:0}
+.wb-body .wb-back{display:inline-block;margin:0 0 6px;font-size:16px;color:var(--muted);text-decoration:none}
+.wb-body .wb-back:hover{color:var(--kz-ink);text-decoration:underline;text-underline-offset:3px}
+.wb-body .wb-project-title h1{margin:0}
+.wb-body .wb-request{margin:8px 0 0;max-width:var(--kz-measure);font-size:18px;color:var(--body)}
+.wb-body .wb-meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin:8px 0 0;font-size:16px;color:var(--muted)}
+.wb-body .wb-counts{display:grid;grid-template-columns:repeat(4,minmax(92px,auto));gap:10px;
+  flex:0 0 auto;margin:0}
+.wb-body .wb-count{min-width:0;padding:8px 16px;border:1px solid var(--border);border-radius:14px;
+  background:var(--kz-data-plane)}
+.wb-body .wb-count b{display:block;font-size:var(--kz-type-kpi);line-height:1.2;color:var(--kz-ink);
+  font-variant-numeric:tabular-nums}
+.wb-body .wb-count span{display:block;font-size:16px;color:var(--muted)}
+.wb-body .wb-report-links{display:flex;flex-wrap:wrap;gap:12px}
+.wb-body .wb-report-link{display:inline-flex;align-items:center;min-height:44px;text-decoration:none;color:var(--kz-ink)}
+.wb-body .wb-report-link:hover{box-shadow:var(--kz-elev-rest)}
+.wb-body .wb-export{margin:12px 0 0}
+
+/* ---------- run state ---------- */
+.wb-body .wb-progress{margin:6px 0 12px;font-size:18px;color:var(--body)}
+.wb-body .wb-note{margin:0 0 12px;font-size:18px;color:var(--body)}
+.wb-body .wb-alert{margin:0 0 12px;padding:12px 16px;border:1px solid rgba(192,0,0,.28);border-radius:14px;
+  background:#FDF3F3}
+.wb-body .wb-alert-title{margin:0;font-size:18px;font-weight:700;color:var(--risk)}
+.wb-body .wb-alert--soft{border-color:rgba(255,153,0,.35);background:#FFF8EE}
+.wb-body .wb-alert--soft .wb-alert-title{color:#A35F00}
+.wb-body .wb-run-actions{display:flex;flex-wrap:wrap;gap:12px;margin:4px 0 0}
+.wb-body .wb-action-form{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:0}
+.wb-body .wb-action-form button{min-height:44px;padding:9px 22px;font-size:18px}
+.wb-body .wb-action-form .sub{max-width:46em}
+
+.wb-body .wb-chip{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;
+  border:1px solid transparent;font-size:16px;font-weight:600;line-height:1.5;white-space:nowrap}
+.wb-body .wb-chip::before{content:"";flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:currentColor}
+.wb-body .wb-chip--ok{background:var(--stat-bg);color:var(--stat);border-color:rgba(88,123,59,.28)}
+.wb-body .wb-chip--bad{background:#FDE7E7;color:var(--risk);border-color:rgba(192,0,0,.22)}
+.wb-body .wb-chip--wait{background:var(--med-bg);color:#A35F00;border-color:rgba(255,153,0,.32)}
+.wb-body .wb-chip--muted{background:#EFEFEF;color:var(--muted)}
+
+/* ---------- expandable diagnostics ---------- */
+.wb-body .wb-details{margin:16px 0 0;padding-top:12px;border-top:1px solid var(--border);min-width:0}
+.wb-body .wb-details>summary{cursor:pointer;font-size:18px;font-weight:600;color:var(--ops);line-height:1.5}
+.wb-body .wb-details>summary:hover{color:var(--kz-ink)}
+.wb-body .wb-failure{margin:8px 0 0;padding-top:0;border-top:0}
+.wb-body .wb-failure>summary{font-size:16px;color:var(--risk);font-weight:600}
+.wb-body .wb-diagnostics h3{margin:16px 0 8px}
+.wb-body .wb-diagnostic{margin:10px 0 0;padding:12px 14px;border:1px solid var(--border);border-radius:12px;
+  background:var(--kz-data-plane);color:var(--body);font:16px/1.6 var(--font);
+  white-space:pre-wrap;overflow-wrap:anywhere;max-width:none;max-height:none;overflow:visible}
+.wb-body .wb-diagnostic-inline{display:inline;font-size:16px;line-height:1.6;color:var(--body);
+  overflow-wrap:anywhere;white-space:pre-wrap}
+.wb-body .wb-steps{margin:12px 0 0}

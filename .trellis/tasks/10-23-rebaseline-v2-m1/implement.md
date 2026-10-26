@@ -959,3 +959,33 @@ owner读完整源码/新276行测试及3处合同迁移；发现任意16hex段�
 139另将135已成功前缀复制到memory、只核版本不查运行进度，新Ego9/2行改动仍实际恢复trial_evidence，前六stage兼容、legacy空。先等135自然终态，再以活的专用空间和新源码恢复后续；禁止重跑中国/全球/已成功scope或给旧134回填新接受。
 
 140一次稳定完整门2018PASS12.15s/Ruff/249Python/14JS/390输入SHA不变，manifest3c945fd1ad9ad7547e01fd1ed2cda5d7277df71a3bbc2a15e54a5b4d04892129；141仅120运行时1935153bytes、manifestd1fc9754b253a0ee82ef4a8ae2e8bb3169154a6ba2536857ea55dd0ad2ac3a6d。无新venv/整仓测试拷贝，原134运行字节不动。当前仅改trial_evidence查询构造，actual memory兼容核无需重跑前六成功前置。等待135自然结束后保全当次模型/设计/渲染/失败，再用141/live专用9从trial_evidence普通恢复。不得为提前修源终止健康135、在其活DB并发采用新源或伪称72已通过。
+
+ee7f31c0已推并核远端；142逐SHA核275 Git源/Skill/测试+固定ECharts同140门。当前原135还需等自然终态，新141不热加载。再次等待只监听已验证74351的kernel NOTE_EXIT，不周期读取stage/模型/DB；如在注册前终态则读取其真实receipt，不重派。替代Ego9持续复用，旧8不再作为未来恢复配置；M6需明确区分space_missing与user_control并避免一批重复不明失败，当前未引入新平台或自动抢占逻辑。
+
+## 2026-10-26 用户再次续接并强调最新康哲前端
+
+未暂停Goal或135。只停止主线程functions drain cell1794以响应新输入，未发信号给135/原生83367/既有kernel waiter13839；新输入时ps74351已运行5h19，仍固定134。保留其终态回执读取路线，不重启。CAO历史搜索不可用且无命中，只用repo/本会话源，不写替代memory库；本地旧memory仅用于定位连续性，不采旧暂停为当前指令。
+
+最新康哲Skill仍7.1，按用户功能优先取site轨：官方Logo、token/文字/按钮/配色、宽屏数据面与分层阅读；用户四桌面取代skill五档，不加电影/空100vh hero或手机。采用execution-plus-conference：工作台3模板/局部CSS有独立写集，交worker144；owner同时核真实报告模板/图表/阅读层，不碰worker源码；最终当前物理页面主观视觉需有界独立挑战，未执行前不称通过。现有旧40预览实屏已看，确认它是历史源31/probe37组件、不是当前HEAD或普通135报告；不凭其单柱图重复修已闭合49几何。下一步先生成当前字节/固定真实数据ABC预览再判现存缺陷。
+
+
+## 2026-10-26 144/147–150 当前前端与受控环境
+
+144终态收取：原CodeBuddy选择器DS4.1flash:max，后经声明ZCode失败/MTPLX空回复，最终同Pi session01a175eb-e546-7000-a60a-efc81d15363b转openai-codex/gpt-6-luna:max交最终报告；不采顶层effective_model仍CodeBuddy为真实最终模型。Luna明确本pass未改文件、当时已有模板和6测试；primary日志red4FAIL1PASS，green逐5/5/6，related64/83，原件保留，不制造回退RED。最后报告环境Ruff不可用仅其全局Python，owner既有venv实际36相关PASS1.16s/Ruff全过，无安装。原4dispatch SHA全部不变，audit-execution PASS；独立视觉不能由备用核验替代。初始化C02曾在144未终态因无stdout证据明确拒绝，等真实终态后成功初始化，不绕门。
+
+147 owner生产portal.js旧部门色用于临床被2个RED实核；改消费现有KZ_TOKENS.charts，文字/轴线/网格同当前token，保留fallback仅用于无token便携上下文。超5系列按稳定原索引分小多图，同图/表事实ID、零/负数/缺口不变、公共数值域；A也保留每框fact/source ID及筛后颜色。单量值逐行条形用统一量值色，完整标签区分身份；不猜对照身份/不合并临床系列。相关19、扩A38通过；实际7系列软件夹具发现初点标签拥挤后成族1FAIL2PASS，最小仅对>3系列保留端点/tooltip/全表；最终完整相关与148合并93PASS0.99s，初Ruff测试空行/隐式字符串括号错误均保留后修，非每行重跑全仓。
+
+148 owner在当前真实C来源窗发现“Failure to achieve…(IGA≤2)”被醒目裸阈值当主层可误读。2个生产渲染RED后，让完整逐字条款（含否定/条件/访视）为主，中文提取指标改折叠并仅显示层去重；failure/failed/unable按原文加字重，未改原阈值/规则/DB或推医学解释。93相关PASS，原原文逐字符还原/恶意字符串安全/当前科学不写均核。PRD与现行Plan已同步。此为阅读投影，不当新医学判定或普通完整C已采用。
+
+146预览最初FastAPI default对象deepcopy失败的决定性错误是不能pickle _thread.RLock，而非初私有描述SQLite连接；保留145原失败。146参数无参工厂修仪器后真源memory预览成功；因148 Python正则需新进程，149从两份原冻结DB只读复制memory、0模型/来源/全部POST409，C源DB2120dbfc…/284研究，B源DB917f82b3…/668结果。精准停止已归属旧146 PID63278与旧40 PID19969两个只读预览，替代149 PID69752/端口58164；研究74351/worker未动。新venv0，原CAS/DB/151批/缓存/历史均保全。
+
+150当前Ego12/p2生产C/B四宽各3态共24，工作台四宽首页/项目/诊断12态；无页面横溢。284研究/282点，筛单项1/1；B668行/34组仅一真实研究，默认临床602/绘39→筛202行/绘13，不称跨研究。C Enter来源/Esc真实触发者回焦，workbench Tab关联焦点/label点击+Space复原，诊断仍全可达。七系列仅软件夹具，实际2面板共同域−20..0、14测试点/7缺口/7端点/0拥挤初点标签，不当临床demo。owner实看当前1440首页/C密集/来源/B线及测试几何；其余帧由当前回执绑定，主观全验尚未收。
+
+独立C02已实际启动runner73360/原生15200，Pi/google-antigravity/gemini-3.8-flash:high，48turn/7200s、route frozen且过滤144实际四路线、preflight PASS0warning；7精选图与22文件SHA固定，禁止DB/源调研/写代码/其他节点报告，只做有界当前组件视觉挑战。等待真实输出，不把初始化/截图数量当完成；现只待该节点并独立推进后续可行工作。
+
+135第二kernel结果实际elapsed12277.68s/PENDING_TIMEOUT_NOT_FAILURE（不追改7200标签）；仅此边界一次只读快照，trial_scope_review已成功、enrich_drugs10任务/207成功模型事件/17submit，最后4010/02:01:16Z，仍健康有进展，不终止/重派；trial_evidence旧72失败仍保留。第三kernel NOTE_EXIT原生7686，继续等自然终态/原83367，不查周期进度。150另按135完全相同protected env白名单（不加载模型凭据）实际只probe Ego12/p1，accessible true、0导航/源查询/配置变化；未来恢复前重核活空间，当前138组件与普通环境可见性差异这项已得到新证据，不推全71详情已通。
+
+
+151一次稳定完整门2029PASS13.33s/Ruff/252Python600/80/16JS/397输入SHA不变，manifest9e058340144bdc7c9f1f81b5341285a34bec965cd42152a11ea6ed6d3a7caa52；152仅122运行时1952484bytes/manifestc317b88cbc3a38419547daddf392e0a3061192cb564dba3a524cc66b30458c04，无新venv/原文/过程副本或135热加载。记录更新后只核源/差异，不重复宽门。C02实际terminal exit3：Pi google-antigravity缺APIkey、无有效输出，不是完成独立审阅；quality-escalation仍同route，声明备用都已参与144而被独立性过滤，未擅换模型/获取凭据。原22输入与4派发SHA核，失败回执保留，不能把structuralPASS当视觉/医学接受。
+
+owner实看B2560表，发现当前图选EASI绝对变化，完整表默认全匹配602中首行是百分比变化；不是数值错绘，而是图-表任务不对应。登记下一小单元：同一原DOM完整集合，默认当前指标数据且有明确“全部匹配结果”入口；选择指标/分面/筛选保持图表对应，未知不可绘仍可达，不复制668行或新增框架。当前批保全/提交后立即继续，不设阶段暂停。公开摘要与3精选截图存docs/evidence/20261026-kangzhe-workbench-and-chart-context.json；原全量截图/DB/CAS/日志仍本地，不入Git。

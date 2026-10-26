@@ -1,21 +1,71 @@
 {% extends "_layout.html" %}
+{% import "_workbench.html" as wb %}
 {% block content %}
-<div class="grid">
-<div class="card"><h2>新建调研</h2>
-<form class="new" method="post" action="/projects">
-<label>适应症（中文）</label><input name="indication" required placeholder="例如：阵发性睡眠性血红蛋白尿症">
-<label>报告</label><div>
-<label><input type="checkbox" name="reports" value="A" checked style="width:auto"> A 竞争格局</label>
-<label><input type="checkbox" name="reports" value="B" style="width:auto"> B 疗效与安全性</label>
-<label><input type="checkbox" name="reports" value="C" style="width:auto"> C 试验设计先例</label></div>
-<label>需求原话（可选）</label><textarea name="request_text" rows="3" placeholder="例如：重点看中国已上市和 III 期的补体抑制剂"></textarea>
-<label>关注点（可选）</label><input name="focus">
-<label>历史截止日期（暂未开放）</label><input name="cutoff_date" type="date" disabled>
-<p class="muted">目前生成当前报告；历史版本筛选接通后再开放日期选择。</p>
-<button type="submit">开始调研</button></form></div>
-<div class="card"><h2>项目</h2><table><thead><tr><th>适应症</th><th>报告</th><th>最近运行</th><th>创建</th></tr></thead><tbody>
-{% for p in projects %}<tr><td><a href="/projects/{{ p.id }}">{{ p.indication }}</a></td><td>{{ p.reports }}</td>
-<td>{% if p.run %}<span class="badge {{ 'verified' if p.run.status == 'succeeded' else ('unverified' if p.run.status == 'failed' else 'unknown') }}">{{ p.run.status }}</span>{% else %}—{% endif %}</td>
-<td class="muted">{{ p.created_at[:16] }}</td></tr>{% else %}<tr><td colspan="4" class="muted">暂无项目</td></tr>{% endfor %}
-</tbody></table></div></div>
+<div class="wb-page">
+<section class="wb-intro" aria-labelledby="wb-intro-title">
+<h1 id="wb-intro-title">临床竞品调研工作台</h1>
+<p class="sub">按中文适应症新建调研，或继续已有项目的报告阅读与运行管理。</p>
+</section>
+<div class="wb-columns">
+<section class="card wb-panel" aria-labelledby="wb-new-title">
+<h2 id="wb-new-title">新建调研</h2>
+<form class="new wb-form" method="post" action="/projects">
+<div class="wb-field">
+<label for="wb-indication">适应症（中文）</label>
+<input id="wb-indication" name="indication" required autocomplete="off" placeholder="例如：阵发性睡眠性血红蛋白尿症">
+</div>
+<fieldset class="wb-fieldset">
+<legend>报告</legend>
+<div class="wb-choices">
+<span class="wb-choice"><input id="wb-report-a" type="checkbox" name="reports" value="A" checked><label for="wb-report-a">A 竞争格局</label></span>
+<span class="wb-choice"><input id="wb-report-b" type="checkbox" name="reports" value="B"><label for="wb-report-b">B 疗效与安全性</label></span>
+<span class="wb-choice"><input id="wb-report-c" type="checkbox" name="reports" value="C"><label for="wb-report-c">C 试验设计先例</label></span>
+</div>
+</fieldset>
+<div class="wb-field">
+<label for="wb-request_text">需求原话（可选）</label>
+<textarea id="wb-request_text" name="request_text" rows="3" placeholder="例如：重点看中国已上市和 III 期的补体抑制剂"></textarea>
+</div>
+<div class="wb-field">
+<label for="wb-focus">关注点（可选）</label>
+<input id="wb-focus" name="focus" autocomplete="off" placeholder="例如：给药间隔与安全性差异">
+</div>
+<div class="wb-field">
+<label for="wb-cutoff_date">历史截止日期（暂未开放）</label>
+<input id="wb-cutoff_date" name="cutoff_date" type="date" disabled>
+<p class="wb-help">当前只生成最新报告，日期筛选接通后再开放选择。</p>
+</div>
+<button type="submit" class="wb-primary">开始调研</button>
+</form>
+</section>
+<section class="card wb-panel wb-projects" aria-labelledby="wb-projects-title">
+<div class="wb-panel-head">
+<h2 id="wb-projects-title">项目</h2>
+<span class="sub">共 {{ projects|length }} 个</span>
+</div>
+{% if projects %}
+<div class="wb-table-wrap">
+<table class="wb-table">
+<thead><tr><th scope="col">适应症</th><th scope="col">报告</th><th scope="col">最近运行</th><th scope="col">创建</th></tr></thead>
+<tbody>
+{% for p in projects %}
+<tr>
+<td><a class="wb-project-link" href="/projects/{{ p.id }}">{{ p.indication }}</a></td>
+<td>{% set picked = namespace(count=0) %}{% for code in ['A', 'B', 'C'] %}{% if code in p.reports %}{% if picked.count %} · {% endif %}{{ wb.report_name(code) }}{% set picked.count = picked.count + 1 %}{% endif %}{% endfor %}</td>
+<td>{% if p.run %}{{ wb.run_chip(p.run.status) }}{% else %}<span class="sub">未运行</span>{% endif %}</td>
+<td class="wb-time">{{ p.created_at[:16]|replace('T', ' ') }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% else %}
+<div class="wb-empty">
+<p class="wb-empty-title">还没有项目</p>
+<p class="sub">填写左侧适应症与报告，开始第一次调研。</p>
+</div>
+{% endif %}
+</section>
+</div>
+</div>
 {% endblock %}

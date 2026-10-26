@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% from '_trial.html' import clinical_trial %}
 {% macro annotated(segments) -%}{% for segment in segments %}{% if segment.emphasis %}<span class="criteria-{{ segment.emphasis }}">{{ segment.text }}</span>{% else %}{{ segment.text }}{% endif %}{% endfor %}{%- endmacro %}
-{% macro criteria_index(clauses, original=false) %}
+{% macro criteria_index(clauses) %}
 {% set state=namespace(scope=none) %}
 {% for clause in clauses %}{% if clause.section_title and clause.section_title != state.scope %}<h4 class="criteria-scope">{{ clause.section_title }}</h4>{% set state.scope=clause.section_title %}{% endif %}
-<div class="criteria-clause"><span class="criteria-section">{{ {'inclusion':'入选','exclusion':'排除','unspecified':'原条款'}[clause.section] }}</span>
-<div class="criteria-values">{% for label in clause.labels %}<span>{{ label }}</span>{% endfor %}</div>
-{% if original %}<p class="criteria-clause-original">{{ annotated(clause.segments) }}</p>{% endif %}</div>{% endfor %}
+<div class="criteria-clause"><span class="criteria-section">{{ {'inclusion':'入选条款','exclusion':'排除条款','unspecified':'原条款'}[clause.section] }}</span>
+<p class="criteria-clause-original">{{ annotated(clause.segments) }}</p>
+<details class="criteria-metrics"><summary>提取指标</summary><div class="criteria-values">{% for label in clause.labels|unique %}<span>{{ label }}</span>{% endfor %}</div></details></div>{% endfor %}
 {% endmacro %}
 {% macro evidence(refs, shown_text=none, label='依据', show_values=false, compact=false) %}{% if refs %}<details class="evidence{% if compact %} evidence-inline{% endif %}"><summary data-reading-title="{{ label }}"{% if compact %} aria-label="{{ label }}，{{ refs|length }}条"{% endif %}>{% if compact %}[{{ refs|length }}]{% else %}{{ label }} {{ refs|length }}{% endif %}</summary><div class="source-evidence-content">
 {% for ref in refs %}<div data-fact-id="{{ ref.fact_id }}"><span class="badge {{ ref.status }}">{% if ref.historical %}当时{% endif %}{{ ref.status|status }}</span>
@@ -81,10 +81,10 @@
 {{ scalar(r,'trial_scope') }}{% if r.observations.get('countries') %}{{ scalar(r,'countries') }}{% else %}{{ scalar(r,'china_site') }}{% endif %}
 {{ scalar(r,'eligibility_sex') }}{{ scalar(r,'eligibility_healthy_volunteers') }}
 {% if r.eligibility_thresholds %}<details class="eligibility-key"><summary>入排要点{% if r.eligibility_criteria_status != 'verified' %} <span class="badge {{ r.eligibility_criteria_status }}">{{ r.eligibility_criteria_status|status }}</span>{% endif %}</summary>
-{{ criteria_index(r.eligibility_clauses, true) }}</details>{% endif %}
+{{ criteria_index(r.eligibility_clauses) }}</details>{% endif %}
 </td>
 <td><details class="design-evidence"><summary data-reading-title="{{ '入排与依据' if r.eligibility_criteria else '研究依据' }}">{{ '完整入排与依据' if r.eligibility_criteria else '研究依据' }}</summary><div class="{{ 'design-evidence-content' if r.eligibility_criteria else 'source-evidence-content' }}">
-{% if r.eligibility_criteria %}<section>{% if r.eligibility_clauses %}<h3>评分与检验阈值</h3>{{ criteria_index(r.eligibility_clauses, true) }}{% endif %}
+{% if r.eligibility_criteria %}<section>{% if r.eligibility_clauses %}<h3>评分与检验阈值</h3>{{ criteria_index(r.eligibility_clauses) }}{% endif %}
 <h3>完整入排原文</h3>{% if r.eligibility_criteria_status != 'verified' %}<span class="badge {{ r.eligibility_criteria_status }}">{{ r.eligibility_criteria_status|status }}</span>{% endif %}<pre class="criteria">{{ annotated(r.eligibility_reading.segments) }}</pre></section>{% endif %}
 <section><h3>事实依据</h3>{% set source_labels = {'sample_size':'样本量','enrolled_to_date':'入组进度','phase':'研究期别','allocation':'随机分组','masking':'设盲','arms':'研究组别','eligibility_age':'年龄','eligibility_sex':'性别','eligibility_healthy_volunteers':'健康受试者','trial_scope':'试验范围','applicant':'登记申请人','eligibility_criteria':'完整入排','primary_endpoint':'主要终点','secondary_endpoint':'次要终点','trial_status':'研究状态','countries':'站点地区','china_site':'中国大陆站点','legacy_geography':'原始地域记录','start_date':'研究启动日期'} %}
 {% for name, refs in r.sources.items() %}{{ evidence(refs, r.eligibility_criteria, source_labels.get(name, '资料') ~ '依据', (name in r.observations and r.get(name) is none) or name=='legacy_geography') }}{% endfor %}</section>

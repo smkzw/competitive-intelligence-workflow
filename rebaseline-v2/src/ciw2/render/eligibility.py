@@ -116,7 +116,7 @@ _HEADING_ZH = re.compile(
 _BULLET = re.compile(r"^[ \t]*(?:[-\u2022\u00b7\u2013*]|\d+[.)])\s+")
 _LOGIC_RE = re.compile(r"\b(?:and/or|and|or|but)\b|\u4ee5\u53ca|\u548c|\u6216|\u4e14", re.IGNORECASE)
 _NEGATION_RE = re.compile(
-    r"\b(?:no|not|without|unless|except|excluding|excluded|free\s+of|negative\s+for)\b|"
+    r"\b(?:no|not|without|unless|except|excluding|excluded|failure|failed|unable|free\s+of|negative\s+for)\b|"
     r"\u672a|\u65e0|\u975e|\u4e0d\u5f97|\u4e0d\u80fd|\u7981\u7528|\u9664\u5916|\u6392\u9664",
     re.IGNORECASE,
 )

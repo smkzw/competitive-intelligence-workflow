@@ -1,40 +1,113 @@
 {% extends "_layout.html" %}
+{% import "_workbench.html" as wb %}
 {% block title %}{{ p.indication }}{% endblock %}
 {% block head %}{% if latest and latest.status in ('queued', 'running') %}<meta http-equiv="refresh" content="5">{% endif %}{% endblock %}
 {% block content %}
-{% set labels = {'queued': '排队中', 'running': '执行中', 'succeeded': '已完成', 'failed': '失败', 'cancelled': '已取消', 'pending': '等待', 'skipped': '跳过'} %}
+<div class="wb-page">
+<header class="wb-project-head">
+<div class="wb-project-title">
+<a class="wb-back" href="/">← 返回项目列表</a>
 <h1>{{ p.indication }}</h1>
-<p class="sub">{{ p.request_text or '' }}</p>
-<div class="kpis">
-<div class="kpi"><b>{{ counts.drug }}</b><span>药物</span></div><div class="kpi"><b>{{ counts.trial }}</b><span>试验</span></div>
-<div class="kpi"><b>{{ counts.company }}</b><span>企业</span></div><div class="kpi"><b>{{ n_facts }}</b><span>事实</span></div>
+{% if p.request_text %}<p class="wb-request">{{ p.request_text }}</p>{% endif %}
+<p class="wb-meta">
+{% if p.focus %}<span>关注点：{{ p.focus }}</span>{% endif %}
+<span>创建 {{ p.created_at[:16]|replace('T', ' ') }}</span>
+{% if p.cutoff_date %}<span>截止 {{ p.cutoff_date }}</span>{% endif %}
+</p>
 </div>
-<h2>报告</h2>
-<p>{% for r in p.reports %}<a class="btn" href="/projects/{{ p.id }}/portal/{{ r }}">{{ {'A':'A 竞争格局','B':'B 疗效与安全性','C':'C 试验设计先例'}[r] }}</a> {% endfor %}</p>
-<p>下载当前研究资料：<a href="/api/projects/{{ p.id }}/facts/export?format=json">JSON</a> · <a href="/api/projects/{{ p.id }}/facts/export?format=csv">CSV</a></p>
+<section class="wb-counts" aria-label="项目资料数量">
+<div class="wb-count"><b>{{ counts.drug }}</b><span>药物</span></div>
+<div class="wb-count"><b>{{ counts.trial }}</b><span>试验</span></div>
+<div class="wb-count"><b>{{ counts.company }}</b><span>企业</span></div>
+<div class="wb-count"><b>{{ n_facts }}</b><span>事实</span></div>
+</section>
+</header>
+
+<section class="wb-section" aria-labelledby="wb-reports-title">
+<div class="wb-panel-head"><h2 id="wb-reports-title">报告</h2></div>
+<div class="wb-report-links">
+{% for r in p.reports %}<a class="btn wb-report-link" href="/projects/{{ p.id }}/portal/{{ r }}">{{ wb.report_name(r) }}</a>{% endfor %}
+</div>
+<p class="wb-export sub">下载当前研究资料：<a href="/api/projects/{{ p.id }}/facts/export?format=json">JSON</a> · <a href="/api/projects/{{ p.id }}/facts/export?format=csv">CSV</a></p>
+</section>
+
 {% if latest %}
-<h2>最近运行 <span class="badge {{ 'verified' if latest.status == 'succeeded' else ('unverified' if latest.status == 'failed' else 'unknown') }}">{{ '执行中（停止中）' if stopping and latest.status == 'running' else labels.get(latest.status, latest.status) }}</span></h2>
-{% if latest.error %}<p class="warn">{{ latest.error }}</p>{% endif %}
-{% if latest.status == 'queued' %}<p class="muted">排队中：同一时间只执行一个调研任务，轮到后自动开始。</p>{% endif %}
-<div class="card"><table><thead><tr><th>阶段</th><th>状态</th><th>阻断</th><th>开始</th><th>结束</th><th>错误</th></tr></thead><tbody>
-{% for s in stages %}<tr><td>{{ s.name }}</td><td><span class="badge {{ 'verified' if s.status == 'succeeded' else ('unverified' if s.status == 'failed' else 'unknown') }}">{{ labels.get(s.status, s.status) }}</span></td>
-<td>{{ '是' if s.blocking else '否' }}</td><td class="muted">{{ (s.started_at or '')[11:19] }}</td><td class="muted">{{ (s.finished_at or '')[11:19] }}</td>
-<td class="quote">{{ (s.error or '')[:300] }}</td></tr>{% endfor %}</tbody></table>
-{% if latest.status in ('queued', 'running') %}
-<form method="post" action="/projects/{{ p.id }}/runs/{{ latest.id }}/cancel" style="margin-top:12px">
-<button type="submit" class="secondary"{% if stopping %} disabled{% endif %}>{{ '停止中…' if stopping else '停止' }}</button>
-{% if latest.status == 'running' %}<span class="muted">正在执行的工作会在下一个安全阶段/工具边界停止；已核实的资料保留。</span>{% endif %}</form>
-{% elif latest.status in ('failed', 'cancelled') %}
-<form method="post" action="/projects/{{ p.id }}/runs" style="margin-top:12px;display:flex;gap:8px">
-<input type="hidden" name="resume_run" value="{{ latest.id }}"><button type="submit">从{{ '失败' if latest.status == 'failed' else '取消' }}处继续</button>
-<span class="muted">沿用本次运行的已核实资料与同 run 缓存。</span></form>
-{% else %}
-<form method="post" action="/projects/{{ p.id }}/runs" style="margin-top:12px"><button type="submit" class="secondary">重新运行</button></form>
-{% endif %}</div>
-<h2>检索覆盖</h2>
-<div class="card"><table><thead><tr><th>区域</th><th>路线</th><th>状态</th><th>次数</th><th>命中</th></tr></thead><tbody>
-{% for c in coverage %}<tr><td>{{ c.region }}</td><td>{{ c.route_id }}</td><td>{{ c.status }}</td><td>{{ c.n }}</td><td>{{ c.hits or 0 }}</td></tr>{% endfor %}
-</tbody></table></div>
-<p class="muted">Agent 留痕：<a href="/api/runs/{{ latest.id }}/steps">/api/runs/{{ latest.id }}/steps</a></p>
+<section class="card wb-run" aria-labelledby="wb-run-title">
+<div class="wb-panel-head">
+<h2 id="wb-run-title">最近运行</h2>
+{{ wb.run_chip(latest.status, stopping) }}
+</div>
+<p class="wb-progress">{{ wb.run_progress(latest, stages) }}</p>
+{% if latest.status == 'failed' %}
+<div class="wb-alert" role="alert">
+<p class="wb-alert-title">本次运行失败，报告未完成。</p>
+{% if latest.error %}<details class="wb-details wb-failure"><summary>查看失败详情</summary><pre class="wb-diagnostic">{{ latest.error }}</pre></details>{% endif %}
+</div>
+{% elif latest.status == 'cancelled' and not latest.error %}
+<p class="wb-note">运行已取消，已完成阶段与已核实资料保留。</p>
+{% elif latest.status == 'queued' %}
+<p class="wb-note">排队中：同一时间只执行一个调研任务，轮到后自动开始。</p>
 {% endif %}
+{% if latest.error and latest.status in ('succeeded', 'cancelled') %}
+<div class="wb-alert wb-alert--soft" role="status">
+<p class="wb-alert-title">{{ '运行已取消，已完成阶段与已核实资料保留；相关说明如下。' if latest.status == 'cancelled' else '本轮运行已完成，但部分阶段未成功。' }}</p>
+<details class="wb-details wb-soft"><summary>查看运行说明</summary><pre class="wb-diagnostic">{{ latest.error }}</pre></details>
+</div>
+{% endif %}
+<div class="wb-run-actions">
+{% if latest.status in ('queued', 'running') %}
+<form method="post" action="/projects/{{ p.id }}/runs/{{ latest.id }}/cancel" class="wb-action-form">
+<button type="submit" class="secondary"{% if stopping %} disabled{% endif %}>{{ '停止中…' if stopping else '停止' }}</button>
+{% if latest.status == 'running' %}<span class="sub">正在执行的工作会在下一个安全阶段或工具边界停止；已核实的资料保留。</span>{% endif %}
+</form>
+{% elif latest.status in ('failed', 'cancelled') %}
+<form method="post" action="/projects/{{ p.id }}/runs" class="wb-action-form">
+<input type="hidden" name="resume_run" value="{{ latest.id }}">
+<button type="submit">从{{ '失败' if latest.status == 'failed' else '取消' }}处继续</button>
+<span class="sub">沿用本次运行的已核实资料与同 run 缓存。</span>
+</form>
+{% else %}
+<form method="post" action="/projects/{{ p.id }}/runs" class="wb-action-form">
+<button type="submit" class="secondary">重新运行</button>
+</form>
+{% endif %}
+</div>
+<details class="wb-details wb-diagnostics">
+<summary>运行诊断与来源覆盖（{{ stages|length }} 个阶段 · {{ coverage|length }} 条检索记录）</summary>
+<h3>阶段明细</h3>
+<div class="wb-table-wrap">
+<table class="wb-table">
+<thead><tr><th scope="col">阶段</th><th scope="col">状态</th><th scope="col">是否阻断</th><th scope="col">开始</th><th scope="col">结束</th><th scope="col">错误</th></tr></thead>
+<tbody>
+{% for s in stages %}
+<tr>
+<td>{{ wb.stage_name(s.name) }}</td>
+<td>{{ wb.stage_chip(s.status) }}</td>
+<td>{{ '是' if s.blocking else '否' }}</td>
+<td class="wb-time">{{ (s.started_at or '')[11:19] or '—' }}</td>
+<td class="wb-time">{{ (s.finished_at or '')[11:19] or '—' }}</td>
+<td>{% if s.error %}<span class="wb-diagnostic-inline">{{ s.error }}</span>{% else %}<span class="sub">—</span>{% endif %}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+<h3>检索覆盖</h3>
+<div class="wb-table-wrap">
+<table class="wb-table">
+<thead><tr><th scope="col">区域</th><th scope="col">检索路线</th><th scope="col">状态</th><th scope="col">次数</th><th scope="col">命中</th></tr></thead>
+<tbody>
+{% for c in coverage %}
+<tr><td>{{ wb.region_name(c.region) }}</td><td>{{ c.route_id }}</td><td>{{ wb.coverage_state(c.status) }}</td><td class="wb-time">{{ c.n }}</td><td class="wb-time">{{ c.hits or 0 }}</td></tr>
+{% else %}
+<tr><td colspan="5" class="sub">本次运行暂未记录检索覆盖。</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+<p class="sub wb-steps">运行留痕：<a href="/api/runs/{{ latest.id }}/steps">查看逐步执行记录</a></p>
+</details>
+</section>
+{% endif %}
+</div>
 {% endblock %}
