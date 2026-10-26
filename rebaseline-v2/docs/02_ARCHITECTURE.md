@@ -21,6 +21,8 @@ NAME_BOUND_FIELDS复用既有identity_basis回执：目标/模态保留注册品
                                             sources/http.py：所有外部内容先入 CAS + sources 表
 ```
 
+注册类别复用现有链：`cde_evidence._applications`以`proven_acceptance_refs`重新核对具体产品原行，`cde_adoption`写入幂等、critical的`identity.registration_class`代码事实，空字段仅保留源而不生成类别；唯一JSON路径/逐字整行/字节摘要与原观察时间一起保存。`render/registration.py`只读当前该来源事实，按有出处的2020后具体药品类型解释，保留相同时间冲突与旧观察；未知、疫苗及其他未支持域不借用治生3.3规则。A类别筛选复用现有文字筛选和阶段图查询，不建新schema/Skill/平台，不自动授予MAH、中国适应症或核心成员资格。新增源采用只影响trial_evidence及下游，类别规则/模板影响实际消费该投影的分析与渲染阶段；版本范围以真实绑定核对为准。
+
 ## 1. 流水线（DAG，按报告裁剪）
 | 阶段 | 类型 | 报告 | 阻断 | 说明 |
 |---|---|---|---|---|

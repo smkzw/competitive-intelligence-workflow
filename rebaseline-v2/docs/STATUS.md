@@ -2,7 +2,7 @@
 
 **2026-10-26｜Goal ACTIVE｜rebaseline-v2｜M1–M6尚未全部交付，非RC**
 
-唯一产品合同：01_PRD、02_ARCHITECTURE、03_PLAN、04_AGENT_RULES。仅英文工程；旧中文工程零接触，未知v1工作树保留。本轮基线已推f96fa686，当前HEAD以Git为准。当前状态只在本文件；详细现场和失败保留根Trellis `10-23-rebaseline-v2-m1/implement.md`、M2任务及下列证据索引，不沿历史running文字重跑。
+唯一产品合同：01_PRD、02_ARCHITECTURE、03_PLAN、04_AGENT_RULES。仅英文工程；旧中文工程零接触，未知v1工作树保留。本轮基线已推60adf30f，当前HEAD以Git为准。当前状态只在本文件；详细现场和失败保留根Trellis `10-23-rebaseline-v2-m1/implement.md`、M2任务及下列证据索引，不沿历史running文字重跑。
 
 ## 当前并行工作
 
@@ -30,7 +30,7 @@
 
 - 两次kernel边界均PENDING_TIMEOUT_NOT_FAILURE，过程中0进度轮询；第二次实际elapsed12277.68s保留，不改写成7200s。边界快照已通过triage、expand、coverage_review、trial_scope_review；正在enrich_drugs，10任务/207成功model事件/17submit记录，不能当十任务全部采用。最新事件4010/02:01:16Z。下一次只等原生7686退出事件。
 - 该旧候选trial_evidence仍IncompleteWork72：71CTR详情与`[14C]HS-10542`查询400。137真实API裸名400/quoted原样字面200且该条件0结果；139最小生产修复及7反例、100相关PASS，实际组件200。0结果不当范围排除。
-- Ego8实际不存在，长期授权替换9；9后来也不存在，当前持续复用12，不动profile/login/cache/版本。138同生产采集器从原列表绑定SB12/CTR20201869详情，memory新增25设计事实，0模型/不写135；不是71项全闭合。未来普通恢复先核活空间与受控子进程环境一致。
+- Ego8实际不存在，长期授权替换9；9后来也不存在，当前持续复用14（12再次确证不存在，160失败不记零，永久授权替代），不动profile/login/cache/版本。138同生产采集器从原列表绑定SB12/CTR20201869详情，memory新增25设计事实，0模型/不写135；不是71项全闭合。未来普通恢复先核活空间与受控子进程环境一致。
 - 139实际memory版本核后续恢复边界trial_evidence，原六成功前置兼容；须等135终态与标准备份，才用新候选恢复。不重跑中国/全球/已合格scope，不给旧134补新通过。
 - **125已失败终态**：4768.883s；中国/全球/triage/expand成功，coverage_review规划前超预算；45成功回复/1181297成功tokens，0设计HTML。127标准备份335文件52.74MB、manifestf4911aaf…，另12trace573.56KB。无旧PID待等。
 - **130/132预算根因已闭合**：243药物+44孤立研究、4773 NCT/source/JSON/URL引用和原始组全等；最大registry74102→42115、base352856→6713，28+2包均≤60k/≤30，0来源/模型/写原DB。135已实际越过原预算故障，非扩大预算或裁Top-N。
@@ -39,12 +39,14 @@
 
 ## M2独立参照（尚未封存）
 
-- 156已实际派发两指定缺口（Cendakimab/GHZ339）一手正向来源单元：Grok/grok-build/grok-4.7:high及声明备用，runner83475/原生42701，48turn/5400s，5输入SHA固定/preflight PASS0warning。仅6原始来源+当前政策，不读生产DB/owner分类；每产品一条新策略，未封分母或写科学。
+- 156实际终态：Grok认证失败、Cursor该变体不可用，声明备用Pi/openai-codex/gpt-6.1-sol:max选择器；实际effort未独立暴露。5派发/6原始/21引文定位已核，809.513s按原ledger。4新未接受响应头匿名会话值已显式脱敏并保留前后SHA，原manifest与科学原件不改；无凭据使用。
+- 159/161：Cendakimab原始研发论文+FDA UNII桥接CC93538/RPC4046；原RPC4064别名不擅改，中国AD资格待核。原登记4条China代码地点实为Ichikawa/Matsudo的冲突，本次官方API同SHA证实，不据此认中国开发。GHZ339实得JXSL2500081治生1及原CTR20253287中重度AD记录；企业列不作MAH，年度管线脚注1不作注册类。
+- 162当前生产切片：普通应用核源路径采用完整注册类别事实，唯一原行定位/源版本/幂等；A类别+文字筛选同图-表集合。6RED→106相关PASS1.36s/Ruff，真实GHZ原行1事实、重复0新增、0模型/新源、不写原件；core_membership仍null。四宽16态/4次Enter与Esc回焦，非完整A/密集多药接受。实屏初搜索框被挤窄/JSON数组主显已修为稳定输入宽度与中文来源字段；初帧保留。
 
 - 原AD127/IgAN57/PNH28均provisional；15编译212ID/373引文/217SHA结构通过，但131反证推核心与5学术申办误排已判REVISE；17覆盖层保留137待核，未知不静默移出分母。
 - 已核CDE/官方定义支持CM313/CM338治生1、ALXN2050化药进口1；发行人原件支持ADX038/EVER001、Felzartamab/Mezagitamab正向类；阿曲生坦↔atrasentan仅成分名链，不推剂型/MAH/许可等价。
 - IBI3027/QL2108按具体治生3.3行与官方定义、SB12原题明确类似药；D23按独立患者II期与发行人源保留，不并Nefecon/D23A。TLL018 IR/ER唯一单位、GS101类别、中国适应症资格与指定AD缺口仍待。
-- 74/86/100等历史派发格式/独立性限制及owner定位纠正全部保留；真实源核不替代失败的流程审计。未算95%召回，生产核心分类/分面仍待实现。
+- 74/86/100等历史派发格式/独立性限制及owner定位纠正全部保留；真实源核不替代失败的流程审计。未算95%召回；162只接通注册类来源路线及A分面，其他正向路线和核心成员/计数仍待。
 
 ## 当前新发现
 
@@ -64,4 +66,6 @@
 
 - 当前本地：`ciw-data/ordinary-pnh-scope-payload-20261026-135/`、`report-theme-20261026-147/`、`eligibility-context-20261026-148/`、`real-frontend-current-20261026-149/`、`frontend-kangzhe-20261026-150/`；不提交DB/CAS/全文/原始日志。
 - 历史可提交摘要：`docs/evidence/20261026-source-closure-recovery.json`、`20261026-scope-payload-budget.json`、`20261026-ordinary-pnh-terminal.json`及其Git历史；旧详细STATUS保留Git ee7f31c0与Trellis，禁止改历史SHA成PASS。
-- 下一步：f96fa686已推且285代码/Skill/测试同151；153图-表已实际核验/154新门/155固定源通过，白名单提交后157当前155安装/恢复组件已核；158阶段元数据小修已74相关，下一稳定候选再跑宽门/出包。继续156定向源与135退出事件，不重派。C02实际缺凭据不可用，记录NOT_RUN，不借owner或测试冒充独立视觉通过。并行只监听135退出；终态保全后据真实最早失效阶段恢复，不建立阶段暂停点。
+- 163一次稳定宽门2046PASS16.38s/Ruff，257Python/18JS、411输入SHA不变，manifest7f28be39…。164只124运行时1963261bytes/manifest6d94861d…；165在空target安装新wheel6d413e23…/sdistad9c1b7c…，25资产/9Skills/全部模块/隔离cwd CLI入口函数同字节，0下载/无新venv，复用157仅依赖且未修改157。不是新venv安装或普通135恢复。相对155实际13阶段中10同，变化只有trial_evidence/analysis_C/render，发现/范围六前置同。
+- C03对162独立挑战初始化被guard去重拒绝：源156已使用完该链全部合格变体，NOT_RUN_NO_UNUSED_ELIGIBLE_ROUTE，未派发/不静默替换；owner原件/代码/回归/实屏检查不冒充独立意见。C02仍NOT_RUN_AUTH_UNAVAILABLE。
+- 下一步：当前批白名单提交/推送；按135退出事件保全后从实际最早失效阶段恢复普通完整C，持续补M2唯一产品/中国资格与真实A/B。当前source-only分类事实不当已封核心/95%或完整A；不重派156、不重跑151研究、不建立阶段暂停点。

@@ -21,6 +21,10 @@
   "children": [],
   "parent": "10-23-rebaseline-v2-m1",
   "relatedFiles": [],
-  "notes": "2026-10-25 reference still provisional/not frozen/recall not computed. Primary class/form/name sources05–09 retained. Focused3claim review terminal:Grok TLS failure,Cursor runtime mismatch,approved same-session Pi/openai-codex/gpt-6.1-sol:high fallback; owner retains product-vs-acceptance grain and rejects unsupported OCR claim. G1/D1 class links qualified,Q1 product-level supported,no CTR=acceptance identity. User explicitly selected innovative+independently clinically developed modified forms core; biosimilars separate/not core. Policy11/IBI3027+QL2108 literal3.3 dispositions recorded, original lists immutable, remaining identity/China/unique-unit closure required. No denominator freeze/recall or production facet adoption. D23 core eligibility now source-supported by official Chinese patientPhaseII D23-201 and issuer primary source, supplement12 kept separate pending final dedup; notNefecon/D23A/notCTRacceptance join. Other closure and production facets incomplete.",
-  "meta": {}
+  "notes": "2026-10-26 active:156 terminal declared Pi/openai-codex/gpt-6.1-sol:max fallback after Grok auth/Cursor unavailable;159 exact21quote/6source checks and E08 audit passed.161 exact CDE JXSL2500081 therapeuticbio1 and original CTR20253287 support GHZ339 ChinaAD; Cendakimab original development/name bridge supported, China eligibility unresolved.162 deterministic registration facts and A query facets implemented, real-source1fact/idempotent0duplicates, no original edits. Three references/unique products/final core membership not sealed, recall not computed. C03 init lacked unused eligible route, not independent acceptance.",
+  "meta": {
+    "workflow_state": "in_progress",
+    "goal_status": "active",
+    "current_status": "rebaseline-v2/docs/STATUS.md"
+  }
 }

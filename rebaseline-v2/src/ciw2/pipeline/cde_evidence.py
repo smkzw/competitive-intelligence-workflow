@@ -7,7 +7,7 @@ from pathlib import Path
 from ciw2.pipeline.context import RunContext
 from ciw2.pipeline.queries import scoped_drugs
 from ciw2.pipeline.recovery import fingerprint, get_unit, put_unit
-from ciw2.sources import cde_priority, cde_review_browser
+from ciw2.sources import cde_adoption, cde_priority, cde_review_browser
 from ciw2.sources.cde_review_capture import SCOPES, parse_review_capture
 
 
@@ -16,6 +16,7 @@ def _applications(rc: RunContext, ctx, pending: list[dict]) -> list[dict]:
     for drug in scoped_drugs(rc):
         claimed=drug['attrs'].get('cde_acceptance_refs',[])
         proven=cde_review_browser.proven_acceptance_refs(ctx,drug)
+        cde_adoption.adopt(ctx, drug['id'], proven)
         refs.extend({'drug_id':drug['id'],**ref} for ref in proven)
         accepted={(r['source_id'],r['acceptance_number']) for r in proven}
         if any(not isinstance(r,dict) or (r.get('source_id'),r.get('acceptance_number')) not in accepted for r in claimed):

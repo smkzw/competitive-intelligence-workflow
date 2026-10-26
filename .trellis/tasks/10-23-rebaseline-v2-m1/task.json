@@ -23,10 +23,11 @@
   ],
   "parent": null,
   "relatedFiles": [],
-  "notes": "2026-10-25 active:3aa1f559 pushed, source gate1847PASS/Ruff/JS/600-80. Install10 exact3aa offline0downloads/23assets/9Skills; currentABC standard restore+installed ASGI summary isolation+11-ID recorded replay+scope/class recovery passed bounded. Frontier126cached554inputs297intermediates+141pending226inputs retained. User core policy innovative+independent modified forms; biosimilars separate/not core, owner11 overlay only, denominator/UI not complete. Whole-stage upgrade invalidation and M1–M6 incomplete.",
+  "notes": "2026-10-26 active: 60adf30f pushed; current162 registration facts/A facets accepted component, 163 once2046PASS/Ruff/structure, frozen164124files. 165 offline empty-target wheel check uses unchanged157 test dependencies, not fresh venv or complete recovery. Ordinary135 fixed134/native83367/74351 and kernel waiter7686 still pending, no restart/hotpatch/progress poll. M1–M6 incomplete; current truth rebaseline-v2/docs/STATUS.md.",
   "meta": {
     "workflow_state": "in_progress",
-    "pause_checkpoint": "rebaseline-v2/docs/PAUSE_HANDOFF_20261024_SYNTHESIS.md",
-    "goal_status": "active"
+    "goal_status": "active",
+    "current_status": "rebaseline-v2/docs/STATUS.md",
+    "historical_pause_checkpoint": "rebaseline-v2/docs/PAUSE_HANDOFF_20261024_SYNTHESIS.md"
   }
 }

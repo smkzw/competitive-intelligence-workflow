@@ -1,0 +1,166 @@
+{
+  "scope": "SOURCE_CLASSIFICATION_PRODUCTION_COMPONENT_NOT_CORE_DENOMINATOR_OR_COMPLETE_A",
+  "base_commit": "60adf30f16bd6012e2b83087dc3b6db8f033f1b2",
+  "classification_policy": "innovative and independently developed modified forms are core candidates; biosimilars separately accessible; actual China-indication and unique-product membership still need sources",
+  "source_check": {
+    "executor_actual_selector": "Pi/openai-codex/gpt-6.1-sol:max declared fallback; actual endpoint effort not independently exposed",
+    "execution_audit": "PASS_E08",
+    "input_original_quote_checks": [
+      5,
+      6,
+      21
+    ],
+    "GHZ339": {
+      "acceptance": "JXSL2500081",
+      "kind": "治疗用生物制品",
+      "class": "1",
+      "handled_date": "2025-05-23",
+      "source_url": "https://www.cde.org.cn/main/xxgk/listpage/9f9c74c73e0f8f56a8bfbc646055026d",
+      "source_digest": "59646f1aca103fd4e96f6141eeb75a95b36ad9bcb784cc06c527e43d59a57e94",
+      "china_AD_registration": "CTR20253287"
+    },
+    "Cendakimab": {
+      "original_developer_DOI": "10.1007/s12325-017-0525-8",
+      "official_identity": "https://precision.fda.gov/uniisearch/srs/unii/o8r9u9zuvn",
+      "china_eligibility": "unresolved",
+      "original_RPC4064_alias": "preserved_not_automatically_equated_to_RPC4046"
+    },
+    "geography": "current official NCT04800315 API bytes exactly equal original source; preserve four China-coded Japanese-city conflicts, not evidence of China development",
+    "geography_api_digest": "1b6661610ae4ca2955063d611a6e324507566108eea2b60c560f733a23887436",
+    "header_handling": "4 new unaccepted response metadata files sanitized with explicit before/after digests; no scientific-body or historical-manifest edits"
+  },
+  "implementation": {
+    "initial_RED": 6,
+    "related_PASS": 106,
+    "related_seconds": 1.36,
+    "wide_PASS": 2046,
+    "wide_seconds": 16.38,
+    "ruff": "PASS",
+    "python_structure_files": 257,
+    "javascript_syntax_files": 18,
+    "gate_input_SHA_unchanged": 411,
+    "gate_manifest_sha256": "7f28be3970c6b2a56e3c96374f558073832e45a4465e085f068d12dcda1fc897",
+    "runtime_manifest_sha256": "6d94861db331f5b6023782161220b45dc3b1739d75c216e5fb4ef477d52ad900",
+    "runtime_files": 124,
+    "runtime_bytes": 1963261,
+    "schema_or_dependency_additions": false,
+    "original_data_modified": false,
+    "metadata_only_stage_progress_included": true
+  },
+  "actual_source_component": {
+    "scope": "ACTUAL_CDE_ROW_PRODUCTION_ADOPTION_AND_A_RENDER_COMPONENT_NOT_ORDINARY_FULL_A_OR_M2",
+    "project": "prj_b2b98c4a5c6b",
+    "run": "run_014eace39592",
+    "source_id": "src_7c05d952a9d9",
+    "source_digest": "59646f1aca103fd4e96f6141eeb75a95b36ad9bcb784cc06c527e43d59a57e94",
+    "original_fetch_time_preserved": "2026-10-26T03:21:52+00:00",
+    "fact_id": "fct_ce630b58efa3",
+    "value": "1",
+    "path": "$.pages[0].rows[0][5]",
+    "category": "innovative",
+    "core_membership": null,
+    "references": 1,
+    "adopted_facts": 1,
+    "repeat_duplicate_facts": 0,
+    "new_model_calls": 0,
+    "new_source_requests": 0,
+    "original_sources_written": false,
+    "html_sha256": "97a000e8a824b0c8f920901f33b9cc35aa85f2923222e1a64821bcda53ac2f6a"
+  },
+  "render_final": {
+    "scope": "SAME_REAL_SOURCE_READ_ONLY_RERENDER_AFTER_OBSERVED_NARROW_INPUT_AND_RAW_ARRAY_DISPLAY",
+    "html_sha256": "4f00889eb2a9bcb91271ee432383d3901b2a5488e54704d1fa7dadb651af294d",
+    "database_read_only": true,
+    "new_model_or_source_calls": 0
+  },
+  "browser": {
+    "widths": [
+      1440,
+      1600,
+      1920,
+      2560
+    ],
+    "states_per_width": [
+      "all",
+      "biosimilar_empty",
+      "text_plus_category",
+      "source_reader"
+    ],
+    "page_overflow": false,
+    "keyboard_enter_escape_return": 4,
+    "search_width_px": 640,
+    "source_fact_mapping_checked": true,
+    "source_rows": 1,
+    "dense_multi_drug_acceptance": false,
+    "initial_narrow_input_and_raw_array_display": "fixed_after_actual_frame_inspection; original evidence retained",
+    "screenshots": {
+      "registration-A-1440-20261026.png": "e9b035fb7c70a97a7abd84a8c406d08bad9d28ea71dd5a68f928de4b1bb26398",
+      "registration-source-2560-20261026.png": "d06069869e57f1abafb903cc5e8a813ce6293ca55871202e179a15d3550f73d3"
+    }
+  },
+  "bindings": {
+    "same": [
+      "intake",
+      "universe_china",
+      "universe_global",
+      "candidate_triage",
+      "universe_expand",
+      "coverage_review",
+      "trial_scope_review",
+      "enrich_drugs",
+      "extract_design",
+      "verify"
+    ],
+    "changed": [
+      "trial_evidence",
+      "analysis_C",
+      "render"
+    ],
+    "calls_or_state_writes": 0
+  },
+  "package": {
+    "scope": "CURRENT164_WHEEL_EMPTY_TARGET_INSTALL_REUSED157_TEST_DEPENDENCIES_NOT_FRESH_VENV_OR_FULL_RECOVERY",
+    "wheel_sha256": "6d413e23731d9bef27287495cf1850ccb9ff2aa87e5834ebe433c2402202732e",
+    "sdist_sha256": "ad9c1b7c7d561282ff455e5fe75a25fa5326febc7bc255c6cb1c7bc15238ee61",
+    "frozen_manifest_sha256": "6d94861db331f5b6023782161220b45dc3b1739d75c216e5fb4ef477d52ad900",
+    "source_files_checked": 124,
+    "assets_checked": 25,
+    "skills_checked": 9,
+    "new_venv": false,
+    "old157_venv_modified": false,
+    "external_downloads": 0,
+    "model_or_source_calls": 0,
+    "steps": {
+      "offline-build": 0,
+      "empty-target-install": 0,
+      "isolated-imports": 0,
+      "cli-entry-function": 0
+    },
+    "installed": {
+      "modules": "all_imported",
+      "skills": 9,
+      "extractor_version": "bc315eb4e721b713ca1869f0573e68bd3a7b5f692250a19188c94a11febae773",
+      "rule_version": "cde-registration-2020-literal-v1"
+    }
+  },
+  "independent_review": {
+    "scope": "ATTEMPTED_C03_INIT_NOT_DISPATCHED_NO_SILENT_SUBSTITUTION",
+    "task_id": "ciw2-registration-source-20261026",
+    "execution_dedup_task": "ciw2-ad-two-positive-sources-20261026",
+    "status": "NOT_RUN_NO_UNUSED_ELIGIBLE_ROUTE",
+    "reason": "guard rejected conference base chain after excluding the actual source executor chain: grok/grok-build/grok-4.7, pi/cursor/grok-4.7-high, pi/openai-codex/gpt-6.1-sol",
+    "reviewer_created": false,
+    "owner_direct_checks": "full original source text/page, exact21locators, source row bindings, code and regression, actual four desktop component states; not independent acceptance"
+  },
+  "reference_sealed": false,
+  "recall_computed": false,
+  "ordinary135": "still pending, fixed old134; not hotpatched or restarted",
+  "not_delivered": [
+    "M1 ordinary complete C",
+    "M2 sealed 3 references and >=95% recall",
+    "M3 complete real A",
+    "M4 cross-study B and 50 critical >=98%",
+    "M5 historical and global",
+    "M6 complete current ordinary recovery/final acceptance"
+  ]
+}

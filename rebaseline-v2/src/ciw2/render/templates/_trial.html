@@ -10,14 +10,14 @@
 {% set state.facts=state.facts+[item.fact_id] %}<div data-fact-id="{{ item.fact_id }}">
 {% set role=item.role or (item.field|registry_label('profile_field') if item.field else '') %}
 {% if role %}<span class="muted">{{ role }}</span> {% endif %}
-{% if item.field=='identity.modality' %}{{ item.value|registry_label('drug_modality') }}{% else %}{{ item.value or item.name }}{% endif %}
+{% if item.field=='identity.registration_class' %}{{ item.context.drug_type }} · {{ item.value }}类<div>申请类型：{{ item.context.application_type }} · 承办日期：{{ item.context.handled_date_text }}</div><div class="muted">原记录企业：{{ item.context.company_text }}</div>{% elif item.field=='identity.modality' %}{{ item.value|registry_label('drug_modality') }}{% else %}{{ item.value or item.name }}{% endif %}
 {% if item.field and item.field.endswith('.development') and item.context.indication %}<span class="muted"> · {{ item.context.indication }}{% if item.source_kind %} · {{ item.source_kind|registry_label('source_kind') }}{% endif %}</span>{% endif %}
 {% set as_of=item.as_of or (item.context.as_of if item.context else none) %}{% if as_of %}<span class="muted"> · 截至 {{ as_of }}</span>{% endif %}
 {% if item.legal_entity %}<div>持有人法律实体：{{ item.legal_entity }}</div>{% endif %}
 {% set meta=(item.source_id,item.registration_number,item.strength,item.observed_at,item.issue_date,item.approval_date,item.valid_until) %}
 {% if meta not in state.metadata %}{{ certificate_metadata(item) }}{% set state.metadata=state.metadata+[meta] %}{% endif %}
 </div>{% endif %}{% endfor %}
-<blockquote>{{ ref.quote or '' }}</blockquote>{% if ref.url %}<a href="{{ ref.url }}" target="_blank" rel="noopener">原始来源</a>{% endif %}
+{% if ref.field=='identity.registration_class' %}<details><summary>原始行</summary><blockquote>{{ ref.quote or '' }}</blockquote></details>{% else %}<blockquote>{{ ref.quote or '' }}</blockquote>{% endif %}{% if ref.url %}<a href="{{ ref.url }}" target="_blank" rel="noopener">原始来源</a>{% endif %}
 </section>{% endif %}{% endfor %}</div></details>{% endif %}{% endmacro %}
 {% macro company_evidence(ref) %}{% if ref.fact_id %}{{ profile_evidence([ref]+(ref.group_refs|default([])),ref.role+'依据') }}{% endif %}{% endmacro %}
 {% macro name_evidence(refs) %}{{ profile_evidence(refs,'正式名称依据') }}{% endmacro %}

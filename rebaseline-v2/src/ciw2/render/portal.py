@@ -20,6 +20,7 @@ from ciw2.render.drug_identity import china_trial_sites, drug_identities
 from ciw2.render.drug_profile import drug_profiles
 from ciw2.render.endpoint_label import endpoint_label
 from ciw2.render.labels import PHASE_ZH, age_label, phase_label, registry_label
+from ciw2.render.registration import registrations
 from ciw2.render.result_identity import bind_result_drugs
 from ciw2.render.results import arm_tokens, dispersion_text, result_groups, visit_label
 from ciw2.render.trial_identity import trial_identities, verified_holders
@@ -55,6 +56,7 @@ def _trial_drugs(db: DB, pid: str) -> dict[str, list[str]]:
 def data_a(db: DB, pid: str) -> dict[str, Any]:
     drugs = list(drug_identities(db,pid).values())
     profiles=drug_profiles(db,pid)
+    classes=registrations(db,pid)
     identities = trial_identities(db, pid)
     holder_map = verified_holders(db.current_facts(pid), {s['id']: s for s in db.query(
         'SELECT id,url FROM sources WHERE project_id=?', (pid,))})
@@ -74,7 +76,7 @@ def data_a(db: DB, pid: str) -> dict[str, Any]:
         n_china=sum(china_sites.get(t['id']) is True for t in ts)
         unknown_sites=sum(china_sites.get(t['id']) is None for t in ts)
         rows.append({
-            "id": d['id'], "name": d["name"], "name_zh": d["name_zh"], "targets": profile['targets'],
+            "classification":classes[d['id']], "id": d['id'], "name": d["name"], "name_zh": d["name_zh"], "targets": profile['targets'],
             "modality":profile['modality'],"companies":profile['companies'],
             "china_mah": ' / '.join(dict.fromkeys(c['display_name'] for c in holder_map[d['id']])),
             'mah_refs': holder_map[d['id']], 'name_refs': d['name_refs'],

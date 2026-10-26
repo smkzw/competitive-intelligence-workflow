@@ -462,10 +462,12 @@
   }
   document.querySelectorAll("input[data-filter]").forEach(function (inp) {
     var table = el(inp.getAttribute("data-filter"));
-    inp.addEventListener("input", function () {
-      var q = inp.value.trim().toLowerCase();
+    var apply = function () {
+      var q = inp.value.trim().toLowerCase(), category = table.id === "tbl-a" && el("competition-class");
       table.querySelectorAll("tbody tr").forEach(function (tr) {
-        tr.style.display = !q || tr.textContent.toLowerCase().indexOf(q) >= 0 ? "" : "none";
+        var matched = !q || tr.textContent.toLowerCase().indexOf(q) >= 0;
+        if (category && category.value !== "all") matched = matched && tr.dataset.competitionClass === category.value;
+        tr.style.display = matched ? "" : "none";
       });
       var extra = el(inp.getAttribute("data-filter-extra"));
       if (extra && extra !== table) {
@@ -479,7 +481,9 @@
       if (table.id === "tbl-c") updateDesignQuery(table);
       if (table.id === "tbl-a") updateLandscapeQuery(table);
       if (table.id === "tbl-b" && el("result-group")) updateResultQuery(table);
-    });
+    };
+    inp.addEventListener("input", apply);
+    if (table.id === "tbl-a" && el("competition-class")) el("competition-class").addEventListener("change", apply);
   });
   function updateDesignQuery(table) {
     var rows = Array.from(table.querySelectorAll("tbody tr"));

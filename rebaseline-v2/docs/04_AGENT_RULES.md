@@ -8,7 +8,8 @@
 3. 自动回归中的网络相关测试一律离线（monkeypatch / 小夹具 ≤50KB）。真实来源/模型检查与 pytest 分开，使用有明确输入、版本和恢复记录的独立 smoke 或正常产品运行；常规 smoke 放 `scripts/smoke_*.py`，已有长程真实项目的保全入口留在忽略的 `ciw-data/`，不得混入离线开发门或仅为换名重跑。
 4. `docs/STATUS.md` **替换式更新**（不是追加日志），≤150 行：当前里程碑、已完成、进行中、阻塞、下一步、最近一次真实运行结果。
 5. 里程碑结束时附一次真实运行的证据（数字 + 截图路径），并更新 03_PLAN 的勾选。
-6. 领域规则改动（semantics / tiers / quote）必须同时改测试并在 STATUS 说明原因。
+6. 来源请求只记录安全头白名单（Content-Type、Content-Length、ETag、Last-Modified）、状态和规范来源地址；不落 Set-Cookie、Authorization、会话值或临时跳转参数。发现新未接受的请求元数据含会话值时，仅对该元数据显式脱敏并记录前后摘要，科学原件与历史manifest不改。
+7. 领域规则改动（semantics / tiers / quote）必须同时改测试并在 STATUS 说明原因。
 
 ## 禁止
 1. 提交运行产物、数据库、CAS、日志、第三方全文（PDF、HTML 页面、论文全文）、截图以外的大文件。
