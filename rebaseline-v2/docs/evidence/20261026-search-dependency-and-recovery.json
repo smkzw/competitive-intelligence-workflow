@@ -47,15 +47,18 @@
     "source_cas": 936,
     "event_cas": 397,
     "database_unchanged_before_qualification": true,
-    "ordinary_service_started": false
+    "ordinary_service_started": true
   },
   "independent_review": {
     "primary": "zcode/zcode/GLM-5.3-Flash:max",
     "primary_status": "TERMINAL_ENVIRONMENT_FAILURE_NO_SESSION_OR_OPINION",
     "first_declared_fallback": "grok/grok-build/grok-4.7:high",
-    "fallback_status": "REVISE_INITIAL_FIXED_TWO_ROOTS_SAME_SESSION_FOLLOWUP_PENDING",
+    "fallback_status": "REVISE_THEN_SAME_SESSION_ACCEPT",
     "actual_seconds": 897.891,
-    "session": "394e8213-baa2-4955-9694-bed65e11becc"
+    "session": "394e8213-baa2-4955-9694-bed65e11becc",
+    "remediation_seconds": 819.475,
+    "final_report_sha256": "fc99dbf55d302599c5a611ec7d66cb19341fdddb8293386e3ce3ffbfb406001a",
+    "runner_audit_errors": []
   },
   "actual_model_protocol_check": {
     "requested": "cms-router/glm-5.3-flash",
@@ -68,7 +71,7 @@
   },
   "new_frontend_changes": false,
   "browser_rerun_for_this_backend_fix": "NOT_REQUIRED_FRONTEND_UNCHANGED",
-  "ordinary_research_acceptance": "NOT_RUN",
+  "ordinary_research_acceptance": "ACTUAL_SERVICE_RUNNING_NOT_ACCEPTED",
   "clinical_acceptance": "NOT_RUN",
   "M1_complete": false,
   "release_accepted": false,
@@ -87,6 +90,28 @@
     "bytes": 1993637,
     "manifest_sha256": "eba329f5063d3086b4be5dbcf05e4ae018a9ccf9b2a5fd530f7c07e14e2daa17",
     "RAM_preflight": "PASS_THREE_EXPLICIT_QUALIFICATIONS_TRIAL_EVIDENCE_RESTART",
-    "activated": false
+    "activated": true
+  },
+  "ordinary_resume": {
+    "entry": "Service.start_run(project_id,resume_run=run_id,background=False)",
+    "restart": "trial_evidence",
+    "six_discovery_prefix_reused": true,
+    "old_extraction_keys_migrated": 0,
+    "first_owned_attempt": {
+      "status": "cancelled_by_owner_for_invalid_browser_context_not_user_pause",
+      "seconds": 76.649,
+      "successful_models": 0,
+      "source_versions_before": 1319,
+      "source_versions_after": 1363,
+      "facts": 6254,
+      "original_unchanged": true,
+      "six_prefix_unchanged": true,
+      "forced_kill": false
+    },
+    "retry": "same data, retained actual new sources, no requalification",
+    "retry_status": "RUNNING",
+    "new_browser_space": 32,
+    "start_event": 6976,
+    "latest_result": "NOT_YET_RETURNED"
   }
 }
