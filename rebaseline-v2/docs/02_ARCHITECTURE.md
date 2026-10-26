@@ -220,3 +220,8 @@ render回执另绑定实际A/B/C文件的字节摘要；文件名输出JSON不�
 `extraction._key`使用现有tool_versions工具白名单绑定、共享执行digest、实际RunContext.skill、Skill正文/输出/预算、模型、来源恢复规则。extraction.CODE_HASH由加载的提取函数和TASK_CHARS构造；不再整文件绑定context/http或各工具模块。identity_enrichment另绑定现有profile规则。新layout=extraction-unit-dependencies-v2只用于新键，不搜索或重签旧键，阶段版本机制继续沿用。
 
 `recovery._representation_current`对所有已存在来源检查实际raw CAS以及非空已记录text CAS的SHA；PDF另要求当前parser identity及text。row=None维持缺URL观察语义。读取不修原件、不取网络、不变旧source/receipt；不兼容只返回未命中。旧运行资格检查先使用明确闭合的导出与固定runtime，不触及活跃执行状态。Python3.14的slice常量在既有运行digest递归编码三个分量，不换哈希平台或降低变更敏感性。
+
+
+### 身份富集对象的稳定连接（2026-10-26）
+
+仅identity_enrichment的drug输入附entity_id；extract_drugs及既有selected-unit smoke由实际host drug记录写drug_entity_id。严格模型输出schema不接受该宿主字段。verification.prepare在任何历史回放前验证显式连接；_profile_entity拒绝跨项目、非药物、错误原名或缺依据的返回名称，不对显式空连接执行名称fallback。未带元数据的旧提案保留原行为。新增元数据参与新提案身份；_existing_proposal只读匹配同host历史ID及原扩展引文，不复制或改写旧科学事实/状态。无DB迁移、无合并实体或新审批步骤。

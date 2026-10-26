@@ -51,7 +51,8 @@ def main() -> int:
         for drug in selected:
             task=_tasks(rc,'extract-results',drug,{'mode':'identity_enrichment','evidence_urls':args.url})[0]
             result=_call(rc,'extract-results',task,_key(rc,'extract-results',task))
-            output['facts'].extend({**fact,'drug':drug['name'],'extraction_model':result['extraction_model']}
+            output['facts'].extend({**fact,'drug':drug['name'],'drug_entity_id':drug['id'],
+                                   'extraction_model':result['extraction_model']}
                                    for fact in result['facts'])
             output['gaps'].extend(result['gaps'])
         # This is a deliberately bounded source slice, not a completed normal stage.

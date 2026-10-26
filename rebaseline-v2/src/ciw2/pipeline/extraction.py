@@ -22,7 +22,7 @@ def _tasks(rc: RunContext, skill: str, drug: dict[str, Any], extra: dict[str, An
     if extra.get('mode')=='identity_enrichment':
         from ciw2.render.drug_identity import drug_identities
         formal=drug_identities(rc.db,rc.project_id)[drug['id']]
-        base['drug']={key:formal[key] for key in ('name','name_zh','aliases')}
+        base['drug']={'entity_id': drug['id'], **{key:formal[key] for key in ('name','name_zh','aliases')}}
         return [{**base,**extra}]
     refs: dict[str, list[dict[str, Any]]] = {}
     if skill == 'extract-design':
@@ -136,6 +136,7 @@ def extract_drugs(rc: RunContext, skill: str,
             typed = ExtractionResult.model_validate({'facts': [
                 {k: v for k, v in f.items() if k != 'source_id'} for f in result['facts']], 'gaps': result['gaps']})
             output['facts'].extend({**fact.model_dump(), 'drug': drug['name'],
+                **({'drug_entity_id': drug['id']} if task.get('mode') == 'identity_enrichment' else {}),
                 **({'source_id': raw['source_id']} if 'source_id' in raw else {}),
                 'extraction_model': result['extraction_model']} for fact, raw in zip(typed.facts, result['facts'], strict=True))
             output['gaps'].extend(f"{drug['name']}: {gap}" for gap in typed.gaps)

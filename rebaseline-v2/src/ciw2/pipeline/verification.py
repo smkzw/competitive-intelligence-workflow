@@ -40,6 +40,12 @@ def prepare(rc: RunContext, cross_check: Callable[..., Any]) -> list[dict[str, A
     for stage in ('enrich_drugs', 'extract_results', 'extract_design'):
         for raw in _proposals(rc,stage):
             fid=_proposal_id(rc,stage,raw)
+            bound = None
+            if raw['field'] in FIELDS and 'drug_entity_id' in raw:
+                try: bound = _profile_entity(rc, raw)
+                except ValueError as exc:
+                    prepared.append({'id': fid, 'proposal': raw, 'identity_error': str(exc)})
+                    continue
             existing=_existing_proposal(rc,stage,raw,fid)
             proposal=raw if existing else anchored(rc,raw)
             if existing:fid=existing['id']
@@ -68,7 +74,7 @@ def prepare(rc: RunContext, cross_check: Callable[..., Any]) -> list[dict[str, A
                                     'source_id': src['id'] if src else None, 'status': 'unverified',
                                     'quote_start': None, 'quote_end': None, 'reason': ''}
             if proposal['field'] in FIELDS:
-                try:item['entity_id']=_profile_entity(rc,proposal)
+                try:item['entity_id']=bound if bound is not None else _profile_entity(rc,proposal)
                 except ValueError as exc:
                     item['identity_error']=str(exc);prepared.append(item);continue
             if proposal.get('value') is None:
@@ -103,8 +109,11 @@ def _existing_proposal(rc: RunContext,stage: str,raw: dict[str,Any],fid: str) ->
     matches=[]
     for row in rc.db.query('SELECT * FROM facts WHERE project_id=? AND field=? AND source_id IS ?',
                             (rc.project_id,raw['field'],raw.get('source_id'))):
+        if 'drug_entity_id' in raw and row['entity_id'] != raw['drug_entity_id']:
+            continue
         legacy={**raw,'quote':row['quote']}
-        if _proposal_id(rc,stage,legacy)==row['id']:matches.append(row)
+        variants = [legacy, {k: v for k, v in legacy.items() if k != 'drug_entity_id'}]
+        if any(_proposal_id(rc,stage,item)==row['id'] for item in variants):matches.append(row)
     if len(matches)>1:raise ValueError('原始提案存在多个历史采用身份，保留现场不猜选')
     return matches[0] if matches else None
 
@@ -122,6 +131,13 @@ def _profile_entity(rc: RunContext,proposal: dict[str,Any]) -> str:
     from ciw2.domain.identity import name_key
     from ciw2.domain.profile_evidence import drug_names
     drugs=rc.db.entities(rc.project_id,'drug')
+    if 'drug_entity_id' in proposal:
+        host = next((d for d in drugs if d['id'] == proposal['drug_entity_id']), None)
+        if (host is None or host['name'] != proposal['drug'] or not any(
+                name_key(name) == name_key(proposal['entity'])
+                for name in drug_names(rc.db, rc.project_id, host['id']))):
+            raise ValueError('档案返回实体不等于宿主输入药物实体')
+        return host['id']
     expected={d['id'] for d in drugs if name_key(d['name'])==name_key(proposal['drug'])}
     actual={d['id'] for d in drugs if name_key(d['name'])==name_key(proposal['entity'])}
     if not actual:

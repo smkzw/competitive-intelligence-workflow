@@ -1080,3 +1080,18 @@ worker实核Python3.14把slice(None,3000,None)放co_consts，原stage_versions�
 184execution audit PASS；parent review-gate首因旧工具硬编码Hermes词拒绝（实际Pi，无额外Hermes角色），加明确Hermes未参与及Duration/Result列后PASS0warnings，原失败保留。按既有guard先dryrun再apply可恢复归档prompt/report/stdout三个文件，所有SHA相等，0证据/原源/DB/Agent历史删除；精确映射184/archive-verified.json。worker初始系统Python和230工具用于小补丁开销偏高，记录以后先固定项目venv，只有具体兼容反例再多版本；不改全局路由/造管理节点。小型闭合packet567026bytes，无原文拷贝/新venv。public portable摘要docs/evidence/20261026-unit-cache-source-integrity.json。
 
 新key覆盖整个Skill可调用工具合同，仍保守使允许工具/正文实质变化失效；不是按“未使用”自动认证兼容。旧22/305机械资格绿只是下一步证据，不签新key或医学接受。135自然终态后先标准备份，再按实际任务/toolreadset/论文身份内容/现行规则科学语义判断哪些可受控保留，不能以本批绿盲迁或默认151重跑。当前第五kernel33850/原83367仍等待，不读新进度、不热改/终止。GoalACTIVE，M1–M6未全交付。
+
+
+## 2026-10-26 189/190宿主身份连接与真实资料采用诊断
+
+上回合PROGRESS：5722654c已推/远端同SHA，184缓存/字节/3.14修复。本回合从实际HEAD、当前应用干净面及精确74351命令核原135活跃，未读新阶段进度。选择conference：真实身份属性是否被句式模板误拒具有医学解释不确定性，需一名独立源挑战；owner同时direct修同一抽取/核验合同的机械host-ID根因，不多派共享写集worker。旧中文根零接触。
+
+185闭合22unit/157task/305源的107提案用当前prepare在127标准备份memory副本核验：首次1confirmed/25身份问题，不能算模型准确率。仅点读22个已闭合输入原名的实体上下文，不读活run进度，初误用entities.kind列报错，核实际schema type后纠正；同名大小写的ravulizumab/pegcetacoplan/pozelimab各旧实体仍并存。补完整host上下文后25歧义仍在，确认不是仅旧快照漏实体。全部源/旧unit/DB/CAS无写、0网络/模型；真实论文/标题/引用有未解决问题，不以更高通过数为目标放宽科学规则。
+
+host族7真实RED/1原PASS：identity输入无host ID、显式foreign/trial/wrong/empty元数据被忽略、同host仅加元数据会重复事实。最小修改仅identity_enrichment输入drug.entity_id、宿主聚合drug_entity_id；模型strict schema不能决定该字段。verification在任何历史回放前核project/type/精确host原名/返回名依据；显式错空ID不fallback，旧不带ID提案保留原逻辑。只读匹配同host旧事实ID/原扩展quote，不改旧ID/value/status/source。selected-unit smoke按同一host元数据收口，无DB迁移/合并实体/审批流程。91相关PASS1.25s；初Ruff一个未使用svc变量，元数据式改名后于完整门验。190最终2141PASS18.28s/Ruff/277Python/22JS/446输入不变，manifestead97a3986e593f486984a7d50edeac83b998c0096f7d736c8c9d069431088c7。原断言/拒绝他药/旧回执字节保全，不改科学profile_evidence/quote/assessment。
+
+同107实际proposal按明确host-ID memory复测：身份错误25→2（剩余部分/名称关系未证实，未强行改名），当前规则确认1→2、其余仍有原文/别名桥接/字段语义/地域日期等问题。2/107不是准确率或M3验收。只修改了memory诊断输入，不向active135注入事实、迁缓存或重跑151。后续需要区分真实不支持、原文引用错误、缺正式名桥接和泛化不足的句式守卫，不能只扩字典或去掉关系检查。
+
+189固定15实源property决定/36882bytes案例，8输入SHA（含3科学文件）始终同。C03 guard实际初始化/预检PASS，声明Grok4.7→Cursor/grok-4.7-high→Pi/openai-codex/gpt-6.1-sol:high；前两未建可用会话，fallback实际session01a17712-a0cd-7000-b637-adc24de78e84 54.866s/0tools/empty/Codex at capacity turn_rate_limit_exceeded。精确start检查时runner已终态，因此ps为空assert失败不是新运行失败；随后实际收原生22949确认，不能沿PENDING等旧PID。只有一次owner合并同会话恢复（原3600s预算内，实际24turn/1800s）；首preflight格式expectedoutput0被拒未派，按标准runner report行修后PASS才派13726/原生24007，56.323s仍同容量/0tools/0有效意见。runner内重复错误条目不当已知HTTP次数/计费；无临时换模型。189 NOT_RUN_PROVIDER_CAPACITY且无活runner，独立科学判断未完成，不把临床结果或正式接受写PASS；不立即重复派，待实际可用性/新边界再核声明路线。property规则未动，原失败/placeholder/两个真实回执保留，parent review/metrics如实标未运行。
+
+无前端字节改变，保留179四宽25态/当前B178source，不为host元数据重跑浏览器；188只安装187，不拿来验190新host代码，不每小改造新venv/包。已核无pytest活进程，只退役本app可重建.pytest_cache332020逻辑bytes，清理前清单SHA及后回执存189/cache-cleanup；原190结果/源/测试/DB/CAS/历史和Agent会话不动，不宣称APFS实际释放。PRD/Architecture/Plan/STATUS及public20261026-profile-host-identity.json更新，后置仅元数据不重跑全门。135第五kernel33850仍原事件等待，不查新进度、不热改/终止。M1–M6未全交付、GoalACTIVE，下一步真实来源/可证明名称桥接/语义规则根因与终态后的受控旧单位资格继续。

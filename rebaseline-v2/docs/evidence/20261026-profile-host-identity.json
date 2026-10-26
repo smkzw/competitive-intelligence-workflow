@@ -1,0 +1,109 @@
+{
+  "scope": "TRUSTED_HOST_ID_TRANSPORT_AND_FROZEN_REAL_PROPOSAL_DIAGNOSIS_NOT_M3_OR_M1_ACCEPTANCE",
+  "base_commit": "5722654c1211cb4b7cd72bf0c359ffcb259ac280",
+  "root_cause": "case-variant retained entities made name-only profile binding ambiguous; explicit invalid host metadata was ignored",
+  "fixes": [
+    "identity_enrichment task carries actual host entity ID; aggregation pins it from host, not model output",
+    "verify validates project/drug type/exact host name and source-backed returned name before replay",
+    "explicit foreign/trial/wrong/empty binding never falls back to a matching string",
+    "historical fact lookup accepts metadata-only transport additions only for the same exact bound host, preserving ID/value/status/bytes",
+    "selected source smoke driver uses the same host ID contract"
+  ],
+  "tests": {
+    "family_red": "7 genuine failures/1 existing pass",
+    "related_passed": 91,
+    "full_passed": 2141,
+    "full_seconds": 18.28,
+    "pytest_returncode": 0,
+    "ruff_returncode": 0,
+    "structure": {
+      "python_files": 277,
+      "javascript_files": 22,
+      "inputs_unchanged": 446,
+      "manifest_sha256": "ead97a3986e593f486984a7d50edeac83b998c0096f7d736c8c9d069431088c7"
+    }
+  },
+  "closed_real_component": {
+    "proposals": 107,
+    "host_name_records": 22,
+    "identity_errors_before": 25,
+    "identity_errors_after": 2,
+    "confirmed_by_current_rule_before": 1,
+    "confirmed_by_current_rule_after": 2,
+    "source_database_cas_or_old_unit_writes": 0,
+    "network_or_model_calls": 0,
+    "not_an_accuracy_measurement": "127 baseline plus exact closed host/source context; source aliases/semantics/citations remain to qualify; unverified is not proved medically wrong",
+    "inputs_and_outputs": {
+      "closed_packet": "7ea8f7291c653d28de6c05668870aa362f0054df5b0e14ada0a1c09f1f82ec22",
+      "before": "6901bc7445611c669e033253c6fb2af90d87428235e83681f01c9e8acf5c274e",
+      "after": "5770b4c931ed0f7e1998756b25e2c760509d2b37575bcaf49f215062b8adeff6"
+    }
+  },
+  "independent_property_review": {
+    "scope": "INDEPENDENT_PROFILE_REVIEW_NOT_RUN_NO_SUBSTANTIVE_OUTPUT",
+    "frozen_inputs_unchanged": 8,
+    "attempts": [
+      {
+        "name": "evidence_single_object",
+        "returncode": 1,
+        "seconds": 54.866,
+        "session_id": "01a17712-a0cd-7000-b637-adc24de78e84",
+        "runtime_identity": {
+          "requested": "openai-codex/gpt-6.1-sol",
+          "observed": [
+            "openai-codex/gpt-6.1-sol"
+          ],
+          "current": "openai-codex/gpt-6.1-sol"
+        },
+        "error": "Codex error event: Codex is at capacity, please try again later (code=turn_rate_limit_exceeded)",
+        "tool_calls": 0,
+        "receipt_sha256": "212c5f08b42cf55900e82111c985d5935ac122449606011da6d7634617367636"
+      },
+      {
+        "name": "evidence_single_object_recovery",
+        "returncode": 1,
+        "seconds": 56.323,
+        "session_id": "01a17712-a0cd-7000-b637-adc24de78e84",
+        "runtime_identity": {
+          "requested": "openai-codex/gpt-6.1-sol",
+          "observed": [
+            "openai-codex/gpt-6.1-sol"
+          ],
+          "current": "openai-codex/gpt-6.1-sol"
+        },
+        "error": "Codex error event: Codex is at capacity, please try again later (code=turn_rate_limit_exceeded)",
+        "tool_calls": 0,
+        "receipt_sha256": "3c0e0c9da201e98564267813c478f819c97776ff4db3bde451d0ca116cce749f"
+      }
+    ],
+    "science_decision": null,
+    "active_review_process": false,
+    "next": "No immediate repeated dispatch. Revalidate declared route availability at a later material boundary; preserve same-session ID and inputs. Continue unrelated authorized implementation."
+  },
+  "resources": {
+    "scope": "ONLY_CURRENT_APP_REGENERABLE_PYTEST_CACHE_AFTER_TERMINAL_190_GATE",
+    "active_pytest_detected": false,
+    "sources_databases_history_or_tests_removed": false,
+    "status": "REMOVED_REGENERABLE_CACHE",
+    "logical_bytes": 332020,
+    "physical_space_release_measured": false
+  },
+  "unchanged": [
+    "scientific property/quote/assessment rule files (frozen8 inputs verified)",
+    "current B178 facts and179 rendered frontend bytes",
+    "active135 fixed134 process and original151 research batches",
+    "all historical source/receipts and unrelated v1 work"
+  ],
+  "not_run": [
+    "valid independent15-case property judgment, provider capacity blocked; original +one consolidated same-session recovery both zero tools/output",
+    "new package for190 host metadata;188 only validates187",
+    "new browser matrix not needed for unchanged frontend bytes; no claim of new medical adoption",
+    "ordinary135 terminal recovery and old/new unit semantic qualification"
+  ],
+  "next": [
+    "preserve real cited proposals and distinguish true source gaps from generic sentence-form false negatives",
+    "resume bounded independent property review when declared capacity/eligibility changes; no repeated immediate dispatch",
+    "ordinary135 waits fifthkernel33850; standard backup after terminal before controlled qualification",
+    "M2 reference unique units and M3 identity completeness remain required"
+  ]
+}
