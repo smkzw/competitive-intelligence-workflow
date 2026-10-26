@@ -1062,3 +1062,21 @@ owner去掉11个新顶层辅助函数，收205→126行/入口55行，无新依�
 135第四7200.001kernel仅边界一次快照：仍running、最新5796/extract_design/06:27:19Z，enrich157task/474model/32submit，135error事件未新增；不代表全采用。首次误猜trace_events表报错后读真实schema agent_steps纠正，0写入。第五kernel NOTE_EXIT原生33850等待74351，7200s，不轮询/热改/强杀。原trial_evidence72缺口仍保留。下一单位cache根因未修，先静态/闭合源资格分析，135终态前不迁key或切runtime。
 
 public摘要20261026-b-threshold-query-and-reading.json+两精选截图，原DB/CAS/论文/完整浏览器/日志仅本地。PRD/Plan/STATUS同权威更新；原源/历史不清理。所有M1–M6未全部闭合、非RC，GoalACTIVE。
+
+
+## 2026-10-26 184/185当前根因在途
+
+7367bdb8205d7c55b2fdfe04defe5c86445453d9已push且ls-remote逐字核。本轮execution：recovery.py源字节检查与owner extraction.py键依赖/闭合资料核验写集相离，能真实并行；共享合同仍owner，不另派无医学判断的会商。guard新E03预检PASS0warning后实际runner87610/原生14628，24turn/1800s有限合同，现已自然终态。Pi/cursor/default实际selector未知底层/effort、448.539s/230toolcalls，无fallback，四派发SHA不变，audit-execution PASS；原报告/返回SHA保留。helper `_stored_digest`两处复用，保留PDF parser/空URL历史语义。原始7RED/4PASS中先有SQLNULL违反schema的伪RED，纠成空串后7真实RED；新12cases+PDF/scope39PASS。worker先误用系统Python3.14引出21slice编码失败，项目.venv3.13通过；命令环境问题和科学缓存失败分开，不伪造绿。
+
+owner新key族6RED/3PASS，窄tool_binding+共享执行+真实RunContext.skill/Skill预算/输出/规则/模型/源policy；提取CODE_HASH改loaded行为与TASK_CHARS，不按context/http整文件。首关联78PASS1FAIL是替换夹具把原注册函数名改成changed导致helper集合变化，改为保留原名模拟真实同名换实现后79PASS；原断言不弱化。旧key不搜索/改签，新任务一次执行后二次复用，legacy行字节不变。当前135固定134、不热改。
+
+worker实核Python3.14把slice(None,3000,None)放co_consts，原stage_versions不能JSON序列化；owner2真实RED后仅 `_literal_digest`加slice三分量递归。首次补丁匹配两处被assert拒绝，源未改，后命令仍跑导致旧缺陷失败，原输出保留；限定完整函数段修后121项目相关PASS/Ruff、57Python3.14相关PASS，0模型。宽门首次2127PASS6FAIL都旧scope夹具只写假digest不存CAS；读完整两测试文件，仅让正向来源真实cas.put及变更有真实新字节，原次数/集合断言全留，负向仍由12cases证明拒绝；34相关PASS。当前186retry宽门在途，不将前186失败或旧180当新PASS。
+
+185只导出已闭合trace<=5615/05:38:21Z、22成功unit/157原task/305引用source版本，567026bytes，不是活run全备份，不读新进度。固定134120runtime逐SHA未变，旧函数/原Skill/model glm-5.3-flash重算22/22精确命中；305raw/text原字节SHA全对，再用当前生产 `_representation_current`真实305/305/22unit通过，0网络/模型/新源解析/DB或旧key写。此只证明机械资料完整性，不证明新工具/Skill语义已兼容或医学采用；不盲迁旧key、不默认重跑151。135第五kernel33850仍只等退出，未轮询。
+
+
+184–188已收口为开发组件：186最终2133PASS17.16s/Ruff/276Python/22JS/444输入不变，manifest4e8f8d23f79f959447ccb132a3c9242dd1d111048fc44a0aaf82554d5ddcfa08。之后只有PRD/Architecture/Plan/AgentRules/STATUS及摘要元数据，不重复宽门。187127runtime1979398bytes、manifest974edbe3…866c1；188空target离线wheel df5807fc…67ab/sdistdacde230…3b86，26资产/9Skills全部同字节、隔离cwd全模块/CLI成功、复用157deps非freshvenv。安装187对178只读memory渲染逐字等179HTML82e62242…7b17d5，原DB不改，0新HTML副本/源/模型；无前端字节变化，不重跑25态。
+
+184execution audit PASS；parent review-gate首因旧工具硬编码Hermes词拒绝（实际Pi，无额外Hermes角色），加明确Hermes未参与及Duration/Result列后PASS0warnings，原失败保留。按既有guard先dryrun再apply可恢复归档prompt/report/stdout三个文件，所有SHA相等，0证据/原源/DB/Agent历史删除；精确映射184/archive-verified.json。worker初始系统Python和230工具用于小补丁开销偏高，记录以后先固定项目venv，只有具体兼容反例再多版本；不改全局路由/造管理节点。小型闭合packet567026bytes，无原文拷贝/新venv。public portable摘要docs/evidence/20261026-unit-cache-source-integrity.json。
+
+新key覆盖整个Skill可调用工具合同，仍保守使允许工具/正文实质变化失效；不是按“未使用”自动认证兼容。旧22/305机械资格绿只是下一步证据，不签新key或医学接受。135自然终态后先标准备份，再按实际任务/toolreadset/论文身份内容/现行规则科学语义判断哪些可受控保留，不能以本批绿盲迁或默认151重跑。当前第五kernel33850/原83367仍等待，不读新进度、不热改/终止。GoalACTIVE，M1–M6未全交付。

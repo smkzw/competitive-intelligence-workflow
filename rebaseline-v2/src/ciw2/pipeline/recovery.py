@@ -22,17 +22,33 @@ def _version(row: dict[str, Any] | None, url: str) -> dict[str, Any]:
     return version
 
 
-def _representation_current(rc: RunContext,row: dict[str,Any] | None) -> bool:
-    if row is None:return True
-    meta=json.loads(row['meta'])
-    if 'pdf' not in meta.get('content_type','').casefold() and not meta.get('text_parser_id'):
-        return True
-    from ciw2.sources.pdf_text import PDFTextError, parser_identity
+def _stored_digest(rc: RunContext, digest: Any) -> bool:
+    if not isinstance(digest, str) or not digest:
+        return False
     try:
-        if not row.get('text_digest') or meta.get('text_parser_id')!=parser_identity():return False
-        raw=rc.cas.get(row['digest']);text=rc.cas.get(row['text_digest'])
-    except (PDFTextError,OSError):return False
-    return hashlib.sha256(raw).hexdigest()==row['digest'] and hashlib.sha256(text).hexdigest()==row['text_digest']
+        return hashlib.sha256(rc.cas.get(digest)).hexdigest() == digest
+    except (OSError, ValueError):
+        return False
+
+
+def _representation_current(rc: RunContext, row: dict[str, Any] | None) -> bool:
+    if row is None:
+        return True
+    meta = json.loads(row['meta'])
+    pdf = 'pdf' in meta.get('content_type', '').casefold() or bool(meta.get('text_parser_id'))
+    if pdf:
+        from ciw2.sources.pdf_text import PDFTextError, parser_identity
+        try:
+            if not row.get('text_digest') or meta.get('text_parser_id') != parser_identity():
+                return False
+        except (PDFTextError, OSError):
+            return False
+    if not _stored_digest(rc, row.get('digest')):
+        return False
+    text_digest = row.get('text_digest')
+    if text_digest is not None:
+        return _stored_digest(rc, text_digest)
+    return not pdf
 
 
 def get_unit(rc: RunContext, key: str) -> Any:

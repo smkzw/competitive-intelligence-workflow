@@ -213,3 +213,10 @@ render回执另绑定实际A/B/C文件的字节摘要；文件名输出JSON不�
 `pubmed_fetch`保留source_url/source_id/text/total_chars，增加pmid、content_level(pubmed_record/pmc_full_text)、full_text_requested及full_text_status(not_requested/not_in_pmc/metadata_unresolved/available)。esummary为空与明确无PMCID分开；PMC失败继续抛来源错误，不静默变成摘要。efetch先register=False，stdlib ElementTree核唯一文章、front/article-meta编号及非空body；PubMed核唯一行首PMID，不强制MEDLINE后缀。校验后只登记一次canonical来源，raw/纯文本算法和12000字符分页不变。
 
 实现保留在单个55行入口内，避免新增全模块辅助函数令未使用它们的pubmed_search工具错误失效。真实载入工具绑定核对表明仅pubmed_fetch变，pubmed_search/fetch_url/ctgov_get相同；无DB/来源/模型探针。Skill内容层级指引的变化只作用于相应提取阶段，不改旧冻结运行或旧来源回执。
+
+
+### 抽取单位依赖与来源完整性（2026-10-26）
+
+`extraction._key`使用现有tool_versions工具白名单绑定、共享执行digest、实际RunContext.skill、Skill正文/输出/预算、模型、来源恢复规则。extraction.CODE_HASH由加载的提取函数和TASK_CHARS构造；不再整文件绑定context/http或各工具模块。identity_enrichment另绑定现有profile规则。新layout=extraction-unit-dependencies-v2只用于新键，不搜索或重签旧键，阶段版本机制继续沿用。
+
+`recovery._representation_current`对所有已存在来源检查实际raw CAS以及非空已记录text CAS的SHA；PDF另要求当前parser identity及text。row=None维持缺URL观察语义。读取不修原件、不取网络、不变旧source/receipt；不兼容只返回未命中。旧运行资格检查先使用明确闭合的导出与固定runtime，不触及活跃执行状态。Python3.14的slice常量在既有运行digest递归编码三个分量，不换哈希平台或降低变更敏感性。

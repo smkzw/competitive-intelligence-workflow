@@ -1,0 +1,124 @@
+{
+  "scope": "EXTRACTION_UNIT_KEYS_AND_SOURCE_BYTE_INTEGRITY_COMPONENT_NOT_LEGACY_MIGRATION_OR_RELEASE",
+  "base_commit": "7367bdb8205d7c55b2fdfe04defe5c86445453d9",
+  "implementation": {
+    "unit_keys": "existing tool_versions scoped whitelist bindings, shared execution, actual Skill call, body/output/budgets/model and source policy; loaded extraction behavior fingerprint",
+    "source_integrity": "every existing source requires matching raw CAS and any recorded text CAS; PDF current parser/text retained",
+    "python314": "slice constants bind start/stop/step recursively in existing runtime digest",
+    "legacy": "no old receipt/key rewrite or automatic alias; same current unit reuses without new research"
+  },
+  "tests": {
+    "key_red": "6 genuine failures/3 passes",
+    "source_red": "7 genuine failures/4 passes after fixing invalid NULL fixture",
+    "slice_red": "2 failures on actual3.14, including real dispatch",
+    "related_project_venv": 121,
+    "related_python314": 57,
+    "scope_real_cas_related": 34,
+    "full": {
+      "passed": 2133,
+      "seconds": 17.16,
+      "ruff_returncode": 0,
+      "pytest_returncode": 0,
+      "structure": {
+        "python_files": 276,
+        "javascript_files": 22,
+        "inputs_unchanged": 444,
+        "manifest_sha256": "4e8f8d23f79f959447ccb132a3c9242dd1d111048fc44a0aaf82554d5ddcfa08"
+      }
+    },
+    "failures_retained": [
+      "worker invalidNULL test setup, corrected before genuineRED",
+      "owner attempted slice patch matched two sites and was refused before mutation; following shell checks still ran old code",
+      "first full gate2127pass6fail: old positive scope fixtures had fake digest names/no CAS; real bytes added and original assertions retained"
+    ]
+  },
+  "execution": {
+    "adapter": "pi",
+    "provider_selector": "cursor/default",
+    "underlying_model": "not_exposed",
+    "requested_effort": "default",
+    "seconds": 448.539,
+    "tool_calls": 230,
+    "returncode": 0,
+    "fallback": null,
+    "input_sha_unchanged": 4,
+    "report_sha256": "9b177aa0297bff588784c425963ed3f730f92502f73bbd2ead8af3bc5ce7e889",
+    "receipt_sha256": "df73ca051f75e0772ee548321e0b077415d1d8d9470a3fe25afe2b0e0017c3a8",
+    "runtime_identity": {
+      "requested": "cursor/default",
+      "observed": [
+        "cursor/default"
+      ],
+      "current": "cursor/default"
+    },
+    "skills_enabled": true,
+    "execution_audit": true,
+    "owner_review_gate": true
+  },
+  "closed_real_data": {
+    "trace_cut": 5615,
+    "tasks": 157,
+    "units": 22,
+    "old_keys_exact": 22,
+    "source_versions": 305,
+    "current_representation_pass": 305,
+    "all_source_sets_pass_units": 22,
+    "packet_bytes": 567026,
+    "packet_sha256": "7ea8f7291c653d28de6c05668870aa362f0054df5b0e14ada0a1c09f1f82ec22",
+    "frozen134_manifest_sha256": "132bd33665d2f1c46e150bcc70e28f24655a42a3ae0cf31bfd16e2a0385f0e4c",
+    "network_model_active_database_or_legacy_key_writes": 0,
+    "qualification_scope": "mechanical source/old-task fidelity only, not semantic equivalence or medical adoption"
+  },
+  "installation": {
+    "scope": "CURRENT187_WHEEL_EMPTY_TARGET_INSTALL_REUSED157_TEST_DEPENDENCIES_NOT_FRESH_VENV_OR_FULL_RECOVERY",
+    "wheel_sha256": "df5807fc22646d6c495cf5bc13605929e40017603c343b94e74e3328ff8867ab",
+    "sdist_sha256": "dacde23028fef9db9a331b3559fa06e220a837ca5b1eb22b0f5fdc4077ee3b86",
+    "frozen_manifest_sha256": "974edbe3e61675fd8adfe60969c4bd6fb0b949bc56ed93d652252b0eccc866c1",
+    "source_files_checked": 127,
+    "assets_checked": 26,
+    "skills_checked": 9,
+    "new_venv": false,
+    "old157_venv_modified": false,
+    "external_downloads": 0,
+    "model_or_source_calls": 0,
+    "steps": {
+      "offline-build": 0,
+      "empty-target-install": 0,
+      "isolated-imports": 0,
+      "cli-entry-function": 0
+    },
+    "installed": {
+      "modules": "all_imported",
+      "skills": 9,
+      "extractor_version": "bc315eb4e721b713ca1869f0573e68bd3a7b5f692250a19188c94a11febae773",
+      "rule_version": "cde-registration-2020-literal-v1"
+    }
+  },
+  "render_binding": {
+    "scope": "INSTALLED187_MAIN_RENDER_IS_BYTE_IDENTICAL_TO_BROWSER179_ON_SAME178_FACTS",
+    "html_sha256": "82e6224278e41162f0b7a9e5b21eb409569ffa364221aee2cd594fa4279b17d5",
+    "db_sha256": "f3eb183974ce1b0ea925999b0a325efa054683411600a051773f99b6e260abca",
+    "result_count": 3010,
+    "safety_count": 1571,
+    "catalog_count": 17,
+    "source_or_model_calls": 0,
+    "original_db_writes": 0,
+    "new_html_copy": false
+  },
+  "resources": {
+    "new_venv": false,
+    "new_runtime_files": 127,
+    "new_runtime_bytes": 1979398,
+    "closed_packet_raw_source_copies": 0,
+    "archived_process_files": 3,
+    "archived_sha_all_equal": true,
+    "evidence_deleted": false,
+    "physical_space_release_measured": false
+  },
+  "remaining": [
+    "135 ordinary C remains fixed134/event-wait only",
+    "after terminal standard backup qualify actual old/new task/tool/publication semantics before any controlled cache reuse",
+    "no wholesale151-batch replay",
+    "M1-M6 integrated quality and final recovery not complete"
+  ]
+}

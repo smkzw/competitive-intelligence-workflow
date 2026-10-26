@@ -245,7 +245,7 @@ def test_terminal_route_volume_keeps_source_version_reuse_scoped(settings, monke
     assert len(calls) == 2
     scope.review_scope(rc, '阵发性睡眠性血红蛋白尿症')
     assert len(calls) == 2
-    rc.db.execute('UPDATE sources SET digest=? WHERE id=?', ('changed-digest', sid))
+    rc.db.execute('UPDATE sources SET digest=? WHERE id=?', (rc.cas.put(b'changed source raw bytes'), sid))
     scope.review_scope(rc, '阵发性睡眠性血红蛋白尿症')
     assert len(calls) == 3
     scope.review_scope(rc, '阵发性睡眠性血红蛋白尿症')

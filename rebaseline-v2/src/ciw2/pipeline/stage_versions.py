@@ -60,6 +60,8 @@ def _symbol(value: Any) -> str:
 def _literal_digest(value: Any) -> Any:
     if isinstance(value, CodeType):
         return {'code': _code_digest(value)}
+    if isinstance(value, slice):
+        return {'slice': [_literal_digest(part) for part in (value.start, value.stop, value.step)]}
     if isinstance(value, tuple):
         return {'tuple': [_literal_digest(item) for item in value]}
     if isinstance(value, frozenset):

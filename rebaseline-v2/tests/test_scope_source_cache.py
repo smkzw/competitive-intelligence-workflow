@@ -56,7 +56,8 @@ def planned_tasks(rc):
 
 
 def fetch(rc, digest, url=URL, text='text-1'):
-    return rc.db.add_source(rc.project_id, 'ctgov', url, digest, text_digest=text)
+    return rc.db.add_source(rc.project_id, 'ctgov', url, rc.cas.put(digest.encode()),
+                            text_digest=rc.cas.put(text.encode()))
 
 
 def receipt_sources(rc, task):
@@ -115,13 +116,13 @@ def test_unrelated_source_does_not_invalidate_but_used_source_changes_do(setting
     coverage_review(rc)
     assert len(calls) == 1  # retired: an unrelated source used to invalidate every batch
     count = rc.db.one('SELECT COUNT(*) n FROM sources WHERE project_id=?', (rc.project_id,))['n']
-    rc.db.execute('UPDATE sources SET digest=? WHERE project_id=? AND digest=?',
-                  ('digest-a-changed', rc.project_id, 'digest-a'))
+    rc.db.execute('UPDATE sources SET digest=? WHERE project_id=? AND id=?',
+                  (rc.cas.put(b'digest-a-changed'), rc.project_id, used['sid']))
     assert rc.db.one('SELECT COUNT(*) n FROM sources WHERE project_id=?', (rc.project_id,))['n'] == count
     coverage_review(rc)
     assert len(calls) == 2
-    rc.db.execute('UPDATE sources SET text_digest=? WHERE project_id=? AND digest=?',
-                  ('text-a-changed', rc.project_id, 'digest-a-changed'))
+    rc.db.execute('UPDATE sources SET text_digest=? WHERE project_id=? AND id=?',
+                  (rc.cas.put(b'text-a-changed'), rc.project_id, used['sid']))
     coverage_review(rc)
     assert len(calls) == 3 and scripted.calls == []
 

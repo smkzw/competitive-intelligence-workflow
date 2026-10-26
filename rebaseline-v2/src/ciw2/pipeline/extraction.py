@@ -1,24 +1,17 @@
 """Complete-record extraction batches and recoverable explicit work budgets."""
 from __future__ import annotations
 
-import hashlib
 import json
 from collections.abc import Callable
-from pathlib import Path
 from typing import Any
 
 from ciw2.domain.models import ExtractionResult
 from ciw2.harness.agent import HARNESS_RULES
-from ciw2.harness.tools import REGISTRY
+from ciw2.pipeline import stage_versions, tool_versions
 from ciw2.pipeline.context import IncompleteWork, RunContext, work_limit
 from ciw2.pipeline.queries import drug_trials, intake_data, scoped_drugs
 from ciw2.pipeline.recovery import fingerprint, get_unit, put_unit
-from ciw2.sources import china_detail
-from ciw2.sources.http import source_by_url
 
-CODE_HASH = hashlib.sha256(b''.join(Path(path).read_bytes() for path in (
-    __file__, RunContext.skill.__code__.co_filename, put_unit.__code__.co_filename,
-    source_by_url.__code__.co_filename))).hexdigest()
 TASK_CHARS = 60000
 
 
@@ -74,14 +67,17 @@ def _tasks(rc: RunContext, skill: str, drug: dict[str, Any], extra: dict[str, An
 def _key(rc: RunContext, skill: str, task: dict[str, Any]) -> str:
     from ciw2.pipeline import profile
     spec = rc.skills[skill]
-    signature = {'task': task, 'code': CODE_HASH, 'rules': HARNESS_RULES, 'skill': spec.body,
-                 'profile_rule':hashlib.sha256(Path(profile.__file__).read_bytes()).hexdigest()
-                     if task.get('mode')=='identity_enrichment' else None,
+    signature = {'layout': 'extraction-unit-dependencies-v2', 'task': task, 'code': CODE_HASH,
+                 'rules': HARNESS_RULES, 'skill': spec.body, 'skill_max_steps': spec.max_steps,
+                 'skill_output': spec.output.model_json_schema() if spec.output is not None else None,
+                 'execution': tool_versions.shared_execution_digest(),
+                 'skill_call': stage_versions.function_digest(RunContext.skill),
+                 'source_policy': stage_versions.module_digest('ciw2.pipeline.recovery'),
+                 'profile_rule': stage_versions.module_digest(profile.__name__)
+                     if task.get('mode') == 'identity_enrichment' else None,
                  'schema': ExtractionResult.model_json_schema(), 'model': rc.settings.llm_model,
-                 'china_detail_version':china_detail.code_hash() if 'china_trial_detail' in spec.tools else None,
-                 'tools': [{'schema': REGISTRY.get(name).schema(), 'code': hashlib.sha256(
-                     Path(REGISTRY.get(name).fn.__code__.co_filename).read_bytes()).hexdigest()}
-                     for name in spec.tools]}
+                 'max_agent_steps': rc.settings.max_agent_steps,
+                 'tools': [tool_versions.tool_binding(rc, name) for name in spec.tools]}
     return f'extraction:{skill}:{fingerprint(signature)}'
 
 
@@ -147,3 +143,9 @@ def extract_drugs(rc: RunContext, skill: str,
     if output['pending_units']:
         raise IncompleteWork(f"药物抽取未完成：{len(output['pending_drug_ids'])}个药物仍有待处理批次", output)
     return output
+
+
+# Bind the extraction behavior actually loaded; unrelated context/http siblings
+# and source-file comments cannot invalidate every completed extraction unit.
+CODE_HASH = fingerprint({'task_chars': TASK_CHARS, 'functions': [stage_versions.function_digest(fn)
+                         for fn in (_tasks, _key, _call, extract_drugs)]})
