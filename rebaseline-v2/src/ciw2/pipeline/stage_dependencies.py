@@ -22,6 +22,7 @@ _RENDER_MODULES = (
     'ciw2.render.registration',
     'ciw2.render.result_identity',
     'ciw2.render.results',
+    'ciw2.render.study_catalog', 'ciw2.render.safety',
     'ciw2.render.trial_identity',
 )
 

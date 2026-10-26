@@ -49,6 +49,16 @@ def _atomic_measure(text: str) -> str | None:
     return text if re.fullmatch(_ABBREVIATION, text) else None
 
 
+def _response_visit(text: str) -> str | None:
+    match = re.fullmatch(r'(Percentage|Number) of Participants With (>=|<=|>|<|≥|≤)([0-9]+(?:\.[0-9]+)?)% '
+                         r'Improvement in (.+) at (Week|Day|Month) ([0-9]+): (ITT Population)', text)
+    if not match or not (measure := _measure(match[4])):
+        return None
+    statistic = '受试者比例' if match[1] == 'Percentage' else '受试者人数'
+    return (f'{measure} · 改善{_OP[match[2]]}{match[3]}% · {statistic} · '
+            f'第{match[6]}{_UNIT[match[5].lower()]} · ITT人群')
+
+
 def _response(text: str) -> str | None:
     single=re.fullmatch(r'Percentage of Participants With an Improvement of (>=|<=|>|<|≥|≤) '
                         r'([0-9]+(?:\.[0-9]+)?) From Baseline in (.+)',text,re.IGNORECASE)
@@ -93,7 +103,7 @@ def endpoint_label(value: object) -> str:
     relation=relationship_parts(text)
     if relation and (measure:=_measure(relation[1])):
         return f'PK/PD关系 · {relation[0]}血清浓度与{measure}变化'
-    response=_response(text)
+    response=_response_visit(text) or _response(text)
     if response:return response
     for prefix, change in _CHANGE:
         if not text.casefold().startswith(prefix.casefold()):

@@ -13,6 +13,7 @@ from ciw2.domain.outcomes import DOMAIN_LABELS
 from ciw2.render.endpoint_label import endpoint_label, response_facet_label
 from ciw2.render.labels import registry_label
 from ciw2.render.parameter_reading import safety_facet_label
+from ciw2.render.safety import safety_label
 
 VISIT = re.compile(r'(?:at\s+)?(week|day|month)s?\s*(\d+)|第\s*(\d+)\s*(周|天|月)', re.IGNORECASE)
 
@@ -42,7 +43,10 @@ def _measurement(row: dict[str, Any]) -> tuple[tuple, tuple[str, int, str] | Non
                    for name in ('class_title', 'category', 'timepoint'))
     # Missing population/statistics/unit cannot silently qualify unrelated studies.
     incomplete = not all(row.get(name) for name in ('population', 'stat_type', 'unit'))
-    frame = (name_key(row['endpoint']), row.get('stat_type'), name_key(row.get('unit')),
+    endpoint = name_key(row['endpoint'])
+    if row['field'].startswith('safety.'):
+        endpoint = (row['field'], endpoint, row.get('organ_system'), row.get('threshold_pct'))
+    frame = (endpoint, row.get('stat_type'), name_key(row.get('unit')),
              row.get('param_type'), row.get('dispersion_type'), name_key(row.get('population')),
              visit[0] if visit else None, facets,
              (row['entity_id'], row['source_id']) if incomplete or any(
@@ -74,6 +78,10 @@ def arm_tokens(value: Any) -> list[str]:
 
 
 def arm_label(value: Any) -> str:
+    raw = str(value or '')
+    period = re.fullmatch(r'(Initial|Maintenance|Extension) Treatment Period \(Baseline - Week [0-9]+ Predose\): (.+)', raw)
+    if period:
+        return {'Initial': '初始治疗期', 'Maintenance': '维持治疗期', 'Extension': '延长治疗期'}[period[1]] + ' · ' + period[2]
     return ''.join(arm_tokens(value))
 
 
@@ -116,7 +124,8 @@ def _point(row: dict[str, Any], visit: tuple | None) -> dict[str, Any]:
             'arm': row.get('arm') or '', 'arm_label': clinical_arm,
             'spread': row.get('spread'), 'lower': row.get('lower'), 'upper': row.get('upper'),
             'dispersion_label': registry_label(row.get('dispersion_type'), 'dispersion'),
-            'dispersion_text': dispersion_text(row)}
+            'dispersion_text': dispersion_text(row),
+            **{key: row.get(key) for key in ('denominator', 'proportion', 'num_events', 'threshold_pct', 'source_id')}}
 
 
 def _facets(row: dict[str, Any], frame: tuple) -> list[str]:
@@ -139,6 +148,12 @@ def _natural_key(value: str) -> tuple:
 def _group(frame: tuple, items: list[tuple[dict, tuple | None]], positions: set[int]) -> dict[str, Any]:
     rows = [item[0] for item in items]
     points = [_point(row, visit) for row, visit in items]
+    label_trials = defaultdict(set)
+    for point in points:
+        label_trials[point['axis_label']].add(point['trial'])
+    for point in points:
+        if len(label_trials[point['axis_label']]) > 1:
+            point['axis_label'] += ' · ' + point['trial']
     pairs = Counter((point['series_key'], point['x']) for point in points)
     collision = any(count > 1 for count in pairs.values())
     line = not collision and all(point['x'] is not None for point in points) and len({p['x'] for p in points}) > 1
@@ -147,11 +162,15 @@ def _group(frame: tuple, items: list[tuple[dict, tuple | None]], positions: set[
     facets = _facets(rows[0], frame)
     label = (safety_facet_label(rows[0]['endpoint'],facets) or response_facet_label(rows[0]['endpoint'],facets)
              or ' · '.join([*facets, endpoint_label(rows[0]['endpoint'])]))
+    if rows[0]['field'].startswith('safety.'):
+        label = safety_label(rows[0])
     return {'id': group_id, 'title': rows[0]['endpoint'], 'label': label, 'facets': facets,
             'subtitle': rows[0].get('timepoint') or '',
             'domain': frame[-1],
             'population': rows[0].get('population') or '', 'unit': rows[0].get('unit') or '',
-            'unit_label': registry_label(rows[0].get('unit'), 'measure_unit'),
+            'unit_label': ('受试者人数' if rows[0]['field'].startswith('safety.')
+                           and rows[0].get('stat_type') == 'count_participants'
+                           else registry_label(rows[0].get('unit'), 'measure_unit')),
             'stat_label': registry_label(rows[0].get('stat_type'), 'statistic'),
             'stat_type': rows[0].get('stat_type') or '', 'primary': any(row['field'].startswith('result.primary') for row in rows),
             'kind': 'line' if line else 'bar', 'axis_unit': axes, 'collision': collision, 'positions': sorted(positions),

@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% from '_trial.html' import clinical_trial %}
+{% from '_b_studies.html' import study_catalog_nav, study_catalog_section, study_catalog_select %}
 {% block section_nav %}
-<a href="#comparison">结果横比</a><a href="#measurements">完整数据</a>
+{{ study_catalog_nav(data.study_catalog) }}<a href="#comparison">结果横比</a><a href="#measurements">完整数据</a>
 {% if data.safety %}<a href="#safety">安全性</a>{% endif %}
 {% endblock %}
 {% block kpis %}
@@ -9,12 +10,14 @@
 <div class="kpi design-total"><b>{{ data.charts.groups | length }}</b><span>结果组</span></div>
 {% endblock %}
 {% block content %}
+{{ study_catalog_section(data.study_catalog) }}
 <section id="comparison" class="kz-section">
 <h2>结果横比</h2>
 <div class="result-controls">
 <label>检索结果 <input id="result-query" class="filter" data-filter="tbl-b" data-filter-extra="tbl-b-safety" placeholder="药物、研究、组别、终点或访视"></label>
 <label>指标领域 <select id="result-domain"><option value="all" {% if data.default_domain == 'all' %}selected{% endif %}>全部（{{ data.results|length }}）</option>{% for domain, count in data.domain_counts.items() %}<option value="{{ domain }}" {% if data.default_domain == domain %}selected{% endif %}>{{ data.domain_labels[domain] }}（{{ count }}）</option>{% endfor %}</select></label>
 <label>选择指标 <select id="result-group">{% for g in data.charts.groups %}<option value="{{ g.id }}">{{ loop.index }} · {{ g.label }}</option>{% endfor %}</select></label>
+{{ study_catalog_select(data.study_catalog) }}
 </div>
 <p id="result-count" aria-live="polite">{{ data.results|length }} 条结果</p>
 {% if data.charts.groups %}<div class="card result-panel kz-data" id="result-panel">
@@ -30,8 +33,8 @@
 <div class="kz-query"><label for="result-table-scope">表格范围 <select id="result-table-scope" class="filter" aria-controls="tbl-b"><option value="metric">当前图表指标</option><option value="all">全部匹配结果</option></select></label></div>
 <div class="card table-card kz-data"><table id="tbl-b"><thead><tr><th>药物</th><th>研究</th><th>终点</th><th class="result-visit">访视与分层</th>
 <th class="result-arm">组别</th><th>值</th><th class="result-statistic">单位/统计</th><th>N</th><th>状态</th><th>来源</th></tr></thead><tbody>
-{% for r in data.results %}<tr data-fact-id="{{ r.id }}" data-domain="{{ r.domain }}"><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td>
-<td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td><details><summary>{{ r.endpoint|endpoint_label }}</summary>{{ r.endpoint }}</details></td>
+{% for r in data.results %}<tr data-fact-id="{{ r.id }}" data-domain="{{ r.domain }}"{% if r.entity_id %} data-study-id="{{ r.entity_id }}"{% endif %}><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td>
+<td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td><details><summary>{{ r.safety_label if r.safety_label else r.endpoint|endpoint_label }}</summary>{{ r.endpoint }}</details></td>
 <td class="result-visit">{% if r.class_title %}<div>{{ r.class_title|visit_label }}</div>{% endif %}{% if r.category %}<div>{{ r.category|visit_label }}</div>{% endif %}
 <details><summary>时间与人群</summary>{% if r.class_title %}<p>{{ r.class_title }}</p>{% endif %}{% if r.category %}<p>{{ r.category }}</p>{% endif %}<p>{{ r.timepoint or '—' }}</p><p>{{ r.population or '—' }}</p></details></td>
 <td class="result-arm">{% set tokens = r.arm|arm_tokens %}{% if tokens|join('') != r.arm and r.arm %}<details><summary>{% for token in tokens %}<span class="arm-token">{{ token }}</span>{% if not loop.last %}<wbr>{% endif %}{% endfor %}</summary>{{ r.arm }}</details>{% else %}{{ r.arm or '—' }}{% endif %}</td><td class="numeric"><b>{{ '—' if r.value is none else r.value }}</b>{% if r|dispersion_text %}<div class="muted">{{ r|dispersion_text }}</div>{% endif %}</td>
@@ -44,10 +47,11 @@
 </section>
 {% if data.safety %}<section id="safety" class="kz-section"><h2>安全性</h2>
 <details class="safety-table"><summary>安全性数据表（<span id="safety-count">{{ data.safety|length }}</span>条）</summary>
-<div class="card table-card kz-data"><table id="tbl-b-safety"><thead><tr><th>药物</th><th>研究</th><th>组别</th><th>类别</th><th>n</th><th>N</th><th>%</th><th>时间窗</th><th>状态</th><th>来源</th></tr></thead><tbody>
-{% for r in data.safety %}<tr data-fact-id="{{ r.id }}"><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td><td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td>{{ r.arm or '—' }}</td>
-<td>{{ 'SAE' if r.field == 'safety.sae.any' else '全因死亡' }}</td><td class="numeric">{{ '—' if r.value is none else r.value }}</td>
+<div class="card table-card kz-data"><table id="tbl-b-safety"><thead><tr><th>药物</th><th>研究</th><th>组别</th><th>类别</th><th>n</th><th>N</th><th>%</th><th>事件次数</th><th>时间窗</th><th>状态</th><th>来源</th></tr></thead><tbody>
+{% for r in data.safety %}<tr data-fact-id="{{ r.id }}"{% if r.entity_id %} data-study-id="{{ r.entity_id }}"{% endif %}><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td><td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td>{{ r.arm or '—' }}</td>
+<td>{{ r.safety_label }}{% if r.organ_system %}<details><summary>SOC</summary>{{ r.organ_system }}</details>{% endif %}</td><td class="numeric">{{ '—' if r.value is none else r.value }}</td>
 <td class="numeric">{{ r.denominator if r.denominator is not none else '—' }}</td><td class="numeric">{{ r.proportion if r.proportion is not none else '—' }}</td>
+<td class="numeric">{{ r.num_events if r.num_events is not none else '—' }}</td>
 <td><details><summary>时间窗</summary>{{ r.timepoint or '—' }}</details></td><td><span class="badge {{ r.status }}">{{ r.status|status }}</span></td>
 <td>{% if r.source_url %}<a href="{{ r.source_url }}" target="_blank" rel="noopener">原文</a>{% endif %}
 {% if r.quote or r.verdict_note %}<details><summary>原文值</summary>{% if r.status != 'verified' and r.verdict_note %}<p class="muted">{{ r.verdict_note }}</p>{% endif %}<div class="quote">{{ r.quote or '' }}</div></details>{% endif %}</td></tr>{% endfor %}

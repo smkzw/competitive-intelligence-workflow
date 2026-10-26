@@ -1,0 +1,37 @@
+{% from '_trial.html' import clinical_trial %}
+{% macro study_option_label(row) -%}
+{%- set label = row.identity.label if row.identity and row.identity.label else '' -%}
+{%- if label and row.registry_id and row.registry_id not in label -%}
+{{- label }} · {{ row.registry_id -}}
+{%- elif label -%}
+{{- label -}}
+{%- else -%}
+{{- row.registry_id -}}
+{%- endif -%}
+{%- endmacro %}
+{% macro study_catalog_nav(catalog) -%}
+{%- if catalog and catalog.rows -%}<a href="#studies">相关研究</a>{%- endif -%}
+{%- endmacro %}
+{% macro study_catalog_select(catalog) -%}
+{%- if catalog and catalog.rows -%}
+<label>研究 <select id="result-study"><option value="all" selected>全部研究</option>
+{%- for row in catalog.rows if row.entity_id -%}
+<option value="{{ row.entity_id }}">{{ study_option_label(row) }}</option>
+{%- endfor -%}
+</select></label>
+{%- endif -%}
+{%- endmacro %}
+{% macro study_catalog_section(catalog) -%}
+{%- if catalog and catalog.rows -%}
+<section id="studies" class="kz-section">
+<h2>相关研究</h2>
+<p class="muted">共 <span id="study-catalog-count">{{ catalog.rows|length }}</span> 项 · 登记已发布 {{ catalog.counts.with_results }} · 尚无登记结果 {{ catalog.counts.without_results }} · 未知 {{ catalog.counts.unknown }}</p>
+<details class="result-table"><summary>全部相关研究</summary>
+<div class="card table-card kz-data"><table id="tbl-b-studies"><thead><tr><th>研究</th><th>登记结果状态</th><th>已收录数据点</th><th>来源</th></tr></thead><tbody>
+{% for row in catalog.rows %}<tr{% if row.entity_id %} data-study-id="{{ row.entity_id }}"{% endif %}><td>{{ clinical_trial(row.identity) if row.identity else (row.registry_id or '—') }}</td>
+<td>{{ row.published_label }}</td><td class="numeric">{{ '—' if row.result_count is none else row.result_count }}</td>
+<td>{% if row.source_url %}<a href="{{ row.source_url }}" target="_blank" rel="noopener">原文</a>{% endif %}</td></tr>{% endfor %}
+</tbody></table></div></details>
+</section>
+{%- endif -%}
+{%- endmacro %}

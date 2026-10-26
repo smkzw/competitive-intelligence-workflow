@@ -281,7 +281,10 @@
     var point = p.data || {};
     return safeText(point.series_name || point.label || "") + "<br>" + safeText(point.visit || "") +
       "：" + safeText(Array.isArray(point.value) ? point.value[1] : point.value) +
-      (point.dispersion_text ? "<br>" + safeText(point.dispersion_text) : "");
+      (point.dispersion_text ? "<br>" + safeText(point.dispersion_text) : "") +
+      (point.denominator != null ? "<br>N：" + safeText(point.denominator) : "") +
+      (point.proportion != null ? " · " + safeText(point.proportion) + "%" : "") +
+      (point.num_events != null ? "<br>事件次数：" + safeText(point.num_events) : "");
   }
   function resultBars(points) {
     var labels = points.map(function (p, i) {
@@ -395,13 +398,28 @@
       var node = document.createElement('p'); node.textContent = label; list.appendChild(node);
     });
   }
+  function updateBStudyViews(study, query) {
+    ['tbl-b-studies', 'tbl-b-safety'].forEach(function (id) {
+      var table = el(id); if (!table) return;
+      var rows = Array.from(table.querySelectorAll('tbody tr'));
+      rows.forEach(function (row) {
+        var match = !study || study.value === 'all' || row.dataset.studyId === study.value;
+        if (id === 'tbl-b-safety') match = match && (!query || row.textContent.toLowerCase().indexOf(query) >= 0);
+        row.style.display = match ? '' : 'none';
+      });
+      var count = el(id === 'tbl-b-studies' ? 'study-catalog-count' : 'safety-count');
+      if (count) count.textContent = rows.filter(function (r) { return r.style.display !== 'none'; }).length + ' / ' + rows.length;
+    });
+  }
   function updateResultQuery(table) {
     var rows = Array.from(table.querySelectorAll("tbody tr"));
-    var domain = el('result-domain'), query = el('result-query');
+    var domain = el('result-domain'), query = el('result-query'), study = el('result-study');
+    var q = query ? query.value.trim().toLowerCase() : '';
+    updateBStudyViews(study, q);
     var visible = rows.filter(function (row) {
       var matchesDomain = !domain || domain.value === 'all' || row.dataset.domain === domain.value;
-      var q = query ? query.value.trim().toLowerCase() : '';
-      return matchesDomain && (!q || row.textContent.toLowerCase().indexOf(q) >= 0);
+      var matchesStudy = !study || study.value === 'all' || row.dataset.studyId === study.value;
+      return matchesDomain && matchesStudy && (!q || row.textContent.toLowerCase().indexOf(q) >= 0);
     });
     var selected = new Set(visible.map(function (row) { return row.dataset.factId; }));
     var available = (D.groups || []).filter(function (g) { return g.points.some(function (p) { return selected.has(p.fact_id); }); });
@@ -450,6 +468,7 @@
     if (el('result-domain')) el('result-domain').addEventListener('change', function () {
       updateResultQuery(el('tbl-b'));
     });
+    if (el('result-study')) el('result-study').addEventListener('change', function () { updateResultQuery(el('tbl-b')); });
     if (el('result-table-scope')) el('result-table-scope').addEventListener('change', function () {
       updateResultQuery(el('tbl-b'));
     });

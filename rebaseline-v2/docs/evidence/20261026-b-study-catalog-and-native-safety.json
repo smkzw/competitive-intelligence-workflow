@@ -1,0 +1,67 @@
+{
+  "scope": "DEVELOPMENT_COMPONENT_RELATED_REGRESSION_AND_REAL_PRIMARY_SOURCE_RECHECK_NOT_RELEASE",
+  "source_set": {
+    "studies": 17,
+    "individual_current_api_sources": 17,
+    "source_db_sha256": "92eed440fb58b9443ad1b1e9e934ba303119b7285c29ecbec5e6659c0a5d1922",
+    "original_db_unchanged": true,
+    "capture_model_calls": 0
+  },
+  "readout": {
+    "counts": {
+      "all": 17,
+      "with_results": 9,
+      "without_results": 8,
+      "unknown": 0,
+      "adopted": 9
+    },
+    "measurements": 3010,
+    "safety": 1571,
+    "groups": 624,
+    "cross_study_groups": 13,
+    "safety_fields": {
+      "safety.ae.term": 974,
+      "safety.sae.term": 495,
+      "safety.sae.any": 34,
+      "safety.other_ae.above_threshold": 34,
+      "safety.death.all_cause": 34
+    }
+  },
+  "source_recheck": {
+    "safety": 1571,
+    "outcomes": 1439,
+    "critical_outcomes": 155,
+    "explicit_zero_safety_values": 818,
+    "events_differ_from_participants": 28,
+    "checks": "exact raw CAS SHA, measurement or event path, explicit group ID, source value, N, unit/statistic, visit, population; all checked source IDs preserved; not independent medical equivalence review"
+  },
+  "related_gate": {
+    "pytest": "74 PASS in 0.47s",
+    "ruff": "PASS",
+    "full_current_gate": "NOT_RUN"
+  },
+  "template_execution": {
+    "guard_audit": "PASS",
+    "adapter": "pi",
+    "provider": "cursor",
+    "model_selector": "default",
+    "underlying_model": "NOT_EXPOSED",
+    "actual_effort": "NOT_EXPOSED",
+    "dispatch_inputs_unchanged": 4
+  },
+  "acceptance": {
+    "scientific_conference": "PENDING_TERMINAL",
+    "main_tree_visual": "REVISE_FOUR_POINT_DENSITY_AND_TOOLTIP",
+    "separate_ui_variant": "FOUR_WIDTHS_16_STATES_PLUS_4_GLYPH_KEYBOARD_CHECKS_COMPLETE_NOT_YET_INTEGRATED",
+    "current_package": "NOT_RUN",
+    "ordinary_report": "NOT_COMPLETE",
+    "M1_M6": "NOT_COMPLETE"
+  },
+  "evidence_hashes": {
+    "current.json": "633d12223d5e34009c87a5386b06dec32a84f028b9d8325404001c825dd9df85",
+    "source-audit.json": "86c90961be60499b417d9f94942b3ceca35c937a0e05b67aef24d306c5d9e940",
+    "outcome-source-audit.json": "d7bdfce930558bebfc5297149b4a71dbca770864673b6148c1873ade4901f14e",
+    "review-input-sha.json": "7b5284d6c33d25573144d3716ce36c31297dfa4bfb0026f71c60216f059eb04a"
+  },
+  "raw_sources_logs_and_databases_committed": false
+}

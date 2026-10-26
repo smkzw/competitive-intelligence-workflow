@@ -131,7 +131,15 @@ def test_safety_defaults_to_folded_source_linked_rows_and_shared_query(settings)
     html=render_report(db,pid,'B')
     assert 'data-filter-extra="tbl-b-safety"' in html
     assert '<details class="safety-table">' in html and '<details class="safety-table" open' not in html
-    assert f'<tr data-fact-id="{fid}">' in html
+    from html.parser import HTMLParser
+    class Rows(HTMLParser):
+        def handle_starttag(self, tag, attrs):
+            if tag == 'tr':
+                self.rows.append(dict(attrs))
+    parser = Rows()
+    parser.rows = []
+    parser.feed(html)
+    assert any(r.get('data-fact-id') == fid and r.get('data-study-id') == trial for r in parser.rows)
     safety=html.split('id="tbl-b-safety"',1)[1].split('</table>',1)[0]
     assert 'https://example.org/results' in safety and '<summary>原文值</summary>' in safety
 

@@ -23,6 +23,8 @@ from ciw2.render.labels import PHASE_ZH, age_label, phase_label, registry_label
 from ciw2.render.registration import registrations
 from ciw2.render.result_identity import bind_result_drugs
 from ciw2.render.results import arm_tokens, dispersion_text, result_groups, visit_label
+from ciw2.render.safety import safety_label
+from ciw2.render.study_catalog import study_catalog
 from ciw2.render.trial_identity import trial_identities, verified_holders
 from ciw2.store.db import DB
 
@@ -135,7 +137,8 @@ def _result_rows(db: DB, pid: str) -> list[dict[str, Any]]:
             "source_url": c.get("source_url") or srcs.get(f["source_id"] or ""), "quote": f["quote"],
             "verify_note": c.get("verify_note"),
             **{key: c.get(key) for key in ('class_title', 'category', 'param_type', 'dispersion_type',
-                                          'group_id', 'raw_value', 'spread', 'lower', 'upper', 'json_path')},
+                                          'group_id', 'raw_value', 'spread', 'lower', 'upper', 'json_path',
+                                          'term', 'organ_system', 'threshold_pct', 'num_events')},
         })
     return rows
 
@@ -152,14 +155,17 @@ def data_b(db: DB, pid: str) -> dict[str, Any]:
                                          for name in row['drugs'])
         row['domain'] = ('safety' if row['field'].startswith('safety.') else
                          classify_outcome_domain(row['endpoint'], drug_names=row['drugs']))
-    results = [r for r in rows if r["field"].startswith("result.") and not r["field"].endswith(".analysis")]
+    results = [r for r in rows if not r["field"].endswith(".analysis")]
     analyses = [r for r in rows if r["field"].endswith(".analysis")]
-    safety = [r for r in rows if r["field"] in ("safety.sae.any", "safety.death.all_cause")]
+    safety = [r for r in rows if r["field"].startswith("safety.")]
+    for row in safety:
+        row["safety_label"] = safety_label(row)
     charts, exclusions = result_groups(results)
     counts = {label: sum(r['domain'] == label for r in results) for label in DOMAIN_LABELS}
     counts = {label: count for label, count in counts.items() if count}
     unverified_critical = sum(1 for r in rows if r["tier"] == "critical" and r["status"] != "verified")
     return {"results": results, "analyses": analyses, "safety": safety, "charts": {"groups": charts},
+            "study_catalog": study_catalog(db, pid, results, identities),
             "unverified_critical": unverified_critical, "plot_exclusions": exclusions,
             'domain_counts': counts, 'domain_labels': DOMAIN_LABELS,
             'default_domain': 'clinical' if counts.get('clinical') else 'all'}
