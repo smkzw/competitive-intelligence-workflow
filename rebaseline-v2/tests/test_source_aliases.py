@@ -12,12 +12,11 @@ def test_fetched_publication_url_resolves_to_exact_cas_text(settings, monkeypatc
     db, cas = DB(settings.db_path), CAS(settings.cas_dir)
     pid = db.create_project('研究', ['C'])
     ctx = ToolContext(db=db, cas=cas, settings=settings, project_id=pid)
-    text = 'The primary endpoint was EASI-75 at week 16.'
+    text = 'The primary endpoint was EASI-75 at week 16.\nPMID: 12345678\n'
 
     def fake_fetch(ctx, url, **kwargs):
-        digest = cas.put(text.encode())
-        sid = db.add_source(pid, 'pubmed', url + '?db=pubmed&id=12345678', digest, text_digest=digest)
-        return Fetched(sid, url + '?db=pubmed&id=12345678', 200, text.encode(), text, 'text/plain')
+        assert kwargs['register'] is False
+        return Fetched(None, url + '?db=pubmed&id=12345678', 200, text.encode(), text, 'text/plain')
 
     monkeypatch.setattr(pubmed, 'fetch', fake_fetch)
     result = pubmed._pubmed_fetch(ctx, pubmed.PubFetchArgs(pmid='12345678'))
@@ -25,4 +24,5 @@ def test_fetched_publication_url_resolves_to_exact_cas_text(settings, monkeypatc
     assert source is not None
     assert source_text(ctx, source['id']) == text
     assert source['id'] == result['source_id']
+    assert len(db.query('SELECT * FROM sources WHERE project_id=?', (pid,))) == 1
     assert json.loads(source['meta'])['fetched_url'].endswith('?db=pubmed&id=12345678')

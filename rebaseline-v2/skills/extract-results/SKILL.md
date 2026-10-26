@@ -28,3 +28,5 @@ source_context只记录原文明确的legal_entity、relationship、as_of（YYYY
    - denominator：仅当原文明确给出该组 N
    - quote：**从读取文本中逐字复制**、包含该数值的一段（≤400 字）
 4. 原文没有的写进 gaps（例如「III 期 52 周数据未公开」），不要推断、不要换算、不要把未报告写成 0。
+
+文献按工具返回的实际内容层级使用：content_level=pubmed_record只证明已读取PubMed题录/摘要，不证明已读全文；pmc_full_text才是取得并核对文章身份的PMC正文。请求full_text=true不等于取得全文。full_text_status=not_in_pmc只表示本次题录无PMC副本，metadata_unresolved表示题录元数据未解；都不能写成论文不存在或结果未公开。PMC访问/解析失败保留失败记录，必要时可显式另取PubMed记录，但不得把这种后续记录称作全文。仅引用实际取回的页段/文本，不能补造未读表格、附录或方案。

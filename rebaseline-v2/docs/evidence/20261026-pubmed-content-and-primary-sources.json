@@ -1,0 +1,107 @@
+{
+  "scope": "PUBLICATION_SOURCE_LAYERS_AND_IDENTITY_VALIDATION_COMPONENT_NOT_CLINICAL_ADOPTION_OR_RELEASE",
+  "source_component": {
+    "studies": 17,
+    "registry_references": 21,
+    "derived_references": 17,
+    "background_references": 4,
+    "unique_derived_pmids": 12,
+    "derived_does_not_mean_primary_results": true,
+    "actual_selected_reports": 6,
+    "elapsed_seconds": 11.965,
+    "model_calls": 0
+  },
+  "actual_sources": [
+    {
+      "pmid": "28249150",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28249150/",
+      "doi": "10.1056/NEJMoa1606490",
+      "content_level": "pubmed_record",
+      "source_id": "src_3e53000c4e8f"
+    },
+    {
+      "pmid": "29753033",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29753033/",
+      "doi": "10.1016/j.jaci.2018.03.018",
+      "content_level": "pubmed_record",
+      "source_id": "src_787c9bd3d906"
+    },
+    {
+      "pmid": "31449914",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31449914/",
+      "doi": "10.1016/j.jaci.2019.08.013",
+      "content_level": "pubmed_record",
+      "source_id": "src_8f4cab8a8133"
+    },
+    {
+      "pmid": "35088348",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8941010/",
+      "doi": "10.1007/s13555-021-00678-7",
+      "content_level": "pmc_full_text",
+      "source_id": "src_58661756e308"
+    },
+    {
+      "pmid": "39067461",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39067461/",
+      "doi": "10.1016/S0140-6736(24)01203-0",
+      "content_level": "pubmed_record",
+      "source_id": "src_77747e4773fd"
+    },
+    {
+      "pmid": "41081535",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13109752/",
+      "doi": "10.1111/jdv.70080",
+      "content_level": "pmc_full_text",
+      "source_id": "src_36463c273e18"
+    }
+  ],
+  "official_counterexample": {
+    "pmid": "35088348",
+    "raw_sha256": "15c60f9fbc2a3a00ae5ddd20b3f380f466cb40e3e61ef4222d99935068af21d8",
+    "unique_bare_pmid_accepted": true,
+    "medline_indexing_suffix_required": false
+  },
+  "code_validation": {
+    "worker": "27 RED /1PASS ->28PASS/Ruff",
+    "owner_counterexamples": "3RED/28PASS ->31PASS within82related",
+    "related_gate": "82PASS0.96s/Ruff",
+    "source_file_lines": 126,
+    "entry_function_lines": 55,
+    "discarded_single_use_top_level_helpers": 11,
+    "real_saved_primary_payloads_replayed_unchanged": 6,
+    "additional_official_record_replayed": 1,
+    "new_replay_network_or_db_writes": 0,
+    "tool_bindings_same": [
+      "ctgov_get",
+      "fetch_url",
+      "pubmed_search"
+    ],
+    "tool_binding_changed": [
+      "pubmed_fetch"
+    ],
+    "full_current_gate": "NOT_RUN",
+    "current_install": "NOT_RUN"
+  },
+  "execution": {
+    "guard_audit": "PASS",
+    "adapter": "pi",
+    "provider": "cursor",
+    "observed_runtime_selector": "cursor/default",
+    "underlying_model": "NOT_EXPOSED",
+    "effort": "default_SELECTOR_NOT_VERIFIED_REASONING_LEVEL",
+    "duration_seconds": 640.51,
+    "tool_call_count_from_receipt": 108,
+    "dispatch_inputs_unchanged": 4
+  },
+  "new_sources_clinically_adopted": false,
+  "historical_availability_qualified": false,
+  "reports_or_full_literature_accepted": false,
+  "raw_text_databases_and_logs_committed": false,
+  "evidence_sha256": {
+    "real-source-replay.json": "f7c0c1d0145f35fcfe34781928eaa41fa60ae4c85417f9c05c7d076b07ab123d",
+    "actual-bare-marker-replay.json": "95aacdf878e3cf394f5750f7f412c1768f885de72b2af853a4dca0e657198a85",
+    "actual-tool-bindings.json": "befad1edd5a8888ec346dbb83285ed81406ae4f36c6b1f06d417c629a63cd526",
+    "stage-bindings.json": "2b2898584bdeedb496de266b6f1eb93de695b2d47559f9013462ce0116d86e42"
+  },
+  "extraction_unit_cache_compatibility": "NOT_QUALIFIED: extraction._key still includes whole tool file/Skill; unchanged stage/tool prefixes do not prove old unit reuse; original135 remains frozen"
+}

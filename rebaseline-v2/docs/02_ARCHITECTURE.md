@@ -207,3 +207,9 @@ render回执另绑定实际A/B/C文件的字节摘要；文件名输出JSON不�
 ### 归并身份与工具版本收口（2026-10-25）
 归并复用已有trial_identities投影，按所引事实的研究附临床身份；正文/引用和身份共同参与basis版本，不新建药名/公司字典或事实视图。引用所选观察时读取完整原事实；指标×时间窗×治疗期关系按原文，不按排列推定。身份进入后完整记录按原8k叙述/72k预计证据预算重新分包，不上调预算或截断。
 阶段工具版本绑定实际白名单函数、同模块非入口辅助函数及显式来源脚本；共享Harness执行/校验/分页单独绑定，不再因无关读取函数改变而重跑入口。旧版绑定布局保守失效一次，不能改写旧回执伪造兼容。
+
+### PubMed与PMC实际内容合同
+
+`pubmed_fetch`保留source_url/source_id/text/total_chars，增加pmid、content_level(pubmed_record/pmc_full_text)、full_text_requested及full_text_status(not_requested/not_in_pmc/metadata_unresolved/available)。esummary为空与明确无PMCID分开；PMC失败继续抛来源错误，不静默变成摘要。efetch先register=False，stdlib ElementTree核唯一文章、front/article-meta编号及非空body；PubMed核唯一行首PMID，不强制MEDLINE后缀。校验后只登记一次canonical来源，raw/纯文本算法和12000字符分页不变。
+
+实现保留在单个55行入口内，避免新增全模块辅助函数令未使用它们的pubmed_search工具错误失效。真实载入工具绑定核对表明仅pubmed_fetch变，pubmed_search/fetch_url/ctgov_get相同；无DB/来源/模型探针。Skill内容层级指引的变化只作用于相应提取阶段，不改旧冻结运行或旧来源回执。
