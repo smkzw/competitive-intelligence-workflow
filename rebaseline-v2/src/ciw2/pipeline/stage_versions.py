@@ -175,6 +175,11 @@ def _constant_payload(value: Any) -> Any:
         try:
             json.dumps(value, sort_keys=True, ensure_ascii=False)
         except (TypeError, ValueError):
+            # CT.gov phase maps have ordered tuple-of-string keys, not JSON object keys.
+            if isinstance(value, dict) and all(isinstance(key, tuple)
+                    and all(isinstance(part, str) for part in key) and isinstance(item, str)
+                    for key, item in value.items()):
+                return _default_payload(value)
             return None
         return value
     return None

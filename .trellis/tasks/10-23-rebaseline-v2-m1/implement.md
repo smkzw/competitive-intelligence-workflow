@@ -1160,3 +1160,6 @@ worker脚本903行/main83违反04，原文本/三输出保留；owner只拆离�
 
 ## 205–206｜恢复资格独立审阅与真实连接（2026-10-26，ACTIVE）
 执行+会商：已完成发现/范围资料恢复涉及真实依赖解释，owner保留共享写入；204仅静态执行，205独立挑战后才应用恢复副本。ZCode主路0.568s缺built-in配置、无session/意见，原失败保留；已用批准首备Grok/grok-build/grok-4.7:high新上下文同冻结资料审阅，原生69820在途，勿定时轮询/重派。203开发门2232PASS35.18s/Ruff/283Python25JS468输入，RAM资格10守卫PASS；未改原DB/CAS/旧回执/40旧键，未启普通研究。206主GLM真实工具协议5.244s/208tokens成功，0备用，非研究/医学接受。204同会话末轮72.674s/2工具及输出SHA实际审计无错，304行未运行原型不采纳。下一动作：205意见→必要根因修复→冻结当前代码与独立恢复副本→完整普通C续接，不重跑151批。
+
+## 207｜独立根因修正，准备普通续接（ACTIVE）
+205首备Grok/grok-build/grok-4.7:high实际897.891s，会话394e8213-baa2-4955-9694-bed65e11becc，REVISE指出真实_PHASE元组键漏摘要及展开组件差异过宽。四个生产RED→tuple-key字串映射用既有_default_payload；两个组件RED→实际134展开常量+现有code_binding反算，只允许该常量差异。owner另两个邻阶段失败RED→后置检查移入现有事务，防失败留下新回执。81相关PASS4.67s/14资格守卫，207整门2236PASS26.60s/Ruff/283Python25JS469输入，manifestbd9f1630…365c5。初相关命令错文件NOT_RUN；初fixture过宽提前被china tool门拦截、Ruff import失败均保留，修正后通过。205同会话仅核这三根因round2实际派发native35712在途，不重开全页审阅。206copy原件6061…23a9、936+397CAS完整，未qualification/start；固定207 runtime128文件1993637bytes，manifesteba329f5…daa17，v3 RAM资格仍三回执trial_evidence。GLM主路已实通，Ego30/p1已建立；预备start_recovered.py/run_recovered.py，待独立意见并owner接受后一次启动。旧135start绝不再跑。bc8b0d74已推远端；本批待白名单提交。

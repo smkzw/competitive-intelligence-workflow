@@ -5,7 +5,8 @@
     "src/ciw2/pipeline/tool_versions.py": "8599666043ea6bd24c43aea04ae48774177b9c9bc024e64f0f57b1a12cf50c30",
     "src/ciw2/pipeline/stage_dependencies.py": "bffa2fef24c515798938f8efb43d5b25c4f7531039b5fd40e859e2b13cba30ba",
     "src/ciw2/pipeline/expansion.py": "521ec2cd6635582ad440af0628d9a01b61ecd759e5de6b7b643042b88f3d51a2",
-    "tests/test_ctgov_dependency_scope.py": "1ba933656f642973444e2135a89da9decb3e4d407ab4c3dcc76c0dc6c0a3209d"
+    "tests/test_ctgov_dependency_scope.py": "96336967da6ee29871809f55cd5ff0a3455f30ebdcfa3e62c39cd2521a46d824",
+    "src/ciw2/pipeline/stage_versions.py": "041f7ee7540378cf33c59953983ae9e13ae9fb338f3c0999506a292e6512f8de"
   },
   "root_red": {
     "failed": 5,
@@ -16,18 +17,24 @@
     "seconds": 2.91
   },
   "development_gate": {
-    "passed": 2232,
-    "seconds": 35.18,
+    "passed": 2236,
+    "seconds": 26.6,
     "ruff": "PASS",
     "python_files": 283,
     "javascript_files": 25,
-    "checked_inputs": 468,
-    "manifest_sha256": "833b3f973b0e7d72a1b89083af23395578bc71b50bb2c3fc830772d52a6f42bf"
+    "checked_inputs": 469,
+    "manifest_sha256": "bd9f1630f1bd8613f2cda23f64040f5af469b829bd0cf84506cb7a8c715365c5"
   },
   "qualification_operation_guards": {
-    "passed": 10,
-    "seconds": 1.65,
-    "red_before_implementation": false
+    "passed": 14,
+    "related_total": 81,
+    "related_seconds": 4.67,
+    "root_red": {
+      "phase_map": 4,
+      "changed_nonconstant_component": 2,
+      "postcondition_atomicity": 2
+    },
+    "earlier_ten_guards_green_only": true
   },
   "historical_runtime_prefix_bindings_reproduced": 7,
   "historical_runtime_files_verified": 120,
@@ -46,7 +53,9 @@
     "primary": "zcode/zcode/GLM-5.3-Flash:max",
     "primary_status": "TERMINAL_ENVIRONMENT_FAILURE_NO_SESSION_OR_OPINION",
     "first_declared_fallback": "grok/grok-build/grok-4.7:high",
-    "fallback_status": "PENDING"
+    "fallback_status": "REVISE_INITIAL_FIXED_TWO_ROOTS_SAME_SESSION_FOLLOWUP_PENDING",
+    "actual_seconds": 897.891,
+    "session": "394e8213-baa2-4955-9694-bed65e11becc"
   },
   "actual_model_protocol_check": {
     "requested": "cms-router/glm-5.3-flash",
@@ -63,5 +72,21 @@
   "clinical_acceptance": "NOT_RUN",
   "M1_complete": false,
   "release_accepted": false,
-  "recovery_materials": "Local controlled ciw-data/197,203,204,206; not included by Git clone; originals and failed receipts preserved."
+  "recovery_materials": "Local controlled ciw-data/197,203,204,206; not included by Git clone; originals and failed receipts preserved.",
+  "earlier_development_gate": {
+    "passed": 2232,
+    "seconds": 35.18,
+    "ruff": "PASS",
+    "python_files": 283,
+    "javascript_files": 25,
+    "checked_inputs": 468,
+    "manifest_sha256": "833b3f973b0e7d72a1b89083af23395578bc71b50bb2c3fc830772d52a6f42bf"
+  },
+  "current_fixed_runtime": {
+    "files": 128,
+    "bytes": 1993637,
+    "manifest_sha256": "eba329f5063d3086b4be5dbcf05e4ae018a9ccf9b2a5fd530f7c07e14e2daa17",
+    "RAM_preflight": "PASS_THREE_EXPLICIT_QUALIFICATIONS_TRIAL_EVIDENCE_RESTART",
+    "activated": false
+  }
 }

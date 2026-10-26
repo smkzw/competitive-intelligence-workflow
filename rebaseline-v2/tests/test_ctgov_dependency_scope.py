@@ -102,3 +102,35 @@ def test_expansion_source_cache_uses_current_tool_and_real_source_bytes(settings
     assert expansion._source(rc,query,True)[1]=='fetched' and len(calls)==2
     assert rc.db.stage_output(rc.run_id,next(row['name'] for row in rc.db.query(
         "SELECT name FROM stages WHERE run_id=? AND name LIKE 'expansion_source:%'",(rc.run_id,))))['sources']
+
+
+@pytest.mark.parametrize('name',['ctgov_search','ctgov_get'])
+def test_reachable_tuple_key_phase_map_changes_summary_tool_binding(settings,monkeypatch,name):
+    rc=context(settings);before=tool_versions.tool_binding(rc,name)
+    monkeypatch.setitem(ctgov._PHASE,('PHASE3',),'phase3-changed')
+    assert tool_versions.tool_binding(rc,name)!=before
+
+
+def test_tuple_key_map_is_stable_but_key_order_and_values_are_meaningful():
+    payload=stage_versions._constant_payload
+    left={('A','B'):'ab',('C',):'c'}
+    assert payload(left) is not None
+    assert payload(left)==payload(dict(reversed(list(left.items()))))
+    assert payload(left)!=payload({('B','A'):'ab',('C',):'c'})
+    assert payload(left)!=payload({('A','B'):'changed',('C',):'c'})
+
+
+def test_real_expansion_source_cache_refetches_when_phase_map_changes(settings,monkeypatch):
+    from ciw2.sources.http import Fetched, register_text
+    rc=context(settings);rc.stage='universe_expand';calls=[]
+    def fetch(ctx,url,**kwargs):
+        calls.append(url);text='{"studies":[]}'
+        sid=register_text(ctx,kind='ctgov',url=url,text=text)
+        return Fetched(sid,url,200,text.encode(),text,'application/json')
+    monkeypatch.setattr(ctgov,'fetch',fetch)
+    query={'tool':'ctgov_search','id':'global:test','region':'global','term':'condition','registry':None,
+           'arguments':{'condition':'condition','route_id':'global:test','region':'global'}}
+    assert expansion._source(rc,query,True)[1]=='fetched'
+    assert expansion._source(rc,query,True)[1]=='cached'
+    monkeypatch.setitem(ctgov._PHASE,('PHASE3',),'phase3-changed')
+    assert expansion._source(rc,query,True)[1]=='fetched' and len(calls)==2
