@@ -1,0 +1,33 @@
+{
+  "scope": "READ_ONLY_ORDINARY_RESUME_PREFLIGHT_NOT_RESEARCH_OR_COMPATIBILITY_ACCEPTANCE",
+  "code_commit": "1b8d74d40111596386ff8a9930e94c1d2542cb8c",
+  "source_db_sha256": "6061bfb8304d3ca2cf101199c0954cbaa723ce646a96c253d6234c91650923a9",
+  "restart_stage": "universe_china",
+  "legacy_missing_receipts": [],
+  "individually_compatible": [
+    "intake",
+    "candidate_triage",
+    "coverage_review",
+    "trial_scope_review"
+  ],
+  "individually_incompatible": [
+    "universe_china",
+    "universe_global",
+    "universe_expand"
+  ],
+  "different_ctgov_ast_definitions": [
+    "ae_facts"
+  ],
+  "old_ctgov_sha256": "d962ebd62d471f781942e04859919f7266b67234fff63cd15001217d416841e5",
+  "current_ctgov_sha256": "02d6653515520fda8d154c330b092c2d82a81ae437f43fce7bba977241b110d0",
+  "observed_coupling": "ctgov_search.helpers includes sibling safety parser and whole-file EXTRACTOR_VERSION; universe expansion also binds whole extractor version",
+  "execution": {
+    "models": 0,
+    "network": 0,
+    "live_db_writes": 0,
+    "stages_called": 0,
+    "old_keys_rewritten": 0
+  },
+  "next_bounded_action": "203: prove/narrow search helper dependencies and test a transparent source-bound qualified recovery candidate on a copy; preserve old receipts/151 batches; do not blindly re-sign 40 extraction keys",
+  "full_goal_complete": false
+}

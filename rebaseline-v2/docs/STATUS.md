@@ -10,13 +10,14 @@
 |---|---|---|
 |135普通PNH完整C|原固定134；用户暂停后安全cancelled，child74351/parent74349退出，原生83367已收终态|197终态保全后验证旧单位资格，再一次普通Service续接；不能再次运行已有started/activation的start135|
 |197暂停→恢复|Goal曾实际paused，用户解除后实核ACTIVE；未SIGSTOP/SIGKILL/热改运行时。149只读预览69752也已退出|标准DB+936源CAS、397大事件CAS已核；原151批/780与134120文件SHA不变，不重跑前置|
-|193b B既有组件|当前52bf…a21c，四宽20独立截图/表格开合/键盘+4native glyph定位，源178不改|主身份与角色常显、次级资料折叠、全空组药列随查询收起/恢复；整体阅读/正式身份仍继续|
+|193b B既有组件|当时52bf…a21c，四宽20独立截图/表格开合/键盘+4native glyph定位，源178不改|主身份与角色常显、次级资料折叠、全空组药列随查询收起/恢复；整体阅读/正式身份仍继续|
 |200/201当前开发门|2220PASS24.94s/Ruff；282Python/25JS/463输入检查期间不变|代码/Skill/测试/资产后置逐SHA不变；首200测试2198PASS但Ruff失败保留|
 |195/196历史包组件|固定127文件1981753bytes；空target离线wheel/sdist、26资产/9Skills/全部模块/CLI通过|安装渲染同193b实际HTML逐字一致；复用157依赖，未冒充新venv/普通综合恢复|
 |198终态单位资格|runner已返0，827.636s/355工具，Pi/cursor/default底层未知；40旧key精确命中，32现来源检查通过/8版本变更miss|机械索引已核，900行脚本由owner拆为479/470行，三输出逐字同；不当现键/科学/医学采用接受|
 |199/200独立来源复核|同CodeBuddy会话实际431.179+275.552s，原文9确认/3混合分类/3缺身份或角色，3新分类候选原文支持|REVISE中的值后缀/蛋白结合反例已成族复现修复；当前回执问题DB已正确处理，新增测试证实；未认证40单位兼容|
 |200分类与A组件|用户裁决已入PRD/架构/Plan/Skill；两字段/两筛选/图表分组分开；真实源RAM切片12verified/3unverified，生产DB不写|当前18da…28d3，四宽16状态、Esc/来源/组合零值/恢复157；无合格药物阶段不画空图，真实正向阶段图NOT_RUN|
 |201限流修复|同CodeBuddy真实会话193.956s步数上限+94.401s续接完成，owner125相关PASS；一次429链后只列待办、仍读合格缓存|旧key不改签；原报告拒绝/格式审计FAIL保留，最终同会话回执绑定单独实核通过；未做真实限流模型请求|
+|202只读续接预检|当前2220门代码在197备份RAM中返回universe_china；intake/两个scope阶段/trial_scope_review本身兼容，无缺回执|CT.gov AST仅ae_facts改变，但search助手摘要/expansion常量也过期；未执行阶段/网络/模型。203先缩小依赖并验证透明合格恢复副本，不盲跑全前置|
 |189属性独立审阅|15实源冻结；声明Grok/Cursor未建可用会话，Pi/openai-codex/gpt-6.1-sol:high及一次同会话恢复均capacity/0工具/无有效意见|NOT_RUN_PROVIDER_CAPACITY，无活runner；科学property/quote/assessment规则未改，不将placeholder当接受|
 
 ## 本批完成与复盘
@@ -56,4 +57,4 @@
 
 保持中文专家阅读、图+完整折叠表、历时线与标注，功能优先Kangzhe7.1/四桌面HTML，不堆防御性说明/工程字段/英文墙；不猜译关系或补0。Ego专用空间失效永久授权替换，不再询问，不改登录/缓存/升级。Goal ACTIVE，不建立阶段暂停点，不称RC或全部交付。
 
-本批复盘：首次200全测试2198PASS但新测试缺check=False导致Ruff失败，不能写“全门绿”；修正后成族348PASS及当前整门2220PASS。独立审阅只静态Read/Grep，源码/原件SHA及运行由owner补。MC1的C5-mediated例已被既有数值/引文门拦住，但Factor D-related确有属性词尾缺口；MC2 protein-binding确有误分子类型；两者与binds to/inhibits正向同族闭合。读屏发现1440药名折行，折叠纳入理由并保障14ch身份、18px字体，不删原文。原始36pin/15source审阅历史和首次截图均保留，不用新候选覆盖。201初轮实际有session却被runner概括“无可用会话”，依据真实回执同句柄续接；不改全局工具/旧失败伪造流程PASS。下一步202是完整普通续接的有界dry-run与兼容性/来源差异核实，不重跑151批或批量签40新key。
+本批复盘：首次200全测试2198PASS但新测试缺check=False导致Ruff失败，不能写“全门绿”；修正后成族348PASS及当前整门2220PASS。独立审阅只静态Read/Grep，源码/原件SHA及运行由owner补。MC1的C5-mediated例已被既有数值/引文门拦住，但Factor D-related确有属性词尾缺口；MC2 protein-binding确有误分子类型；两者与binds to/inhibits正向同族闭合。读屏发现1440药名折行，折叠纳入理由并保障14ch身份、18px字体，不删原文。原始36pin/15source审阅历史和首次截图均保留，不用新候选覆盖。201初轮实际有session却被runner概括“无可用会话”，依据真实回执同句柄续接；不改全局工具/旧失败伪造流程PASS。202只读预检已完成，下一步203收窄search依赖与透明资格副本，再进入真实普通续接；不重跑151批或批量签40新key。
