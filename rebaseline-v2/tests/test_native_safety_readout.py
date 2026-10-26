@@ -55,7 +55,14 @@ def test_native_severity_threshold_and_event_counts_do_not_merge_or_become_death
     table = html.split('id="tbl-b-safety"', 1)[1].split('</table>', 1)[0]
     assert 'Headache' in table and '事件次数' in table and 'Nervous system disorders' in table
     assert serious['safety_label'] in table and other['safety_label'] in table
-    assert table.count('全因死亡') == 1
+    from html.parser import HTMLParser
+    class VisibleLabels(HTMLParser):
+        def handle_data(self, text):
+            self.labels.append(text.strip())
+    parser = VisibleLabels()
+    parser.labels = []
+    parser.feed(table)
+    assert parser.labels.count('全因死亡') == 1
 
 
 def test_plot_metadata_preserves_zero_risk_denominator_and_exact_source_ids(settings):

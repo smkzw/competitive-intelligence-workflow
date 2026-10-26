@@ -20,7 +20,7 @@ const elements={charts:{textContent:JSON.stringify({groups:[a,b]})},'result-grou
   'chart-result':{id:'chart-result',style:{}}};
 elements['result-study-reference']={};
 elements['result-study-list']={items:[],replaceChildren(){this.items=[];},appendChild(n){this.items.push(n);}};
-const safetyRows=['first','other'].map(text=>({textContent:text,style:{}}));
+const safetyRows=['first','other'].map((text,i)=>({dataset:{factId:'f'+i},textContent:text,style:{}}));
 elements['tbl-b-safety']={querySelectorAll:()=>safetyRows};elements['safety-count']={};
 input.getAttribute=name=>name==='data-filter-extra'?'tbl-b-safety':'tbl-b';
 const document={getElementById:id=>elements[id],querySelectorAll:s=>s==='input[data-filter]'?[input]:[],

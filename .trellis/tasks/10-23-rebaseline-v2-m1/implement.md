@@ -1045,3 +1045,20 @@ owner去掉11个新顶层辅助函数，收205→126行/入口55行，无新依�
 175原DERIVED21引用中4BACKGROUND、17DERIVED/12唯一PMID，0RESULT；不能用自动关联当主结果。六选定真实报告源全取回；主要结果39067461明确ARCADIA1↔NCT03985943、ARCADIA2↔NCT03989349，逐字/字符范围已存source-level-and-trial-name-claims，不仅按顺序或署名猜。尚未生产采用新论文数值或证明历史资格。原135/173长程kernel继续，仅等退出事件；未改其34输入/旧运行、未跑新整体门/安装。
 
 176收口的额外真问题：虽真实tool_binding已窄签，extraction.py::_key仍按整个REGISTRY工具文件及整份Skill正文构造unitkey，CODE_HASH还整文件包含context/recovery/http。故9阶段相同不能证明旧enrich单位复用；176一处来源增强可能让已完成identity单位全miss。未改该生产函数/旧key，不能虚报兼容或自动把当前176用于135恢复。先等135终态保全，以固定旧运行时、精确任务/单位key/源读集为输入做有证据资格验证，当前来源/事实语义不兼容才重做相应单位；不盲签旧缓存或默认重跑151批。该根因是后续有界高优先实现，复用现有tool_versions/recovery，不建通用迁移平台。
+
+
+## 2026-10-26 177–183科学反例关闭、当前前端和稳定包
+
+继续ACTIVE。本批执行方式execution-plus-conference：沿用已有冻结173科学审阅，由owner集成共享源/查询与显示，不另派重复全页会商。原C03实际Grok启动前失败、Cursor变体不支持，声明Pi/openai-codex/gpt-6.1-sol:high备用399.939s/103tools/session01a176b1-7c04-7000-93ee-935f6fad7bd9给REVISE；D1/P1 974otherAEterm未继承原frequencyThreshold，D2/P2 SOC检索main0/safety464，均真实缺陷。仅采纳事实标签/同查询修复，不采纳默认防御解释段。源170/原3721历史保留。
+
+177成族RED后最小源上下文+共享fact检索文档/selected集合修复；174显示双文件经原审阅终态后逐SHA集成，旧genericarm失研究上下文回归由原断言拦截并修，不猜drug关系。99相关PASS/Ruff。178SQLite标准backup+原17source固定重摄取，0HTTP/模型/旧库写；当前3010/安全1571/624组/13双研究，974阈值311为5%、663为0%；原COVID6/321=1.9%保留低于5%观察，阈值不当逐臂筛选。1571当前原路径审计通过，首次脚本误把历史行混入已保留firstfailure并改用ctgov-current集合，不改历史。
+
+同会话round2初preflight缺必要段落失败未派，修合同后0warnings/PASS才派原生10364；273.333s/60tools/原session exact runtime后D1/D2 ACCEPT。续审十输入SHA集成前全同，原34已在前轮核；没有伪称Grok/跨模型完全独立，executor cursor/default底层未知、skills_enabled=true。reviewer实执行冻结HTML真实JS及当前源反例，不当浏览器或全M4。parent reviews/metrics按真实身份填写，原输出/失败保留。
+
+178 Ego18四宽25实态，source窗每轴重复使六臂只见一臂；179隔离133runtime约1.98MB仅results.py/portal.js双文件，固定审阅十输入不动。把已可解析visit_short与完整window分开、源定义期别短显/方案主显、单位去重、按实际行数分图高；原完整时间定义/tooltip不丢。3RED方向、39显式import variant Python/五原生JS通过，25四宽实态0页面溢出、SOC464一致、四点及六臂全显、glyph/键盘真实动作。owner实看五代表帧，未声称624组或全A/B/C审美通过。发现旧174 PYTHONPATH-only被pytest pythonpath覆盖，保留原回执并纠正它不证明variant Python；当前180全门验证实际集成源。
+
+180初宽门2108PASS1FAIL：旧result-query-lifecycle VM safety行缺实际factId；读完整fixture后仅补dataset factId，原断言不动。最终2109PASS16.30s/Ruff/273Python/22JS/438输入不变，manifestd23bb451dc24dd766852e04df91d51d0e240ac1000329d7feea207be0366e223。两显示文件逐SHA写回后181127运行文件1978673bytes，0新venv/原文/日志副本；182空target离线wheel/sdist，全部模块/26资产/9Skills/CLI隔离cwd通过，复用157依赖非freshvenv。以安装包只读memory重绘同178，HTML逐字等17982e62242…7b17d5，原DB不变，故不重复浏览器25态。首次读出目录len(dict)=2错误原回执保留，纠正rows17。
+
+135第四7200.001kernel仅边界一次快照：仍running、最新5796/extract_design/06:27:19Z，enrich157task/474model/32submit，135error事件未新增；不代表全采用。首次误猜trace_events表报错后读真实schema agent_steps纠正，0写入。第五kernel NOTE_EXIT原生33850等待74351，7200s，不轮询/热改/强杀。原trial_evidence72缺口仍保留。下一单位cache根因未修，先静态/闭合源资格分析，135终态前不迁key或切runtime。
+
+public摘要20261026-b-threshold-query-and-reading.json+两精选截图，原DB/CAS/论文/完整浏览器/日志仅本地。PRD/Plan/STATUS同权威更新；原源/历史不清理。所有M1–M6未全部闭合、非RC，GoalACTIVE。

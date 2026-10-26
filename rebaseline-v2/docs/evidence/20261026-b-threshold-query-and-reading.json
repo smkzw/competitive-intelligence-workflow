@@ -1,0 +1,163 @@
+{
+  "scope": "B_FIXED_17_OFFICIAL_SOURCES_COMPONENT_NOT_COMPLETE_M4_OR_RELEASE",
+  "base_commit": "95d2499c5482adc1e38cd813bb9f2ca04704d87b",
+  "changes": {
+    "D1": "Preserve nonserious AE reporting threshold as source context, not a per-arm rate filter",
+    "D2": "Main chart/table and safety table share a per-fact clinical search document and selected IDs",
+    "reading": "Known source-defined periods compacted; common unparsed source window retained in detail and tooltip, not repeated on every axis; unit words deduplicated; four/six observations visible"
+  },
+  "current_observations": 3010,
+  "safety": 1571,
+  "studies": 17,
+  "registry_results": 9,
+  "without_registry_results": 8,
+  "cross_study_clinical_groups": 13,
+  "threshold_terms": 974,
+  "threshold_5pct_terms": 311,
+  "source_snapshot": "b-threshold-current-20261026-178",
+  "source_db_sha256": "f3eb183974ce1b0ea925999b0a325efa054683411600a051773f99b6e260abca",
+  "html_sha256": "82e6224278e41162f0b7a9e5b21eb409569ffa364221aee2cd594fa4279b17d5",
+  "science_review": [
+    {
+      "report": "evidence_single_object",
+      "session": "01a176b1-7c04-7000-93ee-935f6fad7bd9",
+      "runtime_identity": {
+        "requested": "openai-codex/gpt-6.1-sol",
+        "observed": [
+          "openai-codex/gpt-6.1-sol"
+        ],
+        "current": "openai-codex/gpt-6.1-sol"
+      },
+      "requested_effort": "high",
+      "effort_measurement": "requested high and CLI high; internal reasoning effort not separately measured",
+      "seconds": 399.939,
+      "tool_calls": 103,
+      "returncode": 0,
+      "report_sha256": "ce6a3b48d0ad692989e55640fd7977b3ab5db913f40976907dcbfbe1a04723c1",
+      "receipt_sha256": "2f73e4718e962dbe3f9422d78eba1d114e19c058b7b1cdf3bdb018a574ade63e",
+      "skills_enabled": true
+    },
+    {
+      "report": "evidence_single_object_round2",
+      "session": "01a176b1-7c04-7000-93ee-935f6fad7bd9",
+      "runtime_identity": {
+        "requested": "openai-codex/gpt-6.1-sol",
+        "observed": [
+          "openai-codex/gpt-6.1-sol"
+        ],
+        "current": "openai-codex/gpt-6.1-sol"
+      },
+      "requested_effort": "high",
+      "effort_measurement": "requested high and CLI high; internal reasoning effort not separately measured",
+      "seconds": 273.333,
+      "tool_calls": 60,
+      "returncode": 0,
+      "report_sha256": "9c579ba10cde0bd608d9440df5192b100426f74529e52fe58b3b0389873084fb",
+      "receipt_sha256": "d178171040410b9c506689126671c85715cff9088ea851e68e939fb180db7b2b",
+      "skills_enabled": true
+    }
+  ],
+  "review_decision": "Initial REVISE, same-session D1/D2 ACCEPT; not final medical or visual approval",
+  "independence": "Fresh original review context; executor cursor/default underlying model unknown; cross-model independence not guaranteed; same-session follow-up is not a second independent opinion",
+  "development_gate": {
+    "pytest": {
+      "passed": 2109,
+      "seconds": 16.3,
+      "returncode": 0
+    },
+    "ruff": {
+      "returncode": 0
+    },
+    "structure": {
+      "python_files": 273,
+      "javascript_files": 22,
+      "inputs_unchanged": 438,
+      "manifest_sha256": "d23bb451dc24dd766852e04df91d51d0e240ac1000329d7feea207be0366e223"
+    },
+    "scope": "Current source169/172/176/177/179 combined development gate; actual B178 source audit and B179 browser evidence separate. Ordinary135/cache compatibility/current installation/M1-M6 remain incomplete."
+  },
+  "browser": {
+    "widths": [
+      1440,
+      1600,
+      1920,
+      2560
+    ],
+    "record_count": 25,
+    "states": "dense four points, sparse two points, no results, source; four actual glyph/focus checks; four SOC queries; one six-arm threshold case",
+    "horizontal_overflow": false,
+    "same_query_SOC_main_and_safety": 464,
+    "threshold_case_visible_bars": 6,
+    "owner_viewed": [
+      "1440 dense",
+      "1600 source",
+      "1920 sparse",
+      "2560 no results",
+      "2560 threshold"
+    ],
+    "receipt_sha256": "8b6acb5ec1ea1719430b06d7bdb94312138c8ba3b70495162ce2fe923fd992da",
+    "not_claimed": "all groups/pages aesthetic approval or independent visual review"
+  },
+  "installation": {
+    "scope": "CURRENT181_WHEEL_EMPTY_TARGET_INSTALL_REUSED157_TEST_DEPENDENCIES_NOT_FRESH_VENV_OR_FULL_RECOVERY",
+    "wheel_sha256": "89a7c46b1769801844cfd1b528d974539082c1deaa4a8507b9e993a6bc653eca",
+    "sdist_sha256": "d98db19a953b40b9c9803120592d70707bc031f1f6c3fcb75f973215a5870499",
+    "frozen_manifest_sha256": "0b076c6ceccbca6f0dff4fa469d039959f623b40d667ff227d39bf1ec280d611",
+    "source_files_checked": 127,
+    "assets_checked": 26,
+    "skills_checked": 9,
+    "new_venv": false,
+    "old157_venv_modified": false,
+    "external_downloads": 0,
+    "model_or_source_calls": 0,
+    "steps": {
+      "offline-build": 0,
+      "empty-target-install": 0,
+      "isolated-imports": 0,
+      "cli-entry-function": 0
+    },
+    "installed": {
+      "modules": "all_imported",
+      "skills": 9,
+      "extractor_version": "bc315eb4e721b713ca1869f0573e68bd3a7b5f692250a19188c94a11febae773",
+      "rule_version": "cde-registration-2020-literal-v1"
+    }
+  },
+  "installed_render": {
+    "scope": "INSTALLED181_MAIN_RENDER_IS_BYTE_IDENTICAL_TO_BROWSER179_ON_SAME178_FACTS",
+    "html_sha256": "82e6224278e41162f0b7a9e5b21eb409569ffa364221aee2cd594fa4279b17d5",
+    "db_sha256": "f3eb183974ce1b0ea925999b0a325efa054683411600a051773f99b6e260abca",
+    "result_count": 3010,
+    "safety_count": 1571,
+    "catalog_count": 17,
+    "source_or_model_calls": 0,
+    "original_db_writes": 0,
+    "new_html_copy": false,
+    "catalog_count_correction": "first receipt used len(study_catalog) which counts two container keys; actual rows=17 per production catalog and browser IDs"
+  },
+  "screenshots": {
+    "docs/evidence/screenshots/20261026-b179-B-1440-dense.png": "fc024eb3a1ea07cd219506e759523457a8e37187816dbb8ab6aa93fb7f3dcea8",
+    "docs/evidence/screenshots/20261026-b179-B-2560-threshold-case.png": "547aa56a00fd7b598bd0baf1e7642cc28f0a9f5ff52aeb7ce0dd4880a3cafe57"
+  },
+  "corrections": [
+    "First whole gate: one old VM fixture lacked production fact IDs; 2108 passed/1 failed retained; fixture aligned without weakening assertions; final 2109 passed",
+    "Earlier174 PYTHONPATH-only tests did not select variant because pytest configured pythonpath=src; original receipts preserved, scope corrected;179 explicit imported path=variant 39 pass, main180 complete gate passes",
+    "First installed render receipt counted two catalog dictionary keys instead of 17 rows; original count receipt retained and corrected"
+  ],
+  "pending": [
+    "Ordinary135 full C and exact-source revision",
+    "Unit cache compatibility qualification before resuming135 on changed source",
+    "M2 frozen independent reference denominators and recall",
+    "M3 full source-backed Chinese names, role/MAH/group and targets",
+    "M4 semantic approximate mapping, primary-paper fact adoption, 50 critical >=98%, complete report review",
+    "M5 historical evidence eligibility and global breadth",
+    "M6 final integrated ordinary recovery/controls/cost; latest install reused157 dependencies, not a fresh venv"
+  ],
+  "resource": {
+    "new_venv": false,
+    "new_minimal_runtime_bytes": 1978673,
+    "new_full_html_copies": 1,
+    "raw_source_or_database_committed": false,
+    "historical_evidence_deleted": false
+  }
+}

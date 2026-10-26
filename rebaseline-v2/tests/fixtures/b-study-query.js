@@ -19,7 +19,7 @@ elements['result-series']={replaceChildren(){},appendChild(){}};
 elements['chart-result']={id:'chart-result',style:{}};
 const study={value:'all',addEventListener:(_,f)=>events.study=f};elements['result-study']=study;
 const catalog=['study-a','study-b','study-empty'].map(id=>({dataset:{studyId:id},style:{},textContent:id}));
-const safety=['study-a','study-b'].map(id=>({dataset:{studyId:id},style:{},textContent:'common '+id}));
+const safety=['study-a','study-b'].map(id=>({dataset:{studyId:id,factId:id==='study-a'?'fa':'fb'},style:{},textContent:'common '+id}));
 elements['tbl-b-studies']={querySelectorAll:()=>catalog};elements['tbl-b-safety']={querySelectorAll:()=>safety};
 elements['study-catalog-count']={};elements['safety-count']={};
 const document={getElementById:id=>elements[id],createElement:()=>({}),
@@ -63,5 +63,5 @@ assert.equal(catalogVisible(),'study-a,study-b,study-empty');
 study.value='study-a';events.study();query.value='second';events.query();assert.equal(visible(),'');
 assert.equal(catalogVisible(),'study-a');assert.equal(safetyVisible(),'');
 query.value='';events.query();domain.value='unresolved';events.domain();assert.equal(visible(),'fu');
-assert.ok(elements['result-panel'].hidden);assert.equal(safetyVisible(),'study-a');
+assert.ok(elements['result-panel'].hidden);assert.equal(safetyVisible(),'');
 assert.equal(JSON.stringify(groups),original);assert.equal(rows.length,3);assert.equal(catalog.length,3);

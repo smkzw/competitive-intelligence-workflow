@@ -223,7 +223,9 @@ def ae_facts(study: dict[str, Any]) -> list[dict[str, Any]]:
                                  term=ev.get("term"), organ_system=ev.get("organSystem"),
                                  arm=groups.get(st.get("groupId"), {}).get("title"),
                                  group_id=st.get("groupId"), denominator=d, num_events=st.get("numEvents"),
-                                 proportion=derive_proportion(n, d, "count_participants"), **common))
+                                 proportion=derive_proportion(n, d, "count_participants"),
+                                 threshold_pct=ae.get("frequencyThreshold") if bucket == "otherEvents" else None,
+                                 **common))
     return out
 
 

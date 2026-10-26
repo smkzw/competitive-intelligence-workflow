@@ -33,7 +33,7 @@
 <div class="kz-query"><label for="result-table-scope">表格范围 <select id="result-table-scope" class="filter" aria-controls="tbl-b"><option value="metric">当前图表指标</option><option value="all">全部匹配结果</option></select></label></div>
 <div class="card table-card kz-data"><table id="tbl-b"><thead><tr><th>药物</th><th>研究</th><th>终点</th><th class="result-visit">访视与分层</th>
 <th class="result-arm">组别</th><th>值</th><th class="result-statistic">单位/统计</th><th>N</th><th>状态</th><th>来源</th></tr></thead><tbody>
-{% for r in data.results %}<tr data-fact-id="{{ r.id }}" data-domain="{{ r.domain }}"{% if r.entity_id %} data-study-id="{{ r.entity_id }}"{% endif %}><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td>
+{% for r in data.results %}<tr data-fact-id="{{ r.id }}" data-domain="{{ r.domain }}"{% if r.entity_id %} data-study-id="{{ r.entity_id }}"{% endif %} data-search-text="{{ r.search_text }}"><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td>
 <td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td><details><summary>{{ r.safety_label if r.safety_label else r.endpoint|endpoint_label }}</summary>{{ r.endpoint }}</details></td>
 <td class="result-visit">{% if r.class_title %}<div>{{ r.class_title|visit_label }}</div>{% endif %}{% if r.category %}<div>{{ r.category|visit_label }}</div>{% endif %}
 <details><summary>时间与人群</summary>{% if r.class_title %}<p>{{ r.class_title }}</p>{% endif %}{% if r.category %}<p>{{ r.category }}</p>{% endif %}<p>{{ r.timepoint or '—' }}</p><p>{{ r.population or '—' }}</p></details></td>
@@ -48,7 +48,7 @@
 {% if data.safety %}<section id="safety" class="kz-section"><h2>安全性</h2>
 <details class="safety-table"><summary>安全性数据表（<span id="safety-count">{{ data.safety|length }}</span>条）</summary>
 <div class="card table-card kz-data"><table id="tbl-b-safety"><thead><tr><th>药物</th><th>研究</th><th>组别</th><th>类别</th><th>n</th><th>N</th><th>%</th><th>事件次数</th><th>时间窗</th><th>状态</th><th>来源</th></tr></thead><tbody>
-{% for r in data.safety %}<tr data-fact-id="{{ r.id }}"{% if r.entity_id %} data-study-id="{{ r.entity_id }}"{% endif %}><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td><td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td>{{ r.arm or '—' }}</td>
+{% for r in data.safety %}<tr data-fact-id="{{ r.id }}"{% if r.entity_id %} data-study-id="{{ r.entity_id }}"{% endif %} data-search-text="{{ r.search_text }}"><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td><td>{{ clinical_trial(r.identity) if r.identity else r.entity }}</td><td>{{ r.arm or '—' }}</td>
 <td>{{ r.safety_label }}{% if r.organ_system %}<details><summary>SOC</summary>{{ r.organ_system }}</details>{% endif %}</td><td class="numeric">{{ '—' if r.value is none else r.value }}</td>
 <td class="numeric">{{ r.denominator if r.denominator is not none else '—' }}</td><td class="numeric">{{ r.proportion if r.proportion is not none else '—' }}</td>
 <td class="numeric">{{ r.num_events if r.num_events is not none else '—' }}</td>

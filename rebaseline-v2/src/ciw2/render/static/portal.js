@@ -286,22 +286,27 @@
       (point.proportion != null ? " · " + safeText(point.proportion) + "%" : "") +
       (point.num_events != null ? "<br>事件次数：" + safeText(point.num_events) : "");
   }
+  function shortResultVisit(point) { return point.visit_short === undefined ? point.visit : point.visit_short; }
   function resultBars(points) {
     var labels = points.map(function (p, i) {
       return String(i + 1) + " · " + (p.axis_label || p.drug_label || p.arm || "研究观察") +
-        (p.visit ? " · " + p.visit : "");
+        (shortResultVisit(p) ? " · " + shortResultVisit(p) : "");
     });
     // Same decision drives row spacing, visible count and figure height.
-    var units = Math.max.apply(null, labels.map(function (text) {
-      return Array.from(text).reduce(function (sum, ch) { return sum + (ch.charCodeAt(0) > 255 ? 1 : 0.6); }, 0);
+    var labelWidth = 340;
+    var lines = Math.max.apply(null, labels.map(function (text) {
+      return text.split('\n').reduce(function (count, line) {
+        var units = Array.from(line).reduce(function (sum, ch) { return sum + (ch.charCodeAt(0) > 255 ? 1 : 0.6); }, 0);
+        return count + Math.max(1, Math.ceil(units * readingSize / labelWidth));
+      }, 0);
     }).concat([1]));
-    var rowHeight = Math.max(44, Math.ceil(units * readingSize / 280) * 22 + 12);
-    var visible = Math.max(1, Math.min(6, points.length, Math.floor(276 / rowHeight)));
-    return { labels: labels, visible: visible, height: Math.max(120, visible * rowHeight + 60) };
+    var rowHeight = Math.max(44, lines * 22 + 12);
+    var visible = Math.max(1, Math.min(6, points.length, Math.floor((points.length <= 6 ? 468 : 276) / rowHeight)));
+    return { labels: labels, labelWidth: labelWidth, visible: visible, height: Math.max(120, visible * rowHeight + 60) };
   }
   function singleResultOption(point) {
     var label = [point.axis_label || point.label || point.arm || point.series_name,
-      point.visit, point.dispersion_text].filter(Boolean).join(" · ");
+      shortResultVisit(point), point.dispersion_text].filter(Boolean).join(" · ");
     return { animation: false, tooltip: { formatter: resultTooltip },
       series: [{ type: "custom", coordinateSystem: "none", data: [point],
         renderItem: function () {
@@ -358,10 +363,10 @@
       });
     } else {
       var bars = resultBars(points);
-      option.grid.left = 310; option.grid.bottom = 32;
+      option.grid.left = bars.labelWidth + 30; option.grid.bottom = 32;
       option.xAxis = { type: "value", scale: false };
       option.yAxis = { type: "category", inverse: true, data: bars.labels,
-        axisLabel: { width: 280, overflow: "break", lineHeight: 22 } };
+        axisLabel: { width: bars.labelWidth, overflow: "break", lineHeight: 22 } };
       option.dataZoom = [{ type: "slider", yAxisIndex: 0, right: 0, width: 16, show: points.length > bars.visible,
         startValue: 0, endValue: bars.visible - 1, filterMode: "filter" }];
       option.series = [{ type: "bar", barMaxWidth: 22, data: points.map(function (p) {
@@ -398,13 +403,13 @@
       var node = document.createElement('p'); node.textContent = label; list.appendChild(node);
     });
   }
-  function updateBStudyViews(study, query) {
+  function updateBStudyViews(study, selected) {
     ['tbl-b-studies', 'tbl-b-safety'].forEach(function (id) {
       var table = el(id); if (!table) return;
       var rows = Array.from(table.querySelectorAll('tbody tr'));
       rows.forEach(function (row) {
         var match = !study || study.value === 'all' || row.dataset.studyId === study.value;
-        if (id === 'tbl-b-safety') match = match && (!query || row.textContent.toLowerCase().indexOf(query) >= 0);
+        if (id === 'tbl-b-safety') match = selected.has(row.dataset.factId);
         row.style.display = match ? '' : 'none';
       });
       var count = el(id === 'tbl-b-studies' ? 'study-catalog-count' : 'safety-count');
@@ -415,13 +420,13 @@
     var rows = Array.from(table.querySelectorAll("tbody tr"));
     var domain = el('result-domain'), query = el('result-query'), study = el('result-study');
     var q = query ? query.value.trim().toLowerCase() : '';
-    updateBStudyViews(study, q);
     var visible = rows.filter(function (row) {
       var matchesDomain = !domain || domain.value === 'all' || row.dataset.domain === domain.value;
       var matchesStudy = !study || study.value === 'all' || row.dataset.studyId === study.value;
-      return matchesDomain && matchesStudy && (!q || row.textContent.toLowerCase().indexOf(q) >= 0);
+      return matchesDomain && matchesStudy && (!q || (row.dataset.searchText || row.textContent).toLowerCase().indexOf(q) >= 0);
     });
     var selected = new Set(visible.map(function (row) { return row.dataset.factId; }));
+    updateBStudyViews(study, selected);
     var available = (D.groups || []).filter(function (g) { return g.points.some(function (p) { return selected.has(p.fact_id); }); });
     var selector = el("result-group"), availableIds = new Set(available.map(function (g) { return g.id; }));
     Array.from(selector.querySelectorAll("option")).forEach(function (o) { o.hidden = o.disabled = !availableIds.has(o.value); });
@@ -438,10 +443,10 @@
     var viewGroup = Object.assign({}, group, { kind: group.kind === "line" && new Set(points.map(function (p) { return p.x; })).size > 1 ? "line" : "bar" });
     var height = points.length === 1 ? 128 : viewGroup.kind === "line" ? 320 : resultBars(points).height;
     setPanelHeight("chart-result", height);
-    el("result-definition").textContent = [group.title].concat(group.facets || [],
+    el("result-definition").textContent = [group.title, group.subtitle].concat(group.facets || [],
       [group.population, group.unit, group.stat_type]).filter(Boolean).join(" · ");
-    if (el("result-unit")) el("result-unit").textContent = [group.unit_label || group.unit,
-      group.stat_label || group.stat_type].concat(group.facets || []).filter(Boolean).join(" · ");
+    if (el("result-unit")) el("result-unit").textContent = Array.from(new Set([group.unit_label || group.unit,
+      group.stat_label || group.stat_type].concat(group.facets || []).filter(Boolean))).join(" · ");
     var series = new Map();
     points.forEach(function (p) { if (!series.has(p.series_key)) series.set(p.series_key, p.series_name); });
     el("result-series").replaceChildren();
@@ -455,6 +460,7 @@
       instances["chart-result"].on("click", function (p) {
         var row = rows.find(function (r) { return p.data && r.dataset.factId === p.data.fact_id; });
         if (!row || row.style.display === "none") return;
+        if (instances["chart-result"].dispatchAction) instances["chart-result"].dispatchAction({ type: "hideTip" });
         row.closest(".result-table").open = true; row.tabIndex = -1; row.focus(); row.scrollIntoView({ block: "center" });
       });
       resultClickBound = true;
@@ -482,6 +488,7 @@
   document.querySelectorAll("input[data-filter]").forEach(function (inp) {
     var table = el(inp.getAttribute("data-filter"));
     var apply = function () {
+      if (table.id === "tbl-b" && el("result-group")) { updateResultQuery(table); return; }
       var q = inp.value.trim().toLowerCase(), category = table.id === "tbl-a" && el("competition-class");
       table.querySelectorAll("tbody tr").forEach(function (tr) {
         var matched = !q || tr.textContent.toLowerCase().indexOf(q) >= 0;
@@ -499,7 +506,6 @@
       }
       if (table.id === "tbl-c") updateDesignQuery(table);
       if (table.id === "tbl-a") updateLandscapeQuery(table);
-      if (table.id === "tbl-b" && el("result-group")) updateResultQuery(table);
     };
     inp.addEventListener("input", apply);
     if (table.id === "tbl-a" && el("competition-class")) el("competition-class").addEventListener("change", apply);

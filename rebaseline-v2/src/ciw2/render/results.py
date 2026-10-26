@@ -82,6 +82,9 @@ def arm_label(value: Any) -> str:
     period = re.fullmatch(r'(Initial|Maintenance|Extension) Treatment Period \(Baseline - Week [0-9]+ Predose\): (.+)', raw)
     if period:
         return {'Initial': '初始治疗期', 'Maintenance': '维持治疗期', 'Extension': '延长治疗期'}[period[1]] + ' · ' + period[2]
+    maintenance = re.fullmatch(r'Maintenance Period \(Week ([0-9]+)-Week ([0-9]+)\): (.+)', raw)
+    if maintenance:
+        return f'维持治疗期（第{maintenance[1]}–{maintenance[2]}周） · {maintenance[3]}'
     return ''.join(arm_tokens(value))
 
 
@@ -111,13 +114,19 @@ def _point(row: dict[str, Any], visit: tuple | None) -> dict[str, Any]:
     axis_label = ' · '.join(filter(None, (drug_label, phase))) if drug_label else (
         '研究：' + identity['axis_label'] if identity.get('axis_label') else row.get('arm') or '研究观察')
     clinical_arm = arm_label(row.get('arm'))
-    if clinical_arm and clinical_arm != axis_label:
+    period_label = clinical_arm != (row.get('arm') or '') and (row.get('arm') or '').startswith(
+        ('Initial Treatment Period (', 'Maintenance Treatment Period (', 'Extension Treatment Period (', 'Maintenance Period ('))
+    if clinical_arm and not drug_label and period_label:
+        period, _, regimen = clinical_arm.partition(' · ')
+        axis_label = regimen + '\n' + ' · '.join(filter(None, (period, phase)))
+    elif clinical_arm and clinical_arm != axis_label:
         axis_label += ' · ' + clinical_arm
     label = ' · '.join(str(value) for value in (row.get('arm_drug_label') or row.get('arm_drug'), context_label, row.get('arm')) if value)
     series = json.dumps([row['entity_id'], row['source_id'], row.get('source_snapshot'),
                          row.get('group_id'), row.get('arm')], ensure_ascii=False)
     return {'fact_id': row['id'], 'value': row['value'], 'x': visit[1] if visit else None,
             'drug_label': drug_label, 'phase_label': phase, 'axis_label': axis_label,
+            'visit_short': visit[2] if visit else '',
             'visit': visit[2] if visit else (row.get('class_title') or row.get('category') or row.get('timepoint') or ''),
             'series_key': series, 'series_name': label, 'label': label,
             'trial': row.get('entity') or '', 'trial_label': trial_label,
@@ -153,7 +162,7 @@ def _group(frame: tuple, items: list[tuple[dict, tuple | None]], positions: set[
         label_trials[point['axis_label']].add(point['trial'])
     for point in points:
         if len(label_trials[point['axis_label']]) > 1:
-            point['axis_label'] += ' · ' + point['trial']
+            point['axis_label'] += '\n' + point['trial']
     pairs = Counter((point['series_key'], point['x']) for point in points)
     collision = any(count > 1 for count in pairs.values())
     line = not collision and all(point['x'] is not None for point in points) and len({p['x'] for p in points}) > 1
@@ -177,6 +186,20 @@ def _group(frame: tuple, items: list[tuple[dict, tuple | None]], positions: set[
             'display_axis': 'weeks' if axes == 'days' and all(p['x'] is not None and p['x'] % 7 == 0 for p in points) else axes,
             'points': points, 'labels': [point['label'] for point in points], 'values': [point['value'] for point in points],
             'trials': len({row['entity_id'] for row in rows})}
+
+
+def result_search_text(row: dict[str, Any]) -> str:
+    """One clinical search document for every consumer of the same observation."""
+    identity = row.get('identity') or {}
+    fields = ('entity', 'endpoint', 'arm', 'timepoint', 'population', 'class_title', 'category',
+              'term', 'organ_system', 'safety_label', 'unit', 'stat_type', 'quote',
+              'value', 'denominator', 'proportion', 'num_events', 'threshold_pct')
+    values = [row.get(key) for key in fields]
+    values += [arm_label(row.get('arm')), identity.get('label'), *identity.get('drug_names_original', []),
+               *row.get('display_drugs', []), *row.get('trial_drugs', []),
+               DOMAIN_LABELS.get(row.get('domain')), registry_label(row.get('stat_type'), 'statistic'),
+               registry_label(row.get('unit'), 'measure_unit')]
+    return ' '.join(str(value) for value in values if value is not None)
 
 
 def result_groups(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict[str, str]]:

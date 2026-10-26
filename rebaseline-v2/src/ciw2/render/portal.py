@@ -22,7 +22,7 @@ from ciw2.render.endpoint_label import endpoint_label
 from ciw2.render.labels import PHASE_ZH, age_label, phase_label, registry_label
 from ciw2.render.registration import registrations
 from ciw2.render.result_identity import bind_result_drugs
-from ciw2.render.results import arm_tokens, dispersion_text, result_groups, visit_label
+from ciw2.render.results import arm_tokens, dispersion_text, result_groups, result_search_text, visit_label
 from ciw2.render.safety import safety_label
 from ciw2.render.study_catalog import study_catalog
 from ciw2.render.trial_identity import trial_identities, verified_holders
@@ -160,6 +160,8 @@ def data_b(db: DB, pid: str) -> dict[str, Any]:
     safety = [r for r in rows if r["field"].startswith("safety.")]
     for row in safety:
         row["safety_label"] = safety_label(row)
+    for row in results:
+        row["search_text"] = result_search_text(row)
     charts, exclusions = result_groups(results)
     counts = {label: sum(r['domain'] == label for r in results) for label in DOMAIN_LABELS}
     counts = {label: count for label, count in counts.items() if count}
