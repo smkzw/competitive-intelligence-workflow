@@ -1105,3 +1105,22 @@ host族7真实RED/1原PASS：identity输入无host ID、显式foreign/trial/wron
 同178固定真实17源/3010结果/1571安全只读memory渲染，无来源/模型/DB/CAS写。首次191 HTML5bb404…64000的16屏旧回执保留；补队列token后当前HTML1406fd46…e3df2，新191b四宽16表格开合/真实键盘focus+4真实队列年龄换行/原文开合，共20。全DOM3010+1571、1825短显逐fact和chart相同，1662消费者零值、SOC464/464，COVID原6/321=1.9%且5%module阈值不删。首队列探针resize后过早取样横溢，实际固定1440稳定scroll1425；保留失败/原截图，新增chart.getWidth==容器就绪条件再跑四宽，未遮overflow、缩字体或改数据。Ego18不存在，永久授权替换20/p1，不动登录/缓存/日常空间。owner实际看1440主表/队列、1600安全展开、1920主表展开等；仅组名阅读组件接受，不称整体美学/源医学通过。实屏仍见研究身份逐行高重复和药物空列浪费宽度，下一有界批处理，不靠缩字删除真实身份。
 
 PRD/Plan/STATUS/Trellis和public20261026-b-shared-arm-reading.json+两图留档。原189独立属性审阅capacity失败无活runner、科学三文件不变；当前安装188仍仅187，不当当前包验收，不每小改重装。135固定134/第五kernel33850原事件等，不轮询新DB或热改，旧151资料/原回执/未知v1保留。GoalACTIVE、M1–M6未全部交付，未建暂停点。
+
+## 2026-10-26 193逐行身份与空列根因在途
+4db385bc已推/远端同SHA。选择direct：191b实屏显示同一B行反复铺原人群/编号/证据入口，空的组药列仍占宽；共享模板/查询在同一owner写集，先保全固定178读出，处理“主身份+来源角色常显/次级资料折叠”和只收起当前可见集合全空的组药列。B两消费一致，C默认结构不改；未知组药不猜绑定，所有事实/检索/来源/原名留存，不缩字号、不遮横溢。成族RED→完整最小修改→关联批→当前真实四宽几何/键盘。135/134不动，不重复全页会商或先造新框架。
+
+193–196当前阅读密度批已实际完成并保全：B的临床名/分期/真实来源角色常显，编号/原名/身份依据进native研究详情；当前可见组药列全空才收，混合/known恢复，不借研究名猜关系。4族RED；首关联35PASS2FAIL是fixture已有原生消费者而错计仅新增3，及旧<td>确切tag断言，改完整查询计数并保留Alpha值/绑定断言；37相关PASS。首1942151中2FAIL（2149PASS）是新增data-arm-drug插在fact/domain之间，恢复生产属性顺序，原两断言不动；24相邻后194retry2151PASS20.09s/Ruff/279Python/23JS/453输入，manifest76d38dd2…4422a。源规则/药组语义/原数值不变。
+
+193首截图文件名误将已知/未知closed覆盖，原20记录/16图保留并修映射；最终193b当前52bf539b…a21c独立重跑20fact-ID文件（四宽两表closed/open及known列恢复），4native ECharts glyph→正确行focus；3010/1571全ID、known1077/403查询列恢复、空查询列收口。1440相同行主175.67→146.48px，安全226.06→171.67px；1920主150.48→121.28、安全175.67→146.48；2560两表150.48→121.28。18px字不变、无CSS遮overflow、无删事实。owner实看当前1440主表、2560详情等，组件接受不称全页医学/美学或C03通过。
+
+195固定127runtime1981753bytes，manifestcedb428e…1ea5；196空target离线wheel61abc79c…f8f7c/sdistff9f0c8a…35a5a，全部模块/26资产/9Skills/隔离cwd CLI通过。安装读同178原DB，HTML逐字同当前193b52bf…a21c，0来源/模型/DB写；复用157deps非新venv。逐SHA核后只退役可重建196 build-source1993482逻辑bytes，源195/wheel/sdist/target/DB/CAS/历史均保留，不称APFS实际释放。public20261026-b-table-density-and-install.json+两图，PRD/Plan/STATUS更新；后置仅元数据不重跑门。
+
+## 2026-10-26 197用户暂停后解除与终态恢复准备
+
+用户要求无损暂停时Goal实际设paused，不再启动新工作，精确核74351后SIGTERM既有handler只置RunControl停止；69752只读预览SIGTERM。SQLite API一致快照before-terminal.sqlite3核完整，55秒kqueue到边界仍活，诚实记等待，未改运行时/SIGSTOP/SIGKILL。暂停记录首枚举误在英文repo而非app相对ciw-data读，FileNotFound后立即显式app，未触碰旧中文根或改任何资料。
+
+随后用户明确解除暂停，Goal实核ACTIVE。精确ps74351/74349/69752已退出，135真实receipt为cancelled，原生83367exit1是用户取消，53949exit143；33850先7200.001超时PENDING_TIMEOUT_NOT_FAILURE已收，无活kernel/研究/审阅/预览worker，不等旧PID。135终态1319sourceversions/6254currentfacts/6129库内verified/79designrows/0HTML；前六发现覆盖及trial_scope成功，trial_evidence72和enrich135待处理仍failed，extract_designcancelled、verify/analysis_C/renderpending。成功837model事件有GLM1/DeepSeek357/Qwen255/actual_model缺失224，缺失不冒归GLM；成功usage15939473tokens不是全计费。538cache事件、786成功stage行不等于独立采用研究数。
+
+197已核原151批output SHA/780要点原输入与134120runtime文件均不变。标准create_backup终态937文件=DB+936源CAS，DB integrity真ok；另397 agent_step_payload CAS逐SHA后硬链接保全，标准restore不会自动补这些载荷，terminal-summary.json给精确映射，不原地改CAS。before/stop/graceful/goal-active/resume-authority/terminal-summary均保留；RECOVERY_20261026_TABLE_DENSITY.md是恢复证据入口非另一产品权威。未重写旧1319源、旧unitkey或医学接受。
+
+下一owner有界任务：197只读终态全量索引旧单位，分开实际输入/tool/Skill/来源表示/科学语义资格；185的22/305绿不扩到整个终态，也不自动改签。当前195纳139登记修复及永久授权Ego实际空间后，准备一次新的普通Service续接，不运行带started断言的start135、不双跑/重跑151。189独立属性review仍capacity/0意见，无活runner；在真实资格/容量新边界按现行路由复核。GoalACTIVE，M1–M6未全部交付，当前不设阶段暂停点。

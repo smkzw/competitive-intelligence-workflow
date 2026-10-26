@@ -23,11 +23,12 @@
   ],
   "parent": null,
   "relatedFiles": [],
-  "notes": "2026-10-26 ACTIVE;af4ec236 baseline pushed.191 B shared chart/main/safety arm reading, original fold and cohort token boundaries;3RED/3PASS→25related/28adjacent.192 first2146PASS/1FAIL, original assertion retained;retry2147PASS20.56s/Ruff/448 inputs.191b real178 data 4width16 table/keyboard+4 cohort,3010/1571 all IDs,1825 label matches,SOC464/464. Repeated study identity/empty drug columns still tall; next bounded density batch.189 property review capacity NOT_RUN/no active runner; scientific rules unchanged.135 fixed134/event33850 unchanged;188 only187. No final M1-M6/RC. STATUS current.",
+  "notes": "2026-10-26 user resumed;Goal confirmed ACTIVE.193 B compact clinical identity+query-aware empty arm-drug column;37related/24adjacent→194retry2151PASS20.09s/Ruff/453 inputs.193b four desktop widths20 distinct screens/native keyboard+4glyph focus;3010/1571 IDs,known1077/403,1440 row heights175.67→146.48 and226.06→171.67.195 fixed127 runtime;196 emptytarget/offline package26assets9Skills,installed HTML52bf samebrowser.197 user pause SIGTERM drained135 cancelled, exact child/parent/preview exited, oldwait consumed;user unpaused GoalACTIVE.1319sources/6254facts/6129statusverified/79designrows noHTML;standardDB+936CAS and397eventCAS preserved,151/780/runtime134 pins unchanged. Nextterminal unit qualification then onecontrolled ordinary resume;do not replay151/start135.189 science review NOT_RUN capacity. Not M1-M6/RC.",
   "meta": {
     "workflow_state": "in_progress",
     "goal_status": "active",
     "current_status": "rebaseline-v2/docs/STATUS.md",
-    "historical_pause_checkpoint": "rebaseline-v2/docs/PAUSE_HANDOFF_20261024_SYNTHESIS.md"
+    "historical_pause_checkpoint": "rebaseline-v2/docs/PAUSE_HANDOFF_20261024_SYNTHESIS.md",
+    "latest_recovery_checkpoint": "rebaseline-v2/docs/RECOVERY_20261026_TABLE_DENSITY.md"
   }
 }

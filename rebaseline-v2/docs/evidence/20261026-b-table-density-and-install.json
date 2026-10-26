@@ -1,0 +1,170 @@
+{
+  "scope": "CURRENT_B_COMPACT_IDENTITY_AND_QUERY_AWARE_EMPTY_COLUMNS_COMPONENT_NOT_COMPLETE_M4",
+  "base_commit": "4db385bc9ccd3c3db6e48235e20773cf7722cf3a",
+  "html_sha256": "52bf539b584e777d4ff4b8fbae3dcdc2d33c492909c9e8104efa4a825a3ba21c",
+  "database_sha256": "f3eb183974ce1b0ea925999b0a325efa054683411600a051773f99b6e260abca",
+  "assets": {
+    "src/ciw2/render/static/kangzhe.css": "4bba248e4ec915840c3294f70906d901747837046cffcc72ca1b0332110e30f7",
+    "src/ciw2/render/portal.py": "72c9ebfbd94d648c3def631e1e7f04f5e03dea87be83906718d584d04cdf1828",
+    "src/ciw2/render/templates/_trial.html": "bc09ac1ccadbb26d009074364f6fbb479120a5a0f7927609d58c35ff23ebb25c",
+    "src/ciw2/render/templates/b.html": "3355b0aaf1384e50b7ecc2087f6817556b821ebd365917b5c9bbd46f366a805b",
+    "src/ciw2/render/results.py": "f5ec8f09324630c24e82fe273e2501257d915102e97423a590c4f2cef1faab99",
+    "src/ciw2/render/static/portal.js": "0ce3f60d83a2639be8e3e49e0336b20f4ceeadaeddca19598ed820e8a9a00910"
+  },
+  "changes": [
+    "B study drug/short condition/phase/actual company role stay visible; secondary registry/original-name/source metadata use native study detail fold",
+    "The arm-drug column collapses only when every row in that consumers actual visible query lacks a verified binding; mixed/known results restore it",
+    "No inferred arm-drug relation, field loss, font reduction, overflow hiding, or A/C template replacement"
+  ],
+  "tests": {
+    "family_red": "4 genuine failures",
+    "related": "first35PASS/2FAIL: fixture already contained native result/safety rows; expected consumer count now covers its full query. One old exact<td> assertion revised for semantic column attribute with Alpha value retained.",
+    "related_final_passed": 37,
+    "first_full": "2149 PASS /2 FAIL due inserted attribute separating pre-existing fact/domain markup; production attribute order restored, both original assertions retained",
+    "adjacent_attribute_passed": 24,
+    "full_passed": 2151,
+    "full_seconds": 20.09,
+    "ruff": "PASS",
+    "structure": {
+      "python_files": 279,
+      "javascript_files": 23,
+      "inputs_unchanged": 453,
+      "manifest_sha256": "76d38dd26a43e30ac1db202698bd3d0e1313b56fe35cdbc226871605b2c4422a"
+    }
+  },
+  "browser": {
+    "space": 20,
+    "page": "p1",
+    "widths": [
+      1440,
+      1600,
+      1920,
+      2560
+    ],
+    "current_byte_records": 20,
+    "unique_screens": 20,
+    "native_glyph_focus_cases": 4,
+    "all_rows_and_column_restore": {
+      "tbl-b": {
+        "rows": 3010,
+        "unique": 3010,
+        "known": 1077,
+        "columnsHidden": false
+      },
+      "tbl-b-safety": {
+        "rows": 1571,
+        "unique": 1571,
+        "known": 403,
+        "columnsHidden": false
+      }
+    },
+    "no_result_columns_collapsed": {
+      "tbl-b": true,
+      "tbl-b-safety": true
+    },
+    "row_heights": [
+      {
+        "width": 1440,
+        "table": "tbl-b",
+        "before_px": 175.67,
+        "after_px": 146.48
+      },
+      {
+        "width": 1440,
+        "table": "tbl-b-safety",
+        "before_px": 226.06,
+        "after_px": 171.67
+      },
+      {
+        "width": 1600,
+        "table": "tbl-b",
+        "before_px": 175.67,
+        "after_px": 146.48
+      },
+      {
+        "width": 1600,
+        "table": "tbl-b-safety",
+        "before_px": 226.06,
+        "after_px": 171.67
+      },
+      {
+        "width": 1920,
+        "table": "tbl-b",
+        "before_px": 150.48,
+        "after_px": 121.28
+      },
+      {
+        "width": 1920,
+        "table": "tbl-b-safety",
+        "before_px": 175.67,
+        "after_px": 146.48
+      },
+      {
+        "width": 2560,
+        "table": "tbl-b",
+        "before_px": 150.48,
+        "after_px": 121.28
+      },
+      {
+        "width": 2560,
+        "table": "tbl-b-safety",
+        "before_px": 150.48,
+        "after_px": 121.28
+      }
+    ],
+    "screens": {
+      "20261026-b-table-density-1440.png": "53fc0b55027dbe2aba7f17416a5aac96826b155c0dd48c0dde5e24e97b9eaddd",
+      "20261026-b-study-detail-2560.png": "af0cd4fb56b8aea29216544692b316daf8ad5305283650d87d8dc62c12822ace"
+    },
+    "earlier_capture_issue": "Initial pre-attribute candidate reused main closed screenshot name for known/unknown. Original records preserved; current final193b uses20 distinct fact-ID filenames and reran on current52bf HTML. No earlier screenshots counted as current."
+  },
+  "install": {
+    "scope": "CURRENT195_WHEEL_EMPTY_TARGET_INSTALL_REUSED157_TEST_DEPENDENCIES_NOT_FRESH_VENV_OR_FULL_RECOVERY",
+    "wheel_sha256": "61abc79c83c556dbe9f745d6a09b0d6384f560970de0c10eb476e337770f8f7c",
+    "sdist_sha256": "ff9f0c8ad76cc159f79b15cbf72f836148eb4ae48710d6b9e9cb7f759af35a5a",
+    "frozen_manifest_sha256": "cedb428eb9503d24527976b25036ff9a447f0a33a109ecf7175524c61eb21ea5",
+    "source_files_checked": 127,
+    "assets_checked": 26,
+    "skills_checked": 9,
+    "new_venv": false,
+    "old157_venv_modified": false,
+    "external_downloads": 0,
+    "model_or_source_calls": 0,
+    "steps": {
+      "offline-build": 0,
+      "empty-target-install": 0,
+      "isolated-imports": 0,
+      "cli-entry-function": 0
+    },
+    "installed": {
+      "modules": "all_imported",
+      "skills": 9,
+      "extractor_version": "bc315eb4e721b713ca1869f0573e68bd3a7b5f692250a19188c94a11febae773",
+      "rule_version": "cde-registration-2020-literal-v1"
+    }
+  },
+  "installed_render_binding": {
+    "scope": "INSTALLED195_RENDER_BYTE_IDENTICAL_TO_FINAL193B_BROWSER_ON_SAME178_FACTS",
+    "html_sha256": "52bf539b584e777d4ff4b8fbae3dcdc2d33c492909c9e8104efa4a825a3ba21c",
+    "db_sha256": "f3eb183974ce1b0ea925999b0a325efa054683411600a051773f99b6e260abca",
+    "result_count": 3010,
+    "safety_count": 1571,
+    "catalog_count": 17,
+    "source_or_model_calls": 0,
+    "original_db_writes": 0,
+    "new_html_copy": false
+  },
+  "resources": {
+    "retired_generated_build_source_logical_bytes": 1993482,
+    "frozen_runtime_files": 127,
+    "new_venv": false,
+    "sources_cas_history_deleted": false,
+    "physical_release_measured": false
+  },
+  "not_accepted": [
+    "M1-M6 and full A/B/C scientific/visual delivery",
+    "formal source-backed Chinese drug and company/group coverage",
+    "current ordinary135 study extraction/verification/analysis/render closure"
+  ],
+  "next": "Original135 cancelled by user safe stop; goal explicitly resumed. Preserve terminal backup and qualify reusable old units before one controlled service continuation, no151-study replay."
+}

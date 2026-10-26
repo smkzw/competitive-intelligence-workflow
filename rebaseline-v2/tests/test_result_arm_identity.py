@@ -135,5 +135,5 @@ def test_table_and_chart_use_same_explicit_arm_binding(workspace):
     arm(workspace, 'Arm A', ['Drug: Alpha'])
     result(workspace, 'Arm A')
     html = render_report(workspace[0], workspace[1], 'B')
-    assert '<td>Alpha</td>' in html
+    assert '<td data-arm-drug-column>Alpha</td>' in html
     assert '<td>Alpha/Beta</td>' not in html and '<td>Beta/Alpha</td>' not in html

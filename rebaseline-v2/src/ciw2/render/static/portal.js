@@ -377,6 +377,12 @@
     return seriesFrames('chart-result', option);
   }
   var resultPreferred, resultClickBound = false;
+  function armDrugColumn(table) {
+    if (!table) return;
+    var known = Array.from(table.querySelectorAll('tbody tr')).some(function (r) {
+      return r.style.display !== 'none' && r.dataset.armDrug === 'known'; });
+    table.querySelectorAll('[data-arm-drug-column]').forEach(function (cell) { cell.hidden = !known; });
+  }
   function updateResultTable(rows, matched, plotted, hasGroup) {
     var scope = el('result-table-scope'), current = scope && scope.value === 'metric' && hasGroup;
     var visible = rows.filter(function (row) {
@@ -384,6 +390,7 @@
       row.style.display = show ? '' : 'none';
       return show;
     });
+    armDrugColumn(el('tbl-b'));
     if (el('result-table-count')) el('result-table-count').textContent = String(visible.length);
     if (el('result-table-title')) el('result-table-title').textContent = current ? '当前指标完整数据表' :
       hasGroup ? '全部匹配结果完整数据表' : '匹配结果完整数据表';
@@ -412,6 +419,7 @@
         if (id === 'tbl-b-safety') match = selected.has(row.dataset.factId);
         row.style.display = match ? '' : 'none';
       });
+      if (id === 'tbl-b-safety') armDrugColumn(table);
       var count = el(id === 'tbl-b-studies' ? 'study-catalog-count' : 'safety-count');
       if (count) count.textContent = rows.filter(function (r) { return r.style.display !== 'none'; }).length + ' / ' + rows.length;
     });

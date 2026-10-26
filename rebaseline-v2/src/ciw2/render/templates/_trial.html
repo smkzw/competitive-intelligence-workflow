@@ -37,18 +37,20 @@
 {% else %}<div class="trial-company"><span class="muted">{{ company.role }}</span> {{ label }}</div>{% endif %}{% set state.seen=state.seen+[key] %}
 {% endif %}{% else %}—{% endfor %}
 {% if state.secondary %}<details class="secondary-companies"><summary>其他企业（{{ state.secondary|length }}）</summary>{{ companies_summary(state.secondary) }}</details>{% endif %}{% endmacro %}
-{% macro clinical_trial(identity, show_id=true) %}{% if identity %}
-<div class="trial-identity" data-clinical-trial="{{ identity.registry_id }}">
+{% macro clinical_trial(identity, show_id=true, compact=false) %}{% if identity %}
+<div class="trial-identity{% if compact %} trial-identity-compact{% endif %}" data-clinical-trial="{{ identity.registry_id }}">
 <strong class="trial-clinical-name">{{ identity.drug_label }}</strong>
 {% if identity.targets %}<div class="trial-context">{{ identity.targets|join(' / ') }}</div>{% endif %}
 {% set long_condition=identity.indication|default('')|length>24 %}
 <div class="trial-context">{% if identity.indication and not long_condition %}{{ identity.indication }}{% endif %}{% if identity.phase_label %}{% if identity.indication and not long_condition %} · {% endif %}{{ identity.phase_label }}{% endif %}</div>
+{% if compact %}{% if identity.companies %}{{ companies_summary(identity.companies, true) }}{% endif %}<details class="trial-record"><summary>研究详情</summary>{% endif %}
 {% if long_condition %}<details><summary>登记人群与适应症</summary>{{ identity.indication }}</details>{% endif %}
 {% if identity.conditions_original and identity.conditions_original|join(' / ') != identity.indication %}<details><summary>原登记适应症</summary>{{ identity.conditions_original|join(' / ') }}</details>{% endif %}
-{% if identity.companies %}{{ companies_summary(identity.companies, true) }}{% endif %}
+{% if not compact and identity.companies %}{{ companies_summary(identity.companies, true) }}{% endif %}
 {% if identity.drug_names_original and identity.drug_names_original != identity.drugs %}<details><summary>原名与代号</summary>{{ identity.drug_names_original|join(' / ') }}</details>{% endif %}
 {{ identity_evidence(identity) }}
 {% if show_id %}<div class="registry-id">{% if identity.url %}<a href="{{ identity.url }}" target="_blank" rel="noopener">{{ identity.registry_id }}</a>{% else %}{{ identity.registry_id }}{% endif %}</div>{% endif %}
+{% if compact %}</details>{% endif %}
 </div>{% endif %}{% endmacro %}
 
 {% macro clinical_arm(arm) -%}
