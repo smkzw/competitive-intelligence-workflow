@@ -369,6 +369,17 @@
     return seriesFrames('chart-result', option);
   }
   var resultPreferred, resultClickBound = false;
+  function updateResultTable(rows, matched, plotted, hasGroup) {
+    var scope = el('result-table-scope'), current = scope && scope.value === 'metric' && hasGroup;
+    var visible = rows.filter(function (row) {
+      var show = matched.has(row.dataset.factId) && (!current || plotted.has(row.dataset.factId));
+      row.style.display = show ? '' : 'none';
+      return show;
+    });
+    if (el('result-table-count')) el('result-table-count').textContent = String(visible.length);
+    if (el('result-table-title')) el('result-table-title').textContent = current ? '当前指标完整数据表' :
+      hasGroup ? '全部匹配结果完整数据表' : '匹配结果完整数据表';
+  }
   function resultStudyContext(points) {
     var caption = el('result-study-reference'), list = el('result-study-list'), container = el('result-study-context');
     if (!caption || !list) return;
@@ -387,12 +398,11 @@
   function updateResultQuery(table) {
     var rows = Array.from(table.querySelectorAll("tbody tr"));
     var domain = el('result-domain'), query = el('result-query');
-    if (domain) rows.forEach(function (row) {
-      var matchesDomain = domain.value === 'all' || row.dataset.domain === domain.value;
+    var visible = rows.filter(function (row) {
+      var matchesDomain = !domain || domain.value === 'all' || row.dataset.domain === domain.value;
       var q = query ? query.value.trim().toLowerCase() : '';
-      row.style.display = matchesDomain && (!q || row.textContent.toLowerCase().indexOf(q) >= 0) ? '' : 'none';
+      return matchesDomain && (!q || row.textContent.toLowerCase().indexOf(q) >= 0);
     });
-    var visible = rows.filter(function (row) { return row.style.display !== "none"; });
     var selected = new Set(visible.map(function (row) { return row.dataset.factId; }));
     var available = (D.groups || []).filter(function (g) { return g.points.some(function (p) { return selected.has(p.fact_id); }); });
     var selector = el("result-group"), availableIds = new Set(available.map(function (g) { return g.id; }));
@@ -402,9 +412,10 @@
     if (el("result-count")) el("result-count").textContent = visible.length + " / " + rows.length + " 条结果 · " + available.length + " 组";
     if (el("result-panel")) el("result-panel").hidden = !group;
     if (el("result-empty")) el("result-empty").hidden = !!group;
-    if (!group) return;
+    if (!group) { updateResultTable(rows, selected, selected, false); return; }
     selector.value = group.id;
     var points = group.points.filter(function (p) { return selected.has(p.fact_id); });
+    updateResultTable(rows, selected, new Set(points.map(function (p) { return p.fact_id; })), true);
     resultStudyContext(points);
     var viewGroup = Object.assign({}, group, { kind: group.kind === "line" && new Set(points.map(function (p) { return p.x; })).size > 1 ? "line" : "bar" });
     var height = points.length === 1 ? 128 : viewGroup.kind === "line" ? 320 : resultBars(points).height;
@@ -437,6 +448,9 @@
       resultPreferred = this.value; updateResultQuery(el("tbl-b"));
     });
     if (el('result-domain')) el('result-domain').addEventListener('change', function () {
+      updateResultQuery(el('tbl-b'));
+    });
+    if (el('result-table-scope')) el('result-table-scope').addEventListener('change', function () {
       updateResultQuery(el('tbl-b'));
     });
     updateResultQuery(el("tbl-b"));

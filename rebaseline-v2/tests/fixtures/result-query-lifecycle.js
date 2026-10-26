@@ -14,7 +14,7 @@ const select={value:'a',disabled:false,options:[{value:'a'},{value:'b'}],
   querySelectorAll(){return this.options;},addEventListener(k,fn){events['select:'+k]=fn;}};
 const input={value:'',getAttribute:()=>'tbl-b',addEventListener(k,fn){events['input:'+k]=fn;}};
 const table={id:'tbl-b',querySelectorAll:()=>rows};
-const elements={charts:{textContent:JSON.stringify({groups:[a,b]})},'result-group':select,'tbl-b':table,
+const elements={charts:{textContent:JSON.stringify({groups:[a,b]})},'result-group':select,'result-query':input,'tbl-b':table,
   'result-panel':{hidden:false},'result-empty':{hidden:true},'result-count':{},'result-definition':{},
   'result-series':{items:[],replaceChildren(){this.items=[];},appendChild(n){this.items.push(n);}},
   'chart-result':{id:'chart-result',style:{}}};

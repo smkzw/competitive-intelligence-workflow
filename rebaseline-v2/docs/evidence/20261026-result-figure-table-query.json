@@ -1,0 +1,66 @@
+{
+  "scope": "CURRENT_PRODUCTION_B_FIGURE_TABLE_QUERY_COMPONENT_NOT_CROSS_STUDY_OR_FULL_M4",
+  "base_commit": "f96fa686537562bcd561c2afd9cf2c11f3b32108",
+  "root_cause": "Figure selected absolute-change metric but full matched table began with percent-change observations. Values were not changed; default paired reading was ambiguous.",
+  "change": "One full668row DOM; metric view defaults to current plotted fact IDs. Explicit all-matches view keeps all related/unplottable records reachable. Available metrics are derived from the full search/domain query, not current table visibility.",
+  "regression": {
+    "RED": "1 meaningful productionJS figure/table ID mismatch",
+    "first_related": "37PASS1FAIL: old VM fixture omitted the already-existing actual result-query element ID",
+    "fixture_correction": "Added actual query input DOM mapping; no old assertion or scientific guard relaxed",
+    "related": "38PASS0.94s/Ruff",
+    "unknown_not_plottable": "Matched unresolved row remains visible when no numeric group; only figure panel hidden. Zero, IDs and point metadata retained."
+  },
+  "browser": {
+    "engine": "Ego Lite12/p2, current production renderer on immutable realB source memory copy",
+    "widths": [
+      1440,
+      1600,
+      1920,
+      2560
+    ],
+    "states": 20,
+    "default_metric": "39 visible table IDs exactly equal39 plotted fact IDs",
+    "default_all": "602 matched clinical rows reachable",
+    "filtered_metric": "13 visible table IDs equal13 plotted fact IDs",
+    "filtered_all": "202 matched rows reachable",
+    "all_domains_and_scope": "Actual668/668 visible, last original row reachable",
+    "physical_glyph": "Actual ECharts pixel coordinates and native mouse clicks focus exact matching fact row on all4 widths",
+    "page_horizontal_overflow": 0,
+    "controls": "Initial new native select13.3333px observed; reused existing filter style. Final four widths18px/668 total/39 current, no new CSS.",
+    "browser_receipt_sha256": "bbfd47afcd5e1fbc0598b17fd056eff473f6bcc56a01a3c7dbf107b49ff617ef",
+    "final_control_sha256": "883a1be374e231d2662327519fe65d8560fe69bb7fe0dc7bda53463e7f99724e",
+    "all668_sha256": "8a5b2beb40bb5221497f08f319f94ebb8eccb87408ca0c24208941442b531f26",
+    "image_sha256": "69816c1b936eb932196f1f5d9a5aa5f4bc9490336540b8151b7a4187b136b5fd"
+  },
+  "gate": {
+    "pytest": {
+      "returncode": 0,
+      "summary": "2030 passed,1 existing Starlette/httpx deprecation warning,14.93s"
+    },
+    "ruff": {
+      "returncode": 0,
+      "summary": "All checks passed:src/tests/scripts"
+    },
+    "structure": {
+      "python_files": 253,
+      "javascript_files": 17,
+      "inputs_unchanged": 403,
+      "manifest_sha256": "9a1e6de21581eae91b03609be97eca525560e07208be9f53205a4e5ea187a183"
+    },
+    "evidence_limit": "Current paired result figure/table scope, all-matches reachability and prior workbench/theme development gate; actual browser evidence separate. Ordinary135/science/independent visual/current installation/M1-M6 not accepted."
+  },
+  "runtime": {
+    "source_manifest_sha256": "881bf03ef61335f60c7a81e36fcb317c993d2347372c3c3bffcf31fc88a0dcbe",
+    "files": 122,
+    "bytes": 1953701,
+    "no_new_venv": true,
+    "no_raw_data_or_process_logs_copied": true,
+    "ordinary135_hot_updated": false
+  },
+  "source_db_sha256": "917f82b345beec7bf12366a76c025bbe0047e8c4ac3b108913e568baf92aef54",
+  "source_calls": 0,
+  "model_calls": 0,
+  "DB_writes": 0,
+  "independent_visual": "NOT_RUN: prior declared C02 attempt lacked credentials; no silent substitution or final visual acceptance",
+  "remaining": "One real study only; full ordinary C/qualified final narrative/reference95%/cross-study B/current installation/M1-M6 remain unaccepted."
+}

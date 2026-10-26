@@ -26,7 +26,8 @@
 <p id="result-empty" class="muted" {% if data.charts.groups %}hidden{% endif %}>暂无匹配的数值结果。</p>
 </section>
 <section id="measurements" class="kz-section">
-<details class="result-table"><summary>完整数据表（{{ data.results|length }}条）</summary>
+<details class="result-table"><summary><span id="result-table-title">完整数据表</span>（<span id="result-table-count">{{ data.results|length }}</span>条）</summary>
+<div class="kz-query"><label for="result-table-scope">表格范围 <select id="result-table-scope" class="filter" aria-controls="tbl-b"><option value="metric">当前图表指标</option><option value="all">全部匹配结果</option></select></label></div>
 <div class="card table-card kz-data"><table id="tbl-b"><thead><tr><th>药物</th><th>研究</th><th>终点</th><th class="result-visit">访视与分层</th>
 <th class="result-arm">组别</th><th>值</th><th class="result-statistic">单位/统计</th><th>N</th><th>状态</th><th>来源</th></tr></thead><tbody>
 {% for r in data.results %}<tr data-fact-id="{{ r.id }}" data-domain="{{ r.domain }}"><td>{{ r.display_drugs|join(' / ') if r.display_drugs else '—' }}</td>

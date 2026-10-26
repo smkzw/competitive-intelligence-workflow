@@ -989,3 +989,13 @@ ee7f31c0已推并核远端；142逐SHA核275 Git源/Skill/测试+固定ECharts�
 151一次稳定完整门2029PASS13.33s/Ruff/252Python600/80/16JS/397输入SHA不变，manifest9e058340144bdc7c9f1f81b5341285a34bec965cd42152a11ea6ed6d3a7caa52；152仅122运行时1952484bytes/manifestc317b88cbc3a38419547daddf392e0a3061192cb564dba3a524cc66b30458c04，无新venv/原文/过程副本或135热加载。记录更新后只核源/差异，不重复宽门。C02实际terminal exit3：Pi google-antigravity缺APIkey、无有效输出，不是完成独立审阅；quality-escalation仍同route，声明备用都已参与144而被独立性过滤，未擅换模型/获取凭据。原22输入与4派发SHA核，失败回执保留，不能把structuralPASS当视觉/医学接受。
 
 owner实看B2560表，发现当前图选EASI绝对变化，完整表默认全匹配602中首行是百分比变化；不是数值错绘，而是图-表任务不对应。登记下一小单元：同一原DOM完整集合，默认当前指标数据且有明确“全部匹配结果”入口；选择指标/分面/筛选保持图表对应，未知不可绘仍可达，不复制668行或新增框架。当前批保全/提交后立即继续，不设阶段暂停。公开摘要与3精选截图存docs/evidence/20261026-kangzhe-workbench-and-chart-context.json；原全量截图/DB/CAS/日志仍本地，不入Git。
+
+
+f96fa686537562bcd561c2afd9cf2c11f3b32108已白名单22文件提交、push并ls-remote逐字核远端；285代码/Skill/测试逐SHA同151，post-gate仅Plan/STATUS/精简公开回执/根Trellis等元数据，不为元数据重跑测试。公开3截图合878317bytes，无原DB/CAS/全文/日志或私有绝对路径。资源只退役2旧预览，独立视觉NOT_RUN和表图新发现均明示。
+
+153继续实际实现（未暂停）：根因反例生产JS初1FAIL，默认全指标行与当前图ID不同；新增当前指标/全部匹配视图但仍单份668行DOM。查询、domain、available指标取完整匹配集，与表格显示集合分开，避免筛当前表导致选择器丢指标；无可绘时全部匹配记录仍可达；图点映射沿原fact_id。初关联1FAIL37PASS是既有VM夹具遗漏实际页面早已存在的result-query ID，补齐夹具DOM映射、不改任何原断言；最终38相关PASS0.94s/Ruff。实际Ego同源四宽图-表ID、全部匹配、筛后及物理图点聚焦在途，原152/151及22原审阅输入不追改。待此新完整根因闭合后再跑新候选一次门；这次扩大测试有新真实页面缺陷依据，不逐行全仓。
+
+
+153实屏20态已终态：四宽默认39表ID=39绘点，all602，筛后13=13/all202；实际ECharts convertToPixel+原生鼠标点击四宽均焦点落精确fact行。另domainall/scopeall实际668/668、末原记录可达；0模型/源/原DB写入。owner看1440实际成图/配对表后发现新select原生13.3333px，复用既有filter类而不造CSS；最终另四宽18px/全668/当前39/无横溢。未重跑无变化的20行为链，保留前帧与font纠正记录。
+
+154新稳定一次门2030PASS14.93s/Ruff/253Python600/80/17JS/403输入不变，manifest9a1e6de21581eae91b03609be97eca525560e07208be9f53205a4e5ea187a183；155122运行时1953701bytes、manifest881bf03ef61335f60c7a81e36fcb317c993d2347372c3c3bffcf31fc88a0dcbe，无新venv/测试/全文/日志副本、135未热改。公开摘要20261026-result-figure-table-query.json与一张最终1440截图。前151/152/原独立审阅输入不改为新通过；独立视觉缺凭据仍NOT_RUN。下一步当前版本安装/恢复组件和135普通来源链继续。
