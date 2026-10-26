@@ -21,10 +21,11 @@
   "children": [],
   "parent": "10-23-rebaseline-v2-m1",
   "relatedFiles": [],
-  "notes": "2026-10-26 ACTIVE. Independent AD127/IgAN57/PNH28 drafts remain provisional, no denominator/recall. 209 source supplement: actual official AD/EoE PDFs and primary PubMed XML,4 exact claims/pages/xpath verified; prior molecule-code bridge reused. Original researchers explicitly identify RPC4046 as novel, sponsor AD protocol former-code CC93538/RPC4046/ABT308, EoE protocol CC93538/cendakimab/BMS986355. Original registration RPC4064 discrepancy preserved; 4countryChina-city/postcode conflicts from47 retained, not mainland proof. Exact CTR20222885 applicant/originator-product binding still pending; use existing official AD-program healthyPK list rather than infer NMPA approval. Root3draft and identity-revision3 files each verify own manifest unchanged (initial check namespace error corrected, no historical hash update). Local owner-cendakimab-209; public evidence docs/evidence/20261026-cendakimab-reference-source.json.0models/0browser/0productionwrites; no fullpytest for evidence-only work. Next exact registry details when shared Ego32 free; ordinary C79424 still active. OtherM2 cases/unique core denominator remain required. 210 source-only E07 node actually dispatched native85131: CodeBuddy/deepseek-v4.1-flash:max requested,48turns/1800s; six AD families (9MW1911,BBT001,BGB45035,CM326,CM512,CMSD001),4 existing raw pins, no production/browser use. Completion/underlying identity not yet verified; outputs always provisional. Do not redispatch pending node.",
+  "notes": "2026-10-26 USER_PAUSE; Goal actually paused. Owned C17446 terminal cancelled15:35:08UTC;79424/27113 consumed. Latest206:1610sources/7515facts/7349DB-verified/139design/0formalHTML;11source units pending,enrich cancelled,downstream pending.212 DB+1249sourceCAS and399eventCAS verified;197/fixed207/six discovery prefix unchanged.207 software2236PASS/Ruff;205 bounded Grok ACCEPT, not M1.210 source-only six-family node finished158.201s/14tools but owner NOT_ACCEPTED; classification/negativeapproval/forecast issues.211 BGB raw supplement only. Latest complete handoff rebaseline-v2/docs/PAUSE_HANDOFF_20261026_REVIEW.md. No new research or cleanup; existing test reports requested for GitHub.",
   "meta": {
-    "workflow_state": "in_progress",
-    "goal_status": "active",
-    "current_status": "rebaseline-v2/docs/STATUS.md"
+    "workflow_state": "paused",
+    "goal_status": "paused",
+    "current_status": "rebaseline-v2/docs/STATUS.md",
+    "latest_pause_checkpoint": "rebaseline-v2/docs/PAUSE_HANDOFF_20261026_REVIEW.md"
   }
 }

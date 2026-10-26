@@ -23,12 +23,13 @@
   ],
   "parent": null,
   "relatedFiles": [],
-  "notes": "2026-10-26 ACTIVE; b6a11a48 pushed.207 stable2236PASS26.60s/Ruff/283Python25JS469inputs;14qualificationguards/81relatedPASS.205 Grok same-session actual897.891sREVISE+819.475sACCEPT, actualSHA/route/pins audited.206 accepted reviewedv3+fixed207128files eba329f5..daa17. ActualordinaryService resumed trial_evidence, six discovery prefix reused; first invalidspace30 ownergracefulSTOP76.649s/0models/44newsourceversions preserved, original197/frozenruntime unchanged. retry01 native79424 parent17442 child17446 ACTIVE sameDB source1363/facts6254, Ego32/p1, baselineevent6976. No secondclone/requalification/40oldkeymigration/producthotpatch. Do not restart existing start_recovered.py/start_resume_retry01.py; await native79424 completion, receipts-retry01 filenames. Goal not paused; M1-M6 incomplete/nonRC. Latest authority docs/STATUS.md.",
+  "notes": "2026-10-26 USER_PAUSE; Goal actually paused. Owned C17446 terminal cancelled15:35:08UTC;79424/27113 consumed. Latest206:1610sources/7515facts/7349DB-verified/139design/0formalHTML;11source units pending,enrich cancelled,downstream pending.212 DB+1249sourceCAS and399eventCAS verified;197/fixed207/six discovery prefix unchanged.207 software2236PASS/Ruff;205 bounded Grok ACCEPT, not M1.210 source-only six-family node finished158.201s/14tools but owner NOT_ACCEPTED; classification/negativeapproval/forecast issues.211 BGB raw supplement only. Latest complete handoff rebaseline-v2/docs/PAUSE_HANDOFF_20261026_REVIEW.md. No new research or cleanup; existing test reports requested for GitHub.",
   "meta": {
-    "workflow_state": "in_progress",
-    "goal_status": "active",
+    "workflow_state": "paused",
+    "goal_status": "paused",
     "current_status": "rebaseline-v2/docs/STATUS.md",
     "historical_pause_checkpoint": "rebaseline-v2/docs/PAUSE_HANDOFF_20261024_SYNTHESIS.md",
-    "latest_recovery_checkpoint": "rebaseline-v2/docs/RECOVERY_20261026_TABLE_DENSITY.md"
+    "latest_recovery_checkpoint": "rebaseline-v2/docs/RECOVERY_20261026_TABLE_DENSITY.md",
+    "latest_pause_checkpoint": "rebaseline-v2/docs/PAUSE_HANDOFF_20261026_REVIEW.md"
   }
 }

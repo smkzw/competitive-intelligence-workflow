@@ -1,0 +1,82 @@
+{
+  "scope": "EXISTING_COMPONENT_TEST_REPORTS_NOT_FINAL_DELIVERY",
+  "packaged_on": "2026-10-26",
+  "source_bytes_modified": false,
+  "new_model_or_research_calls": 0,
+  "new_browser_acceptance": "NOT_RUN_DURING_PAUSE",
+  "reports": [
+    {
+      "file": "A-PNH-classification-test.html",
+      "report": "A",
+      "indication": "PNH",
+      "source_artifact_date": "2026-10-26",
+      "source_path": "ciw-data/profile-grammar-taxonomy-20261026-200/A-current-final.html",
+      "bytes": 1576477,
+      "sha256": "18da83b0d74913372d1d52468769b25e66e27b20ad4fe92c5d754500721528d3",
+      "test_scope": "A200分类/身份组件；157行，真实阶段观察为0；不是完整M3",
+      "external_resource_references": [],
+      "automated_safety_scan_counts": {
+        "personal_path": 0,
+        "key_pattern": 0,
+        "bearer_value": 0,
+        "url_auth_query": 0,
+        "file_uri": 0
+      },
+      "final_acceptance": false
+    },
+    {
+      "file": "B-AD-results-test.html",
+      "report": "B",
+      "indication": "特应性皮炎",
+      "source_artifact_date": "2026-10-26",
+      "source_path": "ciw-data/b-table-density-20261026-193/B-current.html",
+      "bytes": 17249269,
+      "sha256": "52bf539b584e777d4ff4b8fbae3dcdc2d33c492909c9e8104efa4a825a3ba21c",
+      "test_scope": "B193b固定17来源切片；3010结果/1571安全；不是完整M4",
+      "external_resource_references": [],
+      "automated_safety_scan_counts": {
+        "personal_path": 0,
+        "key_pattern": 0,
+        "bearer_value": 0,
+        "url_auth_query": 0,
+        "file_uri": 0
+      },
+      "final_acceptance": false
+    },
+    {
+      "file": "C-AD-design-reader-test.html",
+      "report": "C",
+      "indication": "特应性皮炎",
+      "source_artifact_date": "2026-10-25",
+      "source_path": "ciw-data/summary-reader-preview-20261025-40/C-hierarchy49.html",
+      "bytes": 17041816,
+      "sha256": "1d471387d069e7e7f2ef3a67f9fcbd8bd2879babed2c4a15ce2ad580e37c68ab",
+      "test_scope": "C49来源31/探针37阅读层组件；282图点/284研究；不是普通全流程分析采用",
+      "external_resource_references": [],
+      "automated_safety_scan_counts": {
+        "personal_path": 0,
+        "key_pattern": 0,
+        "bearer_value": 0,
+        "url_auth_query": 0,
+        "file_uri": 0
+      },
+      "final_acceptance": false
+    }
+  ],
+  "third_party": [
+    {
+      "file": "third-party/ECHARTS-LICENSE.txt",
+      "source": "https://raw.githubusercontent.com/apache/echarts/6.1.0/LICENSE",
+      "status": 200,
+      "bytes": 11990,
+      "sha256": "634293835b43a6dd2094fa39182a3d9a6b9ca43b7fdb9ac354e8037af2a3093a"
+    },
+    {
+      "file": "third-party/ECHARTS-NOTICE.txt",
+      "source": "https://raw.githubusercontent.com/apache/echarts/6.1.0/NOTICE",
+      "status": 200,
+      "bytes": 168,
+      "sha256": "d491d358344f842685c1b1585970999db65fe30ecf7ef3867af8814f4016c016"
+    }
+  ]
+}

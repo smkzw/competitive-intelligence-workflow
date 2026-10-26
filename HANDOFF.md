@@ -1,10 +1,11 @@
-# 当前构建入口｜rebaseline-v2｜2026-10-24
+# 当前接手入口｜rebaseline-v2｜2026-10-26 无损暂停
 
-当前用户授权为继续构建 rebaseline-v2；宿主 Goal 实查为 active，尚未整体交付，不恢复 v1 的旧执行链。
-唯一当前状态：[v2 STATUS](rebaseline-v2/docs/STATUS.md)；任务计划：[v2 PLAN](rebaseline-v2/docs/03_PLAN.md)。
-产品合同与实施规则见 [v2 PRD](rebaseline-v2/docs/01_PRD.md)、[架构](rebaseline-v2/docs/02_ARCHITECTURE.md)、[开发规则](rebaseline-v2/docs/04_AGENT_RULES.md)；恢复索引见 [.trellis 当前任务](.trellis/tasks/10-23-rebaseline-v2-m1/implement.md)。
-最新实测范围、未完成项和仍在运行的模型任务只在 v2 STATUS 更新；局部检查通过不代表完整报告或全部产品交付。
-以下 v1 原文仅为历史，保留原内容；其中的暂停、Goal、在途、旧 PID、旧入口与旧版本计数均不覆盖上述 v2 当前合同，不据此重跑。
+用户要求暂停并交审；Goal实际paused，自有研究进程已安全退出。M1–M6尚未全部交付，非RC。
+唯一当前状态：[v2 STATUS](rebaseline-v2/docs/STATUS.md)；最新详尽交接：[暂停与审阅HANDOFF](rebaseline-v2/docs/PAUSE_HANDOFF_20261026_REVIEW.md)。
+产品合同：[PRD](rebaseline-v2/docs/01_PRD.md)、[架构](rebaseline-v2/docs/02_ARCHITECTURE.md)、[计划](rebaseline-v2/docs/03_PLAN.md)、[规则](rebaseline-v2/docs/04_AGENT_RULES.md)；[暂停机器回执](rebaseline-v2/docs/evidence/20261026-lossless-pause-review.json)。
+用户要求上传的已有[A/B/C测试报告及版本范围](rebaseline-v2/docs/sample-reports/20261026/README.md)已随本批保留，不是当前正式完整报告。
+恢复从最新206/212记录核对，不重跑已完成151批、旧activation或等待旧PID；审阅本身不授权启动研究。
+下列v1原文是保留历史，不覆盖当前v2合同或暂停状态；不触碰旧中文工程，不把未知历史改动并入本次提交。
 
 ---
 

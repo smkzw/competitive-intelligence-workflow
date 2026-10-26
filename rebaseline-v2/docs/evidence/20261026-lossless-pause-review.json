@@ -1,0 +1,252 @@
+{
+  "schema_version": "ciw2-lossless-pause-review-v1",
+  "date": "2026-10-26",
+  "scope": "USER_REQUESTED_PAUSE_AND_REVIEW_HANDOFF_NOT_DELIVERY",
+  "repository": "smkzw/competitive-intelligence-workflow",
+  "branch": "codex/rebaseline-v2-m1",
+  "record_base_commit": "99ad7bfe3e0541dd48c15d616c49d87179434ba1",
+  "product_commit": "b6a11a487987dbac621fdd02738f05dd4c05157a",
+  "authority": [
+    "docs/01_PRD.md",
+    "docs/02_ARCHITECTURE.md",
+    "docs/03_PLAN.md",
+    "docs/04_AGENT_RULES.md"
+  ],
+  "handoff": "docs/PAUSE_HANDOFF_20261026_REVIEW.md",
+  "goal_status": "paused",
+  "goal_objective": "基于rebaseline-v2 新的、全面的、细节化的任务计划、任务执行规范、资料包（或文件指向链接）、PRD文档、Plan文档，以及分步骤的任务执行包、验收包等等，进行实际的、不间断地任务实现，直至完全交付。 注意对过度设计、构建过程（而非构建完成后）的测试要进行约束，避免出现“改了1处测试1次”的情况",
+  "owned_process": {
+    "pid": 17446,
+    "parent_pid": 17442,
+    "terminal": true,
+    "signal": "SIGTERM_COOPERATIVE_RUNCONTROL",
+    "forced_kill": false,
+    "kernel_exit_utc": "2026-10-26T15:35:08.744270+00:00",
+    "native_service_exit": 1,
+    "native_exit_watcher_exit": 0,
+    "old_handles_consumed": true
+  },
+  "ordinary_run": {
+    "project_id": "prj_fc03997a59c5",
+    "run_id": "run_fd9a5c6c4fcf",
+    "run_status": "cancelled",
+    "elapsed_seconds": 3940.893,
+    "source_versions": 1610,
+    "current_facts": 7515,
+    "current_verified": 7349,
+    "design_rows": 139,
+    "actual_successful_models": {
+      "DeepSeek-V4.1-Flash-1017": 3,
+      "Qwen3.8-Flash-Next": 75
+    },
+    "successful_reply_tokens_not_billing": 1888100,
+    "model_error_count": 0,
+    "cache_event_count_not_unit_acceptance": 36,
+    "old_extraction_keys_migrated": 0,
+    "six_discovery_prefix_rows_unchanged": true,
+    "original_unchanged": true,
+    "frozen_runtime_unchanged": true
+  },
+  "stage_status": [
+    {
+      "name": "intake",
+      "status": "succeeded"
+    },
+    {
+      "name": "universe_china",
+      "status": "succeeded"
+    },
+    {
+      "name": "universe_global",
+      "status": "succeeded"
+    },
+    {
+      "name": "candidate_triage",
+      "status": "succeeded"
+    },
+    {
+      "name": "universe_expand",
+      "status": "succeeded"
+    },
+    {
+      "name": "coverage_review",
+      "status": "succeeded"
+    },
+    {
+      "name": "trial_evidence",
+      "status": "failed"
+    },
+    {
+      "name": "trial_scope_review",
+      "status": "succeeded"
+    },
+    {
+      "name": "enrich_drugs",
+      "status": "cancelled"
+    },
+    {
+      "name": "extract_design",
+      "status": "pending"
+    },
+    {
+      "name": "verify",
+      "status": "pending"
+    },
+    {
+      "name": "analysis_C",
+      "status": "pending"
+    },
+    {
+      "name": "render",
+      "status": "pending"
+    }
+  ],
+  "formal_html_files": 0,
+  "pending_ctr": [
+    "CTR20231150",
+    "CTR20242866",
+    "CTR20243627",
+    "CTR20243663",
+    "CTR20243726",
+    "CTR20243733",
+    "CTR20251597",
+    "CTR20251961",
+    "CTR20263469",
+    "CTR20263673",
+    "CTR20263826"
+  ],
+  "pending_status": "source_ingestion_failed_requires_specific_error_review_not_assumed_zero_or_network",
+  "source_backup": {
+    "source_backup_db_sha256": "6e3d7a5e6b67ca11c9e1c8d1947a6b82564af0a8fe5e91cfe67fab53eeeecb6a",
+    "source_backup_manifest_sha256": "d0d556477a1a2054501f60846f139bd8af7565a3c59ce4dda110e72cffd03195",
+    "source_backup_files": 1250,
+    "source_cas_files": 1249,
+    "agent_payload_cas_count": 399,
+    "agent_payload_storage": "verified_hardlinks_do_not_modify_bytes",
+    "source_snapshot_197_unchanged": true
+  },
+  "controlled_local_backup": "ciw-data/pause-20261026-212",
+  "current_runtime_manifest_sha256": "eba329f5063d3086b4be5dbcf05e4ae018a9ccf9b2a5fd530f7c07e14e2daa17",
+  "last_full_development_gate": {
+    "path": "ciw-data/search-dependency-gate-20261026-207",
+    "tests_passed": 2236,
+    "seconds": 26.6,
+    "ruff": "PASS",
+    "python_files": 283,
+    "js_files": 25,
+    "inputs": 469,
+    "manifest_sha256": "bd9f1630f1bd8613f2cda23f64040f5af469b829bd0cf84506cb7a8c715365c5",
+    "rerun_during_pause": false,
+    "clinical_and_browser_acceptance": false
+  },
+  "bounded_independent_review": {
+    "task": "ciw2-search-recovery-20261026",
+    "primary": "ZCode/GLM-5.3-Flash:max",
+    "primary_result": "ENVIRONMENT_FAILED_NO_OPINION",
+    "approved_fallback": "Grok/grok-build/grok-4.7:high",
+    "same_session": true,
+    "rounds": [
+      {
+        "seconds": 897.891,
+        "decision": "REVISE"
+      },
+      {
+        "seconds": 819.475,
+        "decision": "ACCEPT"
+      }
+    ],
+    "scope": "CTGOV_DEPENDENCY_AND_FIXED_SOURCE_EQUIVALENCE_ONLY",
+    "underlying_provider_model_independently_exposed": false
+  },
+  "reference_source_worker": {
+    "task": "ciw2-ad-core-source-six-20261026",
+    "selector": "CodeBuddy/codebuddy-cli/deepseek-v4.1-flash:max",
+    "session": "01a178c1-baf9-79ad-a41b-5078c9ae21e6",
+    "seconds": 158.201,
+    "tools": 14,
+    "terminal_exit": 0,
+    "status": "PROVISIONAL_NOT_OWNER_ACCEPTED",
+    "actual_raw_files": 14,
+    "reported_raw_files": 15,
+    "owner_full_claim_verification": "NOT_RUN",
+    "pending_issues": [
+      "BBT001_mislabelled_independent_modified_form",
+      "unknown_approval_miswritten_negative",
+      "dated_forecast_miswritten_current",
+      "registry_list_mislabelled_CDE",
+      "same_session_fallback_metadata_inconsistent"
+    ]
+  },
+  "bgb_supplement": {
+    "scope": "ACTUAL_OFFICIAL_HKEX_ISSUER_SOURCE_SUPPLEMENT_NOT_CURRENT_PHASE_OR_APPROVAL_ADOPTION",
+    "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0227/2025022701131_c.pdf",
+    "final_url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0227/2025022701131_c.pdf",
+    "http_status": 200,
+    "observed_at": "2026-10-26T15:28:16.818825+00:00",
+    "raw_sha256": "2193236de979914b2fcf3387bb78d2332d5d4c98e6c099c9efe1014bea10ac02",
+    "text_sha256": "97d0d33fa548b512082e1d501180ffc93a4db561ab9d0aebe18342f7ed97b5db",
+    "parser_id": "pdftotext:100c56e936be0150a357e52b84762e19a7f4db90259be1edf9cd21b590e74772",
+    "parser_version": "26.08.0",
+    "pdf_pages": 9,
+    "product_specific_original_development_page": {
+      "page": 7,
+      "start": 6194,
+      "end": 7256
+    },
+    "source_date": "2025-02-27",
+    "current_phase_from_past_forecast_adopted": false
+  },
+  "source_worker_output_sha256": "115b8300052e1aac189eee6cf426c14f27cc59b17f8abca30342916610523157",
+  "milestones": {
+    "M1": "INCOMPLETE",
+    "M2": "INCOMPLETE",
+    "M3": "INCOMPLETE",
+    "M4": "INCOMPLETE",
+    "M5": "INCOMPLETE",
+    "M6": "INCOMPLETE"
+  },
+  "not_run": [
+    "current_complete_C_scientific_and_four_desktop_acceptance",
+    "final_three_indication_A",
+    "final_B_critical50_accuracy",
+    "M2_sealed_denominator_and_recall95",
+    "historical_fact_cutoff",
+    "latest207_install_and_complete_controls"
+  ],
+  "new_research_calls_during_pause": 0,
+  "cleanup_during_pause": "NONE",
+  "unknown_v1_changes": "PRESERVED_NOT_STAGED",
+  "test_report_upload": "USER_REQUESTED_EXISTING_COMPONENT_SAMPLES_NOT_NEW_FORMAL_REPORTS",
+  "test_report_bundle": {
+    "scope": "USER_REQUESTED_EXISTING_TEST_REPORT_UPLOAD",
+    "archive_path": "docs/sample-reports/20261026/ciw2-test-reports.zip",
+    "archive_bytes": 3215836,
+    "archive_sha256": "6623c72c8853d7821002d2db805cd464ee16674a32b2c39a2e324071a7962c73",
+    "uncompressed_bytes": 35884370,
+    "entries": 7,
+    "reports": 3,
+    "report_source_bytes_unchanged": true,
+    "zip_crc_and_all_entry_sha256": "PASS",
+    "browser_revalidation": "NOT_RUN_DURING_PAUSE",
+    "clinical_research_calls": 0,
+    "license_retrieval": {
+      "LICENSE": {
+        "source": "https://raw.githubusercontent.com/apache/echarts/6.1.0/LICENSE",
+        "status": 200,
+        "bytes": 11990,
+        "sha256": "634293835b43a6dd2094fa39182a3d9a6b9ca43b7fdb9ac354e8037af2a3093a"
+      },
+      "NOTICE": {
+        "source": "https://raw.githubusercontent.com/apache/echarts/6.1.0/NOTICE",
+        "status": 200,
+        "bytes": 168,
+        "sha256": "d491d358344f842685c1b1585970999db65fe30ecf7ef3867af8814f4016c016"
+      }
+    }
+  },
+  "public_document_pins": {
+    "docs/01_PRD.md": "203acc390b3ed60f279b7be4b54050bc6bbe273da8b3bb5d0cb454f475f4a3e7",
+    "docs/02_ARCHITECTURE.md": "07fd777e86f7bfeadbf1bca4199339fd5fca681b44d6cdb7b0600dd651b1db0e",
+    "docs/04_AGENT_RULES.md": "3840083664d42b51ce3cc4a9fe306d0c5882161f77179bc0ac630d4bfee65066"
+  }
+}
