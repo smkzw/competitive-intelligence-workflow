@@ -14,7 +14,7 @@ from datetime import date
 from typing import Any
 
 from ciw2.domain.identity import name_key
-from ciw2.domain.profile_evidence import FIELDS, holder_role, indication_qualifies
+from ciw2.domain.profile_evidence import FIELDS, class_value_supported, holder_role, indication_qualifies
 from ciw2.render.drug_identity import web_url
 from ciw2.render.labels import PHASE_ZH
 from ciw2.store.db import DB
@@ -179,14 +179,21 @@ def _profile(rows: list[dict[str, Any]], sources: dict[str, dict[str, Any]],
         region = DEVELOPMENT_FIELDS.get(field)
         if region is not None and not _development_qualifies(fact, indication_keys, region):
             continue
-        qualified.append(_ref(fact, value, sources))
+        ref=_ref(fact,value,sources)
+        if field in {'identity.modality','identity.mechanism_class'} and not class_value_supported(field,value,fact['quote']):
+            ref['role']='历史分类原文'
+        qualified.append(ref)
     qualified.sort(key=_ref_order)
     phase_china_refs = [ref for ref in qualified if ref['field'] == 'status.china.development']
     phase_global_refs = [ref for ref in qualified if ref['field'] == 'status.global.development']
-    modalities = _distinct([ref['value'] for ref in qualified if ref['field'] == 'identity.modality'])
+    modalities = _distinct([ref['value'] for ref in qualified if ref['field'] == 'identity.modality'
+                           and class_value_supported(ref['field'],ref['value'],ref['quote'])])
+    mechanisms = _distinct([ref['value'] for ref in qualified if ref['field'] == 'identity.mechanism_class'
+                           and class_value_supported(ref['field'],ref['value'],ref['quote'])])
     return {
         'targets': _distinct([ref['value'] for ref in qualified if ref['field'] == 'identity.target']),
         'modality': ' / '.join(modalities) or None,
+        'molecular_types':modalities, 'mechanism_classes':mechanisms,
         'companies': [_company(ref) for ref in qualified if ref['field'] in ROLES],
         'group_refs': [_group(ref,current_holders) for ref in qualified if ref['field'] == 'status.china_mah_group'],
         'phase_china': _one_phase(phase_china_refs),

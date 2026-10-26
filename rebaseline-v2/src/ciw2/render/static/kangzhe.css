@@ -63,8 +63,10 @@ h2{margin:8px 0} h3{margin:0 0 8px}
 .kz-query>label{display:flex;align-items:center;gap:12px;flex:0 1 42rem;min-width:0}
 .kz-query .filter{flex:1;min-width:0;width:auto}
 .landscape-query>input.filter{flex:1 1 24rem;min-width:20rem;max-width:40rem}
-.landscape-query>label{flex:0 0 auto}.landscape-query>label .filter{flex:none;width:10rem}
+.landscape-query>label{flex:0 0 auto}.landscape-query>label .filter{flex:none;width:auto;min-width:9rem;max-width:22rem}
 .landscape-query>p{margin:0}
+#tbl-a td:first-child{min-width:14ch;overflow-wrap:normal;word-break:normal}
+#tbl-a .scope-evidence{min-width:6rem;max-width:34ch}
 .sub{color:var(--muted);font-size:var(--kz-type-site-body)}
 p,li,td,th{text-wrap:pretty} h1,h2,h3,.brand,nav a{text-wrap:balance}
 .kpi,.finding{position:relative;border:1px solid transparent;border-radius:var(--kz-radius-compact);

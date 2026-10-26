@@ -16,17 +16,20 @@
 <input class="filter" data-filter="tbl-a" aria-label="筛选竞品" placeholder="筛选：药物 / 靶点 / 企业 / 阶段">
 <label for="competition-class">竞品类别 <select id="competition-class" class="filter">
 <option value="all">全部类别</option><option value="innovative">创新药</option><option value="modified">改良型</option><option value="biosimilar">生物类似药</option><option value="unknown">类别待核</option></select></label>
+<label for="molecular-type">分子类型 <select id="molecular-type" class="filter"><option value="all">全部分子类型</option></select></label>
+<label for="mechanism-class">机制类别 <select id="mechanism-class" class="filter"><option value="all">全部机制类别</option></select></label>
+<label for="landscape-group">图表分组 <select id="landscape-group" class="filter"><option value="targets">靶点</option><option value="molecular_types">分子类型</option><option value="mechanism_classes">机制类别</option></select></label>
 <p id="landscape-count" aria-live="polite">{{ data.rows|length }} 个药物</p>
 </div>
 <div class="grid landscape-grid">
-  <div class="card kz-data" hidden><h3>靶点 × 全球阶段记录</h3><div id="chart-heat" class="chart"></div></div>
+  <div class="card kz-data" hidden><h3 id="landscape-group-title">靶点 × 全球阶段记录</h3><div id="chart-heat" class="chart"></div></div>
   <div class="card kz-data" hidden><h3>阶段记录：中国 / 全球</h3><div id="chart-phase" class="chart"></div></div>
 </div>
 </section>
 <section id="pipeline" class="kz-section">
 <h2>竞品管线</h2>
 <div class="card table-card kz-data"><table id="tbl-a"><thead><tr>
-<th>药物</th><th>靶点</th><th>类型</th><th>相关企业</th><th>中国 MAH</th><th>中国阶段</th><th>全球阶段</th>
+<th>药物</th><th>靶点</th><th>分子类型</th><th>机制类别</th><th>相关企业</th><th>中国 MAH</th><th>中国阶段</th><th>全球阶段</th>
 <th>试验数（含中国大陆站点）</th><th>纳入</th></tr></thead><tbody>
 {% for r in data.rows %}<tr data-competition-class="{{ r.classification.category }}" data-entity-id="{{ r.id }}" data-reading-label="{{ r.name_zh or r.name }}">
 <td><b>{{ r.name_zh or r.name }}</b>{% if r.name_zh and r.name_zh != r.name %}<div class="muted">{{ r.name }}</div>{% endif %}
@@ -35,12 +38,14 @@
 {{ profile_evidence(r.classification.refs,'注册类别依据') }}
 {% if r.classification.refs %}<details><summary>类别定义</summary>{% for ref in r.classification.refs %}{% if ref.definition_url %}<div><a href="{{ ref.definition_url }}" target="_blank" rel="noopener">{{ ref.context.drug_type }} {{ ref.value }}类 · {{ ref.category_label }}</a></div>{% endif %}{% endfor %}</details>{% endif %}</td>
 <td>{% for t in r.targets %}<span class="tag{{ ' target-token' if t|length<=12 else '' }}">{{ t }}</span>{% endfor %}</td>
-<td>{% for value in r.profile_refs|selectattr('field','equalto','identity.modality')|map(attribute='value')|map('registry_label','drug_modality')|unique(case_sensitive=true) %}{{ value }}{% if not loop.last %} / {% endif %}{% else %}—{% endfor %}</td><td>{{ companies_summary(r.companies) }}</td><td>{% if r.group_refs %}{% for group in r.group_refs %}<div><span class="muted">{{ group.role }}</span> {{ group.name }}</div>{% endfor %}<details><summary>持有人法律实体</summary>{{ r.china_mah }}</details>{% else %}{{ r.china_mah or '—' }}{% endif %}</td>
+<td>{% for value in r.molecular_types|map('registry_label','drug_modality')|unique(case_sensitive=true) %}{{ value }}{% if not loop.last %} / {% endif %}{% else %}—{% endfor %}</td><td>{% for value in r.mechanism_classes %}{{ value|registry_label('mechanism_class') }}{% if not loop.last %} / {% endif %}{% else %}—{% endfor %}</td><td>{{ companies_summary(r.companies) }}</td><td>{% if r.group_refs %}{% for group in r.group_refs %}<div><span class="muted">{{ group.role }}</span> {{ group.name }}</div>{% endfor %}<details><summary>持有人法律实体</summary>{{ r.china_mah }}</details>{% else %}{{ r.china_mah or '—' }}{% endif %}</td>
 <td>{{ development_status(r.phase_china_refs) }}</td><td>{{ development_status(r.phase_global_refs) }}</td>
 <td>{{ r.n_trials }}（大陆 {% if r.n_china_trials is none %}—{% elif r.n_china_trials_unknown %}≥{{ r.n_china_trials }}{% else %}{{ r.n_china_trials }}{% endif %}）{% if r.trials %}<details><summary>研究列表</summary>{% for trial in r.trials %}{{ clinical_trial(trial) }}{% endfor %}</details>{% endif %}</td>
 <td>{% if r.in_scope is none %}<span class="badge unknown">待定</span>{% else %}<span class="badge verified">纳入</span>{% endif %}
+{% if r.scope_reason or r.evidence_urls %}<details class="scope-evidence"><summary>纳入依据</summary>
 {% if r.scope_reason %}<div class="quote">{{ r.scope_reason }}</div>{% endif %}
-{% for u in r.evidence_urls[:3] %}<div><a href="{{ u }}" target="_blank" rel="noopener">来源{{ loop.index }}</a></div>{% endfor %}</td>
+{% for u in r.evidence_urls[:3] %}<div><a href="{{ u }}" target="_blank" rel="noopener">来源{{ loop.index }}</a></div>{% endfor %}
+</details>{% endif %}</td>
 </tr>{% endfor %}
 </tbody></table></div>
 </section>

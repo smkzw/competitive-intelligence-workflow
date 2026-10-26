@@ -8,12 +8,13 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import unicodedata
 from datetime import date, datetime
 from typing import Any
 
 from ciw2.domain.identity import name_key
 
-FIELDS=('identity.target','identity.modality','identity.developer','identity.rights_holder',
+FIELDS=('identity.target','identity.modality','identity.mechanism_class','identity.developer','identity.rights_holder',
         'status.china_mah_group','status.china.development','status.global.development')
 SOURCE_CONTEXT=('legal_entity','relationship','as_of','jurisdiction','indication')
 NAME_BOUND_FIELDS=frozenset(FIELDS)-{'status.china_mah_group'}
@@ -25,8 +26,23 @@ _NEGATED=re.compile(r'\b(?:not|never|neither|no longer|without)\b|并非|並非|
     r'(?:抗体药物|药物|药品|产品|產品|疗法|療法|证据|證據|记录|紀錄|报道|報道|获批|獲批|上市)',re.IGNORECASE)
 
 
+def _literal(value: str) -> str:
+    return name_key(''.join('-' if unicodedata.category(c)=='Pd' or c in {'\u00ad','−'} else c for c in value))
+
+
 def contains(quote: str,value: str) -> bool:
-    return re.search(r'(?<![a-z0-9])'+re.escape(name_key(value))+r'(?![a-z0-9])',name_key(quote)) is not None
+    return re.search(r'(?<![a-z0-9])'+re.escape(_literal(value))+r'(?![a-z0-9])',_literal(quote)) is not None
+
+
+def class_value_supported(field: str,value: str,text: str='') -> bool:
+    key=_literal(value)
+    mechanism=r'\b(?:inhibitor|agonist|antagonist|blocker|modulator|degrader|engager|replacement|interference)\b|抑制剂|激动剂|拮抗剂|阻断剂|调节剂|降解剂|替代疗法|干扰|基因编辑'
+    if field=='identity.mechanism_class':return re.search(mechanism,key) is not None
+    if field!='identity.modality':return True
+    if re.search(mechanism+r'|\b(?:targeting|directed against)\b',key):return False
+    if key=='protein' and re.search(r'\bprotein[\s-]+(?:kinase|synthesis|expression|mimetic|binding)\b',_literal(text)):
+        return False
+    return re.search(r'(?<![a-z0-9])(?:mab|adc|antibody|antibodies|small[- ]molecule|protein|peptide|peptidic|sirna|mrna|rna|dna|oligonucleotide|cell therapy|gene therapy)(?![a-z0-9])|抗体|小分子|蛋白|多肽|核酸|细胞疗法|基因疗法',key) is not None
 
 
 def drug_names(db: Any,pid: str,eid: str) -> list[str]:
@@ -161,21 +177,44 @@ def _ownership(text: str,parent: str,child: str,relation: str) -> bool:
     return any(re.search(pattern,text) for pattern in patterns)
 
 
+def _noun_property(text: str,subject: str,value: str,field: str) -> bool:
+    """Only a direct noun phrase or an explicit molecular-head predicate binds."""
+    modifiers=r'(?:(?:oral|investigational|novel|pegylated|recombinant|human|humanized|fully human|small)\s+)*'
+    article=r'(?:a|an|the)\s+'
+    tail=r'(?:\s*\([^()\n]{1,45}\))?'
+    post=subject+tail+r'(?:,\s*'+article+r'|\s+is\s+'+article+r')'+modifiers
+    if field=='identity.target':
+        action=r'\s+(?:inhibitor|antagonist|agonist|blocker|modulator)'
+        if re.search(value+action+r'\s+'+subject,text):return True
+        if re.search(post+value+action,text):return True
+        molecular=r'(?:small interfering rna(?:\s*\(sirna\))?|sirna|mrna|rna|protein|(?:monoclonal |bispecific )?antibody)'
+        if re.search(post+molecular+r'\s+'+value+action,text):return True
+        relation=r'\s+(?:therapy\s+)?(?:targeting|directed against|binding|designed to (?:selectively )?cleave)\s+'
+        return re.search(post+molecular+relation+value,text) is not None
+    if field=='identity.modality' and re.search(value+r'(?:\s+complement)?\s+inhibitor\s+'+subject,text):return True
+    return re.search(value+r'\s+'+subject,text) is not None or re.search(post+value,text) is not None
+
+
 def _property(text: str,names: list[str],value: str,field: str,brands: list[str],others: list[str]) -> bool:
     if field=='identity.developer':return _development(text,names,value)
-    if field not in {'identity.target','identity.modality'}:return True
-    value=re.escape(name_key(value));text=name_key(text)
+    if field not in {'identity.target','identity.modality','identity.mechanism_class'}:return True
+    if not class_value_supported(field,value,text):return False
+    literal_value=re.escape(_literal(value))+r'(?![a-z0-9/+\-])'
+    normalized=_literal(text)
     for name in names:
-        subject=re.escape(name_key(name))
+        subject=r'(?<![a-z0-9/+\-])'+re.escape(_literal(name))+r'(?![a-z0-9/+\-])'
+        alias_subject=r'(?<![a-z0-9/+\-])[a-z][a-z0-9-]*\s+\('+re.escape(_literal(name))+r'\)'
+        if any(_noun_property(normalized,form,literal_value,field) for form in (subject,alias_subject)):return True
         if field=='identity.target':
-            predicate=r'\s*(?:targets?\s+|binds\s+|has (?:the )?target (?:of )?|靶向|特异性靶向|作用于|的靶点为)\s*'
+            predicate=r'\s*(?:targets?\s+|binds(?:\s+to)?\s+|inhibits?\s+|has (?:the )?target (?:of )?|靶向|特异性靶向|作用于|的靶点为)\s*'
             antibody=(r'\s+is (?:a |an |the )?(?:fully human |humanized |human |recombinant )?'
                       r'(?:monoclonal |bispecific )?antibody(?: drug)? (?:targeting|directed against)\s+')
-            if re.search(subject+antibody+value,text):return True
+            if re.search(subject+antibody+literal_value,normalized):return True
         else:predicate=r'\s*(?:is (?:a |an |the )?|是(?:一种|一款)?|为(?:一种|一款)?)\s*'
-        if re.search(subject+predicate+value,text):return True
-    # A literal drug-class noun apposition is not merely a value elsewhere in a sentence.
-    # Only registered, unambiguous trade names may use this form; no stripped dosage-form aliases.
+        if re.search(subject+predicate+literal_value,normalized):return True
+    if field=='identity.mechanism_class':return False
+    # Registered-brand ownership remains under the original exact normalization.
+    value=re.escape(name_key(value));text=name_key(text)
     kind=value+(r'抗体药物' if field=='identity.target' else r'药物')
     for brand in brands:
         subject=r'(?P<brand>'+re.escape(name_key(brand))+r')(?![a-z0-9])'
@@ -191,12 +230,15 @@ def _property(text: str,names: list[str],value: str,field: str,brands: list[str]
 
 
 def _development(text: str,names: list[str],company: str) -> bool:
-    """Require a development relation, not a product's manufacturer, holder or marketer."""
-    owner=re.escape(name_key(company));text=name_key(text)
+    """Require a direct development relation; a sponsor or manufacturer is separate."""
+    edge=r"(?!['’]|的|[a-z0-9/+\-])"
+    owner=r'(?<![a-z0-9])'+re.escape(_literal(company))+edge;text=_literal(text)
+    descriptor=r'(?:(?:a|an|the|novel|investigational|oral|peptidic|complement|small|molecule|protein|inhibitor|antibody|drug)\s+)*'
     for name in names:
-        drug=(re.escape(name_key(name))+r"(?!['’]|的|[a-z0-9]|\s*(?:manufacturing|production|process|生产|生產|工艺|工藝|制造|製造))")
-        patterns=(owner+r'\s+(?:developed|develops|co-developed)\s+(?:the\s+)?'+drug,
-            drug+r'\s+(?:(?:is|was)\s+)?(?:developed|co-developed)\s+by\s+'+owner,
+        drug=(r'(?<![a-z0-9/+\-])'+re.escape(_literal(name))+edge+
+              r'(?!\s*(?:manufacturing|production|process|生产|生產|工艺|工藝|制造|製造))')
+        patterns=(owner+r'\s+(?:developed|develops|co-developed|is (?:co-)?developing)\s+'+descriptor+drug,
+            drug+r'\s+(?:(?:is|was)\s+)?(?:being )?(?:developed|co-developed)\s+by\s+'+owner,
             owner+r'(?:宣布[，,:：]\s*(?:本)?公司)?\s*(?:自主|独立|独立自主|联合)?研发的?'
             r'[^。；;，,\n]{0,80}'+drug,
             drug+r'\s*(?:由|为|是)\s*'+owner+r'\s*(?:自主|独立|联合)?研发')

@@ -55,6 +55,6 @@
 <div id="design-evidence-body"></div></dialog>
 <script id="charts" type="application/json">{{ charts_json | tojson }}</script>
 {% if assets %}<script>{{ assets.echarts | safe }}</script><script>{{ assets.js | safe }}</script>
-{% else %}<script src="{{ static }}/echarts.min.js"></script><script src="{{ static }}/kz-tokens.js"></script><script src="{{ static }}/kz-motion.js"></script><script src="{{ static }}/kz-site.js"></script><script src="{{ static }}/portal.js"></script>{% endif %}
+{% else %}<script src="{{ static }}/echarts.min.js"></script><script src="{{ static }}/kz-tokens.js"></script><script src="{{ static }}/kz-motion.js"></script><script src="{{ static }}/kz-site.js"></script><script src="{{ static }}/classification.js"></script><script src="{{ static }}/portal.js"></script>{% endif %}
 </body>
 </html>

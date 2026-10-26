@@ -7,6 +7,7 @@ from typing import Any
 
 from ciw2.domain.models import ExtractionResult
 from ciw2.harness.agent import HARNESS_RULES
+from ciw2.harness.llm import LLMError
 from ciw2.pipeline import stage_versions, tool_versions
 from ciw2.pipeline.context import IncompleteWork, RunContext, work_limit
 from ciw2.pipeline.queries import drug_trials, intake_data, scoped_drugs
@@ -111,12 +112,19 @@ def _call(rc: RunContext, skill: str, task: dict[str, Any], key: str) -> dict[st
     return output
 
 
+def _rate_limited(exc: BaseException) -> bool:
+    """The configured route chain already spent this call on HTTP 429; later units wait."""
+    status = exc.metadata.get('http_status') if isinstance(exc, LLMError) else None
+    return type(status) is int and status == 429
+
+
 def extract_drugs(rc: RunContext, skill: str,
                   extra: Callable[[RunContext, dict[str, Any]], dict[str, Any]]) -> dict[str, Any]:
     limit = work_limit(rc.cache.get('max_drugs'))
     planned = [(drug, _tasks(rc, skill, drug, extra(rc, drug))) for drug in scoped_drugs(rc)]
     output = {'facts': [], 'gaps': [], 'errors': [], 'pending_drug_ids': [], 'pending_units': []}
     started = set()
+    throttled = False
     for drug, tasks in planned:
         for task in tasks:
             rc.check_cancelled()
@@ -125,13 +133,20 @@ def extract_drugs(rc: RunContext, skill: str,
             if result is None and limit is not None and len(started) >= limit and drug['id'] not in started:
                 output['pending_units'].append({'drug_id': drug['id'], 'key': key, 'reason': 'execution_budget'})
                 continue
+            if result is None and throttled:
+                output['pending_units'].append({'drug_id': drug['id'], 'key': key,
+                                                'reason': 'transport_rate_limited'})
+                continue
             if result is None:
                 started.add(drug['id'])
                 try:
                     result = _call(rc, skill, task, key)
                 except Exception as exc:  # noqa: BLE001 - isolate a failed batch, retain healthy neighbors
+                    limited = _rate_limited(exc)
+                    throttled = throttled or limited
                     output['errors'].append(f"{drug['name']}: {type(exc).__name__}: {exc}")
-                    output['pending_units'].append({'drug_id': drug['id'], 'key': key, 'reason': 'unit_failed'})
+                    output['pending_units'].append({'drug_id': drug['id'], 'key': key,
+                                                    'reason': 'transport_rate_limited' if limited else 'unit_failed'})
                     continue
             typed = ExtractionResult.model_validate({'facts': [
                 {k: v for k, v in f.items() if k != 'source_id'} for f in result['facts']], 'gaps': result['gaps']})
@@ -149,4 +164,4 @@ def extract_drugs(rc: RunContext, skill: str,
 # Bind the extraction behavior actually loaded; unrelated context/http siblings
 # and source-file comments cannot invalidate every completed extraction unit.
 CODE_HASH = fingerprint({'task_chars': TASK_CHARS, 'functions': [stage_versions.function_digest(fn)
-                         for fn in (_tasks, _key, _call, extract_drugs)]})
+                         for fn in (_tasks, _key, _call, extract_drugs, _rate_limited)]})

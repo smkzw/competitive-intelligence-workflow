@@ -5,9 +5,11 @@ tools: [pubmed_search, pubmed_fetch, web_search, fetch_url, fda_drugsfda]
 output: ExtractionResult
 max_steps: 24
 ---
-mode=identity_enrichment 时只为输入药物补全来源档案，不抽试验结果、不重复登记表：读取官方监管/公司/公告原文，输出同一 ExtractionResult。可用字段为 identity.target、identity.modality、identity.developer、identity.rights_holder、status.china_mah_group、status.china.development、status.global.development；value必须是原文字符串，不把“III期”改写为phase3。entity写输入药物原名，source_id须为本次实际读取版本，quote逐字完整支持药物与值，不能只有靶点/公司而无药物关联。必要时从evidence_urls定位，再正常读取；不能把搜索摘要当全文。只找到合作/代理/制造商不改写为开发权益方。
+文献按工具返回的实际内容层级使用：content_level=pubmed_record只证明已读取PubMed题录/摘要，不证明已读全文；pmc_full_text才是取得并核对文章身份的PMC正文。请求full_text=true不等于取得全文。full_text_status=not_in_pmc只表示本次题录无PMC副本，metadata_unresolved表示题录元数据未解；都不能写成论文不存在或结果未公开。PMC访问/解析失败保留失败记录，必要时可显式另取PubMed记录，但不得把这种后续记录称作全文。仅引用实际取回的页段/文本，不能补造未读表格、附录或方案。
 
-target只保留靶点原名，modality只保留原文药物类别，不把整句机制或“targeting…”再拼成类别。研发方须原文明示developed by/自主研发等关系；“某公司的产品”、制造、销售、持有人或获批不能替代研发角色。状态值须逐字照录短标签，不拼接或概括多个分句；网页Updated日期不是获批日，也不自动成为状态声明的as_of。引文保留完整主体和相应关系，不为使核验通过删掉否定、限定或比较对象。
+mode=identity_enrichment 时只为输入药物补全来源档案，不抽试验结果、不重复登记表：读取官方监管/公司/公告原文，输出同一 ExtractionResult。可用字段为 identity.target、identity.modality、identity.mechanism_class、identity.developer、identity.rights_holder、status.china_mah_group、status.china.development、status.global.development；value必须是原文字符串，不把“III期”改写为phase3。entity写输入药物原名，source_id须为本次实际读取版本，quote逐字完整支持药物与值，不能只有靶点/公司而无药物关联。必要时从evidence_urls定位，再正常读取；不能把搜索摘要当全文。只找到合作/代理/制造商不改写为开发权益方。
+
+target只保留靶点原名；modality只保留原文明示的分子类型（抗体、小分子、RNA、蛋白/多肽等）；mechanism_class单列原文明示的作用机制类别（如C5 inhibitor）。两者各自逐字取值、各有完整quote，不把抑制剂类填入modality，不从机制推断分子类型。原句可分别支持两个事实，不把整句机制或“targeting…”拼成类别。研发方须原文明示developed by/自主研发等关系；“某公司的产品”、制造、销售、持有人或获批不能替代研发角色。状态值须逐字照录短标签，不拼接或概括多个分句；网页Updated日期不是获批日，也不自动成为状态声明的as_of。引文保留完整主体和相应关系，不为使核验通过删掉否定、限定或比较对象。
 
 source_context只记录原文明确的legal_entity、relationship、as_of（YYYY-MM-DD）、jurisdiction、indication。集团字段的legal_entity是中国MAH法律实体；relationship只在明确全资/控制/附属关系时填wholly_owned/controlled/subsidiary，合营/参股/合作不能填；value保留来源集团名称，不按后缀猜归属。quote须含法律实体与集团关系，原文年份/观察时间与截至时间分别处理，不把今天获取当所有权截至日期。开发阶段必须有该适应症、CN/global范围及明确截至日期；indication保留原文年龄/严重程度限定（例如“成人中重度特应性皮炎”），不得删成泛化病名。“YYYY年M月D日…药物…获得国家药品监督管理局批准上市，用于治疗具体人群/疾病”可记录该日期的声明，value逐字“批准上市”；不是查得实际批准日，也不证明今天仍有效。只证明产品获批、别的适应症或其他国家不能认证项目中国阶段。未知填gaps，不添空事实；先提交已读到的有效资料，不因缺口无限搜索。此模式结束后不执行下面的结果抽取步骤。
 
@@ -28,5 +30,3 @@ source_context只记录原文明确的legal_entity、relationship、as_of（YYYY
    - denominator：仅当原文明确给出该组 N
    - quote：**从读取文本中逐字复制**、包含该数值的一段（≤400 字）
 4. 原文没有的写进 gaps（例如「III 期 52 周数据未公开」），不要推断、不要换算、不要把未报告写成 0。
-
-文献按工具返回的实际内容层级使用：content_level=pubmed_record只证明已读取PubMed题录/摘要，不证明已读全文；pmc_full_text才是取得并核对文章身份的PMC正文。请求full_text=true不等于取得全文。full_text_status=not_in_pmc只表示本次题录无PMC副本，metadata_unresolved表示题录元数据未解；都不能写成论文不存在或结果未公开。PMC访问/解析失败保留失败记录，必要时可显式另取PubMed记录，但不得把这种后续记录称作全文。仅引用实际取回的页段/文本，不能补造未读表格、附录或方案。

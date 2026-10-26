@@ -53,7 +53,7 @@ def add_development(db, pid, entity_id, source_id, value, *, region='china',
     return add_fact(db, pid, entity_id, field, value, source_id, context=context)
 
 
-EMPTY = {'targets': [], 'modality': None, 'companies': [], 'group_refs': [],
+EMPTY = {'molecular_types': [], 'mechanism_classes': [], 'targets': [], 'modality': None, 'companies': [], 'group_refs': [],
          'phase_china': 'unknown', 'phase_global': 'unknown', 'profile_refs': [],
          'phase_china_refs': [], 'phase_global_refs': []}
 

@@ -23,6 +23,10 @@ NAME_BOUND_FIELDS复用既有identity_basis回执：目标/模态保留注册品
 
 注册类别复用现有链：`cde_evidence._applications`以`proven_acceptance_refs`重新核对具体产品原行，`cde_adoption`写入幂等、critical的`identity.registration_class`代码事实，空字段仅保留源而不生成类别；唯一JSON路径/逐字整行/字节摘要与原观察时间一起保存。`render/registration.py`只读当前该来源事实，按有出处的2020后具体药品类型解释，保留相同时间冲突与旧观察；未知、疫苗及其他未支持域不借用治生3.3规则。A类别筛选复用现有文字筛选和阶段图查询，不建新schema/Skill/平台，不自动授予MAH、中国适应症或核心成员资格。新增源采用只影响trial_evidence及下游，类别规则/模板影响实际消费该投影的分析与渲染阶段；版本范围以真实绑定核对为准。
 
+药物分类沿用现有ExtractionResult/FIELDS，不新增表或Skill：identity.modality仅为分子类型，identity.mechanism_class为机制类别；当前来源裁决投影成molecular_types/mechanism_classes。A同一集合分别筛选和按两轴分组，原值作查询键、中文术语只作显示；旧混合类别不认证分子类型，历史原值/原引文仍以“历史分类原文”可查。共享证据阅读器与表格采用同一字段含义，主体/数值连字符分别检查，不把作用于某过程缩为靶点。文献实际读取层级对全部模式生效。
+
+抽取阶段出现最终传播的HTTP429时，本次extract_drugs暂停后续未缓存模型请求，仍读取合格缓存并列全待处理单元；真实错误只计实际发生的一次，transport_rate_limited与unit_failed分开。再次调用可重试，取消优先，不新建全局调度/熔断服务。原单位key不改签；代码/Skill变化导致的新key与旧候选资格分开核验。
+
 ## 1. 流水线（DAG，按报告裁剪）
 | 阶段 | 类型 | 报告 | 阻断 | 说明 |
 |---|---|---|---|---|

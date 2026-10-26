@@ -80,6 +80,7 @@ def data_a(db: DB, pid: str) -> dict[str, Any]:
         unknown_sites=sum(china_sites.get(t['id']) is None for t in ts)
         rows.append({
             "classification":classes[d['id']], "id": d['id'], "name": d["name"], "name_zh": d["name_zh"], "targets": profile['targets'],
+            "molecular_types":profile['molecular_types'],"mechanism_classes":profile['mechanism_classes'],
             "modality":profile['modality'],"companies":profile['companies'],
             "china_mah": ' / '.join(dict.fromkeys(c['display_name'] for c in holder_map[d['id']])),
             'mah_refs': holder_map[d['id']], 'name_refs': d['name_refs'],
@@ -96,7 +97,7 @@ def data_a(db: DB, pid: str) -> dict[str, Any]:
         })
     included = [r for r in rows if r["in_scope"] != 0]
     charts = {'landscape': {
-        'rows': [{**{key: r[key] for key in ('id', 'targets', 'phase_global', 'phase_china')},
+        'rows': [{**{key: r[key] for key in ('id', 'targets', 'molecular_types', 'mechanism_classes', 'phase_global', 'phase_china')},
                   'phase_observations':[{'region':region,'phase':ref['phase_code'],
                       'raw_value':ref['value'],'plot_reason':None if ref['phase_code']!='unknown' else 'stage_not_mapped',
                       'indication':ref['context']['indication'],'as_of':ref['context']['as_of'],
@@ -104,6 +105,8 @@ def data_a(db: DB, pid: str) -> dict[str, Any]:
                       'fact_id':ref['fact_id'],'source_id':ref['source_id']}
                       for region in ('global','china') for ref in r['phase_'+region+'_refs']]}
                  for r in included],
+        'classification_labels':{field:{value:registry_label(value,category) for r in included for value in r[field]}
+                                 for field,category in [('molecular_types','drug_modality'),('mechanism_classes','mechanism_class')]},
         'phase_labels': {p: PHASE_ZH[p] for p in PHASE_ORDER if p != 'unknown'},
     }}
     return {"rows": sorted(included, key=lambda r: PHASE_ORDER.index(r["phase_china"]))
@@ -209,7 +212,7 @@ def render_report(db: DB, pid: str, report: str, *, findings: dict[str, Any] | N
         assets = {"css": '\n'.join((STATIC / name).read_text(encoding='utf-8')
                                     for name in ('kz-tokens.css', 'kangzhe.css')),
                   "js": '\n'.join((STATIC / name).read_text(encoding='utf-8')
-                                   for name in ('kz-tokens.js', 'kz-motion.js', 'kz-site.js', 'portal.js')),
+                                   for name in ('kz-tokens.js', 'kz-motion.js', 'kz-site.js', 'classification.js', 'portal.js')),
                   "logo": 'data:image/svg+xml;base64,' + base64.b64encode((STATIC / 'logo_bot.svg').read_bytes()).decode(),
                   "echarts": (STATIC / "echarts.min.js").read_text(encoding="utf-8")
                   if (STATIC / "echarts.min.js").exists() else ""}

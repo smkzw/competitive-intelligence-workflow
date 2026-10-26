@@ -1,0 +1,136 @@
+{
+  "scope": "BOUNDED_PROFILE_TAXONOMY_AND_TRANSPORT_COMPONENTS_NOT_FULL_M1_M6_OR_RELEASE",
+  "base_commit": "16dfe31047c25b804263d4e97f318aa56814cd8b",
+  "user_decision": "Molecular type and mechanism class separate, each with original source evidence",
+  "production_fields": {
+    "identity.modality": "分子类型",
+    "identity.mechanism_class": "机制类别"
+  },
+  "source_evidence": {
+    "fixed_database_sha256": "6061bfb8304d3ca2cf101199c0954cbaa723ce646a96c253d6234c91650923a9",
+    "rule": "quote-4c468009dbbdc95b",
+    "quotes_present": 15,
+    "original_confirmed": [
+      "P013",
+      "P049",
+      "P050",
+      "P051",
+      "P085",
+      "P090",
+      "P092",
+      "P093",
+      "P098"
+    ],
+    "original_other": [
+      "P014",
+      "P015",
+      "P019",
+      "P048",
+      "P099",
+      "P103"
+    ],
+    "new_source_pinned_candidates": [
+      {
+        "original_case": "P014",
+        "field": "identity.mechanism_class",
+        "value": "Factor D (FD) inhibitor",
+        "context": {},
+        "verdict": "confirmed"
+      },
+      {
+        "original_case": "P048",
+        "field": "identity.modality",
+        "value": "peptidic",
+        "context": {},
+        "verdict": "confirmed"
+      },
+      {
+        "original_case": "P099",
+        "field": "identity.mechanism_class",
+        "value": "C3 inhibitor",
+        "context": {},
+        "verdict": "confirmed"
+      }
+    ],
+    "live_fact_adoption": false,
+    "source_model_network_calls": 0,
+    "live_database_writes": 0
+  },
+  "independent_review": {
+    "route": "CodeBuddy/codebuddy-cli/deepseek-v4.1-flash:max requested; CLI selector verified; underlying provider identity not independently proved",
+    "session": "01a177ec-3d74-772e-adda-e157bed6ac77",
+    "initial_seconds": 431.179,
+    "followup_seconds": 275.552,
+    "verdict": "REVISE; owner reproduced and fixed value-boundary/protein-binding defects; current-receipt concern already closed by DB.current_facts + new regression",
+    "limitations": "Read/Grep only: reviewer Bash denied; owner actually rehashed fixed originals and executed checks; not guaranteed different-model family",
+    "review_sha256": "8ecac8e3d2697d77e19c6581a91c3b0640888c13eb7a8b8e4c7f17bc2ef70f1a"
+  },
+  "transport": {
+    "route": "CodeBuddy/codebuddy-cli/deepseek-v4.1-flash:max requested",
+    "session": "01a17824-476d-7bf9-b989-b9a4d0889cec",
+    "round_seconds": [
+      193.956,
+      94.401
+    ],
+    "initial_step_boundary_preserved": true,
+    "completion_returncode": 0,
+    "owner_related": "125 passed in3.05s",
+    "change": "one exhausted429 chain defers subsequent uncached units; healthy source-verified cache still consumed; later invocation retries",
+    "old_keys": "untouched, not migrated/re-signed or certified compatible",
+    "formal_audit": "legacy filename/canonical rejected-output FAIL preserved; explicit completed followup SHA/route/session audit passes",
+    "owner_receipt_sha256": "4baf642d2974bcf2c6f440e6921db12ac9b85a94d11632da1a8d4309a9e87ef7"
+  },
+  "gate": {
+    "pytest": "2220 passed in24.94s; one preexisting Starlette warning",
+    "ruff": "PASS",
+    "structure": {
+      "python_files": 282,
+      "javascript_files": 25,
+      "inputs_unchanged": 463,
+      "manifest_sha256": "1cad77b42505a0d7be4427bed7ea53de7208f64cf71c2cc1d6a9c867db7f2987"
+    }
+  },
+  "browser": {
+    "html_sha256": "18da83b0d74913372d1d52468769b25e66e27b20ad4fe92c5d754500721528d3",
+    "space": 26,
+    "widths": [
+      1440,
+      1600,
+      1920,
+      2560
+    ],
+    "states": 16,
+    "states_per_width": [
+      "all157",
+      "molecular_type_one",
+      "mechanism_class_one",
+      "original_source_dialog"
+    ],
+    "additional_checks": [
+      "combined_filters_zero",
+      "restore157",
+      "Esc_actual_trigger_focus",
+      "same_query_source_reader",
+      "ALXN2050_unbroken",
+      "scope_original_accessible"
+    ],
+    "font_px": 18,
+    "page_overflow": false,
+    "owner_viewed": [
+      "1440 mechanism",
+      "2560 source"
+    ],
+    "real_phase_graph_positive": "NOT_RUN_NO_SOURCE_SUPPORTED_DRUG_PHASE; offline production-JS positive grouping tested",
+    "whole_portal_acceptance": false
+  },
+  "not_complete": [
+    "ordinary M1 C run",
+    "40 extraction-unit scientific/current-key compatibility",
+    "8 source-version misses and one envelope gap",
+    "M2 reference closure",
+    "M3 full three-indication A",
+    "M4 full B",
+    "M5 refresh",
+    "M6 current install/restore"
+  ]
+}

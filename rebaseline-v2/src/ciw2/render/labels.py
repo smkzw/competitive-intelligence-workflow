@@ -39,10 +39,13 @@ _REGISTRY_LABELS: dict[str, dict[str, str]] = {
     'drug_modality': {
         'monoclonal antibody':'单克隆抗体','mAb':'单克隆抗体','ADC':'抗体偶联药物',
         'bispecific antibody':'双特异性抗体','small molecule':'小分子药物',
+        'small protein':'小型蛋白','recombinant protein':'重组蛋白','fusion protein':'融合蛋白',
+        'protein':'蛋白','peptide':'多肽','peptidic':'肽类','siRNA':'小干扰RNA',
+        'Small Interfering RNA (siRNA)':'小干扰RNA',
     },
     'profile_field': {
         'identity.name_zh':'正式中文名','identity.name_en':'原文英文名',
-        'identity.target':'靶点','identity.modality':'药物类型','identity.developer':'研发方',
+        'identity.target':'靶点','identity.modality':'分子类型','identity.mechanism_class':'机制类别','identity.developer':'研发方',
         'identity.rights_holder':'研发权益方','status.china_mah_group':'持有人所属集团',
         'status.china.development':'中国开发阶段','status.global.development':'全球开发阶段',
     },
@@ -121,6 +124,11 @@ def registry_label(value: object, category: str) -> str:
     text = _text(value)
     if text is None:
         return EM_DASH
+    if category=='mechanism_class':
+        suffixes={'inhibitor':'抑制剂','antagonist':'拮抗剂','agonist':'激动剂','blocker':'阻断剂',
+                  'modulator':'调节剂','degrader':'降解剂'}
+        match=re.fullmatch(r'(.+?)\s+(inhibitor|antagonist|agonist|blocker|modulator|degrader)',text,re.IGNORECASE)
+        return match.group(1)+' '+suffixes[match.group(2).lower()] if match else text
     labels = _REGISTRY_LABELS.get(category) if isinstance(category, str) else None
     if labels is None:
         return text

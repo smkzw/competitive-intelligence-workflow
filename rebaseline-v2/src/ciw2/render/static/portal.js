@@ -229,7 +229,7 @@
         return r['phase_' + region] && r['phase_' + region] !== 'unknown';
       }).map(function (region) { return {region: region, phase: r['phase_' + region]}; });
       return observations.map(function (o) {
-        return Object.assign({}, o, {entity_id: r.id, targets: r.targets, frame: [
+        return Object.assign({}, o, {entity_id: r.id, targets: window.CIW_CLASSIFICATION ? window.CIW_CLASSIFICATION.groups(r) : r.targets, frame: [
           o.region === 'china' ? '中国' : '全球', o.indication,
           o.as_of ? '截至 ' + o.as_of : '', o.source_label || o.source_kind
         ].filter(Boolean).join(' · ')});
@@ -274,7 +274,7 @@
       })});
     if (el('landscape-count')) el('landscape-count').textContent = rows.length + ' / ' + all.length + ' 个药物 · 全球阶段 ' +
       count(observations.filter(function (o) { return o.region === 'global'; })) + ' · 中国阶段 ' +
-      count(observations.filter(function (o) { return o.region === 'china'; })) + ' · 靶点与阶段 ' + count(eligible);
+      count(observations.filter(function (o) { return o.region === 'china'; })) + ' · ' + (window.CIW_CLASSIFICATION ? window.CIW_CLASSIFICATION.title() : '靶点') + '与阶段 ' + count(eligible);
   }
   if (D.landscape) updateLandscapeQuery(null);
   function resultTooltip(p) {
@@ -500,6 +500,7 @@
       var q = inp.value.trim().toLowerCase(), category = table.id === "tbl-a" && el("competition-class");
       table.querySelectorAll("tbody tr").forEach(function (tr) {
         var matched = !q || tr.textContent.toLowerCase().indexOf(q) >= 0;
+        if (table.id === 'tbl-a' && window.CIW_CLASSIFICATION) matched = matched && window.CIW_CLASSIFICATION.matches(tr.dataset.entityId);
         if (category && category.value !== "all") matched = matched && tr.dataset.competitionClass === category.value;
         tr.style.display = matched ? "" : "none";
       });

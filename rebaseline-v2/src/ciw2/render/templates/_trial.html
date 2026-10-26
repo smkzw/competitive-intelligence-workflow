@@ -10,7 +10,7 @@
 {% set state.facts=state.facts+[item.fact_id] %}<div data-fact-id="{{ item.fact_id }}">
 {% set role=item.role or (item.field|registry_label('profile_field') if item.field else '') %}
 {% if role %}<span class="muted">{{ role }}</span> {% endif %}
-{% if item.field=='identity.registration_class' %}{{ item.context.drug_type }} · {{ item.value }}类<div>申请类型：{{ item.context.application_type }} · 承办日期：{{ item.context.handled_date_text }}</div><div class="muted">原记录企业：{{ item.context.company_text }}</div>{% elif item.field=='identity.modality' %}{{ item.value|registry_label('drug_modality') }}{% else %}{{ item.value or item.name }}{% endif %}
+{% if item.field=='identity.registration_class' %}{{ item.context.drug_type }} · {{ item.value }}类<div>申请类型：{{ item.context.application_type }} · 承办日期：{{ item.context.handled_date_text }}</div><div class="muted">原记录企业：{{ item.context.company_text }}</div>{% elif item.field=='identity.modality' and item.role!='历史分类原文' %}{{ item.value|registry_label('drug_modality') }}{% elif item.field=='identity.mechanism_class' and item.role!='历史分类原文' %}{{ item.value|registry_label('mechanism_class') }}{% else %}{{ item.value or item.name }}{% endif %}
 {% if item.field and item.field.endswith('.development') and item.context.indication %}<span class="muted"> · {{ item.context.indication }}{% if item.source_kind %} · {{ item.source_kind|registry_label('source_kind') }}{% endif %}</span>{% endif %}
 {% set as_of=item.as_of or (item.context.as_of if item.context else none) %}{% if as_of %}<span class="muted"> · 截至 {{ as_of }}</span>{% endif %}
 {% if item.legal_entity %}<div>持有人法律实体：{{ item.legal_entity }}</div>{% endif %}
