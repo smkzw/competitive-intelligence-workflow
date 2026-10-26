@@ -999,3 +999,12 @@ f96fa686537562bcd561c2afd9cf2c11f3b32108已白名单22文件提交、push并ls-r
 153实屏20态已终态：四宽默认39表ID=39绘点，all602，筛后13=13/all202；实际ECharts convertToPixel+原生鼠标点击四宽均焦点落精确fact行。另domainall/scopeall实际668/668、末原记录可达；0模型/源/原DB写入。owner看1440实际成图/配对表后发现新select原生13.3333px，复用既有filter类而不造CSS；最终另四宽18px/全668/当前39/无横溢。未重跑无变化的20行为链，保留前帧与font纠正记录。
 
 154新稳定一次门2030PASS14.93s/Ruff/253Python600/80/17JS/403输入不变，manifest9a1e6de21581eae91b03609be97eca525560e07208be9f53205a4e5ea187a183；155122运行时1953701bytes、manifest881bf03ef61335f60c7a81e36fcb317c993d2347372c3c3bffcf31fc88a0dcbe，无新venv/测试/全文/日志副本、135未热改。公开摘要20261026-result-figure-table-query.json与一张最终1440截图。前151/152/原独立审阅输入不改为新通过；独立视觉缺凭据仍NOT_RUN。下一步当前版本安装/恢复组件和135普通来源链继续。
+
+
+23ba6349027ae1bdfa9ddb0268d0b449ea051af2已推并ls-remote核字面，287代码/Skill/测试逐SHA同154，元数据更新无重复宽门。157从155122文件+154已核README在独立build-source离线构建、一个新专用venv0下载安装；原初launcher误指向旧64audit文件，存在断言阻止写，build/venv/install已成功全部保留，沿同157生成新155脚本完成审计，无重建/重装。wheel1705f972d258421ff78f95b2fb3b5c5dba98f38c34267ce26d50b72cb20a1e83、sdist3a6029ee1985ecba72598bf17eeae56b6101473b8589efc9eefa974b406c9c9e，实际隔离cwd -I模块+25资产+9Skill+CLI同字节，错误显式Skill路径exit2不造数据。当前包标准B恢复708事实/668ID完整；缺失/篡改HTML重建、完好mtime不变、同版回调0/无重复，旧legacy0回调/源/模型拒绝；仅一个旧工具身份变更controlled-intake回调，非普通M1/PNH全链或科学接受。
+
+资源复盘：仅替代已被157接受且ps/lsof无引用的旧64专用venv。初dryrun意外uv .lock停下未删，随后核它是正常0byte regularfile、无使用引用，单独decision后精准退役1868文件28008328逻辑bytes。old64依赖pins、wheel/sdist/source-binding/receipt SHA保留不变，DB/CAS/backup/原记录不删，135根.venv和149预览不动，不碰Codex会话/历史或中文根。APFS物理释放未测，不夸称实际回收磁盘28MB。
+
+158新根因选择direct：确定性lifecycle状态一行已足、无独立写集或医学解释，不加worker/会商。只读源码核原execute初始化pending后实际fn期间未标running，工作台真实长阶段因此不能显示当前阶段。生产回调内GET三结局族最初2FAIL1PASS，发现失败结局会吞掉内部测试断言，外部增同一必需running断言后合法3RED；入口绑定/取消检查后仅调用既有db.set_stage(running)。首关联命令误写不存在test_stage_runtime.py，0tests NOT_RUN，按rg真实文件修正后74相关PASS2.75s/Ruff。无新状态schema、假百分比或ETA；成功/失败/安全取消开始/结束和执行中当前阶段均实核。
+
+158另外分别用真实固定155与当前源加载13个完整C stage_binding（代码/Skill/schema/tools/模型合同同一无模型探针）逐SHA全同，0DB/CAS/网络/模型/回执写。metadata修复不改变临床阶段资格，不为这一行重跑上游。157仍只安装155，158全仓门与新包待下一稳定候选，历史154/155不追改或借为新PASS；135旧134不热改，退出仍等原生7686。公开精简摘要20261026-installed155-and-stage-progress.json。

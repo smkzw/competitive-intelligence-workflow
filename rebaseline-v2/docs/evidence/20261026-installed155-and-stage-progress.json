@@ -1,0 +1,67 @@
+{
+  "scope": "FROZEN155_INSTALL_RESTORE_AND_CURRENT_STAGE_METADATA_FIX_SEPARATE_ACCEPTANCE_SCOPES",
+  "installed_candidate": {
+    "source_manifest_sha256": "881bf03ef61335f60c7a81e36fcb317c993d2347372c3c3bffcf31fc88a0dcbe",
+    "wheel_sha256": "1705f972d258421ff78f95b2fb3b5c5dba98f38c34267ce26d50b72cb20a1e83",
+    "sdist_sha256": "3a6029ee1985ecba72598bf17eeae56b6101473b8589efc9eefa974b406c9c9e",
+    "assets": 25,
+    "skills": 9,
+    "external_downloads": 0,
+    "isolated_cwd_imports_and_cli": "PASS",
+    "invalid_explicit_skill_override_exit": 2,
+    "source_model_calls": 0,
+    "standard_B_restore": {
+      "real_facts": 708,
+      "preserved_result_ids": 668,
+      "scientific_tables_unchanged": true,
+      "missing_or_tampered_HTML_rebuilt": true,
+      "unchanged_HTML_not_rewritten": true,
+      "same_runtime_duplicate_versions": false,
+      "controlled_intake_callbacks": 1,
+      "ordinary_pipeline_restore": false
+    },
+    "legacy_refusal": "No callback/model/source, historical source/stage/agent/science preserved",
+    "preparation_failure": "Initial audit filename collided with historical64; assertion prevented write. Reused same existing build/venv/offline install, did not rerun completed work."
+  },
+  "cleanup": {
+    "scope": "Exact obsolete owned64 venv only after157 accepted",
+    "logical_bytes_retired": 28008328,
+    "physical_free_space_measured": false,
+    "live_process_or_open_file_references": 0,
+    "initial_dry_run": "Stopped on unexpected .lock; separately verified it was regular zero-byte uv metadata before apply.",
+    "pins_old_wheel_sdist_source_binding_and_receipts": "PRESERVED_UNCHANGED",
+    "database_CAS_raw_evidence_cache_history_current_venv_or_Chinese_root": "NOT_TOUCHED"
+  },
+  "current158": {
+    "root_cause": "Runner reset stages pending but never marked active callback running; workbench could not name actual current stage.",
+    "change": "One existing set_stage(running) call immediately before callback, after runtime binding and cancellation check. No new schema or progress estimate.",
+    "RED": "Initial2fail1pass exposed a masked assertion in intended failing callback; explicit outside-callback running assertion then3FAIL. Original logs retained.",
+    "related": "74PASS2.75s/Ruff; success/failure/cooperative cancel read actual progress through GET during callback",
+    "preparation": "First attempted related command named nonexistent test_stage_runtime.py; no tests ran. Correct file inventory then actual related run; not counted PASS.",
+    "source_binding_comparison": {
+      "scope": "ACTUAL_CODE_SKILL_SCHEMA_TOOL_BINDINGS_MATCH155_NO_DB_NO_NETWORK_NO_MODEL",
+      "stages": 13,
+      "equal": true,
+      "digests": {
+        "intake": "18433f4e7636f4481681c37fedccac0948b552a93248db9368181c0e1c1f8ed3",
+        "universe_china": "860ed93d538b8fead77724cb53a31bc6e91abf81a83dd5b23c9102639849b10f",
+        "universe_global": "ebcd59daeb44a05c53ccbc24ca9c0e24842923064bc7ea2fdf2036db3f8c62bb",
+        "candidate_triage": "26dd155eaf96e3d3e7a0af24464b105c2cc1d37e729803512cb0c3d5fbd73258",
+        "universe_expand": "3a530af905a0d252f2849b1ff6651f1ee31bbe4c6d15b38997b8a957a87cc6ad",
+        "coverage_review": "997927caeaf2bc74939c0704734b89cc98f4f525546d49841b685d4a61bbb8d8",
+        "trial_evidence": "e931b0068afbb4f5a9d813ab40bfd1deabcb0cada575763afb6dac1bd7a277ea",
+        "trial_scope_review": "7df9edec8be96d7690e007ff6135f0ccaec1561e93a87ebed7585334b41a9aba",
+        "enrich_drugs": "951a1a2be6d491925cb16e3f3fe856ed99dee1f3b595dc271ed4538b2d34804d",
+        "extract_design": "b1a1f63bfb7b8b271f60ec86c64c62ed928f0c0ea6f1b65238ee9a1dc5e718bc",
+        "verify": "29777b5c30a7876ee2d3b2e15d6042c0afcb334b3794ff5d37ff7cf1e892dcb4",
+        "analysis_C": "e135c5ff543fb0bea8e563e34531779eb00d430caba2b241887662151111b2b9",
+        "render": "cf30fc50021f29822346d6780fdf8a7f414a706d098082f5ba8a293487bfa0fc"
+      },
+      "calls_or_state_writes": 0
+    },
+    "full_gate_after158": "NOT_RUN_YET_NEXT_STABLE_CANDIDATE",
+    "installed157_contains158": "NO_INSTALLED155_ONLY",
+    "ordinary135_hot_changed": false
+  },
+  "acceptance_limits": "Independent visual still NOT_RUN missing credentials; ordinary135 fullC/qualified final narrative/reference95%/cross-study B and fullM1-M6 remain incomplete."
+}

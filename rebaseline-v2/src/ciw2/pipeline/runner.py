@@ -78,6 +78,7 @@ def execute(rc: RunContext) -> str:
             predecessors = [item.name for item in plan[:index]]
             binding = stage_versions.stage_binding(rc, st, predecessors)
             rc.check_cancelled()
+            rc.db.set_stage(rc.run_id, st.name, 'running')
             out = st.fn(rc)
             complete_stage(rc, st, out, predecessors, expected_binding=binding)
         except RunCancelled as exc:
