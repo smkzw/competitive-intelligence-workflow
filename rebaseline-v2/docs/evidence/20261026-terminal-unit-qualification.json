@@ -1,0 +1,75 @@
+{
+  "scope": "OWNER_VERIFIED_MECHANICAL_INDEX_NOT_SCIENTIFIC_OR_LEGACY_MIGRATION_ACCEPTANCE",
+  "base_commit": "1b27b96b",
+  "execution": {
+    "requested": "pi/cursor/default",
+    "runtime_identity": {
+      "requested": "cursor/default",
+      "observed": [
+        "cursor/default"
+      ],
+      "current": "cursor/default"
+    },
+    "underlying_model_effort": "UNKNOWN_DEFAULT_SELECTOR",
+    "session_id": "01a177c9-8855-7000-b42f-55735ea6164d",
+    "returncode": 0,
+    "duration_seconds": 827.636,
+    "tool_calls": 355,
+    "fallback": null
+  },
+  "inputs_unchanged": 78,
+  "backup_db_sha256": "6061bfb8304d3ca2cf101199c0954cbaa723ce646a96c253d6234c91650923a9",
+  "stage_rows": 792,
+  "succeeded_stage_rows": 786,
+  "extraction_units": 40,
+  "extraction_units_by_skill": {
+    "extract-design": 18,
+    "extract-results": 22
+  },
+  "old_key_match": 40,
+  "current_source_get_unit_checks": {
+    "pass": 32,
+    "miss": 8,
+    "cause": "source version changes; not CAS byte corruption"
+  },
+  "source_checks": {
+    "result_source_envelopes": 757,
+    "unique_stored_versions": 1372,
+    "absent_url_observations": 182,
+    "version_differences": 20,
+    "same_bytes_new_row": 11,
+    "changed_bytes": 9,
+    "hash_mismatches": 0
+  },
+  "unresolved_fact_source_envelope_units": [
+    "extraction:extract-design:740cc091c52e0db4f258be19cccd9fe6227969e8dc37fa1f35d8fbdcce43b960"
+  ],
+  "current_key_or_scientific_migration_authorised": false,
+  "past_settings_model": "glm-5.3-flash key reconstruction; not actual provider model proof",
+  "max_agent_steps_current_candidate": "24 only labeled assumption, not adopted key",
+  "whole_run_events_not_units": {
+    "model": 965,
+    "cache": 546,
+    "ordinary135_child_model": 837,
+    "ordinary135_child_cache": 538
+  },
+  "owner_structure_repair": {
+    "build_index.py": {
+      "sha256": "ce1781a20bbde618928e48a53ed1f7c672af8670b050154b3d67e3986cc47949",
+      "lines": 479,
+      "max_function_lines": 75
+    },
+    "qualification_helpers.py": {
+      "sha256": "c208810602e57184f1dc2e98d433e96d41134ede0bbab21ae321067dfe23fe67",
+      "lines": 470,
+      "max_function_lines": 45
+    }
+  },
+  "output_hashes": {
+    "old-key-recompute.json": "52b8752759ac1ac38be30f98aa5c8b70b8ebde8f0383fe7d8cbb293c2ec49ddf",
+    "unit-index.json": "878cf9e9fa964f2cbd86bfac0adb752384e661ba87e261d354ed3ebdcc7dbf34",
+    "unit-index.md": "90132cbb22d72739c758af483ea6dd5f58de0a475435e50c58ddbf3f3dd702ff"
+  },
+  "no_new_product_gate_or_models_sources_replayed": true,
+  "next": "Independent source/Skill-delta review, inspect8source-version misses and1fact-source gap, preserve original facts/proposals, then controlled ordinary continuation without whole research replay."
+}

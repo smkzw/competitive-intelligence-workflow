@@ -1124,3 +1124,18 @@ PRD/Plan/STATUS/Trellis和public20261026-b-shared-arm-reading.json+两图留档�
 197已核原151批output SHA/780要点原输入与134120runtime文件均不变。标准create_backup终态937文件=DB+936源CAS，DB integrity真ok；另397 agent_step_payload CAS逐SHA后硬链接保全，标准restore不会自动补这些载荷，terminal-summary.json给精确映射，不原地改CAS。before/stop/graceful/goal-active/resume-authority/terminal-summary均保留；RECOVERY_20261026_TABLE_DENSITY.md是恢复证据入口非另一产品权威。未重写旧1319源、旧unitkey或医学接受。
 
 下一owner有界任务：197只读终态全量索引旧单位，分开实际输入/tool/Skill/来源表示/科学语义资格；185的22/305绿不扩到整个终态，也不自动改签。当前195纳139登记修复及永久授权Ego实际空间后，准备一次新的普通Service续接，不运行带started断言的start135、不双跑/重跑151。189独立属性review仍capacity/0意见，无活runner；在真实资格/容量新边界按现行路由复核。GoalACTIVE，M1–M6未全部交付，当前不设阶段暂停点。
+
+
+## 2026-10-26 198终态旧单位机械资格执行已启
+1b27b96b已推、193/恢复稳定批已收。选择execution：786成功stage含缓存/前置，终态大集合的确定性索引与owner科学语义/恢复决策可分离，独立只读写集实质减负；一worker、不加会商/管理层。guard真实初始化ciw2-terminal-units-20261026、完整context/allowedread/write/budget78输入pin、preflight PASS才派。实时E03批准Pi/cursor/default→CodeBuddy/deepseek-v4.1-flash:max→Pi/openai-codex/gpt-6-luna:max，default底层模型/effort未知，不冒称具体验证。runner75188/原生7620实际Popen并精确ps确认启动；这只证明runner启动，不等于已完成模型session或有效报告。
+
+198仅读197固定DB/CAS、134/195/current已列定义/Skills、185参考，不读原82liveDB/环境凭据/Agent历史/旧中文/v1；必要get_unit只能memory因其会写cache事件。只写ciw-data/terminal-unit-qualification-20261026-198小脚本/JSON，不迁key/采用/改源/源获取/模型研究/安装/Git/子派。24turn/1800s TOTAL，与声明备用共享预算，返回runner管理报告。owner保留医学语义/缓存改签与普通续接权；机构源/输入/当前表示/可执行合同分开报告，UNKNOWN不冒充MATCH。等退出或硬边界，不固定轮询进度/重派。STATUS已有准确pending入口；未接受输出，不启动重复普通研究。
+
+
+198已真实返回并核验：controller834.25s，实际Pi/cursor/default session01a177c9-8855-7000-b42f-55735ea6164d/827.636s/355tools/0fallback/return0，default底层model/effort仍未知。单kernelNOTE_EXIT等待712.787s，期间无阶段/文件进度轮询或重派，原生7620/51751已收；不是初始化冒称执行。guard audit-execution补必需task-type后PASS，parentreview首缺Boundary字样失败，补实际边界后review-gate PASS，原过程不冒称早已通过。
+
+owner完整读903行索引并核实际DB唯一run，独立SQL40抽取/唯一trace、78pins/DBSHA6061bfb8…23a9不变。成功阶段786不等40抽取；757来源envelope含566expansion/79ingestion/72scope/40extraction。40旧键全真匹配（设置GLM，不等实际route），22身份/18设计；32current get_unit source-only真、8因versionmiss。20依赖版本差11同字节新row/9变字节，182absentURL观察不是损坏/零结果；1设计740cc091…来源引用不在envelope未接受闭合。全run965model/546cache与135child837/538范围不同，均不是unit数。currentmax24仅条件候选，科学同义/迁键未授权。
+
+worker脚本903行/main83违反04，原文本/三输出保留；owner只拆离线helper与driver、提取publish、固定根路径、离线子进程不继承无关环境且-B，去等价死分支。两可运行文件479/470行、最大函数75/45，限定RuffF通过；一次离线重跑old-key-recompute52b875…49ddf、index878cf9…7dbf34、MD90132…2ff全逐字同。产品源码/Skill/科学规则未改、不跑全门。私有三读出命令的语法/相对as_uri错误均未写数据，纠正后实际核，未把失败当通过。355工具/14min生成900行脚本过程过密，后续从封存索引做小切片，避免重探全量；源/CAS/历史不删。
+
+199新C03已初始化/预检PASS，15原始案例去parent status/reason/quote_check裁决，13原源文本实SHA核，当前/134科学定义与真实Skilldelta等36pin。触发理由：显式target/developer源句式与alias/sponsor错误的解释性不确定，机械32绿不足以采用；owner不放宽科学规则。当前offpeak live主路CodeBuddy/deepseek-v4.1-flash:max及声明备选，属实际新可用路由边界，不重复189同失败主路；原189capacity/0意见保留。新context只原源/标准定义，不给执行私有推理；同DeepSeek家族可能参与原提案，独立性是freshsource/context，不保证跨模型。现仅初始化，未冒称模型已派或有效审阅。GoalACTIVE、M1–M6未全交付，普通135未重复启动。

@@ -13,6 +13,8 @@
 |193b B密度组件|当前52bf…a21c，四宽20独立截图/表格开合/键盘+4native glyph定位，源178不改|主身份与角色常显、次级资料折叠、全空组药列随查询收起/恢复；整体阅读/正式身份仍继续|
 |194当前开发门|2151PASS20.09s/Ruff，279Python/23JS/453输入检查期间不变|后置仅元数据核源码SHA，不重复全门；首194失败保留|
 |195/196当前包组件|固定127文件1981753bytes；空target离线wheel/sdist、26资产/9Skills/全部模块/CLI通过|安装渲染同193b实际HTML逐字一致；复用157依赖，未冒充新venv/普通综合恢复|
+|198终态单位资格|runner已返0，827.636s/355工具，Pi/cursor/default底层未知；40旧key精确命中，32现来源检查通过/8版本变更miss|机械索引已核，900行脚本由owner拆为479/470行，三输出逐字同；不当现键/科学/医学采用接受|
+|199独立来源复核|36输入固定/15去父裁决源案例，C03初始化/预检PASS；当前offpeak主路CodeBuddy/deepseek-v4.1-flash:max|尚未派发，不当有效审阅；独立检查来源属性及Skill语义变更，旧189失败保留|
 |189属性独立审阅|15实源冻结；声明Grok/Cursor未建可用会话，Pi/openai-codex/gpt-6.1-sol:high及一次同会话恢复均capacity/0工具/无有效意见|NOT_RUN_PROVIDER_CAPACITY，无活runner；科学property/quote/assessment规则未改，不将placeholder当接受|
 
 ## 本批完成与复盘
@@ -38,12 +40,12 @@
 - 当前开发批基线4db385bc9ccd3c3db6e48235e20773cf7722cf3a，当前/远端HEAD以实际Git命令为准；只提交本批白名单，不纳原始运行产物或未知v1。
 - 194retry gate manifest `76d38dd26a43e30ac1db202698bd3d0e1313b56fe35cdbc226871605b2c4422a`；193当前HTML `52bf539b584e777d4ff4b8fbae3dcdc2d33c492909c9e8104efa4a825a3ba21c`；178DB `f3eb183974ce1b0ea925999b0a325efa054683411600a051773f99b6e260abca`。
 - 195运行manifest `cedb428eb9503d24527976b25036ff9a447f0a33a109ecf7175524c61eb21ea5`；196wheel `61abc79c83c556dbe9f745d6a09b0d6384f560970de0c10eb476e337770f8f7c`，sdist `ff9f0c8ad76cc159f79b15cbf72f836148eb4ae48710d6b9e9cb7f759af35a5a`。旧187/188仅其历史范围，非当前证明。
-- 精简公开证据：`docs/evidence/20261026-b-table-density-and-install.json`及两图、`20261026-b-shared-arm-reading.json`、`20261026-profile-host-identity.json`；本地191–197含真实回执/失败/候选。终态标准备份与Goal/停止/恢复授权清单见197。
+- 精简公开证据：`docs/evidence/20261026-b-table-density-and-install.json`及两图、`20261026-b-shared-arm-reading.json`、`20261026-profile-host-identity.json`；本地191–199含真实回执/失败/候选；198精简公开`20261026-terminal-unit-qualification.json`。终态标准备份与Goal/停止/恢复授权清单见197。
 - 资源：仅退役已被195固定源、196wheel/sdist/安装target替代且逐SHA核的196 build-source，1993482逻辑bytes；无新venv/下载。不清源、DB、CAS、恢复包、测试回执或Agent历史，不声称APFS实际释放量。
 
 ## 未闭合与下一有界任务
 
-1. M1最高优先：在197只读终态核旧unit的实际任务、工具/Skill、来源表示与语义；复用合格完成单元，不盲改签key/重复151批。现行139登记400修复、实际Ego20与来源有效性需纳新恢复合同；未恢复普通任务，不启动第二份同项目。
+1. M1最高优先：198已完成197终态机械索引：792阶段/40抽取单元（22身份18设计），32来源检查真/8因版本变化miss。20版本差异11同字节新row/9变字节，182缺失URL观察不当零结果。1设计unit引用来源未在envelope，必须闭合。当前key与科学语义未接受；199独立复核后才能评估有界保留候选，不能盲改签或重跑151批。现行139登记400修复、实际Ego20与来源有效性需纳新恢复合同；未恢复普通任务，不启动第二份同项目。
 2. M2独立三参照AD127/IgAN57/PNH28仍provisional，唯一核心分母/中国适应症资格未封存。创新药+独立临床改良剂型计核心，生物类似单列；大陆/港澳台分开，中国开发另核。不能以类别/总数/检索零结果断言完成≥95%。
 3. M3真实正式中文名、靶点、MAH→集团/角色、适应症阶段完整性仍待；申办方不当MAH，模糊同名不自动合并。189独立科学复核须有真实有效结果后才关闭解释性判断。
 4. M4独立论文事实、语义近似归并、50critical≥98%及完整医学/视觉未过；176两PMC/四PubMed内容/身份组件继续，不能把DERIVED作主要结果。
