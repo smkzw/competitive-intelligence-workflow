@@ -14,6 +14,7 @@ from __future__ import annotations
 import importlib
 import inspect
 from pathlib import Path
+from types import CodeType
 from typing import Any
 
 from ciw2.pipeline.stage_dependencies import _TOOL_FILES, _TOOL_MODULES
@@ -52,6 +53,36 @@ def _entry_names(rc: Any, module_name: str) -> frozenset[str]:
              or (name in names and getattr(value, '__module__', None) == module_name)))
 
 
+
+def source_helper_digest(fn: Any) -> str:
+    """Summary tools bind their actually named helpers; source acquisition stays explicit.
+
+    Limited to plain CT.gov search/summary code, not a Python dependency engine.
+    Dynamic global lookup or local helper classes keep the conservative module binding.
+    Imported function aliases bind the actual loaded callable as well as declared modules.
+    """
+    digest=_digests();module=importlib.import_module(fn.__module__)
+    pending=[getattr(fn,'__code__',None)];seen=set();entries={}
+    while pending:
+        code=pending.pop()
+        if not isinstance(code,CodeType):return digest.module_digest(module.__name__)
+        if code in seen:continue
+        seen.add(code)
+        pending.extend(value for value in code.co_consts if isinstance(value,CodeType))
+        if {'globals','eval','exec','getattr'} & set(code.co_names):return digest.module_digest(module.__name__)
+        for name in code.co_names:
+            if name in entries:continue
+            value=vars(module).get(name)
+            if inspect.isfunction(value):
+                entries[name]={'function':_implementation(value),'module':value.__module__}
+                if value.__module__==module.__name__:pending.append(value.__code__)
+            elif inspect.isclass(value) and value.__module__==module.__name__:
+                return digest.module_digest(module.__name__)
+            elif name.isupper():
+                payload=digest._constant_payload(value)
+                if payload is not None:entries[name]={'constant':payload}
+    return digest._digest(entries)
+
 def tool_binding(rc: Any, name: str) -> dict[str, Any]:
     """Bind one whitelisted tool; sibling tool entry points stay out."""
     try:
@@ -67,8 +98,9 @@ def tool_binding(rc: Any, name: str) -> dict[str, Any]:
         'schema': digest._digest(tool.schema()),
         'implementation': _implementation(tool.fn),
         'module': module_name,
-        'helpers': digest.module_digest_excluding(
-            module_name, _entry_names(rc, module_name)) if module_name else None,
+        'helpers': (source_helper_digest(tool.fn) if name in {'ctgov_search','ctgov_get'}
+                    and module_name=='ciw2.sources.ctgov' else digest.module_digest_excluding(
+                        module_name,_entry_names(rc,module_name))) if module_name else None,
         'dependencies': [[module, digest.module_digest(module)] for module in dependencies],
         'files': {'components': list(files),
                   'digest': digest.package_files_digest(_PACKAGE_ROOT, files)}

@@ -175,6 +175,8 @@ _STAGE_SKILLS: dict[str, tuple[str, ...]] = {
 }
 
 _TOOL_MODULES: dict[str, tuple[str, ...]] = {
+    'ctgov_search': ('ciw2.sources.http','ciw2.domain.identity'),
+    'ctgov_get': ('ciw2.sources.http','ciw2.domain.identity'),
     'china_registry_search': (
         'ciw2.sources.china_browser',
         'ciw2.sources.cde_browser',

@@ -13,15 +13,16 @@ from ciw2.domain.identity import CODE_HASH as IDENTITY_HASH
 from ciw2.domain.identity import name_key, research_aliases
 from ciw2.domain.models import UniverseResult
 from ciw2.harness.agent import HARNESS_RULES
+from ciw2.pipeline import tool_versions
 from ciw2.pipeline.context import IncompleteWork, RunContext, work_limit
 from ciw2.pipeline.queries import intake_data
 from ciw2.pipeline.recovery import fingerprint, get_unit, put_unit
-from ciw2.sources import cde_browser, china, ctgov, websearch
+from ciw2.sources import cde_browser, china, websearch
 from ciw2.sources.china_browser import CODE_HASH as CHINA_BROWSER_HASH
 from ciw2.sources.http import FetchError
 
 CODE_HASH = hashlib.sha256(Path(__file__).read_bytes() + IDENTITY_HASH.encode() +
-    ctgov.EXTRACTOR_VERSION.encode() + Path(china.__file__).read_bytes() +
+    Path(china.__file__).read_bytes() +
     Path(websearch.__file__).read_bytes() + CHINA_BROWSER_HASH.encode() + cde_browser.code_hash().encode()).hexdigest()
 
 
@@ -95,7 +96,7 @@ def _source_shape(query: dict[str, Any], result: dict[str, Any]) -> bool:
 
 def _source(rc: RunContext, query: dict[str, Any], admitted: bool) -> tuple[dict[str, Any], str]:
     key = 'expansion_source:' + fingerprint({'arguments': query['arguments'], 'tool': query['tool'],
-        'code': CODE_HASH, 'search_provider': rc.settings.websearch_provider,
+        'code': CODE_HASH, 'tool_contract':tool_versions.tool_binding(rc,query['tool']), 'search_provider': rc.settings.websearch_provider,
         'china_browser_space':rc.settings.china_ego_space_id if query.get('registry') in {'chinadrugtrials','cde'} else None})
     cached = get_unit(rc, key)
     if cached is not None:

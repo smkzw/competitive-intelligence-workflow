@@ -1,0 +1,67 @@
+{
+  "scope": "BOUNDED_BACKEND_DEPENDENCY_FIX_AND_NOT_YET_ACTIVATED_RECOVERY_CANDIDATE",
+  "base_commit": "67d3e8e54689ad4da9215962ac69b3e029f26fd2",
+  "source_files": {
+    "src/ciw2/pipeline/tool_versions.py": "8599666043ea6bd24c43aea04ae48774177b9c9bc024e64f0f57b1a12cf50c30",
+    "src/ciw2/pipeline/stage_dependencies.py": "bffa2fef24c515798938f8efb43d5b25c4f7531039b5fd40e859e2b13cba30ba",
+    "src/ciw2/pipeline/expansion.py": "521ec2cd6635582ad440af0628d9a01b61ecd759e5de6b7b643042b88f3d51a2",
+    "tests/test_ctgov_dependency_scope.py": "1ba933656f642973444e2135a89da9decb3e4d407ab4c3dcc76c0dc6c0a3209d"
+  },
+  "root_red": {
+    "failed": 5,
+    "passed": 6
+  },
+  "related": {
+    "passed": 106,
+    "seconds": 2.91
+  },
+  "development_gate": {
+    "passed": 2232,
+    "seconds": 35.18,
+    "ruff": "PASS",
+    "python_files": 283,
+    "javascript_files": 25,
+    "checked_inputs": 468,
+    "manifest_sha256": "833b3f973b0e7d72a1b89083af23395578bc71b50bb2c3fc830772d52a6f42bf"
+  },
+  "qualification_operation_guards": {
+    "passed": 10,
+    "seconds": 1.65,
+    "red_before_implementation": false
+  },
+  "historical_runtime_prefix_bindings_reproduced": 7,
+  "historical_runtime_files_verified": 120,
+  "ram_only_qualification_receipts": 3,
+  "qualification_is_execution": false,
+  "ram_restart_stage": "trial_evidence",
+  "old_extraction_keys_migrated": 0,
+  "source_database_sha256": "6061bfb8304d3ca2cf101199c0954cbaa723ce646a96c253d6234c91650923a9",
+  "preserved_recovery_copy": {
+    "source_cas": 936,
+    "event_cas": 397,
+    "database_unchanged_before_qualification": true,
+    "ordinary_service_started": false
+  },
+  "independent_review": {
+    "primary": "zcode/zcode/GLM-5.3-Flash:max",
+    "primary_status": "TERMINAL_ENVIRONMENT_FAILURE_NO_SESSION_OR_OPINION",
+    "first_declared_fallback": "grok/grok-build/grok-4.7:high",
+    "fallback_status": "PENDING"
+  },
+  "actual_model_protocol_check": {
+    "requested": "cms-router/glm-5.3-flash",
+    "actual_response_model": "glm-5.3-flash",
+    "status": "PASS",
+    "seconds": 5.244,
+    "tokens": 208,
+    "fallback_calls": 0,
+    "research_source_calls": 0
+  },
+  "new_frontend_changes": false,
+  "browser_rerun_for_this_backend_fix": "NOT_REQUIRED_FRONTEND_UNCHANGED",
+  "ordinary_research_acceptance": "NOT_RUN",
+  "clinical_acceptance": "NOT_RUN",
+  "M1_complete": false,
+  "release_accepted": false,
+  "recovery_materials": "Local controlled ciw-data/197,203,204,206; not included by Git clone; originals and failed receipts preserved."
+}
