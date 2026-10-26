@@ -1,0 +1,74 @@
+{
+  "scope": "M2_CENDAKIMAB_ORIGINAL_DEVELOPMENT_COMPONENT_NOT_COMPLETE_CORE_QUALIFICATION",
+  "base_commit": "771bc334938a0c3145466795eae829d6e3b64ac8",
+  "reference_ids": [
+    "AD-012",
+    "AD-098"
+  ],
+  "existing_molecule_identity_bridge_reused": true,
+  "positive_component": "Original investigators call RPC4046 a novel antibody; sponsor AD protocol links former code RPC4046 to CC-93538; EoE protocol gives cendakimab as its nonproprietary name.",
+  "sources": [
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28455782/",
+      "doi": "10.1007/s12325-017-0525-8",
+      "extent": "original research abstract",
+      "quote": "RPC4046 is a novel anti-IL-13 antibody",
+      "xml_sha256": "32b58e40fd11bb79d93542c29168ecb16c5df894cbf18bd6e968331a5cb6a580"
+    },
+    {
+      "url": "https://cdn.clinicaltrials.gov/large-docs/15/NCT04800315/Prot_SAP_000.pdf",
+      "pdf_sha256": "3dcc48187aad54d9205d727ff79e8b1900decbec7a0392c2f9370d44bf00cc0f",
+      "pdf_page": 40,
+      "role": "exact former-code statement; other fragmented pages not adopted"
+    },
+    {
+      "url": "https://cdn.clinicaltrials.gov/large-docs/97/NCT04753697/Prot_SAP_000.pdf",
+      "pdf_sha256": "e16965225410c32993253c2b72210cb9f96c7f9cee0de28a075b2b5a059c89c4",
+      "pdf_page": 33,
+      "role": "exact cendakimab/CC-93538 name; EoE numeric outcomes not adopted as AD"
+    }
+  ],
+  "native_acquisitions": {
+    "official_protocol_PDFs": 2,
+    "PubMed_XML": 1,
+    "model_calls": 0,
+    "browser_calls": 0
+  },
+  "verification": {
+    "scope": "EXACT_PRIMARY_SOURCE_CLAIMS_AND_VERSIONED_LIST_INTEGRITY_NOT_DENOMINATOR_ACCEPTANCE",
+    "claims_checked": [
+      "RPC4046-CC93538",
+      "CENDAKIMAB-CC93538",
+      "RPC4046-ORIGINAL",
+      "CHINA-CANDIDATE"
+    ],
+    "all_source_hashes_and_locators_match": true,
+    "three_root_original_lists_unchanged": true,
+    "three_identity_revision_lists_unchanged": true,
+    "original_bulk_registry_unchanged": true,
+    "initial_check_correction": "owner12 basenames refer to identity-revision-01; initial root-draft comparison mismatched namespaces. Both distinct versions verified unchanged against their own manifests; no old hash rewritten.",
+    "source_qualification_sha256": "fb5c281a86d565cb3344a25dbf3136b47d5b71d520d5005941fe7b4d0a5b8d51",
+    "model_calls": 0,
+    "browser_calls": 0,
+    "production_DB_writes": 0,
+    "source_manifest_sha256": "7782cbf71fca0d138839f0b789db85f0c01ec3dd7464be35ba18876929da5c54",
+    "ad_native_text_quality": "Some pages have fragmented font spacing. Only legible unique page40 code relationship used; remaining AD PDF content not adopted.",
+    "excluded_inference": "EoE novel-treatment phrase alone is not molecular innovation evidence; original research novelty plus explicit former-code bridge supply it."
+  },
+  "conflicts_preserved": {
+    "registry_alias": "RPC4064",
+    "protocol_alias": "RPC4046",
+    "not_silently_corrected": true,
+    "country_China_rows": 4,
+    "country_city_postcode_conflict_already_known": true,
+    "not_accepted_as_mainland_clinical_development": true
+  },
+  "China_program": "Original official list has CTR20222885/Cendakimab injection/AD-program healthy-volunteer PK; exact applicant/originator product binding pending.",
+  "next": "Read exact CTR20222885 details/applicant after shared browser is free. Reuse molecule identity and original-research source; do not repeat broad discovery.",
+  "core_denominator_sealed": false,
+  "recall_computed": false,
+  "original_lists_changed": false,
+  "production_facts_changed": false,
+  "local_material": "ciw-data/reference-goldens-20261025/owner-cendakimab-209",
+  "manifest_sha256": "fe28c217bdf429a5c011e502da725e4e1edf5b470cf8055aa08c3e43c8e8d885"
+}

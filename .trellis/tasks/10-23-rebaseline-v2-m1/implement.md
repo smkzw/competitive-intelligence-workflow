@@ -1167,3 +1167,8 @@ worker脚本903行/main83违反04，原文本/三输出保留；owner只拆离�
 ## 208｜独立接受后实际普通C续接，不是暂停（ACTIVE）
 205同Grok会话819.475s返回ACCEPT三根因；owner回执/SHA/route/12r2pins实核，14资格/81相关与207整门已绿。owner-review-acceptance.json绑定v3校验器/精确proposal/固定128文件；真实普通Service已调用，三显式资格应用COPY，六发现/范围阶段不重跑。首space30预检失败未让shell中止，owner承认错误并对本人child15926 RunControl SIGTERM安全停止；终态cancelled76.649s，0模型/44真实新源(1319→1363)，6254事实、原197与六前置、冻结代码不变，无SIGKILL，非用户暂停。原生14612收退出1，旧所有句柄不等。新授权Ego32；retry启动内强制Python检查returncode+space/p1，初一次stderr解析导致激活前拒绝保留，修正双流读取，无产品改动/额外宽门。
 实际同副本retry01：native79424，parent17442/child17446，基线event6976，Service完整C从trial_evidence，Ego32/p1，fixed207 runtime eba329f5…daa17。新started/activation/process/service-output后缀retry01；不重跑任何既有start脚本，不另起第二项目，不再次应用固定197资格，不丢44新来源，旧40键不改签。原始197 DB6061…23a9/CAS不写。当前无活会商，只有这份普通研究；保持Goal ACTIVE，等待原生完成事件，不定时读进度/热改冻结。下一真实门：普通终态/具体来源待办及当前C HTML→关键原文/科学/四宽验收；M2–M6仍未完。源代码b6a11a48已推GitHub，本段只更新状态与证据不重跑开发门。
+
+## 209｜Goal续轮分类为progress，并行M2定点核源
+本轮启动实际ps确认17442/17446健康、native79424完成等待仍pending；未因等待超时判失败/重派。M1固定207不改，浏览器32不并用。owner独立补AD012/098原研发正向源，官方2PDF+primary XML、4精确claims校核，原6个版本清单各按自己manifest不变；创新源组件已补，中国具体登记产品归属仍待，详见子任务209与公开source receipt。本轮没有产品源码变动或全仓重测；清理当前STATUS表中过时“待派/待激活”下一动作，原历史在Trellis/Git保留，唯一普通在途仍206 retry01。下一沿79424完成事件接当前报告实际审查，或在不碰共享Ego的前提继续M2资料，不创建阶段暂停点。
+
+210主线并行：按global execution trigger新增一个有实质并行收益的E07源单元，native85131，48turn/1800s六具体AD家族/4既有源pins；不碰源32或生产集。详见M2子任务210，角色/原文/路由已由guard初始化并preflight后实际派发，尚未接受任何输出。未新增管理/会商节点或架构。原C79424完成等候仍pending，不判停，不重跑入口；Goal ACTIVE。

@@ -139,3 +139,14 @@ owner同时完成118–122 typed API缓存根因与1999代码门，125普通C按
 163一次2046PASS16.38s/Ruff/257Python600-80/18JS，411字节输入不变，manifest7f28be3970c6b2a56e3c96374f558073832e45a4465e085f068d12dcda1fc897；仅Starlette已有弃用警告，不为此临时加依赖。164最小124运行时1963261bytes，manifest6d94861db331f5b6023782161220b45dc3b1739d75c216e5fb4ef477d52ad900，无venv/整仓测试副本。165新wheel6d413e23731d9bef27287495cf1850ccb9ff2aa87e5834ebe433c2402202732e、sdistad9c1b7c7d561282ff455e5fe75a25fa5326febc7bc255c6cb1c7bc15238ee61在空target离线安装；复用157只读依赖、不改旧venv，25资产/9Skill/全部module及/tmp隔离CLI入口函数一致，不冒称新venv console安装或普通综合恢复。155→164实际13 C阶段10同，变化只有trial_evidence、analysis_C、render，六发现/范围前置原样；0DB/CAS/网络/模型探针。
 
 当前STATUS69–72行、Plan约73行清除重复历史流水，历史原计划在Git60adf30f和根Trellis完整保留，规范没有另造。纯metadata/公开摘要/截图更新在163后，不借163对更新文档宣称逐SHA同；当前产品源/Skills/测试单独逐SHA与163绑定。下一条有界任务：等135真实kernel退出/边界后保全原普通运行，查实际成本/完整设计/源缺口和最早恢复点；不热改134、不借新组件给旧运行填PASS、不重启发现全集。继续剩余M2产品唯一单位和中国资格，所有M1–M6未过仍active/non-RC。
+
+## 209｜原研发正向来源补件（2026-10-26，M2仍在执行）
+方式 direct：原始论文明确新研发声明与官方方案显式旧名关系有可决定的原文/页码；本单元不关闭最终中国产品归属/核心分母，不新增一轮全清单会商。
+未读生产AD集合，沿独立参照既有47/17缺口补证。新取得官方AD方案3913471bytes/110页、EoE方案4512753bytes/143页，原始研究PMID28455782官方XML。AD页40明示CC93538曾用RPC4046/ABT308，EoE页33明示CC93538/BMS986355非专利名cendakimab；原始研究明确RPC4046是novel antibody。4条精确引文/xpath/页/字节SHA核过。AD部分字体碎片化，只用清晰且唯一旧名条款，不把搜索引擎的整洁正文冒充实际提取质量。未使用泛称EoE novel treatment作为分子创新单证。
+原登记otherNames=RPC4064保留，与方案RPC4046差异不擅改；原47已指出4个countryChina城市/邮编冲突，不能直接判大陆资格。官方CTR20222885列表支持AD项目健康受试者PK线索，具体申请人/原研产品关系仍待。旧名称桥复用，未把原source list/底层事实改写或将AD012/098计作已封存核心。
+初完整性检查把owner12 manifest的identity-revision basename指根草稿而失败；分别核根manifest3清单与identity-revision3清单均未变，没有修改旧SHA。原始新PDF/XML/清晰quote及自动校核在ciw-data/reference-goldens-20261025/owner-cendakimab-209，complete-manifest.json绑定；精简公开docs/evidence/20261026-cendakimab-reference-source.json。0模型、0浏览器、0生产DB写、无新依赖/venv；本来源批不重跑产品测试。下一只在主C释放共享浏览器后查CTR20222885精确详情；不得重做已闭合原研发/名称来源或冒称完整M2/召回通过。
+
+## 210｜六个既有AD家族并行原研发源补件（已实际派发，非接受）
+方式 execution：六个明确候选的原始来源获取/结构化提取可与主C运行实质并行，资料和写入路径分离、不碰共享浏览器，收益大于一次分派整合成本；owner保留共享身份/分母与最终接受，无新增chair或review节点。
+已按live guard E07 competitive_intelligence/high初始化context/plan/route并填明源与约束，preflight PASS后实际运行批准主路CodeBuddy/codebuddy-cli/deepseek-v4.1-flash:max，native85131；一次48internalturn/1800s，不自动fallback、不固定轮询。尚未取得完成回执，model/effort底层身份不自认。输入six-ad-origin-source-210/inputs.json含6家族+4既有原源pins：9MW1911、BBT001、BGB-45035、CM326、CM512、CMS-D001；不是不存在的CMS-D002第六行。
+worker只能在新six-ad-origin-source-210写原始公开资料、六条qualifications/source-log/manifest/notes，不读生产候选/DB/CAS/报告/Agent轨迹/凭据，不改原参照；不用Ego/GUI/登录/缓存，不干扰M1 space32。先复用同一原源，缺项最多30次定点一手HTTP获取，不扩到全宇宙，不做额外模型服务调用、OCR/翻译、新环境或产品测试。明确创新/原研/独立改良开发正向源，中国资格另核，不能按phase/newdrug/无biosimilar猜core，所有输出均PROVISIONAL_NOT_OWNER_ACCEPTED。主C79424仍是唯一普通研究。下一等当前node实际终态→逐源与产品关系核验，必要时再作一轮有界独立争议审阅，不把pending算成功或因慢重派。
