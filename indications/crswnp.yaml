@@ -29,6 +29,25 @@ china:
   wechat_accounts: [丁香园Insight数据库, 医药魔方Info]
   wechat_queries: [鼻息肉 III期, CRSwNP 获批, 鼻息肉 临床试验 结果]
 
+# 只索引对应原文，不根据关键词推定人群资格或数值。
+design_topics:
+  - label: 鼻息肉评分
+    patterns: ['\bNPS\b', 'polyp.{0,25}score', '鼻息肉.{0,12}评分']
+  - label: 鼻塞评分
+    patterns: ['\bNCS\b', '(?:congestion|obstruction).{0,25}score', '鼻塞.{0,12}评分']
+  - label: 既往手术
+    patterns: ['surger', '手术']
+  - label: 全身激素
+    patterns: ['systemic.{0,20}(?:corticosteroid|steroid)', '全身.{0,10}激素']
+  - label: 合并哮喘
+    patterns: ['asthma', '哮喘']
+  - label: 背景治疗与救援
+    patterns: ['rescue', 'background therap', 'intranasal corticosteroid', '救援', '背景治疗', '鼻用.{0,8}激素']
+  - label: 随机比例
+    patterns: ['randomi.{0,60}ratio', 'ratio.{0,30}\d+\s*:\s*\d+', '随机.{0,30}比例']
+  - label: 给药与治疗期
+    patterns: ['\b(?:mg|mcg|q2w|q4w|weekly|biweekly)\b', '治疗.{0,15}周', '给药']
+
 # 背景/对照/救援治疗：出现在试验里，但不进入竞品宇宙
 background_patterns:
   - placebo

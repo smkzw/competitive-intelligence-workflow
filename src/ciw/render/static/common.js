@@ -20,6 +20,22 @@
     const re = new RegExp("(" + String(query).replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi");
     return original.split(re).map((part, i) => i % 2 ? `<mark>${esc(part)}</mark>` : esc(part)).join("");
   };
+  const annotate = (text, spans, query) => {
+    const original = String(text == null ? "" : text), chars = Array.from(original);
+    const marks = (spans || []).filter(s => Number.isInteger(s.start) && Number.isInteger(s.end) && s.start >= 0 && s.end > s.start && s.end <= chars.length);
+    const hits = [];
+    if (query) {
+      const re = new RegExp(String(query).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+      for (const m of original.matchAll(re)) hits.push({start:Array.from(original.slice(0,m.index)).length,end:Array.from(original.slice(0,m.index+m[0].length)).length});
+    }
+    const edges = [...new Set([0,chars.length,...marks.flatMap(s=>[s.start,s.end]),...hits.flatMap(s=>[s.start,s.end])])].sort((a,b)=>a-b);
+    return edges.slice(0,-1).map((a,i)=>{
+      const b=edges[i+1];let part=esc(chars.slice(a,b).join(""));
+      if(hits.some(s=>s.start<=a&&s.end>=b))part=`<mark>${part}</mark>`;
+      if(marks.some(s=>s.start<=a&&s.end>=b))part=`<strong class="criterion-value">${part}</strong>`;
+      return part;
+    }).join("");
+  };
   const OWN = "#c2410c", PAL = ["#0f4c75", "#3282b8", "#2a9d8f", "#6a4c93", "#e76f51", "#8d99ae", "#bc6c25", "#457b9d", "#588157", "#9d4edd"];
 
   function coverage() {
@@ -46,22 +62,41 @@
         if (sortKey === c.key) asc = !asc; else { sortKey = c.key; asc = true; }
         draw();
       });
-      if (opts.onRow) el.querySelectorAll("tbody tr[data-ri]").forEach((tr) => tr.onclick = (event) => {
-        if (event.target.closest?.("a,button,input,select,textarea,summary,details")) return;
-        opts.onRow(rows[+tr.dataset.ri]);
+      if (opts.onRow) el.querySelectorAll("tbody tr[data-ri]").forEach((tr) => {
+        tr.tabIndex = 0;
+        const open = () => { tr.focus?.(); opts.onRow(rows[+tr.dataset.ri]); };
+        tr.onclick = event => {
+          if (event.target.closest?.("a,button,input,select,textarea,summary,details")) return;
+          open();
+        };
+        tr.onkeydown = event => {
+          if(event.target === tr && ["Enter", " "].includes(event.key)) { event.preventDefault(); open(); }
+        };
       });
     }
     draw();
   }
 
+  let drawerTrigger, drawerFallback;
   function drawer(html) {
+    drawerTrigger = document.activeElement;
+    drawerFallback = drawerTrigger?.closest?.("table");
     const d = document.getElementById("drawer");
     d.querySelector(".drawer-body").innerHTML = html;
+    d.setAttribute("role", "dialog");
+    d.setAttribute("aria-label", d.querySelector("h2")?.textContent || "研究详情");
     d.hidden = false;
     d.querySelector(".close").focus();
   }
-  document.addEventListener("click", (e) => { if (e.target.closest(".drawer .close")) document.getElementById("drawer").hidden = true; });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") document.getElementById("drawer").hidden = true; });
+  function closeDrawer() {
+    const d = document.getElementById("drawer");
+    if(!d || d.hidden) return;
+    d.hidden = true;
+    if(drawerTrigger?.isConnected) drawerTrigger.focus();
+    else if(drawerFallback?.isConnected) { drawerFallback.tabIndex = -1; drawerFallback.focus(); }
+  }
+  document.addEventListener("click", (e) => { if (e.target.closest(".drawer .close")) closeDrawer(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
 
   function chart(id, option) {
     const el = document.getElementById(id);
@@ -83,5 +118,5 @@
   }
 
   coverage();
-  window.U = { D, esc, num, nN, tag, src, highlight, table, drawer, chart, options, OWN, PAL };
+  window.U = { D, esc, num, nN, tag, src, highlight, annotate, table, drawer, chart, options, OWN, PAL };
 })();

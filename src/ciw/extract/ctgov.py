@@ -138,7 +138,7 @@ def extract_trial(study: dict[str, Any], source: Source, cfg: IndicationConfig, 
         countries=countries,
         china=bool(CHINA_COUNTRIES & set(countries)),
         conditions=cond_mod.get("conditions", []),
-        design=_trial_design(design, elig, arms, background),
+        design=_trial_design(design, elig, arms, background, p.get("descriptionModule", {})),
         arms=arms,
         outcomes_planned=outcomes,
         product_ids=product_ids,
@@ -408,10 +408,13 @@ def _planned_outcomes(p, cfg) -> list[PlannedOutcome]:
     return outcomes
 
 
-def _trial_design(design, elig, arms, background) -> Design:
+def _trial_design(design, elig, arms, background, description) -> Design:
     enroll = design.get("enrollmentInfo", {})
     masking = design.get("designInfo", {}).get("maskingInfo", {})
     return Design(
+        brief_summary=description.get("briefSummary", ""),
+        detailed_description=description.get("detailedDescription", ""),
+        model_description=design.get("designInfo", {}).get("interventionModelDescription", ""),
         allocation=design.get("designInfo", {}).get("allocation", ""),
         model=design.get("designInfo", {}).get("interventionModel", ""),
         masking=masking.get("masking", ""),

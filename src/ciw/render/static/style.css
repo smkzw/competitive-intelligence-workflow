@@ -69,6 +69,7 @@ details summary h2 { display: inline; } details summary .count { color: var(--mu
 .drawer pre { white-space: pre-wrap; font: 13px/1.6 inherit; background: #f8fafc; padding: 10px; border-radius: 6px; }
 .drawer dl { display: grid; grid-template-columns: 110px 1fr; gap: 4px 12px; } .drawer dt { color: var(--muted); }
 mark { background: #fff3a3; }
+.criterion-value { color: var(--bad); font-weight: 700; text-decoration: underline; text-underline-offset: .18em; }
 .empty { color: var(--muted); padding: 24px; text-align: center; }
 @media (max-width: 1300px) { .layout-b .row { flex-direction: column; } }
 @media (max-width: 850px) {

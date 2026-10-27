@@ -6,6 +6,7 @@ from collections import Counter
 from typing import Any
 
 from ciw.analyze.common import product_label, role_label
+from ciw.analyze.design_excerpts import design_excerpts, threshold_spans
 from ciw.analyze.landscape import REGISTRY_ZH, STATUS_ZH
 from ciw.config import IndicationConfig
 from ciw.models import Product, Trial
@@ -30,6 +31,7 @@ def _registration(t: Trial) -> dict[str, Any]:
             t.design.enrollment_type, t.design.enrollment_type
         ),
         "eligibility": t.design.eligibility_text,
+        "eligibility_marks": threshold_spans(t.design.eligibility_text),
         "arms": [
             {
                 "label": a.label,
@@ -48,6 +50,9 @@ def _registration(t: Trial) -> dict[str, Any]:
 def build_design(cfg: IndicationConfig, trials: list[Trial], products: dict[str, Product]) -> dict[str, Any]:
     labels = {c.id: c.label for c in cfg.concepts}
     rows = [_design_row(t, products, labels) for t in trials if t.relevance == "core"]
+    for row, trial in zip(rows, (t for t in trials if t.relevance == "core"), strict=True):
+        row["design_excerpts"] = design_excerpts(trial, cfg.design_topics)
+        row["eligibility_marks"] = threshold_spans(trial.design.eligibility_text)
     # 设计参考价值：III（含 II/III）> IV > II > I > 未知；同期别按首例入组时间倒序
     priority = {4: 0, 5: 1, 3: 2, 2: 3, 1: 4, 0: 5}
     rows.sort(key=lambda r: r["start"] or "", reverse=True)

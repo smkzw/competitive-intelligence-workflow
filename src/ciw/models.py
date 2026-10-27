@@ -64,6 +64,9 @@ class Design(Model):
     masking: str = ""
     masked_roles: list[str] = Field(default_factory=list)
     purpose: str = ""
+    brief_summary: str = ""
+    detailed_description: str = ""
+    model_description: str = ""
     enrollment: int | None = None
     enrollment_text: str = ""
     enrollment_type: str = ""

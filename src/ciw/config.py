@@ -67,6 +67,21 @@ class ChinaCfg(_Cfg):
     wechat_queries: list[str] = Field(default_factory=list)
 
 
+class DesignTopicCfg(_Cfg):
+    label: str
+    patterns: list[str]
+
+    @field_validator("patterns")
+    @classmethod
+    def _patterns(cls, values):
+        for pattern in values:
+            try:
+                re.compile(pattern, re.I)
+            except re.error as exc:
+                raise ValueError("design_topics包含无效匹配表达式") from exc
+        return values
+
+
 class IndicationConfig(_Cfg):
     slug: str
     name_zh: str
@@ -78,6 +93,7 @@ class IndicationConfig(_Cfg):
     products: list[ProductCfg]
     background_patterns: list[str] = Field(default_factory=list)
     concepts: list[ConceptCfg] = Field(default_factory=list)
+    design_topics: list[DesignTopicCfg] = Field(default_factory=list)
 
     @field_validator("slug")
     @classmethod

@@ -272,6 +272,7 @@ def _trial_from_detail(
         china=True,
         conditions=[parsed["indication"]],
         design=Design(
+            brief_summary=get("试验目的"),
             allocation=get("随机化"),
             masking=get("盲法"),
             enrollment=int(enroll[0]) if len(enroll) == 1 else None,

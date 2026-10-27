@@ -18,6 +18,7 @@
   }
 
   const ep = (list) => list.map((o) => `${esc(o.concept || o.title)}<span class="hint">${o.timeframe ? "（" + esc(o.timeframe.slice(0, 40)) + "）" : ""}</span>`).join("<br>");
+  const excerpts = r => (r.design_excerpts || []).map(t=>`<details><summary>${esc(t.label)} · ${t.snippets.length}处原文</summary>${t.snippets.map(s=>`<p><span class="hint">${esc(s.section)}</span><br>${window.U.annotate(s.text,s.marks,document.getElementById("q").value.trim())}</p>`).join("")}</details>`).join("");
   const cols = [
     { label: "试验", key: "acronym", html: (r) => `${r.is_own ? '<span class="own-tag">本品 </span>' : ""}${src(r.url, r.acronym || r.trial_id)}<br><span class="hint">${(r.registration_ids || [r.trial_id]).map(esc).join(" / ")}</span>` },
     { label: "产品", html: (r) => r.products.map((p) => (p.is_own ? `<span class="own-tag">${esc(p.label)}</span>` : esc(p.label))).join("、") },
@@ -28,6 +29,7 @@
     { label: "样本量", key: "enrollment", num: true, html: (r) => (r.enrollment == null ? esc(r.enrollment_text || "—") : `${r.enrollment}<span class="hint">${esc(r.enrollment_type)}</span>`) },
     { label: "主要终点（时间）", html: (r) => ep(r.primary) },
     { label: "背景治疗", html: (r) => esc(r.background_therapy.join("；")) },
+    { label: "关键设计原文", html: excerpts },
     { label: "地区", html: (r) => esc(r.country_label || "—") },
     { label: "首例入组", key: "start" },
     { label: "主要完成", key: "primary_completion" },
@@ -41,10 +43,6 @@
   }
   ["q", "f-phase", "f-mask", "f-concept", "f-china"].forEach((id) => document.getElementById(id).addEventListener("input", redraw));
   redraw();
-
-  function highlight(text) {
-    return window.U.highlight(text, document.getElementById("q").value.trim());
-  }
 
   function show(r) {
     drawer(`<h2>${r.products.map(p => esc(p.label)).join(" / ")}${r.phase ? " · " + esc(r.phase) : ""}</h2>
@@ -60,14 +58,15 @@
       ${r.arms.map((a) => `<tr><td>${esc(a.label)}</td><td>${esc(a.role_label)}</td><td>${esc(a.interventions.join("；"))}<br><span class="hint">${esc(a.description)}</span></td></tr>`).join("")}</tbody></table>
       <h3>主要终点</h3><ul>${r.primary.map((o) => `<li>${esc(o.title)}<br><span class="hint">${esc(o.timeframe)}</span></li>`).join("")}</ul>
       <h3>次要终点（${r.secondary.length}）</h3><ul>${r.secondary.map((o) => `<li>${esc(o.title)}<br><span class="hint">${esc(o.timeframe)}</span></li>`).join("")}</ul>
-      <h3>入选与排除标准（原文）</h3><pre>${highlight(r.eligibility || "未公开")}</pre>
+      ${(r.design_excerpts || []).length ? `<h3>关键设计原文</h3>${excerpts(r)}` : ""}
+      <h3>入选与排除标准（原文）</h3><pre>${window.U.annotate(r.eligibility || "—",r.eligibility_marks,document.getElementById("q").value.trim())}</pre>
       ${(r.registrations || []).map(g => `<details><summary>${esc(g.registry)} · ${esc(g.trial_id)}</summary>
         <p>${src(g.url, g.trial_id)} · ${esc(g.phase)} · ${esc(g.status)} · ${esc(g.sponsor)}</p>
         <p>样本量：${g.enrollment == null ? esc(g.enrollment_text || "—") : esc(g.enrollment)} ${esc(g.enrollment_type)}</p>
         <h3>组别与给药</h3><ul>${g.arms.map(a => `<li>${esc(a.label)} · ${esc(a.role_label)} · ${esc(a.interventions.join("；"))}<p>${esc(a.description)}</p></li>`).join("")}</ul>
         <h3>主要终点</h3><ul>${g.primary.map(o => `<li>${esc(o.title)} · ${esc(o.timeframe)}</li>`).join("")}</ul>
         <h3>次要终点</h3><ul>${g.secondary.map(o => `<li>${esc(o.title)} · ${esc(o.timeframe)}</li>`).join("")}</ul>
-        <h3>完整入排</h3><pre>${highlight(g.eligibility)}</pre></details>`).join("")}`);
+        <h3>完整入排</h3><pre>${window.U.annotate(g.eligibility,g.eligibility_marks,document.getElementById("q").value.trim())}</pre></details>`).join("")}`);
   }
 
   // 主要终点构成
