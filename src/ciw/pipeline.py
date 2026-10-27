@@ -96,14 +96,17 @@ def run(
     merged_trials, identity_issues = deduplicate_trials(list(trials.values()))
     trials = {trial.trial_id: trial for trial in merged_trials}
     review_queue.extend(identity_issues)
-    review_queue.extend(enrich_attributes(ws, products, list(trials.values()), resolver, roles))
+    log("[research] attributes")
+    review_queue.extend(enrich_attributes(ws, products, list(trials.values()), resolver, roles, log=log))
 
+    log("[research] publications")
     _add_publications(cfg, ws, resolver, trials, results, roles, offline, review_queue, coverage)
 
     body = _build_body(cfg, ws, products, trials, results, safety, events, review_queue, unclassified, stats, coverage)
     release_id, path = write_release(ws, json.loads(json.dumps(body, default=str)))
     site = None
     if render:
+        log("[research] render")
         from ciw.render.site import render_release
 
         site = render_release(path)

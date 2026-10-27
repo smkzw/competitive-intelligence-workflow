@@ -11,6 +11,10 @@
   <div class="qmain">
     <section class="card">
       <div class="card-h"><h2 id="q-title"></h2><span id="q-sub" class="hint"></span></div>
+      <div class="filters" id="frame-controls">
+        <label id="frame-label">分析口径 <select id="frame-select" aria-label="分析口径"></select></label>
+        <details id="frame-context"><summary>终点定义与分析人群</summary><div id="frame-context-text" class="context-text"></div></details>
+      </div>
       <div class="row">
         <div class="grow" id="comparison-plots"><div id="diff-wrap"><h3>与对照组的差值（试验组−对照组）</h3><div id="diff-chart" class="chart"></div></div>
           <div id="ratio-wrap" hidden><h3>比值（HR / OR 等，对数轴，参考线为 1）</h3><div id="ratio-chart" class="chart"></div></div></div>

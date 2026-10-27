@@ -19,6 +19,7 @@ def enrich_attributes(
     trials: list[Trial],
     resolver: ProductResolver,
     roles: dict[str, Backend] | None,
+    *, log=None,
 ) -> list[dict]:
     if roles is None:
         return []
@@ -26,9 +27,12 @@ def enrich_attributes(
     sources = {s.source_id: s for s in ws.sources()}
     candidates, issues, seen = defaultdict(list), [], set()
     instruction = "只抽取原文明确写出的产品靶点与分子类型；产品名逐字照抄，不凭药名或外部知识推断。"
-    for trial in [r for t in trials for r in (t, *t.registrations)]:
+    entries = [r for t in trials for r in (t, *t.registrations)]
+    for index, trial in enumerate(entries, 1):
         if not (set(trial.product_ids) & missing) or trial.locator.source_id in seen:
             continue
+        if log:
+            log(f"[attributes] {index}/{len(entries)}")
         source = sources[trial.locator.source_id]
         seen.add(source.source_id)
         raw = json.loads(ws.read_source(source.source_id))

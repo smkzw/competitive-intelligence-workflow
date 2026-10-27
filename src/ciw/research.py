@@ -130,7 +130,8 @@ def _queue(ws, lock_path):
 
 def run_research(indication, workspace, *, question="", llm_config=None, log=print, queue_lock=None):
     ws = Workspace(workspace)
-    state = dict(state="queued", pid=os.getpid(), started_at=now_iso(), updated_at=now_iso(), message="等待开始")
+    state = dict(state="queued", pid=os.getpid(), started_at=now_iso(), updated_at=now_iso(), message="等待开始",
+                 execution_token=os.environ.get("CIW_RESEARCH_EXECUTION_TOKEN"))
 
     def progress(message):
         state.update(state="running", message=message, updated_at=now_iso())

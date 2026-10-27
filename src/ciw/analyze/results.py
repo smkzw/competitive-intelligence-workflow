@@ -14,6 +14,7 @@ from typing import Any
 from ciw.analyze.common import pct, product_label, role_label
 from ciw.config import IndicationConfig, normalize_name
 from ciw.models import OutcomeResult, Product, SafetySummary, Trial
+from ciw.normalize.comparison_context import endpoint_context
 from ciw.normalize.semantics import MEASURE_LABEL_ZH
 
 _CFB = re.compile(
@@ -115,6 +116,7 @@ def build_results(
                 "trial_ids": trial_ids,
                 "rows": rows,
                 "comparisons": comps,
+                "frames": _context_frames(rs, c, trials, products),
             }
         )
     questions.sort(
@@ -122,6 +124,25 @@ def build_results(
     )
     return {"questions": questions, "longitudinal": _longitudinal(cfg, trials, products, results),
             "observations": _observations(trials, products, results)}
+
+
+def _context_frames(results, concept, trials, products):
+    contexts = defaultdict(list)
+    for result in results:
+        contexts[endpoint_context(result, concept)].append(result)
+    frames = []
+    for context, rs in sorted(contexts.items()):
+        rows, comps = [], []
+        for r in rs:
+            trial = trials[r.trial_id]
+            rows.extend(_group_row(r, trial, g, products) for g in r.groups
+                        if g.value is not None and g.period == "treatment" and g.role != "other")
+            comps.extend(_comparisons(r, trial, products))
+        frames.append(dict(frame_id="frame_" + hashlib.sha256(repr(context).encode()).hexdigest()[:12],
+                           context_label=context[0], title=rs[0].title, description=rs[0].description,
+                           population=rs[0].population, trial_ids=sorted({r.trial_id for r in rs}),
+                           result_ids=[r.result_id for r in rs], rows=rows, comparisons=comps))
+    return sorted(frames, key=lambda f: (-len(f["trial_ids"]), f["frame_id"]))
 
 
 def _observations(trials, products, results):
@@ -273,7 +294,8 @@ def _longitudinal(
             if g.value is None or g.period != "treatment":
                 continue
             series_key = (t.trial_id, normalize_name(g.title))
-            charts[(r.concept_id, r.measure_kind, _cfb(r), _pct(r), _unit_key(r.unit))][series_key].append(
+            context = endpoint_context(r, next(c for c in cfg.concepts if c.id == r.concept_id))
+            charts[(r.concept_id, r.measure_kind, _cfb(r), _pct(r), _unit_key(r.unit), context)][series_key].append(
                 {
                     "weeks": r.time.weeks,
                     "label": r.time.label,
@@ -290,7 +312,7 @@ def _longitudinal(
                 }
             )
     out = []
-    for (cid, kind, cfb, pctc, unit), series in charts.items():
+    for (cid, kind, cfb, pctc, unit, context), series in charts.items():
         lines = []
         for (tid, _), pts in series.items():
             by_week: dict[float, list] = defaultdict(list)
@@ -317,7 +339,8 @@ def _longitudinal(
         if lines:
             out.append(
                 {
-                    "chart_id": f"l_{cid}_{kind}_{int(cfb)}{int(pctc)}_{hashlib.sha256(unit.encode()).hexdigest()[:6]}",
+                    "chart_id": f"l_{cid}_{kind}_{int(cfb)}{int(pctc)}_"
+                    + hashlib.sha256(repr((unit, context)).encode()).hexdigest()[:10],
                     "concept_id": cid,
                     "label": _label(labels[cid], cfb, pctc, kind),
                     "measure_label": MEASURE_LABEL_ZH.get(kind, kind),

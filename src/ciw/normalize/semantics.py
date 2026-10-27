@@ -8,7 +8,9 @@ from ciw.config import IndicationConfig
 from ciw.models import TimePoint
 
 # ---------- 时间点 ----------
-_WEEK_LIST = re.compile(r"weeks?\s*(\d+(?:\s*(?:,|,?\s*and)\s*\d+)+)", re.I)
+_WEEK_LIST = re.compile(
+    r"weeks?\s*(\d+(?:\s*(?:,\s*(?:and\s+)?|and\s+)(?:weeks?\s*)?\d+)+)", re.I
+)
 _WEEK = re.compile(r"weeks?\s*(\d+(?:\.\d+)?)(?:\s*(?:to|-|–|through)\s*(?:weeks?\s*)?(\d+(?:\.\d+)?))?", re.I)
 _DAY = re.compile(r"days?\s*(\d+)(?:\s*(?:to|-|–|through)\s*(?:days?\s*)?(\d+))?", re.I)
 _MONTH = re.compile(r"months?\s*(\d+)", re.I)
@@ -152,7 +154,7 @@ def concept_of(title: str, cfg: IndicationConfig) -> str | None:
 
 # ---------- 亚组 ----------
 _SUBGROUP = re.compile(
-    r"(?:[:：,]\s*)?(sub-?group[^;]*|\b(?:in|among)\s+(?:participants|patients|subjects)\s+(?:with|who|without|aged|having)\b.*)$",
+    r"(?:[:：,]\s*)?(sub-?group[^;]*|\b(?:in|among)\s+(?:participants|patients|subjects)\s+(?:with|who|without|aged|having|in)\b.*)$",
     re.I,
 )
 

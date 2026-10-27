@@ -4,15 +4,16 @@
   const B = D.b;
   const qs = B.questions;
   let current = null;
+  const selectedFrames = new Map();
 
   function listQuestions() {
     const q = document.getElementById("qsearch").value.trim().toLowerCase();
     const prim = document.getElementById("only-primary").checked;
-    const items = qs.filter((x) => (!prim || x.has_primary) && (!q || `${x.label} ${x.time_label} ${x.measure_label}`.toLowerCase().includes(q)));
+    const items = qs.filter((x) => (!prim || x.has_primary) && (!q || `${x.label} ${x.time_label} ${x.measure_label} ${(x.frames || []).map(f => f.title + " " + f.population).join(" ")}`.toLowerCase().includes(q)));
     const ul = document.getElementById("qlist");
     ul.innerHTML = items.map((x) => `<li data-id="${esc(x.question_id)}" class="${current && current.question_id === x.question_id ? "on" : ""}">
       <div class="q">${esc(x.label)} · ${esc(x.time_label)}${x.category ? ` · ${esc(x.category)}` : ""}</div>${x.subgroup ? `<div class="s">亚组：${esc(x.subgroup)}</div>` : ""}
-      <div class="s">${esc(x.measure_label)} · ${x.trial_ids.length} 项试验${x.has_primary ? " · 含主要终点" : ""}</div></li>`).join("") || '<li class="empty">无匹配问题</li>';
+      <div class="s">${esc(x.measure_label)} · ${x.trial_ids.length} 项试验${x.frames?.length > 1 ? ` · ${x.frames.length} 个口径` : ""}${x.has_primary ? " · 含主要终点" : ""}</div></li>`).join("") || '<li class="empty">无匹配问题</li>';
     ul.querySelectorAll("li[data-id]").forEach((li) => li.onclick = () => select(li.dataset.id));
   }
 
@@ -49,14 +50,24 @@
     });
   }
 
-  function select(id) {
+  function select(id, frameId) {
     current = qs.find((x) => x.question_id === id) || qs[0];
     if (!current) { document.getElementById("q-title").textContent = "暂无可比较的临床问题"; return; }
     listQuestions();
     document.getElementById("q-title").textContent = `${current.label} · ${current.time_label}${current.category ? " · " + current.category : ""}${current.subgroup ? "（亚组：" + current.subgroup + "）" : ""}`;
     document.getElementById("q-sub").textContent = `${current.measure_label}${current.units.length ? " · 单位：" + current.units.join(" / ") : ""}${current.direction === "lower_better" ? " · 数值越低越好" : current.direction === "higher_better" ? " · 数值越高越好" : ""}`;
 
-    const comps = current.comparisons;
+    const frames = current.frames?.length ? current.frames : [current];
+    const frame = frames.find(f => f.frame_id === (frameId || selectedFrames.get(id))) || frames[0];
+    selectedFrames.set(id, frame.frame_id);
+    const picker = document.getElementById("frame-select");
+    document.getElementById("frame-label").hidden = frames.length < 2;
+    picker.innerHTML = frames.map((f, i) => `<option value="${esc(f.frame_id || "")}">${i + 1} · ${f.trial_ids.length} 项研究${f.context_label ? " · " + esc(f.context_label.slice(0, 90)) : ""}</option>`).join("");
+    picker.value = frame.frame_id || "";
+    picker.onchange = () => select(id, picker.value);
+    document.getElementById("frame-context-text").textContent = [frame.title, frame.description, frame.population].filter(Boolean).join("\n\n");
+    document.getElementById("frame-context").open = false;
+    const comps = frame.comparisons;
     const differences = comps.filter(c => c.family === "difference" && c.plot_value != null);
     const ratios = comps.filter(c => c.family === "ratio" && c.plot_value > 0);
     document.getElementById("comparison-plots").hidden = !differences.length && !ratios.length;
@@ -65,7 +76,7 @@
     document.getElementById("ratio-wrap").hidden = !ratios.length;
     if (ratios.length) drawForest("ratio-chart", ratios, 1, true);
 
-    const rows = current.rows;
+    const rows = frame.rows;
     document.getElementById("arm-values").hidden = !rows.length;
     document.getElementById("arm-details").hidden = !rows.length;
     const vEl = document.getElementById("value-chart");

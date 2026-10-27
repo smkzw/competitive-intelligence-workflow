@@ -107,3 +107,32 @@ process.stdout.write(JSON.stringify(out));
     assert unknown["concepts"] == ["NCS"] and unknown["sizeHidden"]
     assert absent["conceptHidden"] and absent["sizeHidden"] and absent["count"].startswith("0 /")
     assert restored == initial
+
+
+def test_result_context_switch_updates_chart_and_tables_together():
+    asset = Path(__file__).resolve().parents[1] / "src/ciw/render/static/b.js"
+    script = r"""
+const fs=require('fs'),vm=require('vm');
+const elements=new Proxy({}, {get:(all,id)=>all[id]||(all[id]={id,value:'',checked:false,style:{},
+ querySelectorAll:()=>[],addEventListener(){}})});
+const row=v=>({value:v,role:'experimental',acronym:'Trial',group_title:'Drug',product_label:'Drug'});
+const frames=[{frame_id:'first',trial_ids:['one'],title:'First definition',population:'All participants',
+ rows:[row(25)],comparisons:[]},{frame_id:'second',trial_ids:['two'],title:'Other definition',
+ population:'Responders',rows:[row(10)],comparisons:[]}];
+const q={question_id:'q',label:'临床缓解',time_label:'第52周',units:['%'],measure_label:'比例',
+ trial_ids:['one','two'],rows:[row(25),row(10)],comparisons:[],frames};
+const plots={},tables={};
+const window={U:{D:{b:{questions:[q],longitudinal:[],safety:[],observations:[]},stats:{},trials:{}},
+ esc:s=>s||'',num:s=>s,nN(){},tag(){},src(){},options(){},OWN:'orange',PAL:[],
+ chart:(id,opt)=>plots[id]=opt,table:(el,cols,rows)=>tables[el.id]=rows}};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{window,document:{getElementById:id=>elements[id]}});
+const read=()=>({values:plots['value-chart'].series[0].data.map(d=>d.value),
+ table:tables['row-table'].map(d=>d.value),context:elements['frame-context-text'].textContent});
+const first=read();elements['frame-select'].value='second';elements['frame-select'].onchange();
+process.stdout.write(JSON.stringify([first,read()]));
+"""
+    result = subprocess.run(["node", "-e", script, str(asset)], capture_output=True, text=True, check=True)
+    first, second = json.loads(result.stdout)
+    assert first["values"] == first["table"] == [25]
+    assert second["values"] == second["table"] == [10]
+    assert "Responders" in second["context"] and "All participants" in first["context"]

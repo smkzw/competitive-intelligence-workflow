@@ -193,7 +193,7 @@ def extract_results(
             if _BASELINE_CLASS.fullmatch(class_title):
                 continue  # 基线值不是该终点的结果，不进入比较
             class_time, class_rest = _split_class(class_title)
-            tp = parse_timepoint(class_time, title, om.get("timeFrame", ""))
+            tp = parse_timepoint(class_time, om.get("timeFrame", ""), title)
             subgroup = "；".join(x for x in (subgroup_of(title), class_rest) if x)
             groups = _measurements(cat, class_n, group_meta, oi, ci, ki)
             results.append(
