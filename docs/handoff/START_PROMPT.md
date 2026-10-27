@@ -21,7 +21,7 @@
 1. 只有一条真实的端到端命令能证明“完成”；组件测试通过不算交付。
 2. 测试按根因成族写，一组改动做完后再统一跑 uv run pytest，不要改一处就跑一次全量。
 3. 不新建过程目录（packets/prompts/reviews/receipts/evidence），不写追加式日志；STATUS 整块替换，不超过 80 行。
-4. 核对只有两种：确定性规则，以及 ciw.verify.crosscheck（三个不同模型家族）。不引入多模型会商、签发或资格认证；缓存不得按代码哈希失效。
+4. 核对只有两种：确定性规则，以及 ciw.verify.crosscheck（DeepSeek主抽取＋cms-smk glm-5.3-flash原文核对，两个不同家族；D17替代旧三模型）。不引入多模型会商、签发或资格认证；缓存不得按代码哈希失效。
 5. 渲染层只做投影；适应症之间的差异只写在 indications/*.yaml；中文药名没核实就留空。
 6. 运行产物、第三方原文、key、cookie、任何机器的绝对路径一律不入库。DGX key 由用户提供，只通过环境变量 CIW_DGX_API_KEY 或 CIW_DGX_KEY_FILE 读取。
 7. 需要浏览器时只用 ego-browser（先运行 `ego-browser skill`）。为本目标建一个专用 TaskSpace 并一直复用，不启动 Playwright 或其他 Chromium。执行机上没有 ego 时，中国来源采集记为阻塞，其余任务照常推进。

@@ -1,11 +1,6 @@
-"""异构模型交叉核对。
+"""DeepSeek主抽取 → 异构GLM读取原文核对、纠错、补漏 → 确定性来源校验。
 
-两个不同家族的模型独立抽取同一份原文 → 每条结果先过原文引语校验 → 按身份键配对、逐字段确定性比对：
-- 两边一致且引语都在原文中           → dual_agreed
-- 不一致、或只有一边抽到             → 第三家族仲裁（看到原文与两份候选，只能选 A/B/都不对）
-- 仲裁选中且所选候选引语校验通过     → arbitrated
-- 其余                                → needs_review（进入待核队列，不进图表数值轴）
-模型自报置信度不参与判定。
+核对者可见抽取候选，不宣称盲审。历史dual_agreed/arbitrated仅兼容读取。
 """
 
 from __future__ import annotations
@@ -24,7 +19,7 @@ from pydantic import BaseModel, ValidationError
 from ciw.verify.llm import Backend, check_heterogeneous, parse_json
 from ciw.verify.quote import check_quote
 
-PROMPT_VERSION = "crosscheck-v2"
+PROMPT_VERSION = "source-review-v3"
 
 SYSTEM_EXTRACT = (
     "你是临床试验与药物研发信息的抽取器。只依据用户给出的原文，按要求的 JSON 结构输出。"
@@ -33,10 +28,12 @@ SYSTEM_EXTRACT = (
     "items中的每条必须直接包含实际数据字段（包括quote），不要复述JSON Schema，"
     "不要使用properties、type、required、description包装数据。找不到符合任务的信息时返回items空数组。"
 )
-SYSTEM_ARBITER = (
-    "你是独立核对员。给你原文和两个抽取器对同一条信息的候选（A 与 B，可能其中一个为空）。"
-    '逐字段对照原文，判断哪个候选完全被原文支持。只能回答 JSON：{"choice": "A"|"B"|"neither", '
-    '"reason": "一句话"}。两个都对且等价时选 A。'
+SYSTEM_VERIFY = (
+    "你是临床来源核对者。原文是唯一依据；候选可能错误或遗漏，不能当成证据。"
+    "阅读全文，逐字段核对候选，纠正错误并主动补齐遗漏。"
+    "返回核对后的完整items数组，每项直接符合给定Schema，不返回choice或Schema本身。"
+    "每项quote须逐字引用支持其字段的连续原文。原文没有的信息留空，不推测。"
+    '输出JSON对象：{"items": [...]}；确实无可用信息才返回空数组。'
 )
 
 
@@ -63,7 +60,7 @@ class CrosscheckFailed(RuntimeError):
 @dataclass
 class CheckedItem:
     item: dict[str, Any]
-    status: str  # dual_agreed / arbitrated / needs_review
+    status: str  # verified / needs_review
     key: tuple[str, ...]
     calls: list[dict[str, Any]] = field(default_factory=list)
     note: str = ""
@@ -98,10 +95,16 @@ def _user_prompt(task: ExtractionTask) -> str:
     return f"任务：{task.instruction}\n\n每条 item 的 JSON Schema：{schema}\n\n原文：\n<<<\n{task.source_text}\n>>>"
 
 
-def _extract(backend: Backend, task: ExtractionTask) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    call: dict[str, Any] = {"role": "extract", "family": backend.family, "model": backend.model}
+def _extract(backend: Backend, task: ExtractionTask, candidates=None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    call: dict[str, Any] = {
+        "role": "extract" if candidates is None else "verify", "family": backend.family, "model": backend.model
+    }
     try:
-        payload = parse_json(backend.chat(SYSTEM_EXTRACT, _user_prompt(task)))
+        system, user = SYSTEM_EXTRACT, _user_prompt(task)
+        if candidates is not None:
+            system = SYSTEM_VERIFY
+            user += "\n待核候选（仅供查错，不是来源）：\n" + json.dumps(candidates, ensure_ascii=False)
+        payload = parse_json(backend.chat(system, user))
         call.update(getattr(backend, "receipt", {}))
         if not isinstance(payload, dict) or not isinstance(payload.get("items"), list):
             raise ValueError("模型输出缺少items数组")
@@ -188,80 +191,46 @@ def _same(task: ExtractionTask, a: dict[str, Any], b: dict[str, Any]) -> bool:
     return all(_norm_value(a.get(f)) == _norm_value(b.get(f)) for f in task.value_fields)
 
 
-def _arbitrate(
-    arbiter: Backend, task: ExtractionTask, a: dict[str, Any] | None, b: dict[str, Any] | None
-) -> tuple[str, dict[str, Any]]:
-    call: dict[str, Any] = {"role": "arbitrate", "family": arbiter.family, "model": arbiter.model}
-    user = (
-        f"任务：{task.instruction}\n\n候选 A：{json.dumps(a, ensure_ascii=False)}\n"
-        f"候选 B：{json.dumps(b, ensure_ascii=False)}\n\n原文：\n<<<\n{task.source_text}\n>>>"
-    )
-    try:
-        payload = parse_json(arbiter.chat(SYSTEM_ARBITER, user))
-        call.update(getattr(arbiter, "receipt", {}))
-        choice = str(payload.get("choice", "neither")).strip()
-        call["choice"] = choice if choice in ("A", "B", "neither") else "neither"
-        call["reason"] = str(payload.get("reason", ""))[:200]
-    except (ValueError, KeyError, OSError, AttributeError) as exc:
-        call.update(getattr(arbiter, "receipt", {}))
-        call["choice"], call["error"] = "neither", type(exc).__name__
-    return call["choice"], call
+def _checked_items(task, items):
+    out = {}
+    for raw in items:
+        it = dict(raw)
+        ok, reason = _quote_ok(task, it)
+        it["_quote_ok"], it["_quote_reason"] = ok, reason
+        key = _key(task, it)
+        previous = out.get(key)
+        if previous is not None and not _same(task, previous, it):
+            previous["_duplicate_conflict"] = True
+        elif previous is None or (not previous["_quote_ok"] and ok):
+            out[key] = it
+    return out
 
 
 def crosscheck(task: ExtractionTask, roles: dict[str, Backend]) -> list[CheckedItem]:
     check_heterogeneous(roles)
     a_items, a_call = _extract(roles["extractor_a"], task)
-    b_items, b_call = _extract(roles["extractor_b"], task)
-    base_calls = [a_call, b_call]
-    if not (a_items or b_items) and (a_call.get("error") or b_call.get("error")):
-        raise CrosscheckFailed(f"没有可校验结果：{a_call.get('error', 'empty')} / {b_call.get('error', 'empty')}")
-
-    def valid(items: list[dict[str, Any]]) -> dict[tuple[str, ...], dict[str, Any]]:
-        out: dict[tuple[str, ...], dict[str, Any]] = {}
-        for it in items:
-            ok, reason = _quote_ok(task, it)
-            it["_quote_ok"], it["_quote_reason"] = ok, reason
-            key = _key(task, it)
-            previous = out.get(key)
-            if previous is not None and not _same(task, previous, it):
-                previous["_duplicate_conflict"] = True
-            elif previous is None or (not previous["_quote_ok"] and it["_quote_ok"]):
-                out[key] = it
-        return out
-
-    a_by, b_by = valid(a_items), valid(b_items)
-    results: list[CheckedItem] = []
+    if a_call.get("error"):
+        raise CrosscheckFailed("主抽取失败：" + a_call["error"])
+    b_items, b_call = _extract(roles["verifier"], task, a_items)
+    if b_call.get("error"):
+        raise CrosscheckFailed("来源核对失败：" + b_call["error"])
+    a_by, b_by = _checked_items(task, a_items), _checked_items(task, b_items)
+    results = []
     for key in sorted(set(a_by) | set(b_by)):
         a, b = a_by.get(key), b_by.get(key)
-        calls = list(base_calls)
-        if any(it and it.get("_duplicate_conflict") for it in (a, b)):
-            results.append(
-                CheckedItem(
-                    item=_clean(a or b),
-                    status="needs_review",
-                    key=key,
-                    calls=calls,
-                    note="同一抽取器在相同身份下返回冲突值，未按顺序取用",
-                )
-            )
-            continue
-        if a and b and a["_quote_ok"] and b["_quote_ok"] and _same(task, a, b):
-            results.append(CheckedItem(item=_clean(a), status="dual_agreed", key=key, calls=calls))
-            continue
-        single = "（仅一个抽取器给出，经仲裁）" if not (a and b) else ""
-        choice, call = _arbitrate(roles["arbiter"], task, _clean(a) if a else None, _clean(b) if b else None)
-        calls.append(call)
-        chosen = {"A": a, "B": b}.get(choice)
-        if chosen is not None and chosen["_quote_ok"]:
-            results.append(
-                CheckedItem(
-                    item=_clean(chosen), status="arbitrated", key=key, calls=calls, note=f"仲裁选择 {choice}{single}"
-                )
-            )
-        else:
-            fallback = a or b
-            note = "仲裁未选中可校验的候选" if chosen is None else f"所选候选引语未通过：{chosen['_quote_reason']}"
-            results.append(CheckedItem(item=_clean(fallback), status="needs_review", key=key, calls=calls, note=note))
+        chosen = b or a
+        status, note = "verified", "原文核对通过"
+        if b is None:
+            status, note = "needs_review", "主抽取条目未被核对者确认"
+        elif b.get("_duplicate_conflict"):
+            status, note = "needs_review", "核对者对同一身份返回冲突值"
+        elif not b["_quote_ok"]:
+            status, note = "needs_review", "核对结果未通过来源校验：" + b["_quote_reason"]
+        elif a is None:
+            note = "核对者从原文补充遗漏"
+        elif not _same(task, a, b) or a.get("_duplicate_conflict"):
+            note = "核对者依据原文修正候选"
+        results.append(CheckedItem(_clean(chosen), status, key, [a_call, b_call], note))
     return results
 
 

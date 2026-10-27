@@ -26,9 +26,9 @@ uv run ciw run indications/crswnp.yaml --with-models    # 启用异构模型交�
 ```
 
 采集与运行时使用同一个 `--workspace`。公众号原文使用 `--kind wechat`，发布者必须匹配适应症配置中的账号。
-DGX 凭据仅通过 `CIW_DGX_API_KEY` 或 `CIW_DGX_KEY_FILE` 显式提供。三角色使用 deepseek/qwen/glm；
-Qwen 当前不提供接口级强制 JSON，DeepSeek实际端点也拒绝`response_format`（HTTP 400），
-因此配置明确关闭这两路的该参数，仍执行相同的 JSON/schema/引文校验；GLM保留接口JSON参数。
+DGX 凭据仅通过 `CIW_DGX_API_KEY` 或 `CIW_DGX_KEY_FILE` 显式提供；cms-smk凭据只读 `CMS_SMK_API_KEY`。
+现行D17配置：DGX `deepseek`主抽取，cms-smk `glm-5.3-flash`读取完整原文和候选核对、纠错、补漏。
+通过本地JSON/schema/引文/数值/日期校验后标记 `verified`；不再调用Qwen或第三模型仲裁，不宣称盲审。
 各模型响应的 model/id、结束原因和用量随原有工作区核对记录保留；缓存复用不会伪造新调用。
 
 文档：

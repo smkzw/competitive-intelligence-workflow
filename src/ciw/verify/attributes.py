@@ -91,4 +91,4 @@ def _apply(products, candidates, issues):
         product = products[pid]
         setattr(product, field, value)
         product.attribute_locators[field] = locator
-        product.attribute_status = "arbitrated" if "arbitrated" in {product.attribute_status, status} else "dual_agreed"
+        product.attribute_status = status

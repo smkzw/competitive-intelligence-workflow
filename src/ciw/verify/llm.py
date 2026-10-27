@@ -135,11 +135,11 @@ class CachedBackend:
 
 def _read_key(spec: dict[str, Any]) -> str | None:
     if (
-        set(spec.get("key_env", [])) - {"CIW_DGX_API_KEY"}
+        set(spec.get("key_env", [])) - {"CIW_DGX_API_KEY", "CMS_SMK_API_KEY"}
         or set(spec.get("key_file_env", [])) - {"CIW_DGX_KEY_FILE"}
         or spec.get("default_key_file")
     ):
-        raise ValueError("DGX凭据仅允许CIW_DGX_API_KEY或显式CIW_DGX_KEY_FILE")
+        raise ValueError("凭据仅允许CIW_DGX_API_KEY、CIW_DGX_KEY_FILE或CMS_SMK_API_KEY")
     for name in spec.get("key_env", []):
         if os.environ.get(name):
             return os.environ[name]
@@ -152,7 +152,7 @@ def _read_key(spec: dict[str, Any]) -> str | None:
 
 
 def load_roles(config_path: str | Path | None = None) -> dict[str, Backend]:
-    """读取 config/llm.yaml，返回 {role: backend}；校验三个角色来自三个不同家族。"""
+    """读取 config/llm.yaml，返回 {role: backend}；校验主抽取和核对来自两个不同家族。"""
     text = (
         Path(config_path).read_text(encoding="utf-8")
         if config_path
@@ -177,12 +177,11 @@ def load_roles(config_path: str | Path | None = None) -> dict[str, Backend]:
 
 
 def check_heterogeneous(roles: dict[str, Backend]) -> None:
-    need = {"extractor_a", "extractor_b", "arbiter"}
-    if not need <= roles.keys():
-        raise ValueError(f"模型角色缺失：{sorted(need - roles.keys())}")
-    fams = {roles[r].family for r in need}
-    if len(fams) != 3:
-        raise ValueError("extractor_a / extractor_b / arbiter 必须来自三个不同模型家族")
+    need = {"extractor_a", "verifier"}
+    if set(roles) != need:
+        raise ValueError("模型角色必须且仅有extractor_a与verifier")
+    if len({roles[r].family for r in need}) != 2:
+        raise ValueError("主抽取与核对必须来自两个不同模型家族")
 
 
 def parse_json(text: str) -> Any:

@@ -66,7 +66,7 @@ def test_production_inbox_keeps_announcement_date_unaccepted(cfg, resolver, ws):
 
     roles = {
         role: FakeBackend(family, family, respond)
-        for role, family in [("extractor_a", "deepseek"), ("extractor_b", "qwen"), ("arbiter", "glm")]
+        for role, family in [("extractor_a", "deepseek"), ("verifier", "glm")]
     }
     events, queue, _ = extract_events(ws, cfg, resolver, roles)
     assert events[0].status == "needs_review" and queue[0]["kind"] == "event_needs_review"

@@ -116,13 +116,13 @@ uv run ciw audit --workspace <你的工作区目录>/crswnp -n 40               
 ### T3 · 异构模型交叉核对接真实端点（M4）
 
 **前提**
-- 执行机能访问 DGX，即 `src/ciw/data/llm.yaml` 里配置的 OpenAI 兼容端点。
+- 执行机能访问DGX及cms-smk；现行D17使用DeepSeek主抽取、cms-smk的glm-5.3-flash核对，取消Qwen及第三模型仲裁。GLM凭据只读CMS_SMK_API_KEY。DGX为 `src/ciw/data/llm.yaml` 里配置的 OpenAI 兼容端点。
 - key 由用户提供，通过环境变量 `CIW_DGX_API_KEY`，或 `CIW_DGX_KEY_FILE` 指向的文件传入。任何 key 都不写进仓库。
 
 **运行**：`uv run ciw run indications/crswnp.yaml --offline --with-models`。
 
 **验收**
-- 抽 20 条 `dual_agreed` 或 `arbitrated` 事件，人工对照原文，0 错误。
+- 抽 20 条 `verified`（历史状态不冒充新流程） 事件，人工对照原文，0 错误。
 - `needs_review` 占比低于 15%。超标时先改抽取指令或 schema，不要放宽比对规则。
 
 **产品属性**
@@ -130,8 +130,8 @@ uv run ciw audit --workspace <你的工作区目录>/crswnp -n 40               
 - 只补配置里为空的 target 和 modality，不覆盖已有值；`attribute_status` 记录核对状态。
 
 **路由**
-- deepseek 和 glm 在 DGX 的同一车道上互斥，qwen 走单独车道。
-- 并发上限：deepseek 4，glm 1，qwen 2。
+- DeepSeek使用DGX，核对者只调用cms-smk的glm-5.3-flash；任务内顺序执行，原文与响应缓存复用。
+- 本子系统保持单任务串行调用，不改服务端并发配置；不复用旧DGX GLM或Qwen答复冒充新核对。
 
 ### T4 · 论文结果补齐（M5）
 - **对象**：CT.gov 上没有结果、但已经发表的关键 II/III 期试验。中国企业的 III 期大多属于这一类。

@@ -65,7 +65,7 @@ def setup(ws):
 def roles(items):
     return {
         k: FakeBackend(f, f, lambda *a: json.dumps({"items": items}))
-        for k, f in (("extractor_a", "deepseek"), ("extractor_b", "qwen"), ("arbiter", "glm"))
+        for k, f in (("extractor_a", "deepseek"), ("verifier", "glm"))
     }
 
 
@@ -79,7 +79,7 @@ def test_adjusted_contrast_with_no_arm_values_is_plotted_without_fabricated_zero
     c = q["comparisons"][0]
     assert q["rows"] == [] and q["trial_ids"] == [trial.trial_id]
     assert (c["value"], c["plot_value"], c["plot_lower"], c["plot_upper"]) == (-2.5, -2.5, -2.9, -2.1)
-    assert c["source_kind"] == "publication" and c["status"] == "dual_agreed" and c["url"].endswith("/123/")
+    assert c["source_kind"] == "publication" and c["status"] == "verified" and c["url"].endswith("/123/")
 
 
 def test_population_statistic_and_registry_values_remain_distinct(cfg, resolver, ws):

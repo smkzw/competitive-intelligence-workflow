@@ -1,15 +1,14 @@
-# 异构交叉核对的模型角色。三个角色必须来自三个不同家族（加载时校验）。
-# key 只从环境变量或 key 文件读取；不要把 key 写进本文件或任何入库文件。
+# DeepSeek主抽取；cms-smk GLM读原文核对、修正与补漏。凭据只读环境变量。
 endpoints:
   dgx:
     base_url: https://spark-a321.tail623d86.ts.net/v1
     key_env: [CIW_DGX_API_KEY]
     key_file_env: [CIW_DGX_KEY_FILE]
     no_proxy: true
-
+  cms-smk:
+    base_url: https://new-api.mediportal.com.cn/v1
+    key_env: [CMS_SMK_API_KEY]
+    no_proxy: false
 roles:
-  # The live DeepSeek gateway also rejects response_format (HTTP 400).
   extractor_a: {endpoint: dgx, model: deepseek, family: deepseek, max_tokens: 65536, timeout: 7200, response_format: null}
-  # Current Qwen endpoint does not support constrained JSON; JSON is prompted and validated locally.
-  extractor_b: {endpoint: dgx, model: qwen, family: qwen, max_tokens: 65536, timeout: 7200, response_format: null}
-  arbiter: {endpoint: dgx, model: glm, family: glm, max_tokens: 65536, timeout: 7200}
+  verifier: {endpoint: cms-smk, model: glm-5.3-flash, family: glm, max_tokens: 65536, timeout: 7200, response_format: null}

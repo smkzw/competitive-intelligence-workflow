@@ -107,7 +107,7 @@ def _product_row(p, ts, product_events) -> dict[str, Any]:
     approvals = [
         e
         for e in product_events
-        if e.event_type == "approval" and e.status in ("registry", "dual_agreed", "arbitrated")
+        if e.event_type == "approval" and e.status in ("registry", "verified", "dual_agreed", "arbitrated")
     ]
     starts = sorted(t.dates.start for t in ts if t.dates.start)
     return {

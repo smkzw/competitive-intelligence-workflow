@@ -10,7 +10,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 ArmRole = Literal["experimental", "active_comparator", "placebo", "no_intervention", "other", "unknown"]
 Period = Literal["treatment", "run_in", "follow_up", "extension", "overall"]
-VerifyStatus = Literal["registry", "dual_agreed", "arbitrated", "needs_review", "rejected"]
+VerifyStatus = Literal["registry", "verified", "dual_agreed", "arbitrated", "needs_review", "rejected"]
 SourceKind = Literal["ctgov", "europepmc", "openfda", "cde", "nmpa", "company", "wechat"]
 
 

@@ -188,15 +188,14 @@ Q = "2024年3月，度普利尤单抗（Dupixent）在加拿大获批"
 def test_same_fact_with_different_names_is_one_item(resolver):
     a = {"product_mention": "Dupixent", "event_type": "approval", "region": "加拿大", "date": "2024-03", "quote": Q}
     b = {"product_mention": "dupilumab", "event_type": "approval", "region": "Canada", "date": "2024-03", "quote": Q}
-    out = crosscheck(_task(resolver), {"extractor_a": _b("x", [a]), "extractor_b": _b("y", [b]), "arbiter": _b("z")})
-    assert len(out) == 1 and out[0].status == "dual_agreed"
+    out = crosscheck(_task(resolver), {"extractor_a": _b("x", [a]), "verifier": _b("y", [b])})
+    assert len(out) == 1 and out[0].status == "verified"
 
 
 def test_date_not_in_quote_fails(resolver):
     a = {"product_mention": "Dupixent", "event_type": "approval", "region": "加拿大", "date": "2023-11", "quote": Q}
-    b = {"product_mention": "Dupixent", "event_type": "approval", "region": "加拿大", "date": "2024-03", "quote": Q}
     out = crosscheck(
-        _task(resolver), {"extractor_a": _b("x", [a]), "extractor_b": _b("y", [b]), "arbiter": _b("z", choice="A")}
+        _task(resolver), {"extractor_a": _b("x", [a]), "verifier": _b("y", [a])}
     )
     assert out[0].status == "needs_review"
 
@@ -204,7 +203,7 @@ def test_date_not_in_quote_fails(resolver):
 def test_both_extractors_failing_raises(resolver):
     with pytest.raises(CrosscheckFailed):
         crosscheck(
-            _task(resolver), {"extractor_a": _b("x", raw="bad"), "extractor_b": _b("y", raw="bad"), "arbiter": _b("z")}
+            _task(resolver), {"extractor_a": _b("x", raw="bad"), "verifier": _b("y", raw="bad")}
         )
 
 

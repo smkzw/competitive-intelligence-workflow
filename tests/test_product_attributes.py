@@ -9,7 +9,7 @@ from ciw.verify.llm import FakeBackend
 def roles(item):
     return {
         k: FakeBackend(f, f, lambda *a: json.dumps({"items": [item]}))
-        for k, f in (("extractor_a", "deepseek"), ("extractor_b", "qwen"), ("arbiter", "glm"))
+        for k, f in (("extractor_a", "deepseek"), ("verifier", "glm"))
     }
 
 
@@ -30,7 +30,7 @@ def test_only_missing_attributes_are_filled_with_source_backing(cfg, resolver, w
     assert not enrich_attributes(ws, products, [trial], resolver, roles(item))
     p = products["mg-k10"]
     assert p.target == "configured target" and p.modality == "monoclonal antibody"
-    assert p.attribute_status == "dual_agreed"
+    assert p.attribute_status == "verified"
     assert p.attribute_locators["modality"].source_id == source.source_id
     assert p.attribute_locators["modality"].quote == text
 
