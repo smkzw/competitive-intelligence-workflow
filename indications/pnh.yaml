@@ -92,12 +92,13 @@ concepts:
     direction: lower_better
   - id: transfusion_avoidance
     label: 输血避免
-    patterns: ['transfusion avoidance', 'avoidance of.*transfusion', 'transfusion[- ]free', '(?:absence of|without|not requiring).*transfusion']
+    patterns: ['transfusion avoidance', 'avoidance of.*transfusion', 'transfusion[- ]free', 'free (?:from|of).*transfusion', '(?:absence of|without|not requiring).*transfusion']
+    exclude: ['reticulocyte', 'normali[sz]', 'stabili[sz]', 'hemoglobin', 'haemoglobin', '\bHb\b', '\bLDH\b']
     direction: higher_better
   - id: transfusion_burden
     label: 输血需求
     patterns: ['transfusion', 'packed red blood cell', '\bPRBC\b']
-    exclude: ['avoidance', 'transfusion[- ]free', '(?:absence of|without|not requiring).*transfusion']
+    exclude: ['avoidance', 'transfusion[- ]free', 'free (?:from|of).*transfusion', '(?:absence of|without|not requiring).*transfusion']
     direction: lower_better
   - id: facit_fatigue
     label: FACIT-Fatigue 疲劳评分
@@ -107,3 +108,7 @@ concepts:
     label: 突破性溶血
     patterns: ['breakthrough h[ae]+molysis', '\bBTH\b']
     direction: lower_better
+  - id: reticulocyte_normalization
+    label: 网织红细胞正常化
+    patterns: ['reticulocyte.*normali[sz]', 'normali[sz].*reticulocyte']
+    domain: pd
