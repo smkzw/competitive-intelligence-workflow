@@ -88,12 +88,31 @@ def presentation_digest():
     return digest.hexdigest()
 
 
-def _write_immutable(path, data):
+def _write_immutable(path, data, recover=False):
     if path.exists():
-        if path.read_bytes() != data:
+        if path.read_bytes() == data:
+            return
+        if not recover:
             raise ValueError("已存在的不可变报告文件冲突，原文件已保留")
-        return
-    path.write_bytes(data)
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_bytes(data)
+    temporary.replace(path)
+
+
+def _render_attempt(base, site, rel, selected):
+    """Only an explicitly unfinished, never-published attempt may repair partial bytes."""
+    marker = site.parent / f".{site.name}.pending.json"
+    expected = dict(release_id=rel["release_id"], presentation_digest=rel.get("presentation_digest"), reports=selected)
+    if not site.exists() and not marker.exists():
+        _write_immutable(marker, json.dumps(expected, sort_keys=True).encode())
+    if not marker.exists():
+        return marker, False
+    if json.loads(marker.read_text()) != expected:
+        raise ValueError("未完成报告版本冲突，原文件已保留")
+    pointer = base.parent / "current.json"
+    if pointer.exists() and json.loads(pointer.read_text()).get("release_id") == rel["release_id"]:
+        raise ValueError("已提交报告仍有未完成标记，原文件已保留")
+    return marker, True
 
 
 def rerender_current(ws):
@@ -118,18 +137,22 @@ def render_release(release_path: str | Path, out_dir: str | Path | None = None, 
     env = Environment(loader=PackageLoader("ciw.render", "templates"), autoescape=select_autoescape())
     static = resources.files("ciw.render").joinpath("static")
     selected = reports if reports is not None else rel.get("rendered_reports", list(REPORTS))
+    marker, recovering = _render_attempt(base, site, rel, selected)
     for report in selected:
         if report not in REPORTS:
             raise ValueError("未知报告类型")
         d = site / report
         d.mkdir(parents=True, exist_ok=True)
         for name in (*STATIC, f"{report.lower()}.js"):
-            _write_immutable(d / name, static.joinpath(name).read_bytes())
+            _write_immutable(d / name, static.joinpath(name).read_bytes(), recover=recovering)
         data = json.dumps(_payload(rel, report), ensure_ascii=False, separators=(",", ":"))
-        _write_immutable(d / "data.js", ("window.CIW=" + data.replace("</", "<\\/") + ";\n").encode())
+        _write_immutable(d / "data.js", ("window.CIW=" + data.replace("</", "<\\/") + ";\n").encode(),
+                         recover=recovering)
         html = env.get_template(f"{report.lower()}.html").render(
             report=report, title=REPORTS[report], indication=rel["indication"], cutoff=rel["cutoff"],
             reports={r: REPORTS[r] for r in selected}
         )
-        _write_immutable(d / "index.html", html.encode())
+        _write_immutable(d / "index.html", html.encode(), recover=recovering)
+    if recovering:
+        marker.unlink()
     return site

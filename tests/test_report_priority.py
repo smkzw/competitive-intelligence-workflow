@@ -140,3 +140,38 @@ def test_failed_render_leaves_previous_current_unchanged(cfg, seeded_ws, monkeyp
     with pytest.raises(OSError):
         run(cfg, seeded_ws, offline=True, report_scope="C", render_reports=["B", "C"], log=lambda *_: None)
     assert seeded_ws.current_release_dir().name == first.release_id
+
+
+def test_interrupted_unpublished_site_recovers_without_rewriting_any_published_history(cfg, seeded_ws, monkeypatch):
+    import ciw.render.site as rendering
+    first = run(cfg, seeded_ws, offline=True, report_scope="C", render_reports=["C"], log=lambda *_: None)
+    old = (first.site_dir / "C/data.js").read_bytes()
+    original_write = rendering._write_immutable
+    def crash(path, data, *a, **kw):
+        if path.name == "data.js" and path.parent.name == "B":
+            path.write_bytes(data[:8])
+            raise OSError("simulated truncated candidate file")
+        return original_write(path, data, *a, **kw)
+    monkeypatch.setattr(rendering, "_write_immutable", crash)
+    with pytest.raises(OSError):
+        run(cfg, seeded_ws, offline=True, report_scope="C", render_reports=["B", "C"], log=lambda *_: None)
+    assert seeded_ws.current_release_dir().name == first.release_id
+    monkeypatch.setattr(rendering, "_write_immutable", original_write)
+    repaired = run(cfg, seeded_ws, offline=True, report_scope="C", render_reports=["B", "C"], log=lambda *_: None)
+    assert repaired.release_id != first.release_id
+    assert (first.site_dir / "C/data.js").read_bytes() == old
+    assert (repaired.site_dir / "B/data.js").read_bytes().startswith(b"window.CIW=")
+    # Protection applies to historical completed reports even after current moves on.
+    historical = first.site_dir / "C/data.js"
+    historical.write_text("user preserved historical bytes")
+    with pytest.raises(ValueError):
+        rendering.render_release(first.release_path)
+    assert historical.read_text() == "user preserved historical bytes"
+
+
+def test_recording_same_source_returns_the_original_acquisition_metadata(ws):
+    first = ws.record_source(kind="ctgov", url="https://example.test", data=b"same", ext="json",
+                             title="original", fetched_at="2020-01-02T03:04:05+00:00")
+    again = ws.record_source(kind="ctgov", url="https://example.test", data=b"same", ext="json", title="changed")
+    assert again == first
+    assert ws.sources() == [first]

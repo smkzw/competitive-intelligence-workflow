@@ -95,7 +95,10 @@ class Workspace:
                 "INSERT OR IGNORE INTO sources VALUES (?,?,?,?,?,?,?,?,?)",
                 (source.source_id, kind, url, title, publisher, published_at, source.fetched_at, sha, ext),
             )
-        return source
+            stored = con.execute("SELECT title,publisher,published_at,fetched_at FROM sources WHERE source_id=?",
+                                 (source.source_id,)).fetchone()
+        fields = ("title", "publisher", "published_at", "fetched_at")
+        return source.model_copy(update=dict(zip(fields, stored, strict=True)))
 
     def sources(self) -> list[Source]:
         with self.db() as con:

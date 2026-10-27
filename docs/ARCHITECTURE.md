@@ -148,3 +148,5 @@ C终点定义直接投影原始PlannedOutcome.description并标记阈值；治�
 release记录`rendered_reports`，工作台由committed current与实际HTML存在共同决定入口；任务running/failed不使旧报告消失。新增类型沿用原任务/工作区，重复点击不重复执行，同时只运行一个补生成。原子切current在完整渲染之后。
 
 release JSON及门户文件不覆盖已有不同字节；相同内容重复写保持原generated_at。呈现资产digest只决定报告版本，不参与LLM缓存失效；`ciw render`为新版呈现创建新release，不改历史快照。
+
+D20续审修复：新站点开始写入前记录私有未完成标记，文件以临时文件原子替换；全部成功后移除标记，再允许切current。只有带对应未完成标记且从未成为current的候选可恢复半文件；所有已完成历史目录都禁止覆盖不同字节，不能仅保护当前指针。重复来源记录返回库中原元数据，避免内存返回值与CAS账本的获取日期冲突。
