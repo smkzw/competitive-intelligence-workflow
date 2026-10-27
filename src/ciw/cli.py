@@ -26,6 +26,13 @@ def _parser() -> argparse.ArgumentParser:
     r.add_argument("--with-models", action="store_true", help="对非结构化来源启用异构模型交叉核对")
     r.add_argument("--llm-config", help="模型角色配置（默认包内 data/llm.yaml）")
 
+    research = sub.add_parser("research", help="输入适应症自动检索并生成报告")
+    research.add_argument("indication")
+    research.add_argument("--question", default="")
+    research.add_argument("--workspace", required=True)
+    research.add_argument("--llm-config")
+    research.add_argument("--queue-lock", help=argparse.SUPPRESS)
+
     s = sub.add_parser("status", help="查看 current release 的统计、覆盖与待核")
     s.add_argument("--workspace", required=True)
 
@@ -54,6 +61,15 @@ def main(argv: list[str] | None = None) -> int:
     ap = _parser()
     a = ap.parse_args(argv)
     from ciw.store import Workspace
+
+    if a.cmd == "research":
+        from ciw.research import run_research
+
+        result = run_research(
+            a.indication, a.workspace, question=a.question, llm_config=a.llm_config, queue_lock=a.queue_lock
+        )
+        print(json.dumps({"release_id": result.release_id, "stats": result.stats}, ensure_ascii=False))
+        return 0
 
     if a.cmd == "run":
         return _run_command(a)

@@ -28,7 +28,7 @@ class ProductCfg(_Cfg):
     route: str = ""
     company: str = ""
     china_partner: str = ""
-    innovative: bool = True
+    innovative: bool | None = True
     own: bool = False
     note: str = ""
 

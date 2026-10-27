@@ -123,3 +123,10 @@ uv run ciw run indications/crswnp.yaml --workspace ~/Developer/ciw-workspaces/cr
 uv run ciw status --workspace ...                 # 阶段、计数、待核数量、coverage
 uv run ciw render --workspace ...                 # 只重渲染 current release
 ```
+
+
+## 10. 自助研究（D19）
+
+`research.py`用既有两角色提出并核查英文适应症检索词与终点/设计索引；该计划不是事实。CT.gov完整分页获取后，用原始DRUG/BIOLOGICAL干预建立来源绑定的候选和运行时YAML，创新属性未知、未核实名称属性留空，交给同一pipeline。已取登记对象传给流水线，不重复获取。论文和采集来源仍走原有核对规则。
+
+工作台通过显式配置的CI源码位置启动同一个`ciw research`子进程，私有文件保存提交与执行状态。子进程独立于HTTP连接并用标准库文件锁串行化网页任务；接口重启不杀任务。查询与报告文件按真实身份隔离，幂等键防重复启动，失败/中断复用同一工作区。历史release/current不因失败被覆盖。这里不新增执行平台、科学签发或额外核对模型。

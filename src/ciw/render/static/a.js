@@ -10,7 +10,7 @@
   const c3 = prods.filter((p) => p.china_rank >= 4).length;
   const own = prods.find((p) => p.is_own);
   document.getElementById("kpis").innerHTML = [
-    [prods.length, "纳入竞品宇宙的产品"],
+    [prods.length, prods.some(p => p.innovative == null) ? "研究涉及的药物" : "纳入竞品宇宙的产品"],
     [n3, "全球已到 III 期及以上"],
     [c3, "中国已到 III 期及以上"],
     [D.stats.trials_core, `核心试验（其中 ${D.stats.trials_core_with_results} 项已公布登记结果）`],
@@ -42,7 +42,7 @@
   options("#f-phase", prods.map((p) => p.global_phase));
   const trialLinks = (ids) => ids.map((id) => { const t = T[id] || {}; return src(t.url, t.acronym || id); }).join("、");
   const cols = [
-    { label: "产品", key: "label", html: (r) => `${r.is_own ? '<span class="own-tag">本品 </span>' : ""}${esc(r.label)}${r.codes.length ? `<br><span class="hint">${esc(r.codes.join(" / "))}</span>` : ""}` },
+    { label: "产品", key: "label", html: (r) => `${r.is_own ? '<span class="own-tag">本品 </span>' : ""}${esc(r.label)}${r.innovative == null ? " <span class=\"tag\">登记候选</span>" : ""}${r.codes.length ? `<br><span class="hint">${esc(r.codes.join(" / "))}</span>` : ""}` },
     { label: "靶点", key: "target", html: (r) => esc(r.target || "") || '<span class="hint">待核</span>' },
     { label: "分子类型", key: "modality" },
     { label: "企业", key: "company" },

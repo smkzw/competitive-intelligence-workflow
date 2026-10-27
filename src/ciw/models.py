@@ -129,7 +129,7 @@ class Product(Model):
     route: str = ""
     company: str = ""
     china_partner: str = ""
-    innovative: bool = True
+    innovative: bool | None = True
     is_own: bool = False
     inclusion_reason: str = ""
     attribute_status: VerifyStatus | Literal["config"] = "config"

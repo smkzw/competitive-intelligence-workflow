@@ -64,8 +64,8 @@ def build_landscape(
     for r in rows:
         r["innovative"] = next(p.innovative for p in products if p.product_id == r["product_id"])
         r["other_indications"] = own_other if r["is_own"] else []
-    non_innovative = [r for r in rows if not r["innovative"]]
-    rows = [r for r in rows if r["innovative"]]
+    non_innovative = [r for r in rows if r["innovative"] is False]
+    rows = [r for r in rows if r["innovative"] is not False]
     rows.sort(key=lambda r: (not r["is_own"], -r["global_rank"], -r["china_rank"], r["label"].casefold()))
 
     timeline = []

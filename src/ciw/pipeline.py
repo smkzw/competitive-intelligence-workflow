@@ -55,7 +55,7 @@ def build_products(cfg: IndicationConfig) -> dict[str, Product]:
             china_partner=p.china_partner,
             innovative=p.innovative,
             is_own=p.own,
-            inclusion_reason="适应症配置中的竞品",
+            inclusion_reason=p.note or "适应症配置中的竞品",
             attribute_status="config",
         )
     return out
@@ -69,12 +69,17 @@ def run(
     roles: dict[str, Backend] | None = None,
     render: bool = True,
     log=print,
+    preloaded_studies=None,
 ) -> RunResult:
     coverage: list[dict[str, Any]] = []
     resolver = ProductResolver(cfg)
     products = build_products(cfg)
 
-    studies = _load_studies(cfg, ws, offline, coverage, log)
+    studies = preloaded_studies
+    if studies is None:
+        studies = _load_studies(cfg, ws, offline, coverage, log)
+    else:
+        coverage.append(dict(source="ctgov", status="ok", records=len(studies), fetched_at=now_iso()))
 
     trials, results, safety, unclassified, stats = _extract_studies(cfg, resolver, studies)
 
