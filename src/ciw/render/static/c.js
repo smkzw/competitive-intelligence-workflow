@@ -33,6 +33,7 @@
     const data = filtered();
     document.getElementById("count").textContent = `${data.length} / ${rows.length} 项试验`;
     table(tEl, cols, data, { rowClass: (r) => (r.is_own ? "own" : ""), onRow: show });
+    drawSummary(data);
   }
   ["q", "f-phase", "f-mask", "f-concept", "f-china"].forEach((id) => document.getElementById(id).addEventListener("input", redraw));
   redraw();
@@ -62,20 +63,30 @@
         <h3>完整入排</h3><pre>${window.U.annotate(g.eligibility,g.eligibility_marks,document.getElementById("q").value.trim())}</pre></details>`).join("")}`);
   }
 
-  // 主要终点构成
+  function drawSummary(data) {
   const counts = {};
-  rows.forEach((r) => r.primary_concepts.forEach((c) => (counts[c] = (counts[c] || 0) + 1)));
+  data.forEach((r) => r.primary_concepts.forEach((c) => (counts[c] = (counts[c] || 0) + 1)));
   const ck = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
-  chart("concept-chart", { grid: { left: 200, right: 40, top: 20, bottom: 30 }, tooltip: {},
+  const conceptEl = document.getElementById("concept-chart");
+  conceptEl.parentElement.hidden = !ck.length;
+  const plotHeight = Math.min(360, Math.max(160, ck.length * 32 + 60));
+  conceptEl.style.height = plotHeight + "px";
+  if (ck.length) chart("concept-chart", { grid: { left: 200, right: 40, top: 20, bottom: 30 }, tooltip: {},
     xAxis: { type: "value", minInterval: 1 }, yAxis: { type: "category", data: ck, inverse: true },
     series: [{ type: "bar", data: ck.map((k) => counts[k]), itemStyle: { color: "#008F8A" }, label: { show: true, position: "right" } }] });
 
   // 样本量 × 首例入组
-  const phases = [...new Set(rows.map((r) => r.phase))];
-  chart("size-chart", { grid: { left: 60, right: 30, top: 40, bottom: 40 }, legend: { top: 0 },
+  const drawable = data.filter(r => r.start && r.enrollment != null);
+  const sizeEl = document.getElementById("size-chart");
+  sizeEl.parentElement.hidden = !drawable.length;
+  sizeEl.style.height = (data.length < 5 ? plotHeight : 360) + "px";
+  const phases = [...new Set(drawable.map((r) => r.phase))];
+  if (drawable.length) chart("size-chart", { grid: { left: 60, right: 30, top: 40, bottom: 40 }, legend: { top: 0 },
     tooltip: { formatter: (p) => `${esc(p.data.r.acronym || p.data.r.trial_id)}<br>${esc(p.data.r.phase)} · N=${p.data.r.enrollment}<br>${esc(p.data.r.start)}` },
-    xAxis: { type: "time" }, yAxis: { type: "value", name: "样本量" },
+    xAxis: { type: "time", ...(drawable.length === 1 ? { splitNumber: 2, minInterval: 86400000,
+      axisLabel: { formatter: "{yyyy}-{MM}-{dd}", hideOverlap: true } } : {}) }, yAxis: { type: "value", name: "样本量" },
     series: phases.map((ph, i) => ({ name: ph || "未知", type: "scatter",
-      data: rows.filter((r) => r.phase === ph && r.start && r.enrollment != null).map((r) => ({ value: [r.start, r.enrollment], r,
+      data: drawable.filter((r) => r.phase === ph).map((r) => ({ value: [r.start, r.enrollment], r,
         itemStyle: { color: r.is_own ? OWN : PAL[i % PAL.length] }, symbolSize: r.is_own ? 14 : 9 })) })) });
+  }
 })();

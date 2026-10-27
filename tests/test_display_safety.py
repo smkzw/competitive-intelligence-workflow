@@ -78,3 +78,32 @@ def test_unconfirmed_events_are_retained_in_release_but_not_presented_as_adopted
     view = _payload(rel, 'A')
     assert [e['status'] for e in view['events']] == ['registry','verified','dual_agreed','arbitrated']
     assert len(rel['events']) == 6 and rel['events'][4]['status'] == 'needs_review'
+
+
+def test_design_filter_updates_both_charts_and_omits_empty_plot_frames():
+    asset = Path(__file__).resolve().parents[1] / "src/ciw/render/static/c.js"
+    script = r"""
+const fs=require('fs'),vm=require('vm');
+const inputs={q:{value:''},'f-phase':{value:''},'f-mask':{value:''},'f-concept':{value:''},'f-china':{checked:false}};
+for(const e of Object.values(inputs))e.addEventListener=(name,fn)=>e.change=fn;
+const els={...inputs,matrix:{},count:{},'concept-chart':{parentElement:{},style:{}},
+ 'size-chart':{parentElement:{},style:{}}};
+const rows=[{trial_id:'zero',phase:'II',primary_concepts:['NPS'],start:'2026-01-01',enrollment:0,
+ products:[],primary:[],title:'',eligibility:''},
+ {trial_id:'unknown',phase:'III',primary_concepts:['NCS'],start:'2026-01-02',enrollment:null,products:[],primary:[],title:'',eligibility:''}];
+const plots={},out=[];
+const window={U:{D:{c:{rows}},esc:s=>s,OWN:'orange',PAL:['teal'],options(){},table(){},chart(id,opt){plots[id]=opt;}}};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{window,document:{getElementById:id=>els[id]}});
+function read(){return {count:els.count.textContent,concepts:plots['concept-chart'].yAxis.data,
+ points:plots['size-chart'].series.flatMap(s=>s.data).map(p=>p.value),
+ conceptHidden:!!els['concept-chart'].parentElement.hidden,sizeHidden:!!els['size-chart'].parentElement.hidden};}
+out.push(read());for(const q of ['zero','unknown','absent','']){inputs.q.value=q;inputs.q.change();out.push(read());}
+process.stdout.write(JSON.stringify(out));
+"""
+    result = subprocess.run(["node", "-e", script, str(asset)], capture_output=True, text=True, check=True)
+    initial, zero, unknown, absent, restored = json.loads(result.stdout)
+    assert set(initial["concepts"]) == {"NPS", "NCS"}
+    assert zero["concepts"] == ["NPS"] and zero["points"] == [["2026-01-01", 0]]
+    assert unknown["concepts"] == ["NCS"] and unknown["sizeHidden"]
+    assert absent["conceptHidden"] and absent["sizeHidden"] and absent["count"].startswith("0 /")
+    assert restored == initial
