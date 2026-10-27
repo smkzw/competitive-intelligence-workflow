@@ -1,0 +1,451 @@
+# CRSwNP 适应症配置（v2）
+# 规则：
+# - name_zh 只填已核实的正式中文通用名；没核实的留空，门户会显示 INN/代号，不机器翻译。
+# - target/mechanism/company 这类属性只填有把握的；没把握的留空，交给属性核对任务
+#   （CT.gov 干预描述 + 企业/监管来源，异构模型交叉核对）补齐。
+# - aliases 用于把 CT.gov / CDE 里的干预名映射到产品，必须一对一；配置加载时会做冲突校验。
+slug: crswnp
+name_zh: 慢性鼻窦炎伴鼻息肉
+name_en: Chronic rhinosinusitis with nasal polyps
+abbr: CRSwNP
+
+ctgov:
+  conditions:
+    - nasal polyps
+    - chronic rhinosinusitis with nasal polyps
+  relevance_patterns:
+    - nasal polyp
+    - polyposis
+    - CRSwNP
+    - rhinosinusitis with (nasal )?polyp
+    - 鼻息肉
+
+china:
+  cde_queries: [鼻息肉, 慢性鼻窦炎伴鼻息肉, MG-K10]
+  nmpa_queries: [鼻息肉]
+  wechat_accounts: [丁香园Insight数据库, 医药魔方Info]
+  wechat_queries: [鼻息肉 III期, CRSwNP 获批, 鼻息肉 临床试验 结果]
+
+# 背景/对照/救援治疗：出现在试验里，但不进入竞品宇宙
+background_patterns:
+  - placebo
+  - \bsaline\b
+  - mometasone
+  - fluticasone
+  - budesonide
+  - beclomethasone
+  - ciclesonide
+  - triamcinolone
+  - predniso
+  - methylpredniso
+  - corticosteroid
+  - glucocorticoid
+  - \bINCS\b
+  - standard (of care|therapy)
+  - usual therapy
+  - nasonex
+  - flonase
+  - doxycycline
+  - azithromycin
+  - augmentin|amoxicillin
+  - clarithromycin|rifampicin
+  - itraconazole
+  - montelukast
+  - vitamin d
+  - fish oil
+  - lansoprazole
+  - furosemide
+  - tranexamic
+  - bupivacaine|remifentanil|tramadol|metoprolol|dexmedetomidin|esketamine|epinephrine|adrenaline
+  - desmopressin
+  - mupirocin
+  - acetyl ?salicylic|aspirin
+  - verapamil
+  - botox
+  - run in medication
+  - biologic (agents|treatments)
+  - dosage of 17 cytokines
+  - sugar pill
+  # 中文登记（CDE）中的背景/对照/传统治疗
+  - 安慰剂
+  - 模拟剂
+  - 处方缓冲液
+  - 莫米松
+  - 布地奈德
+  - 氟替卡松
+  - 倍氯米松
+  - 泼尼松
+  - 甲泼尼龙
+  - 糖皮质激素
+  - 生理盐水
+
+products:
+  - id: mg-k10
+    name_en: MG-K10
+    aliases: [MG-K10, MGK10]
+    own: true
+    note: 本品；靶点、企业等属性待由 CDE 登记与企业来源核对后补齐
+
+  - id: dupilumab
+    name_en: dupilumab
+    name_zh: 度普利尤单抗
+    aliases: [dupilumab, SAR231893, REGN668, Dupixent, "dupilumab sar231893 (regn668)", "dupilumab sar231893",
+              "dupilumab prefilled syringe", "dupilumab 300 mg in 2 ml prefilled syringe",
+              "dupilumab 300 mg/2 ml subcutaneous solution [dupixent]", "dupixent®"]
+    brand: Dupixent
+    target: IL-4Rα
+    modality: 单克隆抗体
+    route: 皮下注射
+    company: Sanofi / Regeneron
+
+  - id: omalizumab
+    name_en: omalizumab
+    name_zh: 奥马珠单抗
+    aliases: [omalizumab, Xolair, "xolair (omalizumab)"]
+    brand: Xolair
+    target: IgE
+    modality: 单克隆抗体
+    route: 皮下注射
+    company: Novartis / Genentech
+
+  - id: mepolizumab
+    name_en: mepolizumab
+    name_zh: 美泊利珠单抗
+    aliases: [mepolizumab, Nucala, "mepolizumab 100 mg", "mepolizumab injection", "nucala®"]
+    brand: Nucala
+    target: IL-5
+    modality: 单克隆抗体
+    route: 皮下注射
+    company: GSK
+
+  - id: benralizumab
+    name_en: benralizumab
+    name_zh: 贝那利珠单抗
+    aliases: [benralizumab, Fasenra, "benralizumab 30 mg", "benralizumab 30 mg sc + mometasone furoate"]
+    brand: Fasenra
+    target: IL-5Rα
+    modality: 单克隆抗体
+    route: 皮下注射
+    company: AstraZeneca
+
+  - id: reslizumab
+    name_en: reslizumab
+    aliases: [reslizumab]
+    target: IL-5
+    modality: 单克隆抗体
+    company: Teva
+
+  - id: tezepelumab
+    name_en: tezepelumab
+    aliases: [tezepelumab, "experimental: tezepelumab", Tezspire, 特泽利尤单抗]
+    brand: Tezspire
+    target: TSLP
+    modality: 单克隆抗体
+    route: 皮下注射
+    company: AstraZeneca / Amgen
+    # 中文登记药名“特泽利尤单抗注射液”见 CDE CTR20260829；正式中文通用名待 NMPA 核对后再填 name_zh
+
+  - id: depemokimab
+    name_en: depemokimab
+    aliases: [depemokimab, GSK3511294, "depemokimab (gsk3511294)"]
+    target: IL-5
+    modality: 单克隆抗体（长效）
+    route: 皮下注射
+    company: GSK
+
+  - id: itepekimab
+    name_en: itepekimab
+    aliases: [itepekimab, SAR440340, "itepekimab (sar440340)"]
+    target: IL-33
+    modality: 单克隆抗体
+    company: Sanofi / Regeneron
+
+  - id: lebrikizumab
+    name_en: lebrikizumab
+    aliases: [lebrikizumab, LY3650150]
+    target: IL-13
+    modality: 单克隆抗体
+    company: Eli Lilly
+
+  - id: lunsekimig
+    name_en: lunsekimig
+    aliases: [lunsekimig]
+    company: Sanofi
+
+  - id: verekitug
+    name_en: verekitug
+    aliases: [verekitug, UPB-101, "verekitug (upb-101)"]
+    company: Upstream Bio
+
+  - id: etokimab
+    name_en: etokimab
+    aliases: [etokimab, ANB020]
+    target: IL-33
+    company: AnaptysBio
+
+  - id: stapokibart
+    name_en: stapokibart
+    name_zh: 司普奇拜单抗
+    aliases: [stapokibart, CM310]
+    target: IL-4Rα
+    modality: 单克隆抗体
+    route: 皮下注射
+    company: 康诺亚生物（Keymed Biosciences）
+
+  - id: cm512
+    name_en: CM512
+    aliases: [CM512]
+    company: 康诺亚生物（Keymed Biosciences）
+
+  - id: cm326
+    name_en: CM326
+    aliases: [CM326, "cm326 injection"]
+    target: TSLP
+    company: 康诺亚生物 / 石药集团
+
+  - id: tqc2731
+    name_en: TQC2731
+    aliases: [TQC2731, "tqc2731 injection", "210mg of tqc2731 injection", "420mg of tqc2731 injection"]
+    target: TSLP
+    modality: 单克隆抗体
+    company: 正大天晴
+
+  - id: shr-1905
+    name_en: SHR-1905
+    aliases: [SHR-1905, "shr-1905 injection"]
+    company: 恒瑞医药
+
+  - id: gr1802
+    name_en: GR1802
+    aliases: [GR1802, "gr1802 injection"]
+    company: 智翔金泰（Genrix）
+
+  - id: ssgj-611
+    name_en: "611"
+    aliases: ["611", SSGJ-611]
+    company: 三生国健
+
+  - id: lp-003
+    name_en: LP-003
+    aliases: [LP-003, "lp-003 injection"]
+    company: Longbio Pharma
+
+  - id: ak139
+    name_en: AK139
+    aliases: [AK139]
+    company: 康方生物（Akeso）
+
+  - id: bbt002
+    name_en: BBT002
+    aliases: [BBT002]
+    company: Bambusa Therapeutics
+
+  - id: gsk5784283
+    name_en: GSK5784283
+    aliases: [GSK5784283]
+    company: GSK
+
+  - id: rademikibart
+    name_en: rademikibart
+    aliases: [rademikibart, CBP-201]
+    target: IL-4Rα
+    company: Connect Biopharma
+
+  - id: fevipiprant
+    name_en: fevipiprant
+    aliases: [fevipiprant, QAW039, "fevipiprant 150 mg", "fevipiprant 450 mg"]
+    target: CRTH2（DP2）
+    modality: 小分子
+    route: 口服
+    company: Novartis
+
+  - id: dexpramipexole
+    name_en: dexpramipexole
+    aliases: [dexpramipexole]
+    modality: 小分子
+    route: 口服
+
+  - id: brensocatib
+    name_en: brensocatib
+    aliases: [brensocatib]
+    target: DPP1
+    modality: 小分子
+    route: 口服
+    company: Insmed
+
+  - id: rss0343
+    name_en: RSS0343
+    aliases: [RSS0343, "rss0343 tablet; rifampicin capsules", "rss0343 tablet; clarithromycin tablets"]
+    modality: 小分子
+    route: 口服
+    company: 瑞石生物（Reistone）
+
+  - id: tqh2722
+    name_en: TQH2722
+    aliases: [TQH2722, "300mg of tqh2722 injection", "600mg of tqh2722 injection", "300mg/600mg of tqh2722 injection"]
+    company: 正大天晴
+
+  - id: htmc0658
+    name_en: HTMC0658
+    aliases: [HTMC0658]
+    company: 上海翊点（Shanghai Yidian）
+
+  - id: qx005n
+    name_en: QX005N
+    aliases: [QX005N, "qx005n注射液"]
+    company: 江苏荃信生物医药（CDE 登记申请人）
+
+  - id: qx027n
+    name_en: QX027N
+    aliases: [QX027N, "qx027n注射液"]
+    company: 荃信生物（CDE 登记）
+
+  - id: jkn2401
+    name_en: JKN2401
+    aliases: [JKN2401, "jkn2401 注射液", "jkn2401注射液"]
+
+  - id: ba2101
+    name_en: BA2101
+    aliases: [BA2101, "ba2101注射液"]
+    company: 山东博安生物技术（CDE 登记申请人）
+
+  - id: bat2606
+    name_en: BAT2606
+    aliases: [BAT2606, "bat2606注射液"]
+    company: 百奥泰生物制药（CDE 登记申请人）
+    innovative: false
+    modality: 生物类似药（对照药为美泊利珠单抗，CDE CTR20221879）
+
+  - id: pf-06817024
+    name_en: PF-06817024
+    aliases: [PF-06817024]
+    company: Pfizer
+
+  - id: ak001
+    name_en: AK001 (lirentelimab)
+    aliases: [AK001, lirentelimab, "ak001 low dose", "ak001 high dose"]
+    target: Siglec-8
+    company: Allakos
+
+  - id: amg-282
+    name_en: AMG 282
+    aliases: [AMG 282, AMG282]
+    company: Amgen
+
+  - id: act-774312
+    name_en: ACT-774312
+    aliases: [ACT-774312]
+    target: CRTH2
+    modality: 小分子
+    company: Idorsia
+
+  - id: gb001
+    name_en: GB001
+    aliases: [GB001]
+    target: DP2
+    modality: 小分子
+    company: Gossamer Bio
+
+  - id: trl1068
+    name_en: TRL1068
+    aliases: [TRL1068]
+    modality: 单克隆抗体
+    company: Trellis Bioscience
+
+  - id: opn-375
+    name_en: OPN-375 (fluticasone EDS)
+    aliases: [OPN-375, "fluticasone propionate exhalation delivery system", Xhance]
+    brand: Xhance
+    modality: 改良剂型（呼气式给药装置）
+    route: 鼻内
+    company: Optinose
+    note: 改良剂型；活性成分为氟替卡松
+
+  - id: mometasone-implant
+    name_en: mometasone furoate sinus implant
+    aliases: ["s8 sinus implant", Sinuva, "mometasone furoate sinus implant"]
+    brand: Sinuva
+    modality: 药械组合（窦内植入物）
+    route: 窦内植入
+    company: Intersect ENT
+
+  - id: lyr-210
+    name_en: LYR-210
+    aliases: [LYR-210]
+    modality: 药械组合（鼻窦植入物）
+    company: Lyra Therapeutics
+
+concepts:
+  - id: surgery_or_scs
+    label: 需要鼻息肉手术或全身激素
+    patterns: ["(surgery|surgical).*(SCS|systemic corticosteroid|OCS|oral corticosteroid)", "(SCS|systemic corticosteroid|OCS).*(surgery|surgical)"]
+    exclude: ["without (surgery|SCS|systemic|OCS)", "concentration"]
+    direction: lower_better
+  - id: nps
+    label: 鼻息肉评分（NPS）
+    patterns: ["nasal polyps? score", "\\bNPS\\b", "endoscopic.*nasal polyp", "nasal polyp.*endoscop", "polyp size"]
+    direction: lower_better
+  - id: ncs
+    label: 鼻塞评分（NCS）
+    patterns: ["nasal congestion", "congestion score", "nasal obstruction.*(symptom|severity|score)", "\\bNCS\\b", "\\bNC\\b.*score"]
+    exclude: ["\\bVAS\\b", "visual analog"]
+    direction: lower_better
+  - id: vas_composite
+    label: 复合症状 VAS
+    patterns: ["composite.*(VAS|visual analog)", "(VAS|visual analog).*composite"]
+    direction: lower_better
+  - id: nasal_obstruction_vas
+    label: 鼻塞 VAS
+    patterns: ["(nasal obstruction|congestion).*(VAS|visual analog)", "(VAS|visual analog).*(nasal obstruction|congestion)"]
+    exclude: ["composite"]
+    direction: lower_better
+  - id: lmk
+    label: 鼻窦 CT Lund-Mackay 评分
+    patterns: ["lund[- ]?mackay", "\\bLMK\\b"]
+    direction: lower_better
+  - id: snot22
+    label: SNOT-22 评分
+    patterns: ["SNOT[- ]?22", "sino[- ]?nasal outcome test"]
+    exclude: ["domain", "subscale", "sub-score", "subscore"]
+    direction: lower_better
+  - id: upsit
+    label: 嗅觉识别测试（UPSIT）
+    patterns: ["UPSIT", "university of pennsylvania smell"]
+    direction: higher_better
+  - id: loss_of_smell
+    label: 嗅觉丧失评分
+    patterns: ["loss of smell", "sense of smell", "smell score", "\\bLoS\\b"]
+    exclude: ["UPSIT", "university of pennsylvania"]
+    direction: lower_better
+  - id: tss
+    label: 总症状评分（TSS）
+    patterns: ["total symptom score", "\\bTSS\\b"]
+    direction: lower_better
+  - id: tnss
+    label: 鼻部总症状评分（TNSS）
+    patterns: ["\\bTNSS\\b", "total nasal symptom"]
+    direction: lower_better
+  - id: scs_use
+    label: 全身激素使用
+    patterns: ["systemic corticosteroid", "\\bSCS\\b", "oral corticosteroid", "\\bOCS\\b"]
+    direction: lower_better
+  - id: surgery
+    label: 鼻息肉手术
+    patterns: ["(nasal|sinus|NP|polyp) surgery", "polypectomy", "surgery for nasal polyp"]
+    direction: lower_better
+  - id: vas_overall
+    label: 总体症状 VAS
+    patterns: ["(overall|total) (symptom )?VAS", "VAS.*(overall|total) symptom"]
+    direction: lower_better
+  - id: pnif
+    label: 鼻吸气峰流速（PNIF）
+    patterns: ["PNIF", "peak nasal inspiratory"]
+    direction: higher_better
+  - id: fev1
+    label: FEV1（合并哮喘）
+    patterns: ["FEV ?1"]
+    direction: higher_better
+  - id: acq
+    label: 哮喘控制问卷（ACQ）
+    patterns: ["\\bACQ"]
+    direction: lower_better

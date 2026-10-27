@@ -1,0 +1,18 @@
+# 异构交叉核对的模型角色。三个角色必须来自三个不同家族（加载时校验）。
+# key 只从环境变量或 key 文件读取；不要把 key 写进本文件或任何入库文件。
+endpoints:
+  dgx:
+    base_url: https://spark-a321.tail623d86.ts.net/v1
+    key_env: [CIW_DGX_API_KEY, MW_DGX_API_KEY]
+    key_file_env: [CIW_DGX_KEY_FILE, MW_DGX_KEY_FILE]
+    default_key_file: ~/.config/ciw/dgx.key
+    no_proxy: true
+  cms:
+    base_url: http://127.0.0.1:20128/v1
+    key_env: [MW_CMS_API_KEY]
+    no_proxy: true
+
+roles:
+  extractor_a: {endpoint: dgx, model: deepseek, family: deepseek, max_tokens: 8192}
+  extractor_b: {endpoint: dgx, model: qwen, family: qwen, max_tokens: 4096}
+  arbiter: {endpoint: dgx, model: glm, family: glm, max_tokens: 8192}

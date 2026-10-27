@@ -1,0 +1,43 @@
+[project]
+name = "ciw"
+version = "2.0.0a1"
+description = "竞品调研子系统：适应症 → 竞品事实 release → A/B/C HTML 门户（医学经理工作台 evidence_design）"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+  "pydantic>=2.9,<3",
+  "Jinja2>=3.1,<4",
+  "PyYAML>=6,<7",
+  "jsonschema>=4.23,<5",
+  "lxml>=5.3,<7",
+]
+
+[project.scripts]
+ciw = "ciw.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.8,<0.12"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3",
+  "ruff>=0.8",
+]
+
+[tool.uv.build-backend]
+module-name = "ciw"
+
+[tool.pytest.ini_options]
+addopts = "-q --strict-markers"
+testpaths = ["tests"]
+markers = [
+  "live: 访问真实网络或模型端点；默认不运行（pytest -m live）",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="kpis" id="kpis"></section>
+<section class="row">
+  <div class="card grow">
+    <div class="card-h"><h2>研发阶段矩阵</h2><span class="legend"><i class="dot g"></i>全球最高阶段 <i class="dot c"></i>中国最高阶段</span></div>
+    <div id="phase-chart" class="chart tall"></div>
+  </div>
+</section>
+<section class="card">
+  <div class="card-h"><h2>产品一览</h2>
+    <div class="filters">
+      <input id="q" type="search" placeholder="搜索产品、靶点、企业">
+      <select id="f-target"><option value="">全部靶点</option></select>
+      <select id="f-phase"><option value="">全部阶段</option></select>
+      <label><input id="f-china" type="checkbox"> 只看中国有开发</label>
+    </div>
+  </div>
+  <div class="table-wrap"><table id="products" class="grid"></table></div>
+</section>
+<section class="card" id="events-card" hidden>
+  <div class="card-h"><h2>里程碑事件（公告、公众号、监管来源）</h2><span class="hint">每条事件均经异构模型交叉核对并附原文</span></div>
+  <div class="table-wrap"><table id="events" class="grid"></table></div>
+</section>
+<section class="card">
+  <div class="card-h"><h2>II 期及以上关键试验时间线</h2><span class="hint">首例入组 → 主要完成日期</span></div>
+  <div id="timeline-chart" class="chart tall"></div>
+</section>
+<section class="card">
+  <details id="unclassified"><summary><h2>未归类干预</h2><span class="count"></span></summary><div class="table-wrap"></div></details>
+</section>
+{% endblock %}

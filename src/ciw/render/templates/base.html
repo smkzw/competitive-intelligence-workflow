@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }} · {{ indication.name_zh }}</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-report="{{ report }}">
+<header class="top">
+  <div class="brand">
+    <span class="ind">{{ indication.name_zh }}{% if indication.abbr %}（{{ indication.abbr }}）{% endif %}</span>
+    <nav class="reports">
+      {% for key, label in reports.items() %}
+      <a href="../{{ key }}/index.html" class="{{ 'on' if key == report else '' }}">{{ key }} · {{ label }}</a>
+      {% endfor %}
+    </nav>
+  </div>
+  <div class="meta"><span>数据截至 {{ cutoff }}</span><span id="coverage" class="coverage"></span></div>
+</header>
+<main id="app">{% block main %}{% endblock %}</main>
+<aside id="drawer" class="drawer" hidden>
+  <button class="close" type="button" aria-label="关闭">×</button>
+  <div class="drawer-body"></div>
+</aside>
+<script src="echarts.min.js"></script>
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script src="{{ report|lower }}.js"></script>
+</body>
+</html>

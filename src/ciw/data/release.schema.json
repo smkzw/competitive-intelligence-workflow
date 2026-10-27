@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ciw release v1",
+  "type": "object",
+  "required": ["schema_version", "release_id", "generated_at", "code_version", "indication", "cutoff",
+               "own_product_id", "coverage", "sources", "products", "trials", "results", "safety", "events",
+               "a", "b", "c", "review_queue", "stats"],
+  "properties": {
+    "schema_version": {"const": "ciw-release-1"},
+    "release_id": {"type": "string", "pattern": "^rel_[0-9a-f]{16}$"},
+    "indication": {"type": "object", "required": ["slug", "name_zh", "name_en"]},
+    "cutoff": {"type": "string"},
+    "own_product_id": {"type": ["string", "null"]},
+    "coverage": {"type": "array", "items": {"type": "object", "required": ["source", "status"],
+      "properties": {"status": {"enum": ["ok", "partial", "not_captured", "failed", "skipped"]}}}},
+    "sources": {"type": "array", "items": {"type": "object", "required": ["source_id", "kind", "url", "sha256"]}},
+    "products": {"type": "array", "items": {"type": "object", "required": ["product_id", "name_en"]}},
+    "trials": {"type": "array", "items": {"type": "object", "required": ["trial_id", "registry", "locator"]}},
+    "results": {"type": "array"},
+    "safety": {"type": "array"},
+    "events": {"type": "array"},
+    "a": {"type": "object", "required": ["products", "phase_columns", "timeline", "unclassified"]},
+    "b": {"type": "object", "required": ["questions", "longitudinal", "safety"]},
+    "c": {"type": "object", "required": ["rows", "facets"]},
+    "review_queue": {"type": "array"},
+    "stats": {"type": "object"}
+  }
+}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="row">
+  <div class="card grow"><div class="card-h"><h2>主要终点构成</h2></div><div id="concept-chart" class="chart"></div></div>
+  <div class="card grow"><div class="card-h"><h2>样本量与首例入组时间</h2></div><div id="size-chart" class="chart"></div></div>
+</section>
+<section class="card">
+  <div class="card-h"><h2>设计对照矩阵</h2>
+    <div class="filters">
+      <input id="q" type="search" placeholder="搜索试验、产品、终点、入排原文">
+      <select id="f-phase"><option value="">全部期别</option></select>
+      <select id="f-mask"><option value="">全部盲法</option></select>
+      <select id="f-concept"><option value="">全部主要终点</option></select>
+      <label><input id="f-china" type="checkbox"> 只看含中国中心</label>
+      <span id="count" class="hint"></span>
+    </div>
+  </div>
+  <div class="table-wrap"><table id="matrix" class="grid sticky"></table></div>
+</section>
+{% endblock %}

@@ -1,0 +1,20 @@
+# 运行产物与第三方原文一律不入库
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+workspace/
+workspaces/
+captures/
+releases/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.log
+*.png
+!docs/screenshots/*.png
+*.pdf
+*.bin
+.env
+*.key
