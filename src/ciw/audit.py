@@ -85,6 +85,7 @@ def audit(ws: Workspace, n: int = 30, seed: int = 20261027) -> dict[str, Any]:
                         "label": f"{c['acronym']} · {q['label']} · 计算值",
                     }
                 )
+    items.extend(_observation_samples(rel, items))
     random.Random(seed).shuffle(items)
     checked, errors = [], []
     cache: dict[str, Any] = {}
@@ -112,12 +113,31 @@ def audit(ws: Workspace, n: int = 30, seed: int = 20261027) -> dict[str, Any]:
             ok = src == it["value"] and (lo, hi) == tuple(it["ci"])
         row = {**it, "source_value": src, "ok": ok}
         (checked if ok else errors).append(row)
+    return _report(rel["release_id"], checked, errors)
+
+
+def _report(release_id, checked, errors):
     return {
-        "release_id": rel["release_id"],
+        "release_id": release_id,
         "sampled": len(checked) + len(errors),
         "errors": errors,
         "examples": [f"{x['label']} = {x['value']}  ←  原件：{x.get('context', '')}" for x in checked[:8]],
     }
+
+
+def _observation_samples(rel, existing):
+    seen = {(i.get("source_id"), i.get("path"), i.get("result_id")) for i in existing}
+    out = []
+    for r in rel["b"].get("observations", []):
+        for g in r["groups"]:
+            key = (r["source_id"], g["path"], r["result_id"])
+            if key in seen or g["value"] is None or not g["path"]:
+                continue
+            seen.add(key)
+            out.append({"kind": "group_value", "source_id": r["source_id"], "path": g["path"],
+                        "result_id": r["result_id"], "source_kind": r["source_kind"], "value": g["value"], "n": g["n"],
+                        "label": f"{r['acronym']} · {r['domain_label']} · {r['title']} · {g['title']}"})
+    return out
 
 
 def _publication(item, doc, results):

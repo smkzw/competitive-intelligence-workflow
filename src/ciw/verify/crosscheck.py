@@ -19,7 +19,7 @@ from pydantic import BaseModel, ValidationError
 from ciw.verify.llm import Backend, check_heterogeneous, parse_json
 from ciw.verify.quote import check_quote
 
-PROMPT_VERSION = "source-review-v3"
+PROMPT_VERSION = "source-review-v3.1"
 
 SYSTEM_EXTRACT = (
     "你是临床试验与药物研发信息的抽取器。只依据用户给出的原文，按要求的 JSON 结构输出。"

@@ -10,7 +10,7 @@ _ACTION = {
     "filing": r"受理|递交|提交|submit|accept|filing|filed",
     "topline": r"顶线|揭盲|主要终点|top[- ]?line|primary endpoint|results",
     "phase_start": r"入组|启动|enroll|enrol|initiated|first patient",
-    "licensing": r"签署|授权|许可|签约|sign|licens|agreement",
+    "licensing": r"签署|授权|许可|签约|修订|修正|sign|licens|agreement|amend|revis",
 }
 _ANNOUNCEMENT = re.compile(r"宣布|发布|公告|announc|issued|press release", re.I)
 _TOPLINE = re.compile(
@@ -33,6 +33,10 @@ def validate_event_item(item: dict) -> tuple[bool, str]:
         _ACTION.get(kind, r"(?!)"), evidence, re.I
     ):
         return False, "新闻头部日期不能代替事件日期"
+    if kind == "licensing":
+        amendment = re.compile(r"修订|修正|amend|revis", re.I)
+        if amendment.search(item.get("detail", "")) and not amendment.search(evidence):
+            return False, "原合作签署日期不能用于修订后条款"
     if kind in {"approval", "filing"} and _ANNOUNCEMENT.search(evidence):
         return False, "宣布已经获批/受理不证明该日就是批准/受理日"
     return True, ""

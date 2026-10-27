@@ -5,6 +5,7 @@
     <div class="card-h"><h2>临床问题</h2></div>
     <input id="qsearch" type="search" placeholder="搜索终点、时间点">
     <label class="small"><input id="only-primary" type="checkbox"> 只看含主要终点的问题</label>
+    <p><a href="#observations">全部观测与原始数值</a></p>
     <ul id="qlist"></ul>
   </nav>
   <div class="qmain">
@@ -29,6 +30,17 @@
       <div id="sae-chart" class="chart"></div>
       <div class="table-wrap"><table id="safety-table" class="grid"></table></div>
     </section>
+    <section class="card" id="observations">
+      <details id="observation-detail"><summary><h2>全部观测与原始数值</h2></summary>
+        <div class="card-h">
+          <div class="filters"><input id="observation-search" type="search" placeholder="搜索药物、研究、终点、分析人群">
+            <select id="observation-domain" aria-label="观测类别"><option value="">全部类别</option></select></div>
+          <div class="filters"><button id="observation-prev" type="button">上一页</button><span id="observation-count"></span><button id="observation-next" type="button">下一页</button></div>
+        </div>
+        <div class="table-wrap"><table id="observation-table" class="grid"></table></div>
+      </details>
+    </section>
+
   </div>
 </div>
 {% endblock %}

@@ -120,7 +120,27 @@ def build_results(
     questions.sort(
         key=lambda q: (bool(q["subgroup"]), not q["has_primary"], -len(q["trial_ids"]), q["label"], q["weeks"] or 999)
     )
-    return {"questions": questions, "longitudinal": _longitudinal(cfg, trials, products, results)}
+    return {"questions": questions, "longitudinal": _longitudinal(cfg, trials, products, results),
+            "observations": _observations(trials, products, results)}
+
+
+def _observations(trials, products, results):
+    domains = {"efficacy": "疗效", "safety": "安全性", "pk": "药代动力学", "pd": "药效学",
+               "immunogenicity": "免疫原性", "other": "其他观测"}
+    return [
+        {
+            "result_id": r.result_id, "trial_id": t.trial_id, "acronym": t.acronym or t.trial_id,
+            "products": [product_label(products.get(pid)) for pid in t.product_ids],
+            "phase": t.phase, "domain": r.domain, "domain_label": domains[r.domain],
+            "title": r.title, "timeframe": r.timeframe, "class_title": r.class_title,
+            "category_title": r.category_title, "population": r.population,
+            "unit": r.unit, "param_type": r.param_type, "dispersion_type": r.dispersion_type,
+            "status": r.status, "source_kind": r.kind, "url": r.source_url or t.url, "source_id": r.locator.source_id,
+            "groups": [{**g.model_dump(), "role_label": role_label(g.role)} for g in r.groups],
+            "analyses": [a.model_dump() for a in r.analyses],
+        }
+        for r in results if (t := trials.get(r.trial_id)) and t.relevance == "core"
+    ]
 
 
 def _orient(a_val: float, g1, g2) -> tuple | None:

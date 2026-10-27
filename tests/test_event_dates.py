@@ -72,3 +72,18 @@ def test_production_inbox_keeps_announcement_date_unaccepted(cfg, resolver, ws):
     assert events[0].status == "needs_review" and queue[0]["kind"] == "event_needs_review"
     saved = ws.verifications()[events[0].event_id]
     assert saved["item"]["event_date_quote"] == text and saved["source_id"] == events[0].source_id
+
+
+def test_original_contract_year_does_not_date_amended_terms():
+    from ciw.verify.events import validate_event_item
+
+    original = "2012年甲乙双方签署合作协议"
+    item = dict(event_type="licensing", date="2012", event_date_quote=original,
+                quote=original + "，目前已经修订，双方平摊成本与利润。",
+                detail="修订后双方平摊成本与利润")
+    assert not validate_event_item(item)[0]
+    item["detail"] = "双方签署合作协议"
+    assert validate_event_item(item)[0]
+    item.update(date="2025", event_date_quote="2025年双方修订合作协议",
+                quote="2025年双方修订合作协议", detail="双方修订合作协议")
+    assert validate_event_item(item)[0]
