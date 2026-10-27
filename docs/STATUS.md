@@ -6,8 +6,8 @@
 直接执行：本线程持有共享浏览器、来源和current指针；不引入旧会商/签发链。旧中文工程零接触。
 
 ## 发布与合同
-- CI分支codex/ciw-v2-trunk，最新已推3cd8b60；后续本轮提交以git log为准。保留main，不强推。
-- 工作台已推1945b82357958086e69393ebbf4d9f988da2ee66，分支feat/ciw-release-adapter。
+- CI分支codex/ciw-v2-trunk，最新已推40e4bf6；后续本轮提交以git log为准。保留main，不强推。
+- 工作台已推1493779（兼容新verified状态；21项接线/身份/studio回归通过），分支feat/ciw-release-adapter。
 - D17：DGX/deepseek主抽取；cms-smk/glm-5.3-flash读完整原文与候选核对、修正、补漏；仅两角色。
 - 新通过状态verified，页面显示模型核对；历史dual_agreed/arbitrated只读兼容，不宣称新流程盲审。
 - 凭据仅环境变量或DGX显式key文件；cms-smk使用CMS_SMK_API_KEY。没有更改服务端或访问控制。
@@ -15,11 +15,11 @@
 ## 进度
 |项|已证实|剩余|
 |---|---|---|
-|M0基础|独立源码与环境；职责拆分前后真实源release ID相同；192测试1.34秒/Ruff通过；Python函数≤80行/文件≤600行|最终干净clone复核；历史清理/两个archive标签未证实|
+|M0基础|独立源码与环境；职责拆分前后真实源release ID相同；194测试/Ruff通过；Python函数≤80行/文件≤600行|干净clone40e4bf6在Python3.13独立环境192测试/Ruff通过；历史清理/两个archive标签未证实|
 |M1主链|普通CLI出真实A/B/C；登记臂显式产品身份补回5研究/133结果；隔离候选全部1375个B数值/比较回查零错|新两模型同一候选的全链验收|
 |M2工作台|默认关闭隔离只读身份，托管A/B/C及旧候选实屏已测|最新模型候选在工作台内重验|
-|M3中国来源|CDE59详情/75登记；官网7篇+公众号3篇；NMPA16/16详情、原5组失败列表均恢复，coverage=ok|未发现本品CRSwNP登记，不虚构|
-|M4模型|cms-smk目录200；已真实返回glm-5.3-flash；两模型规则族与邻接共81测试通过；新整轮在运行|最终20事件原文零错、待核比例与调用失败分开统计|
+|M3中国来源|CDE59详情/75登记；原官网7篇+公众号3篇，另补2篇欧美许可原文；NMPA16/16详情、原5组失败列表均恢复，coverage=ok|未发现本品CRSwNP登记，不虚构|
+|M4模型|cms-smk目录200；已真实返回glm-5.3-flash；两模型规则族与邻接共81测试通过；新整轮在运行；错误条目仅回送同一GLM修正一次，不增加模型家族|最终20事件原文零错、待核比例与调用失败分开统计|
 |M5论文|3篇关联摘要；旧CROWNS2双抽取12结果/4差值可绘，N未知；17个503检索已全部补查|D17重新核对三篇并进入同一release及B实屏|
 |M6泛化/studio|PNH仅YAML修正输血条件/网织红细胞概念，真实CLI及audit40零错；studio旧160行选择重开已测|最终C集合重读、选择重开与实际泛化使用|
 
@@ -37,7 +37,7 @@
 - D17切换时旧三模型进程按用户变更退出130；已返回响应保留，current不动，SQLite备份integrity=ok。
 - D17普通CLI --offline --with-models已启动；复用DeepSeek同原文/指令响应，新GLM核对单独缓存，不将旧DGX GLM或Qwen冒充新调用。
 - 过渡清单与备份：主工作区stages/model-transition.json和before-two-model.sqlite；不入Git。
-- PNH current=rel_e7b7ee61b26dc349：149研究/70核心/7产品/1459结果/256问题/30比较，audit40/errors=[]。
+- PNH current=rel_5f1cb505877d49a5：149研究/70核心/7产品/1459结果/256问题/30比较，全部2691个B数值/比较audit零错，三页1920实屏无溢出。
 - 工作台项目p20261027_86fa32仍读旧rel_87dc2fc802b3fc41/160行/5已选，不能当最新C已接入。
 - 运行服务保留；Ego专用空间复用，不升级/清缓存/改登录。新模型整轮健康时不重复发起。
 

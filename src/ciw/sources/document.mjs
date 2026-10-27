@@ -13,7 +13,8 @@ try {
     const body=article.innerText;
     const header=[heading?.innerText?.trim(),publisher?.innerText?.trim(),date?.innerText?.trim()]
       .filter(s=>s&&!body.includes(s)).join('\n');
-    return {url: location.href, title: heading?.innerText?.trim() || document.title,
+    const canonicalTitle = document.querySelector('meta[property="og:title"]')?.content?.trim();
+    return {url: location.href, title: canonicalTitle || heading?.innerText?.trim() || document.title,
       text: header ? header+'\n'+body : body, publisher: publisher?.innerText?.trim() || '',
       published_at: date?.getAttribute('datetime') || '', date_text: date?.innerText || '',
       fetched_at: new Date().toISOString()};

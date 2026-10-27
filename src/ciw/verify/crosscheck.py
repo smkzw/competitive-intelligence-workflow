@@ -95,7 +95,9 @@ def _user_prompt(task: ExtractionTask) -> str:
     return f"任务：{task.instruction}\n\n每条 item 的 JSON Schema：{schema}\n\n原文：\n<<<\n{task.source_text}\n>>>"
 
 
-def _extract(backend: Backend, task: ExtractionTask, candidates=None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+def _extract(
+    backend: Backend, task: ExtractionTask, candidates=None, errors=None
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     call: dict[str, Any] = {
         "role": "extract" if candidates is None else "verify", "family": backend.family, "model": backend.model
     }
@@ -104,6 +106,9 @@ def _extract(backend: Backend, task: ExtractionTask, candidates=None) -> tuple[l
         if candidates is not None:
             system = SYSTEM_VERIFY
             user += "\n待核候选（仅供查错，不是来源）：\n" + json.dumps(candidates, ensure_ascii=False)
+            if errors:
+                user += ("\n确定性校验错误：" + json.dumps(errors, ensure_ascii=False)
+                         + "\n本次仅修复所列候选，逐字复制真实连续原文；无法支持的日期留空。不要新增其他身份。")
         payload = parse_json(backend.chat(system, user))
         call.update(getattr(backend, "receipt", {}))
         if not isinstance(payload, dict) or not isinstance(payload.get("items"), list):
@@ -206,6 +211,22 @@ def _checked_items(task, items):
     return out
 
 
+def _repair_review(task, backend, b_by):
+    invalid = {key: it for key, it in b_by.items() if not it["_quote_ok"] or it.get("_duplicate_conflict")}
+    if not invalid:
+        return []
+    errors = [{"key": key, "error": it["_quote_reason"] or "相同身份存在冲突值"} for key, it in invalid.items()]
+    repaired, call = _extract(backend, task, [_clean(it) for it in invalid.values()], errors)
+    call["role"] = "verify_repair"
+    if not call.get("error"):
+        fixed = _checked_items(task, repaired)
+        call["unrequested_items"] = len(set(fixed) - set(invalid))
+        for key in invalid:
+            if key in fixed:
+                b_by[key] = fixed[key]
+    return [call]
+
+
 def crosscheck(task: ExtractionTask, roles: dict[str, Backend]) -> list[CheckedItem]:
     check_heterogeneous(roles)
     a_items, a_call = _extract(roles["extractor_a"], task)
@@ -215,6 +236,7 @@ def crosscheck(task: ExtractionTask, roles: dict[str, Backend]) -> list[CheckedI
     if b_call.get("error"):
         raise CrosscheckFailed("来源核对失败：" + b_call["error"])
     a_by, b_by = _checked_items(task, a_items), _checked_items(task, b_items)
+    calls = [a_call, b_call, *_repair_review(task, roles["verifier"], b_by)]
     results = []
     for key in sorted(set(a_by) | set(b_by)):
         a, b = a_by.get(key), b_by.get(key)
@@ -230,7 +252,7 @@ def crosscheck(task: ExtractionTask, roles: dict[str, Backend]) -> list[CheckedI
             note = "核对者从原文补充遗漏"
         elif not _same(task, a, b) or a.get("_duplicate_conflict"):
             note = "核对者依据原文修正候选"
-        results.append(CheckedItem(_clean(chosen), status, key, [a_call, b_call], note))
+        results.append(CheckedItem(_clean(chosen), status, key, calls, note))
     return results
 
 

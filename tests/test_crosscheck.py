@@ -89,3 +89,27 @@ def test_same_family_or_extra_third_role_is_rejected():
     models["arbiter"] = backend("qwen")
     with pytest.raises(ValueError):
         crosscheck(task(), models)
+
+
+def test_invalid_review_gets_one_same_model_repair_with_source_error():
+    seen = []
+    def review(system, user):
+        seen.append(user)
+        corrected = len(seen) == 2
+        return json.dumps({"items": [item() if corrected else dict(item(), date="2024-01-01")]}, ensure_ascii=False)
+    out = crosscheck(task(), roles(backend("deepseek", [item()]), FakeBackend("glm", "glm", review)))
+    assert out[0].status == "verified" and len(seen) == 2
+    assert "确定性校验错误" in seen[1] and "2024-01-01" in seen[1]
+    assert [c["role"] for c in out[0].calls] == ["extract", "verify", "verify_repair"]
+    assert {c["family"] for c in out[0].calls} == {"deepseek", "glm"}
+
+
+def test_repair_is_bounded_and_cannot_adopt_unrequested_new_identities():
+    seen = []
+    def review(system, user):
+        seen.append(user)
+        invalid = dict(item(), date="2024-01-01")
+        extra = dict(item(), product_mention="Unrelated")
+        return json.dumps({"items": [invalid] if len(seen) == 1 else [invalid, extra]}, ensure_ascii=False)
+    out = crosscheck(task(), roles(backend("deepseek", [item()]), FakeBackend("glm", "glm", review)))
+    assert len(seen) == 2 and len(out) == 1 and out[0].status == "needs_review"
