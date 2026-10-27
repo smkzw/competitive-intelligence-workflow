@@ -1,8 +1,8 @@
 # STATUS（整块替换）
 
-**2026-10-27 17:11 CST｜用户要求无损暂停；Goal API实读paused；整体未交付**
+**2026-10-27｜用户已解除暂停；Goal API实读active；真实模型整轮在运行；函数拆分真实源结果保持一致，整体未交付**
 
-当前唯一接续说明：[完整暂停/复盘/HANDOFF](handoff/PAUSE_2026-10-27.md)。用户解除暂停前不新增研究或模型调用。
+本轮从[暂停交接](handoff/PAUSE_2026-10-27.md)恢复；新源码两工作树干净、无遗留运行；两个current与暂停指针一致，SQLite完整性正常，三个DGX模型目录均可用。
 
 ## 合同与发布
 - 依据PRD、DECISIONS、PLAN及EXECUTION_PACK；直接执行，共享浏览器/发布指针由本线程持有。只用确定性规则与crosscheck，不恢复旧会商/资格链。
@@ -13,7 +13,7 @@
 ## 进度（不合并不同候选的PASS）
 |项|已证实|剩余|
 |---|---|---|
-|M0基础|附件新ciw、独立环境、GitHub干净clone169测试及Ruff通过|10个既有长函数未达PLAN长度约定，详见handoff；未做历史清理|
+|M0基础|附件新ciw、独立环境、GitHub干净clone169测试及Ruff通过|原10个长函数已按职责提取，全src函数≤80行/文件≤600行；未做历史清理|
 |M1主链|真实CT.gov255项，普通CLI出A/B/C，旧候选audit40零错|最新带模型同候选覆盖与实屏|
 |M2工作台|隔离默认关闭的只读身份；T1六张1440/1920截图；宽度空栏已修|新论文/事件current后的再验|
 |M3中国来源|CDE59详情/75登记；公司7+公众号3篇；NMPA四药9详情|7许可详情连接失败；未发现本品CRSwNP登记，不虚构|
@@ -28,15 +28,15 @@
 - studio项目p20261027_86fa32仍读rel_87dc2fc802b3fc41/160行；取消/恢复并重开保存5条已测，未调用AI评价。
 - 论文最终切片stages/publication-live-slice-final.json：NPS总体-2.3[-2.6,-1.9]、亚组-2.5[-2.9,-2.1]；NCS总体-0.7[-0.9,-0.5]、亚组-0.8[-1,-0.6]；未并入current。
 
-## 暂停与恢复
-- 新整轮在事件extractor_b等待QwenHTTP响应时因用户暂停退出130；无新release，current不变。54 DeepSeek+54 Qwen+18 GLM=126已完成响应保留；未返回的一次答复未保存，恢复需补调用。
+## 恢复位置与保留证据
+- 原暂停轮退出130；本轮从5522bda恢复，普通CLI --offline --with-models已运行，只有一个模型进程。暂停前126份响应可复用，未返回的Qwen答复需补；未完成前current沿用旧轮。
 - 两工作区SQLite一致性备份均integrity=ok；CRSwNP408源/408CAS/127采集，PNH171源/171CAS；全部579CAS哈希匹配。清单/备份在库外stages/pause-20261027.*，studio压缩备份同目录。
-- API18931、Vite15186自建服务已停；Ego替代空间49保留，无升级/清缓存/登录改动。不要等旧PID/40空间。
+- 本地工作台验收服务待新候选时启动；Ego继续复用专用空间，不升级/清缓存/改登录。不等待旧PID或旧空间。
 - 恢复：核对HEAD/manifest/current→普通CLI --offline --with-models复用原件缓存→新候选20事件/比例与audit→B论文和A/C实屏→studio最新C集合及选择重开。
 - 不重做CDE59详情、10篇正文、已完成属性与论文缓存；不按代码hash失效；未解外部503/连接错误有新证据才重试。
 
 ## 验证与复盘
-- CI169 passed（1.27s）；GitHub干净clone169 passed（1.67s）；Ruff通过。工作台适配器/studio10 passed，开发身份pytest10 passed，前端构建成功。
+- 原干净clone169 passed；本轮拆分后169 passed（1.10s）、Ruff通过。同批真实源隔离重放前后release_id均rel_9f50893e6409dfc9，audit40零错，抽取prompt/schema未改。
 - 一条扩展unittest命令误拼额外模块导致失败；前7模块49测试/20skip无用例失败。纠正后误用unittest跑pytest文件为0tests，最终正确pytest10通过；不把错误命令改记PASS。
 - 数值audit不能验证日期/臂/人群语义；旧19事件原文检查发现发稿日、品牌重复和旧结果误判，已修规则但新整轮未验。
 - 登记臂名与干预关联真实冲突，保留原件按明确名称绑定；中国登记不填国家数1，摘要无N不补0。

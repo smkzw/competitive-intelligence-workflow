@@ -84,6 +84,31 @@ def list_docs(ws: Workspace) -> list[tuple[Path, dict[str, Any]]]:
     return out
 
 
+def _event_task(src, text, cfg, resolver) -> ExtractionTask:
+    return ExtractionTask(
+        task_id=task_id_for(
+            src.sha256,
+            json.dumps(EventItem.model_json_schema(), sort_keys=True),
+            INSTRUCTION.format(ind=cfg.name_zh),
+        ),
+        source_id=src.source_id,
+        source_text=text,
+        instruction=INSTRUCTION.format(ind=cfg.name_zh),
+        item_model=EventItem,
+        key_fields=("product_mention", "event_type", "region"),
+        value_fields=("date", "indication"),
+        date_fields=("date",),
+        item_check=validate_event_item,
+        key_fn=lambda it, r=resolver: (
+            r.find_in_text(it.get("product_mention", ""))
+            or r.resolve_intervention(it.get("product_mention", ""))
+            or it.get("product_mention", "").casefold().strip(),
+            str(it.get("event_type", "")),
+            norm_region(it.get("region", "")),
+        ),
+    )
+
+
 def extract_events(
     ws: Workspace, cfg: IndicationConfig, resolver: ProductResolver, roles: dict[str, Backend] | None
 ) -> tuple[list[Event], list[dict[str, Any]], list[dict[str, Any]]]:
@@ -125,28 +150,7 @@ def extract_events(
         if roles is None:
             queue.append({"kind": "doc_not_extracted", "ref": src.source_id, "note": "未配置异构模型，未抽取"})
             continue
-        task = ExtractionTask(
-            task_id=task_id_for(
-                src.sha256,
-                json.dumps(EventItem.model_json_schema(), sort_keys=True),
-                INSTRUCTION.format(ind=cfg.name_zh),
-            ),
-            source_id=src.source_id,
-            source_text=text,
-            instruction=INSTRUCTION.format(ind=cfg.name_zh),
-            item_model=EventItem,
-            key_fields=("product_mention", "event_type", "region"),
-            value_fields=("date", "indication"),
-            date_fields=("date",),
-            item_check=validate_event_item,
-            key_fn=lambda it, r=resolver: (
-                r.find_in_text(it.get("product_mention", ""))
-                or r.resolve_intervention(it.get("product_mention", ""))
-                or it.get("product_mention", "").casefold().strip(),
-                str(it.get("event_type", "")),
-                norm_region(it.get("region", "")),
-            ),
-        )
+        task = _event_task(src, text, cfg, resolver)
         try:
             checked = crosscheck(task, roles)
         except CrosscheckFailed as exc:
@@ -156,20 +160,7 @@ def extract_events(
         stat["extracted"] += 1
         for chk in checked:
             it = chk.item
-            pid = resolver.find_in_text(it["product_mention"]) or resolver.resolve_intervention(it["product_mention"])
-            ev = Event(
-                event_id=stable_id("ev", src.source_id, chk.key),
-                product_id=pid,
-                product_mention=it["product_mention"],
-                event_type=it["event_type"],
-                region=norm_region(it.get("region", "")),
-                date=it.get("date") or None,
-                indication=it.get("indication", ""),
-                detail=it.get("detail", ""),
-                quote=it.get("quote", ""),
-                status=chk.status,
-                source_id=src.source_id,
-            )
+            ev = _event(chk, src, resolver)
             ws.save_verification(
                 ev.event_id,
                 chk.status,
@@ -189,3 +180,21 @@ def extract_events(
         for k, v in sorted(by_kind.items())
     ]
     return events, queue, cov
+
+
+def _event(chk, src, resolver) -> Event:
+    it = chk.item
+    pid = resolver.find_in_text(it["product_mention"]) or resolver.resolve_intervention(it["product_mention"])
+    return Event(
+        event_id=stable_id("ev", src.source_id, chk.key),
+        product_id=pid,
+        product_mention=it["product_mention"],
+        event_type=it["event_type"],
+        region=norm_region(it.get("region", "")),
+        date=it.get("date") or None,
+        indication=it.get("indication", ""),
+        detail=it.get("detail", ""),
+        quote=it.get("quote", ""),
+        status=chk.status,
+        source_id=src.source_id,
+    )

@@ -46,56 +46,7 @@ def build_landscape(
         ts = by_product.get(p.product_id, [])
         if not ts and not ev_by.get(p.product_id) and not p.is_own:
             continue
-        registered = [record for t in ts for record in [t, *t.registrations]]
-        g = max((t.phase_rank for t in registered), default=0)
-        cn = max((t.phase_rank for t in registered if t.china or t.registry == "cde"), default=0)
-        statuses = Counter(t.status for t in ts)
-        approvals = [
-            e
-            for e in ev_by.get(p.product_id, [])
-            if e.event_type == "approval" and e.status in ("registry", "dual_agreed", "arbitrated")
-        ]
-        starts = sorted(t.dates.start for t in ts if t.dates.start)
-        rows.append(
-            {
-                "product_id": p.product_id,
-                "label": product_label(p),
-                "name_en": p.name_en,
-                "name_zh": p.name_zh,
-                "codes": p.codes,
-                "target": p.target,
-                "modality": p.modality,
-                "route": p.route,
-                "company": p.company,
-                "china_partner": p.china_partner,
-                "is_own": p.is_own,
-                "attribute_status": p.attribute_status,
-                "global_rank": g,
-                "china_rank": cn,
-                "global_phase": _rank_label(g),
-                "china_phase": _rank_label(cn) if cn else "—",
-                "approvals": [
-                    {
-                        "region": e.region,
-                        "date": e.date,
-                        "status": e.status,
-                        "source_id": e.source_id,
-                        "detail": e.detail,
-                        "scope_label": e.indication or "药品许可",
-                    }
-                    for e in approvals
-                ],
-                "trial_count": len(ts),
-                "active_trials": sum(statuses[s] for s in ACTIVE),
-                "status_counts": {STATUS_ZH.get(k, k): v for k, v in statuses.items()},
-                "first_start": starts[0] if starts else None,
-                "key_trials": [
-                    t.trial_id
-                    for t in sorted(ts, key=lambda t: (-t.phase_rank, t.dates.start or ""))
-                    if t.phase_rank >= 3
-                ][:12],
-            }
-        )
+        rows.append(_product_row(p, ts, ev_by.get(p.product_id, [])))
     own_other = [
         {
             "trial_id": t.trial_id,
@@ -146,3 +97,52 @@ def build_landscape(
 
 def _rank_label(rank: int) -> str:
     return dict(PHASE_COLUMNS).get(rank, "未知")
+
+
+def _product_row(p, ts, product_events) -> dict[str, Any]:
+    registered = [record for t in ts for record in [t, *t.registrations]]
+    g = max((t.phase_rank for t in registered), default=0)
+    cn = max((t.phase_rank for t in registered if t.china or t.registry == "cde"), default=0)
+    statuses = Counter(t.status for t in ts)
+    approvals = [
+        e
+        for e in product_events
+        if e.event_type == "approval" and e.status in ("registry", "dual_agreed", "arbitrated")
+    ]
+    starts = sorted(t.dates.start for t in ts if t.dates.start)
+    return {
+        "product_id": p.product_id,
+        "label": product_label(p),
+        "name_en": p.name_en,
+        "name_zh": p.name_zh,
+        "codes": p.codes,
+        "target": p.target,
+        "modality": p.modality,
+        "route": p.route,
+        "company": p.company,
+        "china_partner": p.china_partner,
+        "is_own": p.is_own,
+        "attribute_status": p.attribute_status,
+        "global_rank": g,
+        "china_rank": cn,
+        "global_phase": _rank_label(g),
+        "china_phase": _rank_label(cn) if cn else "—",
+        "approvals": [
+            {
+                "region": e.region,
+                "date": e.date,
+                "status": e.status,
+                "source_id": e.source_id,
+                "detail": e.detail,
+                "scope_label": e.indication or "药品许可",
+            }
+            for e in approvals
+        ],
+        "trial_count": len(ts),
+        "active_trials": sum(statuses[s] for s in ACTIVE),
+        "status_counts": {STATUS_ZH.get(k, k): v for k, v in statuses.items()},
+        "first_start": starts[0] if starts else None,
+        "key_trials": [
+            t.trial_id for t in sorted(ts, key=lambda t: (-t.phase_rank, t.dates.start or "")) if t.phase_rank >= 3
+        ][:12],
+    }

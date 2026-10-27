@@ -47,83 +47,7 @@ def _registration(t: Trial) -> dict[str, Any]:
 
 def build_design(cfg: IndicationConfig, trials: list[Trial], products: dict[str, Product]) -> dict[str, Any]:
     labels = {c.id: c.label for c in cfg.concepts}
-    rows = []
-    for t in trials:
-        if t.relevance != "core":
-            continue
-        prim = [o for o in t.outcomes_planned if o.kind == "primary"]
-        sec = [o for o in t.outcomes_planned if o.kind == "secondary"]
-        rows.append(
-            {
-                "trial_id": t.trial_id,
-                "ids": t.ids,
-                "registration_ids": list(dict.fromkeys([t.trial_id] + [r.trial_id for r in t.registrations])),
-                "registrations": [_registration(r) for r in t.registrations],
-                "registry": REGISTRY_ZH.get(t.registry, t.registry),
-                "acronym": t.acronym,
-                "title": t.title,
-                "official_title": t.official_title,
-                "url": t.url,
-                "products": [
-                    {
-                        "product_id": pid,
-                        "label": product_label(products.get(pid)),
-                        "is_own": bool(products.get(pid) and products[pid].is_own),
-                    }
-                    for pid in t.product_ids
-                ],
-                "is_own": any(products.get(pid) and products[pid].is_own for pid in t.product_ids),
-                "sponsor": t.sponsor,
-                "phase": t.phase,
-                "phase_rank": t.phase_rank,
-                "status": STATUS_ZH.get(t.status, t.status),
-                "start": t.dates.start,
-                "primary_completion": t.dates.primary_completion,
-                "results_posted": t.dates.results_first_posted,
-                "china": t.china,
-                "country_count": len(t.countries) if t.countries else None,
-                "country_label": "中国登记"
-                if t.registry == "cde"
-                else f"已列 {len(t.countries)} 个国家/地区" + ("，含中国大陆" if t.china else "")
-                if t.countries
-                else "",
-                "china_label": "中国登记" if t.registry == "cde" else "含中国中心" if t.china else "",
-                "countries": t.countries,
-                "allocation": ALLOCATION_ZH.get(t.design.allocation, t.design.allocation),
-                "masking": MASKING_ZH.get(t.design.masking, t.design.masking),
-                "model": MODEL_ZH.get(t.design.model, t.design.model),
-                "enrollment": t.design.enrollment,
-                "enrollment_text": t.design.enrollment_text,
-                "enrollment_type": {"ACTUAL": "实际", "ESTIMATED": "计划"}.get(
-                    t.design.enrollment_type, t.design.enrollment_type
-                ),
-                "arm_count": len(t.arms),
-                "arms": [
-                    {
-                        "label": a.label,
-                        "role_label": role_label(a.role),
-                        "description": a.description,
-                        "interventions": a.interventions,
-                    }
-                    for a in t.arms
-                ],
-                "background_therapy": t.design.background_therapy,
-                "primary": [
-                    {"title": o.title, "timeframe": o.timeframe, "concept": labels.get(o.concept_id or "", "")}
-                    for o in prim
-                ],
-                "secondary": [
-                    {"title": o.title, "timeframe": o.timeframe, "concept": labels.get(o.concept_id or "", "")}
-                    for o in sec
-                ],
-                "primary_concepts": sorted({labels[o.concept_id] for o in prim if o.concept_id}),
-                "min_age": t.design.min_age,
-                "max_age": t.design.max_age,
-                "sex": t.design.sex,
-                "eligibility": t.design.eligibility_text,
-                "has_results": t.has_results,
-            }
-        )
+    rows = [_design_row(t, products, labels) for t in trials if t.relevance == "core"]
     # 设计参考价值：III（含 II/III）> IV > II > I > 未知；同期别按首例入组时间倒序
     priority = {4: 0, 5: 1, 3: 2, 2: 3, 1: 4, 0: 5}
     rows.sort(key=lambda r: r["start"] or "", reverse=True)
@@ -134,3 +58,75 @@ def build_design(cfg: IndicationConfig, trials: list[Trial], products: dict[str,
         "primary_concepts": Counter(c for r in rows for c in r["primary_concepts"]),
     }
     return {"rows": rows, "facets": {k: dict(v.most_common()) for k, v in facets.items()}}
+
+
+def _design_row(t, products, labels) -> dict[str, Any]:
+    prim = [o for o in t.outcomes_planned if o.kind == "primary"]
+    sec = [o for o in t.outcomes_planned if o.kind == "secondary"]
+    return {
+        "trial_id": t.trial_id,
+        "ids": t.ids,
+        "registration_ids": list(dict.fromkeys([t.trial_id] + [r.trial_id for r in t.registrations])),
+        "registrations": [_registration(r) for r in t.registrations],
+        "registry": REGISTRY_ZH.get(t.registry, t.registry),
+        "acronym": t.acronym,
+        "title": t.title,
+        "official_title": t.official_title,
+        "url": t.url,
+        "products": [
+            {
+                "product_id": pid,
+                "label": product_label(products.get(pid)),
+                "is_own": bool(products.get(pid) and products[pid].is_own),
+            }
+            for pid in t.product_ids
+        ],
+        "is_own": any(products.get(pid) and products[pid].is_own for pid in t.product_ids),
+        "sponsor": t.sponsor,
+        "phase": t.phase,
+        "phase_rank": t.phase_rank,
+        "status": STATUS_ZH.get(t.status, t.status),
+        "start": t.dates.start,
+        "primary_completion": t.dates.primary_completion,
+        "results_posted": t.dates.results_first_posted,
+        "china": t.china,
+        "country_count": len(t.countries) if t.countries else None,
+        "country_label": "中国登记"
+        if t.registry == "cde"
+        else f"已列 {len(t.countries)} 个国家/地区" + ("，含中国大陆" if t.china else "")
+        if t.countries
+        else "",
+        "china_label": "中国登记" if t.registry == "cde" else "含中国中心" if t.china else "",
+        "countries": t.countries,
+        "allocation": ALLOCATION_ZH.get(t.design.allocation, t.design.allocation),
+        "masking": MASKING_ZH.get(t.design.masking, t.design.masking),
+        "model": MODEL_ZH.get(t.design.model, t.design.model),
+        "enrollment": t.design.enrollment,
+        "enrollment_text": t.design.enrollment_text,
+        "enrollment_type": {"ACTUAL": "实际", "ESTIMATED": "计划"}.get(
+            t.design.enrollment_type, t.design.enrollment_type
+        ),
+        "arm_count": len(t.arms),
+        "arms": [
+            {
+                "label": a.label,
+                "role_label": role_label(a.role),
+                "description": a.description,
+                "interventions": a.interventions,
+            }
+            for a in t.arms
+        ],
+        "background_therapy": t.design.background_therapy,
+        "primary": [
+            {"title": o.title, "timeframe": o.timeframe, "concept": labels.get(o.concept_id or "", "")} for o in prim
+        ],
+        "secondary": [
+            {"title": o.title, "timeframe": o.timeframe, "concept": labels.get(o.concept_id or "", "")} for o in sec
+        ],
+        "primary_concepts": sorted({labels[o.concept_id] for o in prim if o.concept_id}),
+        "min_age": t.design.min_age,
+        "max_age": t.design.max_age,
+        "sex": t.design.sex,
+        "eligibility": t.design.eligibility_text,
+        "has_results": t.has_results,
+    }

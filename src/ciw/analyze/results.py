@@ -88,39 +88,7 @@ def build_results(
             for g in r.groups:
                 if g.value is None or g.period != "treatment" or g.role in ("other",):
                     continue
-                pid = g.product_id if g.role != "placebo" else None
-                rows.append(
-                    {
-                        "result_id": r.result_id,
-                        "trial_id": t.trial_id,
-                        "acronym": t.acronym or t.trial_id,
-                        "phase": t.phase,
-                        "outcome_type": TYPE_ZH.get(r.type, r.type),
-                        "product_id": pid,
-                        "product_label": product_label(products.get(pid)) if pid else "",
-                        "is_own": bool(pid and products.get(pid) and products[pid].is_own),
-                        "group_title": g.title,
-                        "role": g.role,
-                        "role_label": role_label(g.role),
-                        "n": g.n,
-                        "value": g.value,
-                        "spread": g.spread,
-                        "lower": g.lower,
-                        "upper": g.upper,
-                        "dispersion_type": r.dispersion_type,
-                        "unit": r.unit,
-                        "timeframe": r.timeframe,
-                        "title": r.title,
-                        "class_title": r.class_title,
-                        "category_title": r.category_title,
-                        "population": r.population,
-                        "source_kind": r.kind,
-                        "status": r.status,
-                        "source_id": r.locator.source_id,
-                        "path": g.path,
-                        "url": r.source_url or t.url,
-                    }
-                )
+                rows.append(_group_row(r, t, g, products))
             comps.extend(_comparisons(r, t, products))
         if not rows and not comps:
             continue
@@ -227,38 +195,7 @@ def _comparisons(r: OutcomeResult, t: Trial, products: dict[str, Product]) -> li
                 plot_upper=plot[2],
             )
         )
-    if r.measure_kind in _COMPUTABLE and len(placebo) == 1 and placebo[0].value is not None:
-        ctrl = placebo[0]
-        for g in groups.values():
-            if g.role == "experimental" and g.group_id not in covered and g.value is not None:
-                out.append(
-                    _comp_row(
-                        r,
-                        t,
-                        products,
-                        g,
-                        ctrl,
-                        kind="computed",
-                        value=round(g.value - ctrl.value, 4),
-                        ci_lower=None,
-                        ci_upper=None,
-                        ci_pct=None,
-                        p_value="",
-                        method="",
-                        param_type="组均值之差（计算值）"
-                        if r.measure_kind != "proportion"
-                        else "比例之差（百分点，计算值）"
-                        if re.search(r"percent|%", r.unit, re.I)
-                        else "比例之差（计算值）",
-                        path=g.path,
-                        note="",
-                        h2h=False,
-                        family="difference",
-                        plot_value=round(g.value - ctrl.value, 4),
-                        plot_lower=None,
-                        plot_upper=None,
-                    )
-                )
+    out.extend(_computed_comparisons(r, t, products, groups, placebo, covered))
     return out
 
 
@@ -429,3 +366,74 @@ def _top_terms(s: SafetySummary, group_id: str, k: int = 6) -> list[dict[str, An
             scored.append({"term": term.term, "serious": term.serious, "n": st.n, "N": st.N, "pct": p})
     scored.sort(key=lambda x: -x["pct"])
     return scored[:k]
+
+
+def _group_row(r, t, g, products) -> dict[str, Any]:
+    pid = g.product_id if g.role != "placebo" else None
+    return {
+        "result_id": r.result_id,
+        "trial_id": t.trial_id,
+        "acronym": t.acronym or t.trial_id,
+        "phase": t.phase,
+        "outcome_type": TYPE_ZH.get(r.type, r.type),
+        "product_id": pid,
+        "product_label": product_label(products.get(pid)) if pid else "",
+        "is_own": bool(pid and products.get(pid) and products[pid].is_own),
+        "group_title": g.title,
+        "role": g.role,
+        "role_label": role_label(g.role),
+        "n": g.n,
+        "value": g.value,
+        "spread": g.spread,
+        "lower": g.lower,
+        "upper": g.upper,
+        "dispersion_type": r.dispersion_type,
+        "unit": r.unit,
+        "timeframe": r.timeframe,
+        "title": r.title,
+        "class_title": r.class_title,
+        "category_title": r.category_title,
+        "population": r.population,
+        "source_kind": r.kind,
+        "status": r.status,
+        "source_id": r.locator.source_id,
+        "path": g.path,
+        "url": r.source_url or t.url,
+    }
+
+
+def _computed_comparisons(r, t, products, groups, placebo, covered):
+    out = []
+    if r.measure_kind in _COMPUTABLE and len(placebo) == 1 and placebo[0].value is not None:
+        ctrl = placebo[0]
+        for g in groups.values():
+            if g.role == "experimental" and g.group_id not in covered and g.value is not None:
+                out.append(
+                    _comp_row(
+                        r,
+                        t,
+                        products,
+                        g,
+                        ctrl,
+                        kind="computed",
+                        value=round(g.value - ctrl.value, 4),
+                        ci_lower=None,
+                        ci_upper=None,
+                        ci_pct=None,
+                        p_value="",
+                        method="",
+                        param_type="组均值之差（计算值）"
+                        if r.measure_kind != "proportion"
+                        else "比例之差（百分点，计算值）"
+                        if re.search(r"percent|%", r.unit, re.I)
+                        else "比例之差（计算值）",
+                        path=g.path,
+                        note="",
+                        h2h=False,
+                        family="difference",
+                        plot_value=round(g.value - ctrl.value, 4),
+                        plot_lower=None,
+                        plot_upper=None,
+                    )
+                )
+    return out

@@ -48,6 +48,7 @@ def _status(text: str) -> str:
 def _run_script(name: str, config: dict[str, Any], timeout: float) -> tuple[list[dict], dict]:
     return run_script(name, config, timeout, package="ciw.sources.cde")
 
+
 def capture(
     ws: Workspace,
     cfg: IndicationConfig,
@@ -161,8 +162,11 @@ def ingest(ws: Workspace, cfg: IndicationConfig, resolver: ProductResolver) -> t
         elif own and (resolver.resolve_intervention(r["drug_name"]) or resolver.find_in_text(r["drug_name"])) == own:
             t = _trial_from_list(r, cfg, resolver)  # 本品其他适应症：作为背景保留，不计入本适应症阶段
             trials.append(t.model_copy(update={"relevance": "background", "relevance_reason": "本品其他适应症登记"}))
-    missing = sorted(ctr for ctr, r in listed.items() if ctr not in detailed
-                     and cfg.is_relevant_text(f"{r['indication']} {r['title']}"))
+    missing = sorted(
+        ctr
+        for ctr, r in listed.items()
+        if ctr not in detailed and cfg.is_relevant_text(f"{r['indication']} {r['title']}")
+    )
     complete = all(s.get("complete") for s in list_status) and not failures and not missing
     status = "ok" if complete and trials else ("partial" if trials else "failed")
     return trials, {
@@ -182,7 +186,7 @@ def _phase(text: str) -> tuple[str, int]:
     parts = [re.sub(r"(?<=I)[ab]$", "", p) for p in re.split(r"[/、,，]", t)]
     parts = [p for p in parts if p in _PHASE_RANK]
     if not parts:
-        return ("其他" if t else ""), 0             # “其它其他说明：生物等效性/上市后观察”等
+        return ("其他" if t else ""), 0  # “其它其他说明：生物等效性/上市后观察”等
     return "/".join(parts), max(_PHASE_RANK[p] for p in parts)
 
 
@@ -213,8 +217,9 @@ def _names(text: str) -> list[str]:
 
 
 def _foreign_ids(cells: dict[str, dict[str, Any]]) -> dict[str, str]:
-    text = ";".join(node["value"] for label, node in cells.items()
-                    if re.fullmatch(r"(?:相关|国际|境外|其他).*登记号", label))
+    text = ";".join(
+        node["value"] for label, node in cells.items() if re.fullmatch(r"(?:相关|国际|境外|其他).*登记号", label)
+    )
     nct = registry_ids(text, "ctgov")
     return {"nct": ";".join(nct)} if nct else {}
 
@@ -226,32 +231,7 @@ def _trial_from_detail(
     basic = {r[i].strip(): r[i + 1] for r in raw["basic"] for i in range(0, len(r) - 1, 2)}
     get = lambda k: "" if k not in cells or _absent(cells[k]["value"]) else cells[k]["value"].strip()  # noqa: E731
     phase, rank = _phase(get("试验分期"))
-    arms: list[Arm] = []
-    for label, role_default in (("试验药", "experimental"), ("对照药", "active_comparator")):
-        node = cells.get(label)
-        for rows in (node or {}).get("nested", [])[:1]:
-            for row in rows[1:]:
-                if len(row) != 3:
-                    continue
-                names = _names(row[1])
-                if any(re.search(r"安慰剂|模拟剂|处方缓冲液|空白制剂|placebo|vehicle", n, re.I) for n in names):
-                    role = "placebo"
-                elif all(cfg.is_background(n) for n in names):
-                    role = "other"  # 背景用药（如鼻用激素），不是试验药也不是对照
-                else:
-                    role = role_default
-                pids = sorted({p for n in names if (p := resolver.resolve_intervention(n))})
-                arms.append(
-                    Arm(
-                        arm_id=f"{label}{row[0]}",
-                        label=f"{label} {row[0]}：{names[0]}",
-                        type=label,
-                        role=role,
-                        description=row[2],
-                        interventions=names,
-                        product_ids=pids,
-                    )
-                )
+    arms = _detail_arms(cells, cfg, resolver)
     drug_name = parsed["registered_drug_name"]
     pids = sorted(
         {p for a in arms for p in a.product_ids if a.role == "experimental"}
@@ -334,3 +314,33 @@ def _trial_from_list(r: dict[str, Any], cfg: IndicationConfig, resolver: Product
 def _iso(text: str) -> str | None:
     m = re.search(r"(\d{4})[-年/.](\d{1,2})[-月/.](\d{1,2})", text or "")
     return f"{m[1]}-{int(m[2]):02d}-{int(m[3]):02d}" if m else None
+
+
+def _detail_arms(cells, cfg, resolver) -> list[Arm]:
+    arms: list[Arm] = []
+    for label, role_default in (("试验药", "experimental"), ("对照药", "active_comparator")):
+        node = cells.get(label)
+        for rows in (node or {}).get("nested", [])[:1]:
+            for row in rows[1:]:
+                if len(row) != 3:
+                    continue
+                names = _names(row[1])
+                if any(re.search(r"安慰剂|模拟剂|处方缓冲液|空白制剂|placebo|vehicle", n, re.I) for n in names):
+                    role = "placebo"
+                elif all(cfg.is_background(n) for n in names):
+                    role = "other"  # 背景用药（如鼻用激素），不是试验药也不是对照
+                else:
+                    role = role_default
+                pids = sorted({p for n in names if (p := resolver.resolve_intervention(n))})
+                arms.append(
+                    Arm(
+                        arm_id=f"{label}{row[0]}",
+                        label=f"{label} {row[0]}：{names[0]}",
+                        type=label,
+                        role=role,
+                        description=row[2],
+                        interventions=names,
+                        product_ids=pids,
+                    )
+                )
+    return arms

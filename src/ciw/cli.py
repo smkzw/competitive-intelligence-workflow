@@ -15,7 +15,7 @@ def _ws_default(slug: str) -> Path:
     ).expanduser()
 
 
-def main(argv: list[str] | None = None) -> int:
+def _parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(prog="ciw", description="竞品调研子系统：适应症 → release → A/B/C 门户")
     sub = ap.add_subparsers(dest="cmd", required=True)
 
@@ -47,57 +47,18 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--kind", choices=["company", "wechat"], default="company")
     c.add_argument("--page", default="p1", help="docs采集时已打开的Agent Page标签")
 
+    return ap
+
+
+def main(argv: list[str] | None = None) -> int:
+    ap = _parser()
     a = ap.parse_args(argv)
-    from ciw.config import load_indication
     from ciw.store import Workspace
 
     if a.cmd == "run":
-        from ciw.api import run_indication
-
-        cfg = load_indication(a.config)
-        res = run_indication(
-            a.config,
-            a.workspace or _ws_default(cfg.slug),
-            offline=a.offline,
-            with_models=a.with_models,
-            llm_config=a.llm_config,
-        )
-        print(
-            json.dumps(
-                {
-                    "release_id": res.release_id,
-                    "release": str(res.release_path),
-                    "site": str(res.site_dir),
-                    "stats": res.stats,
-                },
-                ensure_ascii=False,
-                indent=1,
-            )
-        )
-        return 0
+        return _run_command(a)
     if a.cmd == "status":
-        from ciw.api import current_release
-
-        cur = current_release(a.workspace)
-        if cur is None:
-            print("没有 current release")
-            return 1
-        doc, d = cur
-        print(
-            json.dumps(
-                {
-                    "release_id": doc["release_id"],
-                    "dir": str(d),
-                    "generated_at": doc["generated_at"],
-                    "coverage": doc["coverage"],
-                    "stats": doc["stats"],
-                    "review_queue": len(doc["review_queue"]),
-                },
-                ensure_ascii=False,
-                indent=1,
-            )
-        )
-        return 0
+        return _status_command(a)
     if a.cmd == "render":
         from ciw.render.site import render_release
 
@@ -114,25 +75,83 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(out, ensure_ascii=False, indent=1))
         return 0 if not out["errors"] else 1
     if a.cmd == "capture":
-        from ciw.sources.cde_registry import capture
-
-        cfg = load_indication(a.config)
-        ws = Workspace(a.workspace or _ws_default(cfg.slug))
-        if a.source == "docs":
-            from ciw.sources.document import capture_document
-
-            if not a.url:
-                ap.error("capture docs 需要 --url")
-            result = capture_document(ws, cfg, a.space, a.url, a.kind, page_label=a.page)
-        elif a.source == "nmpa":
-            from ciw.sources.nmpa.capture import capture as capture_nmpa
-
-            result = capture_nmpa(ws, cfg, a.space, max_details=a.max_details, resume_only=a.resume_only)
-        else:
-            result = capture(ws, cfg, a.space, max_details=a.max_details)
-        print(json.dumps(result, ensure_ascii=False, indent=1))
-        return 0
+        return _capture_command(a, ap)
     return 2
+
+
+def _run_command(a) -> int:
+    from ciw.api import run_indication
+    from ciw.config import load_indication
+
+    cfg = load_indication(a.config)
+    res = run_indication(
+        a.config,
+        a.workspace or _ws_default(cfg.slug),
+        offline=a.offline,
+        with_models=a.with_models,
+        llm_config=a.llm_config,
+    )
+    print(
+        json.dumps(
+            {
+                "release_id": res.release_id,
+                "release": str(res.release_path),
+                "site": str(res.site_dir),
+                "stats": res.stats,
+            },
+            ensure_ascii=False,
+            indent=1,
+        )
+    )
+    return 0
+
+
+def _status_command(a) -> int:
+    from ciw.api import current_release
+
+    cur = current_release(a.workspace)
+    if cur is None:
+        print("没有 current release")
+        return 1
+    doc, d = cur
+    print(
+        json.dumps(
+            {
+                "release_id": doc["release_id"],
+                "dir": str(d),
+                "generated_at": doc["generated_at"],
+                "coverage": doc["coverage"],
+                "stats": doc["stats"],
+                "review_queue": len(doc["review_queue"]),
+            },
+            ensure_ascii=False,
+            indent=1,
+        )
+    )
+    return 0
+
+
+def _capture_command(a, ap) -> int:
+    from ciw.config import load_indication
+    from ciw.sources.cde_registry import capture
+    from ciw.store import Workspace
+
+    cfg = load_indication(a.config)
+    ws = Workspace(a.workspace or _ws_default(cfg.slug))
+    if a.source == "docs":
+        from ciw.sources.document import capture_document
+
+        if not a.url:
+            ap.error("capture docs 需要 --url")
+        result = capture_document(ws, cfg, a.space, a.url, a.kind, page_label=a.page)
+    elif a.source == "nmpa":
+        from ciw.sources.nmpa.capture import capture as capture_nmpa
+
+        result = capture_nmpa(ws, cfg, a.space, max_details=a.max_details, resume_only=a.resume_only)
+    else:
+        result = capture(ws, cfg, a.space, max_details=a.max_details)
+    print(json.dumps(result, ensure_ascii=False, indent=1))
+    return 0
 
 
 if __name__ == "__main__":

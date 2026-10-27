@@ -87,21 +87,7 @@ def extract_trial(study: dict[str, Any], source: Source, cfg: IndicationConfig, 
     interventions = arms_mod.get("interventions", [])
     iv_product = {iv["name"]: resolver.resolve_intervention(iv["name"]) for iv in interventions}
 
-    arms: list[Arm] = []
-    for i, ag in enumerate(arms_mod.get("armGroups", [])):
-        names = [re.sub(r"^[A-Za-z ]+:\s*", "", n) for n in ag.get("interventionNames", [])]
-        pids = sorted({pid for n in names if (pid := iv_product.get(n) or resolver.resolve_intervention(n))})
-        arms.append(
-            Arm(
-                arm_id=f"A{i}",
-                label=ag.get("label", ""),
-                type=ag.get("type", ""),
-                role=ROLE_BY_TYPE.get(ag.get("type", ""), "unknown"),
-                description=ag.get("description", ""),
-                interventions=names,
-                product_ids=pids,
-            )
-        )
+    arms = _trial_arms(arms_mod, iv_product, resolver)
 
     product_ids = sorted({pid for pid in iv_product.values() if pid})
     background = sorted(
@@ -120,35 +106,18 @@ def extract_trial(study: dict[str, Any], source: Source, cfg: IndicationConfig, 
             *cond_mod.get("keywords", []),
         ]
     )
-    relevant = cfg.is_relevant_text(text)
-    if relevant and product_ids:
-        relevance, reason = "core", "适应症匹配且含竞品干预"
-    elif relevant:
-        relevance, reason = "background", "适应症匹配，但干预均为背景/传统治疗或未归类"
-    else:
-        relevance, reason = "background", "检索命中但条件/标题未明确为本适应症"
+    relevance, reason = _trial_relevance(text, product_ids, cfg)
 
     countries = sorted({loc.get("country", "") for loc in locations if loc.get("country")})
-    enroll = design.get("enrollmentInfo", {})
-    masking = design.get("designInfo", {}).get("maskingInfo", {})
-    outcomes: list[PlannedOutcome] = []
-    out_mod = p.get("outcomesModule", {})
-    for kind, key in (("primary", "primaryOutcomes"), ("secondary", "secondaryOutcomes"), ("other", "otherOutcomes")):
-        for o in out_mod.get(key, []):
-            outcomes.append(
-                PlannedOutcome(
-                    kind=kind,
-                    title=o.get("measure", ""),
-                    timeframe=o.get("timeFrame", ""),
-                    description=o.get("description", ""),
-                    concept_id=concept_of(o.get("measure", ""), cfg),
-                )
-            )
+    outcomes = _planned_outcomes(p, cfg)
     return Trial(
         trial_id=nct,
         registry="ctgov",
-        ids={"nct": nct, **({"org": ident["orgStudyIdInfo"]["id"]} if ident.get("orgStudyIdInfo") else {}),
-             **_secondary_ids(ident)},
+        ids={
+            "nct": nct,
+            **({"org": ident["orgStudyIdInfo"]["id"]} if ident.get("orgStudyIdInfo") else {}),
+            **_secondary_ids(ident),
+        },
         acronym=ident.get("acronym", ""),
         title=ident.get("briefTitle", ""),
         official_title=ident.get("officialTitle", ""),
@@ -169,22 +138,7 @@ def extract_trial(study: dict[str, Any], source: Source, cfg: IndicationConfig, 
         countries=countries,
         china=bool(CHINA_COUNTRIES & set(countries)),
         conditions=cond_mod.get("conditions", []),
-        design=Design(
-            allocation=design.get("designInfo", {}).get("allocation", ""),
-            model=design.get("designInfo", {}).get("interventionModel", ""),
-            masking=masking.get("masking", ""),
-            masked_roles=masking.get("whoMasked", []),
-            purpose=design.get("designInfo", {}).get("primaryPurpose", ""),
-            enrollment=_int(enroll.get("count")),
-            enrollment_type=enroll.get("type", ""),
-            eligibility_text=elig.get("eligibilityCriteria", ""),
-            min_age=elig.get("minimumAge", ""),
-            max_age=elig.get("maximumAge", ""),
-            sex=elig.get("sex", ""),
-            healthy_volunteers=elig.get("healthyVolunteers"),
-            arm_count=len(arms),
-            background_therapy=background,
-        ),
+        design=_trial_design(design, elig, arms, background),
         arms=arms,
         outcomes_planned=outcomes,
         product_ids=product_ids,
@@ -197,6 +151,14 @@ def extract_trial(study: dict[str, Any], source: Source, cfg: IndicationConfig, 
 
 
 # ---------------------------------------------------------------- 结果
+def _trial_relevance(text, product_ids, cfg):
+    if cfg.is_relevant_text(text):
+        if product_ids:
+            return "core", "适应症匹配且含竞品干预"
+        return "background", "适应症匹配，但干预均为背景/传统治疗或未归类"
+    return "background", "检索命中但条件/标题未明确为本适应症"
+
+
 def _denoms(denoms: list[dict[str, Any]] | None) -> dict[str, int | None]:
     for d in denoms or []:
         if str(d.get("units", "")).strip().lower() == "participants":
@@ -239,30 +201,7 @@ def extract_results(
             class_time, class_rest = _split_class(class_title)
             tp = parse_timepoint(class_time, title, om.get("timeFrame", ""))
             subgroup = "；".join(x for x in (subgroup_of(title), class_rest) if x)
-            groups: list[GroupValue] = []
-            for mi, m in enumerate(cat.get("measurements", [])):
-                gid = m["groupId"]
-                gtitle, arm_id, role, pid, period = group_meta.get(gid, (gid, None, "unknown", None, "treatment"))
-                groups.append(
-                    GroupValue(
-                        group_id=gid,
-                        title=gtitle,
-                        arm_id=arm_id,
-                        role=role,
-                        period=period,
-                        product_id=pid,
-                        n=class_n.get(gid),
-                        value=_num(m.get("value")),
-                        value_raw=str(m.get("value", "")),
-                        spread=_num(m.get("spread")),
-                        lower=_num(m.get("lowerLimit")),
-                        upper=_num(m.get("upperLimit")),
-                        path=(
-                            f"resultsSection.outcomeMeasuresModule.outcomeMeasures[{oi}].classes[{ci}]"
-                            f".categories[{ki}].measurements[{mi}]"
-                        ),
-                    )
-                )
+            groups = _measurements(cat, class_n, group_meta, oi, ci, ki)
             results.append(
                 OutcomeResult(
                     result_id=stable_id("res", trial.trial_id, oi, ci, ki),
@@ -430,3 +369,89 @@ def extract_safety(
         discontinuations=_discontinuations(study, trial, resolver),
         locator=Locator(source_id=source.source_id, path="resultsSection.adverseEventsModule"),
     )
+
+
+def _trial_arms(arms_mod, iv_product, resolver) -> list[Arm]:
+    arms: list[Arm] = []
+    for i, ag in enumerate(arms_mod.get("armGroups", [])):
+        names = [re.sub(r"^[A-Za-z ]+:\s*", "", n) for n in ag.get("interventionNames", [])]
+        pids = sorted({pid for n in names if (pid := iv_product.get(n) or resolver.resolve_intervention(n))})
+        arms.append(
+            Arm(
+                arm_id=f"A{i}",
+                label=ag.get("label", ""),
+                type=ag.get("type", ""),
+                role=ROLE_BY_TYPE.get(ag.get("type", ""), "unknown"),
+                description=ag.get("description", ""),
+                interventions=names,
+                product_ids=pids,
+            )
+        )
+
+    return arms
+
+
+def _planned_outcomes(p, cfg) -> list[PlannedOutcome]:
+    outcomes: list[PlannedOutcome] = []
+    out_mod = p.get("outcomesModule", {})
+    for kind, key in (("primary", "primaryOutcomes"), ("secondary", "secondaryOutcomes"), ("other", "otherOutcomes")):
+        for o in out_mod.get(key, []):
+            outcomes.append(
+                PlannedOutcome(
+                    kind=kind,
+                    title=o.get("measure", ""),
+                    timeframe=o.get("timeFrame", ""),
+                    description=o.get("description", ""),
+                    concept_id=concept_of(o.get("measure", ""), cfg),
+                )
+            )
+    return outcomes
+
+
+def _trial_design(design, elig, arms, background) -> Design:
+    enroll = design.get("enrollmentInfo", {})
+    masking = design.get("designInfo", {}).get("maskingInfo", {})
+    return Design(
+        allocation=design.get("designInfo", {}).get("allocation", ""),
+        model=design.get("designInfo", {}).get("interventionModel", ""),
+        masking=masking.get("masking", ""),
+        masked_roles=masking.get("whoMasked", []),
+        purpose=design.get("designInfo", {}).get("primaryPurpose", ""),
+        enrollment=_int(enroll.get("count")),
+        enrollment_type=enroll.get("type", ""),
+        eligibility_text=elig.get("eligibilityCriteria", ""),
+        min_age=elig.get("minimumAge", ""),
+        max_age=elig.get("maximumAge", ""),
+        sex=elig.get("sex", ""),
+        healthy_volunteers=elig.get("healthyVolunteers"),
+        arm_count=len(arms),
+        background_therapy=background,
+    )
+
+
+def _measurements(cat, class_n, group_meta, oi, ci, ki) -> list[GroupValue]:
+    groups: list[GroupValue] = []
+    for mi, m in enumerate(cat.get("measurements", [])):
+        gid = m["groupId"]
+        gtitle, arm_id, role, pid, period = group_meta.get(gid, (gid, None, "unknown", None, "treatment"))
+        groups.append(
+            GroupValue(
+                group_id=gid,
+                title=gtitle,
+                arm_id=arm_id,
+                role=role,
+                period=period,
+                product_id=pid,
+                n=class_n.get(gid),
+                value=_num(m.get("value")),
+                value_raw=str(m.get("value", "")),
+                spread=_num(m.get("spread")),
+                lower=_num(m.get("lowerLimit")),
+                upper=_num(m.get("upperLimit")),
+                path=(
+                    f"resultsSection.outcomeMeasuresModule.outcomeMeasures[{oi}].classes[{ci}]"
+                    f".categories[{ki}].measurements[{mi}]"
+                ),
+            )
+        )
+    return groups

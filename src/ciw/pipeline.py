@@ -74,6 +74,58 @@ def run(
     resolver = ProductResolver(cfg)
     products = build_products(cfg)
 
+    studies = _load_studies(cfg, ws, offline, coverage, log)
+
+    trials, results, safety, unclassified, stats = _extract_studies(cfg, resolver, studies)
+
+    _add_cde(cfg, ws, resolver, trials, unclassified, coverage, log)
+
+    # 3. 非结构化来源（公告、公众号、NMPA 页面文本）：异构模型交叉核对
+    events, review_queue, ev_cov = captures.extract_events(ws, cfg, resolver, roles)
+    coverage.extend(ev_cov)
+    approvals, approval_issues, approval_coverage = ingest_nmpa(ws, resolver)
+    events.extend(approvals)
+    review_queue.extend(approval_issues)
+    coverage.append(approval_coverage)
+
+    merged_trials, identity_issues = deduplicate_trials(list(trials.values()))
+    trials = {trial.trial_id: trial for trial in merged_trials}
+    review_queue.extend(identity_issues)
+    review_queue.extend(enrich_attributes(ws, products, list(trials.values()), resolver, roles))
+
+    _add_publications(cfg, ws, resolver, trials, results, roles, offline, review_queue, coverage)
+
+    body = _build_body(cfg, ws, products, trials, results, safety, events, review_queue, unclassified, stats, coverage)
+    release_id, path = write_release(ws, json.loads(json.dumps(body, default=str)))
+    site = None
+    if render:
+        from ciw.render.site import render_release
+
+        site = render_release(path)
+    ws.set_current(release_id)
+    log(f"[release] {release_id} stats={stats}")
+    return RunResult(release_id=release_id, release_path=path, site_dir=site, stats=stats, coverage=coverage)
+
+
+def _collect_unclassified(
+    cfg: IndicationConfig, resolver: ProductResolver, study: dict[str, Any], t: Trial, acc: dict[str, dict[str, Any]]
+) -> None:
+    if not cfg.is_relevant_text(" ".join([t.title, t.official_title, *t.conditions])):
+        return
+    for iv in study["protocolSection"].get("armsInterventionsModule", {}).get("interventions", []):
+        name = iv.get("name", "")
+        if resolver.resolve_intervention(name):
+            continue
+        if is_unclassified_candidate(cfg, name, iv.get("type", ""), t.sponsor_class):
+            key = name.strip().casefold()
+            entry = acc.setdefault(key, {"name": name.strip(), "trials": [], "sponsors": [], "phases": []})
+            entry["trials"].append(t.trial_id)
+            if t.sponsor not in entry["sponsors"]:
+                entry["sponsors"].append(t.sponsor)
+            entry["phases"].append(t.phase)
+
+
+def _load_studies(cfg, ws, offline, coverage, log):
     # 1. CT.gov
     if offline:
         studies = ctgov.load_from_sources(ws)
@@ -99,6 +151,10 @@ def run(
         )
     log(f"[ctgov] {len(studies)} studies")
 
+    return studies
+
+
+def _extract_studies(cfg, resolver, studies):
     trials: dict[str, Trial] = {}
     results: list[OutcomeResult] = []
     safety: list[SafetySummary] = []
@@ -118,6 +174,10 @@ def run(
         if s:
             safety.append(s)
 
+    return trials, results, safety, unclassified, stats
+
+
+def _add_cde(cfg, ws, resolver, trials, unclassified, coverage, log):
     # 2. 中国登记（CDE 药物临床试验登记与信息公示平台）：采集收件箱
     cde_trials, cde_cov = cde_registry.ingest(ws, cfg, resolver)
     coverage.append(cde_cov)
@@ -135,19 +195,8 @@ def run(
                 entry["phases"].append(t.phase)
     log(f"[cde] {cde_cov['status']}: {len(cde_trials)} trials")
 
-    # 3. 非结构化来源（公告、公众号、NMPA 页面文本）：异构模型交叉核对
-    events, review_queue, ev_cov = captures.extract_events(ws, cfg, resolver, roles)
-    coverage.extend(ev_cov)
-    approvals, approval_issues, approval_coverage = ingest_nmpa(ws, resolver)
-    events.extend(approvals)
-    review_queue.extend(approval_issues)
-    coverage.append(approval_coverage)
 
-    merged_trials, identity_issues = deduplicate_trials(list(trials.values()))
-    trials = {trial.trial_id: trial for trial in merged_trials}
-    review_queue.extend(identity_issues)
-    review_queue.extend(enrich_attributes(ws, products, list(trials.values()), resolver, roles))
-
+def _add_publications(cfg, ws, resolver, trials, results, roles, offline, review_queue, coverage):
     # Paper discovery does not turn a search hit into trial evidence; binding uses literal IDs in abstracts.
     paper_ids = sorted(
         {
@@ -167,6 +216,8 @@ def run(
         paper_coverage["status"] = "partial"
     coverage.append(paper_coverage)
 
+
+def _build_body(cfg, ws, products, trials, results, safety, events, review_queue, unclassified, stats, coverage):
     for t in trials.values():
         for pid in t.product_ids:
             if t.relevance == "core" and t.trial_id not in products[pid].trial_ids:
@@ -232,30 +283,4 @@ def run(
         "review_queue": review_queue,
         "stats": stats,
     }
-    release_id, path = write_release(ws, json.loads(json.dumps(body, default=str)))
-    site = None
-    if render:
-        from ciw.render.site import render_release
-
-        site = render_release(path)
-    ws.set_current(release_id)
-    log(f"[release] {release_id} stats={stats}")
-    return RunResult(release_id=release_id, release_path=path, site_dir=site, stats=stats, coverage=coverage)
-
-
-def _collect_unclassified(
-    cfg: IndicationConfig, resolver: ProductResolver, study: dict[str, Any], t: Trial, acc: dict[str, dict[str, Any]]
-) -> None:
-    if not cfg.is_relevant_text(" ".join([t.title, t.official_title, *t.conditions])):
-        return
-    for iv in study["protocolSection"].get("armsInterventionsModule", {}).get("interventions", []):
-        name = iv.get("name", "")
-        if resolver.resolve_intervention(name):
-            continue
-        if is_unclassified_candidate(cfg, name, iv.get("type", ""), t.sponsor_class):
-            key = name.strip().casefold()
-            entry = acc.setdefault(key, {"name": name.strip(), "trials": [], "sponsors": [], "phases": []})
-            entry["trials"].append(t.trial_id)
-            if t.sponsor not in entry["sponsors"]:
-                entry["sponsors"].append(t.sponsor)
-            entry["phases"].append(t.phase)
+    return body
