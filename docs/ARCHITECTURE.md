@@ -44,7 +44,7 @@ indications/<slug>.yaml ──► ciw pipeline ──► workspace/releases/<id>
 
 | 对象 | 关键字段 |
 |---|---|
-| `Source` | `source_id`=sha256 前 16 位；`kind`(ctgov/europepmc/cde/nmpa/company/wechat)；`url`、`title`、`publisher`、`published_at`、`fetched_at`、`sha256` |
+| `Source` | `source_id`=来源类型、URL、内容哈希的稳定组合；`kind`(ctgov/europepmc/cde/nmpa/company/wechat)；`url`、`title`、`publisher`、`published_at`、`fetched_at`、`sha256` |
 | `Trial` | `trial_id`(NCT 或 CTR)；`ids`；`acronym`、`title`、`phase`、`status`；`dates`(start / primary_completion / completion / results_first_posted)；`sponsor`、`collaborators`、`countries`、`china`；`enrollment`；`design`；`arms[]`；`eligibility`；`outcomes_planned[]`；`product_ids[]`；`relevance` |
 | `Arm` | `arm_id`、`label`、`type`(CT.gov armGroups.type)、`role`(experimental/active/placebo/none/other)、`interventions[]`、`description` |
 | `Product` | `product_id`；`name_en`、`name_zh`、`codes[]`；`target`、`mechanism`、`modality`、`route`；`company`、`china_partner`；`innovative`、`inclusion_reason`；`is_own` |
@@ -71,6 +71,13 @@ indications/<slug>.yaml ──► ciw pipeline ──► workspace/releases/<id>
 - 每个数字都必须带原文引语，并且这个数字字面出现在引语中。做不到就判失败，不靠模型自报置信度。
 - 调用记录（模型、prompt 哈希、响应哈希）写进 `ciw.sqlite`，按 (prompt 哈希, 模型) 缓存，重跑不重复计费。
 - 后端走 OpenAI 兼容接口；key 只从环境变量或 key 文件路径读取，不进日志、不进 release。测试使用 `FakeBackend`。
+- 同一抽取器在同一身份下返回冲突值时进入待核，不采用数组首条。
+
+### 论文补充
+
+`sources.europepmc` 按未公布结果的核心 II/III 期登记号分页查询，保存 API 原件；只有摘要正文中的明确登记号可绑定研究。综述、方案、事后或亚组分析不自动作为主要结果。网络失败与尚未检索的编号保留在 coverage，离线重跑不会将其变成零结果。
+
+`verify.publications` 复用同一 crosscheck，按明确登记臂投影为 `OutcomeResult(kind="publication")`。结果保留原始人群、单位、引用定位和核对状态；已明确的差值方向记录在 `Analysis`，不依赖组均值是否存在或舍入后相减是否相等。来源报告的组间差可以单独进入 B，未报告的组数值不补零，空的单组图不显示。登记与论文记录并存；audit 对论文样本回查原始摘要及引用数字。
 
 ## 6. 中国来源（采集收件箱）
 

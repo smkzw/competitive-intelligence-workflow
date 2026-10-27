@@ -94,7 +94,16 @@ def test_same_family_is_rejected():
         crosscheck(task(), roles(backend("deepseek"), backend("deepseek"), backend("glm")))
 
 
-@pytest.mark.parametrize("raw", ['[]', '{}', '{"items":"not a list"}', '{"items":[{"date":"2025"}]}'])
+def test_conflicting_duplicate_identity_is_not_first_wins_even_when_other_model_agrees():
+    a = item(date="2025-09-01")
+    out = crosscheck(
+        task(), roles(backend("deepseek", [item(), a]), backend("qwen", [item()]), backend("glm", choice="A"))
+    )
+    assert len(out) == 1 and out[0].status == "needs_review"
+    assert len(out[0].calls) == 2 and "冲突" in out[0].note
+
+
+@pytest.mark.parametrize("raw", ["[]", "{}", '{"items":"not a list"}', '{"items":[{"date":"2025"}]}'])
 def test_invalid_schema_is_not_evidence_of_no_events(raw):
     from ciw.verify.crosscheck import CrosscheckFailed
 

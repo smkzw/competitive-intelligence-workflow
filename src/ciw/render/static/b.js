@@ -31,7 +31,7 @@
     }
     chart(id, {
       grid: { left: 300, right: 60, top: 20, bottom: 40 },
-      tooltip: { formatter: (p) => { const c = list[p.dataIndex]; return `<b>${esc(cl[p.dataIndex])}</b><br>对照：${esc(c.ctrl_group)}<br>${esc(c.param_type)}：${num(c.value)}${c.ci_lower != null ? `（${c.ci_pct || 95}% CI ${num(c.ci_lower)}, ${num(c.ci_upper)}）` : ""}${c.p_value ? `<br>P ${esc(c.p_value)}` : ""}<br>${esc(c.kind_label)}${c.note ? "<br>" + esc(c.note) : ""}`; } },
+      tooltip: { formatter: (p) => { const c = list[p.dataIndex]; return `<b>${esc(cl[p.dataIndex])}</b><br>对照：${esc(c.ctrl_group)}<br>${esc(c.param_type)}：${num(c.value)}${c.ci_lower != null ? `（${c.ci_pct != null ? c.ci_pct + "% " : ""}CI ${num(c.ci_lower)}, ${num(c.ci_upper)}）` : ""}${c.p_value ? `<br>P ${esc(c.p_value)}` : ""}<br>${esc(c.kind_label)}${c.note ? "<br>" + esc(c.note) : ""}`; } },
       xAxis: log ? { type: "log", splitLine: { lineStyle: { type: "dashed" } } } : { type: "value", scale: true, splitLine: { lineStyle: { type: "dashed" } } },
       yAxis: { type: "category", data: cl, inverse: true, axisLabel: { width: 280, overflow: "truncate", color: (v, i) => (list[i] && list[i].is_own ? OWN : "#17212b") } },
       series: [
@@ -63,6 +63,8 @@
     if (ratios.length) drawForest("ratio-chart", ratios, 1, true);
 
     const rows = current.rows;
+    document.getElementById("arm-values").hidden = !rows.length;
+    document.getElementById("arm-details").hidden = !rows.length;
     const vEl = document.getElementById("value-chart");
     vEl.style.height = Math.max(240, rows.length * 26 + 80) + "px";
     chart("value-chart", {
@@ -83,7 +85,7 @@
       { label: "置信区间", num: true, html: (c) => (c.ci_lower != null ? `${c.ci_pct ? c.ci_pct + "% " : ""}${num(c.ci_lower)}, ${num(c.ci_upper)}` : "—") },
       { label: "P 值", key: "p_value" },
       { label: "方法", key: "method" },
-      { label: "依据", html: (c) => tag(c.kind === "computed" ? "computed" : "registry") + (c.note ? `<br><span class="hint">${esc(c.note)}</span>` : "") },
+      { label: "依据", html: (c) => `${c.source_kind === "publication" ? src(c.url, "论文") + " " : ""}` + tag(c.kind === "computed" ? "computed" : c.status || "registry") + (c.note ? `<br><span class="hint">${esc(c.note)}</span>` : "") },
     ], comps, { rowClass: (c) => (c.is_own ? "own" : "") });
 
     table(document.getElementById("row-table"), [
@@ -95,7 +97,7 @@
       { label: "单位", key: "unit" },
       { label: "终点原文", html: (r) => `${esc(r.title)}${r.class_title ? `<br><span class="hint">${esc(r.class_title)}</span>` : ""}<br><span class="hint">${esc(r.timeframe)}</span>` },
       { label: "分析人群", html: (r) => `<span class="hint">${esc(r.population)}</span>` },
-      { label: "依据", html: () => tag("registry") },
+      { label: "依据", html: (r) => `${r.source_kind === "publication" ? src(r.url, "论文") + " " : ""}${tag(r.status || "registry")}` },
     ], rows, { rowClass: (r) => (r.is_own ? "own" : "") });
   }
 

@@ -41,6 +41,12 @@ def _pct(r: OutcomeResult) -> bool:
     return bool(_PCT_CHANGE.search(f"{r.title} {r.unit}"))
 
 
+def _unit_key(unit: str) -> str:
+    text = " ".join(unit.split())
+    # Case of physical symbols can change the unit (M versus m); only prose labels fold case.
+    return text.casefold() if text.casefold() in {"score on a scale", "score", "points", "point", "percent"} else text
+
+
 def _label(base: str, cfb: bool, pct: bool, kind: str) -> str:
     if pct:
         return base + "较基线百分比变化"
@@ -60,10 +66,21 @@ def build_results(
         t = trials.get(r.trial_id)
         if not t or t.relevance != "core" or r.domain != "efficacy" or not r.concept_id or r.time is None:
             continue
-        buckets[(r.concept_id, r.time.key, r.measure_kind, _cfb(r), _pct(r), r.subgroup, r.category_title)].append(r)
+        buckets[
+            (
+                r.concept_id,
+                r.time.key,
+                r.measure_kind,
+                _cfb(r),
+                _pct(r),
+                r.subgroup,
+                r.category_title,
+                _unit_key(r.unit),
+            )
+        ].append(r)
 
     questions = []
-    for (cid, tkey, kind, cfb, pctc, sub, cat), rs in buckets.items():
+    for (cid, tkey, kind, cfb, pctc, sub, cat, unit), rs in buckets.items():
         c = concepts[cid]
         rows, comps = [], []
         for r in rs:
@@ -97,22 +114,24 @@ def build_results(
                         "class_title": r.class_title,
                         "category_title": r.category_title,
                         "population": r.population,
+                        "source_kind": r.kind,
+                        "status": r.status,
                         "source_id": r.locator.source_id,
                         "path": g.path,
-                        "url": t.url,
+                        "url": r.source_url or t.url,
                     }
                 )
             comps.extend(_comparisons(r, t, products))
-        if not rows:
+        if not rows and not comps:
             continue
-        trial_ids = sorted({row["trial_id"] for row in rows})
+        trial_ids = sorted({row["trial_id"] for row in [*rows, *comps]})
         rows.sort(key=lambda x: (not x["is_own"], x["acronym"], x["role"] != "placebo", x["group_title"]))
         comps.sort(key=lambda x: (not x["is_own"], x["product_label"], x["acronym"]))
         has_primary = any(r.type == "PRIMARY" for r in rs)
         questions.append(
             {
                 "question_id": "q_"
-                + hashlib.sha256(repr((cid, tkey, kind, cfb, pctc, sub, cat)).encode()).hexdigest()[:12],
+                + hashlib.sha256(repr((cid, tkey, kind, cfb, pctc, sub, cat, unit)).encode()).hexdigest()[:12],
                 "concept_id": cid,
                 "label": _label(c.label, cfb, pctc, kind),
                 "subgroup": sub,
@@ -163,6 +182,8 @@ def _comparisons(r: OutcomeResult, t: Trial, products: dict[str, Product]) -> li
             continue
         ratio = bool(_RATIO.search(a.param_type))
         orient = None if ratio else _orient(a.value, g1, g2)
+        if not ratio and {a.minuend_group_id, a.subtrahend_group_id} == {g1.group_id, g2.group_id}:
+            orient = groups[a.minuend_group_id], groups[a.subtrahend_group_id]
         ctrl = next((g for g in (g1, g2) if g.role in ctrl_roles), None)
         exp = next((g for g in (g1, g2) if g is not ctrl and g.role == "experimental"), None)
         h2h = ctrl is None and g1.role == g2.role == "experimental"
@@ -261,7 +282,9 @@ def _comp_row(r, t, products, exp, ctrl, **kw) -> dict[str, Any]:
         "n_exp": exp.n,
         "n_ctrl": ctrl.n,
         "source_id": r.locator.source_id,
-        "url": t.url,
+        "source_kind": r.kind,
+        "status": r.status,
+        "url": r.source_url or t.url,
         "kind_label": "来源报告" if kw["kind"] == "reported" else "计算值",
         **kw,
     }
@@ -291,7 +314,7 @@ def _longitudinal(
             if g.value is None or g.period != "treatment":
                 continue
             series_key = (t.trial_id, normalize_name(g.title))
-            charts[(r.concept_id, r.measure_kind, _cfb(r), _pct(r))][series_key].append(
+            charts[(r.concept_id, r.measure_kind, _cfb(r), _pct(r), _unit_key(r.unit))][series_key].append(
                 {
                     "weeks": r.time.weeks,
                     "label": r.time.label,
@@ -308,7 +331,7 @@ def _longitudinal(
                 }
             )
     out = []
-    for (cid, kind, cfb, pctc), series in charts.items():
+    for (cid, kind, cfb, pctc, unit), series in charts.items():
         lines = []
         for (tid, _), pts in series.items():
             by_week: dict[float, list] = defaultdict(list)
@@ -335,10 +358,11 @@ def _longitudinal(
         if lines:
             out.append(
                 {
-                    "chart_id": f"l_{cid}_{kind}_{int(cfb)}{int(pctc)}",
+                    "chart_id": f"l_{cid}_{kind}_{int(cfb)}{int(pctc)}_{hashlib.sha256(unit.encode()).hexdigest()[:6]}",
                     "concept_id": cid,
                     "label": _label(labels[cid], cfb, pctc, kind),
                     "measure_label": MEASURE_LABEL_ZH.get(kind, kind),
+                    "unit": unit,
                     "lines": lines,
                 }
             )

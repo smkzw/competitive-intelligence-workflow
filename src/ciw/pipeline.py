@@ -21,11 +21,12 @@ from ciw.models import OutcomeResult, Product, SafetySummary, Source, Trial
 from ciw.normalize.products import ProductResolver, is_unclassified_candidate
 from ciw.normalize.trials import deduplicate_trials
 from ciw.release import write_release
-from ciw.sources import captures, cde_registry, ctgov
+from ciw.sources import captures, cde_registry, ctgov, europepmc
 from ciw.sources.nmpa.registry import ingest as ingest_nmpa
 from ciw.store import Workspace, now_iso
 from ciw.verify.attributes import enrich_attributes
 from ciw.verify.llm import Backend
+from ciw.verify.publications import extract_publications
 
 
 @dataclass
@@ -147,6 +148,25 @@ def run(
     review_queue.extend(identity_issues)
     review_queue.extend(enrich_attributes(ws, products, list(trials.values()), resolver, roles))
 
+    # Paper discovery does not turn a search hit into trial evidence; binding uses literal IDs in abstracts.
+    paper_ids = sorted(
+        {
+            identifier
+            for t in trials.values()
+            if t.relevance == "core" and not t.has_results and t.phase_rank in (3, 4)
+            for identifier in t.ids.values()
+            if europepmc.is_registry_id(identifier)
+        }
+    )
+    papers, paper_coverage = europepmc.discover(ws, paper_ids, offline=offline)
+    paper_results, paper_issues = extract_publications(ws, cfg, papers, trials, resolver, roles)
+    results.extend(paper_results)
+    review_queue.extend(paper_issues)
+    paper_coverage.update(extracted_results=len(paper_results), extraction_enabled=roles is not None)
+    if paper_issues:
+        paper_coverage["status"] = "partial"
+    coverage.append(paper_coverage)
+
     for t in trials.values():
         for pid in t.product_ids:
             if t.relevance == "core" and t.trial_id not in products[pid].trial_ids:
@@ -172,6 +192,7 @@ def run(
         {record.locator.source_id for t in trial_list for record in [t, *t.registrations]}
         | {e.source_id for e in events}
         | {loc.source_id for p in products.values() for loc in p.attribute_locators.values()}
+        | {r.locator.source_id for r in results}
     )
     sources: list[Source] = [s for s in ws.sources() if s.source_id in used]
     core = [t for t in trial_list if t.relevance == "core"]

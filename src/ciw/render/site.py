@@ -21,6 +21,7 @@ COVERAGE_ZH = {
     "wechat": "公众号",
     "nmpa": "NMPA",
     "europepmc": "文献",
+    "publications": "论文结果",
 }
 STATUS_ZH = {"ok": "已覆盖", "partial": "部分覆盖", "not_captured": "未采集", "failed": "失败", "skipped": "未抽取"}
 STATIC = ("style.css", "common.js", "echarts.min.js", "LICENSE")

@@ -46,7 +46,10 @@
         if (sortKey === c.key) asc = !asc; else { sortKey = c.key; asc = true; }
         draw();
       });
-      if (opts.onRow) el.querySelectorAll("tbody tr[data-ri]").forEach((tr) => tr.onclick = () => opts.onRow(rows[+tr.dataset.ri]));
+      if (opts.onRow) el.querySelectorAll("tbody tr[data-ri]").forEach((tr) => tr.onclick = (event) => {
+        if (event.target.closest?.("a,button,input,select,textarea,summary,details")) return;
+        opts.onRow(rows[+tr.dataset.ri]);
+      });
     }
     draw();
   }

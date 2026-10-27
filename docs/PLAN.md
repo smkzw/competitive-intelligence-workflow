@@ -20,8 +20,8 @@
 | M1 | CT.gov 全链 + A/B/C 门户 | CRSwNP 一条命令出 release 和三个门户；抽 30 个 B 数值核对原件，0 错误；门户在 1440 和 1920 宽下实看可用 |
 | M2 | 工作台接入 | 工作台 `ciw_release` 适配器和托管路由合入；工作台相关测试全绿；在工作台里打开 A/B/C（需要宿主身份，见 STATUS 阻塞项） |
 | M3 | 中国来源 | CDE 登记列表和详情：采集 → 解析 → 进入 A/C；补齐 MG-K10 登记；NMPA 批准（药品查询）解析为 approval 事件；药企公告、公众号文章（丁香园 Insight、医药魔方 Info）走采集收件箱 |
-| M4 | 异构模型交叉核对（真实端点） | DGX 上 deepseek / qwen / glm 三家族跑通公告、公众号的 `EventItem` 和产品属性 `ProductAttrItem`；抽 20 条 dual_agreed 结果核对原文，0 错误；待核比例低于 15% |
-| M5 | 论文结果补齐 | CT.gov 没有结果的关键 III 期，从 Europe PMC 开放全文或摘要补主要终点（`PublicationResultItem`，交叉核对）；B 的组间比较中标注“论文” |
+| M4 | 异构模型交叉核对（真实端点） | DGX 上 deepseek / qwen / glm 三家族跑通公告、公众号的 `EventItem` 和产品属性 `ProductAttrItem`；按执行包抽 20 条 dual_agreed 或 arbitrated 事件核对原文，0 错误；待核比例低于 15% |
+| M5 | 论文结果补齐 | CT.gov 没有结果的关键 II/III 期，从 Europe PMC 开放全文或摘要补主要终点（`PublicationResultItem`，交叉核对）；B 的组间比较中标注“论文” |
 | M6 | 泛化 + studio 候选池 | 只新增 `indications/pnh.yaml`，不改 Python，就能产出 PNH 的 A/B/C；工作台设计 studio 读取 release `c.rows` 作为竞品候选 |
 
 ## 不做（v1 范围之外，见 DECISIONS.md D3/D5/E6）

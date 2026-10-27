@@ -14,13 +14,14 @@ import re
 from typing import Any
 
 from ciw.store import Workspace
+from ciw.verify.quote import check_quote
 
 _TOKEN = re.compile(r"([A-Za-z]+)(?:\[(\d+)\])?")
 
 
 def follow(doc: Any, path: str) -> Any:
     cur = doc
-    for part in path.split("."):
+    for part in path.removeprefix("$.").split("."):
         m = _TOKEN.fullmatch(part)
         if not m:
             raise KeyError(path)
@@ -52,6 +53,8 @@ def audit(ws: Workspace, n: int = 30, seed: int = 20261027) -> dict[str, Any]:
                     "path": r["path"],
                     "value": r["value"],
                     "n": r["n"],
+                    "result_id": r["result_id"],
+                    "source_kind": r.get("source_kind", "registry"),
                     "label": f"{r['acronym']} · {q['label']} · {q['time_label']} · {r['group_title']}",
                 }
             )
@@ -64,6 +67,8 @@ def audit(ws: Workspace, n: int = 30, seed: int = 20261027) -> dict[str, Any]:
                         "path": c["path"],
                         "value": c["value"],
                         "ci": (c["ci_lower"], c["ci_upper"]),
+                        "result_id": c["result_id"],
+                        "source_kind": c.get("source_kind", "registry"),
                         "label": f"{c['acronym']} · {q['label']} · {q['time_label']} · "
                         f"{c['exp_group']} vs {c['ctrl_group']}",
                     }
@@ -91,6 +96,10 @@ def audit(ws: Workspace, n: int = 30, seed: int = 20261027) -> dict[str, Any]:
             continue
         doc = cache.get(it["source_id"]) or json.loads(ws.read_source(it["source_id"]))
         cache[it["source_id"]] = doc
+        if it.get("source_kind") == "publication":
+            ok, context = _publication(it, doc, rel["results"])
+            (checked if ok else errors).append({**it, "ok": ok, "context": context})
+            continue
         node = follow(doc, it["path"])
         context = _context(doc, it["path"])
         it["context"] = context["text"]
@@ -109,6 +118,27 @@ def audit(ws: Workspace, n: int = 30, seed: int = 20261027) -> dict[str, Any]:
         "errors": errors,
         "examples": [f"{x['label']} = {x['value']}  ←  原件：{x.get('context', '')}" for x in checked[:8]],
     }
+
+
+def _publication(item, doc, results):
+    from lxml import html
+
+    result = next((r for r in results if r["result_id"] == item["result_id"]), None)
+    if result is None or result["kind"] != "publication" or result["locator"]["source_id"] != item["source_id"]:
+        return False, "论文结果身份不一致"
+    abstract = html.fragment_fromstring(follow(doc, item["path"]), create_parent="div").text_content()
+    if item["kind"] == "group_value":
+        matches = [g for g in result["groups"] if g["value"] == item["value"] and g["n"] == item["n"]]
+        numbers = [item["value"], item["n"]]
+    else:
+        matches = [
+            a
+            for a in result["analyses"]
+            if a["value"] == item["value"] and (a["ci_lower"], a["ci_upper"]) == tuple(item["ci"])
+        ]
+        numbers = [item["value"], *item["ci"]]
+    quote = result["locator"]["quote"]
+    return bool(matches) and check_quote(abstract, quote, numbers).ok, quote
 
 
 def _context(doc: Any, path: str) -> dict[str, Any]:

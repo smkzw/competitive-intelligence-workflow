@@ -28,7 +28,7 @@
     { label: "样本量", key: "enrollment", num: true, html: (r) => (r.enrollment == null ? esc(r.enrollment_text || "—") : `${r.enrollment}<span class="hint">${esc(r.enrollment_type)}</span>`) },
     { label: "主要终点（时间）", html: (r) => ep(r.primary) },
     { label: "背景治疗", html: (r) => esc(r.background_therapy.join("；")) },
-    { label: "地区", html: (r) => `${r.country_count} 国${r.china ? "，含中国" : ""}` },
+    { label: "国家/地区", html: (r) => r.country_count ? `${r.country_count} 个国家/地区${r.china ? "，含中国大陆" : ""}` : "—" },
     { label: "首例入组", key: "start" },
     { label: "主要完成", key: "primary_completion" },
     { label: "申办方", key: "sponsor" },
@@ -47,8 +47,9 @@
   }
 
   function show(r) {
-    drawer(`<h2>${esc(r.acronym || r.trial_id)} · ${esc(r.title)}</h2>
-      <p class="hint">${esc(r.official_title)}</p>
+    drawer(`<h2>${r.products.map(p => esc(p.label)).join(" / ")}${r.phase ? " · " + esc(r.phase) : ""}</h2>
+      <p>${esc(D.indication.name_zh)} · ${esc(r.acronym || r.trial_id)}</p>
+      <details><summary>研究题目原文</summary><p>${esc(r.title)}</p><p>${esc(r.official_title)}</p></details>
       <dl><dt>登记号</dt><dd>${src(r.url, r.trial_id)}（${esc(r.registry)}）</dd><dt>申办方</dt><dd>${esc(r.sponsor)}</dd>
       <dt>期别 / 状态</dt><dd>${esc(r.phase)} · ${esc(r.status)}</dd>
       <dt>设计</dt><dd>${[r.allocation, r.masking, r.model].filter(Boolean).map(esc).join(" · ")}</dd>

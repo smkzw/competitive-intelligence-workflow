@@ -218,7 +218,12 @@ def crosscheck(task: ExtractionTask, roles: dict[str, Backend]) -> list[CheckedI
         for it in items:
             ok, reason = _quote_ok(task, it)
             it["_quote_ok"], it["_quote_reason"] = ok, reason
-            out.setdefault(_key(task, it), it)  # 同键重复只取首个；第二个不覆盖
+            key = _key(task, it)
+            previous = out.get(key)
+            if previous is not None and not _same(task, previous, it):
+                previous["_duplicate_conflict"] = True
+            elif previous is None or (not previous["_quote_ok"] and it["_quote_ok"]):
+                out[key] = it
         return out
 
     a_by, b_by = valid(a_items), valid(b_items)
@@ -226,6 +231,17 @@ def crosscheck(task: ExtractionTask, roles: dict[str, Backend]) -> list[CheckedI
     for key in sorted(set(a_by) | set(b_by)):
         a, b = a_by.get(key), b_by.get(key)
         calls = list(base_calls)
+        if any(it and it.get("_duplicate_conflict") for it in (a, b)):
+            results.append(
+                CheckedItem(
+                    item=_clean(a or b),
+                    status="needs_review",
+                    key=key,
+                    calls=calls,
+                    note="同一抽取器在相同身份下返回冲突值，未按顺序取用",
+                )
+            )
+            continue
         if a and b and a["_quote_ok"] and b["_quote_ok"] and _same(task, a, b):
             results.append(CheckedItem(item=_clean(a), status="dual_agreed", key=key, calls=calls))
             continue

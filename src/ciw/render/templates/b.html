@@ -13,12 +13,12 @@
       <div class="row">
         <div class="grow"><h3>与对照组的差值（试验组−对照组）</h3><div id="diff-chart" class="chart"></div>
           <div id="ratio-wrap" hidden><h3>比值（HR / OR 等，对数轴，参考线为 1）</h3><div id="ratio-chart" class="chart"></div></div></div>
-        <div class="grow"><h3>各组数值</h3><div id="value-chart" class="chart"></div></div>
+        <div class="grow" id="arm-values"><h3>各组数值</h3><div id="value-chart" class="chart"></div></div>
       </div>
       <h3>组间比较</h3>
       <div class="table-wrap"><table id="comp-table" class="grid"></table></div>
-      <h3>各组数值明细</h3>
-      <div class="table-wrap"><table id="row-table" class="grid"></table></div>
+      <div id="arm-details"><h3>各组数值明细</h3>
+        <div class="table-wrap"><table id="row-table" class="grid"></table></div></div>
     </section>
     <section class="card">
       <div class="card-h"><h2>历时变化</h2><select id="long-select"></select></div>

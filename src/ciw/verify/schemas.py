@@ -36,12 +36,24 @@ class PublicationResultItem(_Item):
     """论文/摘要中的结果数值（用于 CT.gov 未公布结果的试验）。"""
 
     arm_label: str = Field(description="原文中的组别名称")
+    registry_id: str = Field(description="摘要明确写出的本条所属NCT或CTR号，不从搜索排序推断")
     endpoint: str = Field(description="原文终点名称")
     timepoint: str = Field("", description="原文时间点，例如 Week 24")
+    population: str = Field("", description="原文分析人群限定；总体与亚组分开，未说明留空")
+    unit: str = Field("", description="原文明确单位；不能从量表或数值猜单位")
+    comparator_label: str = Field("", description="difference/ratio的对照组原名；其他统计量留空")
+    contrast_direction: Literal["arm_minus_comparator", "unknown"] = Field(
+        "unknown", description="仅原文明示试验组减对照组时填arm_minus_comparator；不由正负号猜方向"
+    )
+    base_stat_type: Literal["ls_mean", "mean", "median", "proportion", "other"] = Field(
+        "other", description="difference对应的基础统计量，只按原文明确说明填写；单组数值忽略此字段"
+    )
+    outcome_type: Literal["PRIMARY", "SECONDARY", "OTHER_PRE_SPECIFIED"] = "OTHER_PRE_SPECIFIED"
     stat_type: Literal[
         "ls_mean", "mean", "median", "proportion", "count", "difference", "hazard_ratio", "odds_ratio", "other"
     ]
     value: float
     ci_lower: float | None = None
     ci_upper: float | None = None
+    ci_pct: float | None = Field(None, description="来源明确的置信水平，如95；未写留空")
     n: int | None = Field(None, description="该组分析人数；原文没写留空，不要用总样本量代替")

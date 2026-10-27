@@ -169,6 +169,8 @@ class Analysis(Model):
     method: str = ""
     test_type: str = ""
     path: str = ""
+    minuend_group_id: str | None = None  # 来源明确差值方向，不从舍入后的均值反推
+    subtrahend_group_id: str | None = None
 
 
 class OutcomeResult(Model):
@@ -193,6 +195,8 @@ class OutcomeResult(Model):
     groups: list[GroupValue] = Field(default_factory=list)
     analyses: list[Analysis] = Field(default_factory=list)
     status: VerifyStatus = "registry"
+    kind: Literal["registry", "publication"] = "registry"
+    source_url: str = ""
     locator: Locator
 
 

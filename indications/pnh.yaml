@@ -1,0 +1,109 @@
+# Second-indication configuration; no PNH-specific Python or renderer branches.
+# Chinese generic names remain empty until verified against an official Chinese source.
+# Complement targets: FDA review, BLA 761388 (2024), OtherR.pdf.
+# https://www.accessdata.fda.gov/drugsatfda_docs/nda/2024/761388Orig1s000OtherR.pdf
+slug: pnh
+name_zh: 阵发性睡眠性血红蛋白尿症
+name_en: Paroxysmal nocturnal hemoglobinuria
+abbr: PNH
+
+ctgov:
+  conditions: [paroxysmal nocturnal hemoglobinuria, paroxysmal nocturnal haemoglobinuria]
+  relevance_patterns:
+    - 'paroxysmal nocturnal h[ae]+moglobinuria'
+    - '\bPNH\b'
+    - 阵发性睡眠性血红蛋白尿
+
+china:
+  cde_queries: [阵发性睡眠性血红蛋白尿, MY008211A]
+  wechat_accounts: [丁香园Insight数据库, 医药魔方Info]
+  wechat_queries: [PNH 临床试验 结果, 阵发性睡眠性血红蛋白尿 获批]
+
+background_patterns:
+  - placebo
+  - 安慰剂
+  - best supportive care
+  - standard of care
+  - folic acid
+  - folate
+  - ferrous
+  - corticosteroid
+  - transfusion
+  - vaccination
+
+products:
+  - id: my008211a
+    name_en: MY008211A
+    aliases: [MY008211A]
+    own: true
+    note: 执行包指定的泛化本品；药物属性由新登记原件核实，不借用其他适应症数据
+  - id: eculizumab
+    name_en: eculizumab
+    aliases: [eculizumab, Soliris, ALXN6000, 依库珠单抗]
+    target: C5
+  - id: ravulizumab
+    name_en: ravulizumab
+    aliases: [ravulizumab, ravulizumab-cwvz, Ultomiris, ALXN1210, 雷夫利珠单抗]
+    target: C5
+  - id: pegcetacoplan
+    name_en: pegcetacoplan
+    aliases: [pegcetacoplan, APL-2, APL2, Empaveli, Aspaveli]
+    target: C3
+  - id: iptacopan
+    name_en: iptacopan
+    aliases: [iptacopan, LNP023, LNP-023, Fabhalta]
+    target: Factor B
+  - id: danicopan
+    name_en: danicopan
+    aliases: [danicopan, ALXN2040, ACH-0144471, ACH-4471, Voydeya]
+    target: Factor D
+  - id: crovalimab
+    name_en: crovalimab
+    aliases: [crovalimab, crovalimab-akkz, RO7112689, SKY59, Piasky]
+    target: C5
+
+concepts:
+  - id: hb_response_without_transfusion
+    label: 无输血的血红蛋白应答
+    patterns: ['(?:Hb|h[ae]+moglobin).*(?:response|increase).*(?:absence|without).*transfusion']
+    direction: higher_better
+  - id: free_hb
+    label: 游离血红蛋白
+    patterns: ['free h[ae]+moglobin', 'plasma h[ae]+moglobin']
+    domain: pd
+    direction: lower_better
+  - id: hb_stabilization
+    label: 血红蛋白稳定
+    patterns: ['stabili[sz].*h[ae]+moglobin', 'h[ae]+moglobin.*stabili[sz]']
+    direction: higher_better
+  - id: hb_normalization
+    label: 血红蛋白正常化
+    patterns: ['normali[sz].*h[ae]+moglobin', 'h[ae]+moglobin.*normali[sz]']
+    direction: higher_better
+  - id: hb
+    label: 血红蛋白（Hb）
+    patterns: ['\bhemoglobin\b', '\bhaemoglobin\b', '\bHb\b']
+    exclude: ['hemoglobinuria', 'haemoglobinuria', 'transfusion', 'LDH', 'lactate dehydrogenase', 'breakthrough', 'free', 'plasma', 'stabili[sz]', 'normali[sz]']
+    direction: higher_better
+  - id: ldh
+    label: 乳酸脱氢酶（LDH）
+    patterns: ['\bLDH\b', 'lactate dehydrogenase']
+    exclude: ['breakthrough']
+    direction: lower_better
+  - id: transfusion_avoidance
+    label: 输血避免
+    patterns: ['transfusion avoidance', 'avoidance of.*transfusion', 'transfusion[- ]free', '(?:absence of|without|not requiring).*transfusion']
+    direction: higher_better
+  - id: transfusion_burden
+    label: 输血需求
+    patterns: ['transfusion', 'packed red blood cell', '\bPRBC\b']
+    exclude: ['avoidance', 'transfusion[- ]free', '(?:absence of|without|not requiring).*transfusion']
+    direction: lower_better
+  - id: facit_fatigue
+    label: FACIT-Fatigue 疲劳评分
+    patterns: ['FACIT', 'functional assessment of chronic illness therapy']
+    direction: higher_better
+  - id: breakthrough_hemolysis
+    label: 突破性溶血
+    patterns: ['breakthrough h[ae]+molysis', '\bBTH\b']
+    direction: lower_better

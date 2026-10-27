@@ -27,3 +27,23 @@ process.stdout.write(JSON.stringify({
     assert out["original"] == "NPS <mark>&lt; 5</mark> &amp; ≥2"
     assert out["entity"] == "NPS &lt; 5 &amp; ≥2"
     assert out["markup"] == "<mark>&lt;script&gt;</mark>"
+
+
+def test_table_controls_do_not_also_activate_their_parent_row():
+    asset = Path(__file__).resolve().parents[1] / "src/ciw/render/static/common.js"
+    script = r"""
+const fs=require('fs'),vm=require('vm');
+const window={CIW:{},addEventListener(){}};
+const document={getElementById(){return null},addEventListener(){}};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{window,document,URL});
+const tr={dataset:{ri:'0'}};
+const el={querySelectorAll(selector){return selector==='th'?[]:[tr]}};
+let opened=0;
+window.U.table(el,[{key:'label',label:'label'}],[{label:'x'}],{onRow(){opened++}});
+tr.onclick({target:{closest(){return {tagName:'SUMMARY'}}}});
+const afterControl=opened;
+tr.onclick({target:{closest(){return null}}});
+process.stdout.write(JSON.stringify({afterControl,afterRow:opened}));
+"""
+    result = subprocess.run(["node", "-e", script, str(asset)], capture_output=True, text=True, check=True)
+    assert json.loads(result.stdout) == {"afterControl": 0, "afterRow": 1}

@@ -13,7 +13,7 @@ a:hover { text-decoration: underline; }
   display: flex; justify-content: space-between; align-items: center; padding: 10px 24px; gap: 16px; }
 .brand { display: flex; align-items: center; gap: 24px; }
 .ind { font-size: 17px; font-weight: 600; }
-.reports a { color: #cfe3f3; padding: 6px 12px; border-radius: 6px; margin-right: 4px; }
+.reports a { display: inline-block; white-space: nowrap; color: #cfe3f3; padding: 6px 12px; border-radius: 6px; margin-right: 4px; }
 .reports a.on { background: rgba(255,255,255,.16); color: #fff; font-weight: 600; }
 .meta { display: flex; gap: 16px; align-items: center; font-size: 13px; color: #d9e6f0; flex-wrap: wrap; }
 .coverage .chip { display: inline-block; padding: 1px 8px; border-radius: 10px; margin-left: 6px; font-size: 12px;
