@@ -15,6 +15,21 @@ MASKING_ZH = {"NONE": "开放", "SINGLE": "单盲", "DOUBLE": "双盲", "TRIPLE"
 MODEL_ZH = {"PARALLEL": "平行", "CROSSOVER": "交叉", "SINGLE_GROUP": "单组", "FACTORIAL": "析因", "SEQUENTIAL": "序贯"}
 
 
+def _registration(t: Trial) -> dict[str, Any]:
+    return {"trial_id": t.trial_id, "title": t.title, "registry": REGISTRY_ZH.get(t.registry, t.registry),
+            "url": t.url, "phase": t.phase, "status": STATUS_ZH.get(t.status, t.status),
+            "sponsor": t.sponsor, "enrollment": t.design.enrollment,
+            "enrollment_text": t.design.enrollment_text,
+            "enrollment_type": {"ACTUAL": "实际", "ESTIMATED": "计划"}.get(
+                t.design.enrollment_type, t.design.enrollment_type),
+            "eligibility": t.design.eligibility_text,
+            "arms": [{"label": a.label, "role_label": role_label(a.role),
+                      "interventions": a.interventions, "description": a.description} for a in t.arms],
+            "primary": [o.model_dump() for o in t.outcomes_planned if o.kind == "primary"],
+            "secondary": [o.model_dump() for o in t.outcomes_planned if o.kind == "secondary"],
+            "source_id": t.locator.source_id}
+
+
 def build_design(cfg: IndicationConfig, trials: list[Trial], products: dict[str, Product]) -> dict[str, Any]:
     labels = {c.id: c.label for c in cfg.concepts}
     rows = []
@@ -26,6 +41,10 @@ def build_design(cfg: IndicationConfig, trials: list[Trial], products: dict[str,
         rows.append(
             {
                 "trial_id": t.trial_id,
+                "ids": t.ids,
+                "registration_ids": list(dict.fromkeys(
+                    [t.trial_id] + [r.trial_id for r in t.registrations])),
+                "registrations": [_registration(r) for r in t.registrations],
                 "registry": REGISTRY_ZH.get(t.registry, t.registry),
                 "acronym": t.acronym,
                 "title": t.title,
@@ -54,6 +73,7 @@ def build_design(cfg: IndicationConfig, trials: list[Trial], products: dict[str,
                 "masking": MASKING_ZH.get(t.design.masking, t.design.masking),
                 "model": MODEL_ZH.get(t.design.model, t.design.model),
                 "enrollment": t.design.enrollment,
+                "enrollment_text": t.design.enrollment_text,
                 "enrollment_type": {"ACTUAL": "实际", "ESTIMATED": "计划"}.get(
                     t.design.enrollment_type, t.design.enrollment_type
                 ),

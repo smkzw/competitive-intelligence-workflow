@@ -19,8 +19,10 @@ from ciw.config import IndicationConfig
 from ciw.extract.ctgov import extract_results, extract_safety, extract_trial
 from ciw.models import OutcomeResult, Product, SafetySummary, Source, Trial
 from ciw.normalize.products import ProductResolver, is_unclassified_candidate
+from ciw.normalize.trials import deduplicate_trials
 from ciw.release import write_release
 from ciw.sources import captures, cde_registry, ctgov
+from ciw.sources.nmpa.registry import ingest as ingest_nmpa
 from ciw.store import Workspace, now_iso
 from ciw.verify.llm import Backend
 
@@ -134,6 +136,14 @@ def run(
     # 3. 非结构化来源（公告、公众号、NMPA 页面文本）：异构模型交叉核对
     events, review_queue, ev_cov = captures.extract_events(ws, cfg, resolver, roles)
     coverage.extend(ev_cov)
+    approvals, approval_issues, approval_coverage = ingest_nmpa(ws, resolver)
+    events.extend(approvals)
+    review_queue.extend(approval_issues)
+    coverage.append(approval_coverage)
+
+    merged_trials, identity_issues = deduplicate_trials(list(trials.values()))
+    trials = {trial.trial_id: trial for trial in merged_trials}
+    review_queue.extend(identity_issues)
 
     for t in trials.values():
         for pid in t.product_ids:
@@ -156,7 +166,8 @@ def run(
     b["safety"] = build_safety(trials, products, safety)
     c = build_design(cfg, trial_list, products)
 
-    used = {t.locator.source_id for t in trial_list} | {e.source_id for e in events}
+    used = {record.locator.source_id for t in trial_list for record in [t, *t.registrations]} | {
+        e.source_id for e in events}
     sources: list[Source] = [s for s in ws.sources() if s.source_id in used]
     core = [t for t in trial_list if t.relevance == "core"]
     stats.update(

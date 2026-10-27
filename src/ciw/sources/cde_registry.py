@@ -9,16 +9,15 @@ from __future__ import annotations
 
 import json
 import re
-import shutil
-import subprocess
 import time
-from importlib import resources
 from typing import Any
 
 from ciw.config import IndicationConfig
 from ciw.models import Arm, Design, Locator, PlannedOutcome, Trial, TrialDates
 from ciw.normalize.products import ProductResolver
 from ciw.normalize.semantics import concept_of
+from ciw.normalize.trials import registry_ids
+from ciw.sources.browser import run_script
 from ciw.sources.cde.detail import parse_capture as parse_detail
 from ciw.sources.cde.listing import CaptureError
 from ciw.sources.cde.listing import parse_capture as parse_listing
@@ -47,45 +46,7 @@ def _status(text: str) -> str:
 
 # ------------------------------------------------------------------ 采集（浏览器）
 def _run_script(name: str, config: dict[str, Any], timeout: float) -> tuple[list[dict], dict]:
-    exe = shutil.which("ego-browser")
-    if not exe:
-        raise RuntimeError("未找到 ego-browser；中国来源采集需要 ego lite")
-    script = (
-        "const config = "
-        + json.dumps(config, ensure_ascii=False)
-        + ";\n"
-        + resources.files("ciw.sources.cde").joinpath(name).read_text(encoding="utf-8")
-    )
-    try:
-        proc = subprocess.run(
-            [exe, "nodejs", "-e", script],
-            stdin=subprocess.DEVNULL,
-            capture_output=True,
-            text=True,
-            timeout=timeout,
-            check=False,
-        )
-        streams = (proc.stdout or "") + "\n" + (proc.stderr or "")
-    except subprocess.TimeoutExpired as exc:  # 超时：保留已输出的分页，状态记为 timeout
-        streams = (
-            "\n".join(
-                x.decode("utf-8", "replace") if isinstance(x, bytes) else (x or "") for x in (exc.stdout, exc.stderr)
-            )
-            + '\nCIW_CHINA_END:{"status":"timeout"}'
-        )
-    pages, end = [], {}
-    # ego-browser 0.6 把脚本的 console 输出写到 stderr；两个流都读
-    seen: set[str] = set()
-    for line in streams.splitlines():
-        if line in seen:  # 同一行可能同时出现在两个流里
-            continue
-        seen.add(line)
-        if line.startswith("CIW_CHINA_PAGE:"):
-            pages.append(json.loads(line.removeprefix("CIW_CHINA_PAGE:")))
-        elif line.startswith("CIW_CHINA_END:"):
-            end = json.loads(line.removeprefix("CIW_CHINA_END:"))
-    return pages, end
-
+    return run_script(name, config, timeout, package="ciw.sources.cde")
 
 def capture(
     ws: Workspace,
@@ -200,7 +161,9 @@ def ingest(ws: Workspace, cfg: IndicationConfig, resolver: ProductResolver) -> t
         elif own and (resolver.resolve_intervention(r["drug_name"]) or resolver.find_in_text(r["drug_name"])) == own:
             t = _trial_from_list(r, cfg, resolver)  # 本品其他适应症：作为背景保留，不计入本适应症阶段
             trials.append(t.model_copy(update={"relevance": "background", "relevance_reason": "本品其他适应症登记"}))
-    complete = all(s.get("complete") for s in list_status) and not failures
+    missing = sorted(ctr for ctr, r in listed.items() if ctr not in detailed
+                     and cfg.is_relevant_text(f"{r['indication']} {r['title']}"))
+    complete = all(s.get("complete") for s in list_status) and not failures and not missing
     status = "ok" if complete and trials else ("partial" if trials else "failed")
     return trials, {
         "source": "cde",
@@ -209,6 +172,7 @@ def ingest(ws: Workspace, cfg: IndicationConfig, resolver: ProductResolver) -> t
         "details": len(detailed),
         "list_only": len(trials) - len(detailed),
         "detail_parse_failures": failures,
+        "detail_missing": missing,
     }
 
 
@@ -246,6 +210,13 @@ def _names(text: str) -> list[str]:
         if m and m[2].strip() and m[2].strip().upper() not in {"NA", "N/A", "无"}:
             out.append(m[2].strip())
     return out or [text.strip()]
+
+
+def _foreign_ids(cells: dict[str, dict[str, Any]]) -> dict[str, str]:
+    text = ";".join(node["value"] for label, node in cells.items()
+                    if re.fullmatch(r"(?:相关|国际|境外|其他).*登记号", label))
+    nct = registry_ids(text, "ctgov")
+    return {"nct": ";".join(nct)} if nct else {}
 
 
 def _trial_from_detail(
@@ -300,12 +271,13 @@ def _trial_from_detail(
                         )
                     )
     criteria = "\n".join(f"{k}\n{cells[k]['value']}" for k in ("入选标准", "排除标准") if k in cells)
-    enroll = re.search(r"([0-9]+)", get("目标入组人数"))
+    enrollment_text = get("目标入组人数")
+    enroll = re.findall(r"[0-9]+", enrollment_text)
     relevant = cfg.is_relevant_text(f"{parsed['indication']} {parsed.get('title') or ''}")
     return Trial(
         trial_id=parsed["registry_id"],
         registry="cde",
-        ids={"ctr": parsed["registry_id"]},
+        ids={"ctr": parsed["registry_id"], **_foreign_ids(cells)},
         title=parsed.get("title") or "",
         official_title=get("试验专业题目") or "",
         phase=phase,
@@ -322,7 +294,8 @@ def _trial_from_detail(
         design=Design(
             allocation=get("随机化"),
             masking=get("盲法"),
-            enrollment=int(enroll[1]) if enroll else None,
+            enrollment=int(enroll[0]) if len(enroll) == 1 else None,
+            enrollment_text=enrollment_text,
             enrollment_type="ESTIMATED",
             eligibility_text=criteria,
             sex=get("性别"),

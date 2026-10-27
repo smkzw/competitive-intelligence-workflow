@@ -37,11 +37,13 @@ def main(argv: list[str] | None = None) -> int:
     au.add_argument("-n", type=int, default=30)
 
     c = sub.add_parser("capture", help="浏览器采集中国来源（需要 ego lite 专用空间）")
-    c.add_argument("source", choices=["cde"])
+    c.add_argument("source", choices=["cde", "docs"])
     c.add_argument("config")
     c.add_argument("--workspace")
     c.add_argument("--space", type=int, required=True, help="ego-browser TaskSpace ID")
     c.add_argument("--max-details", type=int, default=None)
+    c.add_argument("--url", help="明确的公开文章地址（docs）")
+    c.add_argument("--kind", choices=["company", "wechat"], default="company")
 
     a = ap.parse_args(argv)
     from ciw.config import load_indication
@@ -114,7 +116,15 @@ def main(argv: list[str] | None = None) -> int:
 
         cfg = load_indication(a.config)
         ws = Workspace(a.workspace or _ws_default(cfg.slug))
-        print(json.dumps(capture(ws, cfg, a.space, max_details=a.max_details), ensure_ascii=False, indent=1))
+        if a.source == "docs":
+            from ciw.sources.document import capture_document
+
+            if not a.url:
+                ap.error("capture docs 需要 --url")
+            result = capture_document(ws, cfg, a.space, a.url, a.kind)
+        else:
+            result = capture(ws, cfg, a.space, max_details=a.max_details)
+        print(json.dumps(result, ensure_ascii=False, indent=1))
         return 0
     return 2
 

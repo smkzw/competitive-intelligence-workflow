@@ -32,6 +32,7 @@ from ciw.models import (
 from ciw.normalize.arms import ROLE_BY_TYPE, match_group, period_of
 from ciw.normalize.products import ProductResolver
 from ciw.normalize.semantics import classify, concept_of, measure_kind, parse_timepoint, subgroup_of
+from ciw.normalize.trials import registry_ids
 
 PHASE_LABEL = {"EARLY_PHASE1": "早期I", "PHASE1": "I", "PHASE2": "II", "PHASE3": "III", "PHASE4": "IV", "NA": "不适用"}
 PHASE_RANK = {"NA": 0, "EARLY_PHASE1": 1, "PHASE1": 2, "PHASE2": 3, "PHASE3": 4, "PHASE4": 5}
@@ -64,6 +65,12 @@ def phase_of(phases: list[str]) -> tuple[str, int]:
 
 
 # ---------------------------------------------------------------- 方案
+def _secondary_ids(ident: dict[str, Any]) -> dict[str, str]:
+    secondary = [entry.get("id", "") for entry in ident.get("secondaryIdInfos", [])]
+    ctr = registry_ids(";".join(secondary), "cde")
+    return {"ctr": ";".join(ctr)} if ctr else {}
+
+
 def extract_trial(study: dict[str, Any], source: Source, cfg: IndicationConfig, resolver: ProductResolver) -> Trial:
     p = study["protocolSection"]
     ident = p["identificationModule"]
@@ -140,7 +147,8 @@ def extract_trial(study: dict[str, Any], source: Source, cfg: IndicationConfig, 
     return Trial(
         trial_id=nct,
         registry="ctgov",
-        ids={"nct": nct, **({"org": ident["orgStudyIdInfo"]["id"]} if ident.get("orgStudyIdInfo") else {})},
+        ids={"nct": nct, **({"org": ident["orgStudyIdInfo"]["id"]} if ident.get("orgStudyIdInfo") else {}),
+             **_secondary_ids(ident)},
         acronym=ident.get("acronym", ""),
         title=ident.get("briefTitle", ""),
         official_title=ident.get("officialTitle", ""),

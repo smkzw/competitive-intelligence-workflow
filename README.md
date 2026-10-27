@@ -32,4 +32,4 @@ uv run ciw run indications/crswnp.yaml --with-models    # 启用异构模型交�
 | [docs/REVIEW_2026-10-27.md](docs/REVIEW_2026-10-27.md) | v1 与 ciw2 的审查结论及处置 |
 | [docs/handoff/](docs/handoff/) | 构建 Agent 执行包与启动提示 |
 
-历史版本已冻结在标签里：`archive/v1`（ci_workflow，2026-08 → 10-12）和 `archive/ciw2`（rebaseline-v2，10-23 → 10-26）。
+当前v2发布分支为 `codex/ciw-v2-trunk`，GitHub `main` 仍保留旧工程。执行包提及的 `archive/v1` 与 `archive/ciw2` 标签在本轮远端核查中不存在，不据此宣称历史清理完成。

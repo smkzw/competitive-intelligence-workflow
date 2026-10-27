@@ -21,8 +21,12 @@ try{
   await p.click('table.searchTable tr td:nth-child(2) a:text-is("'+config.query+'")',{label:'打开对应试验中文原文'});
   detail=await popup;
   await detail.waitForFunction(ctr=>document.title===ctr+'详细信息'&&!!document.querySelector('#collapseOne'),config.query,{timeout:30000});
-  await detail.click('loc=href:/clinicaltrials.searchlistdetail.dhtml#collapseTwo',{label:'展开完整试验方案资料'});
-  await detail.waitForFunction(()=>document.querySelector('#collapseTwo')?.getBoundingClientRect().height>100,undefined,{timeout:30000});
+  await detail.waitForFunction(()=>{const e=document.querySelector('#collapseTwo');
+    return e&&!e.classList.contains('collapsing');},undefined,{timeout:30000});
+  const expanded=await detail.evaluate(()=>document.querySelector('#collapseTwo')?.classList.contains('in'));
+  if(!expanded)await detail.click('loc=href:/clinicaltrials.searchlistdetail.dhtml#collapseTwo',{label:'展开完整试验方案资料'});
+  await detail.waitForFunction(()=>{const e=document.querySelector('#collapseTwo');
+    return e?.classList.contains('in')&&!!e.querySelector('table.searchDetailTable tr');},undefined,{timeout:30000});
   const captured=await detail.evaluate(detailId=>{
     const basic=[],wanted=new Set(['登记号','试验状态','首次公示信息日期','申请人名称']);
     for(const row of document.querySelectorAll('#collapseOne tr')){

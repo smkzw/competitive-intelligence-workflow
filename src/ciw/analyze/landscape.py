@@ -46,13 +46,14 @@ def build_landscape(
         ts = by_product.get(p.product_id, [])
         if not ts and not ev_by.get(p.product_id) and not p.is_own:
             continue
-        g = max((t.phase_rank for t in ts), default=0)
-        cn = max((t.phase_rank for t in ts if t.china or t.registry == "cde"), default=0)
+        registered = [record for t in ts for record in [t, *t.registrations]]
+        g = max((t.phase_rank for t in registered), default=0)
+        cn = max((t.phase_rank for t in registered if t.china or t.registry == "cde"), default=0)
         statuses = Counter(t.status for t in ts)
         approvals = [
             e
             for e in ev_by.get(p.product_id, [])
-            if e.event_type == "approval" and e.status in ("dual_agreed", "arbitrated")
+            if e.event_type == "approval" and e.status in ("registry", "dual_agreed", "arbitrated")
         ]
         starts = sorted(t.dates.start for t in ts if t.dates.start)
         rows.append(
@@ -74,7 +75,8 @@ def build_landscape(
                 "global_phase": _rank_label(g),
                 "china_phase": _rank_label(cn) if cn else "—",
                 "approvals": [
-                    {"region": e.region, "date": e.date, "status": e.status, "source_id": e.source_id}
+                    {"region": e.region, "date": e.date, "status": e.status, "source_id": e.source_id,
+                     "scope_label": e.indication or "药品许可"}
                     for e in approvals
                 ],
                 "trial_count": len(ts),

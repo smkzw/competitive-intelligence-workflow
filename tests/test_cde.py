@@ -45,12 +45,31 @@ def test_list_only_rows_keep_registry_identity(cfg, resolver, ws):
     assert cov["list_only"] > 0
     lo = [t for t in trials if t.locator.path.startswith("row:")]
     assert all(t.trial_id.startswith("CTR") and t.china for t in lo)
+    missing = sorted(t.trial_id for t in lo if cfg.is_relevant_text(" ".join(t.conditions) + t.title))
+    assert missing and cov["detail_missing"] == missing
+    assert cov["status"] == "partial"
 
 
 def test_status_and_phase_mapping():
     assert _status("进行中 招募中") == "RECRUITING" and _status("已完成") == "COMPLETED"
     assert _status("进行中 尚未招募") == "NOT_YET_RECRUITING"
     assert _phase("Ⅲ期") == ("III", 4) and _phase("其它其他说明:生物等效性研究") == ("其他", 0)
+
+
+def test_regional_enrollment_not_misrepresented_as_whole_trial(cfg, resolver, ws):
+    import json
+
+    _seed(ws)
+    path = ws.root / "captures/cde/detail-CTR20221480.json"
+    raw = json.loads(path.read_text())
+    for table in raw["tables"]:
+        for row in table["rows"]:
+            if row[0].strip() == "目标入组人数":
+                row[1] = "国内: 60；国际: 148；"
+    path.write_text(json.dumps(raw, ensure_ascii=False))
+    trial = next(t for t in ingest(ws, cfg, resolver)[0] if t.trial_id == "CTR20221480")
+    assert trial.design.enrollment is None
+    assert trial.design.enrollment_text == "国内: 60；国际: 148；"
 
 
 def test_pipeline_includes_cde_and_moves_biosimilar_out_of_universe(cfg, seeded_ws):

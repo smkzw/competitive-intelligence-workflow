@@ -49,7 +49,7 @@
     { label: "全球最高阶段", key: "global_rank", html: (r) => esc(r.global_phase) },
     { label: "中国最高阶段", key: "china_rank", html: (r) => esc(r.china_phase) },
     { label: "试验数", key: "trial_count", num: true, html: (r) => `${r.trial_count}${r.active_trials ? `<span class="hint">（进行中 ${r.active_trials}）</span>` : ""}` },
-    { label: "获批", html: (r) => (r.approvals || []).map((x) => `${esc(x.region)} ${esc(x.date || "")} ${tag(x.status)}`).join("<br>") },
+    { label: "获批", html: (r) => (r.approvals || []).map((x) => `${esc(x.region)} ${esc(x.scope_label || "")} ${esc(x.date || "")} ${tag(x.status)}`).join("<br>") },
     { label: "II 期及以上关键试验", html: (r) => trialLinks(r.key_trials) },
     { label: "属性来源", html: (r) => tag(r.attribute_status) },
   ];

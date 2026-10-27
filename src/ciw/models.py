@@ -65,6 +65,7 @@ class Design(Model):
     masked_roles: list[str] = Field(default_factory=list)
     purpose: str = ""
     enrollment: int | None = None
+    enrollment_text: str = ""
     enrollment_type: str = ""
     eligibility_text: str = ""
     min_age: str = ""
@@ -110,6 +111,7 @@ class Trial(Model):
     relevance_reason: str = ""
     url: str = ""
     locator: Locator
+    registrations: list[Trial] = Field(default_factory=list)
 
 
 class Product(Model):
