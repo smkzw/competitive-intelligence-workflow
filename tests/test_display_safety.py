@@ -117,7 +117,9 @@ const elements=new Proxy({}, {get:(all,id)=>all[id]||(all[id]={id,value:'',check
  querySelectorAll:()=>[],addEventListener(){}})});
 const row=v=>({value:v,role:'experimental',acronym:'Trial',group_title:'Drug',product_label:'Drug'});
 const frames=[{frame_id:'first',trial_ids:['one'],title:'First definition',population:'All participants',
- rows:[row(25)],comparisons:[]},{frame_id:'second',trial_ids:['two'],title:'Other definition',
+ rows:[row(25)],comparisons:[],source_statistics:[{value:10.3,ci_lower:5.7,ci_upper:14.9,
+ param_type:'Adjusted Difference',group_labels:['A','B'],acronym:'Trial',url:'https://example.test'}]},
+ {frame_id:'second',trial_ids:['two'],title:'Other definition',
  population:'Responders',rows:[row(10)],comparisons:[]}];
 const q={question_id:'q',label:'临床缓解',time_label:'第52周',units:['%'],measure_label:'比例',
  trial_ids:['one','two'],rows:[row(25),row(10)],comparisons:[],frames};
@@ -127,7 +129,8 @@ const window={U:{D:{b:{questions:[q],longitudinal:[],safety:[],observations:[]},
  chart:(id,opt)=>plots[id]=opt,table:(el,cols,rows)=>tables[el.id]=rows}};
 vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{window,document:{getElementById:id=>elements[id]}});
 const read=()=>({values:plots['value-chart'].series[0].data.map(d=>d.value),
- table:tables['row-table'].map(d=>d.value),context:elements['frame-context-text'].textContent});
+ table:tables['row-table'].map(d=>d.value),context:elements['frame-context-text'].textContent,
+ rawValues:plots['source-stat-chart']?.series[1].data.map(d=>d.value),rawHidden:elements['source-statistics'].hidden});
 const first=read();elements['frame-select'].value='second';elements['frame-select'].onchange();
 process.stdout.write(JSON.stringify([first,read()]));
 """
@@ -136,3 +139,4 @@ process.stdout.write(JSON.stringify([first,read()]));
     assert first["values"] == first["table"] == [25]
     assert second["values"] == second["table"] == [10]
     assert "Responders" in second["context"] and "All participants" in first["context"]
+    assert first["rawValues"] == [10.3] and not first["rawHidden"] and second["rawHidden"]

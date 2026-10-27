@@ -56,3 +56,29 @@ def test_outcome_timeframe_beats_a_responder_condition_in_title(cfg, resolver, t
     rows, _ = extract_results(raw, trial, src, cfg, resolver)
     assert rows[0].time.key == "W52"
     assert "Week 12" in rows[0].subgroup
+
+
+def test_explicit_shared_cohort_collapses_only_identical_projections_and_keeps_both_sources(cfg):
+    title = "Clinical Remission: trial-1 and trial-2 Pooled Population at Week 52"
+    a, b = outcome(1, title), outcome(2, title)
+    frame = questions(cfg, a, b)[0]
+    assert len(frame["rows"]) == 1
+    assert {s["trial_id"] for s in frame["rows"][0]["source_records"]} == {"trial-1", "trial-2"}
+    b.groups[0].n = 20
+    assert len(questions(cfg, a, b)[0]["rows"]) == 2
+    a.title = b.title = "Clinical Remission at Week 52"
+    b.groups[0].n = None
+    assert len(questions(cfg, a, b)[0]["rows"]) == 2  # Equal values alone prove nothing.
+
+
+def test_unoriented_source_statistics_remain_in_the_question_without_inventing_arm_roles(cfg):
+    from ciw.models import Analysis
+    row = outcome(1, "Clinical Remission at Week 52")
+    row.groups = [GroupValue(group_id="one", title="Dose A", role="unknown", value=None),
+                  GroupValue(group_id="two", title="Dose B", role="unknown", value=None)]
+    row.analyses = [Analysis(group_ids=["one", "two"], param_type="Adjusted Difference", value=10.3,
+                             ci_lower=5.7, ci_upper=14.9, p_value="<0.001", path="analyses[0]")]
+    frame = questions(cfg, row)[0]
+    assert frame["comparisons"] == []
+    assert frame["source_statistics"][0]["value"] == 10.3
+    assert frame["source_statistics"][0]["group_labels"] == ["Dose A", "Dose B"]

@@ -12,9 +12,10 @@ from collections import defaultdict
 from typing import Any
 
 from ciw.analyze.common import pct, product_label, role_label
+from ciw.analyze.shared_cohort import collapse_shared
 from ciw.config import IndicationConfig, normalize_name
 from ciw.models import OutcomeResult, Product, SafetySummary, Trial
-from ciw.normalize.comparison_context import endpoint_context
+from ciw.normalize.comparison_context import context_display_label, endpoint_context
 from ciw.normalize.semantics import MEASURE_LABEL_ZH
 
 _CFB = re.compile(
@@ -91,9 +92,9 @@ def build_results(
                     continue
                 rows.append(_group_row(r, t, g, products))
             comps.extend(_comparisons(r, t, products))
-        if not rows and not comps:
+        if not rows and not comps and not any(r.analyses for r in rs):
             continue
-        trial_ids = sorted({row["trial_id"] for row in [*rows, *comps]})
+        trial_ids = sorted({r.trial_id for r in rs})
         rows.sort(key=lambda x: (not x["is_own"], x["acronym"], x["role"] != "placebo", x["group_title"]))
         comps.sort(key=lambda x: (not x["is_own"], x["product_label"], x["acronym"]))
         has_primary = any(r.type == "PRIMARY" for r in rs)
@@ -139,10 +140,31 @@ def _context_frames(results, concept, trials, products):
                         if g.value is not None and g.period == "treatment" and g.role != "other")
             comps.extend(_comparisons(r, trial, products))
         frames.append(dict(frame_id="frame_" + hashlib.sha256(repr(context).encode()).hexdigest()[:12],
-                           context_label=context[0], title=rs[0].title, description=rs[0].description,
+                           context_label=context_display_label(rs[0]), title=rs[0].title, description=rs[0].description,
                            population=rs[0].population, trial_ids=sorted({r.trial_id for r in rs}),
-                           result_ids=[r.result_id for r in rs], rows=rows, comparisons=comps))
+                           result_ids=[r.result_id for r in rs], rows=collapse_shared(rows, rs, trials),
+                           comparisons=collapse_shared(comps, rs, trials),
+                           source_statistics=collapse_shared(_source_statistics(rs, trials, comps), rs, trials)))
     return sorted(frames, key=lambda f: (-len(f["trial_ids"]), f["frame_id"]))
+
+
+def _source_statistics(results, trials, comparisons):
+    projected = {(r["result_id"], r["path"]) for r in comparisons if r["kind"] == "reported"}
+    rows = []
+    for result in results:
+        trial = trials[result.trial_id]
+        groups = {g.group_id: g for g in result.groups}
+        for analysis in result.analyses:
+            if (result.result_id, analysis.path) in projected:
+                continue
+            rows.append(dict(result_id=result.result_id, trial_id=trial.trial_id,
+                acronym=trial.acronym or trial.trial_id, phase=trial.phase,
+                source_id=result.locator.source_id, path=analysis.path, url=result.source_url or trial.url,
+                status=result.status, group_labels=[groups[g].title if g in groups else g for g in analysis.group_ids],
+                param_type=analysis.param_type, value=analysis.value, value_raw=analysis.value_raw,
+                ci_lower=analysis.ci_lower, ci_upper=analysis.ci_upper, ci_pct=analysis.ci_pct,
+                p_value=analysis.p_value, method=analysis.method))
+    return rows
 
 
 def _observations(trials, products, results):

@@ -13,7 +13,7 @@
     const ul = document.getElementById("qlist");
     ul.innerHTML = items.map((x) => `<li data-id="${esc(x.question_id)}" class="${current && current.question_id === x.question_id ? "on" : ""}">
       <div class="q">${esc(x.label)} · ${esc(x.time_label)}${x.category ? ` · ${esc(x.category)}` : ""}</div>${x.subgroup ? `<div class="s">亚组：${esc(x.subgroup)}</div>` : ""}
-      <div class="s">${esc(x.measure_label)} · ${x.trial_ids.length} 项试验${x.frames?.length > 1 ? ` · ${x.frames.length} 个口径` : ""}${x.has_primary ? " · 含主要终点" : ""}</div></li>`).join("") || '<li class="empty">无匹配问题</li>';
+      <div class="s">${esc(x.measure_label)} · ${x.trial_ids.length} 项登记研究${x.frames?.length > 1 ? ` · ${x.frames.length} 个口径` : ""}${x.has_primary ? " · 含主要终点" : ""}</div></li>`).join("") || '<li class="empty">无匹配问题</li>';
     ul.querySelectorAll("li[data-id]").forEach((li) => li.onclick = () => select(li.dataset.id));
   }
 
@@ -23,8 +23,11 @@
   const rowLabel = (r) => `${r.acronym} · ${r.role === "placebo" ? "安慰剂" : (r.product_label || r.group_title)}${r.role !== "placebo" ? groupSuffix(r.product_label, r.group_title) : ""}`;
 
 
-  function drawForest(id, list, ref, log) {
-    const cl = list.map((c) => `${c.acronym} · ${c.product_label}${groupSuffix(c.product_label, c.exp_group)}${c.h2h ? " vs " + c.ctrl_group : ""}`);
+  const studyLink = row => row.source_records?.length > 1
+    ? row.source_records.map(s => src(s.url, s.acronym)).join(" · ") : src(row.url, row.acronym);
+
+  function drawForest(id, list, ref, log, sourceOnly = false) {
+    const cl = list.map((c) => sourceOnly ? `${c.acronym} · ${c.group_labels.join("、")}` : `${c.acronym} · ${c.product_label}${groupSuffix(c.product_label, c.exp_group)}${c.h2h ? " vs " + c.ctrl_group : ""}`);
     document.getElementById(id).style.height = Math.max(150, list.length * 34 + 80) + "px";
     if (!list.length) {
       chart(id, { title: { text: "该问题没有可入图的组间比较（见下表）", left: "center", top: "middle", textStyle: { color: "#64676B", fontSize: 16, fontWeight: 400 } } });
@@ -32,7 +35,7 @@
     }
     chart(id, {
       grid: { left: 300, right: 60, top: 20, bottom: 40 },
-      tooltip: { formatter: (p) => { const c = list[p.dataIndex]; return `<b>${esc(cl[p.dataIndex])}</b><br>对照：${esc(c.ctrl_group)}<br>${esc(c.param_type)}：${num(c.value)}${c.ci_lower != null ? `（${c.ci_pct != null ? c.ci_pct + "% " : ""}CI ${num(c.ci_lower)}, ${num(c.ci_upper)}）` : ""}${c.p_value ? `<br>P ${esc(c.p_value)}` : ""}<br>${esc(c.kind_label)}${c.note ? "<br>" + esc(c.note) : ""}`; } },
+      tooltip: { formatter: (p) => { const c = list[p.dataIndex]; return `<b>${esc(cl[p.dataIndex])}</b><br>${sourceOnly ? "比较组：" + esc(c.group_labels.join("、")) : "对照：" + esc(c.ctrl_group)}<br>${esc(c.param_type)}：${num(c.value)}${c.ci_lower != null ? `（${c.ci_pct != null ? c.ci_pct + "% " : ""}CI ${num(c.ci_lower)}, ${num(c.ci_upper)}）` : ""}${c.p_value ? `<br>P ${esc(c.p_value)}` : ""}<br>${esc(c.kind_label || "来源报告")}${c.note ? "<br>" + esc(c.note) : ""}`; } },
       xAxis: log ? { type: "log", splitLine: { lineStyle: { type: "dashed" } } } : { type: "value", scale: true, splitLine: { lineStyle: { type: "dashed" } } },
       yAxis: { type: "category", data: cl, inverse: true, axisLabel: { width: 280, overflow: "truncate", color: (v, i) => (list[i] && list[i].is_own ? OWN : "#0F1115") } },
       series: [
@@ -45,9 +48,33 @@
             { type: "line", shape: { x1: b[0], y1: b[1] - 5, x2: b[0], y2: b[1] + 5 }, style: { stroke: "#64676B" } }] };
         }, encode: { x: [1, 2], y: 0 }, data: list.map((c, i) => [i, c.plot_lower, c.plot_upper]), z: 1 },
         { type: "scatter", symbolSize: 11, data: list.map((c) => ({ value: c.plot_value, symbol: c.h2h ? "diamond" : c.kind === "computed" ? "emptyCircle" : "circle", itemStyle: { color: c.is_own ? OWN : "#008F8A" } })),
-          markLine: { silent: true, symbol: "none", lineStyle: { color: "#999" }, data: [{ xAxis: ref }] }, z: 2 },
+          markLine: { silent: true, symbol: "none", lineStyle: { color: "#999" }, data: ref == null ? [] : [{ xAxis: ref }] }, z: 2 },
       ],
     });
+  }
+
+  function drawSourceStatistics(rows) {
+    document.getElementById("source-statistics").hidden = !rows.length;
+    const selector = document.getElementById("source-stat-kind");
+    const types = [...new Set(rows.map(r => r.param_type || "原文统计量"))].sort();
+    selector.innerHTML = types.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join("");
+    selector.value = types[0] || "";
+    const draw = () => {
+      const selected = rows.filter(r => (r.param_type || "原文统计量") === selector.value);
+      const plotted = selected.filter(r => r.value != null).map(r => ({ ...r,
+        plot_value:r.value, plot_lower:r.ci_lower, plot_upper:r.ci_upper }));
+      document.getElementById("source-stat-chart").hidden = !plotted.length;
+      if(plotted.length) drawForest("source-stat-chart", plotted, null, false, true);
+      table(document.getElementById("source-stat-table"), [
+        {label:"研究",html:studyLink}, {label:"比较组",html:r=>r.group_labels.map(esc).join("、")},
+        {label:"统计量",key:"param_type"}, {label:"原值",num:true,html:r=>esc(r.value_raw || num(r.value))},
+        {label:"置信区间",num:true,html:r=>r.ci_lower == null ? "—" :
+          `${r.ci_pct == null ? "" : esc(r.ci_pct) + "% "}${num(r.ci_lower)}, ${num(r.ci_upper)}`},
+        {label:"P值",key:"p_value"}, {label:"方法",key:"method"}, {label:"来源",html:r=>src(r.url,"查看原文")}
+      ], selected);
+    };
+    selector.onchange = draw;
+    draw();
   }
 
   function select(id, frameId) {
@@ -62,11 +89,12 @@
     selectedFrames.set(id, frame.frame_id);
     const picker = document.getElementById("frame-select");
     document.getElementById("frame-label").hidden = frames.length < 2;
-    picker.innerHTML = frames.map((f, i) => `<option value="${esc(f.frame_id || "")}">${i + 1} · ${f.trial_ids.length} 项研究${f.context_label ? " · " + esc(f.context_label.slice(0, 90)) : ""}</option>`).join("");
+    picker.innerHTML = frames.map((f, i) => `<option value="${esc(f.frame_id || "")}">${i + 1} · ${f.trial_ids.length} 项研究${f.context_label ? " · " + esc(f.context_label) : ""}${f.rows?.length ? " · " + [...new Set(f.rows.map(r => r.product_label).filter(Boolean))].slice(0, 2).map(esc).join("、") : ""}</option>`).join("");
     picker.value = frame.frame_id || "";
     picker.onchange = () => select(id, picker.value);
     document.getElementById("frame-context-text").textContent = [frame.title, frame.description, frame.population].filter(Boolean).join("\n\n");
     document.getElementById("frame-context").open = false;
+    drawSourceStatistics(frame.source_statistics || []);
     const comps = frame.comparisons;
     const differences = comps.filter(c => c.family === "difference" && c.plot_value != null);
     const ratios = comps.filter(c => c.family === "ratio" && c.plot_value > 0);
@@ -91,7 +119,7 @@
     });
 
     table(document.getElementById("comp-table"), [
-      { label: "试验", key: "acronym", html: (c) => src(c.url, c.acronym) + `<br><span class="hint">${esc(c.phase)} 期</span>` },
+      { label: "试验", key: "acronym", html: (c) => studyLink(c) + `<br><span class="hint">${esc(c.phase)} 期</span>` },
       { label: "产品（试验组）", key: "product_label", html: (c) => `${c.is_own ? '<span class="own-tag">本品 </span>' : ""}${esc(c.product_label)}<br><span class="hint">${esc(c.exp_group)}${c.n_exp != null ? `，N=${c.n_exp}` : ""}</span>` },
       { label: "对照", html: (c) => `${esc(c.ctrl_role_label)}<br><span class="hint">${esc(c.ctrl_group)}${c.n_ctrl != null ? `，N=${c.n_ctrl}` : ""}</span>` },
       { label: "统计量", key: "param_type" },
@@ -103,7 +131,7 @@
     ], comps, { rowClass: (c) => (c.is_own ? "own" : "") });
 
     table(document.getElementById("row-table"), [
-      { label: "试验", key: "acronym", html: (r) => src(r.url, r.acronym) + `<br><span class="hint">${esc(r.outcome_type)}</span>` },
+      { label: "试验", key: "acronym", html: (r) => studyLink(r) + `<br><span class="hint">${esc(r.outcome_type)}</span>` },
       { label: "组别", key: "group_title", html: (r) => `${esc(r.group_title)}<br><span class="hint">${esc(r.role_label)}</span>` },
       { label: "N", key: "n", num: true, html: (r) => num(r.n) },
       { label: "数值", key: "value", num: true, html: (r) => num(r.value) },

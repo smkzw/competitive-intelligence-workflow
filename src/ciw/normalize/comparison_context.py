@@ -27,3 +27,18 @@ def endpoint_context(result: OutcomeResult, concept: ConceptCfg) -> tuple[str, s
     title = re.sub(r"[^\w<>%=.+/-]+", " ", title, flags=re.UNICODE).strip()
     # Preserve unknown population and endpoint definitions instead of treating silence as equality.
     return _text(title), _text(result.population), _text(result.description)
+
+
+def context_display_label(result: OutcomeResult) -> str:
+    """Compact lexical labels only; raw definitions remain available and matching does not use these labels."""
+    labels = []
+    for pattern, label in (
+        (r"\bglobal definition\b", "Global定义"), (r"\bUS definition\b", "US定义"),
+        (r"\bdurable\b|\bsustained\b", "持续结局"),
+        (r"\bsteroid[- ]free\b|without (?:the use of )?corticosteroids", "无激素结局"),
+    ):
+        if re.search(pattern, result.title, re.I):
+            labels.append(label)
+    if result.subgroup:
+        labels.append("条件人群")
+    return " · ".join(labels) or "原文定义"
