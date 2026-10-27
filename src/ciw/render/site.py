@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
-import shutil
 from importlib import resources
 from pathlib import Path
 from typing import Any
@@ -59,7 +59,7 @@ def _payload(rel: dict[str, Any], report: str) -> dict[str, Any]:
             }
             for c in rel["coverage"]
         ],
-        "links": {k: f"../{k}/index.html" for k in REPORTS},
+        "links": {k: f"../{k}/index.html" for k in rel.get("rendered_reports", REPORTS)},
     }
     if report == "A":
         sources = {x["source_id"]: {"url": x["url"], "title": x["title"], "kind": x["kind"]} for x in rel["sources"]}
@@ -77,23 +77,59 @@ def _payload(rel: dict[str, Any], report: str) -> dict[str, Any]:
     return {**head, "c": rel["c"]}
 
 
-def render_release(release_path: str | Path, out_dir: str | Path | None = None) -> Path:
+def presentation_digest():
+    root = resources.files("ciw.render")
+    digest = hashlib.sha256()
+    paths = [root.joinpath("site.py")]
+    paths += [p for folder in ("templates", "static") for p in root.joinpath(folder).iterdir() if p.is_file()]
+    for item in sorted(paths, key=lambda p: str(p)):
+        digest.update(item.name.encode())
+        digest.update(item.read_bytes())
+    return digest.hexdigest()
+
+
+def _write_immutable(path, data):
+    if path.exists():
+        if path.read_bytes() != data:
+            raise ValueError("已存在的不可变报告文件冲突，原文件已保留")
+        return
+    path.write_bytes(data)
+
+
+def rerender_current(ws):
+    from ciw.release import write_release
+    doc = load_release(ws.current_release_dir())
+    body = {k: v for k, v in doc.items()
+            if k not in {"schema_version", "release_id", "generated_at", "code_version"}}
+    body["presentation_digest"] = presentation_digest()
+    release_id, path = write_release(ws, body)
+    site = render_release(path)
+    ws.set_current(release_id)
+    return site
+
+
+def render_release(release_path: str | Path, out_dir: str | Path | None = None, reports=None) -> Path:
     rel = load_release(release_path)
+    if not out_dir and rel.get("presentation_digest") != presentation_digest():
+        raise ValueError("呈现版本已变化，请运行ciw render生成新版本，保留旧快照")
     base = Path(release_path)
     base = base if base.is_dir() else base.parent
     site = Path(out_dir) if out_dir else base / "site"
     env = Environment(loader=PackageLoader("ciw.render", "templates"), autoescape=select_autoescape())
     static = resources.files("ciw.render").joinpath("static")
-    for report in REPORTS:
+    selected = reports if reports is not None else rel.get("rendered_reports", list(REPORTS))
+    for report in selected:
+        if report not in REPORTS:
+            raise ValueError("未知报告类型")
         d = site / report
         d.mkdir(parents=True, exist_ok=True)
         for name in (*STATIC, f"{report.lower()}.js"):
-            with resources.as_file(static.joinpath(name)) as src:
-                shutil.copyfile(src, d / name)
+            _write_immutable(d / name, static.joinpath(name).read_bytes())
         data = json.dumps(_payload(rel, report), ensure_ascii=False, separators=(",", ":"))
-        (d / "data.js").write_text("window.CIW=" + data.replace("</", "<\\/") + ";\n", encoding="utf-8")
+        _write_immutable(d / "data.js", ("window.CIW=" + data.replace("</", "<\\/") + ";\n").encode())
         html = env.get_template(f"{report.lower()}.html").render(
-            report=report, title=REPORTS[report], indication=rel["indication"], cutoff=rel["cutoff"], reports=REPORTS
+            report=report, title=REPORTS[report], indication=rel["indication"], cutoff=rel["cutoff"],
+            reports={r: REPORTS[r] for r in selected}
         )
-        (d / "index.html").write_text(html, encoding="utf-8")
+        _write_immutable(d / "index.html", html.encode())
     return site

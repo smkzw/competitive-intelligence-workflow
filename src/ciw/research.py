@@ -13,7 +13,7 @@ from typing import Literal
 import yaml
 from pydantic import BaseModel, Field
 
-from ciw.config import ConceptCfg, DesignTopicCfg, IndicationConfig, ProductCfg, normalize_name
+from ciw.config import ConceptCfg, DesignTopicCfg, IndicationConfig, ProductCfg, load_indication, normalize_name
 from ciw.pipeline import run
 from ciw.sources import ctgov
 from ciw.store import Workspace, now_iso
@@ -98,23 +98,64 @@ def registry_config(plan, studies):
     return cfg, membership
 
 
-def _research(indication, ws, *, question="", llm_config=None, log=print):
+def _reuse_context(ws):
+    context = ws.read_stage("research-context")
+    if not context:
+        # Older accepted web runs did not persist a bootstrap stage. Only an actual
+        # committed release with successful registry coverage can supply that proof.
+        from ciw.release import load_release
+        current = ws.current_release_dir()
+        paths = list((ws.root / "indications").glob("*.yaml"))
+        if not current or len(paths) != 1:
+            raise ResearchInputError("尚无完整登记检索资料，请继续原任务")
+        old = load_release(current)
+        if not any(c["source"] == "ctgov" and c["status"] == "ok" for c in old["coverage"]):
+            raise ResearchInputError("登记检索尚未完整结束，请继续原任务")
+        context = dict(config=paths[0].relative_to(ws.root).as_posix(),
+                       source_ids=[s["source_id"] for s in old["sources"] if s["kind"] == "ctgov"])
+    path = (ws.root / context["config"]).resolve()
+    if path.parent != (ws.root / "indications").resolve():
+        raise ResearchInputError("原调研配置不可用")
+    cfg = load_indication(path)
+    sources = {s.source_id: s for s in ws.sources()}
+    studies = {}
+    for sid in context["source_ids"]:
+        source = sources[sid]
+        raw = json.loads(ws.read_source(sid))
+        nct = raw["protocolSection"]["identificationModule"]["nctId"]
+        studies[nct] = source, raw
+    return cfg, studies
+
+
+def _research(indication, ws, *, question="", llm_config=None, log=print, report="A", reuse_research=False):
     roles = {k: CachedBackend(v, ws) for k, v in load_roles(llm_config).items()}
-    log("[research] plan")
-    plan = plan_query(indication, question, roles, ws)
-    log("[research] search")
-    studies = ctgov.search_and_store(ws, conditions=plan.conditions)
-    if not studies:
-        raise ResearchInputError("未检索到登记研究，请补充适应症英文名称或亚型")
-    cfg, membership = registry_config(plan, studies)
-    directory = ws.root / "indications"
-    directory.mkdir(exist_ok=True)
-    path = directory / f"{cfg.slug}.yaml"
-    path.write_text(yaml.safe_dump(cfg.model_dump(mode="json"), allow_unicode=True, sort_keys=False))
-    ws.write_stage("research-product-membership", membership)
+    if reuse_research and (ws.read_stage("research-context") or ws.current_release_dir()):
+        cfg, studies = _reuse_context(ws)
+        log("[research] reuse")
+    else:
+        log("[research] plan")
+        plan = plan_query(indication, question, roles, ws)
+        log("[research] search")
+        studies = ctgov.search_and_store(ws, conditions=plan.conditions)
+        if not studies:
+            raise ResearchInputError("未检索到登记研究，请补充适应症英文名称或亚型")
+        cfg, membership = registry_config(plan, studies)
+        directory = ws.root / "indications"
+        directory.mkdir(exist_ok=True)
+        path = directory / f"{cfg.slug}.yaml"
+        path.write_text(yaml.safe_dump(cfg.model_dump(mode="json"), allow_unicode=True, sort_keys=False))
+        ws.write_stage("research-product-membership", membership)
+        ws.write_stage("research-context", dict(config=path.relative_to(ws.root).as_posix(),
+                       source_ids=sorted(src.source_id for src, _ in studies.values())))
+    from ciw.release import load_release
+    completed = []
+    if ws.current_release_dir():
+        old = load_release(ws.current_release_dir())
+        if old["indication"]["slug"] == cfg.slug:
+            completed = old.get("rendered_reports", list("ABC"))
     log(f"[research] sources={len(studies)} candidates={len(cfg.products)}")
-    result = run(cfg, ws, offline=False, roles=roles, log=log, preloaded_studies=studies)
-    return result
+    return run(cfg, ws, offline=False, roles=roles, log=log, preloaded_studies=studies,
+               report_scope=report, render_reports=sorted({*completed, report}))
 
 
 @contextmanager
@@ -132,10 +173,13 @@ def _queue(ws, lock_path):
             fcntl.flock(handle, fcntl.LOCK_UN)
 
 
-def run_research(indication, workspace, *, question="", llm_config=None, log=print, queue_lock=None):
+def run_research(indication, workspace, *, question="", llm_config=None, log=print, queue_lock=None,
+                 report="A", reuse_research=False):
+    if report not in {"A", "B", "C"}:
+        raise ResearchInputError("未知报告类型")
     ws = Workspace(workspace)
     state = dict(state="queued", pid=os.getpid(), started_at=now_iso(), updated_at=now_iso(), message="等待开始",
-                 execution_token=os.environ.get("CIW_RESEARCH_EXECUTION_TOKEN"))
+                 execution_token=os.environ.get("CIW_RESEARCH_EXECUTION_TOKEN"), report=report)
 
     def progress(message):
         state.update(state="running", message=message, updated_at=now_iso())
@@ -145,7 +189,8 @@ def run_research(indication, workspace, *, question="", llm_config=None, log=pri
     ws.write_stage("research-run", state)
     try:
         with _queue(ws, queue_lock):
-            result = _research(indication, ws, question=question, llm_config=llm_config, log=progress)
+            result = _research(indication, ws, question=question, llm_config=llm_config, log=progress,
+                               report=report, reuse_research=reuse_research)
         state.update(state="done", release_id=result.release_id, stats=result.stats, message="报告已生成")
         return result
     except Exception as exc:

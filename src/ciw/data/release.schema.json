@@ -23,6 +23,8 @@
     "b": {"type": "object", "required": ["questions", "longitudinal", "safety"]},
     "c": {"type": "object", "required": ["rows", "facets"]},
     "review_queue": {"type": "array"},
-    "stats": {"type": "object"}
+    "stats": {"type": "object"},
+    "rendered_reports": {"type": "array", "uniqueItems": true, "items": {"enum": ["A", "B", "C"]}},
+    "presentation_digest": {"type": "string"}
   }
 }

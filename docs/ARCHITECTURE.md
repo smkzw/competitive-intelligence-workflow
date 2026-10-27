@@ -121,7 +121,7 @@ uv sync
 uv run pytest                                     # 单元测试 + 小夹具，几十秒内完成
 uv run ciw run indications/crswnp.yaml --workspace ~/Developer/ciw-workspaces/crswnp
 uv run ciw status --workspace ...                 # 阶段、计数、待核数量、coverage
-uv run ciw render --workspace ...                 # 只重渲染 current release
+uv run ciw render --workspace ...                 # 新呈现版本产生新release，保留旧文件
 ```
 
 
@@ -138,3 +138,13 @@ uv run ciw render --workspace ...                 # 只重渲染 current release
 C终点定义直接投影原始PlannedOutcome.description并标记阈值；治疗时长主题使用专门的文字角色规则，不混入入排中的避孕/既往窗口、终点评估或每次给药间隔。给药与背景方案保留逐臂及研究描述原文，未知结构化字段不填造。样本量图和配表共享筛选，缺失原因不影响真实0。
 
 候选属性低思考试验只在ProductAttrItem调用处复制现有DeepSeek后端，GLM与临床来源抽取不变；角色始终仅两种。请求reasoning_effort写入收据及模型缓存键，无显式思考配置时沿用原缓存键。低思考候选需真实来源质量与延迟复验，不凭配置宣称性能提高。
+
+### D20 报告优先与资料复用
+
+`research --report A|B|C`只生成所选门户；`--reuse-research`读取已完整取得的登记source集合与原YAML，不重新规划/检索，也不更新原件获取日期。完整分页结束才写research-context；旧工作区仅可由真实current与成功覆盖证明复用资格。失败前已取原件和模型缓存保留。
+
+`pipeline.run`显式区分报告任务与已完成门户集合；B/C跳过A属性，A/C不启动B论文抽取。补生成时将已有门户与新门户投影至同一新release，保留同源已核对属性与论文事实。高级YAML `ciw run`默认仍完整生成A/B/C。
+
+release记录`rendered_reports`，工作台由committed current与实际HTML存在共同决定入口；任务running/failed不使旧报告消失。新增类型沿用原任务/工作区，重复点击不重复执行，同时只运行一个补生成。原子切current在完整渲染之后。
+
+release JSON及门户文件不覆盖已有不同字节；相同内容重复写保持原generated_at。呈现资产digest只决定报告版本，不参与LLM缓存失效；`ciw render`为新版呈现创建新release，不改历史快照。

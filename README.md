@@ -56,3 +56,14 @@ DGX 凭据仅通过 `CIW_DGX_API_KEY` 或 `CIW_DGX_KEY_FILE` 显式提供；cms-
 运行 `uv run ciw run indications/<slug>.yaml --workspace <新工作区> --with-models` 联网生成；原件、来源覆盖与未决项保留在工作区。只在已有真实原件时用 `--offline`，不能用于从零研究。
 
 独立查看本次产物时，可在新工作区的 `releases/<release_id>/site` 运行 `python3 -m http.server <空闲端口> --bind 127.0.0.1`，浏览器打开 `http://127.0.0.1:<端口>/A/`（或B/C）。这是CLI产物查看，不等于新适应症已接入正式工作台；后者需要相应项目和已配置的数据源。
+
+### 按需生成报告
+
+网页优先深入生成所选A/B/C，其他类型通过“生成”按钮复用本次资料补充。高级CLI亦可：
+
+```sh
+uv run ciw research "适应症全称" --report C --workspace <workspace>
+uv run ciw research "适应症全称" --report B --reuse-research --workspace <workspace>
+```
+
+B/C不等待A的产品属性核对。高级YAML `ciw run`仍可一次生成整套A/B/C。运行时间及科学质量以真实独立测试为准。

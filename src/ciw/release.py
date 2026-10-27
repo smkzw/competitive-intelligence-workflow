@@ -34,6 +34,13 @@ def write_release(ws: Workspace, body: dict[str, Any]) -> tuple[str, Path]:
     out_dir = ws.releases_dir / release_id
     out_dir.mkdir(parents=True, exist_ok=True)
     path = out_dir / "release.json"
+    if path.exists():
+        existing = load_release(path)
+        previous = {k: v for k, v in existing.items()
+                    if k not in {"schema_version", "release_id", "generated_at", "code_version"}}
+        if json.dumps(previous, ensure_ascii=False, sort_keys=True, default=str) != content:
+            raise ValueError("不可变发布版本内容冲突")
+        return release_id, path
     tmp = path.with_suffix(".json.tmp")
     tmp.write_text(json.dumps(doc, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
     tmp.replace(path)

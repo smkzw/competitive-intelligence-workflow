@@ -70,7 +70,14 @@ def run(
     render: bool = True,
     log=print,
     preloaded_studies=None,
+    report_scope: str | None = None,
+    render_reports: list[str] | None = None,
 ) -> RunResult:
+    if report_scope not in {None, "A", "B", "C"}:
+        raise ValueError("未知报告类型")
+    selected = render_reports if render_reports is not None else list("ABC")
+    if any(r not in {"A", "B", "C"} for r in selected):
+        raise ValueError("未知报告类型")
     coverage: list[dict[str, Any]] = []
     resolver = ProductResolver(cfg)
     products = build_products(cfg)
@@ -79,7 +86,8 @@ def run(
     if studies is None:
         studies = _load_studies(cfg, ws, offline, coverage, log)
     else:
-        coverage.append(dict(source="ctgov", status="ok", records=len(studies), fetched_at=now_iso()))
+        coverage.append(dict(source="ctgov", status="ok", records=len(studies),
+                             fetched_at=max((src.fetched_at for src, _ in studies.values()), default=None)))
 
     trials, results, safety, unclassified, stats = _extract_studies(cfg, resolver, studies)
 
@@ -96,13 +104,19 @@ def run(
     merged_trials, identity_issues = deduplicate_trials(list(trials.values()))
     trials = {trial.trial_id: trial for trial in merged_trials}
     review_queue.extend(identity_issues)
-    log("[research] attributes")
-    review_queue.extend(enrich_attributes(ws, products, list(trials.values()), resolver, roles, log=log))
+    _reuse_completed(cfg, ws, products, trials, results, coverage, report_scope)
+    if report_scope in {None, "A"}:
+        log("[research] attributes")
+        review_queue.extend(enrich_attributes(ws, products, list(trials.values()), resolver, roles, log=log))
 
-    log("[research] publications")
-    _add_publications(cfg, ws, resolver, trials, results, roles, offline, review_queue, coverage)
+    if report_scope in {None, "B"}:
+        log("[research] publications")
+        _add_publications(cfg, ws, resolver, trials, results, roles, offline, review_queue, coverage)
 
     body = _build_body(cfg, ws, products, trials, results, safety, events, review_queue, unclassified, stats, coverage)
+    from ciw.render.site import presentation_digest
+
+    body.update(rendered_reports=sorted(set(selected)) if render else [], presentation_digest=presentation_digest())
     release_id, path = write_release(ws, json.loads(json.dumps(body, default=str)))
     site = None
     if render:
@@ -113,6 +127,36 @@ def run(
     ws.set_current(release_id)
     log(f"[release] {release_id} stats={stats}")
     return RunResult(release_id=release_id, release_path=path, site_dir=site, stats=stats, coverage=coverage)
+
+
+def _reuse_completed(cfg, ws, products, trials, results, coverage, scope):
+    """Reuse adopted source facts, never HTML or unchecked model memory."""
+    from ciw.release import load_release
+    previous = ws.current_release_dir()
+    if not previous:
+        return
+    old = load_release(previous)
+    if old["indication"]["slug"] != cfg.slug:
+        return
+    source_ids = {entry.locator.source_id for t in trials.values() for entry in (t, *t.registrations)}
+    for item in old["products"]:
+        prior = Product.model_validate(item)
+        product = products.get(prior.product_id)
+        if not product or product.name_en != prior.name_en:
+            continue
+        for attr in ("target", "modality"):
+            locator = prior.attribute_locators.get(attr)
+            if not getattr(product, attr) and locator and locator.source_id in source_ids:
+                setattr(product, attr, getattr(prior, attr))
+                product.attribute_locators[attr] = locator
+                product.attribute_status = prior.attribute_status
+    if scope is not None and scope != "B" and "B" in old.get("rendered_reports", list("ABC")):
+        known = {s.source_id: s.kind for s in ws.sources()}
+        for item in old["results"]:
+            result = OutcomeResult.model_validate(item)
+            if result.trial_id in trials and known.get(result.locator.source_id) == "europepmc":
+                results.append(result)
+        coverage.extend(c for c in old["coverage"] if c["source"] in {"europepmc", "publications"})
 
 
 def _collect_unclassified(

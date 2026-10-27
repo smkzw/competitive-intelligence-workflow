@@ -31,6 +31,8 @@ def _parser() -> argparse.ArgumentParser:
     research.add_argument("--question", default="")
     research.add_argument("--workspace", required=True)
     research.add_argument("--llm-config")
+    research.add_argument("--report", choices=list("ABC"), default="A")
+    research.add_argument("--reuse-research", action="store_true", help="复用同项目已获取的资料")
     research.add_argument("--queue-lock", help=argparse.SUPPRESS)
 
     s = sub.add_parser("status", help="查看 current release 的统计、覆盖与待核")
@@ -66,7 +68,8 @@ def main(argv: list[str] | None = None) -> int:
         from ciw.research import run_research
 
         result = run_research(
-            a.indication, a.workspace, question=a.question, llm_config=a.llm_config, queue_lock=a.queue_lock
+            a.indication, a.workspace, question=a.question, llm_config=a.llm_config, queue_lock=a.queue_lock,
+            report=a.report, reuse_research=a.reuse_research
         )
         print(json.dumps({"release_id": result.release_id, "stats": result.stats}, ensure_ascii=False))
         return 0
@@ -76,13 +79,13 @@ def main(argv: list[str] | None = None) -> int:
     if a.cmd == "status":
         return _status_command(a)
     if a.cmd == "render":
-        from ciw.render.site import render_release
+        from ciw.render.site import rerender_current
 
         d = Workspace(a.workspace).current_release_dir()
         if d is None:
             print("没有 current release")
             return 1
-        print(render_release(d))
+        print(rerender_current(Workspace(a.workspace)))
         return 0
     if a.cmd == "audit":
         from ciw.audit import audit
