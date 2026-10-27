@@ -31,7 +31,7 @@ h2 { font-size: 16px; margin: 0; } h3 { font-size: 14px; margin: 12px 0 6px; col
 .filters { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 input[type=search], select { border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; font: inherit; background: #fff; }
 input[type=search] { width: 260px; }
-.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; }
 .kpi { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; }
 .kpi b { display: block; font-size: 24px; color: var(--brand); } .kpi span { color: var(--muted); font-size: 12px; }
 .table-wrap { overflow: auto; max-height: 70vh; border: 1px solid var(--line); border-radius: 6px; }
@@ -52,7 +52,8 @@ table.grid { border-collapse: collapse; width: 100%; font-size: 13px; }
 .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin: 0 4px 0 10px; }
 .dot.g { background: var(--brand); } .dot.c { background: #e53e3e; }
 .legend { font-size: 12px; color: var(--muted); }
-.layout-b { display: grid; grid-template-columns: 320px 1fr; gap: 16px; }
+.layout-b { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 16px; }
+.qmain { min-width: 0; }
 .qnav { position: sticky; top: 64px; align-self: start; max-height: calc(100vh - 80px); overflow: auto; }
 .qnav input[type=search] { width: 100%; margin-bottom: 6px; }
 .qnav ul { list-style: none; margin: 8px 0 0; padding: 0; }
@@ -69,4 +70,9 @@ details summary h2 { display: inline; } details summary .count { color: var(--mu
 .drawer dl { display: grid; grid-template-columns: 110px 1fr; gap: 4px 12px; } .drawer dt { color: var(--muted); }
 mark { background: #fff3a3; }
 .empty { color: var(--muted); padding: 24px; text-align: center; }
-@media (max-width: 1300px) { .row { flex-direction: column; } .layout-b { grid-template-columns: 1fr; } .qnav { position: static; } }
+@media (max-width: 1300px) { .layout-b .row { flex-direction: column; } }
+@media (max-width: 850px) {
+  .row { flex-direction: column; }
+  .layout-b { grid-template-columns: minmax(0, 1fr); }
+  .qnav { position: static; max-height: 160px; }
+}

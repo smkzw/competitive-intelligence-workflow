@@ -1,5 +1,13 @@
 # 决策记录
 
+## 2026-10-27 接管实施补充
+
+| ID | 用户裁决 | 工程含义 |
+|---|---|---|
+| D13 | 允许在工作台增加显式、隔离的本地开发身份入口 | 默认关闭；只读、仅回环、私有随机密钥、限定MG-K10 CRSwNP。正常宿主身份和其他项目/写入ACL不变；由开发代理在服务端提供凭据，不进浏览器bundle。 |
+| D14 | DGX接入参照用户指定的DGX Models接入包 | 只用Instruction for Agent内授权workbench凭据，通过CIW_DGX_API_KEY或CIW_DGX_KEY_FILE注入；不读取application/owner key，不改服务端。已实查models授权200，尚不等于三家族抽取通过。 |
+
+
 只记录用户裁决和由此推出的工程决定。新决定追加在顶部，旧决定被推翻时写明替代关系，不删除原文。
 
 ## 2026-10-27 补充决定（补审 codex/rebaseline-v2-m1 分支 ciw2 之后）
