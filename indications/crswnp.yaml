@@ -140,13 +140,15 @@ products:
 
   - id: tezepelumab
     name_en: tezepelumab
-    aliases: [tezepelumab, "experimental: tezepelumab", Tezspire, 特泽利尤单抗]
-    brand: Tezspire
+    name_zh: 特泽利尤单抗
+    aliases: [tezepelumab, "experimental: tezepelumab", Tezspire, 特泽利尤单抗, 泰适卓]
+    brand: 泰适卓 / Tezspire
     target: TSLP
     modality: 单克隆抗体
     route: 皮下注射
     company: AstraZeneca / Amgen
-    # 中文登记药名“特泽利尤单抗注射液”见 CDE CTR20260829；正式中文通用名待 NMPA 核对后再填 name_zh
+    # 中文名/品牌见 CDE CTR20260829 与阿斯利康中国2026-03-27正式公告；不据发稿日推定批准日。
+    # https://www.astrazeneca.com.cn/zh/media/press-releases/2026/03-27-02.html
 
   - id: depemokimab
     name_en: depemokimab

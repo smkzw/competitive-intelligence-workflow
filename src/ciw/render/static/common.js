@@ -65,8 +65,10 @@
 
   function chart(id, option) {
     const el = document.getElementById(id);
-    if (!el) return null;
-    const c = echarts.getInstanceByDom(el) || echarts.init(el);
+    if (!el || !el.getClientRects().length) return null;
+    const existing = echarts.getInstanceByDom(el);
+    const c = existing || echarts.init(el);
+    if (existing) c.resize();
     c.setOption(option, true);
     return c;
   }

@@ -28,7 +28,7 @@
     { label: "样本量", key: "enrollment", num: true, html: (r) => (r.enrollment == null ? esc(r.enrollment_text || "—") : `${r.enrollment}<span class="hint">${esc(r.enrollment_type)}</span>`) },
     { label: "主要终点（时间）", html: (r) => ep(r.primary) },
     { label: "背景治疗", html: (r) => esc(r.background_therapy.join("；")) },
-    { label: "国家/地区", html: (r) => r.country_count ? `${r.country_count} 个国家/地区${r.china ? "，含中国大陆" : ""}` : "—" },
+    { label: "地区", html: (r) => esc(r.country_label || "—") },
     { label: "首例入组", key: "start" },
     { label: "主要完成", key: "primary_completion" },
     { label: "申办方", key: "sponsor" },

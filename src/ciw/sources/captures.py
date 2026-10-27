@@ -22,6 +22,7 @@ from ciw.models import Event, stable_id
 from ciw.normalize.products import ProductResolver
 from ciw.store import Workspace
 from ciw.verify.crosscheck import CrosscheckFailed, ExtractionTask, crosscheck, task_id_for
+from ciw.verify.events import validate_event_item
 from ciw.verify.llm import Backend
 from ciw.verify.schemas import EventItem
 
@@ -44,7 +45,12 @@ def norm_region(text: str) -> str:
 
 INSTRUCTION = (
     "抽取与适应症“{ind}”相关的药物研发里程碑：获批上市、上市申请受理/递交、关键试验顶线结果、"
-    "关键试验启动（首例入组）、授权许可交易。每个产品每类事件一条。"
+    "关键试验启动（首例入组）、授权许可交易。按产品、事件类型及明确地区分别列出，不能每类只留一条。"
+    "同一事件列明多个获批地区时，各地区分别保留；地区是监管/交易辖区，不是总部或试验开展地。"
+    "产品别名不要重复计为两个事件。仅回顾已有研究数值、批准依据或获奖，不构成新的顶线结果公布。"
+    "批准/受理日期只在原文明确属于该动作时填写，并以event_date_quote保存该同段原文。"
+    "例：‘2025年1月3日，公司宣布该药已获批’只证明报道时间，批准日期留空；"
+    "‘该药于2025年1月3日获批准’才支持批准日期。不要用新闻头日期、今日宣布或发布日期补批准日。"
 )
 
 
@@ -120,7 +126,11 @@ def extract_events(
             queue.append({"kind": "doc_not_extracted", "ref": src.source_id, "note": "未配置异构模型，未抽取"})
             continue
         task = ExtractionTask(
-            task_id=task_id_for(src.sha256, "EventItem", cfg.slug),
+            task_id=task_id_for(
+                src.sha256,
+                json.dumps(EventItem.model_json_schema(), sort_keys=True),
+                INSTRUCTION.format(ind=cfg.name_zh),
+            ),
             source_id=src.source_id,
             source_text=text,
             instruction=INSTRUCTION.format(ind=cfg.name_zh),
@@ -128,6 +138,7 @@ def extract_events(
             key_fields=("product_mention", "event_type", "region"),
             value_fields=("date", "indication"),
             date_fields=("date",),
+            item_check=validate_event_item,
             key_fn=lambda it, r=resolver: (
                 r.find_in_text(it.get("product_mention", ""))
                 or r.resolve_intervention(it.get("product_mention", ""))
@@ -159,7 +170,11 @@ def extract_events(
                 status=chk.status,
                 source_id=src.source_id,
             )
-            ws.save_verification(ev.event_id, chk.status, {"calls": chk.calls, "note": chk.note, "task": task.task_id})
+            ws.save_verification(
+                ev.event_id,
+                chk.status,
+                {"calls": chk.calls, "note": chk.note, "task": task.task_id, "item": it, "source_id": src.source_id},
+            )
             events.append(ev)
             stat["events"] += 1
             if chk.status == "needs_review":

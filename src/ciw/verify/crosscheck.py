@@ -53,6 +53,7 @@ class ExtractionTask:
     date_fields: tuple[str, ...] = ()  # 日期必须能在引语里找到（年份和月份）
     quote_field: str = "quote"
     key_fn: Callable[[dict[str, Any]], tuple[str, ...]] | None = None  # 跨模型配对键（例如解析后的产品 ID）
+    item_check: Callable[[dict[str, Any]], tuple[bool, str]] | None = None
 
 
 class CrosscheckFailed(RuntimeError):
@@ -172,6 +173,8 @@ def _quote_ok(task: ExtractionTask, item: dict[str, Any]) -> tuple[bool, str]:
     for f in task.date_fields:
         if item.get(f) and not _date_in_quote(str(item[f]), quote):
             return False, f"{f}={item[f]} 在引语中找不到"
+    if task.item_check is not None:
+        return task.item_check(item)
     return True, ""
 
 

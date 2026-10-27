@@ -24,6 +24,7 @@ def test_detail_parses_to_trial_with_explicit_roles(cfg, resolver, ws):
     t = {x.trial_id: x for x in trials}["CTR20221480"]
     assert (t.registry, t.phase, t.phase_rank, t.china) == ("cde", "III", 4, True)
     assert t.product_ids == ["stapokibart"] and t.relevance == "core"
+    assert t.countries == []  # Registration jurisdiction is not a complete site-country list.
     roles = {a.role for a in t.arms}
     assert {"experimental", "placebo"} <= roles
     assert t.design.enrollment == 180
@@ -82,3 +83,6 @@ def test_pipeline_includes_cde_and_moves_biosimilar_out_of_universe(cfg, seeded_
     assert "bat2606" in {p["product_id"] for p in doc["a"]["non_innovative"]}
     sta = next(p for p in doc["a"]["products"] if p["product_id"] == "stapokibart")
     assert sta["china_rank"] >= 4
+    row = next(r for r in doc["c"]["rows"] if r["trial_id"] == "CTR20221480")
+    assert row["country_count"] is None and row["countries"] == []
+    assert row["country_label"] == row["china_label"] == "中国登记"

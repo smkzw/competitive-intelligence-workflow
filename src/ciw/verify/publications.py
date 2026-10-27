@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 
 from ciw.config import normalize_name
 from ciw.models import Analysis, GroupValue, Locator, OutcomeResult, Trial, stable_id
@@ -42,7 +43,7 @@ def _task(paper: dict) -> ExtractionTask:
 
 
 def extract_publications(ws, cfg, papers, trials, resolver, roles) -> tuple[list[OutcomeResult], list[dict]]:
-    results, issues = [], []
+    results, issues, source_conflicts = [], [], set()
     for paper in papers:
         if paper["excluded_type"]:
             continue
@@ -80,6 +81,16 @@ def extract_publications(ws, cfg, papers, trials, resolver, roles) -> tuple[list
                 )
             elif result is not None:
                 results.append(result)
+                trial = trials[result.trial_id]
+                if trial.trial_id not in source_conflicts and _registry_conflict(trial, resolver):
+                    source_conflicts.add(trial.trial_id)
+                    issues.append(
+                        dict(
+                            kind="registry_arm_relationship_conflict",
+                            ref=trial.trial_id,
+                            note="登记组名/角色与干预关联冲突；原文保留，论文按明确名称和角色绑定",
+                        )
+                    )
     return results, issues
 
 
@@ -88,7 +99,29 @@ def _match_arm(trial: Trial, label: str, resolver: ProductResolver):
     if len(exact) == 1:
         return exact[0]
     pid = resolver.resolve_intervention(label)
-    matches = [a for a in trial.arms if pid in a.product_ids] if pid else []
+    # Explicit arm labels/verified aliases beat a contradictory intervention link.
+    matches = (
+        [
+            a
+            for a in trial.arms
+            if resolver.resolve_intervention(a.label) == pid and a.role in {"experimental", "active_comparator"}
+        ]
+        if pid
+        else []
+    )
+    if len(matches) == 1:
+        return matches[0]
+    matches = (
+        [
+            a
+            for a in trial.arms
+            if pid in a.product_ids
+            and a.role in {"experimental", "active_comparator"}
+            and resolver.resolve_intervention(a.label) in {None, pid}
+        ]
+        if pid
+        else []
+    )
     if len(matches) == 1:
         return matches[0]
     # A literal placebo label plus one explicitly registered placebo arm, never array order.
@@ -99,13 +132,16 @@ def _match_arm(trial: Trial, label: str, resolver: ProductResolver):
     return None
 
 
-def _group(arm, label: str, path: str, **values) -> GroupValue:
+def _group(arm, label: str, path: str, resolver, **values) -> GroupValue:
+    pid = resolver.resolve_intervention(label) if arm.role != "placebo" else None
+    if pid is None and arm.role in {"experimental", "active_comparator"} and len(arm.product_ids) == 1:
+        pid = arm.product_ids[0]
     return GroupValue(
         group_id=arm.arm_id,
         arm_id=arm.arm_id,
         title=label,
         role=arm.role,
-        product_id=arm.product_ids[0] if len(arm.product_ids) == 1 else None,
+        product_id=pid,
         path=path,
         **values,
     )
@@ -118,7 +154,12 @@ def _project(cfg, paper, trials, resolver, item, status):
     ):
         return None, "论文科学上下文未在引用中保留原文"
     tid = item["registry_id"].upper()
-    trial = trials.get(tid) or next((t for t in trials.values() if tid in t.ids.values()), None)
+    matches = [
+        t
+        for t in trials.values()
+        if tid in {t.trial_id, *(i.upper() for k, v in t.ids.items() if k in {"nct", "ctr"} for i in v.split(";"))}
+    ]
+    trial = matches[0] if len(matches) == 1 else None
     if tid not in paper["registry_ids"] or trial is None or trial.relevance != "core":
         return None, "论文数值未明确关联当前核心研究"
     arm = _match_arm(trial, item["arm_label"], resolver)
@@ -133,6 +174,7 @@ def _project(cfg, paper, trials, resolver, item, status):
             arm,
             item["arm_label"],
             paper["path"],
+            resolver,
             value=None if contrast else item["value"],
             n=item.get("n"),
             lower=None if contrast else item.get("ci_lower"),
@@ -141,7 +183,7 @@ def _project(cfg, paper, trials, resolver, item, status):
     ]
     analyses = []
     if contrast:
-        groups.append(_group(ctrl, item["comparator_label"], paper["path"]))
+        groups.append(_group(ctrl, item["comparator_label"], paper["path"], resolver))
         analyses = [_analysis(item, arm.arm_id, ctrl.arm_id, paper["path"])]
     domain, concept = classify(item["endpoint"], cfg)
     return OutcomeResult(
@@ -150,6 +192,7 @@ def _project(cfg, paper, trials, resolver, item, status):
         outcome_index=-1,
         type=item["outcome_type"],
         title=item["endpoint"],
+        description=_measurement_context(item),
         timeframe=item["timepoint"],
         time=parse_timepoint(item["timepoint"]),
         subgroup=item["population"],
@@ -167,8 +210,35 @@ def _project(cfg, paper, trials, resolver, item, status):
     ), ""
 
 
+def _measurement_context(item):
+    endpoint = re.escape(item["endpoint"])
+    match = re.search(
+        r"(?:percent(?:age)?\s+)?change\s+(?:from baseline\s+(?:in|of)\s+"
+        + endpoint
+        + r"|in\s+"
+        + endpoint
+        + r"\s+from baseline)",
+        item["quote"],
+        re.I,
+    )
+    return match[0] if match else ""
+
+
+def _registry_conflict(trial, resolver):
+    for arm in trial.arms:
+        label_pid = resolver.resolve_intervention(arm.label)
+        if arm.role == "placebo" and arm.product_ids:
+            return True
+        if label_pid and arm.product_ids and label_pid not in arm.product_ids:
+            return True
+        if label_pid and arm.interventions and any(re.search(r"placebo|安慰剂", i, re.I) for i in arm.interventions):
+            return True
+    return False
+
+
 def _analysis(item, arm, ctrl, path):
     direction = item["stat_type"] == "difference" and item["contrast_direction"] == "arm_minus_comparator"
+    ordered, evidence = _reported_order(item) if not direction else (1, "")
     return Analysis(
         group_ids=[arm, ctrl],
         param_type=item["stat_type"],
@@ -178,6 +248,30 @@ def _analysis(item, arm, ctrl, path):
         ci_upper=item.get("ci_upper"),
         ci_pct=item.get("ci_pct"),
         path=path,
-        minuend_group_id=arm if direction else None,
-        subtrahend_group_id=ctrl if direction else None,
+        minuend_group_id=arm if ordered == 1 else ctrl if ordered == -1 else None,
+        subtrahend_group_id=ctrl if ordered == 1 else arm if ordered == -1 else None,
+        direction_evidence=evidence,
     )
+
+
+def _reported_order(item):
+    if item["stat_type"] != "difference" or item["base_stat_type"] not in {"ls_mean", "mean"}:
+        return 0, ""
+
+    def match(a, b):
+        return re.search(
+            r"(?<!\w)"
+            + re.escape(a)
+            + r"\s+(?:vs\.?|versus)\s+"
+            + re.escape(b)
+            + r"\s+groups?\b(?:[^.;]|\.(?=\d)){0,180}?(?:LS mean difference|"
+            r"least[- ]squares mean difference|mean difference)",
+            item["quote"],
+            re.I,
+        )
+
+    forward = match(item["arm_label"], item["comparator_label"])
+    reverse = match(item["comparator_label"], item["arm_label"])
+    if bool(forward) == bool(reverse):
+        return 0, ""
+    return (1, forward[0]) if forward else (-1, reverse[0])

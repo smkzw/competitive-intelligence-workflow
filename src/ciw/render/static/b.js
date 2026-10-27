@@ -91,7 +91,7 @@
     table(document.getElementById("row-table"), [
       { label: "试验", key: "acronym", html: (r) => src(r.url, r.acronym) + `<br><span class="hint">${esc(r.outcome_type)}</span>` },
       { label: "组别", key: "group_title", html: (r) => `${esc(r.group_title)}<br><span class="hint">${esc(r.role_label)}</span>` },
-      { label: "N", key: "n", num: true, html: (r) => (r.n == null ? "未报告" : r.n) },
+      { label: "N", key: "n", num: true, html: (r) => num(r.n) },
       { label: "数值", key: "value", num: true, html: (r) => num(r.value) },
       { label: "离散度", num: true, html: (r) => (r.spread != null ? `${esc(r.dispersion_type)} ${num(r.spread)}` : r.lower != null ? `${esc(r.dispersion_type)} ${num(r.lower)}, ${num(r.upper)}` : "—") },
       { label: "单位", key: "unit" },

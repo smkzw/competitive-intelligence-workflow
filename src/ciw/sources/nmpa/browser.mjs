@@ -41,7 +41,8 @@ try {
 }catch(e){
   const control=/EGO_.*(?:CONTROL|OWNERSHIP|INACTIVE|UNASSIGNED|NOT_FOUND)|user control/i.test(String(e?.message||''));
   const verification=String(e?.message||'').includes('certificate_user_verification_required');
+  const network=String(e?.message||'').match(/ERR_CONNECTION_CLOSED|ERR_CONNECTION_RESET|ERR_INTERNET_DISCONNECTED|ERR_NAME_NOT_RESOLVED|ERR_TIMED_OUT/)?.[0];
   if(!control&&!verification)for(const p of [detail,result])if(p?.openedBy==='agent')try{await p.close();}catch{}
-  console.log('CIW_CHINA_END:'+JSON.stringify({status:control?'user_control':verification?'verification_required':'failed',error_type:e?.name||'Error',
+  console.log('CIW_CHINA_END:'+JSON.stringify({status:control?'user_control':verification?'verification_required':network?'network_error':'failed',error_type:e?.name||'Error',error_code:network,
     reason:String(e?.message||'').slice(0,360)}));
 }

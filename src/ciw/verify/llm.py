@@ -20,6 +20,7 @@ from urllib.error import HTTPError
 import yaml
 
 from ciw.store import Workspace, now_iso
+from ciw.verify.transport import model_opener
 
 
 class Backend(Protocol):
@@ -60,9 +61,9 @@ class OpenAICompatBackend:
                 **({"Authorization": f"Bearer {self.api_key}"} if self.api_key else {}),
             },
         )
-        handlers = [urllib.request.ProxyHandler({})] if self.no_proxy else []
+        transport = {}
         try:
-            with urllib.request.build_opener(*handlers).open(req, timeout=self.timeout) as resp:
+            with model_opener(self.base_url, self.no_proxy, transport).open(req, timeout=self.timeout) as resp:
                 data = json.load(resp)
         except HTTPError as exc:
             self.receipt = {"http_status": exc.code}
@@ -80,6 +81,7 @@ class OpenAICompatBackend:
         if not choices:
             raise ValueError("模型返回为空（无 choices）")
         self.receipt = {
+            **transport,
             "response_model": data.get("model"),
             "response_id": data.get("id"),
             "finish_reason": choices[0].get("finish_reason"),

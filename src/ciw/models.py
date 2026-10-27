@@ -171,6 +171,7 @@ class Analysis(Model):
     path: str = ""
     minuend_group_id: str | None = None  # 来源明确差值方向，不从舍入后的均值反推
     subtrahend_group_id: str | None = None
+    direction_evidence: str = ""  # 同段原文的有序组别与均值差表达，不由舍入均值相减推断
 
 
 class OutcomeResult(Model):

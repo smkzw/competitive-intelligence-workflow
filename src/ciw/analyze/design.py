@@ -16,18 +16,33 @@ MODEL_ZH = {"PARALLEL": "平行", "CROSSOVER": "交叉", "SINGLE_GROUP": "单组
 
 
 def _registration(t: Trial) -> dict[str, Any]:
-    return {"trial_id": t.trial_id, "title": t.title, "registry": REGISTRY_ZH.get(t.registry, t.registry),
-            "url": t.url, "phase": t.phase, "status": STATUS_ZH.get(t.status, t.status),
-            "sponsor": t.sponsor, "enrollment": t.design.enrollment,
-            "enrollment_text": t.design.enrollment_text,
-            "enrollment_type": {"ACTUAL": "实际", "ESTIMATED": "计划"}.get(
-                t.design.enrollment_type, t.design.enrollment_type),
-            "eligibility": t.design.eligibility_text,
-            "arms": [{"label": a.label, "role_label": role_label(a.role),
-                      "interventions": a.interventions, "description": a.description} for a in t.arms],
-            "primary": [o.model_dump() for o in t.outcomes_planned if o.kind == "primary"],
-            "secondary": [o.model_dump() for o in t.outcomes_planned if o.kind == "secondary"],
-            "source_id": t.locator.source_id}
+    return {
+        "trial_id": t.trial_id,
+        "title": t.title,
+        "registry": REGISTRY_ZH.get(t.registry, t.registry),
+        "url": t.url,
+        "phase": t.phase,
+        "status": STATUS_ZH.get(t.status, t.status),
+        "sponsor": t.sponsor,
+        "enrollment": t.design.enrollment,
+        "enrollment_text": t.design.enrollment_text,
+        "enrollment_type": {"ACTUAL": "实际", "ESTIMATED": "计划"}.get(
+            t.design.enrollment_type, t.design.enrollment_type
+        ),
+        "eligibility": t.design.eligibility_text,
+        "arms": [
+            {
+                "label": a.label,
+                "role_label": role_label(a.role),
+                "interventions": a.interventions,
+                "description": a.description,
+            }
+            for a in t.arms
+        ],
+        "primary": [o.model_dump() for o in t.outcomes_planned if o.kind == "primary"],
+        "secondary": [o.model_dump() for o in t.outcomes_planned if o.kind == "secondary"],
+        "source_id": t.locator.source_id,
+    }
 
 
 def build_design(cfg: IndicationConfig, trials: list[Trial], products: dict[str, Product]) -> dict[str, Any]:
@@ -42,8 +57,7 @@ def build_design(cfg: IndicationConfig, trials: list[Trial], products: dict[str,
             {
                 "trial_id": t.trial_id,
                 "ids": t.ids,
-                "registration_ids": list(dict.fromkeys(
-                    [t.trial_id] + [r.trial_id for r in t.registrations])),
+                "registration_ids": list(dict.fromkeys([t.trial_id] + [r.trial_id for r in t.registrations])),
                 "registrations": [_registration(r) for r in t.registrations],
                 "registry": REGISTRY_ZH.get(t.registry, t.registry),
                 "acronym": t.acronym,
@@ -67,7 +81,13 @@ def build_design(cfg: IndicationConfig, trials: list[Trial], products: dict[str,
                 "primary_completion": t.dates.primary_completion,
                 "results_posted": t.dates.results_first_posted,
                 "china": t.china,
-                "country_count": len(t.countries),
+                "country_count": len(t.countries) if t.countries else None,
+                "country_label": "中国登记"
+                if t.registry == "cde"
+                else f"已列 {len(t.countries)} 个国家/地区" + ("，含中国大陆" if t.china else "")
+                if t.countries
+                else "",
+                "china_label": "中国登记" if t.registry == "cde" else "含中国中心" if t.china else "",
                 "countries": t.countries,
                 "allocation": ALLOCATION_ZH.get(t.design.allocation, t.design.allocation),
                 "masking": MASKING_ZH.get(t.design.masking, t.design.masking),

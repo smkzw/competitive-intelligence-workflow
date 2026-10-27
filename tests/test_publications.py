@@ -9,7 +9,7 @@ from ciw.verify.llm import FakeBackend
 from ciw.verify.publications import extract_publications
 
 TEXT = (
-    "NCT12345678: In the overall population at Week 24, least squares mean change in nasal polyp score "
+    "NCT12345678: In the overall population at Week 24, least squares mean change in nasal polyp score from baseline "
     "was -2.6 with stapokibart and -0.4 with placebo; stapokibart minus placebo difference -2.5 "
     "(95% CI -2.9 to -2.1). The same contrast was reported for the eosinophilic population."
 )
@@ -157,3 +157,48 @@ def test_different_physical_units_never_share_one_numeric_axis(cfg, resolver, ws
     b = build_results(cfg, {trial.trial_id: trial}, build_products(cfg), results + other, None)
     assert len(b["questions"]) == 2
     assert {tuple(q["units"]) for q in b["questions"]} == {("g/dL",), ("g/L",)}
+
+
+def test_paper_uses_explicit_names_and_roles_when_registry_links_are_reversed(cfg, resolver, ws):
+    paper, trial, item = setup(ws)
+    trial.arms[0].product_ids = []
+    trial.arms[0].interventions = ["Placebo"]
+    trial.arms[1].product_ids = ["stapokibart"]
+    trial.arms[1].interventions = ["CM310"]
+    before = trial.model_dump()
+    item["endpoint"] = "nasal polyp score"
+    results, issues = extract_publications(ws, cfg, [paper], {trial.trial_id: trial}, resolver, roles([item]))
+    assert len(results) == 1 and issues[0]["kind"] == "registry_arm_relationship_conflict"
+    assert [(g.arm_id, g.role, g.product_id) for g in results[0].groups] == [
+        ("A", "experimental", "stapokibart"),
+        ("B", "placebo", None),
+    ]
+    assert trial.model_dump() == before
+    b = build_results(cfg, {trial.trial_id: trial}, build_products(cfg), results, None)
+    assert "较基线变化" in b["questions"][0]["label"]
+    assert b["questions"][0]["comparisons"][0]["plot_value"] == -2.5
+
+
+def test_multiple_trials_claiming_one_registration_are_not_first_wins(cfg, resolver, ws):
+    paper, trial, item = setup(ws)
+    another = trial.model_copy(update={"trial_id": "NCT99999999", "ids": {"nct": trial.trial_id}})
+    results, issues = extract_publications(
+        ws, cfg, [paper], {trial.trial_id: trial, another.trial_id: another}, resolver, roles([item])
+    )
+    assert not results and issues[0]["kind"] == "publication_unbound"
+
+
+def test_ordered_reported_contrast_does_not_recompute_the_adjusted_estimate(cfg, resolver, ws):
+    paper, trial, item = setup(ws)
+    quote = (
+        "NCT12345678: The LS mean change in nasal polyp score from baseline to Week 24 "
+        "in the stapokibart vs placebo groups was -3.0 vs -0.4 points, respectively, "
+        "in the overall population (LS mean difference, -2.5; 95% CI -2.9 to -2.1)."
+    )
+    paper["text"] = quote
+    item.update(quote=quote, contrast_direction="unknown", endpoint="nasal polyp score")
+    results, _ = extract_publications(ws, cfg, [paper], {trial.trial_id: trial}, resolver, roles([item]))
+    b = build_results(cfg, {trial.trial_id: trial}, build_products(cfg), results, None)
+    c = b["questions"][0]["comparisons"][0]
+    assert (c["value"], c["plot_value"], c["plot_lower"], c["plot_upper"]) == (-2.5, -2.5, -2.9, -2.1)
+    assert "stapokibart vs placebo groups" in results[0].analyses[0].direction_evidence

@@ -288,7 +288,7 @@ def _trial_from_detail(
         ),
         sponsor=parsed["applicant"].strip(),
         sponsor_class="INDUSTRY",
-        countries=["China"],
+        countries=[],  # 中国登记不等于已取得完整研究国家/中心清单。
         china=True,
         conditions=[parsed["indication"]],
         design=Design(
@@ -320,7 +320,7 @@ def _trial_from_list(r: dict[str, Any], cfg: IndicationConfig, resolver: Product
         ids={"ctr": r["ctr"]},
         title=r["title"],
         status=_status(r["status_text"]),
-        countries=["China"],
+        countries=[],
         china=True,
         conditions=[r["indication"]],
         product_ids=[pid] if pid else [],

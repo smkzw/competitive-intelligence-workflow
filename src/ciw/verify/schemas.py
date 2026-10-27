@@ -19,6 +19,12 @@ class EventItem(_Item):
     event_type: Literal["approval", "filing", "topline", "phase_start", "licensing", "other"]
     region: str = Field("", description="中国/美国/欧盟/日本/全球 等；原文没写留空")
     date: str = Field("", description="事件日期 YYYY-MM-DD 或 YYYY-MM；原文没写留空，不用发布日期代替")
+    event_date_quote: str = Field(
+        "",
+        description=(
+            "明确将日期归属于实际事件动作的同一段连续原文；只有发稿日或‘某日宣布已获批’时，date与本字段均留空"
+        ),
+    )
     indication: str = Field("", description="原文写明的适应症，逐字照抄，不翻译、不扩展")
     detail: str = Field("", description="一句话概括，不加原文没有的信息")
 

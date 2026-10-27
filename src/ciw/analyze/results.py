@@ -33,12 +33,12 @@ _PCT_CHANGE = re.compile(r"percent(age)? change|% change|percent reduction", re.
 
 
 def _cfb(r: OutcomeResult) -> bool:
-    return bool(_CFB.search(r.title))
+    return bool(_CFB.search(r.title + (" " + r.description if r.kind == "publication" else "")))
 
 
 def _pct(r: OutcomeResult) -> bool:
     """较基线百分比变化与绝对变化是不同估计量，不能同轴。"""
-    return bool(_PCT_CHANGE.search(f"{r.title} {r.unit}"))
+    return bool(_PCT_CHANGE.search(r.title + " " + r.unit + (" " + r.description if r.kind == "publication" else "")))
 
 
 def _unit_key(unit: str) -> str:

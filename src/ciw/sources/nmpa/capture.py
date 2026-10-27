@@ -49,8 +49,8 @@ def capture(
             path.write_text(json.dumps(pages[0], ensure_ascii=False), encoding="utf-8")
             summary["details"] += 1
         except (ValueError, KeyError, TypeError) as exc:
-            summary["failures"].append(dict(number=number, reason=str(exc)))
-        if end.get("status") in {"user_control", "verification_required"}:
+            summary["failures"].append(dict(number=number, reason=str(exc), error_code=end.get("error_code")))
+        if end.get("status") in {"user_control", "verification_required", "network_error"}:
             break
     return summary
 
@@ -71,6 +71,6 @@ def _discover(folder, cfg, space, summary, links):
             summary["queries"].append(dict(query=query, category=category, **end))
             for row in rows:
                 links[(category, row["registration_number"])] = row
-            if end.get("status") in {"user_control", "verification_required"}:
+            if end.get("status") in {"user_control", "verification_required", "network_error"}:
                 summary["blocked"] = end["status"]
                 return

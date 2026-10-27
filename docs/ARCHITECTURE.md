@@ -72,12 +72,16 @@ indications/<slug>.yaml ──► ciw pipeline ──► workspace/releases/<id>
 - 调用记录（模型、prompt 哈希、响应哈希）写进 `ciw.sqlite`，按 (prompt 哈希, 模型) 缓存，重跑不重复计费。
 - 后端走 OpenAI 兼容接口；key 只从环境变量或 key 文件路径读取，不进日志、不进 release。测试使用 `FakeBackend`。
 - 同一抽取器在同一身份下返回冲突值时进入待核，不采用数组首条。
+- 私有DGX的系统DNS失败时，仅对已配置的HTTPS Tailscale主机使用本机`tailscale dns query`的唯一私网答案建立连接；保留原主机TLS/SNI验证，不改系统DNS、端点、模型或服务。调用元数据记录解析方式，不记录私网IP或凭据。
+- EventItem的事件日期须有连续原文支持实际动作；发布日期、宣布已批准和历史数据回顾不能补作事件日期或新顶线事件。
 
 ### 论文补充
 
 `sources.europepmc` 按未公布结果的核心 II/III 期登记号分页查询，保存 API 原件；只有摘要正文中的明确登记号可绑定研究。综述、方案、事后或亚组分析不自动作为主要结果。网络失败与尚未检索的编号保留在 coverage，离线重跑不会将其变成零结果。
 
 `verify.publications` 复用同一 crosscheck，按明确登记臂投影为 `OutcomeResult(kind="publication")`。结果保留原始人群、单位、引用定位和核对状态；已明确的差值方向记录在 `Analysis`，不依赖组均值是否存在或舍入后相减是否相等。来源报告的组间差可以单独进入 B，未报告的组数值不补零，空的单组图不显示。登记与论文记录并存；audit 对论文样本回查原始摘要及引用数字。
+
+论文组名优先匹配登记臂名及经核实的别名，矛盾的干预关联不改写；问题写入当前待核集合。来源明确的“X vs Y groups … LS mean difference”保留原句作为方向证据，不由数值正负号或舍入均值反推。只有摘要实际提供的分析N才进入对应结果。
 
 ## 6. 中国来源（采集收件箱）
 

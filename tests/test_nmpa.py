@@ -119,3 +119,27 @@ def test_incomplete_catalogue_details_are_partial_not_ok(cfg, resolver, ws):
     _, _, cov = ingest(ws, resolver)
     assert cov["discovered"] == 2 and cov["status"] == "partial"
     assert cov["failed_queries"]
+
+
+def test_connection_failure_stops_the_batch_instead_of_visiting_all_missing_records(cfg, ws, monkeypatch):
+    from ciw.sources.nmpa.capture import capture
+
+    folder = ws.root / "captures/nmpa"
+    folder.mkdir()
+    rows = [
+        {"registration_number": f"国药准字SJ2020000{i}", "url": f"https://datasearch.nmpa.gov.cn/{i}"}
+        for i in range(1, 4)
+    ]
+    (folder / "list-one.json").write_text(
+        json.dumps(dict(query=cfg.china.nmpa_queries[0], category="境外生产药品", rows=rows, end={"status": "ok"}))
+    )
+    calls = []
+
+    def offline(*args, **kwargs):
+        calls.append(args)
+        return [], {"status": "network_error", "error_code": "ERR_CONNECTION_CLOSED"}
+
+    monkeypatch.setattr("ciw.sources.nmpa.capture.run_script", offline)
+    result = capture(ws, cfg, 40, resume_only=True)
+    assert len(calls) == 1 and len(result["failures"]) == 1
+    assert result["failures"][0]["error_code"] == "ERR_CONNECTION_CLOSED"

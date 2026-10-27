@@ -10,6 +10,8 @@ async function readCertificate(page, category, number) {
   // heading, this certificate column, and a non-empty required product value.
   await page.waitForFunction(({wanted, label, product}) => {
     const body = (document.body?.innerText || '').replace(/\s+/g, '');
+    const network=body.match(/ERR_CONNECTION_CLOSED|ERR_CONNECTION_RESET|ERR_INTERNET_DISCONNECTED|ERR_NAME_NOT_RESOLVED|ERR_TIMED_OUT/)?.[0];
+    if(network)throw Error(network);
     if(body.includes('请完成安全验证')&&body.includes('向右滑动'))throw Error('certificate_user_verification_required');
     if (!body.includes(wanted)) return false;
     const rows = [...document.querySelectorAll('table tr')]
