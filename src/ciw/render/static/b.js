@@ -26,24 +26,24 @@
     const cl = list.map((c) => `${c.acronym} · ${c.product_label}${groupSuffix(c.product_label, c.exp_group)}${c.h2h ? " vs " + c.ctrl_group : ""}`);
     document.getElementById(id).style.height = Math.max(240, list.length * 30 + 80) + "px";
     if (!list.length) {
-      chart(id, { title: { text: "该问题没有可入图的组间比较（见下表）", left: "center", top: "middle", textStyle: { color: "#5b6875", fontSize: 13, fontWeight: 400 } } });
+      chart(id, { title: { text: "该问题没有可入图的组间比较（见下表）", left: "center", top: "middle", textStyle: { color: "#64676B", fontSize: 16, fontWeight: 400 } } });
       return;
     }
     chart(id, {
       grid: { left: 300, right: 60, top: 20, bottom: 40 },
       tooltip: { formatter: (p) => { const c = list[p.dataIndex]; return `<b>${esc(cl[p.dataIndex])}</b><br>对照：${esc(c.ctrl_group)}<br>${esc(c.param_type)}：${num(c.value)}${c.ci_lower != null ? `（${c.ci_pct != null ? c.ci_pct + "% " : ""}CI ${num(c.ci_lower)}, ${num(c.ci_upper)}）` : ""}${c.p_value ? `<br>P ${esc(c.p_value)}` : ""}<br>${esc(c.kind_label)}${c.note ? "<br>" + esc(c.note) : ""}`; } },
       xAxis: log ? { type: "log", splitLine: { lineStyle: { type: "dashed" } } } : { type: "value", scale: true, splitLine: { lineStyle: { type: "dashed" } } },
-      yAxis: { type: "category", data: cl, inverse: true, axisLabel: { width: 280, overflow: "truncate", color: (v, i) => (list[i] && list[i].is_own ? OWN : "#17212b") } },
+      yAxis: { type: "category", data: cl, inverse: true, axisLabel: { width: 280, overflow: "truncate", color: (v, i) => (list[i] && list[i].is_own ? OWN : "#0F1115") } },
       series: [
         { type: "custom", renderItem: (params, api) => {
           const lo = api.value(1), hi = api.value(2); if (lo == null || hi == null || Number.isNaN(lo) || (log && lo <= 0)) return null;
           const a = api.coord([lo, api.value(0)]), b = api.coord([hi, api.value(0)]);
           return { type: "group", children: [
-            { type: "line", shape: { x1: a[0], y1: a[1], x2: b[0], y2: b[1] }, style: { stroke: "#5b6875", lineWidth: 1.5 } },
-            { type: "line", shape: { x1: a[0], y1: a[1] - 5, x2: a[0], y2: a[1] + 5 }, style: { stroke: "#5b6875" } },
-            { type: "line", shape: { x1: b[0], y1: b[1] - 5, x2: b[0], y2: b[1] + 5 }, style: { stroke: "#5b6875" } }] };
+            { type: "line", shape: { x1: a[0], y1: a[1], x2: b[0], y2: b[1] }, style: { stroke: "#64676B", lineWidth: 1.5 } },
+            { type: "line", shape: { x1: a[0], y1: a[1] - 5, x2: a[0], y2: a[1] + 5 }, style: { stroke: "#64676B" } },
+            { type: "line", shape: { x1: b[0], y1: b[1] - 5, x2: b[0], y2: b[1] + 5 }, style: { stroke: "#64676B" } }] };
         }, encode: { x: [1, 2], y: 0 }, data: list.map((c, i) => [i, c.plot_lower, c.plot_upper]), z: 1 },
-        { type: "scatter", symbolSize: 11, data: list.map((c) => ({ value: c.plot_value, symbol: c.h2h ? "diamond" : c.kind === "computed" ? "emptyCircle" : "circle", itemStyle: { color: c.is_own ? OWN : "#0f4c75" } })),
+        { type: "scatter", symbolSize: 11, data: list.map((c) => ({ value: c.plot_value, symbol: c.h2h ? "diamond" : c.kind === "computed" ? "emptyCircle" : "circle", itemStyle: { color: c.is_own ? OWN : "#008F8A" } })),
           markLine: { silent: true, symbol: "none", lineStyle: { color: "#999" }, data: [{ xAxis: ref }] }, z: 2 },
       ],
     });
@@ -71,8 +71,8 @@
       grid: { left: 300, right: 60, top: 20, bottom: 40 },
       tooltip: { formatter: (p) => { const r = rows[p.dataIndex]; return `<b>${esc(rowLabel(r))}</b><br>${num(r.value)} ${esc(r.unit)}${r.n != null ? `<br>N=${r.n}` : ""}${r.spread != null ? `<br>${esc(r.dispersion_type)} ${num(r.spread)}` : ""}${r.lower != null ? `<br>${esc(r.dispersion_type)} ${num(r.lower)}, ${num(r.upper)}` : ""}`; } },
       xAxis: { type: "value", scale: false },
-      yAxis: { type: "category", data: rows.map(rowLabel), inverse: true, axisLabel: { width: 280, overflow: "truncate", color: (v, i) => (rows[i] && rows[i].is_own ? OWN : "#17212b") } },
-      series: [{ type: "bar", barWidth: 12, data: rows.map((r) => ({ value: r.value, itemStyle: { color: r.is_own ? OWN : r.role === "placebo" ? "#a0aec0" : "#3282b8" } })),
+      yAxis: { type: "category", data: rows.map(rowLabel), inverse: true, axisLabel: { width: 280, overflow: "truncate", color: (v, i) => (rows[i] && rows[i].is_own ? OWN : "#0F1115") } },
+      series: [{ type: "bar", barWidth: 12, data: rows.map((r) => ({ value: r.value, itemStyle: { color: r.is_own ? OWN : r.role === "placebo" ? "#6E7B8C" : "#008F8A" } })),
         label: { show: true, position: "right", formatter: (p) => num(p.value) } }],
     });
 
@@ -107,7 +107,7 @@
   ls.innerHTML = L.map((c, i) => `<option value="${i}">${esc(c.label)} · ${esc(c.measure_label)}（${c.lines.length} 条曲线）</option>`).join("");
   function drawLong() {
     const c = L[+ls.value || 0];
-    if (!c) { chart("long-chart", { title: { text: "暂无多时间点数据", left: "center", top: "middle", textStyle: { color: "#5b6875", fontSize: 13, fontWeight: 400 } } }); return; }
+    if (!c) { chart("long-chart", { title: { text: "暂无多时间点数据", left: "center", top: "middle", textStyle: { color: "#64676B", fontSize: 16, fontWeight: 400 } } }); return; }
     chart("long-chart", {
       tooltip: { trigger: "item", formatter: (p) => { const pt = p.data.pt; return `<b>${esc(p.seriesName)}</b><br>${esc(pt.label)}：${num(pt.value)}${pt.n != null ? `（N=${pt.n}）` : ""}`; } },
       legend: { type: "scroll", top: 0 },
@@ -116,7 +116,7 @@
       yAxis: { type: "value", scale: true },
       series: c.lines.map((l, i) => ({ name: `${l.acronym} · ${l.role === "placebo" ? "安慰剂" : l.group_title}`, type: "line", connectNulls: false,
         symbolSize: 6, lineStyle: { width: l.is_own ? 3 : 1.6, type: l.role === "placebo" ? "dashed" : "solid" },
-        itemStyle: { color: l.is_own ? OWN : l.role === "placebo" ? "#a0aec0" : PAL[i % PAL.length] },
+        itemStyle: { color: l.is_own ? OWN : l.role === "placebo" ? "#6E7B8C" : PAL[i % PAL.length] },
         data: l.points.map((pt) => ({ value: [pt.weeks, pt.value], pt })),
         endLabel: { show: c.lines.length <= 8, formatter: (p) => num(p.value[1]) } })),
     });
@@ -134,10 +134,10 @@
     grid: { left: 320, right: 60, top: 30, bottom: 40 }, legend: { top: 0 },
     tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
     xAxis: { type: "value", name: "%" },
-    yAxis: { type: "category", data: sRows.map(sl), inverse: true, axisLabel: { width: 300, overflow: "truncate", color: (v, i) => (sRows[i] && sRows[i].is_own ? OWN : "#17212b") } },
+    yAxis: { type: "category", data: sRows.map(sl), inverse: true, axisLabel: { width: 300, overflow: "truncate", color: (v, i) => (sRows[i] && sRows[i].is_own ? OWN : "#0F1115") } },
     series: [
-      { name: "严重不良事件", type: "bar", data: sRows.map((r) => r.sae_pct), itemStyle: { color: "#c53030" } },
-      { name: "因 AE 停药", type: "bar", data: sRows.map((r) => r.disc_pct), itemStyle: { color: "#dd6b20" } },
+      { name: "严重不良事件", type: "bar", data: sRows.map((r) => r.sae_pct), itemStyle: { color: "#C00000" } },
+      { name: "因 AE 停药", type: "bar", data: sRows.map((r) => r.disc_pct), itemStyle: { color: "#B38A00" } },
     ],
   });
   table(document.getElementById("safety-table"), [

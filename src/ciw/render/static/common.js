@@ -4,7 +4,7 @@
   const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const num = (v, d) => (v == null || Number.isNaN(v) ? "—" : (d == null ? String(+(+v).toFixed(3)) : (+v).toFixed(d)));
   const nN = (n, N, p) => (n == null ? "未报告" : `${n}${N != null ? "/" + N : ""}${p != null ? `（${p}%）` : ""}`);
-  const STATUS = { registry: "登记结构化", dual_agreed: "双模型一致", arbitrated: "仲裁", needs_review: "待核", config: "配置", computed: "计算值" };
+  const STATUS = { registry: "登记结构化", verified: "模型核对", dual_agreed: "双模型一致", arbitrated: "仲裁", needs_review: "待核", config: "配置", computed: "计算值" };
   const tag = (k) => `<span class="tag ${esc(k)}">${esc(STATUS[k] || k)}</span>`;
   const src = (url, label) => {
     if (!url) return "";
@@ -36,7 +36,7 @@
       return part;
     }).join("");
   };
-  const OWN = "#c2410c", PAL = ["#0f4c75", "#3282b8", "#2a9d8f", "#6a4c93", "#e76f51", "#8d99ae", "#bc6c25", "#457b9d", "#588157", "#9d4edd"];
+  const OWN = "#A65000", PAL = ["#D46B08", "#008F8A", "#7B5CC7", "#B38A00", "#C4457C"];
 
   function coverage() {
     const el = document.getElementById("coverage");
@@ -86,17 +86,61 @@
     d.setAttribute("role", "dialog");
     d.setAttribute("aria-label", d.querySelector("h2")?.textContent || "研究详情");
     d.hidden = false;
+    if(!d.open) d.showModal();
+    d.querySelector(".drawer-body").scrollTop = 0;
     d.querySelector(".close").focus();
   }
   function closeDrawer() {
     const d = document.getElementById("drawer");
     if(!d || d.hidden) return;
+    d.close();
     d.hidden = true;
     if(drawerTrigger?.isConnected) drawerTrigger.focus();
     else if(drawerFallback?.isConnected) { drawerFallback.tabIndex = -1; drawerFallback.focus(); }
   }
   document.addEventListener("click", (e) => { if (e.target.closest(".drawer .close")) closeDrawer(); });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
+  const dialog = document.getElementById("drawer");
+  if(dialog?.addEventListener) {
+    dialog.addEventListener("cancel", event => { event.preventDefault(); closeDrawer(); });
+    dialog.addEventListener("keydown", event => {
+      event.stopPropagation();
+      if(event.key !== "Tab") return;
+      const nodes = [...dialog.querySelectorAll('a[href],button,input,select,textarea,summary,[tabindex]')]
+        .filter(el => !el.disabled && el.tabIndex >= 0 && (el.checkVisibility ? el.checkVisibility() : el.getClientRects().length));
+      const first = nodes[0], last = nodes[nodes.length-1];
+      if(event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if(!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    });
+  }
+
+  function present(option, el) {
+    const label = {fontSize:16,color:"#404040"};
+    for(const key of ["xAxis","yAxis"]) {
+      if(!option[key]) continue;
+      const axes = Array.isArray(option[key]) ? option[key] : [option[key]];
+      for(const axis of axes) {
+        axis.axisLabel = {...label,...axis.axisLabel,fontSize:Math.max(16,axis.axisLabel?.fontSize || 16)};
+        axis.nameTextStyle = {...label,...axis.nameTextStyle};
+        axis.axisLine = {lineStyle:{color:"#CED3D8"},...axis.axisLine};
+        axis.splitLine = {lineStyle:{color:"#E7EBEE"},...axis.splitLine};
+      }
+    }
+    if(option.legend) option.legend.textStyle = label;
+    option.textStyle = {fontSize:16,color:"#404040",...option.textStyle};
+    option.tooltip = {confine:true,textStyle:label,...option.tooltip};
+    option.color = PAL;
+    const axis = option.yAxis;
+    if(axis?.type === "category" && axis.data.length > 14) {
+      const last = axis.data.length - 1;
+      option.dataZoom = [{type:"slider",yAxisIndex:0,filterMode:"none",width:16,right:0,
+        startValue:axis.inverse ? 0 : last-13,endValue:axis.inverse ? 13 : last,
+        fillerColor:"rgba(255,153,0,.10)",borderColor:"#E7EBEE",handleStyle:{color:"#B85C00"},
+        dataBackground:{lineStyle:{color:"#CED3D8"},areaStyle:{color:"#E7EBEE"}}}];
+      el.style.height = "520px";
+    }
+    option.series = (option.series || []).map(s=>({...s,clip:true,label:{fontSize:16,...s.label}}));
+    return option;
+  }
 
   function chart(id, option) {
     const el = document.getElementById(id);
@@ -104,7 +148,11 @@
     const existing = echarts.getInstanceByDom(el);
     const c = existing || echarts.init(el);
     if (existing) c.resize();
-    c.setOption(option, true);
+    c.setOption(present(option, el), true);
+    if(typeof ResizeObserver !== "undefined" && !el._ciwObserver) {
+      el._ciwObserver = new ResizeObserver(() => c.resize());
+      el._ciwObserver.observe(el);
+    }
     return c;
   }
   window.addEventListener("resize", () => document.querySelectorAll(".chart").forEach((el) => { const c = echarts.getInstanceByDom(el); if (c) c.resize(); }));
@@ -118,5 +166,5 @@
   }
 
   coverage();
-  window.U = { D, esc, num, nN, tag, src, highlight, annotate, table, drawer, chart, options, OWN, PAL };
+  window.U = { D, esc, num, nN, tag, src, highlight, annotate, table, drawer, chart, present, options, OWN, PAL };
 })();

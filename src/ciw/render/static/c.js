@@ -17,23 +17,16 @@
         .join(" ").toLowerCase().includes(q)));
   }
 
-  const ep = (list) => list.map((o) => `${esc(o.concept || o.title)}<span class="hint">${o.timeframe ? "（" + esc(o.timeframe.slice(0, 40)) + "）" : ""}</span>`).join("<br>");
+  const ep = (list) => list.map((o) => `${esc(o.concept || o.title)}<span class="hint">${o.timeframe ? "（" + esc(o.timeframe) + "）" : ""}</span>`).join("<br>");
   const excerpts = r => (r.design_excerpts || []).map(t=>`<details><summary>${esc(t.label)} · ${t.snippets.length}处原文</summary>${t.snippets.map(s=>`<p><span class="hint">${esc(s.section)}</span><br>${window.U.annotate(s.text,s.marks,document.getElementById("q").value.trim())}</p>`).join("")}</details>`).join("");
   const cols = [
-    { label: "试验", key: "acronym", html: (r) => `${r.is_own ? '<span class="own-tag">本品 </span>' : ""}${src(r.url, r.acronym || r.trial_id)}<br><span class="hint">${(r.registration_ids || [r.trial_id]).map(esc).join(" / ")}</span>` },
-    { label: "产品", html: (r) => r.products.map((p) => (p.is_own ? `<span class="own-tag">${esc(p.label)}</span>` : esc(p.label))).join("、") },
-    { label: "期别", key: "phase_rank", html: (r) => esc(r.phase) },
-    { label: "状态", key: "status" },
-    { label: "设计", html: (r) => [r.allocation, r.masking, r.model].filter(Boolean).map(esc).join(" · ") },
-    { label: "组数", key: "arm_count", num: true },
-    { label: "样本量", key: "enrollment", num: true, html: (r) => (r.enrollment == null ? esc(r.enrollment_text || "—") : `${r.enrollment}<span class="hint">${esc(r.enrollment_type)}</span>`) },
-    { label: "主要终点（时间）", html: (r) => ep(r.primary) },
-    { label: "背景治疗", html: (r) => esc(r.background_therapy.join("；")) },
-    { label: "关键设计原文", html: excerpts },
-    { label: "地区", html: (r) => esc(r.country_label || "—") },
-    { label: "首例入组", key: "start" },
-    { label: "主要完成", key: "primary_completion" },
-    { label: "申办方", key: "sponsor" },
+    { label: "药物 / 研究", key: "acronym", html: (r) => `<strong>${r.products.map(p=>esc(p.label)).join("、")}</strong><br>${r.is_own ? '<span class="own-tag">本品 </span>' : ""}${esc(r.phase)} · ${src(r.url, r.acronym || r.trial_id)}${r.acronym ? `<br><span class="hint">${esc(r.trial_id)}</span>` : ""}` },
+    { label: "设计 / 组别", html: (r) => `${[r.allocation,r.masking,r.model].filter(Boolean).map(esc).join(" · ")}<br>${r.arm_count} 组` },
+    { label: "样本量", key: "enrollment", num: true, html: (r) => r.enrollment == null ? esc(r.enrollment_text || "—") : `${r.enrollment}<br><span class="hint">${esc(r.enrollment_type)}</span>` },
+    { label: "主要终点 / 时间窗", html: r => ep(r.primary) },
+    { label: "背景治疗", html: r => esc(r.background_therapy.join("；")) },
+    { label: "关键设计条款", html: r => (r.design_excerpts || []).length ? `<details><summary>${r.design_excerpts.length} 个主题</summary>${excerpts(r)}</details>` : "" },
+    { label: "研究信息", html: r => `${esc(r.status)}<br><span class="hint">首例 ${esc(r.start || "—")}</span><details><summary>地区 / 申办方</summary><p>${esc(r.country_label || "—")}</p><p>主要完成 ${esc(r.primary_completion || "—")}</p><p>申办方：${esc(r.sponsor)}</p><p>${(r.registration_ids || [r.trial_id]).map(esc).join(" / ")}</p></details>` },
   ];
   const tEl = document.getElementById("matrix");
   function redraw() {
@@ -75,7 +68,7 @@
   const ck = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
   chart("concept-chart", { grid: { left: 200, right: 40, top: 20, bottom: 30 }, tooltip: {},
     xAxis: { type: "value", minInterval: 1 }, yAxis: { type: "category", data: ck, inverse: true },
-    series: [{ type: "bar", data: ck.map((k) => counts[k]), itemStyle: { color: "#3282b8" }, label: { show: true, position: "right" } }] });
+    series: [{ type: "bar", data: ck.map((k) => counts[k]), itemStyle: { color: "#008F8A" }, label: { show: true, position: "right" } }] });
 
   // 样本量 × 首例入组
   const phases = [...new Set(rows.map((r) => r.phase))];

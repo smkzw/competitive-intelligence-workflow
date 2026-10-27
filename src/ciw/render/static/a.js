@@ -29,10 +29,10 @@
     } },
     xAxis: { type: "value", position: "top", min: 0, max: 5.5, interval: 1, axisLabel: { formatter: (v) => (v >= 1 && v <= 5 ? phaseName(v) : "") }, splitLine: { lineStyle: { type: "dashed" } } },
     yAxis: { type: "category", data: ys.map((r) => r.label + (r.target ? `  ·  ${r.target}` : "")),
-      axisLabel: { color: (v, i) => (ys[i] && ys[i].is_own ? OWN : "#17212b"), fontWeight: (v, i) => (ys[i] && ys[i].is_own ? 700 : 400), width: 240, overflow: "truncate" } },
+      axisLabel: { color: (v, i) => (ys[i] && ys[i].is_own ? OWN : "#0F1115"), fontWeight: 400, width: 240, overflow: "truncate" } },
     series: [
-      { name: "全球最高阶段", type: "bar", barWidth: 8, data: ys.map((r) => ({ value: r.global_rank, itemStyle: { color: r.is_own ? OWN : "#0f4c75" } })) },
-      { name: "中国最高阶段", type: "scatter", symbol: "diamond", symbolSize: 13, data: ys.map((r) => (r.china_rank ? r.china_rank : null)), itemStyle: { color: "#e53e3e" } },
+      { name: "全球最高阶段", type: "bar", barWidth: 8, data: ys.map((r) => ({ value: r.global_rank, itemStyle: { color: r.is_own ? OWN : "#008F8A" } })) },
+      { name: "中国最高阶段", type: "scatter", symbol: "diamond", symbolSize: 13, data: ys.map((r) => (r.china_rank ? r.china_rank : null)), itemStyle: { color: "#7B5CC7" } },
     ],
   });
 
@@ -110,12 +110,12 @@
     grid: { left: 300, right: 40, top: 20, bottom: 40 },
     tooltip: { formatter: (p) => { const t = tl[p.value[0]]; return `${esc(label(t))}<br>${esc(t.phase)} · ${esc(t.status)}<br>${esc(t.start)} → ${esc(t.primary_completion || "未登记")}`; } },
     xAxis: { type: "time" },
-    yAxis: { type: "category", data: tl.map(label), inverse: true, axisLabel: { width: 280, overflow: "truncate", color: (v, i) => (tl[i] && isOwn(tl[i]) ? OWN : "#17212b") } },
+    yAxis: { type: "category", data: tl.map(label), inverse: true, axisLabel: { width: 280, overflow: "truncate", color: (v, i) => (tl[i] && isOwn(tl[i]) ? OWN : "#0F1115") } },
     series: [{ type: "custom", renderItem: (params, api) => {
       const i = api.value(0), s = api.coord([api.value(1), i]), e = api.coord([api.value(2), i]);
       const h = api.size([0, 1])[1] * 0.55, t = tl[i];
       return { type: "rect", shape: { x: s[0], y: s[1] - h / 2, width: Math.max(e[0] - s[0], 3), height: h },
-        style: { fill: isOwn(t) ? OWN : t.phase.includes("III") ? "#0f4c75" : "#7aa6c2", opacity: t.status.includes("终止") || t.status.includes("撤回") ? 0.35 : 1 } };
+        style: { fill: isOwn(t) ? OWN : t.phase.includes("III") ? "#008F8A" : "#6E7B8C", opacity: t.status.includes("终止") || t.status.includes("撤回") ? 0.35 : 1 } };
     }, encode: { x: [1, 2], y: 0 }, data: tl.map((t, i) => [i, day(t.start), day(t.primary_completion || t.start)]) }],
   });
 

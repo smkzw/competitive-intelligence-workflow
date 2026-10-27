@@ -10,19 +10,21 @@
 <header class="top">
   <div class="brand">
     <span class="ind">{{ indication.name_zh }}{% if indication.abbr %}（{{ indication.abbr }}）{% endif %}</span>
-    <nav class="reports">
+    <nav class="reports" aria-label="报告类型">
       {% for key, label in reports.items() %}
-      <a href="../{{ key }}/index.html" class="{{ 'on' if key == report else '' }}">{{ key }} · {{ label }}</a>
+      <a href="../{{ key }}/index.html" class="{{ 'on' if key == report else '' }}" {% if key == report %}aria-current="page"{% endif %}>{{ key }} · {{ label }}</a>
       {% endfor %}
     </nav>
   </div>
-  <div class="meta"><span>数据截至 {{ cutoff }}</span><span id="coverage" class="coverage"></span></div>
+  <div class="meta">数据截至 {{ cutoff }}</div>
 </header>
-<main id="app">{% block main %}{% endblock %}</main>
-<aside id="drawer" class="drawer" hidden>
-  <button class="close" type="button" aria-label="关闭">×</button>
+<main id="app">
+<div class="page-heading"><h1>{{ title }}</h1><details class="source-status"><summary>来源覆盖</summary><div id="coverage" class="coverage"></div></details></div>
+{% block main %}{% endblock %}</main>
+<dialog id="drawer" class="drawer" hidden aria-label="研究详情">
+  <header class="drawer-head"><strong>研究详情</strong><button class="close" type="button" aria-label="关闭">关闭</button></header>
   <div class="drawer-body"></div>
-</aside>
+</dialog>
 <script src="echarts.min.js"></script>
 <script src="data.js"></script>
 <script src="common.js"></script>
