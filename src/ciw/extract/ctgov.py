@@ -89,14 +89,8 @@ def extract_trial(study: dict[str, Any], source: Source, cfg: IndicationConfig, 
 
     arms = _trial_arms(arms_mod, iv_product, resolver)
 
-    product_ids = sorted({pid for pid in iv_product.values() if pid})
-    background = sorted(
-        {
-            n
-            for n, pid in iv_product.items()
-            if pid is None and cfg.is_background(n) and not re.search(r"placebo|matching", n, re.I)
-        }
-    )
+    product_ids = sorted({pid for pid in iv_product.values() if pid} | {pid for a in arms for pid in a.product_ids})
+    background = _background_interventions(arms, iv_product, cfg)
 
     text = " ".join(
         [
@@ -376,6 +370,10 @@ def _trial_arms(arms_mod, iv_product, resolver) -> list[Arm]:
     for i, ag in enumerate(arms_mod.get("armGroups", [])):
         names = [re.sub(r"^[A-Za-z ]+:\s*", "", n) for n in ag.get("interventionNames", [])]
         pids = sorted({pid for n in names if (pid := iv_product.get(n) or resolver.resolve_intervention(n))})
+        if not pids and ag.get("type") != "PLACEBO_COMPARATOR":
+            explicit = resolver.resolve_intervention(ag.get("label", ""))
+            if explicit:
+                pids = [explicit]
         arms.append(
             Arm(
                 arm_id=f"A{i}",
@@ -458,3 +456,23 @@ def _measurements(cat, class_n, group_meta, oi, ci, ki) -> list[GroupValue]:
             )
         )
     return groups
+
+
+def _background_interventions(arms, iv_product, cfg):
+    formulation_ingredients = {
+        a.interventions[0]
+        for a in arms
+        if a.product_ids and len(a.interventions) == 1 and iv_product.get(a.interventions[0]) is None
+    }
+    background = sorted(
+        {
+            n
+            for n, pid in iv_product.items()
+            if pid is None
+            and n not in formulation_ingredients
+            and cfg.is_background(n)
+            and not re.search(r"placebo|matching", n, re.I)
+        }
+    )
+
+    return background
