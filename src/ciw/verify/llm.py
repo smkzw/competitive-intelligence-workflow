@@ -11,9 +11,10 @@ import os
 import re
 import urllib.request
 from collections.abc import Callable
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from importlib import resources
 from pathlib import Path
+from time import perf_counter
 from typing import Any, Protocol
 from urllib.error import HTTPError
 
@@ -40,16 +41,21 @@ class OpenAICompatBackend:
     no_proxy: bool = True
     max_tokens: int = 8192
     response_format: str | None = "json_object"
+    reasoning_effort: str | None = None
+    attribute_reasoning_effort: str | None = None
     receipt: dict[str, Any] = field(default_factory=dict, init=False)
 
     def chat(self, system: str, user: str) -> str:
         self.receipt = {}
+        started = perf_counter()
         body = {
             "model": self.model,
             "temperature": 0,
             "max_tokens": self.max_tokens,
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
         }
+        if self.reasoning_effort:
+            body["reasoning_effort"] = self.reasoning_effort
         if self.response_format:
             body["response_format"] = {"type": self.response_format}
         req = urllib.request.Request(
@@ -66,7 +72,8 @@ class OpenAICompatBackend:
             with model_opener(self.base_url, self.no_proxy, transport).open(req, timeout=self.timeout) as resp:
                 data = json.load(resp)
         except HTTPError as exc:
-            self.receipt = {"http_status": exc.code}
+            self.receipt = {"http_status": exc.code, "requested_reasoning_effort": self.reasoning_effort,
+                            "elapsed_seconds": round(perf_counter() - started, 3)}
             try:
                 error = json.load(exc).get("error", {})
                 message = str(error.get("message", "")) if isinstance(error, dict) else ""
@@ -87,6 +94,9 @@ class OpenAICompatBackend:
             "finish_reason": choices[0].get("finish_reason"),
             "usage": data.get("usage"),
             "response_format": self.response_format,
+            "requested_reasoning_effort": self.reasoning_effort,
+            "observed_reasoning_effort": data.get("reasoning_effort"),
+            "elapsed_seconds": round(perf_counter() - started, 3),
         }
         return choices[0].get("message", {}).get("content") or ""
 
@@ -109,9 +119,19 @@ class CachedBackend:
         self.family, self.model = inner.family, inner.model
         self.receipt: dict[str, Any] = {}
 
+    def for_attributes(self):
+        effort = getattr(self.inner, "attribute_reasoning_effort", None)
+        if not effort or not isinstance(self.inner, OpenAICompatBackend):
+            return self
+        return CachedBackend(replace(self.inner, reasoning_effort=effort), self.ws)
+
     def chat(self, system: str, user: str) -> str:
         prompt_sha = hashlib.sha256((system + "\x00" + user).encode()).hexdigest()
-        key = hashlib.sha256(f"{self.family}|{self.model}|{prompt_sha}".encode()).hexdigest()
+        key_source = f"{self.family}|{self.model}|{prompt_sha}"
+        effort = getattr(self.inner, "reasoning_effort", None)
+        if effort:
+            key_source += "|reasoning_effort=" + effort
+        key = hashlib.sha256(key_source.encode()).hexdigest()
         with self.ws.db() as con:
             row = con.execute("SELECT response, metadata FROM llm_cache WHERE cache_key=?", (key,)).fetchone()
         if row:
@@ -171,6 +191,8 @@ def load_roles(config_path: str | Path | None = None) -> dict[str, Backend]:
             max_tokens=spec.get("max_tokens", 8192),
             timeout=spec.get("timeout", 600),
             response_format=spec.get("response_format", "json_object"),
+            reasoning_effort=spec.get("reasoning_effort"),
+            attribute_reasoning_effort=spec.get("attribute_reasoning_effort"),
         )
     check_heterogeneous(roles)
     return roles

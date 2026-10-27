@@ -83,3 +83,24 @@ process.stdout.write(window.U.annotate(d.text,d.marks,'NPS <5'));
     assert fragment.text_content() == text and not fragment.xpath(".//script")
     assert fragment.xpath(".//strong")[0].text_content() == "<5"
     assert "".join(fragment.xpath(".//mark/text()")) == "NPS <5"
+
+
+def test_treatment_duration_is_not_postdose_contraception_or_endpoint_followup():
+    t = trial("Women use contraception for 18 months after the last dose of study treatment.")
+    t.design.detailed_description = "Study treatment will be administered for 52 weeks."
+    t.arms = [Arm(arm_id="a", label="Drug", description="Drug is administered every 2 weeks.")]
+    topic = DesignTopicCfg(label="治疗时长", patterns=["treatment", "last dose"])
+    found = design_excerpts(t, [topic])
+    assert [s["text"] for s in found[0]["snippets"]] == [t.design.detailed_description]
+
+
+def test_design_projection_keeps_complete_endpoint_definition_and_source_conditions(cfg):
+    from ciw.models import PlannedOutcome
+    t = trial("Study cohort criteria")
+    t.conditions = ["Disease A", "Disease B"]
+    t.outcomes_planned = [PlannedOutcome(kind="primary", title="Response", timeframe="Week 104",
+                                        description="UPCR ≤0.7, eGFR ≥60 and no treatment failure.")]
+    row = build_design(cfg, [t], {})["rows"][0]
+    assert row["primary"][0]["description"] == t.outcomes_planned[0].description
+    assert row["primary"][0]["description_marks"]
+    assert row["conditions"] == t.conditions

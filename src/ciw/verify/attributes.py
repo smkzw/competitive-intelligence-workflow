@@ -23,6 +23,7 @@ def enrich_attributes(
 ) -> list[dict]:
     if roles is None:
         return []
+    roles = {k: v.for_attributes() if hasattr(v, "for_attributes") else v for k, v in roles.items()}
     missing = {pid for pid, p in products.items() if not p.target or not p.modality}
     sources = {s.source_id: s for s in ws.sources()}
     candidates, issues, seen = defaultdict(list), [], set()

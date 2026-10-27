@@ -10,5 +10,5 @@ endpoints:
     key_env: [CMS_SMK_API_KEY]
     no_proxy: false
 roles:
-  extractor_a: {endpoint: dgx, model: deepseek, family: deepseek, max_tokens: 65536, timeout: 7200, response_format: null}
+  extractor_a: {endpoint: dgx, model: deepseek, family: deepseek, attribute_reasoning_effort: low, max_tokens: 65536, timeout: 7200, response_format: null}
   verifier: {endpoint: cms-smk, model: glm-5.3-flash, family: glm, max_tokens: 65536, timeout: 7200, response_format: null}

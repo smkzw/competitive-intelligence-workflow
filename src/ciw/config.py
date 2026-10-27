@@ -70,8 +70,18 @@ class ChinaCfg(_Cfg):
 class DesignTopicCfg(_Cfg):
     label: str
     patterns: list[str]
+    kind: Literal["lookup", "treatment_duration"] = "lookup"
+    exclude: list[str] = Field(default_factory=list)
 
-    @field_validator("patterns")
+    @model_validator(mode="after")
+    def _legacy_duration(self):
+        if "kind" not in self.model_fields_set and re.fullmatch(
+            r"治疗时长|治疗期|给药时长|疗程|treatment duration", self.label, re.I
+        ):
+            self.kind = "treatment_duration"
+        return self
+
+    @field_validator("patterns", "exclude")
     @classmethod
     def _patterns(cls, values):
         for pattern in values:

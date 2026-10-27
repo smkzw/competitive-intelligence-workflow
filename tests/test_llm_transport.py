@@ -87,3 +87,25 @@ def test_multiple_documents_and_duplicate_keys_are_not_first_or_last_wins(text):
     from ciw.verify.llm import parse_json
     with pytest.raises(ValueError):
         parse_json(text)
+
+
+def test_attribute_effort_is_scoped_and_does_not_relabel_the_clinical_extractor(ws):
+    roles = load_roles()
+    original = CachedBackend(roles["extractor_a"], ws)
+    attributes = original.for_attributes()
+    assert original.inner.reasoning_effort is None
+    assert attributes.inner.reasoning_effort == "low"
+    assert attributes.model == original.model == "deepseek"
+    assert roles["verifier"].reasoning_effort is None
+
+
+def test_effort_variants_do_not_reuse_a_different_request_receipt(ws):
+    calls = []
+    backend = FakeBackend("test-family", "same-model", lambda *args: calls.append(args) or '{"items":[]}')
+    base = CachedBackend(backend, ws)
+    base.chat("schema", "source")
+    backend.reasoning_effort = "low"
+    fast = CachedBackend(backend, ws)
+    fast.chat("schema", "source")
+    fast.chat("schema", "source")
+    assert len(calls) == 2 and fast.receipt["cached"]

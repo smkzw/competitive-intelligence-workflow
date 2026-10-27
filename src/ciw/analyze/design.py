@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from collections import Counter
 from typing import Any
 
@@ -65,6 +66,19 @@ def build_design(cfg: IndicationConfig, trials: list[Trial], products: dict[str,
     return {"rows": rows, "facets": {k: dict(v.most_common()) for k, v in facets.items()}}
 
 
+def _endpoint_view(outcome, labels):
+    summary = labels.get(outcome.concept_id or "", "")
+    for pattern, label in ((r"serious adverse", "严重不良事件"),
+                           (r"treatment[- ]emergent adverse|\bTEAE", "治疗期间不良事件"),
+                           (r"adverse events?|\bAEs?\b", "不良事件")):
+        if re.search(pattern, outcome.title, re.I):
+            summary = label
+            break
+    return dict(title=outcome.title, timeframe=outcome.timeframe, summary=summary,
+                concept=labels.get(outcome.concept_id or "", ""), description=outcome.description,
+                description_marks=threshold_spans(outcome.description))
+
+
 def _design_row(t, products, labels) -> dict[str, Any]:
     prim = [o for o in t.outcomes_planned if o.kind == "primary"]
     sec = [o for o in t.outcomes_planned if o.kind == "secondary"]
@@ -122,12 +136,12 @@ def _design_row(t, products, labels) -> dict[str, Any]:
             for a in t.arms
         ],
         "background_therapy": t.design.background_therapy,
-        "primary": [
-            {"title": o.title, "timeframe": o.timeframe, "concept": labels.get(o.concept_id or "", "")} for o in prim
-        ],
-        "secondary": [
-            {"title": o.title, "timeframe": o.timeframe, "concept": labels.get(o.concept_id or "", "")} for o in sec
-        ],
+        "conditions": t.conditions,
+        "study_narrative": [dict(label=label, text=text) for label, text in
+            (("研究摘要", t.design.brief_summary), ("研究描述", t.design.detailed_description),
+             ("设计描述", t.design.model_description)) if text],
+        "primary": [_endpoint_view(o, labels) for o in prim],
+        "secondary": [_endpoint_view(o, labels) for o in sec],
         "primary_concepts": sorted({labels[o.concept_id] for o in prim if o.concept_id}),
         "min_age": t.design.min_age,
         "max_age": t.design.max_age,

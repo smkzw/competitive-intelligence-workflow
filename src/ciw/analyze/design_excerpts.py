@@ -15,6 +15,30 @@ def threshold_spans(text: str) -> list[dict]:
     return [{"start": m.start(), "end": m.end()} for m in _THRESHOLD.finditer(text)]
 
 
+_DURATION = re.compile(
+    r"\b(?:treatment duration|duration of (?:study )?treatment|treatment period)\b.{0,80}"
+    r"(?:\b\d+\s*(?:days?|weeks?|months?|years?)\b|\b(?:day|week|month)\s*\d+)"
+    r"|\b(?:will (?:be (?:administered|treated)|receive)|administered|treated)\b.{0,140}?"
+    r"\b(?:for|through|until|over|up to)\s+(?:a total of )?"
+    r"(?:\d+\s*(?:days?|weeks?|months?|years?)\b|(?:day|week|month)\s*\d+)"
+    r"|(?:治疗|给药).{0,20}(?:持续|共|至)\s*\d+\s*(?:天|周|月|年)", re.I)
+_POSTDOSE = re.compile(
+    r"contracept|pregnan|after.{0,30}(?:last|final) dose|previously treated|prior treatment|"
+    r"末次.{0,15}(?:避孕|妊娠)|既往治疗", re.I)
+
+
+def _matching_lines(topic, patterns, text, field):
+    if topic.kind == "treatment_duration":
+        if field == "eligibility" or field.startswith("outcome:"):
+            return []
+        # Keep literal source clauses; evaluation timepoints and postdose protection are different roles.
+        return [line for line in re.split(r"(?<=[.!?;])\s+(?=[A-Z])|\n", text)
+                if _DURATION.search(line) and not _POSTDOSE.search(line)]
+    excludes = [re.compile(p, re.I) for p in topic.exclude]
+    return [line for line in text.splitlines() if line.strip() and any(p.search(line) for p in patterns)
+            and not any(p.search(line) for p in excludes)]
+
+
 def design_excerpts(trial, topics) -> list[dict]:
     """Keep the complete matching line, source identity, and its original section."""
     passages = [("入排标准", trial.design.eligibility_text, "eligibility")]
@@ -30,9 +54,7 @@ def design_excerpts(trial, topics) -> list[dict]:
         patterns = [re.compile(p, re.I) for p in topic.patterns]
         snippets, seen = [], set()
         for section, text, field in passages:
-            for line in text.splitlines():
-                if not line.strip() or not any(p.search(line) for p in patterns):
-                    continue
+            for line in _matching_lines(topic, patterns, text, field):
                 identity = (field, line)
                 if identity in seen:
                     continue
