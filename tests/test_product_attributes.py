@@ -44,3 +44,29 @@ def test_absent_or_conflicting_source_values_do_not_fill_by_first_match(cfg, res
     _apply(p, {("mg-k10", "target"): [("A", "dual_agreed", loc), ("B", "dual_agreed", loc)]}, issues)
     assert p["mg-k10"].target == "" and issues[0]["kind"] == "attribute_conflict"
     assert not enrich_attributes(ws, p, [], resolver, None)
+
+
+def test_registration_category_does_not_override_the_molecular_type(cfg):
+    from ciw.models import Locator
+    from ciw.pipeline import build_products
+    from ciw.verify.attributes import _apply
+    p = build_products(cfg)["cm326"]
+    p.modality = ""
+    issues = []
+    loc = Locator(source_id="s", quote="重组人源化单克隆抗体")
+    _apply({"cm326": p}, {("cm326", "modality"): [("Biological", "verified", loc),
+             ("重组人源化单克隆抗体", "verified", loc), ("单克隆抗体", "verified", loc)]}, issues)
+    assert p.modality == "单克隆抗体" and issues == []
+
+
+def test_conflicting_molecular_qualifiers_still_remain_unresolved(cfg):
+    from ciw.models import Locator
+    from ciw.pipeline import build_products
+    from ciw.verify.attributes import _apply
+    p = build_products(cfg)["cm326"]
+    p.modality = ""
+    issues = []
+    loc = Locator(source_id="s", quote="source")
+    _apply({"cm326": p}, {("cm326", "modality"): [("人源化单克隆抗体", "verified", loc),
+             ("全人源单克隆抗体", "verified", loc)]}, issues)
+    assert not p.modality and issues[0]["kind"] == "attribute_conflict"

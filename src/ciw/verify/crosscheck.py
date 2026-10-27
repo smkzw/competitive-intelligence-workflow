@@ -233,10 +233,19 @@ def crosscheck(task: ExtractionTask, roles: dict[str, Backend]) -> list[CheckedI
     if a_call.get("error"):
         raise CrosscheckFailed("主抽取失败：" + a_call["error"])
     b_items, b_call = _extract(roles["verifier"], task, a_items)
-    if b_call.get("error"):
+    format_calls = []
+    if b_call.get("error") in {"JSONDecodeError", "ValueError", "KeyError"}:
+        b_items, correction = _extract(roles["verifier"], task, a_items,
+                                      [{"error": "上次核对输出JSON格式或items结构无效，请返回合法JSON，正确转义引号"}])
+        correction["role"] = "verify_format_repair"
+        format_calls.append(correction)
+        if correction.get("error"):
+            raise CrosscheckFailed("来源核对格式纠正失败：" + correction["error"])
+    elif b_call.get("error"):
         raise CrosscheckFailed("来源核对失败：" + b_call["error"])
     a_by, b_by = _checked_items(task, a_items), _checked_items(task, b_items)
-    calls = [a_call, b_call, *_repair_review(task, roles["verifier"], b_by)]
+    repairs = [] if format_calls else _repair_review(task, roles["verifier"], b_by)
+    calls = [a_call, b_call, *format_calls, *repairs]
     results = []
     for key in sorted(set(a_by) | set(b_by)):
         a, b = a_by.get(key), b_by.get(key)

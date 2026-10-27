@@ -63,3 +63,4 @@ class PublicationResultItem(_Item):
     ci_upper: float | None = None
     ci_pct: float | None = Field(None, description="来源明确的置信水平，如95；未写留空")
     n: int | None = Field(None, description="该组分析人数；原文没写留空，不要用总样本量代替")
+    p_value: str = Field("", description="本条统计比较原文明示的P值，含比较符，不含字母P；未报告留空")

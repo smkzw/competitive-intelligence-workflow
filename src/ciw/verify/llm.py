@@ -184,10 +184,32 @@ def check_heterogeneous(roles: dict[str, Backend]) -> None:
         raise ValueError("主抽取与核对必须来自两个不同模型家族")
 
 
+def _unique_fields(pairs):
+    out = {}
+    for key, value in pairs:
+        if key in out:
+            raise ValueError("JSON包含重复键")
+        out[key] = value
+    return out
+
+
 def parse_json(text: str) -> Any:
-    """容忍 ```json 围栏和前后空白；仍然解析失败就抛 ValueError。"""
+    """读取唯一JSON文档，允许围栏与尾部说明，不按首条/末条覆盖多结果。"""
     s = text.strip()
-    m = re.search(r"```(?:json)?\s*(.*?)```", s, re.S)
-    if m:
-        s = m.group(1).strip()
-    return json.loads(s)
+    fenced = None if s.startswith(("{", "[")) else re.search(r"```(?:json)?\s*(.*?)```", s, re.S)
+    if fenced:
+        body, tail = fenced[1].strip(), s[:fenced.start()] + s[fenced.end():]
+    else:
+        start = re.search(r"(?m)^\s*(?=[{\[])", s)
+        body, tail = (s[start.end():], s[:start.end()]) if start else (s, "")
+    decoder = json.JSONDecoder(object_pairs_hook=_unique_fields)
+    value, end = decoder.raw_decode(body)
+    tail = body[end:] + "\n" + tail
+    for start in re.finditer(r"[\{\[]", tail):
+        try:
+            extra, _ = decoder.raw_decode(tail[start.start():])
+        except json.JSONDecodeError:
+            continue
+        if isinstance(extra, (dict, list)):
+            raise ValueError("模型返回多个JSON文档")
+    return value

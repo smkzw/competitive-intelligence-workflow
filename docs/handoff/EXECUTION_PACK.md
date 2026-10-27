@@ -10,12 +10,12 @@
 
 | 内容 | 来源（任选其一） |
 |---|---|
-| 竞品调研子系统 v2（包 `ciw`） | ① GitHub `smkzw/competitive-intelligence-workflow` 的分支 `main`，从提交说明为 “feat: v2 trunk (ciw)” 的那次提交起；② 附件 `ciw-v2-src.tar.gz`（解压后 `git init` 并自行提交） |
+| 竞品调研子系统 v2（包 `ciw`） | ① GitHub `smkzw/competitive-intelligence-workflow` 的分支 `codex/ciw-v2-trunk`（D15批准；保留旧main）；② 附件 `ciw-v2-src.tar.gz`（解压后 `git init` 并自行提交） |
 | 历史版本（只作移植来源，不在上面开发） | 同一仓库的标签 `archive/v1`（旧 ci_workflow）和 `archive/ciw2`（rebaseline-v2）。附件里不含这两个版本 |
 | 医学经理工作台接入改动 | ① GitHub `smkzw/protocol-v3-workbench` 的分支 `feat/ciw-release-adapter`；② 附件 `workbench-ciw-adapter.patch`（在工作台提交 `7c1bd916` 上执行 `git apply`） |
 
 **怎么判断用哪个来源：**
-- 如果 GitHub 上 `competitive-intelligence-workflow` 的 `main` 仍是 v1（顶层有 `src/ci_workflow/`、`packets/`、`runs/`），说明 v2 还没推送。这时用附件，并在 STATUS 的“待用户决定”里记下“v2 尚未推送”。
+- 优先读取已推送的 `codex/ciw-v2-trunk`；旧main仍为v1不代表v2未发布。只有该分支也不存在时才使用附件。
 - 工作台同理：GitHub 上没有 `feat/ciw-release-adapter` 分支，就用补丁。
 
 ## 1. 环境准备（在执行 Agent 所在机器上）
@@ -24,7 +24,7 @@
 # 竞品调研子系统（Python ≥ 3.12，uv）
 cd competitive-intelligence-workflow
 uv sync
-uv run pytest -o addopts="" -q          # 预期：87 passed
+uv run pytest -o addopts="" -q          # 数量以当前STATUS为准；87为附件初始基线
 uv run ruff check src tests             # 预期：All checks passed
 uv run ciw run indications/crswnp.yaml --workspace <你的工作区目录>/crswnp   # 会联网访问 ClinicalTrials.gov
 uv run ciw audit --workspace <你的工作区目录>/crswnp -n 40                  # 预期：errors 为空
@@ -126,7 +126,7 @@ uv run ciw audit --workspace <你的工作区目录>/crswnp -n 40               
 - `needs_review` 占比低于 15%。超标时先改抽取指令或 schema，不要放宽比对规则。
 
 **产品属性**
-- 新增 `ProductAttrItem` 任务（schema 已有，尚未接入）。输入是 CT.gov 的干预描述和 CDE 的药物名称。
+- `ProductAttrItem` 已接入现行两模型链。输入是 CT.gov 的干预描述和 CDE 的药物名称。
 - 只补配置里为空的 target 和 modality，不覆盖已有值；`attribute_status` 记录核对状态。
 
 **路由**
@@ -155,4 +155,4 @@ uv run ciw audit --workspace <你的工作区目录>/crswnp -n 40               
 1. 运行 `uv run pytest` 和 `uv run ruff check src tests`。
 2. 真跑一次 release，再运行 `ciw audit -n 40`。
 3. 整块替换 `docs/STATUS.md`。
-4. 提交到 `main` 并推送，只包含源码、测试、文档和小夹具。工作台的改动提交到 `feat/ciw-release-adapter`。
+4. 按D15提交到 `codex/ciw-v2-trunk` 并推送，只包含源码、测试、文档和小夹具。工作台的改动提交到 `feat/ciw-release-adapter`。

@@ -5,14 +5,14 @@
 你在自己的机器上从零开始，不依赖任何其他机器上的目录、数据或浏览器会话。
 
 获取代码（按执行包 §0 判断用哪个来源）：
-- 竞品调研：GitHub smkzw/competitive-intelligence-workflow 的 main 分支（v2 主干）。如果 main 上仍是 v1，改用附件 ciw-v2-src.tar.gz。
+- 竞品调研：GitHub smkzw/competitive-intelligence-workflow 的 codex/ciw-v2-trunk 分支（D15批准，旧main保留）；只有此分支也不存在才用附件 ciw-v2-src.tar.gz。
 - 工作台接入：GitHub smkzw/protocol-v3-workbench 的 feat/ciw-release-adapter 分支。如果没有这个分支，改用附件 workbench-ciw-adapter.patch，在提交 7c1bd916 上执行 git apply。
 
 开工前按顺序阅读：README.md → docs/STATUS.md → docs/PLAN.md（执行规则）→ docs/handoff/EXECUTION_PACK.md。
 产品合同见 docs/PRD.md，用户裁决见 docs/DECISIONS.md。已裁决的事项不要重新提问。
 
 先按执行包 §1 搭好环境，依次完成：
-1. uv run pytest，预期 87 passed；
+1. uv run pytest，数量以STATUS为准（87为初始附件基线）；
 2. uv run ciw run indications/crswnp.yaml --workspace <自选目录>/crswnp，跑出第一份 release；
 3. uv run ciw audit -n 40，结果为 0 错误。
 然后按执行包 T1→T5 的顺序推进。每个任务都要真实跑出 release，audit 0 错误后，再更新 STATUS、提交并推送。
@@ -26,6 +26,8 @@
 6. 运行产物、第三方原文、key、cookie、任何机器的绝对路径一律不入库。DGX key 由用户提供，只通过环境变量 CIW_DGX_API_KEY 或 CIW_DGX_KEY_FILE 读取。
 7. 需要浏览器时只用 ego-browser（先运行 `ego-browser skill`）。为本目标建一个专用 TaskSpace 并一直复用，不启动 Playwright 或其他 Chromium。执行机上没有 ego 时，中国来源采集记为阻塞，其余任务照常推进。
 8. 需要用户决定的事项写进 STATUS 的“待用户决定”，同时继续推进不受影响的任务；只有真正阻塞时才停下来问。
+
+D18已批准：论文原文明示分组关联登记研究；没有独立登记臂时arm_id保留空，不猜对应、不改登记、不分摊汇总。
 
 用户使用简体中文，面向用户的输出用中文。
 ```

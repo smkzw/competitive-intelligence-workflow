@@ -68,7 +68,8 @@ def _payload(rel: dict[str, Any], report: str) -> dict[str, Any]:
             "a": rel["a"],
             "trials": _trial_index(rel),
             "stats": rel["stats"],
-            "events": rel["events"],
+            "events": [e for e in rel["events"] if e["status"] in
+                       {"registry", "verified", "dual_agreed", "arbitrated"}],
             "sources": sources,
         }
     if report == "B":

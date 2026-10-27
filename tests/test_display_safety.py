@@ -67,3 +67,14 @@ process.stdout.write(JSON.stringify({hiddenCreated,created,resized}));
 """
     result = subprocess.run(["node", "-e", script, str(asset)], capture_output=True, text=True, check=True)
     assert json.loads(result.stdout) == {"hiddenCreated": 0, "created": 1, "resized": 1}
+
+
+def test_unconfirmed_events_are_retained_in_release_but_not_presented_as_adopted_milestones():
+    from ciw.render.site import _payload
+    events = [{"event_id": str(i), "status": s} for i, s in enumerate(
+        ["registry", "verified", "dual_agreed", "arbitrated", "needs_review", "rejected"])]
+    rel = dict(indication={}, cutoff="2026-10-27", release_id="r", generated_at="now", own_product_id=None,
+               coverage=[], a={}, trials=[], stats={}, events=events, sources=[])
+    view = _payload(rel, 'A')
+    assert [e['status'] for e in view['events']] == ['registry','verified','dual_agreed','arbitrated']
+    assert len(rel['events']) == 6 and rel['events'][4]['status'] == 'needs_review'

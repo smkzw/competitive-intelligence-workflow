@@ -24,7 +24,7 @@
 
   function drawForest(id, list, ref, log) {
     const cl = list.map((c) => `${c.acronym} · ${c.product_label}${groupSuffix(c.product_label, c.exp_group)}${c.h2h ? " vs " + c.ctrl_group : ""}`);
-    document.getElementById(id).style.height = Math.max(240, list.length * 30 + 80) + "px";
+    document.getElementById(id).style.height = Math.max(150, list.length * 34 + 80) + "px";
     if (!list.length) {
       chart(id, { title: { text: "该问题没有可入图的组间比较（见下表）", left: "center", top: "middle", textStyle: { color: "#64676B", fontSize: 16, fontWeight: 400 } } });
       return;
@@ -57,8 +57,11 @@
     document.getElementById("q-sub").textContent = `${current.measure_label}${current.units.length ? " · 单位：" + current.units.join(" / ") : ""}${current.direction === "lower_better" ? " · 数值越低越好" : current.direction === "higher_better" ? " · 数值越高越好" : ""}`;
 
     const comps = current.comparisons;
-    drawForest("diff-chart", comps.filter((c) => c.family === "difference" && c.plot_value != null), 0, false);
-    const ratios = comps.filter((c) => c.family === "ratio" && c.plot_value > 0);
+    const differences = comps.filter(c => c.family === "difference" && c.plot_value != null);
+    const ratios = comps.filter(c => c.family === "ratio" && c.plot_value > 0);
+    document.getElementById("comparison-plots").hidden = !differences.length && !ratios.length;
+    document.getElementById("diff-wrap").hidden = !differences.length;
+    if(differences.length) drawForest("diff-chart", differences, 0, false);
     document.getElementById("ratio-wrap").hidden = !ratios.length;
     if (ratios.length) drawForest("ratio-chart", ratios, 1, true);
 
@@ -66,7 +69,7 @@
     document.getElementById("arm-values").hidden = !rows.length;
     document.getElementById("arm-details").hidden = !rows.length;
     const vEl = document.getElementById("value-chart");
-    vEl.style.height = Math.max(240, rows.length * 26 + 80) + "px";
+    vEl.style.height = Math.max(150, rows.length * 28 + 80) + "px";
     chart("value-chart", {
       grid: { left: 300, right: 60, top: 20, bottom: 40 },
       tooltip: { formatter: (p) => { const r = rows[p.dataIndex]; return `<b>${esc(rowLabel(r))}</b><br>${num(r.value)} ${esc(r.unit)}${r.n != null ? `<br>N=${r.n}` : ""}${r.spread != null ? `<br>${esc(r.dispersion_type)} ${num(r.spread)}` : ""}${r.lower != null ? `<br>${esc(r.dispersion_type)} ${num(r.lower)}, ${num(r.upper)}` : ""}`; } },
@@ -85,7 +88,7 @@
       { label: "置信区间", num: true, html: (c) => (c.ci_lower != null ? `${c.ci_pct ? c.ci_pct + "% " : ""}${num(c.ci_lower)}, ${num(c.ci_upper)}` : "—") },
       { label: "P 值", key: "p_value" },
       { label: "方法", key: "method" },
-      { label: "依据", html: (c) => `${c.source_kind === "publication" ? src(c.url, "论文") + " " : ""}` + tag(c.kind === "computed" ? "computed" : c.status || "registry") + (c.note ? `<br><span class="hint">${esc(c.note)}</span>` : "") },
+      { label: "依据", html: (c) => `${c.source_kind === "publication" ? src(c.url, "论文") + (c.group_basis === "论文分组" ? " · 论文分组 " : " ") : ""}` + tag(c.kind === "computed" ? "computed" : c.status || "registry") + (c.note ? `<br><span class="hint">${esc(c.note)}</span>` : "") },
     ], comps, { rowClass: (c) => (c.is_own ? "own" : "") });
 
     table(document.getElementById("row-table"), [
@@ -103,6 +106,7 @@
 
   // 历时
   const L = B.longitudinal;
+  document.getElementById("longitudinal-card").hidden = !L.length;
   const ls = document.getElementById("long-select");
   ls.innerHTML = L.map((c, i) => `<option value="${i}">${esc(c.label)} · ${esc(c.measure_label)}（${c.lines.length} 条曲线）</option>`).join("");
   function drawLong() {
@@ -128,6 +132,7 @@
   const S = B.safety;
   const sEl = document.getElementById("sae-chart");
   const sRows = S.filter((r) => r.sae_pct != null);
+  sEl.hidden = !sRows.length;
   sEl.style.height = Math.max(240, sRows.length * 22 + 80) + "px";
   const sl = (r) => `${r.acronym} · ${r.role === "placebo" ? "安慰剂" : (r.product_label || r.group_title)}（${r.group_title}）`;
   chart("sae-chart", {

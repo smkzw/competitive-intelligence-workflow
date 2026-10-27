@@ -78,7 +78,7 @@ indications/<slug>.yaml ──► ciw pipeline ──► workspace/releases/<id>
 
 `sources.europepmc` 按未公布结果的核心 II/III 期登记号分页查询，保存 API 原件；只有摘要正文中的明确登记号可绑定研究。综述、方案、事后或亚组分析不自动作为主要结果。网络失败与尚未检索的编号保留在 coverage，离线重跑不会将其变成零结果。
 
-`verify.publications` 复用同一 crosscheck，按明确登记臂投影为 `OutcomeResult(kind="publication")`。结果保留原始人群、单位、引用定位和核对状态；已明确的差值方向记录在 `Analysis`，不依赖组均值是否存在或舍入后相减是否相等。来源报告的组间差可以单独进入 B，未报告的组数值不补零，空的单组图不显示。登记与论文记录并存；audit 对论文样本回查原始摘要及引用数字。
+`verify.publications`复用同一crosscheck。D18允许按论文原文明示分组投影为`OutcomeResult(kind="publication")`：能明确对应登记臂时保留arm_id；否则使用论文组别ID、arm_id为空，并保留研究关联。登记记录不改写，汇总不分摊。来源明确P值及比较符原样进入Analysis。结果保留原始人群、单位、引用定位和核对状态；已明确的差值方向记录在 `Analysis`，不依赖组均值是否存在或舍入后相减是否相等。来源报告的组间差可以单独进入 B，未报告的组数值不补零，空的单组图不显示。登记与论文记录并存；audit 对论文样本回查原始摘要及引用数字。
 
 论文组名优先匹配登记臂名及经核实的别名，矛盾的干预关联不改写；问题写入当前待核集合。来源明确的“X vs Y groups … LS mean difference”保留原句作为方向证据，不由数值正负号或舍入均值反推。只有摘要实际提供的分析N才进入对应结果。
 

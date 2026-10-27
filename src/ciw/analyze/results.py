@@ -243,6 +243,8 @@ def _comp_row(r, t, products, exp, ctrl, **kw) -> dict[str, Any]:
         "status": r.status,
         "url": r.source_url or t.url,
         "kind_label": "来源报告" if kw["kind"] == "reported" else "计算值",
+        "group_basis": "论文分组"
+        if r.kind == "publication" and (exp.arm_id is None or ctrl.arm_id is None) else "登记臂",
         **kw,
     }
 

@@ -92,7 +92,7 @@
       { label: "产品", html: (e) => esc(label(e.product_id) || e.product_mention) },
       { label: "事件", html: (e) => esc(EV_ZH[e.event_type] || e.event_type) },
       { label: "地区", key: "region" },
-      { label: "内容", key: "detail" },
+      { label: "内容", html: e => esc((e.detail || "").replace(/[，；]原文(?:未给出批准日期|仅为获批宣布，批准日期未明示)[。]?$/u, "。")) },
       { label: "原文", html: (e) => `<details><summary>查看原文</summary><pre>${esc(e.quote)}</pre></details>` },
       { label: "核对", html: (e) => tag(e.status) },
       { label: "来源", html: (e) => { const s = (D.sources || {})[e.source_id] || {}; return src(s.url, s.title || "来源"); } },

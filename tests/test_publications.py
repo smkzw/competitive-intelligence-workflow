@@ -2,6 +2,8 @@
 
 import json
 
+import pytest
+
 from ciw.analyze.results import build_results
 from ciw.models import Arm, Locator, Trial
 from ciw.pipeline import build_products
@@ -202,3 +204,49 @@ def test_ordered_reported_contrast_does_not_recompute_the_adjusted_estimate(cfg,
     c = b["questions"][0]["comparisons"][0]
     assert (c["value"], c["plot_value"], c["plot_lower"], c["plot_upper"]) == (-2.5, -2.5, -2.9, -2.1)
     assert "stapokibart vs placebo groups" in results[0].analyses[0].direction_evidence
+
+
+@pytest.mark.parametrize("single_cohort", [False, True])
+def test_publication_groups_survive_cohort_registration_without_guessing_arms(cfg, resolver, ws, single_cohort):
+    paper, trial, item = setup(ws)
+    trial.arms = [Arm(arm_id="cohort1", label="55 mg Q2W", role="experimental", product_ids=["stapokibart"]),
+                  Arm(arm_id="cohort2", label="110 mg Q2W", role="experimental", product_ids=["stapokibart"])]
+    if single_cohort:
+        trial.arms = [Arm(arm_id="cohort", label="CM310", role="experimental",
+                          description="CM310 or matched placebo", product_ids=["stapokibart"])]
+    before = trial.model_dump()
+    results, issues = extract_publications(ws, cfg, [paper], {trial.trial_id: trial}, resolver, roles([item]))
+    assert not issues and len(results) == 1
+    groups = results[0].groups
+    assert [(g.arm_id, g.role, g.product_id) for g in groups] == [(None, "experimental", "stapokibart"),
+                                                               (None, "placebo", None)]
+    assert trial.model_dump() == before
+    b = build_results(cfg, {trial.trial_id: trial}, build_products(cfg), results, None)
+    c = b["questions"][0]["comparisons"][0]
+    assert c["plot_value"] == -2.5 and c["n_exp"] is None and c["n_ctrl"] is None
+
+
+@pytest.mark.parametrize('quote', [
+    'stapokibart improves nasal polyp score compared with placebo (mean difference, -2.5)',
+    'with the treatment of stapokibart (mean difference vs. placebo: -2.5)',
+])
+def test_source_ordered_contrast_phrases_keep_direction_without_means(quote):
+    from ciw.verify.publications import _reported_order
+    item = dict(stat_type="difference", base_stat_type="mean", arm_label="stapokibart",
+                comparator_label="placebo", quote=quote)
+    assert _reported_order(item)[0] == 1
+    item.update(arm_label="placebo", comparator_label="stapokibart")
+    assert _reported_order(item)[0] == -1
+
+
+@pytest.mark.parametrize("literal", ["0.0001", ".001", "1e-3"])
+def test_reported_p_value_and_threshold_are_not_interchanged(cfg, resolver, ws, literal):
+    paper, trial, item = setup(ws)
+    item['quote'] += f' P < {literal}.'
+    paper['text'] = item['quote']
+    item['p_value'] = '<' + literal
+    results, issues = extract_publications(ws, cfg, [paper], {trial.trial_id: trial}, resolver, roles([item]))
+    assert not issues and results[0].analyses[0].p_value == '<' + literal
+    item['p_value'] = literal
+    results, issues = extract_publications(ws, cfg, [paper], {trial.trial_id: trial}, resolver, roles([item]))
+    assert not results and 'P值' in issues[0]['note']

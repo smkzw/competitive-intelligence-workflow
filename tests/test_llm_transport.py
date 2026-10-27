@@ -64,3 +64,26 @@ def test_content_cache_keeps_original_receipt_without_another_model_call(ws):
     assert c.chat("s", "original source") == '{"items":[]}'
     assert len(calls) == 1 and c.receipt["cached"]
     assert c.receipt["response_id"] == "original-call"
+
+
+@pytest.mark.parametrize('text', [
+    '{"items": []}\n说明：原文只有剂量，没有靶点。',
+    '核对说明：没有靶点。\n\n{"items": []}',
+    '核对说明：无遗漏。\n\n```json\n{"items": []}\n```',
+    '```json\n{"items": []}\n```\n核对说明：未报告。',
+    '{"items": [{"quote": "literal {braces}"}]}\n说明：保留原文。',
+])
+def test_one_json_document_can_have_trailing_explanation(text):
+    from ciw.verify.llm import parse_json
+    assert isinstance(parse_json(text)["items"], list)
+
+
+@pytest.mark.parametrize('text', [
+    '{"items": []}\n{"items": [{"value": 9}]}',
+    '```json\n{"items": []}\n```\n```json\n{"items": [1]}\n```',
+    '{"items": [], "items": [1]}',
+])
+def test_multiple_documents_and_duplicate_keys_are_not_first_or_last_wins(text):
+    from ciw.verify.llm import parse_json
+    with pytest.raises(ValueError):
+        parse_json(text)

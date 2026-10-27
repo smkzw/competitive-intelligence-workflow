@@ -82,6 +82,14 @@ def enrich_attributes(
 
 def _apply(products, candidates, issues):
     for (pid, field), values in candidates.items():
+        if field == "modality":
+            values = [v for v in values if v[0].casefold().strip() not in
+                      {"biological", "drug", "生物制品", "生物药", "药物"}]
+            if not values:
+                continue
+            shortest = min(values, key=lambda v: len(v[0]))
+            if all(shortest[0].casefold().strip() in v[0].casefold().strip() for v in values):
+                values = [shortest]
         if len({v.casefold().strip() for v, _, _ in values}) != 1:
             issues.append(
                 dict(kind="attribute_conflict", ref=f"{pid}:{field}", note="来源属性存在不同表述，保留空值待核")

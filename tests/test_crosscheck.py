@@ -113,3 +113,13 @@ def test_repair_is_bounded_and_cannot_adopt_unrequested_new_identities():
         return json.dumps({"items": [invalid] if len(seen) == 1 else [invalid, extra]}, ensure_ascii=False)
     out = crosscheck(task(), roles(backend("deepseek", [item()]), FakeBackend("glm", "glm", review)))
     assert len(seen) == 2 and len(out) == 1 and out[0].status == "needs_review"
+
+
+def test_malformed_verifier_json_has_one_format_repair_without_chaining_retries():
+    seen = []
+    def review(system, user):
+        seen.append(user)
+        return '{"items": [broken}' if len(seen) == 1 else json.dumps({"items": [dict(item(), date="2024")]})
+    out = crosscheck(task(), roles(backend("deepseek", [item()]), FakeBackend("glm", "glm", review)))
+    assert len(seen) == 2 and out[0].status == "needs_review"
+    assert [c["role"] for c in out[0].calls] == ["extract", "verify", "verify_format_repair"]

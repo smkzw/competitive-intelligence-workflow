@@ -23,7 +23,7 @@ INSTRUCTION = (
     "quote必须是涵盖本条数值及人群、终点、时点的连续原文，可包含相邻方法句，不拼接。"
 )
 _FIELDS = tuple(PublicationResultItem.model_fields)
-_NUMBERS = ("value", "ci_lower", "ci_upper", "ci_pct", "n")
+_NUMBERS = ("value", "ci_lower", "ci_upper", "ci_pct", "n", "p_value")
 
 
 def _task(paper: dict) -> ExtractionTask:
@@ -147,12 +147,61 @@ def _group(arm, label: str, path: str, resolver, **values) -> GroupValue:
     )
 
 
+def _publication_group(trial, label, paper, resolver, role):
+    arm = _match_arm(trial, label, resolver)
+    cohort = arm and re.search(r"\bor\b.{0,30}placebo|或.{0,15}安慰剂", arm.description, re.I)
+    if arm is not None and arm.role != "unknown" and not cohort:
+        return _group(arm, label, paper["path"], resolver)
+    pid = resolver.resolve_intervention(label)
+    related = set(trial.product_ids) | {p for a in trial.arms for p in a.product_ids}
+    related |= {resolver.resolve_intervention(a.label) for a in trial.arms}
+    if pid and pid not in related:
+        return None
+    placebo = bool(re.search(r"\bplacebo\b|安慰剂", label, re.I))
+    if placebo and pid:
+        pid, role = None, "unknown"
+    elif placebo:
+        role = "placebo"
+    elif not pid:
+        role = "unknown"
+    return GroupValue(group_id=stable_id("pubgroup", paper["paper_id"], trial.trial_id, normalize_name(label)),
+                      arm_id=None, title=label, role=role, product_id=pid, path=paper["path"])
+
+
+def _publication_groups(trial, item, paper, resolver):
+    contrast = item["stat_type"] in {"difference", "hazard_ratio", "odds_ratio"}
+    group = _publication_group(trial, item["arm_label"], paper, resolver, "experimental")
+    if group is None:
+        return [], "论文药物未明确关联登记研究"
+    group.value = None if contrast else item["value"]
+    group.n = item.get("n")
+    group.lower = None if contrast else item.get("ci_lower")
+    group.upper = None if contrast else item.get("ci_upper")
+    groups = [group]
+    if contrast:
+        ctrl = _publication_group(trial, item["comparator_label"], paper, resolver, "active_comparator")
+        if ctrl is None or normalize_name(ctrl.title) == normalize_name(group.title):
+            return [], "论文对照组身份未明确或与比较组重复"
+        if ctrl.group_id == group.group_id:
+            # One registered cohort may contain both interventions; preserve publication identities separately.
+            group.arm_id = ctrl.arm_id = None
+            group.group_id = stable_id("pubgroup", paper["paper_id"], group.title)
+            ctrl.group_id = stable_id("pubgroup", paper["paper_id"], ctrl.title)
+        groups.append(ctrl)
+    return groups, ""
+
+
 def _project(cfg, paper, trials, resolver, item, status):
     if any(
         item[field] and normalize(item[field]) not in normalize(item["quote"])
         for field in ("unit", "population", "arm_label", "comparator_label")
     ):
         return None, "论文科学上下文未在引用中保留原文"
+    p_value = re.sub(r"\s+", "", item.get("p_value", ""))
+    reported = {re.sub(r"\s+", "", m[1] + m[2]) for m in re.finditer(
+        r"\bP\s*([=<>≤≥]+)\s*((?:\d+(?:\.\d+)?|\.\d+)(?:[eE][+-]?\d+)?)", item["quote"], re.I)}
+    if p_value and (p_value if p_value[0] in "=<>≤≥" else "=" + p_value) not in reported:
+        return None, "P值及比较符未被原文明确支持"
     tid = item["registry_id"].upper()
     matches = [
         t
@@ -162,29 +211,11 @@ def _project(cfg, paper, trials, resolver, item, status):
     trial = matches[0] if len(matches) == 1 else None
     if tid not in paper["registry_ids"] or trial is None or trial.relevance != "core":
         return None, "论文数值未明确关联当前核心研究"
-    arm = _match_arm(trial, item["arm_label"], resolver)
-    if arm is None or arm.role == "unknown":
-        return None, "论文组别未唯一匹配登记臂"
+    groups, reason = _publication_groups(trial, item, paper, resolver)
+    if reason:
+        return None, reason
     contrast = item["stat_type"] in {"difference", "hazard_ratio", "odds_ratio"}
-    ctrl = _match_arm(trial, item["comparator_label"], resolver) if contrast else None
-    if contrast and (ctrl is None or ctrl.arm_id == arm.arm_id or ctrl.role == "unknown"):
-        return None, "论文对照组未唯一匹配登记臂"
-    groups = [
-        _group(
-            arm,
-            item["arm_label"],
-            paper["path"],
-            resolver,
-            value=None if contrast else item["value"],
-            n=item.get("n"),
-            lower=None if contrast else item.get("ci_lower"),
-            upper=None if contrast else item.get("ci_upper"),
-        )
-    ]
-    analyses = []
-    if contrast:
-        groups.append(_group(ctrl, item["comparator_label"], paper["path"], resolver))
-        analyses = [_analysis(item, arm.arm_id, ctrl.arm_id, paper["path"])]
+    analyses = [_analysis(item, groups[0].group_id, groups[1].group_id, paper["path"])] if contrast else []
     domain, concept = classify(item["endpoint"], cfg)
     return OutcomeResult(
         result_id=stable_id("pubresult", paper["paper_id"], item),
@@ -244,6 +275,7 @@ def _analysis(item, arm, ctrl, path):
         param_type=item["stat_type"],
         value=item["value"],
         value_raw=str(item["value"]),
+        p_value=item.get("p_value", ""),
         ci_lower=item.get("ci_lower"),
         ci_upper=item.get("ci_upper"),
         ci_pct=item.get("ci_pct"),
@@ -259,16 +291,15 @@ def _reported_order(item):
         return 0, ""
 
     def match(a, b):
-        return re.search(
-            r"(?<!\w)"
-            + re.escape(a)
-            + r"\s+(?:vs\.?|versus)\s+"
-            + re.escape(b)
-            + r"\s+groups?\b(?:[^.;]|\.(?=\d)){0,180}?(?:LS mean difference|"
-            r"least[- ]squares mean difference|mean difference)",
-            item["quote"],
-            re.I,
-        )
+        a, b = re.escape(a), re.escape(b)
+        gap = r"(?:[^.;]|\.(?=\d)){0,160}?"
+        metric = r"(?:LS mean difference|least[- ]squares mean difference|mean difference)"
+        patterns = [
+            a + r"\s+(?:vs\.?|versus)\s+" + b + r"\s+groups?\b" + gap + metric,
+            a + gap + r"compared\s+(?:with|to)\s+" + b + gap + metric,
+            a + gap + metric + r"\s+(?:vs\.?|versus)\s+" + b,
+        ]
+        return next((m for p in patterns if (m := re.search(r"(?<!\w)" + p + r"(?!\w)", item["quote"], re.I))), None)
 
     forward = match(item["arm_label"], item["comparator_label"])
     reverse = match(item["comparator_label"], item["arm_label"])
