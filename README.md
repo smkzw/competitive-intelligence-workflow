@@ -44,3 +44,13 @@ DGX 凭据仅通过 `CIW_DGX_API_KEY` 或 `CIW_DGX_KEY_FILE` 显式提供；cms-
 | [docs/handoff/](docs/handoff/) | 构建 Agent 执行包与启动提示 |
 
 当前v2发布分支为 `codex/ciw-v2-trunk`，GitHub `main` 仍保留旧工程。执行包提及的 `archive/v1` 与 `archive/ciw2` 标签在本轮远端核查中不存在，不据此宣称历史清理完成。
+
+## 从新适应症开始
+
+当前公开研究入口是Agent或操作者提交适应症YAML，再运行CLI；工作台负责读取发布包。网页目前没有自助生成新调研的按钮。
+
+新建 `indications/<slug>.yaml`，提供名称、英文检索词与人群匹配规则、从来源核实的产品/别名，以及要比较的终点概念；结构可参照已有配置。未核实中文药名留空；未归类干预保留单列，不能把少量配置产品称为完整竞品宇宙。
+
+运行 `uv run ciw run indications/<slug>.yaml --workspace <新工作区> --with-models` 联网生成；原件、来源覆盖与未决项保留在工作区。只在已有真实原件时用 `--offline`，不能用于从零研究。
+
+独立查看本次产物时，可在新工作区的 `releases/<release_id>/site` 运行 `python3 -m http.server <空闲端口> --bind 127.0.0.1`，浏览器打开 `http://127.0.0.1:<端口>/A/`（或B/C）。这是CLI产物查看，不等于新适应症已接入正式工作台；后者需要相应项目和已配置的数据源。

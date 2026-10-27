@@ -115,6 +115,7 @@ mark { background:#FFE8B7; color:inherit; }
 #matrix th:nth-child(7) { width:14%; }
 #matrix td { padding-top:12px; padding-bottom:12px; }
 #matrix td.num { white-space:normal; }
+.detail-button { font:inherit; margin-top:6px; padding:3px 10px; border:1px solid #CED3D8; border-radius:8px; background:#fff; color:var(--brand-2); cursor:pointer; }
 .filters button { background:#fff; color:var(--body); border:1px solid #CED3D8; border-radius:10px; padding:7px 12px; cursor:pointer; }
 .filters button:disabled { color:var(--muted); background:#F4F5F6; cursor:default; }
 #observation-detail[open] > summary { margin-bottom:16px; }

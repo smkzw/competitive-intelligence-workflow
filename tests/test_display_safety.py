@@ -86,7 +86,7 @@ def test_design_filter_updates_both_charts_and_omits_empty_plot_frames():
 const fs=require('fs'),vm=require('vm');
 const inputs={q:{value:''},'f-phase':{value:''},'f-mask':{value:''},'f-concept':{value:''},'f-china':{checked:false}};
 for(const e of Object.values(inputs))e.addEventListener=(name,fn)=>e.change=fn;
-const els={...inputs,matrix:{},count:{},'concept-chart':{parentElement:{},style:{}},
+const els={...inputs,matrix:{addEventListener(){}},count:{},'concept-chart':{parentElement:{},style:{}},
  'size-chart':{parentElement:{},style:{}}};
 const rows=[{trial_id:'zero',phase:'II',primary_concepts:['NPS'],start:'2026-01-01',enrollment:0,
  products:[],primary:[],title:'',eligibility:''},

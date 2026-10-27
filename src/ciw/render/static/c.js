@@ -20,7 +20,7 @@
   const ep = (list) => list.map((o) => `${esc(o.concept || o.title)}<span class="hint">${o.timeframe ? "（" + esc(o.timeframe) + "）" : ""}</span>`).join("<br>");
   const excerpts = r => (r.design_excerpts || []).map(t=>`<details><summary>${esc(t.label)} · ${t.snippets.length}处原文</summary>${t.snippets.map(s=>`<p><span class="hint">${esc(s.section)}</span><br>${window.U.annotate(s.text,s.marks,document.getElementById("q").value.trim())}</p>`).join("")}</details>`).join("");
   const cols = [
-    { label: "药物 / 研究", key: "acronym", html: (r) => `<strong>${r.products.map(p=>esc(p.label)).join("、")}</strong><br>${r.is_own ? '<span class="own-tag">本品 </span>' : ""}${esc(r.phase)} · ${src(r.url, r.acronym || r.trial_id)}${r.acronym ? `<br><span class="hint">${esc(r.trial_id)}</span>` : ""}` },
+    { label: "药物 / 研究", key: "acronym", html: (r) => `<strong>${r.products.map(p=>esc(p.label)).join("、")}</strong><br>${r.is_own ? '<span class="own-tag">本品 </span>' : ""}${esc(r.phase)} · ${src(r.url, r.acronym || r.trial_id)}${r.acronym ? `<br><span class="hint">${esc(r.trial_id)}</span>` : ""}<br><button class="detail-button" data-design-id="${esc(r.trial_id)}" type="button">查看设计</button>` },
     { label: "设计 / 组别", html: (r) => `${[r.allocation,r.masking,r.model].filter(Boolean).map(esc).join(" · ")}<br>${r.arm_count} 组` },
     { label: "样本量", key: "enrollment", num: true, html: (r) => r.enrollment == null ? esc(r.enrollment_text || "—") : `${r.enrollment}<br><span class="hint">${esc(r.enrollment_type)}</span>` },
     { label: "主要终点 / 时间窗", html: r => ep(r.primary) },
@@ -29,6 +29,10 @@
     { label: "研究信息", html: r => `${esc(r.status)}<br><span class="hint">首例 ${esc(r.start || "—")}</span><details><summary>地区 / 申办方</summary><p>${esc(r.country_label || "—")}</p><p>主要完成 ${esc(r.primary_completion || "—")}</p><p>申办方：${esc(r.sponsor)}</p><p>${(r.registration_ids || [r.trial_id]).map(esc).join(" / ")}</p></details>` },
   ];
   const tEl = document.getElementById("matrix");
+  tEl.addEventListener("click", event => {
+    const button = event.target.closest("button[data-design-id]");
+    if (button) show(rows.find(r => r.trial_id === button.dataset.designId));
+  });
   function redraw() {
     const data = filtered();
     document.getElementById("count").textContent = `${data.length} / ${rows.length} 项试验`;
