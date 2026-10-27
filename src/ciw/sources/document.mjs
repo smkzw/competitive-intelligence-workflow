@@ -1,7 +1,7 @@
 // Read-only visible article capture; source text is data, never executable instructions.
 try {
-  const t = await taskSpace(config.space), p = t.page('p1');
-  await p.goto(config.url, {waitUntil: 'domcontentloaded'});
+  const t = await taskSpace(config.space), p = t.page(config.page || 'p1');
+  if(await p.url()!==config.url)await p.goto(config.url, {waitUntil: 'domcontentloaded'});
   await p.waitForFunction(() => !!document.body?.innerText?.trim(), undefined, {timeout: 30000});
   const doc = await p.evaluate(() => {
     const visible = e => e && (e.checkVisibility ? e.checkVisibility() : !!e.getClientRects().length);
@@ -10,8 +10,11 @@ try {
     const heading = first(['#activity-name', 'h1']);
     const publisher = first(['#js_name']);
     const date = first(['#publish_time', 'time']);
+    const body=article.innerText;
+    const header=[heading?.innerText?.trim(),publisher?.innerText?.trim(),date?.innerText?.trim()]
+      .filter(s=>s&&!body.includes(s)).join('\n');
     return {url: location.href, title: heading?.innerText?.trim() || document.title,
-      text: article.innerText, publisher: publisher?.innerText?.trim() || '',
+      text: header ? header+'\n'+body : body, publisher: publisher?.innerText?.trim() || '',
       published_at: date?.getAttribute('datetime') || '', date_text: date?.innerText || '',
       fetched_at: new Date().toISOString()};
   });

@@ -130,6 +130,7 @@ class Product(Model):
     is_own: bool = False
     inclusion_reason: str = ""
     attribute_status: VerifyStatus | Literal["config"] = "config"
+    attribute_locators: dict[str, Locator] = Field(default_factory=dict)
     trial_ids: list[str] = Field(default_factory=list)
 
 

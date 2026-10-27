@@ -3,16 +3,13 @@
 endpoints:
   dgx:
     base_url: https://spark-a321.tail623d86.ts.net/v1
-    key_env: [CIW_DGX_API_KEY, MW_DGX_API_KEY]
-    key_file_env: [CIW_DGX_KEY_FILE, MW_DGX_KEY_FILE]
-    default_key_file: ~/.config/ciw/dgx.key
-    no_proxy: true
-  cms:
-    base_url: http://127.0.0.1:20128/v1
-    key_env: [MW_CMS_API_KEY]
+    key_env: [CIW_DGX_API_KEY]
+    key_file_env: [CIW_DGX_KEY_FILE]
     no_proxy: true
 
 roles:
-  extractor_a: {endpoint: dgx, model: deepseek, family: deepseek, max_tokens: 8192}
-  extractor_b: {endpoint: dgx, model: qwen, family: qwen, max_tokens: 4096}
-  arbiter: {endpoint: dgx, model: glm, family: glm, max_tokens: 8192}
+  # The live DeepSeek gateway also rejects response_format (HTTP 400).
+  extractor_a: {endpoint: dgx, model: deepseek, family: deepseek, max_tokens: 65536, timeout: 7200, response_format: null}
+  # Current Qwen endpoint does not support constrained JSON; JSON is prompted and validated locally.
+  extractor_b: {endpoint: dgx, model: qwen, family: qwen, max_tokens: 65536, timeout: 7200, response_format: null}
+  arbiter: {endpoint: dgx, model: glm, family: glm, max_tokens: 65536, timeout: 7200}

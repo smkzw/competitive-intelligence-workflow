@@ -126,7 +126,7 @@ def extract_events(
             instruction=INSTRUCTION.format(ind=cfg.name_zh),
             item_model=EventItem,
             key_fields=("product_mention", "event_type", "region"),
-            value_fields=("date",),
+            value_fields=("date", "indication"),
             date_fields=("date",),
             key_fn=lambda it, r=resolver: (
                 r.find_in_text(it.get("product_mention", ""))
@@ -165,7 +165,12 @@ def extract_events(
             if chk.status == "needs_review":
                 queue.append({"kind": "event_needs_review", "ref": ev.event_id, "note": chk.note})
     cov = [
-        {"source": k, "status": ("skipped" if roles is None else "ok" if v["failed"] == 0 else "partial"), **v}
+        {
+            "source": k,
+            "status": ("partial" if roles is None or v["failed"] else "ok"),
+            "extraction_status": "not_enabled" if roles is None else "attempted",
+            **v,
+        }
         for k, v in sorted(by_kind.items())
     ]
     return events, queue, cov

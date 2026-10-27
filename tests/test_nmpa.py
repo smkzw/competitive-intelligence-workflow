@@ -69,3 +69,53 @@ def test_nmpa_inbox_enters_release_as_registry_without_models(cfg, seeded_ws):
     assert event["indication"] == ""  # a certificate cannot prove the CRSwNP indication
     assert event["source_id"] in {s["source_id"] for s in doc["sources"]}
     assert next(c for c in doc["coverage"] if c["source"] == "nmpa")["status"] == "ok"
+
+
+def test_catalogue_capture_reuses_valid_details_and_preserves_failed_scope(cfg, ws, monkeypatch):
+    from ciw.sources.nmpa.capture import capture
+
+    raw = certificate()
+    seen = []
+
+    def browser(name, config, *args, **kwargs):
+        seen.append(name)
+        if name == "browser.mjs":
+            if config["category"] != raw["category"]:
+                return [], {"status": "ok", "records": 0}
+            return [raw], {"status": "ok", "records": 1}
+        return [raw], {"status": "ok"}
+
+    monkeypatch.setattr("ciw.sources.nmpa.capture.run_script", browser)
+    assert capture(ws, cfg, 40)["details"] == 1
+    seen.clear()
+    assert capture(ws, cfg, 40)["resumed"] == 1 and "detail.mjs" not in seen
+    seen.clear()
+    assert capture(ws, cfg, 40, resume_only=True)["resumed"] == 1 and not seen
+    for p in (ws.root / "captures/nmpa").glob("certificate-*.json"):
+        p.unlink()
+    monkeypatch.setattr("ciw.sources.nmpa.capture.run_script", lambda *a, **k: ([], {"status": "user_control"}))
+    assert len(capture(ws, cfg, 40)["queries"]) == 1
+
+
+def test_incomplete_catalogue_details_are_partial_not_ok(cfg, resolver, ws):
+    from ciw.sources.nmpa.registry import ingest
+
+    folder = ws.root / "captures/nmpa"
+    folder.mkdir()
+    raw = certificate()
+    (folder / "certificate-one.json").write_text(json.dumps(raw))
+    listing = dict(
+        query="度普利尤单抗",
+        category=raw["category"],
+        end={"status": "ok"},
+        rows=[{"registration_number": raw["registration_number"]}, {"registration_number": "国药准字SJ20200002"}],
+    )
+    (folder / "list-001.json").write_text(json.dumps(listing))
+    _, _, cov = ingest(ws, resolver)
+    assert cov["status"] == "partial" and cov["adopted"] == 1 and cov["discovered"] == 2
+    assert cov["detail_missing"] == ["国药准字SJ20200002"]
+    listing["rows"], listing["end"] = [], {"status": "failed"}
+    (folder / "list-002.json").write_text(json.dumps(listing))
+    _, _, cov = ingest(ws, resolver)
+    assert cov["discovered"] == 2 and cov["status"] == "partial"
+    assert cov["failed_queries"]

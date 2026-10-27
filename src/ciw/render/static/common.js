@@ -6,7 +6,20 @@
   const nN = (n, N, p) => (n == null ? "未报告" : `${n}${N != null ? "/" + N : ""}${p != null ? `（${p}%）` : ""}`);
   const STATUS = { registry: "登记结构化", dual_agreed: "双模型一致", arbitrated: "仲裁", needs_review: "待核", config: "配置", computed: "计算值" };
   const tag = (k) => `<span class="tag ${esc(k)}">${esc(STATUS[k] || k)}</span>`;
-  const src = (url, label) => (url ? `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(label || "来源")}</a>` : "");
+  const src = (url, label) => {
+    if (!url) return "";
+    try {
+      const parsed = new URL(String(url));
+      if (["http:", "https:"].includes(parsed.protocol)) return `<a href="${esc(parsed.href)}" target="_blank" rel="noopener">${esc(label || "来源")}</a>`;
+    } catch {}
+    return esc(label || "来源");
+  };
+  const highlight = (text, query) => {
+    const original = String(text == null ? "" : text);
+    if (!query) return esc(original);
+    const re = new RegExp("(" + String(query).replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi");
+    return original.split(re).map((part, i) => i % 2 ? `<mark>${esc(part)}</mark>` : esc(part)).join("");
+  };
   const OWN = "#c2410c", PAL = ["#0f4c75", "#3282b8", "#2a9d8f", "#6a4c93", "#e76f51", "#8d99ae", "#bc6c25", "#457b9d", "#588157", "#9d4edd"];
 
   function coverage() {
@@ -65,5 +78,5 @@
   }
 
   coverage();
-  window.U = { D, esc, num, nN, tag, src, table, drawer, chart, options, OWN, PAL };
+  window.U = { D, esc, num, nN, tag, src, highlight, table, drawer, chart, options, OWN, PAL };
 })();

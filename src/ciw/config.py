@@ -56,6 +56,7 @@ class ConceptCfg(_Cfg):
 class CtgovCfg(_Cfg):
     conditions: list[str]
     relevance_patterns: list[str]
+    relevance_exclude_patterns: list[str] = Field(default_factory=list)
     extra_intervention_queries: list[str] = Field(default_factory=list)
 
 
@@ -113,6 +114,9 @@ class IndicationConfig(_Cfg):
         return [re.compile(p, re.I) for p in self.ctgov.relevance_patterns]
 
     def is_relevant_text(self, text: str) -> bool:
+        # Remove explicit nonmatching phrases, not whole mixed-population records.
+        for pattern in self.ctgov.relevance_exclude_patterns:
+            text = re.sub(pattern, "", text, flags=re.I)
         return any(r.search(text) for r in self._relevance_rx)
 
     @cached_property

@@ -43,11 +43,7 @@
   redraw();
 
   function highlight(text) {
-    const q = document.getElementById("q").value.trim();
-    const safe = esc(text);
-    if (!q) return safe;
-    const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
-    return safe.replace(re, (m) => `<mark>${m}</mark>`);
+    return window.U.highlight(text, document.getElementById("q").value.trim());
   }
 
   function show(r) {

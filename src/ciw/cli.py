@@ -37,13 +37,15 @@ def main(argv: list[str] | None = None) -> int:
     au.add_argument("-n", type=int, default=30)
 
     c = sub.add_parser("capture", help="浏览器采集中国来源（需要 ego lite 专用空间）")
-    c.add_argument("source", choices=["cde", "docs"])
+    c.add_argument("source", choices=["cde", "nmpa", "docs"])
     c.add_argument("config")
     c.add_argument("--workspace")
     c.add_argument("--space", type=int, required=True, help="ego-browser TaskSpace ID")
     c.add_argument("--max-details", type=int, default=None)
+    c.add_argument("--resume-only", action="store_true", help="复用已发现的NMPA地址，只补缺失详情")
     c.add_argument("--url", help="明确的公开文章地址（docs）")
     c.add_argument("--kind", choices=["company", "wechat"], default="company")
+    c.add_argument("--page", default="p1", help="docs采集时已打开的Agent Page标签")
 
     a = ap.parse_args(argv)
     from ciw.config import load_indication
@@ -121,7 +123,11 @@ def main(argv: list[str] | None = None) -> int:
 
             if not a.url:
                 ap.error("capture docs 需要 --url")
-            result = capture_document(ws, cfg, a.space, a.url, a.kind)
+            result = capture_document(ws, cfg, a.space, a.url, a.kind, page_label=a.page)
+        elif a.source == "nmpa":
+            from ciw.sources.nmpa.capture import capture as capture_nmpa
+
+            result = capture_nmpa(ws, cfg, a.space, max_details=a.max_details, resume_only=a.resume_only)
         else:
             result = capture(ws, cfg, a.space, max_details=a.max_details)
         print(json.dumps(result, ensure_ascii=False, indent=1))

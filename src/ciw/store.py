@@ -39,6 +39,8 @@ class Workspace:
         self.db_path = self.root / "ciw.sqlite"
         with self.db() as con:
             con.executescript(SCHEMA)
+            if "metadata" not in {r[1] for r in con.execute("PRAGMA table_info(llm_cache)")}:
+                con.execute("ALTER TABLE llm_cache ADD COLUMN metadata TEXT")
 
     # ---------- SQLite ----------
     @contextmanager

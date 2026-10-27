@@ -10,15 +10,26 @@
 
 工作台通过 `ciw_release` 适配器读取 release，并在页内打开门户。
 
+环境：Python 3.12/3.13、uv；显示工具契约测试使用工作台现有的 Node.js，无需另启浏览器。
+
 ```bash
 uv sync
 uv run pytest                                            # 离线测试，几十秒
 uv run ciw run indications/crswnp.yaml                   # 默认工作区 ~/Developer/ciw-workspaces/crswnp
 uv run ciw status --workspace ~/Developer/ciw-workspaces/crswnp
 uv run ciw capture cde indications/crswnp.yaml --space <ego TaskSpace ID>   # 采集中国登记（需要 ego lite）
+uv run ciw capture nmpa indications/crswnp.yaml --space <ego TaskSpace ID>  # 公开药品许可列表与详情
+uv run ciw capture nmpa indications/crswnp.yaml --space <ego TaskSpace ID> --resume-only  # 只补缺失详情
+uv run ciw capture docs indications/crswnp.yaml --space <ego TaskSpace ID> --url <公开文章HTTPS地址> --kind company
 uv run ciw run indications/crswnp.yaml --offline        # 只用工作区里已有的原件重跑
 uv run ciw run indications/crswnp.yaml --with-models    # 启用异构模型交叉核对（需要 DGX key）
 ```
+
+采集与运行时使用同一个 `--workspace`。公众号原文使用 `--kind wechat`，发布者必须匹配适应症配置中的账号。
+DGX 凭据仅通过 `CIW_DGX_API_KEY` 或 `CIW_DGX_KEY_FILE` 显式提供。三角色使用 deepseek/qwen/glm；
+Qwen 当前不提供接口级强制 JSON，DeepSeek实际端点也拒绝`response_format`（HTTP 400），
+因此配置明确关闭这两路的该参数，仍执行相同的 JSON/schema/引文校验；GLM保留接口JSON参数。
+各模型响应的 model/id、结束原因和用量随原有工作区核对记录保留；缓存复用不会伪造新调用。
 
 文档：
 

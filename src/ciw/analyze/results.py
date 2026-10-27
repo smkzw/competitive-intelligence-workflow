@@ -226,7 +226,9 @@ def _comparisons(r: OutcomeResult, t: Trial, products: dict[str, Product]) -> li
                         method="",
                         param_type="组均值之差（计算值）"
                         if r.measure_kind != "proportion"
-                        else "比例之差（百分点，计算值）",
+                        else "比例之差（百分点，计算值）"
+                        if re.search(r"percent|%", r.unit, re.I)
+                        else "比例之差（计算值）",
                         path=g.path,
                         note="",
                         h2h=False,

@@ -16,6 +16,7 @@ import re
 import unicodedata
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from datetime import date
 from typing import Any
 
 from pydantic import BaseModel, ValidationError
@@ -23,12 +24,14 @@ from pydantic import BaseModel, ValidationError
 from ciw.verify.llm import Backend, check_heterogeneous, parse_json
 from ciw.verify.quote import check_quote
 
-PROMPT_VERSION = "crosscheck-v1"
+PROMPT_VERSION = "crosscheck-v2"
 
 SYSTEM_EXTRACT = (
     "你是临床试验与药物研发信息的抽取器。只依据用户给出的原文，按要求的 JSON 结构输出。"
     "每一条结果必须附 quote 字段：从原文逐字复制、能直接支持该条所有数值和关键字段的连续片段。"
     '原文没有的信息不要输出，不要推测，不要补全。输出必须是 JSON 对象：{"items": [...]}。'
+    "items中的每条必须直接包含实际数据字段（包括quote），不要复述JSON Schema，"
+    "不要使用properties、type、required、description包装数据。找不到符合任务的信息时返回items空数组。"
 )
 SYSTEM_ARBITER = (
     "你是独立核对员。给你原文和两个抽取器对同一条信息的候选（A 与 B，可能其中一个为空）。"
@@ -98,7 +101,10 @@ def _extract(backend: Backend, task: ExtractionTask) -> tuple[list[dict[str, Any
     call: dict[str, Any] = {"role": "extract", "family": backend.family, "model": backend.model}
     try:
         payload = parse_json(backend.chat(SYSTEM_EXTRACT, _user_prompt(task)))
-        raw_items = payload.get("items", []) if isinstance(payload, dict) else []
+        call.update(getattr(backend, "receipt", {}))
+        if not isinstance(payload, dict) or not isinstance(payload.get("items"), list):
+            raise ValueError("模型输出缺少items数组")
+        raw_items = payload["items"]
         items = []
         for raw in raw_items:
             try:
@@ -107,8 +113,11 @@ def _extract(backend: Backend, task: ExtractionTask) -> tuple[list[dict[str, Any
                 call.setdefault("invalid_items", 0)
                 call["invalid_items"] += 1
         call["n_items"] = len(items)
+        if raw_items and not items:
+            raise ValueError("所有抽取条目均未通过schema")
         return items, call
     except (ValueError, KeyError, OSError) as exc:  # 网络、JSON 或结构错误：这一路没有结果，不当“无信息”
+        call.update(getattr(backend, "receipt", {}))
         call["error"] = type(exc).__name__
         return [], call
 
@@ -122,6 +131,8 @@ def _date_in_quote(value: str, quote: str) -> bool:
         return False
     if m.group(2):
         month = int(m.group(2))
+        if not 1 <= month <= 12:
+            return False
         en = [
             "january",
             "february",
@@ -138,6 +149,17 @@ def _date_in_quote(value: str, quote: str) -> bool:
         ][month - 1]
         if not (re.search(rf"(?<!\d)0?{month}\s*月|[-/.]0?{month}(?!\d)", q) or en[:3] in q.lower()):
             return False
+        if m.group(3):
+            day, year = int(m.group(3)), int(m.group(1))
+            try:
+                date(year, month, day)
+            except ValueError:
+                return False
+            numeric = rf"(?<!\d){year}\s*[-/.年]\s*0?{month}\s*[-/.月]\s*0?{day}(?!\d)"
+            month_name = rf"(?:{en}|{en[:3]}\.?)"
+            english = rf"\b(?:{month_name}\s+0?{day}(?!\d),?\s+{year}|0?{day}\s+{month_name}\s+{year})\b"
+            if not (re.search(numeric, q) or re.search(english, q, re.I)):
+                return False
     return True
 
 
@@ -173,10 +195,12 @@ def _arbitrate(
     )
     try:
         payload = parse_json(arbiter.chat(SYSTEM_ARBITER, user))
+        call.update(getattr(arbiter, "receipt", {}))
         choice = str(payload.get("choice", "neither")).strip()
         call["choice"] = choice if choice in ("A", "B", "neither") else "neither"
         call["reason"] = str(payload.get("reason", ""))[:200]
     except (ValueError, KeyError, OSError, AttributeError) as exc:
+        call.update(getattr(arbiter, "receipt", {}))
         call["choice"], call["error"] = "neither", type(exc).__name__
     return call["choice"], call
 
@@ -186,8 +210,8 @@ def crosscheck(task: ExtractionTask, roles: dict[str, Backend]) -> list[CheckedI
     a_items, a_call = _extract(roles["extractor_a"], task)
     b_items, b_call = _extract(roles["extractor_b"], task)
     base_calls = [a_call, b_call]
-    if a_call.get("error") and b_call.get("error"):
-        raise CrosscheckFailed(f"两个抽取器均失败：{a_call['error']} / {b_call['error']}")
+    if not (a_items or b_items) and (a_call.get("error") or b_call.get("error")):
+        raise CrosscheckFailed(f"没有可校验结果：{a_call.get('error', 'empty')} / {b_call.get('error', 'empty')}")
 
     def valid(items: list[dict[str, Any]]) -> dict[tuple[str, ...], dict[str, Any]]:
         out: dict[tuple[str, ...], dict[str, Any]] = {}

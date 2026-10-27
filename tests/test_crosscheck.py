@@ -92,3 +92,15 @@ def test_broken_json_from_one_model_is_not_silent_agreement():
 def test_same_family_is_rejected():
     with pytest.raises(ValueError):
         crosscheck(task(), roles(backend("deepseek"), backend("deepseek"), backend("glm")))
+
+
+@pytest.mark.parametrize("raw", ['[]', '{}', '{"items":"not a list"}', '{"items":[{"date":"2025"}]}'])
+def test_invalid_schema_is_not_evidence_of_no_events(raw):
+    from ciw.verify.crosscheck import CrosscheckFailed
+
+    with pytest.raises(CrosscheckFailed):
+        crosscheck(task(), roles(backend("deepseek", raw=raw), backend("qwen", []), backend("glm")))
+
+
+def test_two_legitimate_empty_extractions_remain_empty():
+    assert crosscheck(task(), roles(backend("deepseek"), backend("qwen"), backend("glm"))) == []

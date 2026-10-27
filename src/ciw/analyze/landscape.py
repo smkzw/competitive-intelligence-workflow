@@ -75,8 +75,14 @@ def build_landscape(
                 "global_phase": _rank_label(g),
                 "china_phase": _rank_label(cn) if cn else "—",
                 "approvals": [
-                    {"region": e.region, "date": e.date, "status": e.status, "source_id": e.source_id,
-                     "scope_label": e.indication or "药品许可"}
+                    {
+                        "region": e.region,
+                        "date": e.date,
+                        "status": e.status,
+                        "source_id": e.source_id,
+                        "detail": e.detail,
+                        "scope_label": e.indication or "药品许可",
+                    }
                     for e in approvals
                 ],
                 "trial_count": len(ts),

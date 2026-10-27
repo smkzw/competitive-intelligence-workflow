@@ -19,10 +19,13 @@ ctgov:
     - CRSwNP
     - rhinosinusitis with (nasal )?polyp
     - 鼻息肉
+  relevance_exclude_patterns:
+    - '(?<!with or )(?<!with and )without\s+(?:nasal\s+)?polyps?'
+    - '(?<!或)(?:不伴(?:有)?|无)鼻息肉'
 
 china:
   cde_queries: [鼻息肉, 慢性鼻窦炎伴鼻息肉, MG-K10]
-  nmpa_queries: [鼻息肉]
+  nmpa_queries: [度普利尤单抗, 奥马珠单抗, 美泊利珠单抗, 司普奇拜单抗]
   wechat_accounts: [丁香园Insight数据库, 医药魔方Info]
   wechat_queries: [鼻息肉 III期, CRSwNP 获批, 鼻息肉 临床试验 结果]
 
@@ -147,7 +150,8 @@ products:
 
   - id: depemokimab
     name_en: depemokimab
-    aliases: [depemokimab, GSK3511294, "depemokimab (gsk3511294)"]
+    aliases: [depemokimab, GSK3511294, "depemokimab (gsk3511294)", Exdensur]
+    brand: Exdensur
     target: IL-5
     modality: 单克隆抗体（长效）
     route: 皮下注射
@@ -186,7 +190,8 @@ products:
   - id: stapokibart
     name_en: stapokibart
     name_zh: 司普奇拜单抗
-    aliases: [stapokibart, CM310]
+    aliases: [stapokibart, CM310, 康悦达]
+    brand: 康悦达
     target: IL-4Rα
     modality: 单克隆抗体
     route: 皮下注射

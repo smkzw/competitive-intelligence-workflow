@@ -72,6 +72,15 @@ def test_ambiguous_small_difference_has_no_orientation():
     assert _orient(0.001, g1, g2) is None
 
 
+@pytest.mark.parametrize("unit,expected", [("probability", False), ("percent", True), ("%", True), ("", False)])
+def test_fraction_difference_does_not_claim_percentage_points(unit, expected):
+    groups = [g.model_copy(update={"value": value}) for g, value in zip(G, (0.1, 0.7), strict=True)]
+    result = _result(groups, [], kind="proportion").model_copy(update={"unit": unit})
+    comparison = _comparisons(result, _trial(), {})[0]
+    assert comparison["value"] == 0.6
+    assert ("百分点" in comparison["param_type"]) is expected
+
+
 # --- P0-3 基线 class 与亚组 class
 def test_class_titles():
     assert _looks_like_time("Week 24") and _looks_like_time("Day 169 (EOT)")

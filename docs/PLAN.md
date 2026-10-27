@@ -9,14 +9,14 @@
 3. **不设额外的门。** 不派多模型会商，不做“资格认证”或回执签发链，不保留 24 门户矩阵。真正的核对只有两种：确定性规则，以及异构模型交叉核对（PRD §3）。
 4. **缓存只按原件内容键入**，即原件 sha256 + 抽取 schema + 指令，不按代码哈希。改分析或渲染代码不能让已核对的抽取失效。
 5. **STATUS 只保留当前块，整块替换。** 不新建 packets/、prompts/、reviews/、receipts/ 这类过程目录。
-6. **运行产物不入库。** 包括 workspace、captures、sqlite、截图、第三方原文，`.gitignore` 已经排除。
+6. **运行产物不入库。** 包括 workspace、captures、sqlite、第三方原文，`.gitignore` 已经排除。执行包T1明确要求的小型实屏截图存入`docs/screenshots/`，仅此例外。
 7. **函数不超过 80 行，文件不超过 600 行**，超出就拆。渲染层、流水线里不得写适应症或药物专用逻辑，这些只放在 `indications/*.yaml`。
 
 ## 里程碑
 
 | ID | 目标 | 验收（全部满足才算完成） |
 |---|---|---|
-| M0 | 仓库清理 + v2 主干 + 文档 | 两个分支完成 filter-repo；`archive/v1`、`archive/ciw2` 两个标签已建；`uv run pytest` 全绿；ARCHITECTURE、PRD、PLAN、STATUS 齐全 |
+| M0 | 本机v2重建与隔离发布 + 文档 | 按D15发布`codex/ciw-v2-trunk`且保留main；独立环境测试通过；ARCHITECTURE、PRD、PLAN、STATUS齐全。旧作者历史清理及两个archive标签未经证实，不算本轮已完成，也不在本轮执行强推。 |
 | M1 | CT.gov 全链 + A/B/C 门户 | CRSwNP 一条命令出 release 和三个门户；抽 30 个 B 数值核对原件，0 错误；门户在 1440 和 1920 宽下实看可用 |
 | M2 | 工作台接入 | 工作台 `ciw_release` 适配器和托管路由合入；工作台相关测试全绿；在工作台里打开 A/B/C（需要宿主身份，见 STATUS 阻塞项） |
 | M3 | 中国来源 | CDE 登记列表和详情：采集 → 解析 → 进入 A/C；补齐 MG-K10 登记；NMPA 批准（药品查询）解析为 approval 事件；药企公告、公众号文章（丁香园 Insight、医药魔方 Info）走采集收件箱 |

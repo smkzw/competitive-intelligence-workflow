@@ -11,10 +11,11 @@ import os
 import re
 import urllib.request
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from importlib import resources
 from pathlib import Path
 from typing import Any, Protocol
+from urllib.error import HTTPError
 
 import yaml
 
@@ -37,15 +38,19 @@ class OpenAICompatBackend:
     timeout: float = 600
     no_proxy: bool = True
     max_tokens: int = 8192
+    response_format: str | None = "json_object"
+    receipt: dict[str, Any] = field(default_factory=dict, init=False)
 
     def chat(self, system: str, user: str) -> str:
+        self.receipt = {}
         body = {
             "model": self.model,
             "temperature": 0,
             "max_tokens": self.max_tokens,
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
-            "response_format": {"type": "json_object"},
         }
+        if self.response_format:
+            body["response_format"] = {"type": self.response_format}
         req = urllib.request.Request(
             self.base_url.rstrip("/") + "/chat/completions",
             data=json.dumps(body).encode(),
@@ -56,11 +61,31 @@ class OpenAICompatBackend:
             },
         )
         handlers = [urllib.request.ProxyHandler({})] if self.no_proxy else []
-        with urllib.request.build_opener(*handlers).open(req, timeout=self.timeout) as resp:
-            data = json.load(resp)
+        try:
+            with urllib.request.build_opener(*handlers).open(req, timeout=self.timeout) as resp:
+                data = json.load(resp)
+        except HTTPError as exc:
+            self.receipt = {"http_status": exc.code}
+            try:
+                error = json.load(exc).get("error", {})
+                message = str(error.get("message", "")) if isinstance(error, dict) else ""
+                for parameter in ("response_format", "temperature", "max_tokens", "reasoning_effort"):
+                    if parameter in message:
+                        self.receipt["provider_parameter"] = parameter
+                        break
+            except (ValueError, OSError, AttributeError):
+                pass
+            raise
         choices = data.get("choices") or []
         if not choices:
             raise ValueError("模型返回为空（无 choices）")
+        self.receipt = {
+            "response_model": data.get("model"),
+            "response_id": data.get("id"),
+            "finish_reason": choices[0].get("finish_reason"),
+            "usage": data.get("usage"),
+            "response_format": self.response_format,
+        }
         return choices[0].get("message", {}).get("content") or ""
 
 
@@ -80,30 +105,43 @@ class CachedBackend:
     def __init__(self, inner: Backend, ws: Workspace):
         self.inner, self.ws = inner, ws
         self.family, self.model = inner.family, inner.model
+        self.receipt: dict[str, Any] = {}
 
     def chat(self, system: str, user: str) -> str:
         prompt_sha = hashlib.sha256((system + "\x00" + user).encode()).hexdigest()
         key = hashlib.sha256(f"{self.family}|{self.model}|{prompt_sha}".encode()).hexdigest()
         with self.ws.db() as con:
-            row = con.execute("SELECT response FROM llm_cache WHERE cache_key=?", (key,)).fetchone()
+            row = con.execute("SELECT response, metadata FROM llm_cache WHERE cache_key=?", (key,)).fetchone()
         if row:
+            self.receipt = {**json.loads(row[1] or "{}"), "cached": True}
             return row[0]
-        text = self.inner.chat(system, user)
+        self.receipt = {}
+        try:
+            text = self.inner.chat(system, user)
+        except (OSError, ValueError):
+            self.receipt = dict(getattr(self.inner, "receipt", {}))
+            raise
+        self.receipt = {**getattr(self.inner, "receipt", {}), "cached": False}
         with self.ws.db() as con:
             con.execute(
-                "INSERT OR REPLACE INTO llm_cache VALUES (?,?,?,?,?,?)",
-                (key, self.model, self.family, prompt_sha, text, now_iso()),
+                "INSERT OR REPLACE INTO llm_cache "
+                "(cache_key,model,family,prompt_sha,response,created_at,metadata) VALUES (?,?,?,?,?,?,?)",
+                (key, self.model, self.family, prompt_sha, text, now_iso(), json.dumps(self.receipt)),
             )
         return text
 
 
 def _read_key(spec: dict[str, Any]) -> str | None:
+    if (
+        set(spec.get("key_env", [])) - {"CIW_DGX_API_KEY"}
+        or set(spec.get("key_file_env", [])) - {"CIW_DGX_KEY_FILE"}
+        or spec.get("default_key_file")
+    ):
+        raise ValueError("DGX凭据仅允许CIW_DGX_API_KEY或显式CIW_DGX_KEY_FILE")
     for name in spec.get("key_env", []):
         if os.environ.get(name):
             return os.environ[name]
     files = [os.environ[n] for n in spec.get("key_file_env", []) if os.environ.get(n)]
-    if spec.get("default_key_file"):
-        files.append(spec["default_key_file"])
     for f in files:
         path = Path(f).expanduser()
         if path.is_file():
@@ -129,6 +167,8 @@ def load_roles(config_path: str | Path | None = None) -> dict[str, Backend]:
             api_key=_read_key(ep),
             no_proxy=ep.get("no_proxy", True),
             max_tokens=spec.get("max_tokens", 8192),
+            timeout=spec.get("timeout", 600),
+            response_format=spec.get("response_format", "json_object"),
         )
     check_heterogeneous(roles)
     return roles

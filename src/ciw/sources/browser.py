@@ -9,7 +9,9 @@ from importlib import resources
 from typing import Any
 
 
-def run_script(name: str, config: dict[str, Any], timeout: float, *, package: str) -> tuple[list[dict], dict]:
+def run_script(
+    name: str, config: dict[str, Any], timeout: float, *, package: str, helpers: tuple[str, ...] = ()
+) -> tuple[list[dict], dict]:
     exe = shutil.which("ego-browser")
     if not exe:
         raise RuntimeError("未找到 ego-browser；中国来源采集需要 ego lite")
@@ -17,6 +19,8 @@ def run_script(name: str, config: dict[str, Any], timeout: float, *, package: st
         "const config = "
         + json.dumps(config, ensure_ascii=False)
         + ";\n"
+        + "\n".join(resources.files(package).joinpath(h).read_text(encoding="utf-8") for h in helpers)
+        + "\n"
         + resources.files(package).joinpath(name).read_text(encoding="utf-8")
     )
     try:
@@ -48,4 +52,3 @@ def run_script(name: str, config: dict[str, Any], timeout: float, *, package: st
         elif line.startswith("CIW_CHINA_END:"):
             end = json.loads(line.removeprefix("CIW_CHINA_END:"))
     return pages, end
-

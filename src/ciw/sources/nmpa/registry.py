@@ -14,7 +14,7 @@ from ciw.store import Workspace
 
 def ingest(ws: Workspace, resolver: ProductResolver) -> tuple[list[Event], list[dict], dict[str, Any]]:
     paths = sorted((ws.root / "captures/nmpa").glob("certificate-*.json"))
-    events, issues = [], []
+    events, issues, adopted = [], [], set()
     for path in paths:
         try:
             raw = json.loads(path.read_text())
@@ -45,19 +45,48 @@ def ingest(ws: Workspace, resolver: ProductResolver) -> tuple[list[Event], list[
                     region="中国",
                     date=parsed["approval_date"],
                     indication="",
-                    detail="药品许可记录：" + parsed["registration_number"],
+                    detail=" · ".join(
+                        filter(
+                            None,
+                            [
+                                "药品许可记录：" + parsed["registration_number"],
+                                parsed["holder_name"],
+                                parsed["raw_fields"].get("商品名") or parsed["raw_fields"].get("商品名（中文）"),
+                            ],
+                        )
+                    ),
                     quote=quote,
                     status="registry",
                     source_id=source.source_id,
                 )
             )
+            adopted.add(parsed["registration_number"])
         except (ValueError, KeyError, TypeError) as exc:
             issues.append({"kind": "nmpa_capture_invalid", "ref": path.name, "note": str(exc)})
+    latest, known = {}, {}
+    for path in sorted((ws.root / "captures/nmpa").glob("list-*.json")):
+        try:
+            doc = json.loads(path.read_text())
+            latest[(doc["query"], doc["category"])] = doc
+            if doc["end"].get("status") == "ok":
+                known[(doc["query"], doc["category"])] = doc
+        except (ValueError, KeyError, TypeError):
+            issues.append({"kind": "nmpa_list_invalid", "ref": path.name, "note": "许可检索记录无法解析"})
+    expected = {r["registration_number"] for doc in known.values() for r in doc["rows"]}
+    missing = sorted(expected - adopted)
+    failed_queries = [f"{q} · {cat}" for (q, cat), doc in latest.items() if doc["end"].get("status") != "ok"]
     coverage = {
         "source": "nmpa",
-        "status": "not_captured" if not paths else "partial" if issues else "ok",
+        "status": "not_captured"
+        if not paths and not latest
+        else "partial"
+        if issues or missing or failed_queries
+        else "ok",
         "records": len(paths),
         "adopted": len(events),
         "failed": len(issues),
+        "discovered": len(expected),
+        "detail_missing": missing,
+        "failed_queries": failed_queries,
     }
     return events, issues, coverage

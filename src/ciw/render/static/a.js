@@ -49,7 +49,11 @@
     { label: "全球最高阶段", key: "global_rank", html: (r) => esc(r.global_phase) },
     { label: "中国最高阶段", key: "china_rank", html: (r) => esc(r.china_phase) },
     { label: "试验数", key: "trial_count", num: true, html: (r) => `${r.trial_count}${r.active_trials ? `<span class="hint">（进行中 ${r.active_trials}）</span>` : ""}` },
-    { label: "获批", html: (r) => (r.approvals || []).map((x) => `${esc(x.region)} ${esc(x.scope_label || "")} ${esc(x.date || "")} ${tag(x.status)}`).join("<br>") },
+    { label: "上市许可 / 获批", html: (r) => !(r.approvals || []).length ? "" :
+      `<details><summary>查看许可记录</summary>${r.approvals.map(x => {
+        const s = (D.sources || {})[x.source_id] || {};
+        return `<p>${esc(x.region)} ${src(s.url, x.scope_label)} ${esc(x.date || "")} ${tag(x.status)}<br>${esc(x.detail || "")}</p>`;
+      }).join("")}</details>` },
     { label: "II 期及以上关键试验", html: (r) => trialLinks(r.key_trials) },
     { label: "属性来源", html: (r) => tag(r.attribute_status) },
   ];
@@ -89,7 +93,7 @@
       { label: "事件", html: (e) => esc(EV_ZH[e.event_type] || e.event_type) },
       { label: "地区", key: "region" },
       { label: "内容", key: "detail" },
-      { label: "原文", html: (e) => `<span class="hint">${esc(e.quote)}</span>` },
+      { label: "原文", html: (e) => `<details><summary>查看原文</summary><pre>${esc(e.quote)}</pre></details>` },
       { label: "核对", html: (e) => tag(e.status) },
       { label: "来源", html: (e) => { const s = (D.sources || {})[e.source_id] || {}; return src(s.url, s.title || "来源"); } },
     ], [...evs].sort((x, y) => ((y.date || "") > (x.date || "") ? 1 : -1)));

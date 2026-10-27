@@ -24,6 +24,7 @@ from ciw.release import write_release
 from ciw.sources import captures, cde_registry, ctgov
 from ciw.sources.nmpa.registry import ingest as ingest_nmpa
 from ciw.store import Workspace, now_iso
+from ciw.verify.attributes import enrich_attributes
 from ciw.verify.llm import Backend
 
 
@@ -144,6 +145,7 @@ def run(
     merged_trials, identity_issues = deduplicate_trials(list(trials.values()))
     trials = {trial.trial_id: trial for trial in merged_trials}
     review_queue.extend(identity_issues)
+    review_queue.extend(enrich_attributes(ws, products, list(trials.values()), resolver, roles))
 
     for t in trials.values():
         for pid in t.product_ids:
@@ -166,8 +168,11 @@ def run(
     b["safety"] = build_safety(trials, products, safety)
     c = build_design(cfg, trial_list, products)
 
-    used = {record.locator.source_id for t in trial_list for record in [t, *t.registrations]} | {
-        e.source_id for e in events}
+    used = (
+        {record.locator.source_id for t in trial_list for record in [t, *t.registrations]}
+        | {e.source_id for e in events}
+        | {loc.source_id for p in products.values() for loc in p.attribute_locators.values()}
+    )
     sources: list[Source] = [s for s in ws.sources() if s.source_id in used]
     core = [t for t in trial_list if t.relevance == "core"]
     stats.update(
