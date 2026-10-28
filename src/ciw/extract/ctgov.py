@@ -246,7 +246,7 @@ def _split_class(text: str) -> tuple[str, str]:
     t = text or ""
     if _BASELINE_CLASS.fullmatch(t):
         return "Baseline", ""
-    baseline = re.search(r"[-–—:]\s*((?:at\s+)?baseline\b.*)$", t, re.I)
+    baseline = re.search(r"(?:[-–—:]\s*|\bat\s+)((?:at\s+)?baseline\b.*)$", t, re.I)
     if baseline and _BASELINE_CLASS.fullmatch(baseline[1]):
         return "Baseline", t[:baseline.start()].strip()
     if _looks_like_time(t):

@@ -299,7 +299,7 @@ def test_saved_verifier_item_can_be_rechecked_without_new_models_but_not_unconfi
     item = dict(descriptor_id=key, title=rows[0].title, label="至少改善2个类别", domain="efficacy",
                 direction="higher_better", quote=rows[0].title)
     ws.write_stage("research-endpoint-index", dict(items={}, unresolved={key: note}))
-    ws.save_verification("endpoint:" + key, "needs_review", dict(item=item, calls=[
+    ws.save_verification("endpoint:" + key, "needs_review", dict(item=item, review_note=note, calls=[
         dict(role="extract", family="deepseek", n_items=1),
         *([dict(role="verify", family="glm", n_items=1)] if has_review else [])]))
     issues = enrich_endpoint_index(ws, cfg, rows, roles=None)
@@ -307,3 +307,32 @@ def test_saved_verifier_item_can_be_rechecked_without_new_models_but_not_unconfi
     assert (ws.verifications()["endpoint:" + key]["status"] == "verified") is accepted
     if accepted:
         assert ws.read_stage("research-endpoint-index")["rechecks"][key]["previous_note"] == note
+
+
+@pytest.mark.parametrize("ledger_note,cached_match,accepted", [
+    ("主抽取条目未被核对者确认", True, False), (None, False, False), (None, True, True),
+])
+def test_recheck_requires_item_specific_verifier_evidence_not_a_batch_count(
+    cfg, ws, ledger_note, cached_match, accepted
+):
+    cfg = cfg.model_copy(deep=True)
+    rows = [result("With at Least 2-category Improvement", "")]
+    key = next(iter(_catalog(cfg, rows)))
+    item = dict(descriptor_id=key, title=rows[0].title, label="至少改善2个类别", domain="efficacy",
+                direction="higher_better", quote=rows[0].title)
+    note = "核对结果未通过来源校验：旧数值规则拒绝"
+    ws.write_stage("research-endpoint-index", dict(items={}, unresolved={key: note}))
+    record = dict(item=item, calls=[dict(role="extract", family="deepseek", n_items=1),
+        dict(role="verify", family="glm", model="checker", n_items=1, response_id="response-one")])
+    if ledger_note is not None:
+        record["review_note"] = ledger_note
+    ws.save_verification("endpoint:" + key, "needs_review", record)
+    with ws.db() as con:
+        con.execute("INSERT INTO llm_cache VALUES (?,?,?,?,?,?,?)", ("test-key", "checker", "glm", "prompt",
+                    json.dumps(dict(items=[item] if cached_match else [])), "date",
+                    json.dumps(dict(response_id="response-one"))))
+    enrich_endpoint_index(ws, cfg, rows, roles=None)
+    assert bool(rows[0].concept_id) is accepted
+    if accepted:
+        recheck = ws.verifications()["endpoint:" + key]["deterministic_recheck"]
+        assert recheck["review_binding"] == dict(method="cached_verifier_item", response_id="response-one")

@@ -105,14 +105,15 @@ def test_embedded_baseline_class_is_retained_without_falling_back_to_final_follo
     measure = raw["resultsSection"]["outcomeMeasuresModule"]["outcomeMeasures"][0]
     measure.update(title="Nasal Polyp Score", timeFrame="Up to Week 148", paramType="MEAN")
     measure["classes"] = [dict(title=title, categories=[dict(measurements=[dict(groupId="OG000", value="0")])])
-                          for title in ["Body surface area - Baseline", "Baseline", "Week 16"]]
+                          for title in ["Body surface area - Baseline", "Baseline", "Week 16",
+                                        "DLQI total score at Baseline", "SF-36 - MCS at Baseline"]]
     raw["resultsSection"]["outcomeMeasuresModule"]["outcomeMeasures"] = [measure]
     src = Source(source_id="unit", kind="ctgov", sha256="0" * 64, fetched_at="2026-10-28", url="https://example.test")
     trial = extract_trial(raw, src, cfg, resolver)
     rows, _ = extract_results(raw, trial, src, cfg, resolver)
-    assert len(rows) == 3
-    assert [r.time.key for r in rows] == ["BASELINE", "BASELINE", "W16"]
+    assert len(rows) == 5
+    assert [r.time.key for r in rows] == ["BASELINE", "BASELINE", "W16", "BASELINE", "BASELINE"]
     assert all(r.groups[0].value == 0 for r in rows)
     b = build_results(cfg, {trial.trial_id: trial}, {}, rows, None)
     assert {q["time_key"] for q in b["questions"]} == {"W16"}
-    assert len(b["observations"]) == 3
+    assert len(b["observations"]) == 5

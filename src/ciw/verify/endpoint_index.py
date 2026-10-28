@@ -14,6 +14,7 @@ from pydantic import BaseModel
 from ciw.config import ConceptCfg
 from ciw.normalize.semantics import classify, is_biomarker_title
 from ciw.verify.crosscheck import CrosscheckFailed, ExtractionTask, crosscheck, task_id_for
+from ciw.verify.llm import parse_json
 from ciw.verify.quote import check_quote
 
 
@@ -166,6 +167,31 @@ def _review_batches(ws, cfg, initial, roles, saved):
                 yield batch, [], exc
 
 
+def _review_binding(ws, record, note, item, call):
+    if "review_note" in record:
+        return dict(method="item_review_note") if record["review_note"] == note else None
+    # Older ledgers lack the item-specific decision. Rebind to the actual retained
+    # verifier response, never infer confirmation from a batch's n_items count.
+    response_id = call.get("response_id")
+    if not response_id:
+        return None
+    with ws.db() as con:
+        rows = con.execute("SELECT response, metadata FROM llm_cache WHERE family=? AND model=?",
+                           (call.get("family"), call.get("model"))).fetchall()
+    matches = []
+    for text, metadata in rows:
+        try:
+            if json.loads(metadata or "{}").get("response_id") != response_id:
+                continue
+            payload = parse_json(text)
+            candidates = [EndpointIndexItem.model_validate(x).model_dump() for x in payload.get("items", [])]
+            same_key = [x for x in candidates if x["descriptor_id"] == item["descriptor_id"]]
+            matches.append(bool(same_key) and all(x == item for x in same_key))
+        except (ValueError, AttributeError, TypeError):
+            matches.append(False)
+    return dict(method="cached_verifier_item", response_id=response_id) if matches == [True] else None
+
+
 def _recheck_saved(ws, catalog, saved):
     """Reapply corrected deterministic guards to retained verifier items, never to unconfirmed A candidates."""
     records = ws.verifications()
@@ -180,10 +206,17 @@ def _recheck_saved(ws, catalog, saved):
                 or not item or not reviews or reviews[-1].get("error") or not reviews[-1].get("n_items")
                 or len({c.get("family") for c in calls if c.get("family")}) != 2):
             continue
-        parsed = EndpointIndexItem.model_validate(item).model_dump()
+        try:
+            parsed = EndpointIndexItem.model_validate(item).model_dump()
+        except ValueError:
+            continue
         if parsed["descriptor_id"] != key or not _check(parsed, {key: descriptor})[0]:
             continue
-        recheck = dict(rule="endpoint-label-quantity-v2", previous_status="needs_review", previous_note=note)
+        binding = _review_binding(ws, record, note, parsed, reviews[-1])
+        if not binding:
+            continue
+        recheck = dict(rule="endpoint-label-quantity-v3", previous_status="needs_review", previous_note=note,
+                       review_binding=binding)
         saved["items"][key] = parsed
         saved["unresolved"].pop(key, None)
         saved.setdefault("rechecks", {})[key] = recheck
