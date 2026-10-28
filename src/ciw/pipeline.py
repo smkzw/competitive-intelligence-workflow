@@ -114,7 +114,6 @@ def run(
     if report_scope in {None, "B"}:
         log("[research] publications")
         _add_publications(cfg, ws, resolver, trials, results, roles, offline, review_queue, coverage, reuse_sources)
-
     from ciw.verify.endpoint_index import enrich_endpoint_index
 
     review_queue.extend(enrich_endpoint_index(ws, cfg, results, roles if report_scope in {None, "B"} else None, log))
@@ -127,6 +126,7 @@ def run(
     body = _build_body(cfg, ws, products, trials, results, safety, events, review_queue, unclassified, stats, coverage)
     body["clinical_families"] = families
     body["b"] = project_clinical_families(body["b"], families["groups"])
+    body = _comparison_views(body, cfg, ws, results, trials, families, roles, report_scope, previous)
     body["stats"]["questions"] = len(body["b"]["questions"])
     from ciw.render.site import presentation_digest
 
@@ -141,6 +141,19 @@ def run(
     ws.set_current(release_id)
     log(f"[release] {release_id} stats={stats}")
     return RunResult(release_id=release_id, release_path=path, site_dir=site, stats=stats, coverage=coverage)
+
+
+def _comparison_views(body, cfg, ws, results, trials, families, roles, report_scope, previous):
+    from ciw.analyze.comparison_axes import project_comparison_axes
+    from ciw.verify.comparison_axes import enrich_comparison_axes
+
+    axes, issues = enrich_comparison_axes(ws, cfg, results, trials, families["groups"],
+        roles if report_scope in {None, "B"} else None, previous=previous.get("comparison_axes"))
+    body["comparison_axes"] = axes
+    body["b"] = project_comparison_axes(body["b"], axes["groups"], results)
+    body["review_queue"].extend(issues)
+    body["stats"]["review_queue"] = len(body["review_queue"])
+    return body
 
 
 def _reuse_completed(cfg, ws, products, trials, results, coverage, scope):

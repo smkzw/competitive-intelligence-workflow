@@ -27,7 +27,7 @@
   // 组标题与产品名相同（只差大小写）时不重复显示
   const sameName = (a, b) => (a || "").toLowerCase().replace(/[^a-z0-9一-鿿]/g, "") === (b || "").toLowerCase().replace(/[^a-z0-9一-鿿]/g, "");
   const groupSuffix = (label, group) => (label && group && !sameName(label, group) && !label.toLowerCase().includes(group.toLowerCase()) ? `（${group}）` : "");
-  const rowLabel = (r) => `${r.role === "placebo" ? "安慰剂" : (r.product_label || r.group_title)}${r.role !== "placebo" ? groupSuffix(r.product_label, r.group_title) : ""}${r.phase ? " · " + r.phase + "期" : ""} · ${r.acronym}`;
+  const rowLabel = (r) => `${r.role === "placebo" ? "安慰剂" : (r.product_label || r.group_title)}${r.role !== "placebo" ? groupSuffix(r.product_label, r.group_title) : ""}${r.phase ? " · " + r.phase + "期" : ""} · ${r.acronym}${r.stratum_label ? " · " + r.stratum_label : ""}`;
 
 
   const studyLink = row => row.source_records?.length > 1
@@ -59,7 +59,7 @@
       {label:"离散度 / 区间",html:r=>r.spread != null ? num(r.spread) : r.lower != null ? `${num(r.lower)}, ${num(r.upper)}` : "—"},
       {label:"单位",key:"unit"},
       {label:"依据",html:r=>tag(r.kind === "computed" ? "computed" : r.status || "registry")},
-      {label:"分析人群",html:r=>r.population ? `<details><summary>查看人群</summary>${esc(r.population)}</details>` : "—"},
+      {label:"分析人群",html:r=>r.population ? `<details><summary>${esc(r.stratum_label || "查看人群")}</summary>${esc(r.population)}</details>` : "—"},
       {label:"图表",html:r=>`<button type="button" class="detail-button" data-frame-id="${esc(r.frame_id)}">看图</button>`}
     ], all, {onRow:showResult});
   }
@@ -185,7 +185,7 @@
       { label: "离散度", num: true, html: (r) => (r.spread != null ? `${esc(r.dispersion_type)} ${num(r.spread)}` : r.lower != null ? `${esc(r.dispersion_type)} ${num(r.lower)}, ${num(r.upper)}` : "—") },
       { label: "单位", key: "unit" },
       { label: "终点原文", html: (r) => `<details><summary>查看原文</summary>${esc(r.title)}${r.class_title ? `<br>${esc(r.class_title)}` : ""}<br>${esc(r.timeframe)}</details>` },
-      { label: "分析人群", html: (r) => r.population ? `<details><summary>查看人群</summary>${esc(r.population)}</details>` : "—" },
+      { label: "分析人群", html: (r) => r.population ? `<details><summary>${esc(r.stratum_label || "查看人群")}</summary>${esc(r.population)}</details>` : "—" },
       { label: "依据", html: (r) => `${r.source_kind === "publication" ? src(r.url, "论文") + " " : ""}${tag(r.status || "registry")}` },
     ], rows, { rowClass: (r) => (r.is_own ? "own" : ""), onRow:showResult });
     selectLongitudinal();

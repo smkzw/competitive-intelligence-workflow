@@ -135,7 +135,7 @@ uv run ciw audit --workspace <你的工作区目录>/crswnp -n 40               
 
 ### T4 · 论文结果补齐（M5）
 - **对象**：CT.gov 上没有结果、但已经发表的关键 II/III 期试验。中国企业的 III 期大多属于这一类。
-- **检索**：用 Europe PMC REST，查询式为 `query=EXT_ID:NCTxxxx OR "CTRxxxx"`，取开放全文或摘要。
+- **检索**：用Europe PMC正式REST按登记号查询；失败时补查官方PubMed ESearch/EFetch，保留原始XML和XPath。只有摘要字面登记号可绑定，失败、空查询和未抽取分别记录，不能以检索命中充当结果。
 - **抽取**：用 `PublicationResultItem`（schema 已有）做交叉核对。结果进入 B 时标 `kind="publication"`，并显示核对标签。
 - **冲突**：论文和登记的数值不一致时两条都保留，不合并。
 

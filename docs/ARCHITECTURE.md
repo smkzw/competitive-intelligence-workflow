@@ -172,3 +172,9 @@ DesignTopicKind共用lookup/treatment_duration/eligibility_threshold/endpoint_de
 D21普通DGX/glm临时替代CMS核对，DeepSeek主抽取不变；候选采用abb167a的配置与缓存合同。AB模型切换由推理网关负责，等待7200秒，不调用管理接口或重发健康请求。
 
 D22：用户确认CMS恢复并要求切回，当前核对恢复cms-smk/glm-5.3-flash，DeepSeek抽取不变；实际无临床内容连通请求返回同名模型并正常结束。原D21运行结果和缓存不改标，已发健康请求不强制中断。
+
+### 共同测量轴
+
+既有临床family负责相关性，不能代替数值条件。normalize.comparison_axes按来源版本、研究及唯一测量定义建立局部上下文；verify.comparison_axes仅复用原有两角色核对明确分析集/基线/期别/估计策略，保存逐成员原字段引文及人群标签。确定性守卫保留统计形式、数值方向、阈值、单位维度和期别差异。精确单位别名不换算数值；未知分析集不由可用数据或N猜测。
+
+analyze.comparison_axes把已核对的测量轴用于同一临床问题的数值图及历时图，时间点/区间仍精确分面，各研究/序列/人群保持独立。原值、N、来源、原单位及原定义完整留在对应表与详情，不进行合并估计、排名或跨试验相减。模型内容键按来源上下文/Schema/指令，成功任务及待核项可恢复，原source-index与family缓存不失效；A/C只复用已保存映射。发布物携带comparison_axes，旧版缺省兼容。

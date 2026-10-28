@@ -15,12 +15,9 @@ from ciw.analyze.common import pct, product_label, role_label
 from ciw.analyze.shared_cohort import collapse_shared
 from ciw.config import IndicationConfig, normalize_name
 from ciw.models import OutcomeResult, Product, SafetySummary, Trial
-from ciw.normalize.comparison_context import context_display_label, endpoint_context
+from ciw.normalize.comparison_context import _cfb, _pct, _unit_key, context_display_label, endpoint_context
 from ciw.normalize.semantics import MEASURE_LABEL_ZH
 
-_CFB = re.compile(
-    r"change from baseline|change in|percent(age)? change|reduction from baseline|improvement from baseline", re.I
-)
 _COMPUTABLE = {"ls_mean", "mean", "proportion"}
 _RATIO = re.compile(r"ratio", re.I)
 TYPE_ZH = {
@@ -31,22 +28,6 @@ TYPE_ZH = {
 }
 
 
-_PCT_CHANGE = re.compile(r"percent(age)? change|% change|percent reduction", re.I)
-
-
-def _cfb(r: OutcomeResult) -> bool:
-    return bool(_CFB.search(r.title + (" " + r.description if r.kind == "publication" else "")))
-
-
-def _pct(r: OutcomeResult) -> bool:
-    """较基线百分比变化与绝对变化是不同估计量，不能同轴。"""
-    return bool(_PCT_CHANGE.search(r.title + " " + r.unit + (" " + r.description if r.kind == "publication" else "")))
-
-
-def _unit_key(unit: str) -> str:
-    text = " ".join(unit.split())
-    # Case of physical symbols can change the unit (M versus m); only prose labels fold case.
-    return text.casefold() if text.casefold() in {"score on a scale", "score", "points", "point", "percent"} else text
 
 
 def _label(base: str, cfb: bool, pct: bool, kind: str) -> str:

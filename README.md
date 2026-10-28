@@ -1,6 +1,6 @@
 # ciw · 竞品调研子系统（v2）
 
-当前已按用户要求暂停。续接先读 [STATUS](docs/STATUS.md) 与 [最新交接](docs/handoff/PAUSE_20261028_D22.md)，不要重跑下面的首次安装示例。
+用户已解除暂停，正在持续构建；整体交付仍以当前状态为准。续接先读 [STATUS](docs/STATUS.md) 与 [最新交接](docs/handoff/PAUSE_20261028_D22.md)，不要重跑下面的首次安装示例。
 
 医学经理工作台“证据调研与方案设计”的竞品事实底座。
 
@@ -25,6 +25,7 @@ uv run ciw capture nmpa indications/crswnp.yaml --space <ego TaskSpace ID> --res
 uv run ciw capture docs indications/crswnp.yaml --space <ego TaskSpace ID> --url <公开文章HTTPS地址> --kind company
 uv run ciw run indications/crswnp.yaml --offline        # 只用工作区里已有的原件重跑
 uv run ciw run indications/crswnp.yaml --with-models    # 启用异构模型交叉核对（需要 DGX key）
+uv run ciw run indications/crswnp.yaml --offline --with-models --report B  # 登记原件离线复用；模型在线核对B，保留已有门户
 ```
 
 采集与运行时使用同一个 `--workspace`。公众号原文使用 `--kind wechat`，发布者必须匹配适应症配置中的账号。

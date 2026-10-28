@@ -25,6 +25,7 @@ def _parser() -> argparse.ArgumentParser:
     r.add_argument("--offline", action="store_true", help="只读工作区 CAS，不访问网络")
     r.add_argument("--with-models", action="store_true", help="对非结构化来源启用异构模型交叉核对")
     r.add_argument("--llm-config", help="模型角色配置（默认包内 data/llm.yaml）")
+    r.add_argument("--report", choices=list("ABC"), help="只深入生成所选类型，保留已有门户；默认全部")
 
     research = sub.add_parser("research", help="输入适应症自动检索并生成报告")
     research.add_argument("indication")
@@ -109,6 +110,7 @@ def _run_command(a) -> int:
         offline=a.offline,
         with_models=a.with_models,
         llm_config=a.llm_config,
+        report=a.report,
     )
     print(
         json.dumps(

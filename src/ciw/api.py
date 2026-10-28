@@ -19,6 +19,7 @@ def run_indication(
     offline: bool = False,
     with_models: bool = False,
     llm_config: str | Path | None = None,
+    report: str | None = None,
     log=print,
 ) -> RunResult:
     cfg = load_indication(config_path)
@@ -26,7 +27,12 @@ def run_indication(
     roles = None
     if with_models:
         roles = {k: CachedBackend(v, ws) for k, v in load_roles(llm_config).items()}
-    return run(cfg, ws, offline=offline, roles=roles, log=log)
+    selected = None
+    if report is not None:
+        old = current_release(workspace)
+        old_reports = old[0].get("rendered_reports", []) if old and old[0]["indication"]["slug"] == cfg.slug else []
+        selected = sorted({report, *old_reports})
+    return run(cfg, ws, offline=offline, roles=roles, log=log, report_scope=report, render_reports=selected)
 
 
 def current_release(workspace: str | Path) -> tuple[dict[str, Any], Path] | None:

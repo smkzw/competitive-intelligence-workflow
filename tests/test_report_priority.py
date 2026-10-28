@@ -180,3 +180,23 @@ def test_recording_same_source_returns_the_original_acquisition_metadata(ws):
     again = ws.record_source(kind="ctgov", url="https://example.test", data=b"same", ext="json", title="changed")
     assert again == first
     assert ws.sources() == [first]
+
+
+def test_advanced_yaml_cli_report_focus_skips_a_and_preserves_completed_b_when_adding_c(seeded_ws, monkeypatch):
+    from pathlib import Path
+
+    from ciw.cli import main
+
+    config = Path(__file__).resolve().parents[1] / "indications/crswnp.yaml"
+    def unexpected(*args, **kwargs):
+        raise AssertionError("focused report ran A enrichment")
+    monkeypatch.setattr("ciw.pipeline.enrich_attributes", unexpected)
+    args = ["run", str(config), "--workspace", str(seeded_ws.root), "--offline", "--report"]
+    assert main([*args, "B"]) == 0
+    first = seeded_ws.current_release_dir()
+    assert load_release(first)["rendered_reports"] == ["B"]
+    old = (first / "site/B/data.js").read_bytes()
+    monkeypatch.setattr("ciw.pipeline._add_publications", unexpected)
+    assert main([*args, "C"]) == 0
+    assert load_release(seeded_ws.current_release_dir())["rendered_reports"] == ["B", "C"]
+    assert (first / "site/B/data.js").read_bytes() == old

@@ -46,3 +46,25 @@ def context_display_label(result: OutcomeResult) -> str:
     if result.subgroup:
         labels.append("条件人群")
     return " · ".join(labels) or "原文定义"
+
+
+_CFB = re.compile(
+    r"change from baseline|change in|percent(age)? change|reduction from baseline|improvement from baseline", re.I
+)
+
+_PCT_CHANGE = re.compile(r"percent(age)? change|% change|percent reduction", re.I)
+
+
+def _cfb(r: OutcomeResult) -> bool:
+    return bool(_CFB.search(r.title + (" " + r.description if r.kind == "publication" else "")))
+
+
+def _pct(r: OutcomeResult) -> bool:
+    """较基线百分比变化与绝对变化是不同估计量，不能同轴。"""
+    return bool(_PCT_CHANGE.search(r.title + " " + r.unit + (" " + r.description if r.kind == "publication" else "")))
+
+
+def _unit_key(unit: str) -> str:
+    text = " ".join(unit.split())
+    # Case of physical symbols can change the unit (M versus m); only prose labels fold case.
+    return text.casefold() if text.casefold() in {"score on a scale", "score", "points", "point", "percent"} else text

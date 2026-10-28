@@ -27,6 +27,8 @@
     "rendered_reports": {"type": "array", "uniqueItems": true, "items": {"enum": ["A", "B", "C"]}},
     "presentation_digest": {"type": "string"},
     "clinical_concepts": {"type": "array", "items": {"type": "object", "required": ["id", "label", "patterns"]}},
+    "comparison_axes": {"type": "object", "required": ["schema", "groups"],
+      "properties": {"schema": {"type": "string"}, "groups": {"type": "array"}}},
     "clinical_families": {"type": "object", "required": ["schema", "groups"],
       "properties": {"schema": {"type": "string"}, "groups": {"type": "array"}}}
   }

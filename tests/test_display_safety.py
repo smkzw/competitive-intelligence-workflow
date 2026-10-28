@@ -197,12 +197,15 @@ def test_result_context_switch_updates_chart_and_tables_together():
 const fs=require('fs'),vm=require('vm');
 const elements=new Proxy({}, {get:(all,id)=>all[id]||(all[id]={id,value:'',checked:false,style:{},
  querySelectorAll:()=>[],addEventListener(){}})});
-const row=v=>({result_id:'r'+v,value:v,role:'experimental',acronym:'Trial',group_title:'Drug',product_label:'Drug'});
+const row=v=>({result_id:'r'+v,value:v,role:'experimental',acronym:'Trial',group_title:'Drug',product_label:'Drug',
+ stratum_label:v===25?'无近期输血':'近期输血'});
 const frames=[{frame_id:'first',trial_ids:['one'],title:'First definition',population:'All participants',
  rows:[row(25)],comparisons:[],source_statistics:[{value:10.3,ci_lower:5.7,ci_upper:14.9,
  param_type:'Adjusted Difference',group_labels:['A','B'],acronym:'Trial',url:'https://example.test'}]},
  {frame_id:'second',trial_ids:['two'],title:'Other definition',
- population:'Responders',rows:[row(10)],comparisons:[]}];
+ population:'Responders',rows:[row(10)],comparisons:[]},
+ {frame_id:'shared',trial_ids:['one','two'],title:'Aligned measurement with source-specific strata',
+ rows:[row(25),row(10)],comparisons:[]}];
 const q={question_id:'q',label:'临床缓解',time_label:'第52周',units:['%'],measure_label:'比例',
  trial_ids:['one','two'],rows:[row(25),row(10)],comparisons:[],frames};
 const plots={},tables={},tableOptions={},drawers=[];
@@ -223,17 +226,20 @@ tableOptions['row-table'].onRow(tables['row-table'][0]);
 elements['observation-search'].value='bendamustine–rituximab';
 elements['observation-detail'].open=true;elements['observation-detail'].ontoggle?.();
 elements['observation-prev'].onclick();
-process.stdout.write(JSON.stringify([first,{...read(),drawers,
- found:tables['observation-table'].map(r=>r.result_id)}]));
+const second={...read(),drawers,found:tables['observation-table'].map(r=>r.result_id)};
+elements['frame-select'].value='shared';elements['frame-select'].onchange();
+process.stdout.write(JSON.stringify([first,second,{...read(),labels:plots['value-chart'].yAxis.data}]));
 """
     result = subprocess.run(["node", "-e", script, str(asset)], capture_output=True, text=True, check=True)
-    first, second = json.loads(result.stdout)
+    first, second, shared = json.loads(result.stdout)
     assert first["values"] == first["table"] == [25]
     assert second["values"] == second["table"] == [10]
     assert "Responders" in second["context"] and "All participants" in first["context"]
     assert first["rawValues"] == [10.3] and not first["rawHidden"] and second["rawHidden"]
     assert "Source 25" in second["drawers"][0] and "Source 10" in second["drawers"][1]
     assert second["found"] == ["r25"]
+    assert shared["values"] == shared["table"] == [25, 10]
+    assert "无近期输血" in shared["labels"][0] and "近期输血" in shared["labels"][1]
 
 
 def test_numeric_search_does_not_match_other_weeks_and_tolerates_source_punctuation():
