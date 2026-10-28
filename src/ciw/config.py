@@ -43,12 +43,15 @@ class ConceptCfg(_Cfg):
     exclude: list[str] = Field(default_factory=list)
     direction: Literal["lower_better", "higher_better", "none"] = "none"
     domain: Literal["efficacy", "pd", "other"] = "efficacy"
+    source_definition: str | None = None
 
     @cached_property
     def _rx(self) -> tuple[list[re.Pattern[str]], list[re.Pattern[str]]]:
         return ([re.compile(p, re.I) for p in self.patterns], [re.compile(p, re.I) for p in self.exclude])
 
-    def matches(self, text: str) -> bool:
+    def matches(self, text: str, definition: str = "") -> bool:
+        if self.source_definition is not None and self.source_definition != definition:
+            return False
         inc, exc = self._rx
         return any(r.search(text) for r in inc) and not any(r.search(text) for r in exc)
 

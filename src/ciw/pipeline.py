@@ -15,7 +15,7 @@ from typing import Any
 from ciw.analyze.design import build_design
 from ciw.analyze.landscape import build_landscape
 from ciw.analyze.results import build_results, build_safety
-from ciw.config import IndicationConfig
+from ciw.config import ConceptCfg, IndicationConfig
 from ciw.extract.ctgov import extract_results, extract_safety, extract_trial
 from ciw.models import OutcomeResult, Product, SafetySummary, Source, Trial
 from ciw.normalize.products import ProductResolver, is_unclassified_candidate
@@ -75,6 +75,7 @@ def run(
 ) -> RunResult:
     if report_scope not in {None, "A", "B", "C"}:
         raise ValueError("未知报告类型")
+    cfg = cfg.model_copy(deep=True)
     selected = render_reports if render_reports is not None else list("ABC")
     if any(r not in {"A", "B", "C"} for r in selected):
         raise ValueError("未知报告类型")
@@ -113,6 +114,9 @@ def run(
         log("[research] publications")
         _add_publications(cfg, ws, resolver, trials, results, roles, offline, review_queue, coverage)
 
+    from ciw.verify.endpoint_index import enrich_endpoint_index
+
+    review_queue.extend(enrich_endpoint_index(ws, cfg, results, roles if report_scope in {None, "B"} else None, log))
     body = _build_body(cfg, ws, products, trials, results, safety, events, review_queue, unclassified, stats, coverage)
     from ciw.render.site import presentation_digest
 
@@ -138,6 +142,10 @@ def _reuse_completed(cfg, ws, products, trials, results, coverage, scope):
     old = load_release(previous)
     if old["indication"]["slug"] != cfg.slug:
         return
+    for item in old.get("clinical_concepts", []):
+        concept = ConceptCfg.model_validate(item)
+        if concept.source_definition is not None and not any(c.id == concept.id for c in cfg.concepts):
+            cfg.concepts.append(concept)
     source_ids = {entry.locator.source_id for t in trials.values() for entry in (t, *t.registrations)}
     for item in old["products"]:
         prior = Product.model_validate(item)
@@ -333,6 +341,7 @@ def _build_body(cfg, ws, products, trials, results, safety, events, review_queue
         "b": b,
         "c": c,
         "review_queue": review_queue,
+        "clinical_concepts": [c.model_dump() for c in cfg.concepts if c.source_definition is not None],
         "stats": stats,
     }
     return body

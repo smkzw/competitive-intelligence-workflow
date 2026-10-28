@@ -169,7 +169,7 @@ def extract_results(
     for oi, om in enumerate(measures):
         stats["outcomes"] += 1
         title = om.get("title", "")
-        domain, concept = classify(title, cfg)
+        domain, concept = classify(title, cfg, om.get("description", ""))
         kind = measure_kind(om.get("paramType", ""), om.get("unitOfMeasure", ""))
         group_meta = {}
         for g in om.get("groups", []):
@@ -400,7 +400,7 @@ def _planned_outcomes(p, cfg) -> list[PlannedOutcome]:
                     title=o.get("measure", ""),
                     timeframe=o.get("timeFrame", ""),
                     description=o.get("description", ""),
-                    concept_id=concept_of(o.get("measure", ""), cfg),
+                    concept_id=concept_of(o.get("measure", ""), cfg, o.get("description", "")),
                 )
             )
     return outcomes
