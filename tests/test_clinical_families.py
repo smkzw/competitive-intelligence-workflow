@@ -177,3 +177,59 @@ def test_structural_identity_keeps_punctuation_and_explicit_version_aliases():
         ["Short Form Health Survey Version 2 (SF-36) Score", "Short Form Health Survey (SF-36 V2) Score"],
     ]:
         assert _structural_compatibility([{"title": title} for title in titles]) == (True, "")
+
+
+def test_failed_review_batch_reuses_completed_extraction_and_other_batches(cfg, ws):
+    from ciw.config import ConceptCfg
+    from ciw.verify.llm import CachedBackend
+
+    cfg, seed, _ = inputs(cfg)
+    rows = []
+    for i in range(24):
+        row = seed[i % 2].model_copy(deep=True)
+        row.result_id, row.concept_id = f"r{i}", f"source-{i:02}"
+        rows.append(row)
+    cfg.concepts = [ConceptCfg(id=r.concept_id, label="临床缓解", patterns=[re.escape(r.title)],
+                              source_definition=r.description, origin="source_index") for r in rows]
+    groups = [group_for(rows[i:i + 2]) for i in range(0, len(rows), 2)]
+    calls = {"extract": 0, "review": 0}
+    seen = []
+
+    def extract(*_):
+        calls["extract"] += 1
+        return json.dumps({"items": groups})
+
+    def review(system, user):
+        calls["review"] += 1
+        source = user.split("原文：\n<<<\n", 1)[1].split("\n>>>", 1)[0]
+        seen.append(source)
+        assert source.count("Concept:") <= 10
+        if calls["review"] == 2:
+            raise TimeoutError("synthetic upstream timeout")
+        candidates = json.JSONDecoder().raw_decode(user.split("待核候选（仅供查错，不是来源）：\n", 1)[1])[0]
+        return json.dumps({"items": candidates})
+
+    roles = {"extractor_a": CachedBackend(FakeBackend("deepseek", "a", extract), ws),
+             "verifier": CachedBackend(FakeBackend("glm", "b", review), ws)}
+    partial, issues = enrich_endpoint_families(ws, cfg, rows, roles)
+    assert len(partial["groups"]) == 7 and partial["status"] == "partial"
+    assert partial["checked_catalog"] is None
+    assert any(i["kind"] == "endpoint_family_batch_failed" for i in issues)
+    complete, issues = enrich_endpoint_families(ws, cfg, rows, roles)
+    assert not issues and len(complete["groups"]) == 12
+    assert calls == {"extract": 1, "review": 4}
+    assert {cid for text in seen for cid in re.findall(r"Concept:(\S+)", text)} == {r.concept_id for r in rows}
+
+
+def test_review_batches_keep_whole_proposed_groups_and_cover_primary_omissions(cfg):
+    from ciw.verify.crosscheck import ExtractionTask
+    from ciw.verify.endpoint_families import ClinicalFamilyItem, _review_batches
+
+    catalog = {str(i): dict(title=f"Endpoint {i}", definition="Source") for i in range(25)}
+    task = ExtractionTask("t", "s", "full", "group", ClinicalFamilyItem, (), ())
+    candidate = dict(member_ids=[str(i) for i in range(12)])
+    batches = list(_review_batches(task, [candidate], catalog))
+    assert batches[0][1] == [candidate]  # a proposed family is never silently split
+    texts = [batch.source_text for batch, _ in batches]
+    assert {cid for text in texts for cid in re.findall(r"Concept:(\S+)", text)} == set(catalog)
+    assert sum(text.count("Concept:") for text in texts) == 25

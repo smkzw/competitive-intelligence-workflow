@@ -5,10 +5,17 @@ import hashlib
 import json
 import re
 from collections import Counter
+from dataclasses import replace
 
 from pydantic import BaseModel, Field
 
-from ciw.verify.crosscheck import CrosscheckFailed, ExtractionTask, crosscheck, task_id_for
+from ciw.verify.crosscheck import (
+    CrosscheckFailed,
+    ExtractionTask,
+    extract_candidates,
+    review_candidates,
+    task_id_for,
+)
 from ciw.verify.endpoint_index import _check
 
 SCHEMA = "clinical-question-families-v1"
@@ -126,6 +133,38 @@ def _accepted(checked):
     return accepted, issues
 
 
+def _review_batches(task, candidates, catalog):
+    batches, items, members = [], [], set()
+    for candidate in candidates:
+        proposed = set(candidate["member_ids"]) & set(catalog)
+        if items and len(members | proposed) > 10:
+            batches.append((items, members))
+            items, members = [], set()
+        items.append(candidate)
+        members.update(proposed)
+    if items:
+        batches.append((items, members))
+    missing = sorted(set(catalog) - {cid for _, members in batches for cid in members})
+    batches.extend(([], set(missing[i:i + 10])) for i in range(0, len(missing), 10))
+    for items, members in batches:
+        subset = {cid: catalog[cid] for cid in sorted(members)}
+        text = "\n\n".join(f"Concept:{cid}\nTitle:{v['title']}\nDefinition:{v['definition']}"
+                           for cid, v in subset.items())
+        yield replace(task, source_text=text, item_check=lambda it, subset=subset: _check_group(it, subset)), items
+
+
+def _crosscheck_batches(task, roles, catalog):
+    candidates, extract_call = extract_candidates(task, roles)
+    checked, failures = [], []
+    for index, (batch, items) in enumerate(_review_batches(task, candidates, catalog)):
+        try:
+            checked.extend(review_candidates(batch, roles["verifier"], items, extract_call))
+        except CrosscheckFailed as exc:
+            failures.append(dict(kind="endpoint_family_batch_failed", ref=index,
+                                 note=str(exc), calls=exc.calls))
+    return checked, failures
+
+
 def enrich_endpoint_families(ws, cfg, results, roles=None, *, previous=None):
     catalog = _catalog(cfg, results)
     hashes = {cid: hashlib.sha256(value["material"].encode()).hexdigest() for cid, value in catalog.items()}
@@ -146,12 +185,13 @@ def enrich_endpoint_families(ws, cfg, results, roles=None, *, previous=None):
                           ("family_label", "member_ids", "member_quotes"),
                           item_check=lambda it: _check_group(it, catalog))
     try:
-        checked = crosscheck(task, roles)
+        checked, batch_issues = _crosscheck_batches(task, roles, catalog)
     except CrosscheckFailed as exc:
         snapshot.update(status="failed", calls=exc.calls)
         ws.write_stage("research-endpoint-families", snapshot)
         return snapshot, [dict(kind="endpoint_family_failed", ref=sorted(catalog), note=str(exc), calls=exc.calls)]
     accepted, issues = _accepted(checked)
+    issues.extend(batch_issues)
     used = {cid for g in accepted for cid in g["member_ids"]}
     snapshot["groups"] = accepted + [g for g in groups if not used.intersection(g["member_ids"])]
     issues.extend(dict(kind="endpoint_family_needs_review", ref=c.item["member_ids"], note=c.note)
@@ -159,7 +199,7 @@ def enrich_endpoint_families(ws, cfg, results, roles=None, *, previous=None):
     covered = {cid for g in snapshot["groups"] for cid in g["member_ids"]}
     if missing := sorted(set(catalog) - covered):
         issues.append(dict(kind="endpoint_family_missing", ref=missing, note="原始临床问题保留，语义分组尚未覆盖"))
-    snapshot.update(checked_catalog=digest, status="partial" if issues else "verified")
+    snapshot.update(checked_catalog=None if batch_issues else digest, status="partial" if issues else "verified")
     for c in checked:
         key = hashlib.sha256(json.dumps(c.item, sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:24]
         ws.save_verification("family:" + key, c.status, dict(item=c.item, calls=c.calls, review_note=c.note))

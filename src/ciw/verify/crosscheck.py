@@ -231,15 +231,27 @@ def _repair_review(task, backend, b_by):
     return [call]
 
 
-def crosscheck(task: ExtractionTask, roles: dict[str, Backend]) -> list[CheckedItem]:
+def extract_candidates(task: ExtractionTask, roles: dict[str, Backend]):
     check_heterogeneous(roles)
-    a_items, a_call = _extract(roles["extractor_a"], task)
-    if a_call.get("error"):
-        raise CrosscheckFailed("主抽取失败：" + a_call["error"], calls=[a_call])
-    b_items, b_call = _extract(roles["verifier"], task, a_items)
+    items, call = _extract(roles["extractor_a"], task)
+    if call.get("error"):
+        raise CrosscheckFailed("主抽取失败：" + call["error"], calls=[call])
+    return items, call
+
+
+def crosscheck(task: ExtractionTask, roles: dict[str, Backend]) -> list[CheckedItem]:
+    a_items, a_call = extract_candidates(task, roles)
+    return review_candidates(task, roles["verifier"], a_items, a_call)
+
+
+def review_candidates(task, verifier, a_items, a_call):
+    """Review retained candidates with the same source guards and bounded repairs."""
+    if verifier.family == a_call["family"]:
+        raise ValueError("主抽取和来源核对必须来自两个不同模型家族")
+    b_items, b_call = _extract(verifier, task, a_items)
     format_calls = []
     if b_call.get("error") in {"JSONDecodeError", "ValueError", "KeyError"}:
-        b_items, correction = _extract(roles["verifier"], task, a_items,
+        b_items, correction = _extract(verifier, task, a_items,
                                       [{"error": "上次核对输出JSON格式或items结构无效，请返回合法JSON，正确转义引号"}])
         correction["role"] = "verify_format_repair"
         format_calls.append(correction)
@@ -249,7 +261,7 @@ def crosscheck(task: ExtractionTask, roles: dict[str, Backend]) -> list[CheckedI
     elif b_call.get("error"):
         raise CrosscheckFailed("来源核对失败：" + b_call["error"], calls=[a_call, b_call])
     a_by, b_by = _checked_items(task, a_items), _checked_items(task, b_items)
-    repairs = [] if format_calls else _repair_review(task, roles["verifier"], b_by)
+    repairs = [] if format_calls else _repair_review(task, verifier, b_by)
     calls = [a_call, b_call, *format_calls, *repairs]
     results = []
     for key in sorted(set(a_by) | set(b_by)):
