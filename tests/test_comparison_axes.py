@@ -191,6 +191,10 @@ def test_named_analysis_aliases_match_without_turning_modified_itt_or_pp_into_it
     item = item_for([results[0], results[2]], trials)
     item["analysis_set"] = "ITT"
     assert not check_axis(item, context_catalog(results, trials, families, cfg.concepts))[0]
+    results[0].population = "Modified ITT population."
+    item = item_for([results[0], results[2]], trials)
+    item["analysis_set"] = "ITT"
+    assert not check_axis(item, context_catalog(results, trials, families, cfg.concepts))[0]
     results[0].population = "Per protocol population."
     item = item_for([results[0], results[2]], trials)
     item["analysis_set"] = "ITT"

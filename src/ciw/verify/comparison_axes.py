@@ -16,7 +16,7 @@ from ciw.verify.quote import normalize
 
 SCHEMA = "source-comparison-axes-v1"
 _ANALYSIS_SETS = re.compile(
-    r"(?P<mitt>\bmITT\b|\bmodified\s+intention[ -]to[ -]treat\b)|"
+    r"(?P<mitt>\bmITT\b|\bmodified\s+(?:ITT|intent(?:ion)?[ -]to[ -]treat)\b)|"
     r"(?P<itt>\bITT\b|\bintent(?:ion)?[ -]to[ -]treat\b)|"
     r"(?P<fas>\bFAS\b|\bfull\s+analysis\s+set\b)|"
     r"(?P<pp>\bPP\b|\bper[ -]protocol\b)|"
