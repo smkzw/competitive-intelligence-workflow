@@ -3,6 +3,26 @@ import subprocess
 from pathlib import Path
 
 
+def test_explicit_embedded_reader_deduplicates_navigation_but_preserves_cutoff():
+    asset = Path(__file__).resolve().parents[1] / "src/ciw/render/static/common.js"
+    script = r"""
+const fs=require('fs'),vm=require('vm'),result=[];
+for(const embedded of [false,true]){
+ const out=[],meta={textContent:'数据截至 2026-10-27'},status={},heading={
+ querySelector:()=>status,insertBefore:(node,before)=>out.push([node.textContent,before===status])};
+ const window={CIW:{},name:embedded?'ciw-report':'',self:{},top:{},addEventListener(){}};
+ const document={getElementById:()=>null,addEventListener(){},
+ querySelector:sel=>sel==='.page-heading'?heading:meta,
+ documentElement:{classList:{add:name=>out.push(name)}}};
+ vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{window,document,URL});result.push(out);
+}process.stdout.write(JSON.stringify(result));
+"""
+    run = subprocess.run(["node", "-e", script, str(asset)], capture_output=True, text=True, check=True)
+    standalone, embedded = json.loads(run.stdout)
+    assert standalone == []
+    assert embedded == [["数据截至 2026-10-27", True], "embedded-reading"]
+
+
 def test_chart_density_resizes_before_render_and_keeps_all_filtered_data_reachable():
     asset = Path(__file__).resolve().parents[1] / "src/ciw/render/static/common.js"
     script = r"""

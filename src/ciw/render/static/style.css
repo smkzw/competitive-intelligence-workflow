@@ -27,6 +27,8 @@ button,a,input,select,summary { accent-color:var(--brand); }
 .meta { color:var(--muted); white-space:nowrap; }
 main { padding:12px 16px 20px; width:100%; margin:0 auto; }
 .page-heading { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:10px; }
+.embedded-reading .top { display:none; }
+.embedded-reading .page-heading .meta { margin-left:auto; }
 h1 { font-size:28px; line-height:1.2; margin:0; color:var(--ink); letter-spacing:-.02em; }
 .source-status { max-width:72%; position:relative; }
 .source-status summary { justify-content:flex-end; color:var(--muted); }

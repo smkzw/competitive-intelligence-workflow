@@ -38,6 +38,15 @@
   };
   const OWN = "#A65000", PAL = ["#D46B08", "#008F8A", "#7B5CC7", "#B38A00", "#C4457C"];
 
+  // The host already provides indication and report navigation; keep cutoff beside the title.
+  if(window.name === "ciw-report" && window.self !== window.top) {
+    const heading = document.querySelector(".page-heading"), meta = document.querySelector(".top .meta");
+    if(heading && meta) {
+      heading.insertBefore(meta, heading.querySelector(".source-status"));
+      document.documentElement.classList.add("embedded-reading");
+    }
+  }
+
   function coverage() {
     const el = document.getElementById("coverage");
     if (!el) return;
