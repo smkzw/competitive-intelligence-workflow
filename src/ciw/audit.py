@@ -38,6 +38,14 @@ def _num(v: Any) -> float | None:
         return None
 
 
+def _source_document(ws, item):
+    raw = ws.read_source(item["source_id"])
+    if item["path"].startswith("xpath:"):
+        from ciw.sources.pubmed import parse_xml
+        return parse_xml(raw)
+    return json.loads(raw)
+
+
 def audit(ws: Workspace, n: int = 30, seed: int = 20261027) -> dict[str, Any]:
     d = ws.current_release_dir()
     if d is None:
@@ -95,7 +103,9 @@ def audit(ws: Workspace, n: int = 30, seed: int = 20261027) -> dict[str, Any]:
             ok = bool(e and c) and abs(it["value"] - (e["value"] - c["value"])) < 1e-6
             (checked if ok else errors).append({**it, "exp": None, "ctrl": None, "ok": ok, "context": ""})
             continue
-        doc = cache.get(it["source_id"]) or json.loads(ws.read_source(it["source_id"]))
+        doc = cache.get(it["source_id"])
+        if doc is None:
+            doc = _source_document(ws, it)
         cache[it["source_id"]] = doc
         if it.get("source_kind") == "publication":
             ok, context = _publication(it, doc, rel["results"])
@@ -146,7 +156,16 @@ def _publication(item, doc, results):
     result = next((r for r in results if r["result_id"] == item["result_id"]), None)
     if result is None or result["kind"] != "publication" or result["locator"]["source_id"] != item["source_id"]:
         return False, "论文结果身份不一致"
-    abstract = html.fragment_fromstring(follow(doc, item["path"]), create_parent="div").text_content()
+    if result["locator"]["path"] != item["path"]:
+        return False, "论文原文定位与结果不一致"
+    if item["path"].startswith("xpath:"):
+        from ciw.sources.pubmed import abstract_text
+        nodes = doc.xpath(item["path"].removeprefix("xpath:"))
+        if len(nodes) != 1 or nodes[0].tag != "Abstract":
+            return False, "论文摘要定位不唯一或无效"
+        abstract = abstract_text(nodes[0])
+    else:
+        abstract = html.fragment_fromstring(follow(doc, item["path"]), create_parent="div").text_content()
     if item["kind"] == "group_value":
         matches = [g for g in result["groups"] if g["value"] == item["value"] and g["n"] == item["n"]]
         numbers = [item["value"], item["n"]]

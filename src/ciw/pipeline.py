@@ -21,7 +21,7 @@ from ciw.models import OutcomeResult, Product, SafetySummary, Source, Trial
 from ciw.normalize.products import ProductResolver, is_unclassified_candidate
 from ciw.normalize.trials import deduplicate_trials
 from ciw.release import write_release
-from ciw.sources import captures, cde_registry, ctgov, europepmc
+from ciw.sources import captures, cde_registry, ctgov, europepmc, pubmed
 from ciw.sources.nmpa.registry import ingest as ingest_nmpa
 from ciw.store import Workspace, now_iso
 from ciw.verify.attributes import enrich_attributes
@@ -173,9 +173,9 @@ def _reuse_completed(cfg, ws, products, trials, results, coverage, scope):
         known = {s.source_id: s.kind for s in ws.sources()}
         for item in old["results"]:
             result = OutcomeResult.model_validate(item)
-            if result.trial_id in trials and known.get(result.locator.source_id) == "europepmc":
+            if result.trial_id in trials and known.get(result.locator.source_id) in {"europepmc", "pubmed"}:
                 results.append(result)
-        coverage.extend(c for c in old["coverage"] if c["source"] in {"europepmc", "publications"})
+        coverage.extend(c for c in old["coverage"] if c["source"] in {"europepmc", "pubmed", "publications"})
     return old
 
 
@@ -280,6 +280,15 @@ def _add_publications(cfg, ws, resolver, trials, results, roles, offline, review
         }
     )
     papers, paper_coverage = europepmc.discover(ws, paper_ids, offline=offline, reuse=reuse_sources)
+    failed = [f["registry_id"] for f in paper_coverage["failures"]]
+    if failed or any(s.kind == "pubmed" for s in ws.sources()):
+        _, fallback_coverage = pubmed.discover(ws, failed, offline=offline, reuse=reuse_sources)
+        fallback = pubmed.records(ws, set(paper_ids))
+        fallback_coverage.update(records=len(fallback), eligible=sum(not p["excluded_type"] for p in fallback))
+        coverage.append(fallback_coverage)
+        papers = pubmed.merge_records(ws, [*papers, *fallback])
+        paper_coverage.update(records=len(papers), eligible=sum(not p["excluded_type"] for p in papers),
+                              version_conflicts=sum(p["version_conflict"] for p in papers))
     paper_results, paper_issues = extract_publications(ws, cfg, papers, trials, resolver, roles)
     results.extend(paper_results)
     review_queue.extend(paper_issues)

@@ -21,6 +21,12 @@ _EXCLUDE = re.compile(
 )
 
 
+def excluded_publication(title, types):
+    excluded = {"review", "meta-analysis", "clinical trial protocol", "published erratum",
+                "retracted publication", "retraction of publication", "expression of concern"}
+    return any(str(t).casefold() in excluded for t in types) or bool(_EXCLUDE.search(title))
+
+
 def is_registry_id(text: str) -> bool:
     return bool(_ID.fullmatch(text))
 
@@ -131,9 +137,7 @@ def _records(ws: Workspace, wanted: set[str]) -> list[dict]:
                 continue  # A search hit/citation alone does not bind a publication to a trial.
             title = paper.get("title", "")
             types = paper.get("pubTypeList", {}).get("pubType", [])
-            excluded = paper.get("source") != "MED" or any(
-                str(t).casefold() in {"review", "meta-analysis", "clinical trial protocol"} for t in types
-            )
+            excluded = paper.get("source") != "MED" or excluded_publication(title, types)
             key = (paper.get("source"), paper.get("id"))
             version = stable_id("paper", title, text, types, paper.get("doi", ""))
             candidate = {

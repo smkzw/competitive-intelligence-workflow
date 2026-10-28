@@ -11,7 +11,7 @@ from pydantic import BaseModel, ConfigDict, Field
 ArmRole = Literal["experimental", "active_comparator", "placebo", "no_intervention", "other", "unknown"]
 Period = Literal["treatment", "run_in", "follow_up", "extension", "overall"]
 VerifyStatus = Literal["registry", "verified", "dual_agreed", "arbitrated", "needs_review", "rejected"]
-SourceKind = Literal["ctgov", "europepmc", "openfda", "cde", "nmpa", "company", "wechat"]
+SourceKind = Literal["ctgov", "europepmc", "pubmed", "openfda", "cde", "nmpa", "company", "wechat"]
 
 
 def stable_id(prefix: str, *parts: object) -> str:
@@ -36,7 +36,7 @@ class Source(Model):
 
 class Locator(Model):
     source_id: str
-    path: str = ""  # JSON 路径（结构化来源）
+    path: str = ""  # JSON 路径或明确的xpath:定位
     quote: str = ""  # 原文片段（非结构化来源）
 
 

@@ -104,10 +104,11 @@ def test_presentation_update_creates_new_release_without_modifying_old(cfg, seed
     assert seeded_ws.current_release_dir() == site.parent
 
 
-def test_later_design_keeps_adopted_paper_results_and_verified_attributes(cfg, seeded_ws, monkeypatch):
+@pytest.mark.parametrize("paper_kind", ["europepmc", "pubmed"])
+def test_later_design_keeps_adopted_paper_results_and_verified_attributes(cfg, seeded_ws, monkeypatch, paper_kind):
     from ciw.models import Locator, OutcomeResult
     source = seeded_ws.sources()[0]
-    paper = seeded_ws.record_source(kind="europepmc", url="https://example.test/paper", ext="txt", data=b"Value 8")
+    paper = seeded_ws.record_source(kind=paper_kind, url="https://example.test/paper", ext="txt", data=b"Value 8")
     def attributes(ws, products, *args, **kwargs):
         products["dupilumab"].target = "source-backed-test-target"
         products["dupilumab"].attribute_status = "verified"
