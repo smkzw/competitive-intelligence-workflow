@@ -191,6 +191,7 @@ def test_named_analysis_aliases_match_without_turning_modified_itt_or_pp_into_it
     item = item_for([results[0], results[2]], trials)
     item["analysis_set"] = "ITT"
     assert not check_axis(item, context_catalog(results, trials, families, cfg.concepts))[0]
+
     results[0].population = "Modified ITT population."
     item = item_for([results[0], results[2]], trials)
     item["analysis_set"] = "ITT"
@@ -199,4 +200,19 @@ def test_named_analysis_aliases_match_without_turning_modified_itt_or_pp_into_it
     item = item_for([results[0], results[2]], trials)
     item["analysis_set"] = "ITT"
     assert not check_axis(item, context_catalog(results, trials, families, cfg.concepts))[0]
+
+
+@pytest.mark.parametrize("alias", ["mITT", "m-ITT", "m ITT", "m–ITT", "modified-ITT", "modified (ITT)",
+                                    "modified intention-to-treat", "modified-intention-to-treat"])
+def test_modified_analysis_grammar_keeps_separator_variants_distinct_from_plain_itt(cfg, alias):
+    cfg, results, trials, families = inputs(cfg)
+    results[0].population = alias + " population."
+    results[2].population = "ITT population."
+    item = item_for([results[0], results[2]], trials)
+    item["analysis_set"] = "ITT"
+    assert not check_axis(item, context_catalog(results, trials, families, cfg.concepts))[0]
+    results[2].population = "modified intention to treat population."
+    item = item_for([results[0], results[2]], trials)
+    item["analysis_set"] = "mITT"
+    assert check_axis(item, context_catalog(results, trials, families, cfg.concepts))[0]
 

@@ -16,17 +16,18 @@ from ciw.verify.quote import normalize
 
 SCHEMA = "source-comparison-axes-v1"
 _ANALYSIS_SETS = re.compile(
-    r"(?P<mitt>\bmITT\b|\bmodified\s+(?:ITT|intent(?:ion)?[ -]to[ -]treat)\b)|"
-    r"(?P<itt>\bITT\b|\bintent(?:ion)?[ -]to[ -]treat\b)|"
-    r"(?P<fas>\bFAS\b|\bfull\s+analysis\s+set\b)|"
-    r"(?P<pp>\bPP\b|\bper[ -]protocol\b)|"
-    r"(?P<safety>\bSAF\b|\bsafety\s+(?:analysis\s+)?(?:set|population)\b)|"
-    r"(?P<eas>\bEAS\b|\befficacy\s+analysis\s+set\b)|"
-    r"(?P<treated>\bas[ -]treated\b)", re.I)
+    r"\b(?:(?P<modifier>modified[\s-]+|m[\s-]*)(?:\(\s*)?)?(?:"
+    r"(?P<itt>ITT|intent(?:ion)?[ -]to[ -]treat)|"
+    r"(?P<fas>FAS|full\s+analysis\s+set)|"
+    r"(?P<pp>PP|per[ -]protocol)|"
+    r"(?P<safety>SAF|safety\s+(?:analysis\s+)?(?:set|population))|"
+    r"(?P<eas>EAS|efficacy\s+analysis\s+set)|"
+    r"(?P<treated>as[ -]treated))\b", re.I)
 
 
 def _analysis_tokens(text):
-    return {m.lastgroup for m in _ANALYSIS_SETS.finditer(normalize(text))}
+    return {("modified:" if m.group("modifier") else "") + m.lastgroup
+            for m in _ANALYSIS_SETS.finditer(normalize(text))}
 
 
 class ComparisonAxisItem(BaseModel):
