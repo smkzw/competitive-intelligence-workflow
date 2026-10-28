@@ -19,19 +19,26 @@ const opt=(n,inverse)=>({grid:{top:20,bottom:40},xAxis:{type:'value'},
  yAxis:{type:'category',data:Array.from({length:n},(_,i)=>'study'+i),inverse},
  series:[{type:'bar',data:Array.from({length:n},(_,i)=>i)}]});
 for(const [n,inverse] of [[20,true],[2,true],[20,false]])window.U.chart('plot',opt(n,inverse));
+window.innerHeight=730;window.U.chart('plot',opt(20,true));
 process.stdout.write(JSON.stringify(calls));
 """
     result = subprocess.run(["node", "-e", script, str(asset)], capture_output=True, text=True, check=True)
     calls = json.loads(result.stdout)
     assert calls[0] == ["init", "340px"]
-    assert [c for c in calls if c[0] == "resize"] == [["resize", "144px"], ["resize", "340px"]]
-    dense, sparse, restored = [c for c in calls if c[0] == "draw"]
+    assert [c for c in calls if c[0] == "resize"] == [
+        ["resize", "144px"], ["resize", "340px"], ["resize", "228px"]]
+    dense, sparse, restored, short = [c for c in calls if c[0] == "draw"]
     assert dense[2] == [f"study{i}" for i in range(20)]
     assert dense[3] == list(range(20))  # first zero and last study are retained, not truncated
     assert dense[4][0]["startValue"] == 0 and dense[4][0]["endValue"] == 9
     assert sparse[2:5] == [["study0", "study1"], [0, 1], None]
     assert restored[4][0]["startValue"] == 10 and restored[4][0]["endValue"] == 19
-    assert all(c[5] is True and c[6] == 16 for c in (dense, sparse, restored))
+    assert short[4][0]["startValue"] == 0 and short[4][0]["endValue"] == 5
+    assert all(c[5] is True and c[6] == 16 for c in (dense, sparse, restored, short))
+    for c in (dense, restored, short):
+        zoom = c[4][0]
+        assert zoom["zoomLock"] and not zoom["brushSelect"]
+        assert zoom["minValueSpan"] == zoom["maxValueSpan"] == zoom["endValue"] - zoom["startValue"]
 
 
 def test_production_links_and_highlight_use_safe_original_text():

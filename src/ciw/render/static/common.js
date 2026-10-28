@@ -113,7 +113,7 @@
     });
   }
 
-  function present(option, el) {
+  function present(option, el, zoom) {
     const label = {fontSize:16,color:"#404040"};
     for(const key of ["xAxis","yAxis"]) {
       if(!option[key]) continue;
@@ -130,17 +130,22 @@
     option.tooltip = {confine:true,textStyle:label,...option.tooltip};
     option.color = PAL;
     const axis = option.yAxis;
+    const visibleRows = window.innerHeight < 640 ? 4 : window.innerHeight < 820 ? 6 : 10;
     if(axis?.type === "category" && axis.data.length) {
       const grid = Array.isArray(option.grid) ? option.grid[0] : option.grid;
       const inset = key => typeof grid?.[key] === "number" ? grid[key] : 40;
-      el.style.height = Math.max(144, Math.min(axis.data.length,10) * 28 + inset("top") + inset("bottom")) + "px";
+      el.style.height = Math.max(144, Math.min(axis.data.length,visibleRows) * 28 + inset("top") + inset("bottom")) + "px";
     }
-    if(axis?.type === "category" && axis.data.length > 10) {
-      const last = axis.data.length - 1;
+    if(axis?.type === "category" && axis.data.length > visibleRows) {
+      const lastStart = axis.data.length - visibleRows;
+      const start = Math.min(lastStart, Math.max(0, zoom?.startValue ?? (axis.inverse ? 0 : lastStart)));
       option.dataZoom = [{type:"slider",yAxisIndex:0,filterMode:"none",width:16,right:0,
-        startValue:axis.inverse ? 0 : last-9,endValue:axis.inverse ? 9 : last,
+        startValue:start,endValue:start+visibleRows-1,zoomLock:true,brushSelect:false,
+        minValueSpan:visibleRows-1,maxValueSpan:visibleRows-1,
         fillerColor:"rgba(255,153,0,.10)",borderColor:"#E7EBEE",handleStyle:{color:"#B85C00"},
         dataBackground:{lineStyle:{color:"#CED3D8"},areaStyle:{color:"#E7EBEE"}}}];
+    } else if(axis?.type === "category") {
+      delete option.dataZoom;
     }
     option.series = (option.series || []).map(s=>({...s,clip:true,label:{fontSize:16,...s.label}}));
     return option;
@@ -149,8 +154,9 @@
   function chart(id, option) {
     const el = document.getElementById(id);
     if (!el || !el.getClientRects().length) return null;
-    const prepared = present(option, el);
     const existing = echarts.getInstanceByDom(el);
+    const prepared = present(option, el, existing?.getOption?.().dataZoom?.[0]);
+    el._ciwOption = option;
     const c = existing || echarts.init(el);
     if (existing) c.resize();
     c.setOption(prepared, true);
@@ -160,7 +166,9 @@
     }
     return c;
   }
-  window.addEventListener("resize", () => document.querySelectorAll(".chart").forEach((el) => { const c = echarts.getInstanceByDom(el); if (c) c.resize(); }));
+  window.addEventListener("resize", () => document.querySelectorAll(".chart").forEach((el) => {
+    if(el._ciwOption) chart(el.id, el._ciwOption);
+  }));
 
   function options(sel, values, keep) {
     const el = document.querySelector(sel);

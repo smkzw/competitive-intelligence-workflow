@@ -95,6 +95,7 @@
     document.getElementById("frame-context").open = false;
     drawSourceStatistics(frame.source_statistics || []);
     const comps = frame.comparisons;
+    document.getElementById("comparison-details").hidden = !comps.length;
     const differences = comps.filter(c => c.family === "difference" && c.plot_value != null);
     const ratios = comps.filter(c => c.family === "ratio" && c.plot_value > 0);
     document.getElementById("comparison-plots").hidden = !differences.length && !ratios.length;
