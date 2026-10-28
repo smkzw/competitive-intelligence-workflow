@@ -87,7 +87,7 @@ def registry_config(plan, studies):
                 "path": f"$.protocolSection.armsInterventionsModule.interventions[{index}].name", "quote": name})
     slug = "research-" + hashlib.sha256(plan.name_en.casefold().encode()).hexdigest()[:12]
     concepts = [ConceptCfg(id=f"concept-{i}", label=t.label, patterns=[re.escape(x) for x in t.terms],
-        exclude=[re.escape(x) for x in t.exclude], direction=t.direction, provisional=True)
+        exclude=[re.escape(x) for x in t.exclude], direction=t.direction, provisional=True, origin="research_plan")
                 for i, t in enumerate(plan.concepts)]
     cfg = IndicationConfig(slug=slug, name_zh=plan.name_zh, name_en=plan.name_en,
         ctgov={"conditions": plan.conditions, "relevance_patterns": [re.escape(x) for x in plan.conditions]},
@@ -132,10 +132,19 @@ def _mark_planned_concepts(cfg, ws):
     record = ws.read_stage("research-query-plan") or {}
     for index, topic in enumerate(record.get("plan", {}).get("concepts", [])):
         for concept in cfg.concepts:
-            if (concept.id == f"concept-{index}" and concept.label == topic["label"]
-                    and concept.patterns == [re.escape(x) for x in topic["terms"]]
-                    and concept.exclude == [re.escape(x) for x in topic.get("exclude", [])]):
-                concept.provisional = True
+            if concept.id != f"concept-{index}":
+                continue
+            matches = (concept.label == topic["label"]
+                       and concept.patterns == [re.escape(x) for x in topic["terms"]]
+                       and concept.exclude == [re.escape(x) for x in topic.get("exclude", [])]
+                       and concept.direction == topic.get("direction", "none")
+                       and concept.domain == "efficacy" and concept.source_definition is None)
+            concept.provisional = matches
+            if matches:
+                concept.origin = "research_plan"
+            elif concept.origin == "research_plan":
+                concept.origin = "configured"
+
 
 
 def _research(indication, ws, *, question="", llm_config=None, log=print, report="A", reuse_research=False):

@@ -45,6 +45,7 @@ class ConceptCfg(_Cfg):
     domain: Literal["efficacy", "pd", "other"] = "efficacy"
     source_definition: str | None = None
     provisional: bool = False
+    origin: Literal["configured", "research_plan", "source_index"] = "configured"
 
     @cached_property
     def _rx(self) -> tuple[list[re.Pattern[str]], list[re.Pattern[str]]]:

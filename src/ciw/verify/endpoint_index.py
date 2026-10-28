@@ -88,6 +88,9 @@ def _clinical_label_supported(item, source):
         and not re.search(r"percent(?:age)? change|mean change", title, re.I))
     response = re.search(r"\b(?:response|responders?|remission|achiev\w*|attain\w*)\b", quote, re.I)
     clinical = response and re.search(r"clinical|histolog|histopatholog", quote, re.I)
+    if (is_biomarker_title(title) and re.search(r"\b(?:mean|median|change|geometric)\b", title, re.I)
+            and re.search("缓解|应答|响应|达标", item["label"]) and not attainment):
+        return False, "不能用定义中提及的另一个应答终点替代当前连续测量"
     if is_biomarker_title(title) and not (clinical or attainment):
         return False, "原文未支持将连续标志物测量提升为临床应答或缓解"
     if re.search("缓解", item["label"]) and not (re.search(r"\bremission\b", quote, re.I) or attainment):
@@ -170,7 +173,8 @@ def enrich_endpoint_index(ws, cfg, results, roles=None, log=lambda *_: None):
         cid = "source-endpoint-" + key[:24]
         if not any(c.id == cid for c in cfg.concepts):
             cfg.concepts.append(ConceptCfg(id=cid, label=item["label"], direction=item["direction"],
-                patterns=["^" + re.escape(descriptor["title"]) + "$"], source_definition=descriptor["definition"]))
+                patterns=["^" + re.escape(descriptor["title"]) + "$"], source_definition=descriptor["definition"],
+                origin="source_index"))
         for result in descriptor["results"]:
             result.domain, result.concept_id = classify(result.title, cfg, result.description)
     return issues

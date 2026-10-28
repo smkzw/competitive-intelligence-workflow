@@ -178,3 +178,27 @@ def test_a_pre_retrieval_generic_concept_does_not_preempt_a_checked_source_defin
     assert enrich_endpoint_index(ws, cfg, rows, roles) == []
     assert rows[0].concept_id != generic.id
     assert classify(rows[0].title, cfg, rows[0].description)[1] == rows[0].concept_id
+
+
+def test_a_separate_remission_sentence_cannot_relabel_a_continuous_measure(cfg, ws):
+    cfg = cfg.model_copy(deep=True)
+    rows = [result("Mean Change From Baseline in Peak Esophageal Eosinophil Counts",
+                   "Measured mean counts. Histologic remission is defined as ≤6 eos/hpf.")]
+    roles = roles_for(cfg, rows, label="组织学缓解≤6")
+    for role in roles.values():
+        payload = json.loads(role.responder.return_value)
+        payload["items"][0]["quote"] = rows[0].description
+        role.responder.return_value = json.dumps(payload)
+    issues = enrich_endpoint_index(ws, cfg, rows, roles)
+    assert rows[0].domain == "pd" and issues
+
+
+def test_current_manual_dictionary_wins_over_an_adopted_source_mapping(cfg, ws):
+    cfg = cfg.model_copy(deep=True)
+    rows = [result()]
+    enrich_endpoint_index(ws, cfg, rows, roles_for(cfg, rows))
+    derived = next(c for c in cfg.concepts if c.id == rows[0].concept_id)
+    assert derived.origin == "source_index"
+    manual = ConceptCfg(id="current-manual", label="用户当前核实的组织学定义", patterns=["Eosinophil Count"])
+    cfg.concepts.append(manual)
+    assert classify(rows[0].title, cfg, rows[0].description)[1] == manual.id

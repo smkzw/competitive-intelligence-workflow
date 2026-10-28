@@ -145,6 +145,7 @@ def _reuse_completed(cfg, ws, products, trials, results, coverage, scope):
     for item in old.get("clinical_concepts", []):
         concept = ConceptCfg.model_validate(item)
         if concept.source_definition is not None and not any(c.id == concept.id for c in cfg.concepts):
+            concept.origin, concept.provisional = "source_index", False
             cfg.concepts.append(concept)
     source_ids = {entry.locator.source_id for t in trials.values() for entry in (t, *t.registrations)}
     for item in old["products"]:

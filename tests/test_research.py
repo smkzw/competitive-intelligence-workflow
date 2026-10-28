@@ -80,3 +80,14 @@ def test_legacy_runtime_plan_is_identified_by_recorded_literal_content_not_id_gu
     cfg.concepts[0].provisional = False
     _mark_planned_concepts(cfg, ws)
     assert not cfg.concepts[0].provisional
+
+
+@pytest.mark.parametrize("field,value", [("direction", "lower_better"), ("domain", "pd")])
+def test_manual_plan_semantic_change_is_not_downgraded_to_a_provisional_plan(tmp_path, field, value):
+    from ciw.research import _mark_planned_concepts
+    ws = Workspace(tmp_path)
+    cfg, _ = registry_config(QueryPlan.model_validate(plan()), {"one": study(ws)})
+    ws.write_stage("research-query-plan", dict(plan=plan()))
+    setattr(cfg.concepts[0], field, value)
+    _mark_planned_concepts(cfg, ws)
+    assert not cfg.concepts[0].provisional and cfg.concepts[0].origin == "configured"
