@@ -32,6 +32,7 @@
 
   const studyLink = row => row.source_records?.length > 1
     ? row.source_records.map(s => src(s.url, s.acronym)).join(" · ") : src(row.url, row.acronym);
+  const studyMeta = row => `${row.phase ? esc(row.phase) + "期 · " : ""}${studyLink(row)}`;
   function showResult(row) {
     const observation = (B.observations || []).find(r => r.result_id === row.result_id);
     if(observation) showObservation(observation);
@@ -165,7 +166,7 @@
     });
 
     table(document.getElementById("comp-table"), [
-      { label: "药物 / 研究", key: "acronym", html: (c) => `<strong>${esc(c.product_label || c.exp_group)}</strong><br>${studyLink(c)}${c.phase ? " · " + esc(c.phase) + "期" : ""}` },
+      { label: "药物 / 研究", key: "acronym", html: (c) => `<strong>${esc(c.product_label || c.exp_group)}</strong><br>${studyMeta(c)}` },
       { label: "产品（试验组）", key: "product_label", html: (c) => `${c.is_own ? '<span class="own-tag">本品 </span>' : ""}${esc(c.product_label)}<br><span class="hint">${esc(c.exp_group)}${c.n_exp != null ? `，N=${c.n_exp}` : ""}</span>` },
       { label: "对照", html: (c) => `${esc(c.ctrl_role_label)}<br><span class="hint">${esc(c.ctrl_group)}${c.n_ctrl != null ? `，N=${c.n_ctrl}` : ""}</span>` },
       { label: "统计量", key: "param_type" },
@@ -177,7 +178,7 @@
     ], comps, { rowClass: (c) => (c.is_own ? "own" : ""), onRow:showResult });
 
     table(document.getElementById("row-table"), [
-      { label: "药物 / 研究", key: "acronym", html: (r) => `<strong>${esc(r.product_label || r.group_title)}</strong><br>${studyLink(r)}${r.phase ? " · " + esc(r.phase) + "期" : ""}<br><span class="hint">${esc(r.outcome_type)}</span>` },
+      { label: "药物 / 研究", key: "acronym", html: (r) => `<strong>${esc(r.product_label || r.group_title)}</strong><br>${studyMeta(r)}<br><span class="hint">${esc(r.outcome_type)}</span>` },
       { label: "组别", key: "group_title", html: (r) => `${esc(r.group_title)}<br><span class="hint">${esc(r.role_label)}</span>` },
       { label: "N", key: "n", num: true, html: (r) => num(r.n) },
       { label: "数值", key: "value", num: true, html: (r) => num(r.value) },
@@ -187,31 +188,45 @@
       { label: "分析人群", html: (r) => r.population ? `<details><summary>查看人群</summary>${esc(r.population)}</details>` : "—" },
       { label: "依据", html: (r) => `${r.source_kind === "publication" ? src(r.url, "论文") + " " : ""}${tag(r.status || "registry")}` },
     ], rows, { rowClass: (r) => (r.is_own ? "own" : ""), onRow:showResult });
+    selectLongitudinal();
   }
 
   // 历时
-  const L = B.longitudinal;
-  document.getElementById("longitudinal-card").hidden = !L.length;
+  let L = [];
+  const selectedLong = new Map();
   const ls = document.getElementById("long-select");
-  ls.innerHTML = L.map((c, i) => `<option value="${i}">${esc(c.label)} · ${esc(c.measure_label)}（${c.lines.length} 条曲线）</option>`).join("");
+  function selectLongitudinal() {
+    const ids = new Set(current.member_concept_ids || [current.concept_id]);
+    L = B.longitudinal.filter(c => ids.has(c.concept_id));
+    document.getElementById("longitudinal-card").hidden = !L.length;
+    ls.innerHTML = L.map((c, i) => `<option value="${i}">${esc(c.label)} · ${esc(c.measure_label)}（${c.lines.length} 条曲线）</option>`).join("");
+    ls.value = String(Math.max(0,L.findIndex(c=>c.chart_id === selectedLong.get(current.question_id))));
+    drawLong();
+  }
   function drawLong() {
     const c = L[+ls.value || 0];
-    if (!c) { chart("long-chart", { title: { text: "暂无多时间点数据", left: "center", top: "middle", textStyle: { color: "#64676B", fontSize: 16, fontWeight: 400 } } }); return; }
+    if (!c) return;
+    selectedLong.set(current.question_id,c.chart_id);
     chart("long-chart", {
       tooltip: { trigger: "item", formatter: (p) => { const pt = p.data.pt; return `<b>${esc(p.seriesName)}</b><br>${esc(pt.label)}：${num(pt.value)}${pt.n != null ? `（N=${pt.n}）` : ""}`; } },
       legend: { type: "scroll", top: 0 },
       grid: { left: 60, right: 30, top: 50, bottom: 50 },
       xAxis: { type: "value", name: "周", nameLocation: "end", min: 0 },
       yAxis: { type: "value", scale: true },
-      series: c.lines.map((l, i) => ({ name: `${l.role === "placebo" ? "安慰剂" : l.group_title} · ${l.acronym}`, type: "line", connectNulls: false,
+      series: c.lines.map((l, i) => ({ name: rowLabel(l), type: "line", connectNulls: false,
         symbolSize: 6, lineStyle: { width: l.is_own ? 3 : 1.6, type: l.role === "placebo" ? "dashed" : "solid" },
         itemStyle: { color: l.is_own ? OWN : l.role === "placebo" ? "#6E7B8C" : PAL[i % PAL.length] },
         data: l.points.map((pt) => ({ value: [pt.weeks, pt.value], pt })),
         endLabel: { show: c.lines.length <= 8, formatter: (p) => num(p.value[1]) } })),
     });
+    table(document.getElementById("long-table"), [
+      {label:"药物 / 研究",html:studyMeta}, {label:"组别",key:"group_title"},
+      {label:"时间",key:"label"}, {label:"N",key:"n",num:true,html:r=>num(r.n)},
+      {label:"数值",num:true,html:r=>num(r.value)}, {label:"单位",key:"unit"},
+      {label:"离散度 / 区间",html:r=>r.lower == null ? "—" : `${num(r.lower)}, ${num(r.upper)}`}
+    ], c.lines.flatMap(line=>line.points.map(pt=>({...line,...pt,unit:c.unit}))), {onRow:showResult});
   }
   ls.onchange = drawLong;
-  drawLong();
 
   // 安全
   const S = B.safety;
@@ -230,7 +245,7 @@
     ],
   });
   table(document.getElementById("safety-table"), [
-    { label: "药物 / 研究", key: "acronym", html: (r) => `<strong>${esc(r.product_label || r.group_title)}</strong><br>${src(r.url, r.acronym)}${r.phase ? " · " + esc(r.phase) + "期" : ""}` },
+    { label: "药物 / 研究", key: "acronym", html: (r) => `<strong>${esc(r.product_label || r.group_title)}</strong><br>${studyMeta(r)}` },
     { label: "组别", key: "group_title", html: (r) => `${esc(r.group_title)}<br><span class="hint">${esc(r.role_label)}</span>` },
     { label: "N", key: "N", num: true, html: (r) => (r.N == null ? "未报告" : r.N) },
     { label: "严重不良事件", key: "sae_pct", num: true, html: (r) => nN(r.sae_n, null, r.sae_pct) },

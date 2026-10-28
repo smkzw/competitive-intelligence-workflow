@@ -352,3 +352,15 @@ def test_verified_nonclinical_domain_replaces_a_provisional_search_guess_and_sur
         assert rows[0].model_dump()[field] == before[field]
     assert enrich_endpoint_index(ws, cfg, rows, roles=None) == []
     assert (rows[0].domain, rows[0].concept_id) == (domain, None)
+
+
+@pytest.mark.parametrize("source,label,valid", [
+    ("at least a 75% improvement", "改善≥75%", True),
+    ("at Least a 90% reduction", "减少≥90%", True),
+    ("more than a 75% improvement", "改善≥75%", False),
+    ("at least a 75% improvement", "改善>75%", False),
+])
+def test_source_comparison_articles_keep_exact_inclusive_thresholds(source, label, valid):
+    from ciw.verify.endpoint_index import _check
+    item = dict(descriptor_id="id", title=source, label=label, domain="other", quote=source)
+    assert _check(item, {"id": dict(title=source, material=source)})[0] is valid

@@ -88,7 +88,7 @@ def _comparisons(text):
              "less than or equal to": "<=", "lower than or equal to": "<=", "at most": "<=",
              "greater than": ">", "higher than": ">", "more than": ">", "less than": "<", "lower than": "<"}
     cleaned = re.sub(r"\([\\<>=]+\)", " ", text)
-    pattern = r"\b(" + "|".join(words) + r")\s+(\d+(?:\.\d+)?)"
+    pattern = r"\b(" + "|".join(words) + r")\s+(?:an?\s+)?(\d+(?:\.\d+)?)"
     pairs.update((words[m[1].casefold()], m[2]) for m in re.finditer(pattern, cleaned, re.I))
     suffixes = {"higher": ">=", "greater": ">=", "more": ">=", "lower": "<=", "less": "<="}
     for m in re.finditer(r"(\d+(?:\.\d+)?)\s*(?:%|percent)?\s+or\s+(higher|greater|more|lower|less)\b", text, re.I):
@@ -167,9 +167,13 @@ def _review_batches(ws, cfg, initial, roles, saved):
                 yield batch, [], exc
 
 
-def _review_binding(ws, record, note, item, call):
+def _review_binding(ws, record, note, item, call, *, item_model=EndpointIndexItem,
+                    identity_field="descriptor_id", require_cache=False):
     if "review_note" in record:
-        return dict(method="item_review_note") if record["review_note"] == note else None
+        if record["review_note"] != note:
+            return None
+        if not require_cache:
+            return dict(method="item_review_note")
     # Older ledgers lack the item-specific decision. Rebind to the actual retained
     # verifier response, never infer confirmation from a batch's n_items count.
     response_id = call.get("response_id")
@@ -184,8 +188,8 @@ def _review_binding(ws, record, note, item, call):
             if json.loads(metadata or "{}").get("response_id") != response_id:
                 continue
             payload = parse_json(text)
-            candidates = [EndpointIndexItem.model_validate(x).model_dump() for x in payload.get("items", [])]
-            same_key = [x for x in candidates if x["descriptor_id"] == item["descriptor_id"]]
+            candidates = [item_model.model_validate(x).model_dump() for x in payload.get("items", [])]
+            same_key = [x for x in candidates if x[identity_field] == item[identity_field]]
             matches.append(bool(same_key) and all(x == item for x in same_key))
         except (ValueError, AttributeError, TypeError):
             matches.append(False)

@@ -40,7 +40,7 @@ h1 { font-size:28px; line-height:1.2; margin:0; color:var(--ink); letter-spacing
 .chip.failed::before { content:"● "; color:var(--bad); }
 .card { background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(255,255,255,.94));
   border:1px solid var(--line); border-radius:var(--radius); padding:10px 12px; margin-bottom:10px; box-shadow:var(--shadow); }
-.card-h { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px; }
+.card-h { min-width:0; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px; }
 h2 { font-size:22px; line-height:1.3; margin:0; color:var(--ink); }
 h3 { font-size:18px; line-height:1.4; margin:10px 0 6px; color:var(--ink); font-weight:650; }
 .hint,.small,.legend { color:var(--muted); font-size:16px; }
@@ -49,7 +49,8 @@ h3 { font-size:18px; line-height:1.4; margin:10px 0 6px; color:var(--ink); font-
 .filters { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
 input[type=search],select { border:1px solid #CED3D8; border-radius:8px; padding:5px 10px; background:#fff; color:var(--body); }
 input[type=search] { width:280px; }
-select { max-width:100%; }
+select { max-width:100%; min-width:0; }
+.card-h>select { flex:1 1 420px; }
 .kpis { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; margin-bottom:10px; }
 .kpi { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:8px 12px; box-shadow:var(--shadow); }
 .kpi b { display:block; font-size:28px; line-height:1.2; margin-bottom:2px; color:var(--ink); }
@@ -129,5 +130,13 @@ mark { background:#FFE8B7; color:inherit; }
 .filters button:disabled { color:var(--muted); background:#F4F5F6; cursor:default; }
 #observation-detail[open] > summary { margin-bottom:8px; }
 
-#frame-controls{margin:0 0 8px;align-items:flex-start}#frame-select{max-width:65vw}#frame-context .context-text{white-space:pre-wrap;max-width:1000px;padding:8px 0;line-height:1.55}
+#frame-controls { margin:0 0 8px; align-items:flex-start; }
+#frame-label { display:flex; align-items:center; gap:8px; flex:1 1 480px; min-width:0; max-width:100%; }
+#frame-select { flex:1; width:0; min-width:0; }
+#frame-context { flex:0 1 auto; max-width:100%; }
+#frame-context .context-text { white-space:pre-wrap; overflow-wrap:anywhere; padding:8px 0; line-height:1.55; }
+#row-table td:first-child { min-width:12em; }
+#row-table summary,#family-table summary { white-space:nowrap; }
+#long-select { width:0; }
+
 @media (max-height:820px) { .chart,.chart.tall { height:280px; } }

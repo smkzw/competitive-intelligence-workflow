@@ -16,7 +16,7 @@ from ciw.verify.crosscheck import (
     review_candidates,
     task_id_for,
 )
-from ciw.verify.endpoint_index import _check
+from ciw.verify.endpoint_index import _check, _review_binding
 
 SCHEMA = "clinical-question-families-v1"
 
@@ -133,6 +133,60 @@ def _accepted(checked):
     return accepted, issues
 
 
+def _recheck_retained(ws, catalog, hashes, saved, groups):
+    """Only current, item-confirmed verifier records can be rechecked without another model call."""
+    candidates = []
+    for key, record in ws.verifications().items():
+        note = record.get("review_note", "")
+        if (not key.startswith("family:") or record.get("status") != "needs_review"
+                or not note.startswith("核对结果未通过来源校验：")):
+            continue
+        try:
+            item = ClinicalFamilyItem.model_validate(record.get("item")).model_dump()
+        except ValueError:
+            continue
+        members = item["member_ids"]
+        if not all(saved.get("catalog_hashes", {}).get(cid) == hashes.get(cid) and cid in hashes for cid in members):
+            continue
+        reviews = [c for c in record.get("calls", []) if c.get("role") in
+                   {"verify", "verify_repair", "verify_format_repair"} and not c.get("error") and c.get("response_id")]
+        if (not reviews or len({c.get("family") for c in record.get("calls", []) if c.get("family")}) != 2
+                or not _check_group(item, catalog)[0]):
+            continue
+        binding = next((bound for call in reversed(reviews) if (bound := _review_binding(
+            ws, record, note, item, call, item_model=ClinicalFamilyItem,
+            identity_field="family_anchor", require_cache=True))), None)
+        if binding:
+            candidates.append((key, record, item, binding))
+    counts = Counter(cid for group in groups for cid in group["member_ids"])
+    counts.update(cid for _, _, item, _ in candidates for cid in item["member_ids"])
+    for key, record, item, binding in candidates:
+        if any(counts[cid] > 1 for cid in item["member_ids"]):
+            continue
+        group = {**item, "family_id": "family_" + hashlib.sha256(
+            "|".join(sorted(item["member_ids"])).encode()).hexdigest()[:16]}
+        groups.append(group)
+        ws.save_verification(key, "verified", {**{k: v for k, v in record.items() if k != "status"},
+            "deterministic_recheck": dict(rule="family-source-guard-v2", previous_note=record["review_note"],
+                review_binding=binding)})
+    return groups
+
+
+def _retained_issues(ws, catalog, groups):
+    covered = {cid for group in groups for cid in group["member_ids"]}
+    issues = []
+    for key, record in ws.verifications().items():
+        item = record.get("item") or {}
+        members = set(item.get("member_ids", []))
+        if (key.startswith("family:") and record.get("status") == "needs_review" and members
+                and members.issubset(catalog) and not members.issubset(covered)):
+            issues.append(dict(kind="endpoint_family_needs_review", ref=sorted(members),
+                               note=record.get("review_note", "未完成来源核对")))
+    if missing := sorted(set(catalog) - covered):
+        issues.append(dict(kind="endpoint_family_missing", ref=missing, note="原始临床问题保留，语义分组尚未覆盖"))
+    return issues
+
+
 def _review_batches(task, candidates, catalog):
     batches, items, members = [], [], set()
     for candidate in candidates:
@@ -173,10 +227,15 @@ def enrich_endpoint_families(ws, cfg, results, roles=None, *, previous=None):
     saved = _previous(ws, previous)
     groups = [g for g in saved.get("groups", []) if _check_group(g, catalog)[0]
               and all(saved.get("catalog_hashes", {}).get(cid) == hashes.get(cid) for cid in g["member_ids"])]
+    groups = _recheck_retained(ws, catalog, hashes, saved, groups)
     snapshot = dict(schema=SCHEMA, catalog_hashes=hashes, groups=groups,
                     checked_catalog=saved.get("checked_catalog"), status="reused" if groups else "not_run")
     if not catalog or roles is None or snapshot["checked_catalog"] == digest:
-        return snapshot, []
+        issues = _retained_issues(ws, catalog, groups) if catalog else []
+        if issues:
+            snapshot["status"] = "partial"
+        ws.write_stage("research-endpoint-families", snapshot)
+        return snapshot, issues
     text = "\n\n".join(f"Concept:{cid}\nTitle:{v['title']}\nDefinition:{v['definition']}"
                        for cid, v in sorted(catalog.items()))
     source_sha = hashlib.sha256(text.encode()).hexdigest()

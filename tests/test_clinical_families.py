@@ -233,3 +233,37 @@ def test_review_batches_keep_whole_proposed_groups_and_cover_primary_omissions(c
     texts = [batch.source_text for batch, _ in batches]
     assert {cid for text in texts for cid in re.findall(r"Concept:(\S+)", text)} == set(catalog)
     assert sum(text.count("Concept:") for text in texts) == 25
+
+
+@pytest.mark.parametrize("case,adopt", [("guard", True), ("unconfirmed", False), ("stale", False),
+                                        ("conflict", False), ("no_receipt", False)])
+def test_retained_family_guard_recheck_requires_current_confirmed_item(cfg, ws, case, adopt):
+    cfg, rows, _ = inputs(cfg)
+    snapshot, _ = enrich_endpoint_families(ws, cfg, rows)
+    item = group_for(rows)
+    note = "核对结果未通过来源校验：旧比较符规则"
+    if case == "unconfirmed":
+        note = "主抽取条目未被核对者确认"
+    calls = [dict(role="extract", family="deepseek"),
+             dict(role="verify", family="glm", model="checker",
+                  response_id=None if case == "no_receipt" else "fake-response")]
+    ws.save_verification("family:retained", "needs_review", dict(item=item, calls=calls, review_note=note))
+    if case == "stale":
+        rows[0].description = "New scientific definition"
+    if case == "conflict":
+        ws.save_verification("family:conflict", "needs_review", dict(
+            item={**item, "family_label": "另一个问题"}, calls=calls, review_note=note))
+    payload = [item] if case != "conflict" else [item, {**item, "family_label": "另一个问题"}]
+    with ws.db() as con:
+        con.execute("INSERT INTO llm_cache(cache_key,model,family,prompt_sha,response,created_at,metadata) "
+                    "VALUES(?,?,?,?,?,?,?)", ("fake", "checker", "glm", "prompt", json.dumps({"items": payload}),
+                    "test", json.dumps({"response_id": "fake-response"})))
+    recovered, issues = enrich_endpoint_families(ws, cfg, rows, previous=snapshot)
+    assert bool(recovered["groups"]) is adopt
+    assert (ws.verifications()["family:retained"]["status"] == "verified") is adopt
+    if adopt:
+        assert not issues
+        assert ws.verifications()["family:retained"]["deterministic_recheck"]["review_binding"] == dict(
+            method="cached_verifier_item", response_id="fake-response")
+    else:
+        assert any(i["kind"] == "endpoint_family_missing" for i in issues)

@@ -325,6 +325,7 @@ def _longitudinal(
             context = endpoint_context(r, next(c for c in cfg.concepts if c.id == r.concept_id))
             charts[(r.concept_id, r.measure_kind, _cfb(r), _pct(r), _unit_key(r.unit), context)][series_key].append(
                 {
+                    "result_id": r.result_id,
                     "weeks": r.time.weeks,
                     "label": r.time.label,
                     "value": g.value,
@@ -356,6 +357,8 @@ def _longitudinal(
                 {
                     "trial_id": tid,
                     "acronym": first["acronym"],
+                    "phase": trials[tid].phase,
+                    "url": trials[tid].url,
                     "group_title": first["group_title"],
                     "role": first["role"],
                     "role_label": first.get("role_label") or role_label(first["role"]),

@@ -299,7 +299,12 @@ frames[0].rows[0].product_label='Drug16';frames[0].rows[0].group_title='Group16'
 frames[0].rows[0].source_records=[{acronym:'T16',phase:'III'},{acronym:'T1',phase:'III'}];
 const q={question_id:'family',is_family:true,label:'临床缓解',time_key:'',time_label:'',units:[],
  measure_label:'比例',trial_ids:['T1','T16'],frames};
-const plots={},tables={},opts={},cols={},window={U:{D:{b:{questions:[q],longitudinal:[],safety:[],observations:obs}},
+q.member_concept_ids=['clinical-1'];
+const longitudinal=[{concept_id:'other',label:'Unrelated CGI',measure_label:'人数',lines:[]},
+ {concept_id:'clinical-1',label:'Current clinical score',measure_label:'均值',unit:'Points',
+ lines:[{product_label:'Drug16',group_title:'Group16',phase:'III',acronym:'T16',points:[
+ {result_id:'r1',weeks:1,value:1,label:'第1周'},{result_id:'r16',weeks:16,value:16,label:'第16周'}]}]}];
+const plots={},tables={},opts={},cols={},window={U:{D:{b:{questions:[q],longitudinal,safety:[],observations:obs}},
  esc:s=>s||'',num:v=>v,nN(){},tag(){},src:(url,label)=>label,options(){},OWN:'orange',PAL:[],
  matchesQuestion:helper.U.matchesQuestion,table:(e,c,r,o)=>{tables[e.id]=r;opts[e.id]=o;cols[e.id]=c},
  chart:(id,o)=>plots[id]=o,drawer(){}}};
@@ -311,7 +316,9 @@ const second={values:plots['value-chart'].series[0].data.map(r=>r.value),sub:els
 els.qsearch.value='week 1';els.qsearch.oninput();
 const live=plots['value-chart'].series[0].data.map(r=>r.value);
 const firstCell=cols['family-table'][0].html(tables['family-table'][0]);
-process.stdout.write(JSON.stringify({first,second,live,firstCell,hidden:els['family-overview'].hidden,
+process.stdout.write(JSON.stringify({first,second,live,firstCell,longOptions:els['long-select'].innerHTML,
+ longRows:tables['long-table']?.map(r=>r.value),longSeries:plots['long-chart']?.series.map(s=>s.name),
+ longHidden:els['longitudinal-card'].hidden,hidden:els['family-overview'].hidden,
  mismatch:helper.U.matchesQuestion({...q,frames:[frames[0]]},'week 1')}));
 """
     run = subprocess.run(["node", "-e", script, str(assets / "common.js"), str(assets / "b.js")],
@@ -322,4 +329,8 @@ process.stdout.write(JSON.stringify({first,second,live,firstCell,hidden:els['fam
     assert result["second"]["values"] == [16] and "Proportion" in result["second"]["sub"]
     assert not result["hidden"] and not result["mismatch"]
     assert result["live"] == [1]
+    assert "Unrelated CGI" not in result["longOptions"] and "Current clinical score" in result["longOptions"]
+    assert result["longRows"] == [1, 16] and not result["longHidden"]
+    assert result["longSeries"][0].index("Drug16") < result["longSeries"][0].index("III")
+    assert result["longSeries"][0].index("III") < result["longSeries"][0].index("T16")
     assert result["firstCell"].index("Drug16") < result["firstCell"].index("III") < result["firstCell"].index("T16")
