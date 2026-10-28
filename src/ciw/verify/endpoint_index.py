@@ -92,6 +92,12 @@ def _comparisons(text):
     suffixes = {"higher": ">=", "greater": ">=", "more": ">=", "lower": "<=", "less": "<="}
     for m in re.finditer(r"(\d+(?:\.\d+)?)\s*(?:%|percent)?\s+or\s+(higher|greater|more|lower|less)\b", text, re.I):
         pairs.add((suffixes[m[2].casefold()], m[1]))
+    prefixes = {"至少": ">=", "不低于": ">=", "不小于": ">=", "至多": "<=", "不高于": "<=",
+                "不大于": "<=", "超过": ">", "大于": ">", "小于": "<", "低于": "<"}
+    prefix_pattern = "(" + "|".join(prefixes) + r")\s*(?:改善|增加|降低|升高|减少|达到)?\s*(\d+(?:\.\d+)?)"
+    pairs.update((prefixes[m[1]], m[2]) for m in re.finditer(prefix_pattern, text))
+    for m in re.finditer(r"(\d+(?:\.\d+)?)\s*%?\s*(或更高|或以上|及以上|或更低|或以下|及以下)", text):
+        pairs.add((">=" if m[2] in {"或更高", "或以上", "及以上"} else "<=", m[1]))
     return pairs
 
 
@@ -99,6 +105,9 @@ def _clinical_label_supported(item, source):
     if item["domain"] != "efficacy":
         return True, ""
     title, quote = source["title"], item["quote"]
+    if (re.search(r"\bcomponents?\b", title, re.I) and not re.search(r"\btotal\b", title, re.I)
+            and re.search(r"总分|\btotal\b", item["label"], re.I)):
+        return False, "不能用定义中的总分替代当前分项测量"
     attainment = bool(_comparisons(quote) and re.search(
         r"percentage of|proportion of|number of (?:participants|patients|subjects)|participants achieving", title, re.I)
         and not re.search(r"percent(?:age)? change|mean change", title, re.I))

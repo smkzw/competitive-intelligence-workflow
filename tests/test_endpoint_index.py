@@ -211,6 +211,8 @@ def test_current_manual_dictionary_wins_over_an_adopted_source_mapping(cfg, ws):
     ("ADA positive: at least 1.67-fold increase", "ADA阳性≥1.67倍升高"),
     ("75 % or Higher PASI improvement at Week 16", "第16周PASI改善≥75%"),
     ("PASI improvement greater than or equal to 75 percent", "PASI改善≥75%"),
+    ("75 % or Higher PASI improvement", "PASI改善75%或更高"),
+    ("With at Least 2-category Improvement", "至少改善2个类别"),
 ])
 def test_index_supports_source_instrument_names_hyphen_units_and_spelled_comparators(title, label):
     from ciw.verify.endpoint_index import _check
@@ -224,6 +226,7 @@ def test_index_supports_source_instrument_names_hyphen_units_and_spelled_compara
     ("PASI improvement greater than 75 percent", "PASI改善≥75%"),
     ("ADA positive: 1.67-fold increase", "ADA阳性1.76倍升高"),
     ("ADA positive: at least 1.67-fold increase", "ADA阳性1.67倍升高"),
+    ("PASI improvement greater than 75 percent", "PASI改善75%或更高"),
 ])
 def test_index_still_rejects_wrong_instrument_value_or_inequality(title, label):
     from ciw.verify.endpoint_index import _check
@@ -264,3 +267,18 @@ def test_repeated_token_exhaustion_has_a_finite_split_budget(cfg, ws, monkeypatc
     issues = enrich_endpoint_index(ws, cfg.model_copy(deep=True), rows, roles={"test": True})
     assert calls == [4, 2, 2]
     assert len(issues) == 2 and all(i["kind"] == "endpoint_index_failed" for i in issues)
+
+
+def test_total_score_in_definition_does_not_replace_the_component_measure():
+    from ciw.verify.endpoint_index import _check
+    title = "The Japanese Dermatological Association (JDA) Component Score for GPP Over Time"
+    quote = "The total score is 0-17. Each component score is 0-3."
+    item = dict(descriptor_id="id", title=title, label="JDA总分0-17", domain="efficacy", quote=quote)
+    assert not _check(item, {"id": dict(title=title, material=title + "\n" + quote)})[0]
+
+
+@pytest.mark.parametrize("value,valid", [(0, True), (17, True), (18, False)])
+def test_source_range_endpoint_at_sentence_end_is_not_a_negative_quantity(value, valid):
+    from ciw.verify.quote import check_quote
+    source = "The total score is 0-17. Each component score is 0-3."
+    assert check_quote(source, source, [str(value)]).ok is valid

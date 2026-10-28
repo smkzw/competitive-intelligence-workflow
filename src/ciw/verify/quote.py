@@ -76,6 +76,8 @@ _UNIT_PARTS = frozenset(
         "points",
         "score",
         "fold",
+        "category",
+        "categories",
     )
 )
 
@@ -165,7 +167,7 @@ def _number_in(num: str, text: str, *, exact_scalar: bool = False) -> bool:
     ):
         return True
     # An unsigned upper endpoint is not a negative number or a digit inside 4-1BB.
-    ranges = re.finditer(r"(?<![\w.+/-])\d+(?:\.\d+)?\s*-\s*(?P<upper>\d+(?:\.\d+)?)(?![\d.-])", text)
+    ranges = re.finditer(r"(?<![\w.+/-])\d+(?:\.\d+)?\s*-\s*(?P<upper>\d+(?:\.\d+)?)(?!\d|\.\d|-)", text)
     return any(
         Decimal(match["upper"]) == target
         and _numeric_suffix(text, match.end())

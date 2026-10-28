@@ -9,7 +9,7 @@
   function listQuestions() {
     const q = document.getElementById("qsearch").value.trim().toLowerCase();
     const prim = document.getElementById("only-primary").checked;
-    const items = qs.filter((x) => (!prim || x.has_primary) && (!q || window.U.matchesSearch(`${x.label} ${x.time_label} ${x.measure_label} ${(x.frames || []).map(f => f.title + " " + f.population).join(" ")}`,q)));
+    const items = qs.filter((x) => (!prim || x.has_primary) && (!q || window.U.matchesQuestion(x,q)));
     const ul = document.getElementById("qlist");
     ul.innerHTML = items.map((x) => `<li data-id="${esc(x.question_id)}" class="${current && current.question_id === x.question_id ? "on" : ""}">
       <div class="q">${esc(x.label)} · ${esc(x.time_label)}${x.category ? ` · ${esc(x.category)}` : ""}</div>${x.subgroup ? `<div class="s">亚组：${esc(x.subgroup)}</div>` : ""}
@@ -25,6 +25,10 @@
 
   const studyLink = row => row.source_records?.length > 1
     ? row.source_records.map(s => src(s.url, s.acronym)).join(" · ") : src(row.url, row.acronym);
+  function showResult(row) {
+    const observation = (B.observations || []).find(r => r.result_id === row.result_id);
+    if(observation) showObservation(observation);
+  }
 
   function drawForest(id, list, ref, log, sourceOnly = false) {
     const cl = list.map((c) => sourceOnly ? `${c.acronym} · ${c.group_labels.join("、")}` : `${c.acronym} · ${c.product_label}${groupSuffix(c.product_label, c.exp_group)}${c.h2h ? " vs " + c.ctrl_group : ""}`);
@@ -126,7 +130,7 @@
       { label: "P 值", key: "p_value" },
       { label: "方法", key: "method" },
       { label: "依据", html: (c) => `${c.source_kind === "publication" ? src(c.url, "论文") + (c.group_basis === "论文分组" ? " · 论文分组 " : " ") : ""}` + tag(c.kind === "computed" ? "computed" : c.status || "registry") + (c.note ? `<br><span class="hint">${esc(c.note)}</span>` : "") },
-    ], comps, { rowClass: (c) => (c.is_own ? "own" : "") });
+    ], comps, { rowClass: (c) => (c.is_own ? "own" : ""), onRow:showResult });
 
     table(document.getElementById("row-table"), [
       { label: "试验", key: "acronym", html: (r) => studyLink(r) + `<br><span class="hint">${esc(r.outcome_type)}</span>` },
@@ -135,10 +139,10 @@
       { label: "数值", key: "value", num: true, html: (r) => num(r.value) },
       { label: "离散度", num: true, html: (r) => (r.spread != null ? `${esc(r.dispersion_type)} ${num(r.spread)}` : r.lower != null ? `${esc(r.dispersion_type)} ${num(r.lower)}, ${num(r.upper)}` : "—") },
       { label: "单位", key: "unit" },
-      { label: "终点原文", html: (r) => `${esc(r.title)}${r.class_title ? `<br><span class="hint">${esc(r.class_title)}</span>` : ""}<br><span class="hint">${esc(r.timeframe)}</span>` },
-      { label: "分析人群", html: (r) => `<span class="hint">${esc(r.population)}</span>` },
+      { label: "终点原文", html: (r) => `<details><summary>查看原文</summary>${esc(r.title)}${r.class_title ? `<br>${esc(r.class_title)}` : ""}<br>${esc(r.timeframe)}</details>` },
+      { label: "分析人群", html: (r) => r.population ? `<details><summary>查看人群</summary>${esc(r.population)}</details>` : "—" },
       { label: "依据", html: (r) => `${r.source_kind === "publication" ? src(r.url, "论文") + " " : ""}${tag(r.status || "registry")}` },
-    ], rows, { rowClass: (r) => (r.is_own ? "own" : "") });
+    ], rows, { rowClass: (r) => (r.is_own ? "own" : ""), onRow:showResult });
   }
 
   // 历时

@@ -184,7 +184,7 @@ def test_result_context_switch_updates_chart_and_tables_together():
 const fs=require('fs'),vm=require('vm');
 const elements=new Proxy({}, {get:(all,id)=>all[id]||(all[id]={id,value:'',checked:false,style:{},
  querySelectorAll:()=>[],addEventListener(){}})});
-const row=v=>({value:v,role:'experimental',acronym:'Trial',group_title:'Drug',product_label:'Drug'});
+const row=v=>({result_id:'r'+v,value:v,role:'experimental',acronym:'Trial',group_title:'Drug',product_label:'Drug'});
 const frames=[{frame_id:'first',trial_ids:['one'],title:'First definition',population:'All participants',
  rows:[row(25)],comparisons:[],source_statistics:[{value:10.3,ci_lower:5.7,ci_upper:14.9,
  param_type:'Adjusted Difference',group_labels:['A','B'],acronym:'Trial',url:'https://example.test'}]},
@@ -192,16 +192,21 @@ const frames=[{frame_id:'first',trial_ids:['one'],title:'First definition',popul
  population:'Responders',rows:[row(10)],comparisons:[]}];
 const q={question_id:'q',label:'临床缓解',time_label:'第52周',units:['%'],measure_label:'比例',
  trial_ids:['one','two'],rows:[row(25),row(10)],comparisons:[],frames};
-const plots={},tables={};
-const window={U:{D:{b:{questions:[q],longitudinal:[],safety:[],observations:[]},stats:{},trials:{}},
+const plots={},tables={},tableOptions={},drawers=[];
+const observations=[25,10].map(v=>({result_id:'r'+v,products:['Drug'],acronym:'Trial',
+ groups:[],analyses:[],title:'Source '+v}));
+const window={U:{D:{b:{questions:[q],longitudinal:[],safety:[],observations},stats:{},trials:{}},
  esc:s=>s||'',num:s=>s,nN(){},tag(){},src(){},options(){},OWN:'orange',PAL:[],
- chart:(id,opt)=>plots[id]=opt,table:(el,cols,rows)=>tables[el.id]=rows}};
+ drawer:html=>drawers.push(html),chart:(id,opt)=>plots[id]=opt,
+ table:(el,cols,rows,opts)=>{tables[el.id]=rows;tableOptions[el.id]=opts}}};
 vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{window,document:{getElementById:id=>elements[id]}});
 const read=()=>({values:plots['value-chart'].series[0].data.map(d=>d.value),
  table:tables['row-table'].map(d=>d.value),context:elements['frame-context-text'].textContent,
  rawValues:plots['source-stat-chart']?.series[1].data.map(d=>d.value),rawHidden:elements['source-statistics'].hidden});
-const first=read();elements['frame-select'].value='second';elements['frame-select'].onchange();
-process.stdout.write(JSON.stringify([first,read()]));
+const first=read();tableOptions['row-table'].onRow(tables['row-table'][0]);
+elements['frame-select'].value='second';elements['frame-select'].onchange();
+tableOptions['row-table'].onRow(tables['row-table'][0]);
+process.stdout.write(JSON.stringify([first,{...read(),drawers}]));
 """
     result = subprocess.run(["node", "-e", script, str(asset)], capture_output=True, text=True, check=True)
     first, second = json.loads(result.stdout)
@@ -209,6 +214,7 @@ process.stdout.write(JSON.stringify([first,read()]));
     assert second["values"] == second["table"] == [10]
     assert "Responders" in second["context"] and "All participants" in first["context"]
     assert first["rawValues"] == [10.3] and not first["rawHidden"] and second["rawHidden"]
+    assert "Source 25" in second["drawers"][0] and "Source 10" in second["drawers"][1]
 
 
 def test_numeric_search_does_not_match_other_weeks_and_tolerates_source_punctuation():
@@ -231,3 +237,38 @@ process.stdout.write(JSON.stringify([
 """
     result = subprocess.run(["node", "-e", script, str(asset)], capture_output=True, text=True, check=True)
     assert json.loads(result.stdout) == [True,False,False,False,True,False,True,True,True,False,True,True,True]
+
+
+def test_table_nested_in_details_still_opens_but_its_own_controls_do_not():
+    asset = Path(__file__).resolve().parents[1] / "src/ciw/render/static/common.js"
+    script = r"""
+const fs=require('fs'),vm=require('vm'),outer={tagName:'DETAILS'},inside={tagName:'DETAILS'};
+const tr={dataset:{ri:'0'},contains:node=>node===inside,focus(){}};
+const window={CIW:{},addEventListener(){}};
+const document={getElementById:()=>null,addEventListener(){}};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{window,document,URL});
+let opened=0;
+window.U.table({querySelectorAll:s=>s==='th'?[]:[tr]},[{label:'value',key:'value'}],[{value:0}],{onRow(){opened++}});
+tr.onclick({target:{closest:()=>outer}});const first=opened;
+tr.onclick({target:{closest:()=>inside}});
+tr.onkeydown({target:tr,key:'Enter',preventDefault(){}});
+process.stdout.write(JSON.stringify([first,opened]));
+"""
+    run = subprocess.run(["node", "-e", script, str(asset)], capture_output=True, text=True, check=True)
+    assert json.loads(run.stdout) == [1, 2]
+
+
+def test_question_search_uses_actual_slice_not_other_weeks_in_source_title():
+    asset = Path(__file__).resolve().parents[1] / "src/ciw/render/static/common.js"
+    script = r"""
+const fs=require('fs'),vm=require('vm'),window={CIW:{},addEventListener(){}};
+const document={getElementById:()=>null,addEventListener(){}};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{window,document,URL});
+const q={label:'DLQI评分',time_label:'第16周',measure_label:'均值',time_key:'W16',
+ frames:[{title:'Change in DLQI at Week 1, Week 4, and Week 16',population:'All participants'}]};
+const m=window.U.matchesQuestion;
+process.stdout.write(JSON.stringify([m(q,'week 1'),m(q,'week 16'),m(q,'第1周'),m(q,'DLQI'),
+ m({...q,time_key:'W1'},'week 1'),m({...q,time_key:'W1.5'},'week 1'),m(q,'week 1.5')]));
+"""
+    run = subprocess.run(["node", "-e", script, str(asset)], capture_output=True, text=True, check=True)
+    assert json.loads(run.stdout) == [False, True, False, True, True, False, False]

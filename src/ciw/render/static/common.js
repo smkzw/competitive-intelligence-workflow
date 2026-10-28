@@ -51,6 +51,15 @@
     return new RegExp(pattern,"u").test(searchText(text));
   }
 
+  function matchesQuestion(question, query) {
+    const weeks = [...String(query).matchAll(/\bweeks?\s*(\d+(?:\.\d+)?)(?!\d|\.\d)|第\s*(\d+(?:\.\d+)?)\s*周/gi)]
+      .map(m => Number(m[1] || m[2]));
+    const point = /^W(\d+(?:\.\d+)?)$/.exec(question.time_key || "");
+    if(point && weeks.some(week => week !== Number(point[1]))) return false;
+    return matchesSearch(`${question.label} ${question.time_label} ${question.measure_label} ` +
+      (question.frames || []).map(f => `${f.title} ${f.population}`).join(" "),query);
+  }
+
   // The host already provides indication and report navigation; keep cutoff beside the title.
   if(window.name === "ciw-report" && window.self !== window.top) {
     const heading = document.querySelector(".page-heading"), meta = document.querySelector(".top .meta");
@@ -88,7 +97,8 @@
         tr.tabIndex = 0;
         const open = () => { tr.focus?.(); opts.onRow(rows[+tr.dataset.ri]); };
         tr.onclick = event => {
-          if (event.target.closest?.("a,button,input,select,textarea,summary,details")) return;
+          const control = event.target.closest?.("a,button,input,select,textarea,summary,details");
+          if (control && (!tr.contains || tr.contains(control))) return;
           open();
         };
         tr.onkeydown = event => {
@@ -207,5 +217,6 @@
   }
 
   coverage();
-  window.U = { D, esc, num, nN, tag, src, highlight, annotate, matchesSearch, table, drawer, chart, present, options, OWN, PAL };
+  window.U = { D, esc, num, nN, tag, src, highlight, annotate, matchesSearch, matchesQuestion,
+    table, drawer, chart, present, options, OWN, PAL };
 })();
