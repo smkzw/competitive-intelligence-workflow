@@ -376,7 +376,7 @@ def _trial_arms(arms_mod, iv_product, resolver) -> list[Arm]:
         names = [re.sub(r"^[A-Za-z ]+:\s*", "", n) for n in ag.get("interventionNames", [])]
         pids = sorted({pid for n in names if (pid := iv_product.get(n) or resolver.resolve_intervention(n))})
         role, conflict = arm_role(ag.get("type", ""), names, label=ag.get("label", ""),
-                                  label_products=resolver.find_all_in_text(ag.get("label", "")),
+                                  resolver=resolver,
                                   intervention_products=pids)
         if not pids and ag.get("type") != "PLACEBO_COMPARATOR":
             explicit = resolver.resolve_intervention(ag.get("label", ""))

@@ -107,6 +107,8 @@ def test_placebo_type_with_explicit_active_title_conflict_keeps_source_fields(cf
 
     for label, intervention, conflict in [
         ("Open-label OPN-375 During Parts B and C", "Placebo", True),
+        ("Open-label OPN-375 (Placebo Matching OPN-375 During Part A) During Parts B&C", "Placebo", True),
+        ("Blinded Cohort (Previously OPN-375)", "Placebo", False),
         ("Placebo matching OPN-375", "Placebo", False),
         ("OPN-375 plus placebo", "OPN-375", False),
         ("Blinded cohort", "Placebo", False),

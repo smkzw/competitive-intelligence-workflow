@@ -37,13 +37,15 @@ _QUALIFIER = re.compile(r"\s*[\(\[（][^)\]）]*[\)\]）]\s*")
 
 
 def arm_role(arm_type: str, interventions: list[str], *, label="",
-             label_products=(), intervention_products=()) -> tuple[ArmRole, bool]:
+             resolver: ProductResolver | None = None, intervention_products=()) -> tuple[ArmRole, bool]:
     role = ROLE_BY_TYPE.get(arm_type, "unknown")
     conflict = role in {"experimental", "active_comparator", "no_intervention"} and bool(interventions) and all(
         _PLACEBO_ONLY.fullmatch(name.strip()) for name in interventions
     )
-    if (role == "placebo" and label_products and not _PLACEBO.search(label)
-            and set(label_products) - set(intervention_products)):
+    current_label = _QUALIFIER.sub(" ", label)
+    label_products = resolver.find_all_in_text(current_label) if resolver else set()
+    if (role == "placebo" and label_products and not _PLACEBO.search(current_label)
+            and label_products - set(intervention_products)):
         conflict = True  # explicit known active title contradicts the recorded comparator/intervention fields
     return ("unknown" if conflict else role), conflict
 
