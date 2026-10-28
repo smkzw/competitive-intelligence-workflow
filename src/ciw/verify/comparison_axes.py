@@ -15,6 +15,18 @@ from ciw.verify.endpoint_index import _check, _comparisons
 from ciw.verify.quote import normalize
 
 SCHEMA = "source-comparison-axes-v1"
+_ANALYSIS_SETS = re.compile(
+    r"(?P<mitt>\bmITT\b|\bmodified\s+intention[ -]to[ -]treat\b)|"
+    r"(?P<itt>\bITT\b|\bintent(?:ion)?[ -]to[ -]treat\b)|"
+    r"(?P<fas>\bFAS\b|\bfull\s+analysis\s+set\b)|"
+    r"(?P<pp>\bPP\b|\bper[ -]protocol\b)|"
+    r"(?P<safety>\bSAF\b|\bsafety\s+(?:analysis\s+)?(?:set|population)\b)|"
+    r"(?P<eas>\bEAS\b|\befficacy\s+analysis\s+set\b)|"
+    r"(?P<treated>\bas[ -]treated\b)", re.I)
+
+
+def _analysis_tokens(text):
+    return {m.lastgroup for m in _ANALYSIS_SETS.finditer(normalize(text))}
 
 
 class ComparisonAxisItem(BaseModel):
@@ -61,8 +73,10 @@ def check_axis(item, catalog):
                 return False, "逐成员引文不属于原始字段"
         if source["guard"][1] and not _quoted(item["baseline_quotes"][cid], source):
             return False, "基线变化缺少逐来源基线锚定"
-        if not re.search(r"(?<!\w)" + re.escape(normalize(item["analysis_set"])) + r"(?!\w)",
-                         normalize(item["analysis_quotes"][cid])):
+        analysis = _analysis_tokens(item["analysis_set"])
+        explicit = _analysis_tokens(item["analysis_quotes"][cid])
+        population = _analysis_tokens(source["fields"][-1])
+        if not analysis or analysis != explicit or (population and population != analysis):
             return False, "共同分析集未在各来源明示"
         value = dict(descriptor_id=cid, title=source["title"], label=item["axis_label"],
                      quote=item["member_quotes"][cid], domain="efficacy", direction="none")

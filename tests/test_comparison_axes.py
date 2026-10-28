@@ -170,3 +170,29 @@ def test_source_context_transport_failure_remains_pending_and_recovers_without_e
     restored, issues = enrich_comparison_axes(ws, cfg, results, trials, families, roles)
     assert not issues and len(restored["groups"]) == 1 and len(calls) == 2
 
+
+@pytest.mark.parametrize("label", ["available data", "Participants with available data at each time point", "FAS"])
+def test_availability_phrase_cannot_hide_missing_analysis_set(cfg, label):
+    cfg, results, trials, families = inputs(cfg)
+    results[0].population = "Participants with available data at each time point."
+    results[2].population = "Full analysis set participants with available data at each time point."
+    item = item_for([results[0], results[2]], trials)
+    item["analysis_set"] = label
+    assert not check_axis(item, context_catalog(results, trials, families, cfg.concepts))[0]
+
+
+def test_named_analysis_aliases_match_without_turning_modified_itt_or_pp_into_itt(cfg):
+    cfg, results, trials, families = inputs(cfg)
+    results[0].population = "Part B full analysis set participants with available data."
+    item = item_for([results[0], results[2]], trials)
+    assert check_axis(item, context_catalog(results, trials, families, cfg.concepts))[0]
+    results[0].population = "Modified intention to treat population."
+    results[2].population = "Intention to treat population."
+    item = item_for([results[0], results[2]], trials)
+    item["analysis_set"] = "ITT"
+    assert not check_axis(item, context_catalog(results, trials, families, cfg.concepts))[0]
+    results[0].population = "Per protocol population."
+    item = item_for([results[0], results[2]], trials)
+    item["analysis_set"] = "ITT"
+    assert not check_axis(item, context_catalog(results, trials, families, cfg.concepts))[0]
+
