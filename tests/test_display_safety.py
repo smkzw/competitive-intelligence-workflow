@@ -329,7 +329,8 @@ process.stdout.write(JSON.stringify({first,second,live,firstCell,longOptions:els
     assert result["second"]["values"] == [16] and "Proportion" in result["second"]["sub"]
     assert not result["hidden"] and not result["mismatch"]
     assert result["live"] == [1]
-    assert "Unrelated CGI" not in result["longOptions"] and "临床缓解" in result["longOptions"] and "Points" in result["longOptions"]
+    assert "Unrelated CGI" not in result["longOptions"]
+    assert "临床缓解" in result["longOptions"] and "Points" in result["longOptions"]
     assert result["longRows"] == [1, 16] and not result["longHidden"]
     assert result["longSeries"][0].index("Drug16") < result["longSeries"][0].index("III")
     assert result["longSeries"][0].index("III") < result["longSeries"][0].index("T16")
