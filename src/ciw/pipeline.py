@@ -285,6 +285,13 @@ def _build_body(cfg, ws, products, trials, results, safety, events, review_queue
                 products[pid].trial_ids.append(t.trial_id)
 
     review_queue += [
+        {"kind": "arm_role_conflict", "trial_id": t.trial_id, "arm_id": a.arm_id,
+         "source_id": t.locator.source_id,
+         "path": f"{t.locator.path}.armsInterventionsModule.armGroups[{a.arm_id[1:]}]",
+         "source_type": a.type, "interventions": a.interventions}
+        for t in trials.values() for a in t.arms if a.role_conflict
+    ]
+    review_queue += [
         {
             "kind": "unclassified_intervention",
             "ref": v["name"],

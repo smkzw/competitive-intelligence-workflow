@@ -209,3 +209,24 @@ process.stdout.write(JSON.stringify([first,read()]));
     assert second["values"] == second["table"] == [10]
     assert "Responders" in second["context"] and "All participants" in first["context"]
     assert first["rawValues"] == [10.3] and not first["rawHidden"] and second["rawHidden"]
+
+
+def test_numeric_search_does_not_match_other_weeks_and_tolerates_source_punctuation():
+    asset = Path(__file__).resolve().parents[1] / "src/ciw/render/static/common.js"
+    script = r"""
+const fs=require('fs'),vm=require('vm');
+const window={CIW:{},addEventListener(){}};
+const document={getElementById:()=>null,addEventListener(){}};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{window,document,URL});
+const match=window.U.matchesSearch;
+process.stdout.write(JSON.stringify([
+ match('GPPGA at Week 1','at week 1'),match('GPPGA at Week 12','at week 1'),
+ match('GPPGA at Week 16','at week 1'),match('GPPGA at Week 128','week 12'),
+ match('(GPPGA) Pustulation Sub-score at Week 1','gppga pustulation subscore'),
+ match('Week 1.5','week 1'),match('Week 1.5','week 1.5'),
+ match('GPPGA at Week1','week 1'),match('登记 NCT03782792','NCT03782792'),
+ match('GPPGA ≥ 2','GPPGA < 2'),match('GPPGA ≥ 2','GPPGA ≥ 2')
+]));
+"""
+    result = subprocess.run(["node", "-e", script, str(asset)], capture_output=True, text=True, check=True)
+    assert json.loads(result.stdout) == [True,False,False,False,True,False,True,True,True,False,True]

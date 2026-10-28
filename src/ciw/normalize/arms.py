@@ -27,12 +27,21 @@ ROLE_LABEL_ZH: dict[str, str] = {
 }
 
 _PLACEBO = re.compile(r"\b(placebo|vehicle|sham)\b", re.I)
+_PLACEBO_ONLY = re.compile(r"(?:(?:matching|matched)\s+)?(?:placebos?|vehicle|sham)(?:\s+(?:to|for)\s+.+)?", re.I)
 _PERIOD_RULES: list[tuple[re.Pattern[str], Period]] = [
     (re.compile(r"run[- ]?in", re.I), "run_in"),
     (re.compile(r"follow[- ]?up|post[- ]?treatment|off[- ]?treatment", re.I), "follow_up"),
     (re.compile(r"open[- ]label extension|\bOLE\b|extension (period|phase|study)", re.I), "extension"),
 ]
 _QUALIFIER = re.compile(r"\s*[\(\[（][^)\]）]*[\)\]）]\s*")
+
+
+def arm_role(arm_type: str, interventions: list[str]) -> tuple[ArmRole, bool]:
+    role = ROLE_BY_TYPE.get(arm_type, "unknown")
+    conflict = role in {"experimental", "active_comparator", "no_intervention"} and bool(interventions) and all(
+        _PLACEBO_ONLY.fullmatch(name.strip()) for name in interventions
+    )
+    return ("unknown" if conflict else role), conflict
 
 
 def period_of(title: str) -> Period:

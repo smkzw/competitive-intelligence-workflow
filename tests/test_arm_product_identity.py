@@ -58,3 +58,31 @@ def test_placebo_code_and_multiple_products_do_not_create_single_product_binding
 def test_product_identity_does_not_invent_missing_arm_role(cfg, resolver):
     t = extract(study(arm_type=""), cfg, resolver)
     assert t.product_ids == ["opn-375"] and t.arms[0].role == "unknown"
+
+
+def test_placebo_only_source_type_conflict_is_not_coerced_into_a_comparator(cfg, resolver):
+    from ciw.analyze.common import role_label
+    from ciw.normalize.arms import match_group
+
+    raw = study("Placebo")
+    module = raw["protocolSection"]["armsInterventionsModule"]
+    module["armGroups"][0]["interventionNames"] = ["Drug: Placebo"]
+    module["interventions"][0]["name"] = "Placebo"
+    original = deepcopy(raw)
+    trial = extract(raw, cfg, resolver)
+    arm = trial.arms[0]
+    assert arm.type == "EXPERIMENTAL" and arm.label == "Placebo"
+    assert arm.role == "unknown" and arm.role_conflict
+    assert match_group("Placebo", trial.arms, resolver) == (arm.arm_id, "unknown", None)
+    assert role_label(arm.role, trial, arm.arm_id) == "登记角色信息不一致"
+    assert raw == original
+
+
+def test_explicit_placebo_and_active_plus_placebo_keep_original_roles(cfg, resolver):
+    from ciw.normalize.arms import arm_role
+
+    assert arm_role("PLACEBO_COMPARATOR", ["Placebo"]) == ("placebo", False)
+    assert arm_role("EXPERIMENTAL", ["Drug A", "Placebo"]) == ("experimental", False)
+    assert arm_role("ACTIVE_COMPARATOR", ["Placebos"]) == ("unknown", True)
+    assert arm_role("EXPERIMENTAL", ["Placebomab"]) == ("experimental", False)
+    assert arm_role("", ["Placebo"]) == ("unknown", False)

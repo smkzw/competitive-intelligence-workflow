@@ -36,7 +36,7 @@ def _registration(t: Trial) -> dict[str, Any]:
         "arms": [
             {
                 "label": a.label,
-                "role_label": role_label(a.role),
+                "role_label": role_label(a.role, t, a.arm_id),
                 "interventions": a.interventions,
                 "description": a.description,
             }
@@ -129,7 +129,7 @@ def _design_row(t, products, labels) -> dict[str, Any]:
         "arms": [
             {
                 "label": a.label,
-                "role_label": role_label(a.role),
+                "role_label": role_label(a.role, t, a.arm_id),
                 "description": a.description,
                 "interventions": a.interventions,
             }

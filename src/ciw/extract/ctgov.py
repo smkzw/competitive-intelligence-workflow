@@ -29,7 +29,7 @@ from ciw.models import (
     TrialDates,
     stable_id,
 )
-from ciw.normalize.arms import ROLE_BY_TYPE, match_group, period_of
+from ciw.normalize.arms import arm_role, match_group, period_of
 from ciw.normalize.products import ProductResolver
 from ciw.normalize.semantics import classify, concept_of, measure_kind, parse_timepoint, subgroup_of
 from ciw.normalize.trials import registry_ids
@@ -369,6 +369,7 @@ def _trial_arms(arms_mod, iv_product, resolver) -> list[Arm]:
     arms: list[Arm] = []
     for i, ag in enumerate(arms_mod.get("armGroups", [])):
         names = [re.sub(r"^[A-Za-z ]+:\s*", "", n) for n in ag.get("interventionNames", [])]
+        role, conflict = arm_role(ag.get("type", ""), names)
         pids = sorted({pid for n in names if (pid := iv_product.get(n) or resolver.resolve_intervention(n))})
         if not pids and ag.get("type") != "PLACEBO_COMPARATOR":
             explicit = resolver.resolve_intervention(ag.get("label", ""))
@@ -379,7 +380,8 @@ def _trial_arms(arms_mod, iv_product, resolver) -> list[Arm]:
                 arm_id=f"A{i}",
                 label=ag.get("label", ""),
                 type=ag.get("type", ""),
-                role=ROLE_BY_TYPE.get(ag.get("type", ""), "unknown"),
+                role=role,
+                role_conflict=conflict,
                 description=ag.get("description", ""),
                 interventions=names,
                 product_ids=pids,

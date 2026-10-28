@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from ciw.models import Product
+from ciw.models import Product, Trial
 from ciw.normalize.arms import ROLE_LABEL_ZH
 
 
@@ -14,7 +14,9 @@ def product_label(p: Product | None) -> str:
     return p.name_en
 
 
-def role_label(role: str) -> str:
+def role_label(role: str, trial: Trial | None = None, arm_id: str | None = None) -> str:
+    if role == "unknown" and trial and arm_id and any(a.arm_id == arm_id and a.role_conflict for a in trial.arms):
+        return "登记角色信息不一致"
     return ROLE_LABEL_ZH.get(role, role)
 
 

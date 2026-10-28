@@ -37,6 +37,19 @@
     }).join("");
   };
   const OWN = "#A65000", PAL = ["#D46B08", "#008F8A", "#7B5CC7", "#B38A00", "#C4457C"];
+  const searchText = text => String(text ?? "").normalize("NFKC").toLowerCase()
+    .replace(/(?<=\p{L})[-‐‑–—](?=\p{L})/gu, "")
+    .replace(/(?<=\p{L})(?=\d)|(?<=\d)(?=\p{L})/gu, " ")
+    .replace(/[^\p{L}\p{N}.<>≤≥=]+/gu, " ").trim();
+  function matchesSearch(text, query) {
+    const needle = searchText(query);
+    if(!needle) return true;
+    const pattern = needle.split(/(\d+(?:\.\d+)?)/).map((part, i) => {
+      const literal = part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      return i % 2 ? `(?<![\\d.])${literal}(?![\\d.])` : literal;
+    }).join("");
+    return new RegExp(pattern,"u").test(searchText(text));
+  }
 
   // The host already provides indication and report navigation; keep cutoff beside the title.
   if(window.name === "ciw-report" && window.self !== window.top) {
@@ -194,5 +207,5 @@
   }
 
   coverage();
-  window.U = { D, esc, num, nN, tag, src, highlight, annotate, table, drawer, chart, present, options, OWN, PAL };
+  window.U = { D, esc, num, nN, tag, src, highlight, annotate, matchesSearch, table, drawer, chart, present, options, OWN, PAL };
 })();

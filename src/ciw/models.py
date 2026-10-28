@@ -45,6 +45,7 @@ class Arm(Model):
     label: str
     type: str = ""  # CT.gov armGroups.type 原值
     role: ArmRole = "unknown"
+    role_conflict: bool = False
     description: str = ""
     interventions: list[str] = Field(default_factory=list)
     product_ids: list[str] = Field(default_factory=list)
