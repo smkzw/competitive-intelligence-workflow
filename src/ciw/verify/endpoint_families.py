@@ -22,18 +22,30 @@ class ClinicalFamilyItem(BaseModel):
     quote: str
 
 
+def _component_identity(title):
+    match = re.search(r"\b(?:sub[- ]?(?:score|scale)|components?)\b", title, re.I)
+    if not match:
+        return False, ""
+    phrase = re.split(r"[():;,]|\b(?:with|of|in|on|and|a|the)\b", title[:match.start()], flags=re.I)[-1]
+    phrase = re.sub(r"\b[A-Z][A-Z0-9-]+\b", "", phrase)
+    return True, " ".join(phrase.casefold().split())
+
+
+def _instrument_identity(title):
+    identifiers = re.findall(
+        r"\b(?i:scale|score|index|assessment|questionnaire|inventory|survey)"
+        r"(?:\s+(?i:version)\s*\d+)?\s*\(([A-Z][A-Z0-9-]{1,20})(?:\s+V\d+)?\)", title)
+    versions = re.findall(r"\b(?:version\s*|v)(\d+)\b", title, re.I)
+    return (tuple(sorted(set(identifiers))), tuple(sorted(set(versions)))) if identifiers else None
+
+
 def _structural_compatibility(sources):
     components, instruments, purposes = set(), set(), set()
     for source in sources:
         title = source["title"]
-        component = re.search(r"\b(?:sub[- ]?(?:score|scale)|components?)\b", title, re.I)
-        name = re.search(r"\b([A-Za-z-]+)\s+(?:sub[- ]?(?:score|scale)|component(?:\s+score)?)\b", title, re.I)
-        components.add((bool(component), name[1].casefold() if name else ""))
-        tokens = [" ".join(filter(None, parts)) for parts in re.findall(
-            r"\b(?i:scale|score|index|assessment|questionnaire|inventory|survey)"
-            r"(?:\s+(?i:version)\s*\d+)?\s*\(([A-Z][A-Z0-9-]{1,20})(?:\s+(V\d+))?\)", title)]
-        if tokens:
-            instruments.add(tuple(sorted(set(tokens))))
+        components.add(_component_identity(title))
+        if identity := _instrument_identity(title):
+            instruments.add(identity)
         event = re.search(r"\bworsen\w*|\brelaps\w*|\brecur\w*|\b(?:death|mortality)\b|"
                           r"\b(?:occurr\w*|time\s+to|inciden\w*|at\s+least\s+one)\b.*"
                           r"\b(?:flare\w*|exacerbat\w*|surgery|rescue)\b", title, re.I)

@@ -152,6 +152,9 @@ def test_report_supplement_can_reuse_release_membership_after_stage_loss(cfg, ws
     ("Assessment (GPPGA) Pustulation Subscore", "Assessment (GPPGA) Erythema Subscore"),
     ("Participants Achieving Clinical Remission", "Occurrence of at Least One GPP Flare"),
     ("Dermatology Life Quality Index (DLQI)", "Short Form Health Survey (SF-36)"),
+    ("Short Form Health Survey (SF-36) Mental health subscore",
+     "Short Form Health Survey (SF-36) Physical health subscore"),
+    ("Short Form Health Survey (SF-36) Version 1 score", "Short Form Health Survey (SF-36) Version 2 score"),
     ("Dermatology Life Quality Index (DLQI)", "Short Form Health Status Survey Version 2 (SF-36 V2) Score"),
 ])
 def test_two_models_agreeing_does_not_override_structural_endpoint_differences(cfg, ws, left, right):
@@ -165,3 +168,12 @@ def test_two_models_agreeing_does_not_override_structural_endpoint_differences(c
     assert issues and snapshot["groups"] == []
     original = build_results(cfg, trials, {}, rows, None)
     assert len(project_clinical_families(original, snapshot["groups"])["questions"]) == 2
+
+
+def test_structural_identity_keeps_punctuation_and_explicit_version_aliases():
+    from ciw.verify.endpoint_families import _structural_compatibility
+    for titles in [
+        ["Assessment (GPPGA) Pustulation Sub-score", "Assessment (GPPGA) Pustulation Subscore"],
+        ["Short Form Health Survey Version 2 (SF-36) Score", "Short Form Health Survey (SF-36 V2) Score"],
+    ]:
+        assert _structural_compatibility([{"title": title} for title in titles]) == (True, "")
