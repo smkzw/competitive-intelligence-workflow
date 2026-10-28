@@ -150,7 +150,7 @@
       const start = Math.min(lastStart, Math.max(0, zoom?.startValue ?? (axis.inverse ? 0 : lastStart)));
       option.dataZoom = [{type:"slider",yAxisIndex:0,filterMode:"none",width:16,right:0,
         startValue:start,endValue:start+visibleRows-1,zoomLock:true,brushSelect:false,
-        minValueSpan:visibleRows-1,maxValueSpan:visibleRows-1,
+        minValueSpan:visibleRows-1,maxValueSpan:visibleRows-1,handleSize:0,showDetail:false,
         fillerColor:"rgba(255,153,0,.10)",borderColor:"#E7EBEE",handleStyle:{color:"#B85C00"},
         dataBackground:{lineStyle:{color:"#CED3D8"},areaStyle:{color:"#E7EBEE"}}}];
     } else if(axis?.type === "category") {
@@ -175,9 +175,15 @@
     }
     return c;
   }
-  window.addEventListener("resize", () => document.querySelectorAll(".chart").forEach((el) => {
-    if(el._ciwOption) chart(el.id, el._ciwOption);
-  }));
+  let resizeFrame;
+  const resizeCharts = () => {
+    cancelAnimationFrame(resizeFrame);
+    resizeFrame = requestAnimationFrame(() => document.querySelectorAll(".chart").forEach(el => {
+      if(el._ciwOption) chart(el.id, el._ciwOption);
+    }));
+  };
+  window.addEventListener("resize", resizeCharts);
+  window.visualViewport?.addEventListener("resize", resizeCharts);
 
   function options(sel, values, keep) {
     const el = document.querySelector(sel);
