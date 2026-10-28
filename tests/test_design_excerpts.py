@@ -104,3 +104,55 @@ def test_design_projection_keeps_complete_endpoint_definition_and_source_conditi
     assert row["primary"][0]["description"] == t.outcomes_planned[0].description
     assert row["primary"][0]["description_marks"]
     assert row["conditions"] == t.conditions
+
+
+def test_eligibility_threshold_topics_do_not_collect_outcome_measurements():
+    from ciw.models import PlannedOutcome
+    t = trial("anti-PLA2R antibody ≥50 RU/mL and eGFR ≥50 mL/min.")
+    t.outcomes_planned = [PlannedOutcome(kind="primary", title="anti-PLA2R change",
+                                        description="anti-PLA2R antibody change.")]
+    topic = DesignTopicCfg(label="抗PLA2R抗体入排阈值", patterns=["anti-PLA2R"])
+    found = design_excerpts(t, [topic])
+    assert topic.kind == "eligibility_threshold"
+    assert {s["field"] for s in found[0]["snippets"]} == {"eligibility"}
+    assert found[0]["snippets"][0]["marks"]
+
+
+def test_remission_definition_topics_do_not_collect_prior_response_eligibility():
+    from ciw.models import PlannedOutcome
+    t = trial("Exclude patients who previously achieved complete remission.")
+    t.outcomes_planned = [PlannedOutcome(kind="primary", title="Complete remission",
+                                        description="Complete remission: protein <0.3 g/day.")]
+    topic = DesignTopicCfg(label="完全缓解定义", patterns=["complete remission"])
+    found = design_excerpts(t, [topic])
+    assert topic.kind == "endpoint_definition"
+    assert {s["field"] for s in found[0]["snippets"]} == {"outcome:0"}
+
+
+def test_conditional_retreatment_and_followup_are_separate_verbatim_clauses():
+    t = trial("")
+    text = ("After treatment, subjects enter a repeat treatment period (3 months) if necessary; "
+            "and a final follow-up period of 15 to 18 months.")
+    t.design.detailed_description = text
+    topic = DesignTopicCfg(label="实际给药暴露/治疗时长", patterns=["treatment"], kind="treatment_duration")
+    snippets = design_excerpts(t, [topic])[0]["snippets"]
+    assert len(snippets) == 1
+    assert "3 months" in snippets[0]["text"] and "if necessary" in snippets[0]["text"]
+    assert "15" not in snippets[0]["text"] and "follow-up" not in snippets[0]["text"]
+    assert snippets[0]["context"] == text and t.design.detailed_description == text
+
+
+def test_followup_cannot_supply_a_treatment_duration_and_real_preposed_duration_is_kept():
+    t = trial("")
+    t.design.detailed_description = "Participants will be treated, then followed for 18 months."
+    topic = DesignTopicCfg(label="治疗时长", patterns=["treatment"])
+    assert design_excerpts(t, [topic]) == []
+    t.design.brief_summary = "A randomized study with a 100 week treatment period."
+    snippets = design_excerpts(t, [topic])[0]["snippets"]
+    assert [s["text"] for s in snippets] == [t.design.brief_summary]
+
+
+def test_eligibility_ranges_are_highlighted_without_turning_a_date_into_a_threshold():
+    text = "eGFR 30–60 mL/min, age between 18 and 65; record date 2026-10-28."
+    marked = [text[s["start"]:s["end"]] for s in threshold_spans(text)]
+    assert marked == ["30–60 mL/min", "between 18 and 65"]

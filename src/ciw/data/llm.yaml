@@ -1,4 +1,4 @@
-# DeepSeek主抽取；cms-smk GLM读原文核对、修正与补漏。凭据只读环境变量。
+# D21临时路线：DGX DeepSeek主抽取；DGX glm核对，保留正常加载/换模等待。
 endpoints:
   dgx:
     base_url: https://spark-a321.tail623d86.ts.net/v1
@@ -11,4 +11,4 @@ endpoints:
     no_proxy: false
 roles:
   extractor_a: {endpoint: dgx, model: deepseek, family: deepseek, attribute_reasoning_effort: low, max_tokens: 65536, timeout: 7200, response_format: null}
-  verifier: {endpoint: cms-smk, model: glm-5.3-flash, family: glm, max_tokens: 65536, timeout: 7200, response_format: null}
+  verifier: {endpoint: dgx, model: glm, family: glm, max_tokens: 65536, timeout: 7200, response_format: null}

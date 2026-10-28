@@ -73,18 +73,29 @@ class ChinaCfg(_Cfg):
     wechat_queries: list[str] = Field(default_factory=list)
 
 
+DesignTopicKind = Literal["lookup", "treatment_duration", "eligibility_threshold", "endpoint_definition"]
+
+
 class DesignTopicCfg(_Cfg):
     label: str
     patterns: list[str]
-    kind: Literal["lookup", "treatment_duration"] = "lookup"
+    kind: DesignTopicKind = "lookup"
     exclude: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def _legacy_duration(self):
         if "kind" not in self.model_fields_set and re.fullmatch(
-            r"治疗时长|治疗期|给药时长|疗程|treatment duration", self.label, re.I
+            r"治疗时长|治疗期|给药时长|疗程|treatment duration|实际给药暴露/治疗时长", self.label, re.I
         ):
             self.kind = "treatment_duration"
+        if "kind" not in self.model_fields_set and re.search(
+            r"(?:入排|入选|排除|eligibility).*(?:阈值|threshold)|threshold.*eligibility", self.label, re.I
+        ):
+            self.kind = "eligibility_threshold"
+        if "kind" not in self.model_fields_set and re.search(
+            r"(?:缓解|应答|终点).*定义|definition.*(?:remission|response|endpoint)", self.label, re.I
+        ):
+            self.kind = "endpoint_definition"
         return self
 
     @field_validator("patterns", "exclude")

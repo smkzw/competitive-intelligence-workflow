@@ -13,7 +13,15 @@ from typing import Literal
 import yaml
 from pydantic import BaseModel, Field
 
-from ciw.config import ConceptCfg, DesignTopicCfg, IndicationConfig, ProductCfg, load_indication, normalize_name
+from ciw.config import (
+    ConceptCfg,
+    DesignTopicCfg,
+    DesignTopicKind,
+    IndicationConfig,
+    ProductCfg,
+    load_indication,
+    normalize_name,
+)
 from ciw.pipeline import run
 from ciw.sources import ctgov
 from ciw.store import Workspace, now_iso
@@ -29,7 +37,7 @@ class Topic(BaseModel):
     terms: list[str] = Field(min_length=1, max_length=12)
     exclude: list[str] = Field(default_factory=list, max_length=12)
     direction: Literal["lower_better", "higher_better", "none"] = "none"
-    kind: Literal["lookup", "treatment_duration"] = "lookup"
+    kind: DesignTopicKind = "lookup"
 
 
 class QueryPlan(BaseModel):
@@ -50,7 +58,8 @@ def plan_query(indication, question, roles, ws):
               "concepts为重要疗效终点，label用中文，terms/exclude是英文原文中的字面词组，不是正则。"
               "不同量表和不同数值阈值分别成概念，不用只有PASI等无阈值词混合75/90。"
               "direction只能lower_better/higher_better/none。design_topics为人群入排和方案设计主题，label用中文。"
-              "实际给药暴露/治疗时长主题kind=treatment_duration；避孕、既往治疗和随访另设lookup主题。")
+              "实际给药暴露/治疗时长主题kind=treatment_duration；入排数值阈值kind=eligibility_threshold，"
+              "终点/应答/缓解定义kind=endpoint_definition；避孕、既往治疗和随访另设lookup主题。")
     user = json.dumps(dict(indication=indication, question=question), ensure_ascii=False) + "\nSchema:" + schema
     first = parse_json(roles["extractor_a"].chat(system, user))
     second = parse_json(roles["verifier"].chat(
@@ -65,6 +74,14 @@ def plan_query(indication, question, roles, ws):
         "roles": {k: dict(model=v.model, family=v.family, receipt=getattr(v, "receipt", {}))
                   for k, v in roles.items()}})
     return plan
+
+
+def _topic_config(topic):
+    derived = DesignTopicCfg(label=topic.label, patterns=[re.escape(x) for x in topic.terms],
+                             exclude=[re.escape(x) for x in topic.exclude])
+    if topic.kind != "lookup":
+        derived.kind = topic.kind
+    return derived
 
 
 def registry_config(plan, studies):
@@ -93,9 +110,7 @@ def registry_config(plan, studies):
         ctgov={"conditions": plan.conditions, "relevance_patterns": [re.escape(x) for x in plan.conditions]},
         products=sorted(products.values(), key=lambda p: p.name_en.casefold()), concepts=concepts,
         background_patterns=[r"\bplacebo\b", "安慰剂", r"\bdummy\b"],
-        design_topics=[DesignTopicCfg(label=t.label, patterns=[re.escape(x) for x in t.terms],
-                                      kind=t.kind, exclude=[re.escape(x) for x in t.exclude])
-                       for t in plan.design_topics])
+        design_topics=[_topic_config(t) for t in plan.design_topics])
     return cfg, membership
 
 
@@ -144,6 +159,11 @@ def _mark_planned_concepts(cfg, ws):
                 concept.origin = "research_plan"
             elif concept.origin == "research_plan":
                 concept.origin = "configured"
+    for topic, original in zip(cfg.design_topics, record.get("plan", {}).get("design_topics", []), strict=False):
+        planned = Topic.model_validate(original)
+        if (topic.label == planned.label and topic.patterns == [re.escape(x) for x in planned.terms]
+                and topic.exclude == [re.escape(x) for x in planned.exclude] and topic.kind == planned.kind):
+            topic.kind = _topic_config(planned).kind
 
 
 

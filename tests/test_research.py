@@ -91,3 +91,17 @@ def test_manual_plan_semantic_change_is_not_downgraded_to_a_provisional_plan(tmp
     setattr(cfg.concepts[0], field, value)
     _mark_planned_concepts(cfg, ws)
     assert not cfg.concepts[0].provisional and cfg.concepts[0].origin == "configured"
+
+
+def test_generated_and_legacy_design_topics_follow_the_requested_source_section(tmp_path):
+    from ciw.research import _mark_planned_concepts
+    ws = Workspace(tmp_path)
+    raw = plan(design_topics=[dict(label="eGFR入排阈值", terms=["eGFR"], kind="lookup"),
+                              dict(label="实际给药暴露/治疗时长", terms=["treatment"], kind="lookup")])
+    cfg, _ = registry_config(QueryPlan.model_validate(raw), {"one": study(ws)})
+    assert [t.kind for t in cfg.design_topics] == ["eligibility_threshold", "treatment_duration"]
+    for topic in cfg.design_topics:
+        topic.kind = "lookup"  # old runtime YAML serialized the default
+    ws.write_stage("research-query-plan", dict(plan=raw))
+    _mark_planned_concepts(cfg, ws)
+    assert [t.kind for t in cfg.design_topics] == ["eligibility_threshold", "treatment_duration"]
