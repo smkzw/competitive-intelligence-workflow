@@ -196,7 +196,7 @@ def _research(indication, ws, *, question="", llm_config=None, log=print, report
         if old["indication"]["slug"] == cfg.slug:
             completed = old.get("rendered_reports", list("ABC"))
     log(f"[research] sources={len(studies)} candidates={len(cfg.products)}")
-    return run(cfg, ws, offline=reusing, roles=roles, log=log, preloaded_studies=studies,
+    return run(cfg, ws, offline=False, roles=roles, log=log, preloaded_studies=studies, reuse_sources=reusing,
                report_scope=report, render_reports=sorted({*completed, report}))
 
 

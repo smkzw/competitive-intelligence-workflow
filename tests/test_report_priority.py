@@ -76,7 +76,8 @@ def test_continuation_reuses_closed_source_set_without_query_or_download(cfg, se
     monkeypatch.setattr("ciw.research.run", execute)
     _research("same disease", seeded_ws, report=report, reuse_research=True, log=lambda *_: None)
     assert received["report_scope"] == report and received["render_reports"] == [report]
-    assert received["offline"] is True  # all acquisition, including publication discovery
+    assert received["offline"] is False  # a first B supplement may need previously unsearched papers
+    assert received["reuse_sources"] is True  # completed source acquisition is never replayed
     assert set(received["roles"]) == {"extractor_a", "verifier"}
     assert {src.source_id for src, _ in received["preloaded_studies"].values()} == set(ids)
 
@@ -112,7 +113,7 @@ def test_later_design_keeps_adopted_paper_results_and_verified_attributes(cfg, s
         products["dupilumab"].attribute_status = "verified"
         products["dupilumab"].attribute_locators["target"] = Locator(source_id=source.source_id, quote="fixture")
         return []
-    def publications(cfg, ws, resolver, trials, results, roles, offline, issues, coverage):
+    def publications(cfg, ws, resolver, trials, results, roles, offline, issues, coverage, reuse_sources=False):
         row = results[0].model_copy(deep=True)
         row.result_id, row.kind, row.status = "paper-fixture", "publication", "verified"
         row.locator = Locator(source_id=paper.source_id, quote="Value 8")

@@ -72,6 +72,7 @@ def run(
     preloaded_studies=None,
     report_scope: str | None = None,
     render_reports: list[str] | None = None,
+    reuse_sources: bool = False,
 ) -> RunResult:
     if report_scope not in {None, "A", "B", "C"}:
         raise ValueError("未知报告类型")
@@ -112,7 +113,7 @@ def run(
 
     if report_scope in {None, "B"}:
         log("[research] publications")
-        _add_publications(cfg, ws, resolver, trials, results, roles, offline, review_queue, coverage)
+        _add_publications(cfg, ws, resolver, trials, results, roles, offline, review_queue, coverage, reuse_sources)
 
     from ciw.verify.endpoint_index import enrich_endpoint_index
 
@@ -267,7 +268,7 @@ def _add_cde(cfg, ws, resolver, trials, unclassified, coverage, log):
     log(f"[cde] {cde_cov['status']}: {len(cde_trials)} trials")
 
 
-def _add_publications(cfg, ws, resolver, trials, results, roles, offline, review_queue, coverage):
+def _add_publications(cfg, ws, resolver, trials, results, roles, offline, review_queue, coverage, reuse_sources=False):
     # Paper discovery does not turn a search hit into trial evidence; binding uses literal IDs in abstracts.
     paper_ids = sorted(
         {
@@ -278,7 +279,7 @@ def _add_publications(cfg, ws, resolver, trials, results, roles, offline, review
             if europepmc.is_registry_id(identifier)
         }
     )
-    papers, paper_coverage = europepmc.discover(ws, paper_ids, offline=offline)
+    papers, paper_coverage = europepmc.discover(ws, paper_ids, offline=offline, reuse=reuse_sources)
     paper_results, paper_issues = extract_publications(ws, cfg, papers, trials, resolver, roles)
     results.extend(paper_results)
     review_queue.extend(paper_issues)

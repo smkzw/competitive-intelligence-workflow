@@ -32,13 +32,19 @@ def plain_abstract(paper: dict) -> str:
     return " ".join(html.fragment_fromstring(text, create_parent="div").text_content().split())
 
 
-def discover(ws: Workspace, registry_ids: list[str], *, offline: bool = False) -> tuple[list[dict], dict]:
+def discover(ws: Workspace, registry_ids: list[str], *, offline: bool = False,
+             reuse: bool = False) -> tuple[list[dict], dict]:
     wanted = {s.upper() for s in registry_ids}
     if any(not _ID.fullmatch(s) for s in wanted):
         raise ValueError("论文发现仅接受明确NCT或CTR号")
     state = ws.read_stage("publication-search") or {}
+    completed = {
+        parse_qs(urlparse(s.url).query).get("query", [""])[0].strip('"') for s in ws.sources() if s.kind == "europepmc"
+    }
     if not offline:
         for identifier in sorted(wanted):
+            if reuse and identifier in completed and state.get(identifier, {}).get("status") == "ok":
+                continue
             try:
                 _fetch(ws, identifier)
                 state[identifier] = {"status": "ok", "checked_at": now_iso()}
@@ -69,7 +75,7 @@ def discover(ws: Workspace, registry_ids: list[str], *, offline: bool = False) -
         "eligible": len(eligible),
         "failures": failures,
         "version_conflicts": conflicts,
-        "mode": "offline" if offline else "online",
+        "mode": "offline" if offline else "reuse" if reuse else "online",
         "requested": len(wanted),
         "pending_ids": pending,
     }

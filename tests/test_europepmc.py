@@ -85,3 +85,41 @@ def test_newer_observed_publication_replaces_current_projection_without_rewritin
     rows, cov = discover(ws, ["NCT12345678"], offline=True)
     assert len(rows) == 1 and "2.8" in rows[0]["text"] and not cov["version_conflicts"]
     assert ws.read_source(old.source_id) == original and len(ws.sources()) == 2
+
+
+def test_supplement_fetches_only_unsearched_papers_and_keeps_completed_sources(ws, monkeypatch):
+    from ciw.store import now_iso
+    completed, missing = "NCT12345678", "NCT12345679"
+    seed(ws, [], url=f"https://example.com/search?query=%22{completed}%22")
+    ws.write_stage("publication-search", {completed: {"status": "ok", "checked_at": now_iso()}})
+    before = [s.model_dump() for s in ws.sources()]
+    calls = []
+
+    def fetch(workspace, identifier):
+        calls.append(identifier)
+        seed(workspace, [], url=f"https://example.com/search?query=%22{identifier}%22")
+    monkeypatch.setattr("ciw.sources.europepmc._fetch", fetch)
+    _, coverage = discover(ws, [completed, missing], reuse=True)
+    assert calls == [missing] and coverage["mode"] == "reuse" and not coverage["pending_ids"]
+    assert all(s in [v.model_dump() for v in ws.sources()] for s in before)
+    discover(ws, [completed, missing], reuse=True)
+    assert calls == [missing]
+    _, offline = discover(ws, [completed, missing, "NCT12345680"], offline=True, reuse=True)
+    assert calls == [missing] and offline["pending_ids"] == ["NCT12345680"]
+    discover(ws, [completed, missing])  # explicit ordinary refresh still checks both
+    assert calls == [missing, completed, missing]
+
+
+def test_reuse_retries_failed_lookup_without_relabelling_cached_hits_as_complete(ws, monkeypatch):
+    identifier = "NCT12345678"
+    seed(ws, [], url=f"https://example.com/search?query=%22{identifier}%22")
+    ws.write_stage("publication-search", {identifier: {"status": "failed", "http_status": 503}})
+    calls = []
+
+    def fail(*args):
+        calls.append(args[1])
+        raise HTTPError("https://example.test", 503, "Unavailable", {}, None)
+    monkeypatch.setattr("ciw.sources.europepmc._fetch", fail)
+    rows, coverage = discover(ws, [identifier], reuse=True)
+    assert calls == [identifier] and not rows
+    assert coverage["status"] == "partial" and coverage["failures"][0]["http_status"] == 503
