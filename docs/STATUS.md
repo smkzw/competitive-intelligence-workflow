@@ -2,9 +2,9 @@
 
 **2026-10-28｜双独立用户测试LOOP持续实施，尚未正式上线**
 
-当前权威：PRD、DECISIONS（D17–D20）、PLAN、ARCHITECTURE、EXECUTION_PACK。
+当前权威：PRD、DECISIONS（D17–D21）、PLAN、ARCHITECTURE、EXECUTION_PACK。
 模式：execution-plus-independent-review；指定两位测试者执行真实生成/浏览器/来源抽查，owner只修复、检查产物与运行开发测试。
-产品内部只用DGX DeepSeek主抽取与cms-smk glm-5.3-flash来源核对；不恢复三模型会商/签发链。
+D21临时使用DGX/deepseek主抽取与DGX/glm来源核对；原cms-smk证书故障，旧路线/缓存保留；不恢复三模型会商/签发链。
 
 ## 版本与保全
 - 正式发布开发分支codex/ciw-v2-trunk已推ef7e846；工作台feat/ciw-release-adapter已推36695f6；main保留，不强推。
@@ -51,3 +51,10 @@
 - 下一步冻结D20候选供独立测试：首次所选→补生成→离页返回→同版本图表/来源核对。原R4健康任务自然结束后由原测试者续验，不重跑。
 - 随后集中修复EoE来源端点索引根因，并验证真正独立多研究正向横比；背景方案结构化、长标签、搜索空态与中国来源仍开放。
 - 正式宿主认证未部署；独立测试用显式本地开发身份，默认关闭。没有新的待用户决定事项。
+
+## D21 当前临时恢复
+- 临时配置开发合同243测试3.36秒/Ruff通过；真实生成仍待独立测试。
+- 用户批准DGX/glm，实际GET models200确认glm/deepseek；不选glm:fast，保留两模型家族、TLS、原超时7200秒和原DeepSeek配置。模型自动切换等待正常，不重复请求。
+- R5 GPP B任务research_7701a57b41dc9c90eb55先前两次因CMS过期证书失败，无来源/release，DeepSeek计划缓存保留；将由原独立Cursor在新候选上点一次继续，owner不代做生成。
+- 新候选codex/ciw-dgx-verifier仅在e8707ae基础切换配置与合同测试，工作台eb98195不变；不会把另一临床索引分支的修复当成此候选已包含。
+- 代码根因修复另在codex/ciw-clinical-endpoint-index，最新cd346af/260开发测试；独立复查中。真实采用与正向横比未通过，整体仍未上线。

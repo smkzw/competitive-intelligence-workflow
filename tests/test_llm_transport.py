@@ -11,11 +11,14 @@ def test_role_contract_uses_only_explicit_authorized_credentials(monkeypatch, tm
     monkeypatch.setenv("CIW_DGX_KEY_FILE", str(path))
     monkeypatch.setenv("CMS_SMK_API_KEY", "test-only-cms-key")
     roles = load_roles()
-    assert roles["verifier"].api_key == "test-only-cms-key"
+    assert roles["verifier"].api_key == roles["extractor_a"].api_key == "test-only-key"
     assert {r.family for r in roles.values()} == {"deepseek", "glm"}
     assert roles["verifier"].response_format is None
-    assert roles["verifier"].model == "glm-5.3-flash"
-    assert roles["verifier"].base_url == "https://new-api.mediportal.com.cn/v1"
+    assert roles["verifier"].model == "glm"
+    assert roles["verifier"].base_url == roles["extractor_a"].base_url
+    assert roles["verifier"].no_proxy is True
+    assert roles["verifier"].timeout == 7200
+    assert roles["verifier"].max_tokens == 65536
     assert roles["extractor_a"].response_format is None
     assert roles["extractor_a"].max_tokens == 65536
     for spec in ({"key_env": ["MW_DGX_API_KEY"]}, {"default_key_file": str(path)}):
@@ -109,3 +112,14 @@ def test_effort_variants_do_not_reuse_a_different_request_receipt(ws):
     fast.chat("schema", "source")
     fast.chat("schema", "source")
     assert len(calls) == 2 and fast.receipt["cached"]
+
+
+def test_temporary_model_transition_keeps_both_models_cache_records(ws):
+    calls = []
+    original = CachedBackend(FakeBackend("glm", "glm-5.3-flash", lambda *_: calls.append("cms") or "old"), ws)
+    temporary = CachedBackend(FakeBackend("glm", "glm", lambda *_: calls.append("dgx") or "new"), ws)
+    assert original.chat("same schema", "same source") == "old"
+    assert temporary.chat("same schema", "same source") == "new"
+    assert original.chat("same schema", "same source") == "old"
+    assert temporary.chat("same schema", "same source") == "new"
+    assert calls == ["cms", "dgx"]

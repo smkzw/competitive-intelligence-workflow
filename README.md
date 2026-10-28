@@ -67,3 +67,5 @@ uv run ciw research "适应症全称" --report B --reuse-research --workspace <w
 ```
 
 B/C不等待A的产品属性核对。高级YAML `ciw run`仍可一次生成整套A/B/C。运行时间及科学质量以真实独立测试为准。
+
+临时运行路线（D21，2026-10-28）：DGX/deepseek主抽取＋DGX/glm核对，替代证书故障的CMS线路。AB自动换模/排队属正常等待，保留7200秒超时；不手动卸载，不降TLS，不在无结果时重复请求。
