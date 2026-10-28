@@ -130,13 +130,17 @@
     option.tooltip = {confine:true,textStyle:label,...option.tooltip};
     option.color = PAL;
     const axis = option.yAxis;
-    if(axis?.type === "category" && axis.data.length > 14) {
+    if(axis?.type === "category" && axis.data.length) {
+      const grid = Array.isArray(option.grid) ? option.grid[0] : option.grid;
+      const inset = key => typeof grid?.[key] === "number" ? grid[key] : 40;
+      el.style.height = Math.max(144, Math.min(axis.data.length,10) * 28 + inset("top") + inset("bottom")) + "px";
+    }
+    if(axis?.type === "category" && axis.data.length > 10) {
       const last = axis.data.length - 1;
       option.dataZoom = [{type:"slider",yAxisIndex:0,filterMode:"none",width:16,right:0,
-        startValue:axis.inverse ? 0 : last-13,endValue:axis.inverse ? 13 : last,
+        startValue:axis.inverse ? 0 : last-9,endValue:axis.inverse ? 9 : last,
         fillerColor:"rgba(255,153,0,.10)",borderColor:"#E7EBEE",handleStyle:{color:"#B85C00"},
         dataBackground:{lineStyle:{color:"#CED3D8"},areaStyle:{color:"#E7EBEE"}}}];
-      el.style.height = "520px";
     }
     option.series = (option.series || []).map(s=>({...s,clip:true,label:{fontSize:16,...s.label}}));
     return option;
@@ -145,10 +149,11 @@
   function chart(id, option) {
     const el = document.getElementById(id);
     if (!el || !el.getClientRects().length) return null;
+    const prepared = present(option, el);
     const existing = echarts.getInstanceByDom(el);
     const c = existing || echarts.init(el);
     if (existing) c.resize();
-    c.setOption(present(option, el), true);
+    c.setOption(prepared, true);
     if(typeof ResizeObserver !== "undefined" && !el._ciwObserver) {
       el._ciwObserver = new ResizeObserver(() => c.resize());
       el._ciwObserver.observe(el);

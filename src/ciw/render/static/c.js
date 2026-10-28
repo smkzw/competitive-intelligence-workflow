@@ -77,8 +77,6 @@
   const ck = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
   const conceptEl = document.getElementById("concept-chart");
   conceptEl.parentElement.hidden = !ck.length;
-  const plotHeight = Math.min(360, Math.max(160, ck.length * 32 + 60));
-  conceptEl.style.height = plotHeight + "px";
   if (ck.length) chart("concept-chart", { grid: { left: 200, right: 40, top: 20, bottom: 30 }, tooltip: {},
     xAxis: { type: "value", minInterval: 1 }, yAxis: { type: "category", data: ck, inverse: true },
     series: [{ type: "bar", data: ck.map((k) => counts[k]), itemStyle: { color: "#008F8A" }, label: { show: true, position: "right" } }] });
@@ -98,7 +96,7 @@
     {label:"样本量类型",key:"enrollment_type"},
     {label:"绘图状态",html:r=>[!r.start ? "未记录首例日期" : "",r.enrollment == null ? "未记录样本量" : ""].filter(Boolean).join("；") || "已绘制"}
   ],data);
-  sizeEl.style.height = (data.length < 5 ? plotHeight : 360) + "px";
+  sizeEl.style.height = (drawable.length < 5 ? 240 : 300) + "px";
   const phases = [...new Set(drawable.map((r) => r.phase))];
   if (drawable.length) chart("size-chart", { grid: { left: 60, right: 30, top: 40, bottom: 40 }, legend: { top: 0 },
     tooltip: { formatter: (p) => `${esc(p.data.r.acronym || p.data.r.trial_id)}<br>${esc(p.data.r.phase)} · N=${p.data.r.enrollment}<br>${esc(p.data.r.start)}` },

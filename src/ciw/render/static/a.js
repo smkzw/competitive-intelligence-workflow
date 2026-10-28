@@ -19,8 +19,6 @@
 
   // 阶段矩阵
   const ys = [...prods].reverse();
-  const el = document.getElementById("phase-chart");
-  el.style.height = Math.max(360, ys.length * 24 + 80) + "px";
   chart("phase-chart", {
     grid: { left: 260, right: 40, top: 40, bottom: 20 },
     tooltip: { trigger: "item", formatter: (p) => {
@@ -103,8 +101,6 @@
   const tl = A.timeline.filter((t) => t.start).sort((a, b) => (a.start < b.start ? -1 : 1));
   const label = (t) => { const p = prods.find((x) => x.product_id === t.product_id); return `${p ? p.label : t.product_id} · ${t.acronym || t.trial_id}`; };
   const isOwn = (t) => t.product_id === D.own_product_id;
-  const tEl = document.getElementById("timeline-chart");
-  tEl.style.height = Math.max(360, tl.length * 18 + 80) + "px";
   const day = (s) => +new Date(s.length === 7 ? s + "-01" : s);
   chart("timeline-chart", {
     grid: { left: 300, right: 40, top: 20, bottom: 40 },

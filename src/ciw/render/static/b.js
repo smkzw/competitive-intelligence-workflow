@@ -28,7 +28,6 @@
 
   function drawForest(id, list, ref, log, sourceOnly = false) {
     const cl = list.map((c) => sourceOnly ? `${c.acronym} · ${c.group_labels.join("、")}` : `${c.acronym} · ${c.product_label}${groupSuffix(c.product_label, c.exp_group)}${c.h2h ? " vs " + c.ctrl_group : ""}`);
-    document.getElementById(id).style.height = Math.max(150, list.length * 34 + 80) + "px";
     if (!list.length) {
       chart(id, { title: { text: "该问题没有可入图的组间比较（见下表）", left: "center", top: "middle", textStyle: { color: "#64676B", fontSize: 16, fontWeight: 400 } } });
       return;
@@ -107,8 +106,6 @@
     const rows = frame.rows;
     document.getElementById("arm-values").hidden = !rows.length;
     document.getElementById("arm-details").hidden = !rows.length;
-    const vEl = document.getElementById("value-chart");
-    vEl.style.height = Math.max(150, rows.length * 28 + 80) + "px";
     chart("value-chart", {
       grid: { left: 300, right: 60, top: 20, bottom: 40 },
       tooltip: { formatter: (p) => { const r = rows[p.dataIndex]; return `<b>${esc(rowLabel(r))}</b><br>${num(r.value)} ${esc(r.unit)}${r.n != null ? `<br>N=${r.n}` : ""}${r.spread != null ? `<br>${esc(r.dispersion_type)} ${num(r.spread)}` : ""}${r.lower != null ? `<br>${esc(r.dispersion_type)} ${num(r.lower)}, ${num(r.upper)}` : ""}`; } },
@@ -172,7 +169,6 @@
   const sEl = document.getElementById("sae-chart");
   const sRows = S.filter((r) => r.sae_pct != null);
   sEl.hidden = !sRows.length;
-  sEl.style.height = Math.max(240, sRows.length * 22 + 80) + "px";
   const sl = (r) => `${r.acronym} · ${r.role === "placebo" ? "安慰剂" : (r.product_label || r.group_title)}（${r.group_title}）`;
   chart("sae-chart", {
     grid: { left: 320, right: 60, top: 30, bottom: 40 }, legend: { top: 0 },
