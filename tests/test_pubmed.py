@@ -28,8 +28,10 @@ def search(ids, count=None):
 
 
 def seed(ws, **kwargs):
-    return ws.record_source(kind="pubmed", url="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?id=123",
-                            data=raw_article(**kwargs), ext="xml", publisher="NCBI PubMed")
+    source = ws.record_source(kind="pubmed", url="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?id=123",
+                              data=raw_article(**kwargs), ext="xml", publisher="NCBI PubMed")
+    ws.write_stage("pubmed-search", {"NCT12345678": dict(status="ok", source_ids=[source.source_id])})
+    return source
 
 
 def test_search_pagination_raw_xml_literal_binding_and_successful_reuse(ws, monkeypatch):
@@ -76,7 +78,8 @@ def test_bad_search_is_not_silent_complete_zero_or_first_wins(ws, monkeypatch, p
     assert coverage["status"] == "partial" and coverage["failures"][0]["error"] == "ValueError"
 
 
-@pytest.mark.parametrize("kind", ["Review", "Retracted Publication", "Published Erratum"])
+@pytest.mark.parametrize("kind", ["Review", "Systematic Review", "Retracted Publication",
+                                  " Retracted Publication\n", "Published Erratum"])
 def test_nonprimary_or_retracted_paper_keeps_source_but_is_not_eligible(ws, kind):
     seed(ws, kind=kind)
     record, = pubmed.records(ws, {"NCT12345678"})
@@ -139,7 +142,36 @@ def test_changing_search_total_and_duplicate_fetched_articles_are_incomplete(ws,
         return search(["123"]) if "esearch" in url else (
             "<PubmedArticleSet>" + article() * 2 + "</PubmedArticleSet>").encode()
     monkeypatch.setattr(pubmed, "_get", duplicate)
-    assert pubmed.discover(ws, ["NCT12345678"])[1]["status"] == "partial"
+    papers, coverage = pubmed.discover(ws, ["NCT12345678"])
+    assert not papers and coverage["status"] == "partial"
+
+
+def test_failed_pmid_set_never_adopted_or_recovered_from_uncommitted_xml(ws, monkeypatch):
+    def wrong(url):
+        return search(["123"]) if "esearch" in url else raw_article(pmid="999")
+    monkeypatch.setattr(pubmed, "_get", wrong)
+    papers, coverage = pubmed.discover(ws, ["NCT12345678"])
+    assert not papers and coverage["status"] == "partial"
+    assert len(ws.sources()) == 2  # failure bytes retained, never scientific candidates
+    assert not pubmed.discover(ws, ["NCT12345678"], offline=True)[0]
+    monkeypatch.setattr(pubmed, "_get", lambda url: search(["123"]) if "esearch" in url else raw_article())
+    papers, coverage = pubmed.discover(ws, ["NCT12345678"], reuse=True)
+    assert coverage["status"] == "ok" and [p["paper_id"] for p in papers] == ["123"]
+    monkeypatch.setattr(pubmed, "_get", wrong)
+    papers, coverage = pubmed.discover(ws, ["NCT12345678"])
+    assert coverage["status"] == "partial" and [p["paper_id"] for p in papers] == ["123"]
+    assert [p["paper_id"] for p in pubmed.discover(ws, ["NCT12345678"], offline=True)[0]] == ["123"]
+
+
+@pytest.mark.parametrize("relation", ["RetractionIn", "ExpressionOfConcernIn"])
+def test_paper_with_linked_retraction_or_concern_notice_is_not_automatically_adopted(ws, relation):
+    raw = raw_article().replace(b"</MedlineCitation>", (
+        f'<CommentsCorrectionsList><CommentsCorrections RefType="{relation}">'
+        '<PMID>999</PMID></CommentsCorrections></CommentsCorrectionsList></MedlineCitation>').encode())
+    source = ws.record_source(kind="pubmed", url="https://example.test/retraction", data=raw, ext="xml")
+    ws.write_stage("pubmed-search", {"NCT12345678": dict(status="ok", source_ids=[source.source_id])})
+    record, = pubmed.records(ws, {"NCT12345678"})
+    assert record["excluded_type"]
 
 
 def test_pipeline_fallback_keeps_failed_provider_and_projects_auditable_xml(cfg, resolver, ws, monkeypatch):

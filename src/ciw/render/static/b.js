@@ -267,7 +267,8 @@
     const q = document.getElementById("observation-search").value.trim().toLowerCase();
     const domain = document.getElementById("observation-domain").value;
     const all = observations.filter(r=>(!domain || r.domain_label === domain) && (!q ||
-      window.U.matchesSearch([r.trial_id,r.acronym,...r.products,r.title,r.timeframe,r.population,r.class_title,r.category_title].join(" "),q)));
+      window.U.matchesSearch([r.trial_id,r.acronym,...r.products,...r.groups.map(g=>g.title),r.title,
+        r.timeframe,r.population,r.class_title,r.category_title].join(" "),q)));
     const pageSize = 100, start = observationPage * pageSize;
     const rows = all.slice(start,start+pageSize);
     document.getElementById("observation-count").textContent = `${all.length ? start+1 : 0}–${Math.min(start+pageSize,all.length)} / ${all.length} 条观测`;

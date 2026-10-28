@@ -22,9 +22,9 @@ _EXCLUDE = re.compile(
 
 
 def excluded_publication(title, types):
-    excluded = {"review", "meta-analysis", "clinical trial protocol", "published erratum",
+    excluded = {"review", "systematic review", "meta-analysis", "clinical trial protocol", "published erratum",
                 "retracted publication", "retraction of publication", "expression of concern"}
-    return any(str(t).casefold() in excluded for t in types) or bool(_EXCLUDE.search(title))
+    return any(" ".join(str(t).casefold().split()) in excluded for t in types) or bool(_EXCLUDE.search(title))
 
 
 def is_registry_id(text: str) -> bool:

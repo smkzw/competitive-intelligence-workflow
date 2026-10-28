@@ -98,7 +98,9 @@ def discover(ws, registry_ids, *, offline=False, reuse=False):
                 state[identifier] = dict(status="ok", checked_at=now_iso(), source_ids=source_ids, pmids=pmids)
             except (OSError, ValueError) as exc:
                 state[identifier] = dict(status="failed", checked_at=now_iso(), error=type(exc).__name__,
-                                         http_status=getattr(exc, "code", None))
+                    http_status=getattr(exc, "code", None),
+                    accepted_source_ids=old.get("source_ids", []) if old.get("status") == "ok"
+                    else old.get("accepted_source_ids", []))
             ws.write_stage("pubmed-search", state)
     failures = [dict(registry_id=k, **state[k]) for k in sorted(wanted) if state.get(k, {}).get("status") == "failed"]
     known = {s.source_id for s in ws.sources() if s.kind == "pubmed"}
@@ -112,10 +114,15 @@ def discover(ws, registry_ids, *, offline=False, reuse=False):
 
 def records(ws, wanted):
     candidates = []
+    state = ws.read_stage("pubmed-search") or {}
+    accepted = {sid for item in state.values() for sid in (
+        item.get("source_ids", []) if item.get("status") == "ok" else item.get("accepted_source_ids", []))}
     for source in ws.sources():
-        if source.kind != "pubmed":
+        if source.kind != "pubmed" or source.source_id not in accepted:
             continue
         root = parse_xml(ws.read_source(source.source_id))
+        if root.tag != "PubmedArticleSet":
+            continue
         for article in root.findall("PubmedArticle"):
             citation = article.find("MedlineCitation")
             pmid = citation.findtext("PMID") if citation is not None else None
@@ -131,11 +138,13 @@ def records(ws, wanted):
                 raise ValueError("PubMed文章缺少标题")
             title = "".join(title_node.itertext())
             types = article.findall("MedlineCitation/Article/PublicationTypeList/PublicationType")
+            corrections = article.findall("MedlineCitation/CommentsCorrectionsList/CommentsCorrections")
             doi = article.findtext("PubmedData/ArticleIdList/ArticleId[@IdType='doi']") or ""
             candidates.append(dict(source_id=source.source_id, source_sha=source.sha256, paper_id=pmid, doi=doi,
                 path=f"xpath:./PubmedArticle[MedlineCitation/PMID='{pmid}']/MedlineCitation/Article/Abstract",
                 title=title, text=text, registry_ids=ids,
-                excluded_type=excluded_publication(title, [p.text for p in types]),
+                excluded_type=excluded_publication(title, [p.text for p in types])
+                or any(p.get("RefType") in {"RetractionIn", "ExpressionOfConcernIn"} for p in corrections),
                 version_conflict=False))
     return merge_records(ws, candidates)
 

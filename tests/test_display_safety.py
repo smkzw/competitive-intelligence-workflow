@@ -207,10 +207,11 @@ const q={question_id:'q',label:'临床缓解',time_label:'第52周',units:['%'],
  trial_ids:['one','two'],rows:[row(25),row(10)],comparisons:[],frames};
 const plots={},tables={},tableOptions={},drawers=[];
 const observations=[25,10].map(v=>({result_id:'r'+v,products:['Drug'],acronym:'Trial',
- groups:[],analyses:[],title:'Source '+v}));
+ groups:[{title:v===25?'bendamustine–rituximab':'Other group'}],analyses:[],title:'Source '+v}));
 const window={U:{D:{b:{questions:[q],longitudinal:[],safety:[],observations},stats:{},trials:{}},
  esc:s=>s||'',num:s=>s,nN(){},tag(){},src(){},options(){},OWN:'orange',PAL:[],
  drawer:html=>drawers.push(html),chart:(id,opt)=>plots[id]=opt,
+ matchesSearch:(text,q)=>text.includes(q),
  table:(el,cols,rows,opts)=>{tables[el.id]=rows;tableOptions[el.id]=opts}}};
 vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{window,document:{getElementById:id=>elements[id]}});
 const read=()=>({values:plots['value-chart'].series[0].data.map(d=>d.value),
@@ -219,7 +220,11 @@ const read=()=>({values:plots['value-chart'].series[0].data.map(d=>d.value),
 const first=read();tableOptions['row-table'].onRow(tables['row-table'][0]);
 elements['frame-select'].value='second';elements['frame-select'].onchange();
 tableOptions['row-table'].onRow(tables['row-table'][0]);
-process.stdout.write(JSON.stringify([first,{...read(),drawers}]));
+elements['observation-search'].value='bendamustine–rituximab';
+elements['observation-detail'].open=true;elements['observation-detail'].ontoggle?.();
+elements['observation-prev'].onclick();
+process.stdout.write(JSON.stringify([first,{...read(),drawers,
+ found:tables['observation-table'].map(r=>r.result_id)}]));
 """
     result = subprocess.run(["node", "-e", script, str(asset)], capture_output=True, text=True, check=True)
     first, second = json.loads(result.stdout)
@@ -228,6 +233,7 @@ process.stdout.write(JSON.stringify([first,{...read(),drawers}]));
     assert "Responders" in second["context"] and "All participants" in first["context"]
     assert first["rawValues"] == [10.3] and not first["rawHidden"] and second["rawHidden"]
     assert "Source 25" in second["drawers"][0] and "Source 10" in second["drawers"][1]
+    assert second["found"] == ["r25"]
 
 
 def test_numeric_search_does_not_match_other_weeks_and_tolerates_source_punctuation():
