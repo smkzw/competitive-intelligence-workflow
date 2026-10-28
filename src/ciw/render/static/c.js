@@ -4,13 +4,15 @@
   const C = D.c, rows = C.rows;
   options("#f-phase", rows.map((r) => r.phase));
   options("#f-mask", rows.map((r) => r.masking));
-  options("#f-concept", rows.flatMap((r) => r.primary_concepts));
+  const primaryCategories = r => r.primary_concepts.length ? r.primary_concepts :
+    [r.primary.length ? "其他原文终点" : "未登记主要终点"];
+  options("#f-concept", rows.flatMap(primaryCategories));
 
   function filtered() {
     const q = document.getElementById("q").value.trim().toLowerCase();
     const fp = document.getElementById("f-phase").value, fm = document.getElementById("f-mask").value;
     const fc = document.getElementById("f-concept").value, china = document.getElementById("f-china").checked;
-    return rows.filter((r) => (!fp || r.phase === fp) && (!fm || r.masking === fm) && (!fc || r.primary_concepts.includes(fc))
+    return rows.filter((r) => (!fp || r.phase === fp) && (!fm || r.masking === fm) && (!fc || primaryCategories(r).includes(fc))
       && (!china || r.china) && (!q || [r.trial_id, r.acronym, r.title, r.sponsor, ...r.products.map((p) => p.label),
         ...r.primary.flatMap((o) => [o.title,o.description]), r.eligibility, ...(r.conditions || []),
         ...(r.registrations || []).flatMap(g => [g.trial_id, g.title, g.eligibility, ...g.primary.map(o => o.title)])]
@@ -18,7 +20,7 @@
   }
 
   const endpointDetails = o => `${o.description ? `<details><summary>完整终点定义</summary><p>${window.U.annotate(o.description,o.description_marks,document.getElementById("q").value.trim())}</p></details>` : ""}`;
-  const ep = list => list.map(o => `${esc(o.summary || o.concept || o.title)}<span class="hint">${o.timeframe ? "（" + esc(o.timeframe) + "）" : ""}</span>${endpointDetails(o)}`).join("<br>");
+  const ep = list => list.map(o => `${esc(o.summary || o.concept || o.title)}<span class="hint">${o.timeframe ? (o.timeframe.length > 48 ? `<details><summary>时间窗原文</summary><p>${esc(o.timeframe)}</p></details>` : "（" + esc(o.timeframe) + "）") : ""}</span>${endpointDetails(o)}`).join("<br>");
   const regimens = r => `<details><summary>${r.arms.length}组给药方案</summary>${r.arms.map(a=>`<p><strong>${esc(a.label)}</strong><br>${esc(a.interventions.join("；"))}<br>${esc(a.description)}</p>`).join("")}${(r.study_narrative || []).map(n=>`<details><summary>${esc(n.label)}</summary><p>${esc(n.text)}</p></details>`).join("")}</details>`;
   const excerpts = r => (r.design_excerpts || []).map(t=>`<details><summary>${esc(t.label)} · ${t.snippets.length}处原文</summary>${t.snippets.map(s=>`<p><span class="hint">${esc(s.section)}</span><br>${window.U.annotate(s.text,s.marks,document.getElementById("q").value.trim())}</p>${s.context ? `<details><summary>上下文原文</summary><p>${window.U.annotate(s.context,s.context_marks,document.getElementById("q").value.trim())}</p></details>` : ""}`).join("")}</details>`).join("");
   const cols = [
@@ -73,7 +75,7 @@
 
   function drawSummary(data) {
   const counts = {};
-  data.forEach((r) => r.primary_concepts.forEach((c) => (counts[c] = (counts[c] || 0) + 1)));
+  data.forEach((r) => primaryCategories(r).forEach((c) => (counts[c] = (counts[c] || 0) + 1)));
   const ck = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
   const conceptEl = document.getElementById("concept-chart");
   conceptEl.parentElement.hidden = !ck.length;

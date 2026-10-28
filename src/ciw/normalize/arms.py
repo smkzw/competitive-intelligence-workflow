@@ -36,11 +36,15 @@ _PERIOD_RULES: list[tuple[re.Pattern[str], Period]] = [
 _QUALIFIER = re.compile(r"\s*[\(\[（][^)\]）]*[\)\]）]\s*")
 
 
-def arm_role(arm_type: str, interventions: list[str]) -> tuple[ArmRole, bool]:
+def arm_role(arm_type: str, interventions: list[str], *, label="",
+             label_products=(), intervention_products=()) -> tuple[ArmRole, bool]:
     role = ROLE_BY_TYPE.get(arm_type, "unknown")
     conflict = role in {"experimental", "active_comparator", "no_intervention"} and bool(interventions) and all(
         _PLACEBO_ONLY.fullmatch(name.strip()) for name in interventions
     )
+    if (role == "placebo" and label_products and not _PLACEBO.search(label)
+            and set(label_products) - set(intervention_products)):
+        conflict = True  # explicit known active title contradicts the recorded comparator/intervention fields
     return ("unknown" if conflict else role), conflict
 
 

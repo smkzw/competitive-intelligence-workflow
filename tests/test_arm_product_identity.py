@@ -99,3 +99,28 @@ def test_explicit_paper_placebo_is_preserved_when_registry_role_conflicts(cfg, r
     group = _publication_group(trial, "Placebo", paper, resolver, "experimental")
     assert group.role == "placebo" and group.arm_id is None and group.product_id is None
     assert trial.arms[0].type == "EXPERIMENTAL" and trial.arms[0].role == "unknown"
+
+
+def test_placebo_type_with_explicit_active_title_conflict_keeps_source_fields(cfg, resolver):
+    from ciw.analyze.common import role_label
+    from ciw.normalize.arms import match_group
+
+    for label, intervention, conflict in [
+        ("Open-label OPN-375 During Parts B and C", "Placebo", True),
+        ("Placebo matching OPN-375", "Placebo", False),
+        ("OPN-375 plus placebo", "OPN-375", False),
+        ("Blinded cohort", "Placebo", False),
+    ]:
+        raw = study(label, "PLACEBO_COMPARATOR")
+        module = raw["protocolSection"]["armsInterventionsModule"]
+        module["armGroups"][0]["interventionNames"] = ["Drug: " + intervention]
+        module["interventions"][0]["name"] = intervention
+        before = deepcopy(raw)
+        trial = extract(raw, cfg, resolver)
+        arm = trial.arms[0]
+        assert arm.role_conflict is conflict, label
+        assert arm.role == ("unknown" if conflict else "placebo"), label
+        assert arm.type == "PLACEBO_COMPARATOR" and raw == before
+        if conflict:
+            assert match_group(label, trial.arms, resolver) == (arm.arm_id, "unknown", None)
+            assert role_label(arm.role, trial, arm.arm_id) == "登记角色信息不一致"
