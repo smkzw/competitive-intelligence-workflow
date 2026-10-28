@@ -203,3 +203,64 @@ def test_current_manual_dictionary_wins_over_an_adopted_source_mapping(cfg, ws):
     manual = ConceptCfg(id="current-manual", label="用户当前核实的组织学定义", patterns=["Eosinophil Count"])
     cfg.concepts.append(manual)
     assert classify(rows[0].title, cfg, rows[0].description)[1] == manual.id
+
+
+@pytest.mark.parametrize("title,label", [
+    ("SF-36 V2 Score ranges from 0 to 100", "SF-36 V2评分0至100"),
+    ("Time to DLQI worsening: a 4-point increase", "DLQI恶化4分"),
+    ("ADA positive: at least 1.67-fold increase", "ADA阳性≥1.67倍升高"),
+    ("75 % or Higher PASI improvement at Week 16", "第16周PASI改善≥75%"),
+    ("PASI improvement greater than or equal to 75 percent", "PASI改善≥75%"),
+])
+def test_index_supports_source_instrument_names_hyphen_units_and_spelled_comparators(title, label):
+    from ciw.verify.endpoint_index import _check
+    data = dict(descriptor_id="id", title=title, label=label, domain="other", quote=title)
+    assert _check(data, {"id": dict(title=title, material=title)}) == (True, "")
+
+
+@pytest.mark.parametrize("title,label", [
+    ("SF-36 V2 Score ranges from 0 to 100", "SF-37 V2评分0至100"),
+    ("75 % or Higher PASI improvement", "PASI改善>75%"),
+    ("PASI improvement greater than 75 percent", "PASI改善≥75%"),
+    ("ADA positive: 1.67-fold increase", "ADA阳性1.76倍升高"),
+    ("ADA positive: at least 1.67-fold increase", "ADA阳性1.67倍升高"),
+])
+def test_index_still_rejects_wrong_instrument_value_or_inequality(title, label):
+    from ciw.verify.endpoint_index import _check
+    data = dict(descriptor_id="id", title=title, label=label, domain="other", quote=title)
+    assert not _check(data, {"id": dict(title=title, material=title)})[0]
+
+
+def test_only_token_exhausted_batch_is_split_once_and_successes_are_reused(cfg, ws, monkeypatch):
+    from ciw.verify.crosscheck import CrosscheckFailed
+
+    rows = [result("Clinical score " + str(i), "", str(i)) for i in range(4)]
+    cfg = cfg.model_copy(deep=True)
+    calls = []
+    def review(workspace, config, batch, roles):
+        calls.append(len(batch))
+        if len(batch) > 2:
+            raise CrosscheckFailed("主抽取失败：JSONDecodeError", calls=[dict(finish_reason="length")])
+        from ciw.verify.crosscheck import CheckedItem
+        return [CheckedItem(dict(descriptor_id=k, title=d["title"], label="临床评分", domain="efficacy",
+                                 direction="none", quote=d["title"]), "verified", (k,)) for k, d in batch.items()]
+    monkeypatch.setattr("ciw.verify.endpoint_index._review", review)
+    assert enrich_endpoint_index(ws, cfg, rows, roles={"test": True}) == []
+    assert calls == [4, 2, 2]
+    assert len(ws.read_stage("research-endpoint-index")["recoveries"]) == 1
+    assert enrich_endpoint_index(ws, cfg, rows, roles={"test": True}) == []
+    assert calls == [4, 2, 2]
+
+
+def test_repeated_token_exhaustion_has_a_finite_split_budget(cfg, ws, monkeypatch):
+    from ciw.verify.crosscheck import CrosscheckFailed
+
+    calls = []
+    def review(*args):
+        calls.append(len(args[2]))
+        raise CrosscheckFailed("主抽取失败：JSONDecodeError", calls=[dict(finish_reason="length")])
+    monkeypatch.setattr("ciw.verify.endpoint_index._review", review)
+    rows = [result("Clinical score " + str(i), "", str(i)) for i in range(4)]
+    issues = enrich_endpoint_index(ws, cfg.model_copy(deep=True), rows, roles={"test": True})
+    assert calls == [4, 2, 2]
+    assert len(issues) == 2 and all(i["kind"] == "endpoint_index_failed" for i in issues)

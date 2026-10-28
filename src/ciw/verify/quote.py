@@ -75,6 +75,7 @@ _UNIT_PARTS = frozenset(
         "point",
         "points",
         "score",
+        "fold",
     )
 )
 
@@ -181,7 +182,7 @@ def _numeric_suffix(text: str, end: int) -> bool:
     if tail is None:
         return True
     # Numeric quantities may touch units; 2F8/5-HT2A are complete identifiers, not counts.
-    return all(part in _UNIT_PARTS for part in tail[0].split("/"))
+    return all(part in _UNIT_PARTS for part in tail[0].lstrip("-_").split("/"))
 
 
 def check_quote(source_text: str, quote: str | None, value: object = None) -> QuoteCheck:

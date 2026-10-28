@@ -54,7 +54,11 @@ class ExtractionTask:
 
 
 class CrosscheckFailed(RuntimeError):
-    """两个抽取器都没有返回可用结果：这不是“没有信息”，调用方必须记为失败。"""
+    """A required model call failed; keep its receipt rather than treating it as no information."""
+
+    def __init__(self, message, *, calls=()):
+        super().__init__(message)
+        self.calls = list(calls)
 
 
 @dataclass
@@ -231,7 +235,7 @@ def crosscheck(task: ExtractionTask, roles: dict[str, Backend]) -> list[CheckedI
     check_heterogeneous(roles)
     a_items, a_call = _extract(roles["extractor_a"], task)
     if a_call.get("error"):
-        raise CrosscheckFailed("主抽取失败：" + a_call["error"])
+        raise CrosscheckFailed("主抽取失败：" + a_call["error"], calls=[a_call])
     b_items, b_call = _extract(roles["verifier"], task, a_items)
     format_calls = []
     if b_call.get("error") in {"JSONDecodeError", "ValueError", "KeyError"}:
@@ -240,9 +244,10 @@ def crosscheck(task: ExtractionTask, roles: dict[str, Backend]) -> list[CheckedI
         correction["role"] = "verify_format_repair"
         format_calls.append(correction)
         if correction.get("error"):
-            raise CrosscheckFailed("来源核对格式纠正失败：" + correction["error"])
+            raise CrosscheckFailed("来源核对格式纠正失败：" + correction["error"],
+                                   calls=[a_call, b_call, correction])
     elif b_call.get("error"):
-        raise CrosscheckFailed("来源核对失败：" + b_call["error"])
+        raise CrosscheckFailed("来源核对失败：" + b_call["error"], calls=[a_call, b_call])
     a_by, b_by = _checked_items(task, a_items), _checked_items(task, b_items)
     repairs = [] if format_calls else _repair_review(task, roles["verifier"], b_by)
     calls = [a_call, b_call, *format_calls, *repairs]

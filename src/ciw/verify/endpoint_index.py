@@ -67,7 +67,8 @@ def _check(item, batch):
         return False, "分类身份或标题未对应当前来源描述"
     if item["quote"] not in source["material"]:
         return False, "引语不属于该来源描述"
-    numbers = re.findall(r"(?<![A-Za-z0-9])\d+(?:\.\d+)?", item["label"])
+    # Keep SF-36 / V2 as complete instrument identifiers, not standalone quantities.
+    numbers = re.findall(r"[A-Za-z][A-Za-z-]*\d+(?:\.\d+)?|\d+(?:\.\d+)?", item["label"])
     if not check_quote(source["material"], item["quote"], numbers or None).ok:
         return False, "临床标签数值缺少对应原文支持"
     label_pairs, quote_pairs = _comparisons(item["label"]), _comparisons(item["quote"])
@@ -80,7 +81,18 @@ def _check(item, batch):
 
 def _comparisons(text):
     text = text.replace("≤", "<=").replace("≥", ">=")
-    return set(re.findall(r"(<=|>=|<|>)\s*(\d+(?:\.\d+)?)", text))
+    pairs = set(re.findall(r"(<=|>=|<|>)\s*(\d+(?:\.\d+)?)", text))
+    # Equivalent source spellings only; preserve strict versus inclusive thresholds.
+    words = {"greater than or equal to": ">=", "higher than or equal to": ">=", "at least": ">=",
+             "less than or equal to": "<=", "lower than or equal to": "<=", "at most": "<=",
+             "greater than": ">", "higher than": ">", "more than": ">", "less than": "<", "lower than": "<"}
+    cleaned = re.sub(r"\([\\<>=]+\)", " ", text)
+    pattern = r"\b(" + "|".join(words) + r")\s+(\d+(?:\.\d+)?)"
+    pairs.update((words[m[1].casefold()], m[2]) for m in re.finditer(pattern, cleaned, re.I))
+    suffixes = {"higher": ">=", "greater": ">=", "more": ">=", "lower": "<=", "less": "<="}
+    for m in re.finditer(r"(\d+(?:\.\d+)?)\s*(?:%|percent)?\s+or\s+(higher|greater|more|lower|less)\b", text, re.I):
+        pairs.add((suffixes[m[2].casefold()], m[1]))
+    return pairs
 
 
 def _clinical_label_supported(item, source):
@@ -126,6 +138,25 @@ def _review(ws, cfg, batch, roles):
     return crosscheck(task, roles)
 
 
+def _review_batches(ws, cfg, initial, roles, saved):
+    pending = [(initial, True)]
+    while pending:
+        batch, may_split = pending.pop(0)
+        try:
+            yield batch, _review(ws, cfg, batch, roles), None
+        except CrosscheckFailed as exc:
+            if may_split and len(batch) > 1 and any(c.get("finish_reason") == "length" for c in exc.calls):
+                # One split per original batch, never replay accepted siblings or retry recursively.
+                key = hashlib.sha256("|".join(sorted(batch)).encode()).hexdigest()
+                saved.setdefault("recoveries", {})[key] = dict(ref=sorted(batch), calls=exc.calls, note=str(exc))
+                ws.write_stage("research-endpoint-index", saved)
+                items = list(batch.items())
+                middle = len(items) // 2
+                pending[:0] = [(dict(items[:middle]), False), (dict(items[middle:]), False)]
+            else:
+                yield batch, [], exc
+
+
 def enrich_endpoint_index(ws, cfg, results, roles=None, log=lambda *_: None):
     """Apply previously checked mappings on all reports; only B may request missing mappings."""
     for result in results:
@@ -137,12 +168,12 @@ def enrich_endpoint_index(ws, cfg, results, roles=None, log=lambda *_: None):
     missing = {key: item for key, item in catalog.items() if key not in adopted}
     issues = []
     if roles:
-        for number, batch in enumerate(_batches(missing), 1):
+        checked_batches = (part for batch in _batches(missing)
+                           for part in _review_batches(ws, cfg, batch, roles, saved))
+        for number, (batch, checked, exc) in enumerate(checked_batches, 1):
             log(f"[endpoint-index] {number} · {len(batch)}")
-            try:
-                checked = _review(ws, cfg, batch, roles)
-            except CrosscheckFailed as exc:
-                issues.append(dict(kind="endpoint_index_failed", ref=sorted(batch), note=str(exc)))
+            if exc:
+                issues.append(dict(kind="endpoint_index_failed", ref=sorted(batch), note=str(exc), calls=exc.calls))
                 unresolved.update({key: str(exc) for key in batch})
                 ws.write_stage("research-endpoint-index", saved)
                 continue
