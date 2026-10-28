@@ -220,7 +220,8 @@
         endLabel: { show: c.lines.length <= 8, formatter: (p) => num(p.value[1]) } })),
     });
     table(document.getElementById("long-table"), [
-      {label:"药物 / 研究",html:studyMeta}, {label:"组别",key:"group_title"},
+      {label:"药物 / 研究",html:r=>`<strong>${esc(r.product_label || r.group_title)}</strong><br>${studyMeta(r)}`},
+      {label:"组别",key:"group_title"},
       {label:"时间",key:"label"}, {label:"N",key:"n",num:true,html:r=>num(r.n)},
       {label:"数值",num:true,html:r=>num(r.value)}, {label:"单位",key:"unit"},
       {label:"离散度 / 区间",html:r=>r.lower == null ? "—" : `${num(r.lower)}, ${num(r.upper)}`}
