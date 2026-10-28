@@ -86,3 +86,16 @@ def test_explicit_placebo_and_active_plus_placebo_keep_original_roles(cfg, resol
     assert arm_role("ACTIVE_COMPARATOR", ["Placebos"]) == ("unknown", True)
     assert arm_role("EXPERIMENTAL", ["Placebomab"]) == ("experimental", False)
     assert arm_role("", ["Placebo"]) == ("unknown", False)
+
+
+def test_explicit_paper_placebo_is_preserved_when_registry_role_conflicts(cfg, resolver):
+    from ciw.models import Arm, Locator, Trial
+    from ciw.verify.publications import _publication_group
+
+    trial = Trial(trial_id="NCT00000001", registry="ctgov", title="Synthetic", locator=Locator(source_id="s"),
+        arms=[Arm(arm_id="A1", label="Placebo", type="EXPERIMENTAL", role="unknown", role_conflict=True,
+                  interventions=["Placebo"])])
+    paper = {"paper_id": "synthetic-paper", "path": "Abstract"}
+    group = _publication_group(trial, "Placebo", paper, resolver, "experimental")
+    assert group.role == "placebo" and group.arm_id is None and group.product_id is None
+    assert trial.arms[0].type == "EXPERIMENTAL" and trial.arms[0].role == "unknown"

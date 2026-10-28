@@ -74,7 +74,7 @@ MEASURE_LABEL_ZH = {
     "median": "中位数",
     "geometric_mean": "几何均值",
     "geometric_ls_mean": "几何最小二乘均值",
-    "proportion": "比例（%）",
+    "proportion": "比例",
     "count": "人数",
     "count_units": "计数",
     "number": "数值",

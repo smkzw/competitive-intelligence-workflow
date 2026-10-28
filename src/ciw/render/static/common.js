@@ -46,7 +46,7 @@
     if(!needle) return true;
     const pattern = needle.split(/(\d+(?:\.\d+)?)/).map((part, i) => {
       const literal = part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      return i % 2 ? `(?<![\\d.])${literal}(?![\\d.])` : literal;
+      return i % 2 ? `(?<![\\d.])${literal}(?!\\d|\\.\\d)` : literal;
     }).join("");
     return new RegExp(pattern,"u").test(searchText(text));
   }

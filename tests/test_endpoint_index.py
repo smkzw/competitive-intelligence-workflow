@@ -180,11 +180,12 @@ def test_a_pre_retrieval_generic_concept_does_not_preempt_a_checked_source_defin
     assert classify(rows[0].title, cfg, rows[0].description)[1] == rows[0].concept_id
 
 
-def test_a_separate_remission_sentence_cannot_relabel_a_continuous_measure(cfg, ws):
+@pytest.mark.parametrize("label", ["组织学缓解≤6", "Histologic remission ≤6", "组织学 Histologic remission ≤6"])
+def test_a_separate_remission_sentence_cannot_relabel_a_continuous_measure(cfg, ws, label):
     cfg = cfg.model_copy(deep=True)
     rows = [result("Mean Change From Baseline in Peak Esophageal Eosinophil Counts",
                    "Measured mean counts. Histologic remission is defined as ≤6 eos/hpf.")]
-    roles = roles_for(cfg, rows, label="组织学缓解≤6")
+    roles = roles_for(cfg, rows, label=label)
     for role in roles.values():
         payload = json.loads(role.responder.return_value)
         payload["items"][0]["quote"] = rows[0].description

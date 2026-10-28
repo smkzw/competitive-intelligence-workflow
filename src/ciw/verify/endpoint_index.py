@@ -26,6 +26,10 @@ class EndpointIndexItem(BaseModel):
     quote: str
 
 
+_REMISSION_LABEL = re.compile(r"缓解|\bremission\b", re.I)
+_RESPONSE_LABEL = re.compile(r"应答|响应|达标|\b(?:response|responders?|attainment|achiev\w*)\b", re.I)
+
+
 def _instruction(cfg):
     return (f"疾病：{cfg.name_en}。只按每个Descriptor的原始Title及Definition建立临床问题索引，不补数值。"
             "组织学阈值或症状量表可以是临床疗效，不要因嗜酸细胞/计数等字样一律归为PD；"
@@ -89,13 +93,13 @@ def _clinical_label_supported(item, source):
     response = re.search(r"\b(?:response|responders?|remission|achiev\w*|attain\w*)\b", quote, re.I)
     clinical = response and re.search(r"clinical|histolog|histopatholog", quote, re.I)
     if (is_biomarker_title(title) and re.search(r"\b(?:mean|median|change|geometric)\b", title, re.I)
-            and re.search("缓解|应答|响应|达标", item["label"]) and not attainment):
+            and (_REMISSION_LABEL.search(item["label"]) or _RESPONSE_LABEL.search(item["label"])) and not attainment):
         return False, "不能用定义中提及的另一个应答终点替代当前连续测量"
     if is_biomarker_title(title) and not (clinical or attainment):
         return False, "原文未支持将连续标志物测量提升为临床应答或缓解"
-    if re.search("缓解", item["label"]) and not (re.search(r"\bremission\b", quote, re.I) or attainment):
+    if _REMISSION_LABEL.search(item["label"]) and not (re.search(r"\bremission\b", quote, re.I) or attainment):
         return False, "缓解标签缺少对应原文定义"
-    if re.search("应答|响应|达标", item["label"]) and not (response or attainment):
+    if _RESPONSE_LABEL.search(item["label"]) and not (response or attainment):
         return False, "应答标签缺少对应原文定义"
     return True, ""
 

@@ -8,6 +8,23 @@ from ciw.normalize.arms import match_group
 from ciw.normalize.semantics import classify, measure_kind, parse_timepoint, subgroup_of
 
 
+def test_report_preserves_a_source_proportion_without_implying_percent(cfg):
+    from ciw.analyze.results import build_results
+    from ciw.models import GroupValue, Locator, OutcomeResult, TimePoint, Trial
+
+    loc = Locator(source_id="synthetic-proportion")
+    trial = Trial(trial_id="NCT00000001", registry="ctgov", title="Synthetic", locator=loc)
+    result = OutcomeResult(result_id="r", trial_id=trial.trial_id, outcome_index=0, type="PRIMARY",
+        title="Nasal Polyp Score response", concept_id="nps", domain="efficacy", measure_kind="proportion",
+        unit="Proportion of participants", time=TimePoint(raw="Week 1", label="第1周", key="W1", weeks=1),
+        groups=[GroupValue(group_id="g", title="Group", value=0.543)], locator=loc)
+    report = build_results(cfg, {trial.trial_id: trial}, {}, [result], None)
+    question = report["questions"][0]
+    assert question["measure_label"] == "比例"
+    assert question["units"] == ["Proportion of participants"]
+    assert question["rows"][0]["value"] == 0.543
+
+
 @pytest.mark.parametrize(
     "title,expected",
     [
