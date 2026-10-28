@@ -217,7 +217,7 @@
       {label:"药物 / 研究",html:r=>`<strong>${r.products.map(esc).join("、")}</strong><br>${esc(r.phase)} · ${esc(r.acronym)}`},
       {label:"类别",html:r=>esc(r.domain_label)},
       {label:"终点原文",html:r=>`${esc(r.title)}<br><span class="hint">${esc(r.class_title)} ${esc(r.category_title)}</span>`},
-      {label:"时间 / 人群",html:r=>`${esc(r.timeframe)}<br>${esc(r.population)}`},
+      {label:"时间 / 人群",html:r=>`${esc(r.time_label || r.timeframe)}<br>${esc(r.population)}`},
       {label:"数值明细",html:r=>`${r.groups.length} 组 · ${r.analyses.length} 项统计比较`},
       {label:"来源",html:r=>src(r.url,"查看原文")+" "+tag(r.status)},
     ],rows,{onRow:showObservation});
@@ -226,7 +226,8 @@
     const value = v=>esc(v.value_raw || num(v.value));
     window.U.drawer(`<h2>${r.products.map(esc).join("、")} · ${esc(r.acronym)}</h2>
       <p>${esc(r.domain_label)} · ${esc(r.phase)} · ${src(r.url,"来源原文")}</p><h3>${esc(r.title)}</h3>
-      <p>${esc(r.timeframe)} · ${esc(r.population)} ${esc(r.class_title)} ${esc(r.category_title)}</p>
+      <p>${esc(r.time_label || r.timeframe)} · ${esc(r.population)} ${esc(r.class_title)} ${esc(r.category_title)}</p>
+      ${r.time_label ? `<details><summary>来源时间范围</summary>${esc(r.timeframe)}</details>` : ""}
       <p>${esc(r.param_type)} · ${esc(r.unit)} · ${esc(r.dispersion_type)}</p>
       <table class="grid"><thead><tr><th>组别</th><th>角色</th><th>N</th><th>原值</th><th>离散度</th></tr></thead><tbody>
       ${r.groups.map(g=>`<tr><td>${esc(g.title)}</td><td>${esc(g.role_label)}</td><td>${num(g.n)}</td><td>${value(g)}</td><td>${g.spread != null ? num(g.spread) : g.lower != null ? num(g.lower)+", "+num(g.upper) : "—"}</td></tr>`).join("")}</tbody></table>

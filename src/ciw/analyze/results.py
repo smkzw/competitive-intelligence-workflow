@@ -66,7 +66,8 @@ def build_results(
     buckets: dict[tuple, list[OutcomeResult]] = defaultdict(list)
     for r in results:
         t = trials.get(r.trial_id)
-        if not t or t.relevance != "core" or r.domain != "efficacy" or not r.concept_id or r.time is None:
+        if (not t or t.relevance != "core" or r.domain != "efficacy" or not r.concept_id
+                or r.time is None or r.time.key == "BASELINE"):
             continue
         buckets[
             (
@@ -176,6 +177,7 @@ def _observations(trials, products, results):
             "products": [product_label(products.get(pid)) for pid in t.product_ids],
             "phase": t.phase, "domain": r.domain, "domain_label": domains[r.domain],
             "title": r.title, "timeframe": r.timeframe, "class_title": r.class_title,
+            "time_label": r.time.label if r.time else "", "time_key": r.time.key if r.time else "",
             "category_title": r.category_title, "population": r.population,
             "unit": r.unit, "param_type": r.param_type, "dispersion_type": r.dispersion_type,
             "status": r.status, "source_kind": r.kind, "url": r.source_url or t.url, "source_id": r.locator.source_id,
@@ -305,6 +307,7 @@ def _longitudinal(
             or r.domain != "efficacy"
             or not r.concept_id
             or r.time is None
+            or r.time.key == "BASELINE"
             or r.time.weeks is None
             or "*" in r.time.key  # 多时间点汇总的单值，不是某一周的观察
             or "-" in r.time.key  # 区间（如第 49–52 周）不是单一时点

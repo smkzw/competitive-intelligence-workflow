@@ -166,12 +166,39 @@ def _review_batches(ws, cfg, initial, roles, saved):
                 yield batch, [], exc
 
 
+def _recheck_saved(ws, catalog, saved):
+    """Reapply corrected deterministic guards to retained verifier items, never to unconfirmed A candidates."""
+    records = ws.verifications()
+    for key, descriptor in catalog.items():
+        if key in saved["items"]:
+            continue
+        record = records.get("endpoint:" + key, {})
+        note = saved.get("unresolved", {}).get(key, "")
+        calls, item = record.get("calls", []), record.get("item")
+        reviews = [c for c in calls if c.get("role") in {"verify", "verify_repair", "verify_format_repair"}]
+        if (record.get("status") != "needs_review" or not note.startswith("核对结果未通过来源校验：")
+                or not item or not reviews or reviews[-1].get("error") or not reviews[-1].get("n_items")
+                or len({c.get("family") for c in calls if c.get("family")}) != 2):
+            continue
+        parsed = EndpointIndexItem.model_validate(item).model_dump()
+        if parsed["descriptor_id"] != key or not _check(parsed, {key: descriptor})[0]:
+            continue
+        recheck = dict(rule="endpoint-label-quantity-v2", previous_status="needs_review", previous_note=note)
+        saved["items"][key] = parsed
+        saved["unresolved"].pop(key, None)
+        saved.setdefault("rechecks", {})[key] = recheck
+        payload = {k: v for k, v in record.items() if k != "status"}
+        ws.save_verification("endpoint:" + key, "verified", {**payload, "deterministic_recheck": recheck})
+        ws.write_stage("research-endpoint-index", saved)
+
+
 def enrich_endpoint_index(ws, cfg, results, roles=None, log=lambda *_: None):
     """Apply previously checked mappings on all reports; only B may request missing mappings."""
     for result in results:
         result.domain, result.concept_id = classify(result.title, cfg, result.description)
     catalog = _catalog(cfg, results)
     saved = ws.read_stage("research-endpoint-index") or {"items": {}}
+    _recheck_saved(ws, catalog, saved)
     adopted = saved["items"]
     unresolved = saved.setdefault("unresolved", {})
     missing = {key: item for key, item in catalog.items() if key not in adopted}
@@ -195,7 +222,8 @@ def enrich_endpoint_index(ws, cfg, results, roles=None, log=lambda *_: None):
                 received.add(key)
                 origins = [dict(result_id=r.result_id, locator=r.locator.model_dump()) for r in batch[key]["results"]]
                 ws.save_verification("endpoint:" + key, checked_item.status,
-                                     dict(item=item, calls=checked_item.calls, origins=origins))
+                                     dict(item=item, calls=checked_item.calls, origins=origins,
+                                          review_note=checked_item.note))
                 if checked_item.status == "verified":
                     adopted[key] = item
                     unresolved.pop(key, None)

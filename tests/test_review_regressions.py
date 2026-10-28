@@ -88,7 +88,7 @@ def test_class_titles():
     assert not _looks_like_time("Baseline")
 
 
-def test_baseline_class_is_dropped(cfg, resolver):
+def test_baseline_class_is_retained_but_not_compared_as_a_followup(cfg, resolver):
     from ciw.extract.ctgov import extract_results
     from ciw.models import Source
 
@@ -121,7 +121,13 @@ def test_baseline_class_is_dropped(cfg, resolver):
     }
     src = Source(source_id="s", kind="ctgov", url="u", fetched_at="2026-10-27", sha256="0" * 64)
     rs, _ = extract_results(study, _trial().model_copy(update={"arms": []}), src, cfg, resolver)
-    assert [r.class_title for r in rs] == ["Week 24"] and rs[0].subgroup == ""
+    assert [r.class_title for r in rs] == ["Baseline", "Week 24"]
+    assert [r.time.key for r in rs] == ["BASELINE", "W24"] and rs[1].subgroup == ""
+    from ciw.analyze.results import build_results
+    trial = _trial()
+    b = build_results(cfg, {trial.trial_id: trial}, {}, rs, None)
+    assert all(q["time_key"] != "BASELINE" for q in b["questions"])
+    assert len(b["observations"]) == 2
 
 
 # --- P1-4 单药对照不能因联合臂被判为试验组

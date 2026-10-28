@@ -282,3 +282,28 @@ def test_source_range_endpoint_at_sentence_end_is_not_a_negative_quantity(value,
     from ciw.verify.quote import check_quote
     source = "The total score is 0-17. Each component score is 0-3."
     assert check_quote(source, source, [str(value)]).ok is valid
+
+
+@pytest.mark.parametrize("note,has_review,accepted", [
+    ("核对结果未通过来源校验：旧数值规则拒绝", True, True),
+    ("主抽取条目未被核对者确认", True, False),
+    ("核对者对同一身份返回冲突值", True, False),
+    ("核对结果未通过来源校验：旧数值规则拒绝", False, False),
+])
+def test_saved_verifier_item_can_be_rechecked_without_new_models_but_not_unconfirmed_or_conflicting(
+    cfg, ws, note, has_review, accepted
+):
+    cfg = cfg.model_copy(deep=True)
+    rows = [result("With at Least 2-category Improvement", "")]
+    key = next(iter(_catalog(cfg, rows)))
+    item = dict(descriptor_id=key, title=rows[0].title, label="至少改善2个类别", domain="efficacy",
+                direction="higher_better", quote=rows[0].title)
+    ws.write_stage("research-endpoint-index", dict(items={}, unresolved={key: note}))
+    ws.save_verification("endpoint:" + key, "needs_review", dict(item=item, calls=[
+        dict(role="extract", family="deepseek", n_items=1),
+        *([dict(role="verify", family="glm", n_items=1)] if has_review else [])]))
+    issues = enrich_endpoint_index(ws, cfg, rows, roles=None)
+    assert bool(rows[0].concept_id) is accepted and bool(issues) is not accepted
+    assert (ws.verifications()["endpoint:" + key]["status"] == "verified") is accepted
+    if accepted:
+        assert ws.read_stage("research-endpoint-index")["rechecks"][key]["previous_note"] == note

@@ -25,6 +25,7 @@ from ciw.models import (
     SafetyGroup,
     SafetySummary,
     Source,
+    TimePoint,
     Trial,
     TrialDates,
     stable_id,
@@ -190,10 +191,9 @@ def extract_results(
         for ci, cls, ki, cat in combos:
             class_n = _denoms(cls.get("denoms")) or outcome_n
             class_title = cls.get("title", "") or ""
-            if _BASELINE_CLASS.fullmatch(class_title):
-                continue  # 基线值不是该终点的结果，不进入比较
             class_time, class_rest = _split_class(class_title)
-            tp = parse_timepoint(class_time, om.get("timeFrame", ""), title)
+            tp = (TimePoint(raw=class_title, label="基线", key="BASELINE", weeks=0) if class_time == "Baseline"
+                  else parse_timepoint(class_time, om.get("timeFrame", ""), title))
             subgroup = "；".join(x for x in (subgroup_of(title), class_rest) if x)
             groups = _measurements(cat, class_n, group_meta, oi, ci, ki)
             results.append(
@@ -244,6 +244,11 @@ def _split_class(text: str) -> tuple[str, str]:
     “Week 21, n=42, 32” → ("Week 21", "")；“Change in PM Score - Week 12” → ("Week 12", "Change in PM Score")。
     """
     t = text or ""
+    if _BASELINE_CLASS.fullmatch(t):
+        return "Baseline", ""
+    baseline = re.search(r"[-–—:]\s*((?:at\s+)?baseline\b.*)$", t, re.I)
+    if baseline and _BASELINE_CLASS.fullmatch(baseline[1]):
+        return "Baseline", t[:baseline.start()].strip()
     if _looks_like_time(t):
         return t, ""
     hits = _TIME_TOKEN.findall(t)
