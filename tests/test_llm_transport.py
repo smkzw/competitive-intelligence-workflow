@@ -2,7 +2,14 @@ import json
 
 import pytest
 
-from ciw.verify.llm import CachedBackend, FakeBackend, OpenAICompatBackend, _read_key, load_roles
+from ciw.verify.llm import (
+    CachedBackend,
+    FakeBackend,
+    OpenAICompatBackend,
+    _read_key,
+    load_roles,
+    require_model_credentials,
+)
 
 
 def test_role_contract_uses_only_explicit_authorized_credentials(monkeypatch, tmp_path):
@@ -101,6 +108,18 @@ def test_attribute_effort_is_scoped_and_does_not_relabel_the_clinical_extractor(
     assert attributes.inner.reasoning_effort == "low"
     assert attributes.model == original.model == "deepseek"
     assert roles["verifier"].reasoning_effort is None
+
+
+def test_missing_live_credentials_fail_before_network_while_inspection_and_stubs_remain_usable(monkeypatch):
+    for name in ("CIW_DGX_API_KEY", "CIW_DGX_KEY_FILE", "CMS_SMK_API_KEY"):
+        monkeypatch.delenv(name, raising=False)
+    roles = load_roles()  # configuration inspection alone does not call services
+    assert roles["extractor_a"].api_key is None
+    with pytest.raises(ValueError, match="模型凭据未配置"):
+        require_model_credentials(roles)
+    stub = {"extractor_a": FakeBackend("deepseek", "a", lambda *_: "{}"),
+            "verifier": FakeBackend("glm", "b", lambda *_: "{}")}
+    assert require_model_credentials(stub) is stub
 
 
 def test_effort_variants_do_not_reuse_a_different_request_receipt(ws):

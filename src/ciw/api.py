@@ -9,7 +9,7 @@ from ciw.config import load_indication
 from ciw.pipeline import RunResult, run
 from ciw.release import load_release
 from ciw.store import Workspace
-from ciw.verify.llm import CachedBackend, load_roles
+from ciw.verify.llm import CachedBackend, load_roles, require_model_credentials
 
 
 def run_indication(
@@ -26,7 +26,7 @@ def run_indication(
     ws = Workspace(workspace)
     roles = None
     if with_models:
-        roles = {k: CachedBackend(v, ws) for k, v in load_roles(llm_config).items()}
+        roles = {k: CachedBackend(v, ws) for k, v in require_model_credentials(load_roles(llm_config)).items()}
     selected = None
     if report is not None:
         old = current_release(workspace)

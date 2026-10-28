@@ -25,7 +25,7 @@ from ciw.config import (
 from ciw.pipeline import run
 from ciw.sources import ctgov
 from ciw.store import Workspace, now_iso
-from ciw.verify.llm import CachedBackend, load_roles, parse_json
+from ciw.verify.llm import CachedBackend, load_roles, parse_json, require_model_credentials
 
 
 class ResearchInputError(ValueError):
@@ -168,7 +168,7 @@ def _mark_planned_concepts(cfg, ws):
 
 
 def _research(indication, ws, *, question="", llm_config=None, log=print, report="A", reuse_research=False):
-    roles = {k: CachedBackend(v, ws) for k, v in load_roles(llm_config).items()}
+    roles = {k: CachedBackend(v, ws) for k, v in require_model_credentials(load_roles(llm_config)).items()}
     reusing = bool(reuse_research and (ws.read_stage("research-context") or ws.current_release_dir()))
     if reusing:
         cfg, studies = _reuse_context(ws)

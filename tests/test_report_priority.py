@@ -200,3 +200,20 @@ def test_advanced_yaml_cli_report_focus_skips_a_and_preserves_completed_b_when_a
     assert main([*args, "C"]) == 0
     assert load_release(seeded_ws.current_release_dir())["rendered_reports"] == ["B", "C"]
     assert (first / "site/B/data.js").read_bytes() == old
+
+
+def test_missing_model_credentials_leave_current_unchanged_before_source_or_model_work(cfg, seeded_ws, monkeypatch):
+    from pathlib import Path
+
+    from ciw.api import run_indication
+
+    first = run(cfg, seeded_ws, offline=True, report_scope="C", render_reports=["C"], log=lambda *_: None)
+    for name in ("CIW_DGX_API_KEY", "CIW_DGX_KEY_FILE", "CMS_SMK_API_KEY"):
+        monkeypatch.delenv(name, raising=False)
+    def unexpected(*args, **kwargs):
+        raise AssertionError("missing credentials reached live work")
+    monkeypatch.setattr("ciw.api.run", unexpected)
+    with pytest.raises(ValueError, match="模型凭据未配置"):
+        run_indication(Path(__file__).resolve().parents[1] / "indications/crswnp.yaml",
+                       seeded_ws.root, offline=True, with_models=True, report="B")
+    assert seeded_ws.current_release_dir().name == first.release_id

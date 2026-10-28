@@ -204,6 +204,16 @@ def load_roles(config_path: str | Path | None = None) -> dict[str, Backend]:
     return roles
 
 
+def require_model_credentials(roles: dict[str, Backend]) -> dict[str, Backend]:
+    """Public live-model entrypoints fail before any request when credentials are absent."""
+    missing = [name for name, backend in roles.items()
+               if isinstance(backend, OpenAICompatBackend) and not backend.api_key]
+    if missing:
+        raise ValueError("模型凭据未配置：" + "、".join(sorted(missing))
+                         + "；请设置CIW_DGX_API_KEY或CIW_DGX_KEY_FILE，以及CMS_SMK_API_KEY")
+    return roles
+
+
 def check_heterogeneous(roles: dict[str, Backend]) -> None:
     need = {"extractor_a", "verifier"}
     if set(roles) != need:
