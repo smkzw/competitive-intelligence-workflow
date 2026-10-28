@@ -111,6 +111,8 @@ def build_results(
                 "time_key": tkey,
                 "weeks": rs[0].time.weeks,
                 "measure_kind": kind,
+                "change_from_baseline": cfb,
+                "percent_change": pctc,
                 "measure_label": MEASURE_LABEL_ZH.get(kind, kind),
                 "direction": c.direction,
                 "units": sorted({r.unit for r in rs if r.unit}),

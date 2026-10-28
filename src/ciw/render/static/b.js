@@ -12,15 +12,15 @@
     const items = qs.filter((x) => (!prim || x.has_primary) && (!q || window.U.matchesQuestion(x,q)));
     const ul = document.getElementById("qlist");
     ul.innerHTML = items.map((x) => `<li data-id="${esc(x.question_id)}" class="${current && current.question_id === x.question_id ? "on" : ""}">
-      <div class="q">${esc(x.label)} · ${esc(x.time_label)}${x.category ? ` · ${esc(x.category)}` : ""}</div>${x.subgroup ? `<div class="s">亚组：${esc(x.subgroup)}</div>` : ""}
-      <div class="s">${esc(x.measure_label)} · ${x.trial_ids.length} 项登记研究${x.frames?.length > 1 ? ` · ${x.frames.length} 个口径` : ""}${x.has_primary ? " · 含主要终点" : ""}</div></li>`).join("") || '<li class="empty">无匹配问题</li>';
+      <div class="q">${esc(x.label)}${x.time_label ? " · " + esc(x.time_label) : ""}${!x.is_family && x.category ? ` · ${esc(x.category)}` : ""}</div>${!x.is_family && x.subgroup ? `<div class="s">亚组：${esc(x.subgroup)}</div>` : ""}
+      <div class="s">${x.is_family ? "" : esc(x.measure_label) + " · "}${x.trial_ids.length} 项研究${x.frames?.length > 1 ? ` · ${x.frames.length} 个分析分面` : ""}${x.has_primary ? " · 含主要终点" : ""}</div></li>`).join("") || '<li class="empty">无匹配问题</li>';
     ul.querySelectorAll("li[data-id]").forEach((li) => li.onclick = () => select(li.dataset.id));
   }
 
   // 组标题与产品名相同（只差大小写）时不重复显示
   const sameName = (a, b) => (a || "").toLowerCase().replace(/[^a-z0-9一-鿿]/g, "") === (b || "").toLowerCase().replace(/[^a-z0-9一-鿿]/g, "");
   const groupSuffix = (label, group) => (label && group && !sameName(label, group) && !label.toLowerCase().includes(group.toLowerCase()) ? `（${group}）` : "");
-  const rowLabel = (r) => `${r.acronym} · ${r.role === "placebo" ? "安慰剂" : (r.product_label || r.group_title)}${r.role !== "placebo" ? groupSuffix(r.product_label, r.group_title) : ""}`;
+  const rowLabel = (r) => `${r.role === "placebo" ? "安慰剂" : (r.product_label || r.group_title)}${r.role !== "placebo" ? groupSuffix(r.product_label, r.group_title) : ""}${r.phase ? " · " + r.phase + "期" : ""} · ${r.acronym}`;
 
 
   const studyLink = row => row.source_records?.length > 1
@@ -30,8 +30,40 @@
     if(observation) showObservation(observation);
   }
 
+  function drawFamilyOverview() {
+    document.getElementById("family-overview").hidden = !current.is_family;
+    if(!current.is_family) return;
+    const all = [];
+    for(const frame of current.frames) for(const rid of frame.result_ids) {
+      const r = (B.observations || []).find(row => row.result_id === rid);
+      if(!r) continue;
+      for(const g of r.groups) all.push({...g,result_id:rid,frame_id:frame.frame_id,
+        phase:r.phase,acronym:r.acronym,url:r.url,time_label:frame.time_label,
+        metric:frame.measure_label,unit:r.unit,population:r.population});
+      for(const a of r.analyses) all.push({...a,value:a.value,result_id:rid,frame_id:frame.frame_id,
+        title:a.group_ids.map(id=>r.groups.find(g=>g.group_id===id)?.title || id).join(" / "),
+        phase:r.phase,acronym:r.acronym,url:r.url,time_label:frame.time_label,
+        metric:a.param_type,unit:"",population:r.population,lower:a.ci_lower,upper:a.ci_upper});
+    }
+    document.getElementById("family-count").textContent = `全研究对照表 · ${current.trial_ids.length} 项研究 · ${all.length} 条记录`;
+    table(document.getElementById("family-table"), [
+      {label:"组别 / 研究",html:r=>`<strong>${esc(r.title)}</strong><br>${studyLink(r)} · ${esc(r.phase)}`},
+      {label:"时间",key:"time_label"},{label:"统计量",key:"metric"},
+      {label:"N",key:"n",num:true,html:r=>num(r.n)},
+      {label:"原值",num:true,html:r=>esc(r.value_raw || num(r.value))},
+      {label:"离散度 / 区间",html:r=>r.spread != null ? num(r.spread) : r.lower != null ? `${num(r.lower)}, ${num(r.upper)}` : "—"},
+      {label:"单位",key:"unit"},
+      {label:"分析人群",html:r=>r.population ? `<details><summary>查看人群</summary>${esc(r.population)}</details>` : "—"},
+      {label:"图表",html:r=>`<button type="button" class="detail-button" data-frame-id="${esc(r.frame_id)}">看图</button>`}
+    ], all, {onRow:showResult});
+  }
+  document.getElementById("family-table").addEventListener("click",event=>{
+    const button=event.target.closest("button[data-frame-id]");
+    if(button) select(current.question_id,button.dataset.frameId);
+  });
+
   function drawForest(id, list, ref, log, sourceOnly = false) {
-    const cl = list.map((c) => sourceOnly ? `${c.acronym} · ${c.group_labels.join("、")}` : `${c.acronym} · ${c.product_label}${groupSuffix(c.product_label, c.exp_group)}${c.h2h ? " vs " + c.ctrl_group : ""}`);
+    const cl = list.map((c) => sourceOnly ? `${c.group_labels.join("、")} · ${c.acronym}` : `${c.product_label}${groupSuffix(c.product_label, c.exp_group)}${c.h2h ? " vs " + c.ctrl_group : ""} · ${c.acronym}`);
     if (!list.length) {
       chart(id, { title: { text: "该问题没有可入图的组间比较（见下表）", left: "center", top: "middle", textStyle: { color: "#64676B", fontSize: 16, fontWeight: 400 } } });
       return;
@@ -84,19 +116,26 @@
     current = qs.find((x) => x.question_id === id) || qs[0];
     if (!current) { document.getElementById("q-title").textContent = "暂无可比较的临床问题"; return; }
     listQuestions();
-    document.getElementById("q-title").textContent = `${current.label} · ${current.time_label}${current.category ? " · " + current.category : ""}${current.subgroup ? "（亚组：" + current.subgroup + "）" : ""}`;
-    document.getElementById("q-sub").textContent = `${current.measure_label}${current.units.length ? " · 单位：" + current.units.join(" / ") : ""}${current.direction === "lower_better" ? " · 数值越低越好" : current.direction === "higher_better" ? " · 数值越高越好" : ""}`;
-
     const frames = current.frames?.length ? current.frames : [current];
-    const frame = frames.find(f => f.frame_id === (frameId || selectedFrames.get(id))) || frames[0];
+    const query = document.getElementById("qsearch").value.trim();
+    const matching = current.is_family && query ? frames.filter(f=>window.U.matchesQuestion({
+      ...f,label:current.label,frames:f.source_contexts || [f]},query)) : frames;
+    const frame = (frameId && frames.find(f=>f.frame_id === frameId)) ||
+      matching.find(f => f.frame_id === selectedFrames.get(id)) || matching[0] || frames[0];
     selectedFrames.set(id, frame.frame_id);
     const picker = document.getElementById("frame-select");
     document.getElementById("frame-label").hidden = frames.length < 2;
-    picker.innerHTML = frames.map((f, i) => `<option value="${esc(f.frame_id || "")}">${i + 1} · ${f.trial_ids.length} 项研究${f.context_label ? " · " + esc(f.context_label) : ""}${f.rows?.length ? " · " + [...new Set(f.rows.map(r => r.product_label).filter(Boolean))].slice(0, 2).map(esc).join("、") : ""}</option>`).join("");
+    picker.innerHTML = frames.map((f, i) => `<option value="${esc(f.frame_id || "")}">${i + 1}${f.time_label ? " · " + esc(f.time_label) : ""}${f.category ? " · " + esc(f.category) : ""}${f.subgroup ? " · " + esc(f.subgroup) : ""}${f.measure_label ? " · " + esc(f.measure_label) : ""} · ${f.trial_ids.length} 项研究${f.context_label ? " · " + esc(f.context_label) : ""}${f.rows?.length ? " · " + [...new Set(f.rows.map(r => r.product_label).filter(Boolean))].slice(0, 2).map(esc).join("、") : ""}</option>`).join("");
     picker.value = frame.frame_id || "";
     picker.onchange = () => select(id, picker.value);
-    document.getElementById("frame-context-text").textContent = [frame.title, frame.description, frame.population].filter(Boolean).join("\n\n");
+    const point = frame.time_label || current.time_label, units = frame.units || current.units;
+    const category = current.is_family ? frame.category : current.category;
+    document.getElementById("q-title").textContent = `${current.label}${point ? " · " + point : ""}${category ? " · " + category : ""}`;
+    document.getElementById("q-sub").textContent = `${frame.measure_label || current.measure_label}${units.length ? " · 单位：" + units.join(" / ") : ""}`;
+    document.getElementById("frame-context-text").textContent = (frame.source_contexts || [frame])
+      .map(f=>[f.title,f.description,f.population].filter(Boolean).join("\n\n")).join("\n\n");
     document.getElementById("frame-context").open = false;
+    drawFamilyOverview();
     drawSourceStatistics(frame.source_statistics || []);
     const comps = frame.comparisons;
     document.getElementById("comparison-details").hidden = !comps.length;
@@ -121,7 +160,7 @@
     });
 
     table(document.getElementById("comp-table"), [
-      { label: "试验", key: "acronym", html: (c) => studyLink(c) + `<br><span class="hint">${esc(c.phase)} 期</span>` },
+      { label: "药物 / 研究", key: "acronym", html: (c) => `<strong>${esc(c.product_label || c.exp_group)}</strong><br>${studyLink(c)}${c.phase ? " · " + esc(c.phase) + "期" : ""}` },
       { label: "产品（试验组）", key: "product_label", html: (c) => `${c.is_own ? '<span class="own-tag">本品 </span>' : ""}${esc(c.product_label)}<br><span class="hint">${esc(c.exp_group)}${c.n_exp != null ? `，N=${c.n_exp}` : ""}</span>` },
       { label: "对照", html: (c) => `${esc(c.ctrl_role_label)}<br><span class="hint">${esc(c.ctrl_group)}${c.n_ctrl != null ? `，N=${c.n_ctrl}` : ""}</span>` },
       { label: "统计量", key: "param_type" },
@@ -133,7 +172,7 @@
     ], comps, { rowClass: (c) => (c.is_own ? "own" : ""), onRow:showResult });
 
     table(document.getElementById("row-table"), [
-      { label: "试验", key: "acronym", html: (r) => studyLink(r) + `<br><span class="hint">${esc(r.outcome_type)}</span>` },
+      { label: "药物 / 研究", key: "acronym", html: (r) => `<strong>${esc(r.product_label || r.group_title)}</strong><br>${studyLink(r)}${r.phase ? " · " + esc(r.phase) + "期" : ""}<br><span class="hint">${esc(r.outcome_type)}</span>` },
       { label: "组别", key: "group_title", html: (r) => `${esc(r.group_title)}<br><span class="hint">${esc(r.role_label)}</span>` },
       { label: "N", key: "n", num: true, html: (r) => num(r.n) },
       { label: "数值", key: "value", num: true, html: (r) => num(r.value) },
@@ -159,7 +198,7 @@
       grid: { left: 60, right: 30, top: 50, bottom: 50 },
       xAxis: { type: "value", name: "周", nameLocation: "end", min: 0 },
       yAxis: { type: "value", scale: true },
-      series: c.lines.map((l, i) => ({ name: `${l.acronym} · ${l.role === "placebo" ? "安慰剂" : l.group_title}`, type: "line", connectNulls: false,
+      series: c.lines.map((l, i) => ({ name: `${l.role === "placebo" ? "安慰剂" : l.group_title} · ${l.acronym}`, type: "line", connectNulls: false,
         symbolSize: 6, lineStyle: { width: l.is_own ? 3 : 1.6, type: l.role === "placebo" ? "dashed" : "solid" },
         itemStyle: { color: l.is_own ? OWN : l.role === "placebo" ? "#6E7B8C" : PAL[i % PAL.length] },
         data: l.points.map((pt) => ({ value: [pt.weeks, pt.value], pt })),
@@ -174,7 +213,7 @@
   const sEl = document.getElementById("sae-chart");
   const sRows = S.filter((r) => r.sae_pct != null);
   sEl.hidden = !sRows.length;
-  const sl = (r) => `${r.acronym} · ${r.role === "placebo" ? "安慰剂" : (r.product_label || r.group_title)}（${r.group_title}）`;
+  const sl = (r) => `${r.role === "placebo" ? "安慰剂" : (r.product_label || r.group_title)}${groupSuffix(r.product_label,r.group_title)} · ${r.acronym}`;
   chart("sae-chart", {
     grid: { left: 320, right: 60, top: 30, bottom: 40 }, legend: { top: 0 },
     tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
@@ -186,7 +225,7 @@
     ],
   });
   table(document.getElementById("safety-table"), [
-    { label: "试验", key: "acronym", html: (r) => src(r.url, r.acronym) },
+    { label: "药物 / 研究", key: "acronym", html: (r) => `<strong>${esc(r.product_label || r.group_title)}</strong><br>${src(r.url, r.acronym)}${r.phase ? " · " + esc(r.phase) + "期" : ""}` },
     { label: "组别", key: "group_title", html: (r) => `${esc(r.group_title)}<br><span class="hint">${esc(r.role_label)}</span>` },
     { label: "N", key: "N", num: true, html: (r) => (r.N == null ? "未报告" : r.N) },
     { label: "严重不良事件", key: "sae_pct", num: true, html: (r) => nN(r.sae_n, null, r.sae_pct) },

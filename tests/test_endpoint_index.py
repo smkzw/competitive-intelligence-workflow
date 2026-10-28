@@ -336,3 +336,19 @@ def test_recheck_requires_item_specific_verifier_evidence_not_a_batch_count(
     if accepted:
         recheck = ws.verifications()["endpoint:" + key]["deterministic_recheck"]
         assert recheck["review_binding"] == dict(method="cached_verifier_item", response_id="response-one")
+
+
+@pytest.mark.parametrize("domain", ["other", "pd", "immunogenicity"])
+def test_verified_nonclinical_domain_replaces_a_provisional_search_guess_and_survives_reuse(cfg, ws, domain):
+    cfg = cfg.model_copy(deep=True)
+    cfg.concepts.append(ConceptCfg(id="planned-lab", label="检索前猜测", patterns=["Exploratory marker"],
+                                  provisional=True, origin="research_plan"))
+    rows = [result("Exploratory marker", "Laboratory assessment.")]
+    before = rows[0].model_dump()
+    roles = roles_for(cfg, rows, domain=domain, label="检验观测")
+    assert enrich_endpoint_index(ws, cfg, rows, roles) == []
+    assert (rows[0].domain, rows[0].concept_id) == (domain, None)
+    for field in before.keys() - {"domain", "concept_id"}:
+        assert rows[0].model_dump()[field] == before[field]
+    assert enrich_endpoint_index(ws, cfg, rows, roles=None) == []
+    assert (rows[0].domain, rows[0].concept_id) == (domain, None)

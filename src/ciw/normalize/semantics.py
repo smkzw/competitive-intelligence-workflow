@@ -15,6 +15,7 @@ _WEEK = re.compile(r"weeks?\s*(\d+(?:\.\d+)?)(?:\s*(?:to|-|–|through)\s*(?:wee
 _DAY = re.compile(r"days?\s*(\d+)(?:\s*(?:to|-|–|through)\s*(?:days?\s*)?(\d+))?", re.I)
 _MONTH = re.compile(r"months?\s*(\d+)", re.I)
 _BARE_WEEKS = re.compile(r"(\d+)\s*weeks?\b", re.I)
+_UPPER_WINDOW = re.compile(r"\b(?:up\s+to|through|until)\s*$", re.I)
 
 
 def _fmt(x: float) -> str:
@@ -34,8 +35,8 @@ def parse_timepoint(*texts: str) -> TimePoint | None:
         if weeks:
             m = weeks[-1]
             a, b = float(m.group(1)), (float(m.group(2)) if m.group(2) else None)
-            if b is not None and a == 0:  # “Week 0 to Week 68” 是基线到第 68 周，不是区间
-                a, b = b, None
+            if b is None and _UPPER_WINDOW.search(text[:m.start()]):
+                return TimePoint(raw=text, label=f"至第{_fmt(a)}周", key=f"W{_fmt(a)}_window*", weeks=a)
             if b is not None and b != a:
                 return TimePoint(raw=text, label=f"第{_fmt(a)}–{_fmt(b)}周", key=f"W{_fmt(a)}-{_fmt(b)}", weeks=b)
             return TimePoint(raw=text, label=f"第{_fmt(a)}周", key=f"W{_fmt(a)}", weeks=a)
@@ -44,8 +45,8 @@ def parse_timepoint(*texts: str) -> TimePoint | None:
             m = days[-1]
             a = int(m.group(1))
             b = int(m.group(2)) if m.group(2) else None
-            if b is not None and a == 0:  # “Day 0 to Day 28” 是基线到第 28 天
-                a, b = b, None
+            if b is None and _UPPER_WINDOW.search(text[:m.start()]):
+                return TimePoint(raw=text, label=f"至第{a}天", key=f"D{a}_window*", weeks=a / 7 if a % 7 == 0 else None)
             end = b if b is not None else a
             wk = end / 7 if end % 7 == 0 else None
             if b is not None and b != a:
@@ -53,7 +54,10 @@ def parse_timepoint(*texts: str) -> TimePoint | None:
             return TimePoint(raw=text, label=f"第{a}天", key=f"D{a}", weeks=wk)
         months = list(_MONTH.finditer(text))
         if months:
-            a = int(months[-1].group(1))
+            m = months[-1]
+            a = int(m.group(1))
+            if _UPPER_WINDOW.search(text[:m.start()]):
+                return TimePoint(raw=text, label=f"至第{a}个月", key=f"M{a}_window*", weeks=None)
             return TimePoint(raw=text, label=f"第{a}个月", key=f"M{a}", weeks=None)
         bare = list(_BARE_WEEKS.finditer(text))
         if bare:

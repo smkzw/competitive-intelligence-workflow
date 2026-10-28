@@ -276,3 +276,41 @@ process.stdout.write(JSON.stringify([m(q,'week 1'),m(q,'week 16'),m(q,'第1周')
 """
     run = subprocess.run(["node", "-e", script, str(asset)], capture_output=True, text=True, check=True)
     assert json.loads(run.stdout) == [False, True, False, True, True, False, False, True, True, True, True]
+
+
+def test_family_search_and_chart_selection_use_the_matching_frame_with_complete_study_table():
+    assets = Path(__file__).resolve().parents[1] / "src/ciw/render/static"
+    script = r"""
+const fs=require('fs'),vm=require('vm'),helper={CIW:{},addEventListener(){}};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{window:helper,URL,
+ document:{getElementById:()=>null,addEventListener(){}}});
+const els=new Proxy({}, {get:(all,id)=>all[id]||(all[id]={id,value:'',checked:false,
+ querySelectorAll:()=>[],addEventListener(){}})});
+els.qsearch.value='week 1';
+const obs=[1,16].map(n=>({result_id:'r'+n,title:'Remission',products:['Drug'+n],phase:'III',acronym:'T'+n,
+ unit:n===1?'Percent':'Proportion',groups:[{group_id:'g',title:'Drug'+n,value:n}],analyses:[]}));
+const frames=[16,1].map(n=>({frame_id:'f'+n,time_key:'W'+n,time_label:'第'+n+'周',measure_label:'比例',
+ units:[n===1?'Percent':'Proportion'],trial_ids:['T'+n],result_ids:['r'+n],population:'All participants',
+ title:'Remission at Week 1, Week 16',rows:[{result_id:'r'+n,value:n,acronym:'T'+n,group_title:'Drug'+n}],
+ comparisons:[],source_statistics:[]}));
+const q={question_id:'family',is_family:true,label:'临床缓解',time_key:'',time_label:'',units:[],
+ measure_label:'比例',trial_ids:['T1','T16'],frames};
+const plots={},tables={},opts={},window={U:{D:{b:{questions:[q],longitudinal:[],safety:[],observations:obs}},
+ esc:s=>s||'',num:v=>v,nN(){},tag(){},src(){},options(){},OWN:'orange',PAL:[],
+ matchesQuestion:helper.U.matchesQuestion,table:(e,c,r,o)=>{tables[e.id]=r;opts[e.id]=o},
+ chart:(id,o)=>plots[id]=o,drawer(){}}};
+vm.runInNewContext(fs.readFileSync(process.argv[2],'utf8'),{window,document:{getElementById:id=>els[id]}});
+const first={values:plots['value-chart'].series[0].data.map(r=>r.value),title:els['q-title'].textContent,
+ sub:els['q-sub'].textContent,all:tables['family-table'].map(r=>r.value),count:els['family-count'].textContent};
+els['frame-select'].value='f16';els['frame-select'].onchange();
+const second={values:plots['value-chart'].series[0].data.map(r=>r.value),sub:els['q-sub'].textContent};
+process.stdout.write(JSON.stringify({first,second,hidden:els['family-overview'].hidden,
+ mismatch:helper.U.matchesQuestion({...q,frames:[frames[0]]},'week 1')}));
+"""
+    run = subprocess.run(["node", "-e", script, str(assets / "common.js"), str(assets / "b.js")],
+                         capture_output=True, text=True, check=True)
+    result = json.loads(run.stdout)
+    assert result["first"]["values"] == [1] and "Percent" in result["first"]["sub"]
+    assert result["first"]["all"] == [16, 1] and "2 项研究" in result["first"]["count"]
+    assert result["second"]["values"] == [16] and "Proportion" in result["second"]["sub"]
+    assert not result["hidden"] and not result["mismatch"]

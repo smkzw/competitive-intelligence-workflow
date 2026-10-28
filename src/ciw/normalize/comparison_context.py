@@ -25,8 +25,12 @@ def endpoint_context(result: OutcomeResult, concept: ConceptCfg) -> tuple[str, s
         title = re.sub(pattern, " ", title, flags=re.I)
     title = _WORDING.sub(" ", _TIME.sub(" ", title))
     title = re.sub(r"[^\w<>%=.+/-]+", " ", title, flags=re.UNICODE).strip()
-    # Preserve unknown population and endpoint definitions instead of treating silence as equality.
-    return _text(title), _text(result.population), _text(result.description)
+    # Silence is not a shared analysis context. Keep missing context local to the
+    # original source measure; repeated time classes in that measure can still form a line.
+    measure = f"{result.trial_id}:{result.outcome_index}:{result.locator.source_id}"
+    population = _text(result.population) or "unknown-population:" + measure
+    definition = _text(result.description) or "unknown-definition:" + measure
+    return _text(title), population, definition
 
 
 def context_display_label(result: OutcomeResult) -> str:

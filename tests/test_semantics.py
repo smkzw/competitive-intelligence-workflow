@@ -8,6 +8,15 @@ from ciw.normalize.arms import match_group
 from ciw.normalize.semantics import classify, measure_kind, parse_timepoint, subgroup_of
 
 
+@pytest.mark.parametrize("text,key", [("Up to Week 148 (end of trial)", "W148_window*"),
+    ("Through Week 52", "W52_window*"), ("Until Day 28", "D28_window*"),
+    ("Up to Month 12", "M12_window*"), ("Week 148", "W148"),
+    ("Week 0 to Week 68", "W0-68"), ("Day 0 to Day 28", "D0-28")])
+def test_upper_followup_window_is_not_a_single_visit(text, key):
+    assert parse_timepoint(text).key == key
+    assert parse_timepoint("Week 24", text).key == "W24"
+
+
 def test_report_preserves_a_source_proportion_without_implying_percent(cfg):
     from ciw.analyze.results import build_results
     from ciw.models import GroupValue, Locator, OutcomeResult, TimePoint, Trial
@@ -69,7 +78,7 @@ def test_measure_kind(param, unit, kind):
     [
         (("Baseline, Week 24",), "W24", 24),
         (("Baseline and Weeks 49 to 52",), "W49-52", 52),
-        (("Week 0 to Week 68",), "W68", 68),  # ciw2 取第一个数字的缺陷
+        (("Week 0 to Week 68",), "W0-68", 68),  # explicit window is not the last visit
         (("Baseline (Day 1) and Week 52",), "W52", 52),
         (("Day 169",), "D169", None),  # 不能整除 7 不折算
         (("Month 6",), "M6", None),  # 月不折算成周

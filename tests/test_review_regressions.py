@@ -150,7 +150,7 @@ def test_percent_change_is_separate_question(cfg):
 
 
 # --- P1-9 时间点
-@pytest.mark.parametrize("text,key", [("Weeks 16 and 24", "W24*"), ("Day 0 to Day 28", "D28")])
+@pytest.mark.parametrize("text,key", [("Weeks 16 and 24", "W24*"), ("Day 0 to Day 28", "D0-28")])
 def test_timepoint_regressions(text, key):
     assert parse_timepoint(text).key == key
 

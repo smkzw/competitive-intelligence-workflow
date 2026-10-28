@@ -121,6 +121,8 @@ mark { background:#FFE8B7; color:inherit; }
 #row-table td:nth-child(6) { min-width:9em; overflow-wrap:normal; }
 #row-table td:nth-child(2) { min-width:10em; overflow-wrap:normal; }
 .grid tr[tabindex="0"] { cursor:pointer; }
+#family-overview { margin:8px 0; }
+#family-table td:first-child { min-width:12em; }
 #row-table td:first-child a { white-space:nowrap; }
 .detail-button { font:inherit; margin-top:6px; padding:3px 10px; border:1px solid #CED3D8; border-radius:8px; background:#fff; color:var(--brand-2); cursor:pointer; }
 .filters button { background:#fff; color:var(--body); border:1px solid #CED3D8; border-radius:8px; padding:5px 10px; cursor:pointer; }

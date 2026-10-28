@@ -11,6 +11,7 @@ from ciw.store import Workspace
 
 def outcome(i, title, *, population="All randomized participants", week=52):
     return OutcomeResult(result_id=f"result-{i}", trial_id=f"trial-{i}", title=title, population=population,
+        description="Clinical remission under the same explicit endpoint definition.",
         outcome_index=0, type="PRIMARY",
         time=TimePoint(key=f"W{week}", weeks=week, label=f"第{week}周", raw=f"Week {week}"),
         concept_id="remission", domain="efficacy", measure_kind="proportion", unit="Percentage of participants",

@@ -105,7 +105,7 @@ def run(
     merged_trials, identity_issues = deduplicate_trials(list(trials.values()))
     trials = {trial.trial_id: trial for trial in merged_trials}
     review_queue.extend(identity_issues)
-    _reuse_completed(cfg, ws, products, trials, results, coverage, report_scope)
+    previous = _reuse_completed(cfg, ws, products, trials, results, coverage, report_scope) or {}
     if report_scope in {None, "A"}:
         log("[research] attributes")
         review_queue.extend(enrich_attributes(ws, products, list(trials.values()), resolver, roles, log=log))
@@ -117,7 +117,16 @@ def run(
     from ciw.verify.endpoint_index import enrich_endpoint_index
 
     review_queue.extend(enrich_endpoint_index(ws, cfg, results, roles if report_scope in {None, "B"} else None, log))
+    from ciw.analyze.clinical_families import project_clinical_families
+    from ciw.verify.endpoint_families import enrich_endpoint_families
+
+    families, family_issues = enrich_endpoint_families(ws, cfg, results,
+        roles if report_scope in {None, "B"} else None, previous=previous.get("clinical_families"))
+    review_queue.extend(family_issues)
     body = _build_body(cfg, ws, products, trials, results, safety, events, review_queue, unclassified, stats, coverage)
+    body["clinical_families"] = families
+    body["b"] = project_clinical_families(body["b"], families["groups"])
+    body["stats"]["questions"] = len(body["b"]["questions"])
     from ciw.render.site import presentation_digest
 
     body.update(rendered_reports=sorted(set(selected)) if render else [], presentation_digest=presentation_digest())
@@ -166,6 +175,7 @@ def _reuse_completed(cfg, ws, products, trials, results, coverage, scope):
             if result.trial_id in trials and known.get(result.locator.source_id) == "europepmc":
                 results.append(result)
         coverage.extend(c for c in old["coverage"] if c["source"] in {"europepmc", "publications"})
+    return old
 
 
 def _collect_unclassified(

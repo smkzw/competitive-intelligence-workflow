@@ -273,7 +273,11 @@ def enrich_endpoint_index(ws, cfg, results, roles=None, log=lambda *_: None):
                       for key in catalog if key not in adopted)
     for key, descriptor in catalog.items():
         item = adopted.get(key)
-        if not item or _check(item, {key: descriptor})[0] is False or item["domain"] != "efficacy":
+        if not item or _check(item, {key: descriptor})[0] is False:
+            continue
+        if item["domain"] != "efficacy":
+            for result in descriptor["results"]:
+                result.domain, result.concept_id = item["domain"], None
             continue
         cid = "source-endpoint-" + key[:24]
         if not any(c.id == cid for c in cfg.concepts):

@@ -52,6 +52,9 @@
   }
 
   function matchesQuestion(question, query) {
+    if(question.is_family) return (question.frames || []).some(frame => matchesQuestion({
+      ...frame,is_family:false,label:question.label,measure_label:frame.measure_label || question.measure_label,
+      frames:frame.source_contexts || [frame]},query));
     const requests = [...String(query).matchAll(/\bweeks?\s*(\d+(?:\.\d+)?)(?!\d|\.\d)|第\s*(\d+(?:\.\d+)?)\s*周/gi)];
     const range = requests.some(m => /^\s*(?:[-–—,]|\b(?:to|through|and)\b)\s*(?:weeks?\s*)?\d/i
       .test(String(query).slice(m.index + m[0].length)));
