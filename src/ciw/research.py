@@ -169,7 +169,8 @@ def _mark_planned_concepts(cfg, ws):
 
 def _research(indication, ws, *, question="", llm_config=None, log=print, report="A", reuse_research=False):
     roles = {k: CachedBackend(v, ws) for k, v in load_roles(llm_config).items()}
-    if reuse_research and (ws.read_stage("research-context") or ws.current_release_dir()):
+    reusing = bool(reuse_research and (ws.read_stage("research-context") or ws.current_release_dir()))
+    if reusing:
         cfg, studies = _reuse_context(ws)
         log("[research] reuse")
     else:
@@ -195,7 +196,7 @@ def _research(indication, ws, *, question="", llm_config=None, log=print, report
         if old["indication"]["slug"] == cfg.slug:
             completed = old.get("rendered_reports", list("ABC"))
     log(f"[research] sources={len(studies)} candidates={len(cfg.products)}")
-    return run(cfg, ws, offline=False, roles=roles, log=log, preloaded_studies=studies,
+    return run(cfg, ws, offline=reusing, roles=roles, log=log, preloaded_studies=studies,
                report_scope=report, render_reports=sorted({*completed, report}))
 
 

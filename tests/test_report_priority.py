@@ -50,7 +50,8 @@ def test_modified_old_portal_is_not_silently_overwritten(cfg, seeded_ws):
     assert path.read_text() == "user-preserved-content"
 
 
-def test_continuation_reuses_closed_source_set_without_query_or_download(cfg, seeded_ws, monkeypatch):
+@pytest.mark.parametrize("report", ["B", "C"])
+def test_continuation_reuses_closed_source_set_without_query_or_download(cfg, seeded_ws, monkeypatch, report):
     from types import SimpleNamespace
 
     import yaml
@@ -73,8 +74,10 @@ def test_continuation_reuses_closed_source_set_without_query_or_download(cfg, se
         received.update(kw)
         return SimpleNamespace(release_id="unit-only")
     monkeypatch.setattr("ciw.research.run", execute)
-    _research("same disease", seeded_ws, report="C", reuse_research=True, log=lambda *_: None)
-    assert received["report_scope"] == "C" and received["render_reports"] == ["C"]
+    _research("same disease", seeded_ws, report=report, reuse_research=True, log=lambda *_: None)
+    assert received["report_scope"] == report and received["render_reports"] == [report]
+    assert received["offline"] is True  # all acquisition, including publication discovery
+    assert set(received["roles"]) == {"extractor_a", "verifier"}
     assert {src.source_id for src, _ in received["preloaded_studies"].values()} == set(ids)
 
 

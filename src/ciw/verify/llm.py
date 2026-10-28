@@ -163,11 +163,17 @@ def _read_key(spec: dict[str, Any]) -> str | None:
     for name in spec.get("key_env", []):
         if os.environ.get(name):
             return os.environ[name]
-    files = [os.environ[n] for n in spec.get("key_file_env", []) if os.environ.get(n)]
-    for f in files:
-        path = Path(f).expanduser()
-        if path.is_file():
-            return path.read_text(encoding="utf-8").strip()
+    for name in spec.get("key_file_env", []):
+        if not os.environ.get(name):
+            continue
+        path = Path(os.environ[name]).expanduser()
+        try:
+            key = path.read_text(encoding="utf-8").strip()
+        except OSError:
+            raise ValueError(f"{name}指定的凭据文件不可读取") from None
+        if not key:
+            raise ValueError(f"{name}指定的凭据文件为空")
+        return key
     return None
 
 

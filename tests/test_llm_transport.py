@@ -124,3 +124,15 @@ def test_temporary_model_transition_keeps_both_models_cache_records(ws):
     assert original.chat("same schema", "same source") == "old"
     assert temporary.chat("same schema", "same source") == "new"
     assert calls == ["cms", "dgx"]
+
+
+@pytest.mark.parametrize("exists,content", [(False, ""), (True, ""), (True, "   ")])
+def test_explicit_missing_or_empty_key_file_fails_before_any_request(monkeypatch, tmp_path, exists, content):
+    path = tmp_path / "key"
+    if exists:
+        path.write_text(content)
+    monkeypatch.delenv("CIW_DGX_API_KEY", raising=False)
+    monkeypatch.setenv("CIW_DGX_KEY_FILE", str(path))
+    with pytest.raises(ValueError, match="CIW_DGX_KEY_FILE") as error:
+        load_roles()
+    assert str(path) not in str(error.value)
