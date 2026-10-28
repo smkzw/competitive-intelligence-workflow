@@ -1,5 +1,7 @@
 # ciw · 竞品调研子系统（v2）
 
+当前已按用户要求暂停。续接先读 [STATUS](docs/STATUS.md) 与 [最新交接](docs/handoff/PAUSE_20261028_D22.md)，不要重跑下面的首次安装示例。
+
 医学经理工作台“证据调研与方案设计”的竞品事实底座。
 
 输入一个适应症配置，自动完成以下几步：
@@ -27,7 +29,7 @@ uv run ciw run indications/crswnp.yaml --with-models    # 启用异构模型交�
 
 采集与运行时使用同一个 `--workspace`。公众号原文使用 `--kind wechat`，发布者必须匹配适应症配置中的账号。
 DGX 凭据仅通过 `CIW_DGX_API_KEY` 或 `CIW_DGX_KEY_FILE` 显式提供；cms-smk凭据只读 `CMS_SMK_API_KEY`。
-现行D17配置：DGX `deepseek`主抽取，cms-smk `glm-5.3-flash`读取完整原文和候选核对、纠错、补漏。
+现行D22恢复配置（沿用D17两角色）：DGX `deepseek`主抽取，cms-smk `glm-5.3-flash`读取完整原文和候选核对、纠错、补漏。
 通过本地JSON/schema/引文/数值/日期校验后标记 `verified`；不再调用Qwen或第三模型仲裁，不宣称盲审。
 各模型响应的 model/id、结束原因和用量随原有工作区核对记录保留；缓存复用不会伪造新调用。
 
