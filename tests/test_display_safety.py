@@ -268,7 +268,11 @@ const q={label:'DLQI评分',time_label:'第16周',measure_label:'均值',time_ke
  frames:[{title:'Change in DLQI at Week 1, Week 4, and Week 16',population:'All participants'}]};
 const m=window.U.matchesQuestion;
 process.stdout.write(JSON.stringify([m(q,'week 1'),m(q,'week 16'),m(q,'第1周'),m(q,'DLQI'),
- m({...q,time_key:'W1'},'week 1'),m({...q,time_key:'W1.5'},'week 1'),m(q,'week 1.5')]));
+ m({...q,time_key:'W1'},'week 1'),m({...q,time_key:'W1.5'},'week 1'),m(q,'week 1.5'),
+ m(q,'Week 1, Week 4, and Week 16'),
+ m({...q,frames:[{title:'DLQI at Weeks 1-16'}]},'Weeks 1-16'),
+ m({...q,frames:[{title:'DLQI at Week 1 to Week 16'}]},'Week 1 to Week 16'),
+ m({...q,frames:[{title:'DLQI at Weeks 1, 4, and 16'}]},'Weeks 1, 4, and 16')]));
 """
     run = subprocess.run(["node", "-e", script, str(asset)], capture_output=True, text=True, check=True)
-    assert json.loads(run.stdout) == [False, True, False, True, True, False, False]
+    assert json.loads(run.stdout) == [False, True, False, True, True, False, False, True, True, True, True]

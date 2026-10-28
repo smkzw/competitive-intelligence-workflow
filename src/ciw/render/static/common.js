@@ -52,10 +52,11 @@
   }
 
   function matchesQuestion(question, query) {
-    const weeks = [...String(query).matchAll(/\bweeks?\s*(\d+(?:\.\d+)?)(?!\d|\.\d)|第\s*(\d+(?:\.\d+)?)\s*周/gi)]
-      .map(m => Number(m[1] || m[2]));
+    const requests = [...String(query).matchAll(/\bweeks?\s*(\d+(?:\.\d+)?)(?!\d|\.\d)|第\s*(\d+(?:\.\d+)?)\s*周/gi)];
+    const range = requests.some(m => /^\s*(?:[-–—,]|\b(?:to|through|and)\b)\s*(?:weeks?\s*)?\d/i
+      .test(String(query).slice(m.index + m[0].length)));
     const point = /^W(\d+(?:\.\d+)?)$/.exec(question.time_key || "");
-    if(point && weeks.some(week => week !== Number(point[1]))) return false;
+    if(point && requests.length === 1 && !range && Number(requests[0][1] || requests[0][2]) !== Number(point[1])) return false;
     return matchesSearch(`${question.label} ${question.time_label} ${question.measure_label} ` +
       (question.frames || []).map(f => `${f.title} ${f.population}`).join(" "),query);
   }
