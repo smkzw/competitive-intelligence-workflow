@@ -44,6 +44,7 @@ class ConceptCfg(_Cfg):
     direction: Literal["lower_better", "higher_better", "none"] = "none"
     domain: Literal["efficacy", "pd", "other"] = "efficacy"
     source_definition: str | None = None
+    provisional: bool = False
 
     @cached_property
     def _rx(self) -> tuple[list[re.Pattern[str]], list[re.Pattern[str]]]:
@@ -53,7 +54,8 @@ class ConceptCfg(_Cfg):
         if self.source_definition is not None and self.source_definition != definition:
             return False
         inc, exc = self._rx
-        return any(r.search(text) for r in inc) and not any(r.search(text) for r in exc)
+        excluded_text = text + "\n" + definition if self.provisional else text
+        return any(r.search(text) for r in inc) and not any(r.search(excluded_text) for r in exc)
 
 
 class CtgovCfg(_Cfg):

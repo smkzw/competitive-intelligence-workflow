@@ -134,3 +134,47 @@ def test_model_generated_labels_cannot_invent_a_threshold_or_change_its_operator
     issues = enrich_endpoint_index(ws, cfg, rows, roles_for(cfg, rows, label=label))
     assert (rows[0].domain == "efficacy") is accepted
     assert bool(issues) is not accepted
+
+
+def test_continuous_biomarker_change_cannot_be_labeled_remission_by_model_agreement(cfg, ws):
+    cfg = cfg.model_copy(deep=True)
+    row = result("Mean Change From Baseline in Peak Esophageal Eosinophil Counts",
+                 "Measured peak eosinophil counts before and after treatment.")
+    row.measure_kind = "mean"
+    issues = enrich_endpoint_index(ws, cfg, [row], roles_for(cfg, [row], label="组织学缓解"))
+    assert row.domain == "pd" and row.concept_id is None
+    assert issues
+
+
+def test_omitted_threshold_operator_is_rejected(cfg, ws):
+    cfg = cfg.model_copy(deep=True)
+    rows = [result()]
+    issues = enrich_endpoint_index(ws, cfg, rows, roles_for(cfg, rows, label="组织学应答 6 eos/hpf"))
+    assert rows[0].domain == "pd" and issues
+
+
+def test_unattempted_index_is_recorded_without_calling_a_model(cfg, ws):
+    cfg = cfg.model_copy(deep=True)
+    rows = [result("Change in Dysphagia Symptom Score", "A patient-reported symptom questionnaire.")]
+    rows[0].domain = "other"
+    issues = enrich_endpoint_index(ws, cfg, rows, roles=None)
+    assert any(i["kind"] == "endpoint_index_not_run" for i in issues)
+    assert rows[0].domain == "other"
+
+
+def test_a_pre_retrieval_generic_concept_does_not_preempt_a_checked_source_definition(cfg, ws):
+    cfg = cfg.model_copy(deep=True)
+    # Runtime search plans may carry broad terms; they are not evidence of complete indexing.
+    generic = ConceptCfg(id="search-plan", label="组织学（阈值未明确）", patterns=["Histologic response"])
+    generic.provisional = True
+    cfg.concepts.append(generic)
+    rows = [result("Histologic response", "Histologic remission means ≤6 eos/hpf.")]
+    rows[0].domain, rows[0].concept_id = classify(rows[0].title, cfg, rows[0].description)
+    roles = roles_for(cfg, rows, label="组织学缓解≤6")
+    for role in roles.values():
+        payload = json.loads(role.responder.return_value)
+        payload["items"][0]["quote"] = rows[0].description
+        role.responder.return_value = json.dumps(payload)
+    assert enrich_endpoint_index(ws, cfg, rows, roles) == []
+    assert rows[0].concept_id != generic.id
+    assert classify(rows[0].title, cfg, rows[0].description)[1] == rows[0].concept_id

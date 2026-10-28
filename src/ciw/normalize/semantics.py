@@ -132,7 +132,8 @@ def classify(title: str, cfg: IndicationConfig, definition: str = "") -> tuple[s
     """返回 (domain, concept_id)。疗效只来自概念字典；字典外、非 PK/PD/免疫原性/安全的一律 other。"""
     if _IMMUNO.search(title):
         return "immunogenicity", None
-    clinical = any(c.domain == "efficacy" and c.matches(title, definition) for c in cfg.concepts)
+    ordered = sorted(cfg.concepts, key=lambda c: c.source_definition is None)
+    clinical = any(c.domain == "efficacy" and c.matches(title, definition) for c in ordered)
     if _PD.search(title) and re.search(r"concentration|level|count", title, re.I) and not clinical:
         return "pd", None  # 生物标志物浓度（如总 IgE）不是药代
     if _PK_STRONG.search(title):
@@ -141,7 +142,7 @@ def classify(title: str, cfg: IndicationConfig, definition: str = "") -> tuple[s
         return "pk", None
     if _SAFETY.search(title):
         return "safety", None
-    for concept in cfg.concepts:
+    for concept in ordered:
         if concept.matches(title, definition):
             return concept.domain, concept.id
     if _PD.search(title):
@@ -149,8 +150,13 @@ def classify(title: str, cfg: IndicationConfig, definition: str = "") -> tuple[s
     return "other", None
 
 
+def is_biomarker_title(title: str) -> bool:
+    return bool(_PD.search(title))
+
+
 def concept_of(title: str, cfg: IndicationConfig, definition: str = "") -> str | None:
-    return next((c.id for c in cfg.concepts if c.matches(title, definition)), None)
+    ordered = sorted(cfg.concepts, key=lambda c: c.source_definition is None)
+    return next((c.id for c in ordered if c.matches(title, definition)), None)
 
 
 # ---------- 亚组 ----------

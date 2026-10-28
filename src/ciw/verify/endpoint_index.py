@@ -12,7 +12,7 @@ from typing import Literal
 from pydantic import BaseModel
 
 from ciw.config import ConceptCfg
-from ciw.normalize.semantics import classify
+from ciw.normalize.semantics import classify, is_biomarker_title
 from ciw.verify.crosscheck import CrosscheckFailed, ExtractionTask, crosscheck, task_id_for
 from ciw.verify.quote import check_quote
 
@@ -40,10 +40,11 @@ def _instruction(cfg):
 def _catalog(cfg, results):
     schema = json.dumps(EndpointIndexItem.model_json_schema(), sort_keys=True)
     rule = _instruction(cfg) + schema
-    known = {c.id for c in cfg.concepts}
+    known = {c.id: c for c in cfg.concepts}
     descriptors = {}
     for result in results:
-        if result.domain not in {"other", "pd"} and result.concept_id in known:
+        concept = known.get(result.concept_id)
+        if concept and not concept.provisional:
             continue
         if result.domain in {"pk", "safety", "immunogenicity"}:
             continue
@@ -65,11 +66,34 @@ def _check(item, batch):
     numbers = re.findall(r"(?<![A-Za-z0-9])\d+(?:\.\d+)?", item["label"])
     if not check_quote(source["material"], item["quote"], numbers or None).ok:
         return False, "临床标签数值缺少对应原文支持"
-    def comparisons(text):
-        text = text.replace("≤", "<=").replace("≥", ">=")
-        return set(re.findall(r"(<=|>=|<|>)\s*(\d+(?:\.\d+)?)", text))
-    if not comparisons(item["label"]).issubset(comparisons(item["quote"])):
+    label_pairs, quote_pairs = _comparisons(item["label"]), _comparisons(item["quote"])
+    if not label_pairs.issubset(quote_pairs):
         return False, "临床标签比较符与原文不一致"
+    if any(value in numbers and (op, value) not in label_pairs for op, value in quote_pairs):
+        return False, "临床标签重复阈值时不能省略原比较符"
+    return _clinical_label_supported(item, source)
+
+
+def _comparisons(text):
+    text = text.replace("≤", "<=").replace("≥", ">=")
+    return set(re.findall(r"(<=|>=|<|>)\s*(\d+(?:\.\d+)?)", text))
+
+
+def _clinical_label_supported(item, source):
+    if item["domain"] != "efficacy":
+        return True, ""
+    title, quote = source["title"], item["quote"]
+    attainment = bool(_comparisons(quote) and re.search(
+        r"percentage of|proportion of|number of (?:participants|patients|subjects)|participants achieving", title, re.I)
+        and not re.search(r"percent(?:age)? change|mean change", title, re.I))
+    response = re.search(r"\b(?:response|responders?|remission|achiev\w*|attain\w*)\b", quote, re.I)
+    clinical = response and re.search(r"clinical|histolog|histopatholog", quote, re.I)
+    if is_biomarker_title(title) and not (clinical or attainment):
+        return False, "原文未支持将连续标志物测量提升为临床应答或缓解"
+    if re.search("缓解", item["label"]) and not (re.search(r"\bremission\b", quote, re.I) or attainment):
+        return False, "缓解标签缺少对应原文定义"
+    if re.search("应答|响应|达标", item["label"]) and not (response or attainment):
+        return False, "应答标签缺少对应原文定义"
     return True, ""
 
 
@@ -136,8 +160,9 @@ def enrich_endpoint_index(ws, cfg, results, roles=None, log=lambda *_: None):
                 issues.append(dict(kind="endpoint_index_missing", ref=key, note=unresolved[key]))
             ws.write_stage("research-endpoint-index", saved)
     if not roles:
-        issues.extend(dict(kind="endpoint_index_needs_review", ref=key, note=unresolved[key])
-                      for key in catalog if key in unresolved)
+        issues.extend(dict(kind="endpoint_index_needs_review" if key in unresolved else "endpoint_index_not_run",
+                           ref=key, note=unresolved.get(key, "临床索引未运行，原始观测保留"))
+                      for key in catalog if key not in adopted)
     for key, descriptor in catalog.items():
         item = adopted.get(key)
         if not item or _check(item, {key: descriptor})[0] is False or item["domain"] != "efficacy":

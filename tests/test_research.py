@@ -65,3 +65,18 @@ def test_research_failure_keeps_persisted_state_and_old_current(tmp_path, monkey
         run_research("疾病", tmp_path, queue_lock=tmp_path / "queue.lock")
     assert ws.read_stage("research-run")["state"] == "failed"
     assert json.loads((ws.releases_dir / "current.json").read_text())["release_id"] == "rel_old"
+
+
+def test_legacy_runtime_plan_is_identified_by_recorded_literal_content_not_id_guessing(tmp_path):
+    from ciw.research import _mark_planned_concepts
+    ws = Workspace(tmp_path)
+    cfg, _ = registry_config(QueryPlan.model_validate(plan()), {"one": study(ws)})
+    assert cfg.concepts[0].provisional
+    cfg.concepts[0].provisional = False
+    ws.write_stage("research-query-plan", dict(plan=plan()))
+    _mark_planned_concepts(cfg, ws)
+    assert cfg.concepts[0].provisional
+    cfg.concepts[0].label = "用户已修订的临床名称"
+    cfg.concepts[0].provisional = False
+    _mark_planned_concepts(cfg, ws)
+    assert not cfg.concepts[0].provisional

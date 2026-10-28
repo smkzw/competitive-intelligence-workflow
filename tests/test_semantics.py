@@ -92,3 +92,12 @@ def test_placebo_then_drug_is_not_experimental(resolver):
 @pytest.mark.parametrize("n,N,expected", [(12, 200, 6.0), (None, 200, None), (0, 0, None), (5, 4, None), (0, 10, 0.0)])
 def test_pct_only_from_counts(n, N, expected):
     assert pct(n, N) == expected
+
+
+def test_pre_retrieval_exclusions_can_use_definition_without_overriding_manual_dictionary():
+    from ciw.config import ConceptCfg
+    concept = ConceptCfg(id="provisional", label="阈值尚未索引", patterns=["Histologic response"],
+                         exclude=["≤6"], provisional=True)
+    assert not concept.matches("Histologic response", "Defined as ≤6 cells")
+    concept.provisional = False
+    assert concept.matches("Histologic response", "Defined as ≤6 cells")

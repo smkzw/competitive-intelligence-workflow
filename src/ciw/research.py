@@ -87,7 +87,8 @@ def registry_config(plan, studies):
                 "path": f"$.protocolSection.armsInterventionsModule.interventions[{index}].name", "quote": name})
     slug = "research-" + hashlib.sha256(plan.name_en.casefold().encode()).hexdigest()[:12]
     concepts = [ConceptCfg(id=f"concept-{i}", label=t.label, patterns=[re.escape(x) for x in t.terms],
-        exclude=[re.escape(x) for x in t.exclude], direction=t.direction) for i, t in enumerate(plan.concepts)]
+        exclude=[re.escape(x) for x in t.exclude], direction=t.direction, provisional=True)
+                for i, t in enumerate(plan.concepts)]
     cfg = IndicationConfig(slug=slug, name_zh=plan.name_zh, name_en=plan.name_en,
         ctgov={"conditions": plan.conditions, "relevance_patterns": [re.escape(x) for x in plan.conditions]},
         products=sorted(products.values(), key=lambda p: p.name_en.casefold()), concepts=concepts,
@@ -127,6 +128,16 @@ def _reuse_context(ws):
     return cfg, studies
 
 
+def _mark_planned_concepts(cfg, ws):
+    record = ws.read_stage("research-query-plan") or {}
+    for index, topic in enumerate(record.get("plan", {}).get("concepts", [])):
+        for concept in cfg.concepts:
+            if (concept.id == f"concept-{index}" and concept.label == topic["label"]
+                    and concept.patterns == [re.escape(x) for x in topic["terms"]]
+                    and concept.exclude == [re.escape(x) for x in topic.get("exclude", [])]):
+                concept.provisional = True
+
+
 def _research(indication, ws, *, question="", llm_config=None, log=print, report="A", reuse_research=False):
     roles = {k: CachedBackend(v, ws) for k, v in load_roles(llm_config).items()}
     if reuse_research and (ws.read_stage("research-context") or ws.current_release_dir()):
@@ -147,6 +158,7 @@ def _research(indication, ws, *, question="", llm_config=None, log=print, report
         ws.write_stage("research-product-membership", membership)
         ws.write_stage("research-context", dict(config=path.relative_to(ws.root).as_posix(),
                        source_ids=sorted(src.source_id for src, _ in studies.values())))
+    _mark_planned_concepts(cfg, ws)
     from ciw.release import load_release
     completed = []
     if ws.current_release_dir():
