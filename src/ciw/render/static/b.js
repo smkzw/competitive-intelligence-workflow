@@ -199,7 +199,7 @@
     const ids = new Set(current.member_concept_ids || [current.concept_id]);
     L = B.longitudinal.filter(c => ids.has(c.concept_id));
     document.getElementById("longitudinal-card").hidden = !L.length;
-    ls.innerHTML = L.map((c, i) => `<option value="${i}">${esc(c.label)} · ${esc(c.measure_label)}（${c.lines.length} 条曲线）</option>`).join("");
+    ls.innerHTML = L.map((c, i) => `<option value="${i}">${esc(current.is_family ? current.label : c.label)} · ${esc(c.measure_label)} · ${esc(c.unit)}（${c.lines.length} 条曲线）</option>`).join("");
     ls.value = String(Math.max(0,L.findIndex(c=>c.chart_id === selectedLong.get(current.question_id))));
     drawLong();
   }
