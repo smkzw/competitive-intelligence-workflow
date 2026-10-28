@@ -11,12 +11,13 @@ def test_role_contract_uses_only_explicit_authorized_credentials(monkeypatch, tm
     monkeypatch.setenv("CIW_DGX_KEY_FILE", str(path))
     monkeypatch.setenv("CMS_SMK_API_KEY", "test-only-cms-key")
     roles = load_roles()
-    assert roles["verifier"].api_key == roles["extractor_a"].api_key == "test-only-key"
+    assert roles["extractor_a"].api_key == "test-only-key"
+    assert roles["verifier"].api_key == "test-only-cms-key"
     assert {r.family for r in roles.values()} == {"deepseek", "glm"}
     assert roles["verifier"].response_format is None
-    assert roles["verifier"].model == "glm"
-    assert roles["verifier"].base_url == roles["extractor_a"].base_url
-    assert roles["verifier"].no_proxy is True
+    assert roles["verifier"].model == "glm-5.3-flash"
+    assert roles["verifier"].base_url == "https://new-api.mediportal.com.cn/v1"
+    assert roles["verifier"].no_proxy is False
     assert roles["verifier"].timeout == 7200
     assert roles["verifier"].max_tokens == 65536
     assert roles["extractor_a"].response_format is None

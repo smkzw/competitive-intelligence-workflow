@@ -2,16 +2,16 @@
 
 **2026-10-28｜独立真实测试持续推进，产品尚未正式上线**
 
-权威：PRD、DECISIONS（D17–D21）、ARCHITECTURE、PLAN、EXECUTION_PACK；旧暂停记录不阻止当前授权实施。
+权威：PRD、DECISIONS（D17–D22）、ARCHITECTURE、PLAN、EXECUTION_PACK；旧暂停记录不阻止当前授权实施。
 角色：owner整合修复，指定Pi/openai-codex/gpt-6-luna(max/priority)及Pi/cursor/default执行真实用户任务；Cursor底层型号未知。
-产品内部只有DGX/deepseek主抽取＋D21临时DGX/glm核对，两个家族；不用第三模型仲裁/旧资格签发链。
+产品内部只有DGX/deepseek主抽取＋D22恢复cms-smk/glm-5.3-flash核对，两个家族；不用第三模型仲裁/旧资格签发链。
 
 ## 版本与当前候选
 - 原v2发布分支codex/ciw-v2-trunk已推ef7e846；工作台feat/ciw-release-adapter已推36695f6。main/v1保留，不强推、不触碰旧中文工程。
 - R3冻结CI5d6e6e5/WBa13bb98；R4冻结CIaa8d4c7/WBa0e5eb7，均保留。历史PASS不拼入新版本。
 - D20代码：CIe8707ae/WBeb98195，选报告优先与补生成，独立代码审查三项缺陷已修并复查CLOSED；真实网页正向未全过。
 - D21临时模型候选：CIabb167a/WBeb98195，在15190继续原GPP任务；此候选不含新的临床索引/C条款修复，不在运行中修改源码。
-- 本分支codex/ciw-clinical-endpoint-index为后续合并候选：临床索引＋来源章节/条款＋D21配置，提交见git log。工作台阅读优先另在codex/ciw-report-reading-focus。
+- 本分支codex/ciw-clinical-endpoint-index为后续合并候选：临床索引＋来源章节/条款＋D22恢复配置，提交见git log。工作台阅读优先另在codex/ciw-report-reading-focus。
 - 所有来源、原始模型响应、任务数据库、完整截图只留私有工作区；不进Git。小型已授权截图沿用docs/screenshots。
 
 ## 历史真实完成范围（非当前新候选验收）
@@ -34,7 +34,7 @@
 - MN提供的部分“报告截图”实际停留在表单，不能作为报告视觉通过；“空表仍有18点”的可见残图未被截图证明，源码已隐藏空图，需区分隐藏缓存与可见错误。
 - R5 GPP B原job research_7701a57b41dc9c90eb55，两次CMS调用因证书过期FAIL，无YAML/来源/release；DeepSeek计划缓存保留，C NOT_RUN。
 - 用户授权尝试Omni Router其他鉴权；实际GLM专用三账户都连接同一过期上游，三个502证书错误，末级429不是额度耗尽证明。未改路由/关闭TLS。
-- 用户D21随后批准临时DGX/glm；GET models200确认glm/deepseek。原Cursor已获同一job继续指令，abb167a真实结果尚待；换模自动等待7200秒，不重复/终止健康请求。
+- 用户D21随后批准临时DGX/glm；GET models200确认glm/deepseek。原Cursor仅点一次继续；owner因D22切换所需读取时确认attempt3已自然生成报告，浏览器后验仍待，不重发。
 
 ## 本候选已实现，真实复验尚待
 - D20：首份只生成所选A/B/C；B/C不等A属性，A/C不启动B论文。完整检索后复用同一来源集合/原获取日期/已采用事实；高级YAML仍可整套生成。
@@ -49,9 +49,11 @@
 - 用户要求默认屏高显示更多信息。标题/任务/操作并栏，卡间10px、卡内纵向10px、数据文字16px；嵌入阅读复用外层导航，截止日移至报告标题旁，独立打开保留原导航。
 - 分类图按数量/视口取高，默认10/6/4行；固定窗口平移并保留全部数据，禁止将94项拖挤到固定340px。B空比较块收起，单位按词换行；C筛选图表与矩阵一致。
 - Luna首轮真实呈现三份已完成研究副本：1440×900 A由0行产品变为3行，C由5行变为6行；前后完整载荷除release_id/generated_at相同。原始发布不改，不能当新抽取/科学复核。
-- 首轮发现slider可扩成不可读密度/矮屏A仍偏高，现已修复，实际续验尚待。嵌入预览最初因owner启动漏app路径而失败，已正确启动；原失败记录保留。
+- 首轮发现slider可扩成不可读密度/矮屏A仍偏高；续验短屏已可见2行产品，反向resize/滑块命中仍待最后有界复查。嵌入预览最初因owner启动漏app路径而失败，已正确启动；原失败记录保留。
 - 同一Luna随后实际打开嵌入C两宽，1440可见4完整行，稀疏→重置图高正确；A/B、短屏、滑块及草稿/返回尚未测完。已授权重建专用空间不构成产品缺陷。
 - 内嵌1440下宽矩阵保留横向滚动与全宽入口，未裁掉字段；实际截图不能只取表单。新合并呈现候选仍待完成上述有界收尾。
+
+- D22实际cms-smk连接返回glm-5.3-flash、stop、非空OK，3.278秒；15190未来任务已切CMS，原DGX首份报告不改标。合并候选默认配置同步恢复。
 
 ## 开发检查与下一步
 - 本CI合并候选273单元/合同测试3.49秒、Ruff通过；未调用真实模型或代做用户E2E。
