@@ -11,7 +11,9 @@ from ciw.normalize.semantics import classify, measure_kind, parse_timepoint, sub
 @pytest.mark.parametrize("text,key", [("Up to Week 148 (end of trial)", "W148_window*"),
     ("Through Week 52", "W52_window*"), ("Until Day 28", "D28_window*"),
     ("Up to Month 12", "M12_window*"), ("Week 148", "W148"),
-    ("Week 0 to Week 68", "W0-68"), ("Day 0 to Day 28", "D0-28")])
+    ("Week 0 to Week 68", "W0-68"), ("Day 0 to Day 28", "D0-28"),
+    ("0-24 weeks", "W0-24"), ("0–24 weeks", "W0-24"), ("0 to 24 weeks", "W0-24"),
+    ("0–28 days", "D0-28"), ("0 to 12 months", "M0-12")])
 def test_upper_followup_window_is_not_a_single_visit(text, key):
     assert parse_timepoint(text).key == key
     assert parse_timepoint("Week 24", text).key == "W24"

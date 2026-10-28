@@ -15,6 +15,8 @@ _WEEK = re.compile(r"weeks?\s*(\d+(?:\.\d+)?)(?:\s*(?:to|-|–|through)\s*(?:wee
 _DAY = re.compile(r"days?\s*(\d+)(?:\s*(?:to|-|–|through)\s*(?:days?\s*)?(\d+))?", re.I)
 _MONTH = re.compile(r"months?\s*(\d+)", re.I)
 _BARE_WEEKS = re.compile(r"(\d+)\s*weeks?\b", re.I)
+_TRAILING_RANGE = re.compile(r"(?<![\w.])([-+]?\d+(?:\.\d+)?)\s*(?:-|–|—|to|through)\s*"
+                             r"([-+]?\d+(?:\.\d+)?)\s*(weeks?|days?|months?)\b", re.I)
 _UPPER_WINDOW = re.compile(r"\b(?:up\s+to|through|until)\s*$", re.I)
 
 
@@ -59,6 +61,15 @@ def parse_timepoint(*texts: str) -> TimePoint | None:
             if _UPPER_WINDOW.search(text[:m.start()]):
                 return TimePoint(raw=text, label=f"至第{a}个月", key=f"M{a}_window*", weeks=None)
             return TimePoint(raw=text, label=f"第{a}个月", key=f"M{a}", weeks=None)
+        trailing = list(_TRAILING_RANGE.finditer(text))
+        if trailing:
+            match = trailing[-1]
+            a, b = float(match[1]), float(match[2])
+            unit = match[3].casefold().rstrip("s")
+            prefix, label = {"week": ("W", "周"), "day": ("D", "天"), "month": ("M", "个月")}[unit]
+            weeks = b if unit == "week" else b / 7 if unit == "day" and b % 7 == 0 else None
+            return TimePoint(raw=text, label=f"第{_fmt(a)}–{_fmt(b)}{label}",
+                             key=f"{prefix}{_fmt(a)}-{_fmt(b)}", weeks=weeks)
         bare = list(_BARE_WEEKS.finditer(text))
         if bare:
             a = float(bare[-1].group(1))

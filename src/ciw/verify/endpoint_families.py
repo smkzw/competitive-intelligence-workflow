@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from collections import Counter
 
 from pydantic import BaseModel, Field
@@ -19,6 +20,33 @@ class ClinicalFamilyItem(BaseModel):
     member_ids: list[str] = Field(min_length=1)
     member_quotes: dict[str, str]
     quote: str
+
+
+def _structural_compatibility(sources):
+    components, instruments, purposes = set(), set(), set()
+    for source in sources:
+        title = source["title"]
+        component = re.search(r"\b(?:sub[- ]?(?:score|scale)|components?)\b", title, re.I)
+        name = re.search(r"\b([A-Za-z-]+)\s+(?:sub[- ]?(?:score|scale)|component(?:\s+score)?)\b", title, re.I)
+        components.add((bool(component), name[1].casefold() if name else ""))
+        tokens = [" ".join(filter(None, parts)) for parts in re.findall(
+            r"\b(?i:scale|score|index|assessment|questionnaire|inventory|survey)"
+            r"(?:\s+(?i:version)\s*\d+)?\s*\(([A-Z][A-Z0-9-]{1,20})(?:\s+(V\d+))?\)", title)]
+        if tokens:
+            instruments.add(tuple(sorted(set(tokens))))
+        event = re.search(r"\bworsen\w*|\brelaps\w*|\brecur\w*|\b(?:death|mortality)\b|"
+                          r"\b(?:occurr\w*|time\s+to|inciden\w*|at\s+least\s+one)\b.*"
+                          r"\b(?:flare\w*|exacerbat\w*|surgery|rescue)\b", title, re.I)
+        response = re.search(r"\b(?:response|responders?|remission|clearance|resolution|achiev\w*|improv\w*)\b|"
+                             r"\bscore\b.*\b0\s*(?:or|/)\s*1\b", title, re.I)
+        purposes.add("event" if event else "response" if response else "other")
+    if len(components) > 1:
+        return False, "总体与分项或不同分项不能归为同一临床问题"
+    if len(instruments) > 1:
+        return False, "来源明确的量表标识不同"
+    if {"event", "response"}.issubset(purposes):
+        return False, "应答与恶化/事件预防不能归为同一临床问题"
+    return True, ""
 
 
 def _catalog(cfg, results):
@@ -49,7 +77,7 @@ def _check_group(item, catalog):
         valid, reason = _check(value, {cid: source})
         if not valid:
             return False, reason
-    return True, ""
+    return _structural_compatibility([catalog[cid] for cid in members])
 
 
 def _instruction(cfg):

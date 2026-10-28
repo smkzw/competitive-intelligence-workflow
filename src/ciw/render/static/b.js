@@ -14,7 +14,14 @@
     ul.innerHTML = items.map((x) => `<li data-id="${esc(x.question_id)}" class="${current && current.question_id === x.question_id ? "on" : ""}">
       <div class="q">${esc(x.label)}${x.time_label ? " · " + esc(x.time_label) : ""}${!x.is_family && x.category ? ` · ${esc(x.category)}` : ""}</div>${!x.is_family && x.subgroup ? `<div class="s">亚组：${esc(x.subgroup)}</div>` : ""}
       <div class="s">${x.is_family ? "" : esc(x.measure_label) + " · "}${x.trial_ids.length} 项研究${x.frames?.length > 1 ? ` · ${x.frames.length} 个分析分面` : ""}${x.has_primary ? " · 含主要终点" : ""}</div></li>`).join("") || '<li class="empty">无匹配问题</li>';
-    ul.querySelectorAll("li[data-id]").forEach((li) => li.onclick = () => select(li.dataset.id));
+    ul.querySelectorAll("li[data-id]").forEach((li) => {
+      li.tabIndex=0;li.setAttribute("role","button");
+      const activate=()=>{const id=li.dataset.id;select(id);
+        [...ul.querySelectorAll("li[data-id]")].find(node=>node.dataset.id===id)?.focus();};
+      li.onclick=activate;
+      li.onkeydown=event=>{if(event.target===li && ["Enter"," "].includes(event.key)){
+        event.preventDefault();activate();}};
+    });
   }
 
   // 组标题与产品名相同（只差大小写）时不重复显示
@@ -34,25 +41,23 @@
     document.getElementById("family-overview").hidden = !current.is_family;
     if(!current.is_family) return;
     const all = [];
-    for(const frame of current.frames) for(const rid of frame.result_ids) {
-      const r = (B.observations || []).find(row => row.result_id === rid);
-      if(!r) continue;
-      for(const g of r.groups) all.push({...g,result_id:rid,frame_id:frame.frame_id,
-        phase:r.phase,acronym:r.acronym,url:r.url,time_label:frame.time_label,
-        metric:frame.measure_label,unit:r.unit,population:r.population});
-      for(const a of r.analyses) all.push({...a,value:a.value,result_id:rid,frame_id:frame.frame_id,
-        title:a.group_ids.map(id=>r.groups.find(g=>g.group_id===id)?.title || id).join(" / "),
-        phase:r.phase,acronym:r.acronym,url:r.url,time_label:frame.time_label,
-        metric:a.param_type,unit:"",population:r.population,lower:a.ci_lower,upper:a.ci_upper});
+    for(const frame of current.frames) {
+      const common = {frame_id:frame.frame_id,time_label:frame.time_label,population:frame.population};
+      for(const r of frame.rows) all.push({...common,...r,title:r.group_title,metric:frame.measure_label});
+      for(const c of frame.comparisons) all.push({...common,...c,title:`${c.exp_group} / ${c.ctrl_group}`,
+        metric:c.param_type,n_label:`${num(c.n_exp)} / ${num(c.n_ctrl)}`,lower:c.ci_lower,upper:c.ci_upper});
+      for(const s of frame.source_statistics || []) all.push({...common,...s,title:s.group_labels.join(" / "),
+        metric:s.param_type,lower:s.ci_lower,upper:s.ci_upper});
     }
     document.getElementById("family-count").textContent = `全研究对照表 · ${current.trial_ids.length} 项研究 · ${all.length} 条记录`;
     table(document.getElementById("family-table"), [
-      {label:"组别 / 研究",html:r=>`<strong>${esc(r.title)}</strong><br>${studyLink(r)} · ${esc(r.phase)}`},
+      {label:"药物 / 研究",html:r=>`<strong>${esc(r.product_label || r.title)}</strong>${r.product_label && !sameName(r.product_label,r.title) ? "<br>" + esc(r.title) : ""}<br>${r.phase ? esc(r.phase) + "期 · " : ""}${studyLink(r)}`},
       {label:"时间",key:"time_label"},{label:"统计量",key:"metric"},
-      {label:"N",key:"n",num:true,html:r=>num(r.n)},
+      {label:"N（组 / 对照）",key:"n",num:true,html:r=>r.n_label || num(r.n)},
       {label:"原值",num:true,html:r=>esc(r.value_raw || num(r.value))},
       {label:"离散度 / 区间",html:r=>r.spread != null ? num(r.spread) : r.lower != null ? `${num(r.lower)}, ${num(r.upper)}` : "—"},
       {label:"单位",key:"unit"},
+      {label:"依据",html:r=>tag(r.kind === "computed" ? "computed" : r.status || "registry")},
       {label:"分析人群",html:r=>r.population ? `<details><summary>查看人群</summary>${esc(r.population)}</details>` : "—"},
       {label:"图表",html:r=>`<button type="button" class="detail-button" data-frame-id="${esc(r.frame_id)}">看图</button>`}
     ], all, {onRow:showResult});
@@ -277,7 +282,11 @@
   document.getElementById("observation-prev").onclick=()=>{observationPage=Math.max(0,observationPage-1);drawObservations();};
   document.getElementById("observation-next").onclick=()=>{observationPage++;drawObservations();};
 
-  document.getElementById("qsearch").oninput = listQuestions;
+  document.getElementById("qsearch").oninput = () => {
+    const query=document.getElementById("qsearch").value;
+    if(current?.is_family && window.U.matchesQuestion(current,query)) select(current.question_id);
+    else listQuestions();
+  };
   document.getElementById("only-primary").onchange = listQuestions;
   select(qs[0] && qs[0].question_id);
 })();

@@ -145,3 +145,23 @@ def test_report_supplement_can_reuse_release_membership_after_stage_loss(cfg, ws
     (ws.root / "stages/research-endpoint-families.json").unlink()
     recovered, issues = enrich_endpoint_families(ws, cfg, rows, roles=None, previous=previous)
     assert not issues and recovered["groups"] == previous["groups"] and len(calls) == 2
+
+
+@pytest.mark.parametrize("left,right", [
+    ("Assessment (GPPGA) Total Score of 0 or 1", "Assessment (GPPGA) Pustulation Subscore of 0"),
+    ("Assessment (GPPGA) Pustulation Subscore", "Assessment (GPPGA) Erythema Subscore"),
+    ("Participants Achieving Clinical Remission", "Occurrence of at Least One GPP Flare"),
+    ("Dermatology Life Quality Index (DLQI)", "Short Form Health Survey (SF-36)"),
+    ("Dermatology Life Quality Index (DLQI)", "Short Form Health Status Survey Version 2 (SF-36 V2) Score"),
+])
+def test_two_models_agreeing_does_not_override_structural_endpoint_differences(cfg, ws, left, right):
+    cfg, rows, trials = inputs(cfg)
+    for row, concept, title in zip(rows, cfg.concepts, [left, right], strict=True):
+        row.title, row.description = title, "Source endpoint definition."
+        concept.patterns, concept.source_definition = [re.escape(title)], row.description
+    group = {**group_for(rows), "family_label": "临床结果"}
+    roles, _ = models([group])
+    snapshot, issues = enrich_endpoint_families(ws, cfg, rows, roles)
+    assert issues and snapshot["groups"] == []
+    original = build_results(cfg, trials, {}, rows, None)
+    assert len(project_clinical_families(original, snapshot["groups"])["questions"]) == 2

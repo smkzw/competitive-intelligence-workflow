@@ -293,18 +293,25 @@ const frames=[16,1].map(n=>({frame_id:'f'+n,time_key:'W'+n,time_label:'第'+n+'�
  units:[n===1?'Percent':'Proportion'],trial_ids:['T'+n],result_ids:['r'+n],population:'All participants',
  title:'Remission at Week 1, Week 16',rows:[{result_id:'r'+n,value:n,acronym:'T'+n,group_title:'Drug'+n}],
  comparisons:[],source_statistics:[]}));
+obs.push({...obs[1],result_id:'shared16',groups:[{group_id:'g',title:'Group16',value:16}]});
+frames[0].result_ids.push('shared16');
+frames[0].rows[0].product_label='Drug16';frames[0].rows[0].group_title='Group16';frames[0].rows[0].phase='III';
+frames[0].rows[0].source_records=[{acronym:'T16',phase:'III'},{acronym:'T1',phase:'III'}];
 const q={question_id:'family',is_family:true,label:'临床缓解',time_key:'',time_label:'',units:[],
  measure_label:'比例',trial_ids:['T1','T16'],frames};
-const plots={},tables={},opts={},window={U:{D:{b:{questions:[q],longitudinal:[],safety:[],observations:obs}},
- esc:s=>s||'',num:v=>v,nN(){},tag(){},src(){},options(){},OWN:'orange',PAL:[],
- matchesQuestion:helper.U.matchesQuestion,table:(e,c,r,o)=>{tables[e.id]=r;opts[e.id]=o},
+const plots={},tables={},opts={},cols={},window={U:{D:{b:{questions:[q],longitudinal:[],safety:[],observations:obs}},
+ esc:s=>s||'',num:v=>v,nN(){},tag(){},src:(url,label)=>label,options(){},OWN:'orange',PAL:[],
+ matchesQuestion:helper.U.matchesQuestion,table:(e,c,r,o)=>{tables[e.id]=r;opts[e.id]=o;cols[e.id]=c},
  chart:(id,o)=>plots[id]=o,drawer(){}}};
 vm.runInNewContext(fs.readFileSync(process.argv[2],'utf8'),{window,document:{getElementById:id=>els[id]}});
 const first={values:plots['value-chart'].series[0].data.map(r=>r.value),title:els['q-title'].textContent,
  sub:els['q-sub'].textContent,all:tables['family-table'].map(r=>r.value),count:els['family-count'].textContent};
 els['frame-select'].value='f16';els['frame-select'].onchange();
 const second={values:plots['value-chart'].series[0].data.map(r=>r.value),sub:els['q-sub'].textContent};
-process.stdout.write(JSON.stringify({first,second,hidden:els['family-overview'].hidden,
+els.qsearch.value='week 1';els.qsearch.oninput();
+const live=plots['value-chart'].series[0].data.map(r=>r.value);
+const firstCell=cols['family-table'][0].html(tables['family-table'][0]);
+process.stdout.write(JSON.stringify({first,second,live,firstCell,hidden:els['family-overview'].hidden,
  mismatch:helper.U.matchesQuestion({...q,frames:[frames[0]]},'week 1')}));
 """
     run = subprocess.run(["node", "-e", script, str(assets / "common.js"), str(assets / "b.js")],
@@ -314,3 +321,5 @@ process.stdout.write(JSON.stringify({first,second,hidden:els['family-overview'].
     assert result["first"]["all"] == [16, 1] and "2 项研究" in result["first"]["count"]
     assert result["second"]["values"] == [16] and "Proportion" in result["second"]["sub"]
     assert not result["hidden"] and not result["mismatch"]
+    assert result["live"] == [1]
+    assert result["firstCell"].index("Drug16") < result["firstCell"].index("III") < result["firstCell"].index("T16")
