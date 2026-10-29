@@ -88,9 +88,15 @@ def _topic_config(topic):
         # Legacy plans guessed cutoffs. Index the named metric, never only those guessed values.
         from ciw.analyze.design_excerpts import threshold_spans
 
-        terms = [x[:spans[0]["start"]].strip() if (spans := threshold_spans(x)) else x
-                 for x in topic.terms]
-        derived.patterns = list(dict.fromkeys(re.escape(x) for x in terms if x))
+        expanded = []
+        for term in topic.terms:
+            spans = threshold_spans(term)
+            if not spans or not (prefix := term[:spans[0]["start"]].strip()):
+                continue
+            qualifiers = re.findall(r"\([^()]+\)", term[spans[0]["end"]:])
+            expanded.append("".join(f"(?=.*{re.escape(q)})" for q in qualifiers) +
+                            r"(?<!\w)" + re.escape(prefix) + r"(?!\w)")
+        derived.metric_patterns = list(dict.fromkeys(expanded))
     return derived
 
 
@@ -172,11 +178,16 @@ def _mark_planned_concepts(cfg, ws):
     for topic, original in zip(cfg.design_topics, record.get("plan", {}).get("design_topics", []), strict=False):
         planned = Topic.model_validate(original)
         derived = _topic_config(planned)
-        if (topic.label == planned.label and topic.patterns in ([re.escape(x) for x in planned.terms], derived.patterns)
+        if (topic.label == planned.label and topic.patterns == [re.escape(x) for x in planned.terms]
                 and topic.exclude == derived.exclude and topic.kind in {planned.kind, derived.kind}):
-            topic.kind, topic.patterns = derived.kind, derived.patterns
+            topic.kind = derived.kind
+            if not topic.metric_patterns:
+                topic.metric_patterns = derived.metric_patterns
             if not topic.aliases:
                 topic.aliases = derived.aliases
+        elif topic.metric_patterns == derived.metric_patterns:
+            # Remove only our stale derived expansion after a manual change; keep the user's patterns.
+            topic.metric_patterns = []
 
 
 

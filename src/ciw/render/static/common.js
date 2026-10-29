@@ -114,10 +114,17 @@
   }
 
   let drawerTrigger, drawerFallback;
+  function disposeDrawerCharts(d) {
+    for(const el of d.querySelectorAll?.(".chart") || []) {
+      el._ciwObserver?.disconnect();
+      echarts.getInstanceByDom(el)?.dispose();
+    }
+  }
   function drawer(html) {
     drawerTrigger = document.activeElement;
     drawerFallback = drawerTrigger?.closest?.("table");
     const d = document.getElementById("drawer");
+    disposeDrawerCharts(d);
     d.querySelector(".drawer-body").innerHTML = html;
     d.setAttribute("role", "dialog");
     d.setAttribute("aria-label", d.querySelector("h2")?.textContent || "研究详情");
@@ -129,6 +136,7 @@
   function closeDrawer() {
     const d = document.getElementById("drawer");
     if(!d || d.hidden) return;
+    disposeDrawerCharts(d);
     d.close();
     d.hidden = true;
     if(drawerTrigger?.isConnected) drawerTrigger.focus();

@@ -31,6 +31,7 @@ def test_threshold_topic_covers_unplanned_cutoffs_and_retains_manual_configurati
     cfg.design_topics[0].patterns = ["Manual qualification"]
     _mark_planned_concepts(cfg, ws)
     assert cfg.design_topics[0].patterns == ["Manual qualification"]
+    assert design_excerpts(t, cfg.design_topics) == []
 
 
 def test_topic_excerpt_targets_clause_not_unrelated_paragraph_start():
@@ -91,7 +92,7 @@ def test_mixed_study_other_and_unknown_outcomes_do_not_enter_target_plots(cfg):
     assert {r["result_id"] for r in body["observations"]} == {"target", "other", "unknown", "pooled"}
     assert {p["result_id"] for c in body["longitudinal"] for line in c["lines"] for p in line["points"]} <= {"target"}
     statuses = {r["result_id"]: r["condition_scope"]["status"] for r in body["observations"]}
-    assert statuses == {"target": "target", "other": "other", "unknown": "unresolved", "pooled": "mixed"}
+    assert statuses == {"target": "target", "other": "other", "unknown": "unresolved", "pooled": "unresolved"}
     assert [r.model_dump() for r in results] == before
 
 
@@ -159,3 +160,100 @@ def test_zero_safety_denominator_cannot_fall_through_to_another_population(cfg):
         SafetyGroup(group_id="g", title="CRSwNP cohort", serious=CountN(n=0, N=0), other=CountN(n=1, N=20))])
     row = build_safety({t.trial_id: t}, {}, [safety], cfg)[0]
     assert row["N"] == 0 and row["sae_n"] == 0 and row["sae_pct"] is None
+
+
+def test_one_outcome_cannot_adopt_foreign_groups_or_cross_population_analyses(cfg):
+    from ciw.analyze.condition_scope import group_scopes, target_results
+    from ciw.models import Analysis
+    local = cfg.model_copy(deep=True)
+    local.concepts = [ConceptCfg(id="score", label="评分", patterns=["Score"])]
+    t = example()
+    result = OutcomeResult(result_id="r", trial_id=t.trial_id, outcome_index=0, type="PRIMARY",
+        title="Score", population="CRSwNP cohort", concept_id="score", domain="efficacy",
+        measure_kind="mean", unit="points", time=TimePoint(raw="Week 12", label="第12周", key="W12", weeks=12),
+        locator=Locator(source_id="s"), groups=[
+            GroupValue(group_id="target", title="CRSwNP cohort", n=15, value=1.1),
+            GroupValue(group_id="other", title="Asthma cohort", n=22, value=4.4)],
+        analyses=[Analysis(group_ids=["target", "other"], param_type="Difference", value=3.3)])
+    before = result.model_dump()
+    projected = target_results(local, {t.trial_id: t}, [result])[0]
+    assert [g.group_id for g in projected.groups] == ["target"] and projected.analyses == []
+    assert group_scopes(local, t, result)["other"]["status"] == "other"
+    body = build_results(local, {t.trial_id: t}, {}, [result], None)
+    assert [r["value"] for q in body["questions"] for r in q["rows"]] == [1.1]
+    assert [g["value"] for g in body["observations"][0]["groups"]] == [1.1, 4.4]
+    assert result.model_dump() == before
+
+
+def test_cooccurring_condition_words_do_not_invent_separate_cohorts(cfg):
+    from ciw.analyze.condition_scope import text_scope
+    t = example()
+    assert text_scope(cfg, t, "Patients with CRSwNP and Asthma")["status"] == "unresolved"
+    narrow = cfg.model_copy(deep=True)
+    narrow.ctgov.relevance_patterns = ["Example disease"]
+    t.conditions = ["Secondary Example disease"]
+    assert text_scope(narrow, t, "Secondary Example disease participants")["status"] == "other"
+
+
+def test_logical_list_and_chinese_sentences_keep_clinical_conditions():
+    t = example("Eligible if any of the following: biopsy confirmation; Assay-A ≥20 units; or Score ≥40 points.")
+    topic = DesignTopicCfg(label="评分入排阈值", patterns=["Score"])
+    snippet = design_excerpts(t, [topic])[0]["snippets"][0]
+    assert "any of the following" in snippet["text"] and "or Score" in snippet["text"]
+    t.design.eligibility_text = "白蛋白<30 g/L。抗PLA2R≥20可免活检。"
+    found = design_excerpts(t, [DesignTopicCfg(label="抗体入排阈值", patterns=["抗PLA2R"])])
+    assert found[0]["snippets"][0]["text"] == "抗PLA2R≥20可免活检。"
+
+
+def test_expansion_keeps_method_and_empty_prefix_and_labels_exclusion(tmp_path):
+    from ciw.research import Topic, _topic_config
+    topic = _topic_config(Topic(label="eGFR入组阈值", terms=["eGFR ≥60 mL/min (CKD-EPI)"],
+                                kind="eligibility_threshold"))
+    assert topic.patterns == [r"eGFR\ ≥60\ mL/min\ \(CKD\-EPI\)"]
+    assert design_excerpts(example("eGFR ≥40 mL/min (MDRD)."), [topic]) == []
+    found = design_excerpts(example("Exclusion criteria:\neGFR ≤30 mL/min (CKD-EPI)."), [topic])
+    assert found[0]["snippets"][0]["criterion_role"] == "exclusion"
+    bare = _topic_config(Topic(label="阈值", terms=["≥60"], kind="eligibility_threshold"))
+    assert bare.patterns == ["≥60"] and bare.metric_patterns == []
+    short = _topic_config(Topic(label="UP入排阈值", terms=["UP ≥3.5"], kind="eligibility_threshold"))
+    assert design_excerpts(example("FOLLOWUP ≥3.5 days."), [short]) == []
+
+
+def test_background_and_rescue_in_one_sentence_keep_background_and_context():
+    t = example()
+    t.design.detailed_description = ("Participants continue background therapy throughout treatment, "
+                                     "and nonresponders receive standard of care rescue therapy.")
+    topic = DesignTopicCfg(label="背景治疗", patterns=["background therapy", "standard of care"])
+    snippet = design_excerpts(t, [topic])[0]["snippets"][0]
+    assert "background therapy" in snippet["text"] and "rescue" not in snippet["text"]
+    assert "rescue" in snippet["context"]
+
+
+def test_plain_control_label_and_unassigned_p_statistic_survive_clear_population(cfg):
+    from ciw.analyze.condition_scope import target_results
+    from ciw.models import Analysis
+    t = example()
+    t.conditions = ["CRSwNP"]
+    r = OutcomeResult(result_id="r", trial_id=t.trial_id, outcome_index=0, type="PRIMARY", title="Score",
+        measure_kind="mean", locator=Locator(source_id="s"), groups=[
+            GroupValue(group_id="g1", title="CRSwNP treatment", value=2),
+            GroupValue(group_id="g2", title="Placebo", value=1)],
+        analyses=[Analysis(group_ids=[], p_value="0.03")])
+    selected = target_results(cfg, {t.trial_id: t}, [r])[0]
+    assert len(selected.groups) == 2 and selected.analyses[0].p_value == "0.03"
+
+
+def test_explicit_nontarget_or_pooled_group_does_not_inherit_target_population(cfg):
+    from ciw.analyze.condition_scope import group_scopes, target_results, text_scope
+    t = example()
+    t.conditions = ["CRSwNP"]
+    result = OutcomeResult(result_id="r", trial_id=t.trial_id, outcome_index=0, type="PRIMARY",
+        title="Score", population="CRSwNP cohort", measure_kind="mean", locator=Locator(source_id="s"), groups=[
+            GroupValue(group_id="target", title="CRSwNP", value=1),
+            GroupValue(group_id="negative", title="Without nasal polyps", value=2),
+            GroupValue(group_id="pooled", title="With or without nasal polyps", value=3)])
+    scopes = group_scopes(cfg, t, result)
+    assert scopes["negative"]["status"] == "other" and scopes["pooled"]["status"] == "mixed"
+    assert [g.group_id for g in target_results(cfg, {t.trial_id: t}, [result])[0].groups] == ["target"]
+    assert text_scope(cfg, t, "Without nasal polyps")["status"] == "other"
+    assert text_scope(cfg, t, "With or without nasal polyps")["status"] == "mixed"

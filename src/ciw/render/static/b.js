@@ -256,14 +256,30 @@
   });
   table(document.getElementById("safety-table"), [
     { label: "药物 / 研究", key: "acronym", html: (r) => `<strong>${esc(r.product_label || r.group_title)}</strong><br>${studyMeta(r)}` },
-    { label: "组别", key: "group_title", html: (r) => `${esc(r.group_title)}<br><span class="hint">${esc(r.role_label)}</span>${r.condition_scope?.multiple_conditions ? '<br>多疾病登记' : ""}` },
+    { label: "组别", key: "group_title", html: (r) => `${esc(r.group_title)}<br><span class="hint">${esc(r.role_label)}</span>${r.condition_scope ? '<br>'+esc(r.condition_scope.label) : ""}` },
     { label: "N", key: "N", num: true, html: (r) => (r.N == null ? "未报告" : r.N) },
     { label: "严重不良事件", key: "sae_pct", num: true, html: (r) => nN(r.sae_n, null, r.sae_pct) },
     { label: "非严重 AE（≥阈值）", key: "other_pct", num: true, html: (r) => nN(r.other_n, null, r.other_pct) + (r.other_threshold != null ? `<br><span class="hint">阈值 ${num(r.other_threshold)}%</span>` : "") },
     { label: "因 AE 停药", key: "disc_pct", num: true, html: (r) => nN(r.disc_n, r.disc_N, r.disc_pct) },
     { label: "死亡", key: "death_n", num: true, html: (r) => nN(r.death_n, r.death_N, null) },
     { label: "高频事件", html: (r) => r.top_terms.map((t) => `${esc(t.term)} ${t.pct}%${t.serious ? "（严重）" : ""}`).join("；") },
-  ], S, { rowClass: (r) => (r.is_own ? "own" : "") });
+  ], S, { rowClass: (r) => (r.is_own ? "own" : ""), onRow:showSafetyObservation });
+
+  function showSafetyObservation(r) {
+    const points = [{label:"严重不良事件",value:r.sae_pct,n:r.sae_n,N:r.N},
+      {label:"因AE停药",value:r.disc_pct,n:r.disc_n,N:r.disc_N}].filter(p=>p.value != null);
+    window.U.drawer(`<h2>${esc(r.product_label || r.group_title)} · ${esc(r.acronym)}</h2>
+      <p>${esc(r.group_title)} · ${esc(r.condition_scope?.label || "")} · ${src(r.url,"来源原文")}</p>
+      ${points.length ? '<div id="source-safety-chart" class="chart"></div>' : ""}
+      <table class="grid"><thead><tr><th>事件</th><th>原始人数 / 分母</th></tr></thead><tbody>
+      <tr><td>严重不良事件</td><td>${nN(r.sae_n,r.N,r.sae_pct)}</td></tr>
+      <tr><td>因AE停药</td><td>${nN(r.disc_n,r.disc_N,r.disc_pct)}</td></tr>
+      <tr><td>死亡</td><td>${nN(r.death_n,r.death_N,null)}</td></tr></tbody></table>`);
+    if(points.length) chart("source-safety-chart",{grid:{left:160,right:50,top:20,bottom:40},
+      xAxis:{type:"value",name:"%"},yAxis:{type:"category",inverse:true,data:points.map(p=>p.label)},
+      tooltip:{formatter:p=>`${esc(points[p.dataIndex].label)} ${nN(points[p.dataIndex].n,points[p.dataIndex].N,p.value)}`},
+      series:[{type:"bar",data:points.map(p=>p.value),label:{show:true,position:"right"}}]});
+  }
 
   // All source domains stay searchable; pagination changes the DOM, not the data set.
   const observations = B.observations || [];
@@ -287,21 +303,27 @@
       {label:"药物 / 研究",html:r=>`<strong>${r.products.map(esc).join("、")}</strong><br>${esc(r.phase)} · ${esc(r.acronym)}`},
       {label:"类别",html:r=>esc(r.domain_label)},
       {label:"终点原文",html:r=>`${esc(r.title)}<br><span class="hint">${esc(r.class_title)} ${esc(r.category_title)}</span>`},
-      {label:"时间 / 人群",html:r=>`${esc(r.time_label || r.timeframe)}<br>${esc(r.population)}${r.condition_scope?.multiple_conditions ? '<br>多疾病登记' : ""}`},
+      {label:"时间 / 人群",html:r=>`${esc(r.time_label || r.timeframe)}<br>${esc(r.population)}${r.condition_scope ? '<br>'+esc(r.condition_scope.label) : ""}`},
       {label:"数值明细",html:r=>`${r.groups.length} 组 · ${r.analyses.length} 项统计比较`},
       {label:"来源",html:r=>src(r.url,"查看原文")+" "+tag(r.status)},
     ],rows,{onRow:showObservation});
   }
   function showObservation(r) {
     const value = v=>esc(v.value_raw || num(v.value));
+    const plotted = r.groups.filter(g=>g.value != null);
     window.U.drawer(`<h2>${r.products.map(esc).join("、")} · ${esc(r.acronym)}</h2>
       <p>${esc(r.domain_label)} · ${esc(r.phase)} · ${src(r.url,"来源原文")}</p><h3>${esc(r.title)}</h3>
       <p>${esc(r.time_label || r.timeframe)} · ${esc(r.population)} ${esc(r.class_title)} ${esc(r.category_title)}</p>
       ${r.time_label ? `<details><summary>来源时间范围</summary>${esc(r.timeframe)}</details>` : ""}
       <p>${esc(r.param_type)} · ${esc(r.unit)} · ${esc(r.dispersion_type)}</p>
-      <table class="grid"><thead><tr><th>组别</th><th>角色</th><th>N</th><th>原值</th><th>离散度</th></tr></thead><tbody>
-      ${r.groups.map(g=>`<tr><td>${esc(g.title)}</td><td>${esc(g.role_label)}</td><td>${num(g.n)}</td><td>${value(g)}</td><td>${g.spread != null ? num(g.spread) : g.lower != null ? num(g.lower)+", "+num(g.upper) : "—"}</td></tr>`).join("")}</tbody></table>
+      ${plotted.length ? '<div id="source-observation-chart" class="chart"></div>' : ""}
+      <table class="grid"><thead><tr><th>组别</th><th>登记人群</th><th>角色</th><th>N</th><th>原值</th><th>离散度</th></tr></thead><tbody>
+      ${r.groups.map(g=>`<tr><td>${esc(g.title)}</td><td>${esc(g.condition_scope?.label || "")}</td><td>${esc(g.role_label)}</td><td>${num(g.n)}</td><td>${value(g)}</td><td>${g.spread != null ? num(g.spread) : g.lower != null ? num(g.lower)+", "+num(g.upper) : "—"}</td></tr>`).join("")}</tbody></table>
       ${r.analyses.length ? `<h3>来源统计比较</h3><table class="grid"><thead><tr><th>原文组别</th><th>统计量</th><th>值</th><th>CI</th><th>P</th><th>方法</th></tr></thead><tbody>${r.analyses.map(a=>`<tr><td>${a.group_ids.map(id=>esc(r.groups.find(g=>g.group_id===id)?.title || id)).join(" / ")}</td><td>${esc(a.param_type)}</td><td>${value(a)}</td><td>${a.ci_lower != null ? `${num(a.ci_pct)}% ${num(a.ci_lower)}, ${num(a.ci_upper)}` : "—"}</td><td>${esc(a.p_value)}</td><td>${esc(a.method)}</td></tr>`).join("")}</tbody></table>` : ""}`);
+    if(plotted.length) chart("source-observation-chart",{grid:{left:300,right:50,top:20,bottom:40},
+      xAxis:{type:"value",name:r.unit},yAxis:{type:"category",inverse:true,data:plotted.map(g=>g.title)},
+      tooltip:{formatter:p=>`${esc(plotted[p.dataIndex].title)}<br>${value(plotted[p.dataIndex])} ${esc(r.unit)} · N=${num(plotted[p.dataIndex].n)}`},
+      series:[{type:"bar",data:plotted.map(g=>g.value),label:{show:true,position:"right"}}]});
   }
   document.getElementById("observation-detail").addEventListener("toggle",event=>{if(event.target.open)drawObservations();});
   ["observation-search","observation-domain"].forEach(id=>document.getElementById(id).addEventListener("input",()=>{observationPage=0;drawObservations();}));

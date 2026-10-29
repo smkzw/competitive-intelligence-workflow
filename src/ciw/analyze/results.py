@@ -12,7 +12,7 @@ from collections import defaultdict
 from typing import Any
 
 from ciw.analyze.common import pct, product_label, role_label
-from ciw.analyze.condition_scope import result_scope, target_results, text_scope
+from ciw.analyze.condition_scope import group_scopes, result_scope, target_results, text_scope
 from ciw.analyze.shared_cohort import collapse_shared
 from ciw.config import IndicationConfig, normalize_name
 from ciw.models import OutcomeResult, Product, SafetySummary, Trial
@@ -168,7 +168,8 @@ def _observations(trials, products, results, cfg):
             "condition_scope": result_scope(cfg, t, r),
             "unit": r.unit, "param_type": r.param_type, "dispersion_type": r.dispersion_type,
             "status": r.status, "source_kind": r.kind, "url": r.source_url or t.url, "source_id": r.locator.source_id,
-            "groups": [{**g.model_dump(), "role_label": role_label(g.role, t, g.arm_id)} for g in r.groups],
+            "groups": [{**g.model_dump(), "role_label": role_label(g.role, t, g.arm_id),
+                        "condition_scope": group_scopes(cfg, t, r)[g.group_id]} for g in r.groups],
             "analyses": [a.model_dump() for a in r.analyses],
         }
         for r in results if (t := trials.get(r.trial_id)) and t.relevance == "core"

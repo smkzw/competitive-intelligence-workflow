@@ -210,7 +210,8 @@ const q={question_id:'q',label:'临床缓解',time_label:'第52周',units:['%'],
  trial_ids:['one','two'],rows:[row(25),row(10)],comparisons:[],frames};
 const plots={},tables={},tableOptions={},drawers=[];
 const observations=[25,10].map(v=>({result_id:'r'+v,products:['Drug'],acronym:'Trial',
- groups:[{title:v===25?'bendamustine–rituximab':'Other group'}],analyses:[],title:'Source '+v}));
+ groups:[{title:v===25?'bendamustine–rituximab':'Other group',value:v,n:12,
+ condition_scope:{label:'原登记队列'}}],analyses:[],title:'Source '+v}));
 const window={U:{D:{b:{questions:[q],longitudinal:[],safety:[],observations},stats:{},trials:{}},
  esc:s=>s||'',num:s=>s,nN(){},tag(){},src(){},options(){},OWN:'orange',PAL:[],
  drawer:html=>drawers.push(html),chart:(id,opt)=>plots[id]=opt,
@@ -226,7 +227,8 @@ tableOptions['row-table'].onRow(tables['row-table'][0]);
 elements['observation-search'].value='bendamustine–rituximab';
 elements['observation-detail'].open=true;elements['observation-detail'].ontoggle?.();
 elements['observation-prev'].onclick();
-const second={...read(),drawers,found:tables['observation-table'].map(r=>r.result_id)};
+const second={...read(),drawers,found:tables['observation-table'].map(r=>r.result_id),
+ sourceValues:plots['source-observation-chart'].series[0].data};
 elements['frame-select'].value='shared';elements['frame-select'].onchange();
 process.stdout.write(JSON.stringify([first,second,{...read(),labels:plots['value-chart'].yAxis.data}]));
 """
@@ -237,7 +239,8 @@ process.stdout.write(JSON.stringify([first,second,{...read(),labels:plots['value
     assert "Responders" in second["context"] and "All participants" in first["context"]
     assert first["rawValues"] == [10.3] and not first["rawHidden"] and second["rawHidden"]
     assert "Source 25" in second["drawers"][0] and "Source 10" in second["drawers"][1]
-    assert second["found"] == ["r25"]
+    assert second["found"] == ["r25"] and second["sourceValues"] == [10]
+    assert "原登记队列" in second["drawers"][0]
     assert shared["values"] == shared["table"] == [25, 10]
     assert "无近期输血" in shared["labels"][0] and "近期输血" in shared["labels"][1]
 
@@ -367,3 +370,27 @@ process.stdout.write(JSON.stringify({first,second,live,firstCell,longOptions:els
     assert result["longSeries"][0].index("Drug16") < result["longSeries"][0].index("III")
     assert result["longSeries"][0].index("III") < result["longSeries"][0].index("T16")
     assert result["firstCell"].index("Drug16") < result["firstCell"].index("III") < result["firstCell"].index("T16")
+
+
+def test_source_chart_drawer_replacement_and_escape_dispose_graph_and_observer():
+    asset = Path(__file__).resolve().parents[1] / "src/ciw/render/static/common.js"
+    script = r"""
+const fs=require('fs'),vm=require('vm'),calls=[],events={};
+let charts=[{_ciwObserver:{disconnect:()=>calls.push('disconnect-old')},kind:'old'}];
+const trigger={isConnected:true,focus:()=>calls.push('focus'),closest:()=>null};
+const body={set innerHTML(value){calls.push('replace');charts=[]},scrollTop:0};
+const d={open:false,hidden:true,querySelectorAll:()=>charts,setAttribute(){},
+ querySelector:s=>s==='.drawer-body'?body:s==='h2'?{textContent:'Source'}:{focus(){}},
+ addEventListener:(type,fn)=>events[type]=fn,showModal(){this.open=true},close(){calls.push('close')}};
+const window={CIW:{},addEventListener(){}},document={activeElement:trigger,addEventListener(){},
+ getElementById:id=>id==='drawer'?d:null};
+const echarts={getInstanceByDom:el=>({dispose:()=>calls.push('dispose-'+el.kind)})};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{window,document,URL,echarts});
+window.U.drawer('<h2>Source</h2>');
+charts=[{_ciwObserver:{disconnect:()=>calls.push('disconnect-new')},kind:'new'}];
+events.cancel({preventDefault(){}});
+process.stdout.write(JSON.stringify(calls));
+"""
+    run = subprocess.run(["node", "-e", script, str(asset)], capture_output=True, text=True, check=True)
+    assert json.loads(run.stdout) == ["disconnect-old", "dispose-old", "replace", "disconnect-new",
+                                     "dispose-new", "close", "focus"]

@@ -81,6 +81,7 @@ class DesignTopicCfg(_Cfg):
     label: str
     patterns: list[str]
     aliases: list[str] = Field(default_factory=list)
+    metric_patterns: list[str] = Field(default_factory=list)
     kind: DesignTopicKind = "lookup"
     exclude: list[str] = Field(default_factory=list)
 
@@ -106,7 +107,7 @@ class DesignTopicCfg(_Cfg):
                     self.kind = kind
         return self
 
-    @field_validator("patterns", "exclude")
+    @field_validator("patterns", "exclude", "metric_patterns")
     @classmethod
     def _patterns(cls, values):
         for pattern in values:

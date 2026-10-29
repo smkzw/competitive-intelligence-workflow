@@ -151,6 +151,8 @@ release记录`rendered_reports`，工作台由committed current与实际HTML存�
 
 工作台结果适配器同时投影数值分面的rows、comparisons与source_statistics；不重新计算、重新匹配或给无对照记录补对照。组值按result/group身份、来源分析按result/path身份区分，值状态和论文/登记来源不改标。相同来源记录重复引用去重，冲突不能first-wins；公开候选保留药物、研究和期别。读模型候选数是投影记录数，不冒充原始结果数。
 
+多疾病登记的原始Trial/OutcomeResult保持不变，比较输入按来源组投影并保留每组范围；跨出所选人群的analyses只保留在原始观测。未分明组仍在原始观测详情展示源内组图和完整表，不做跨源归并。设计主题的metric_patterns只作检索展开，原patterns不被覆写，方法限定与完整上下文保留；入选/排除角色取自原文，不能将排除阈值改为入选阈值。弹窗关闭/替换时释放其图表与ResizeObserver。
+
 release JSON及门户文件不覆盖已有不同字节；相同内容重复写保持原generated_at。呈现资产digest只决定报告版本，不参与LLM缓存失效；`ciw render`为新版呈现创建新release，不改历史快照。
 
 D20续审修复：新站点开始写入前记录私有未完成标记，文件以临时文件原子替换；全部成功后移除标记，再允许切current。只有带对应未完成标记且从未成为current的候选可恢复半文件；所有已完成历史目录都禁止覆盖不同字节，不能仅保护当前指针。重复来源记录返回库中原元数据，避免内存返回值与CAS账本的获取日期冲突。

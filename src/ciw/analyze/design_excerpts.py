@@ -34,12 +34,21 @@ _POSTDOSE = re.compile(
 _FOLLOWUP = re.compile(r"follow[- ]?up|\bfollowed\b|monitoring|assessment visits?|随访|观察期", re.I)
 
 
-def _clauses(text):
+def _clauses(text, preserve_lists=False):
     for line in text.splitlines():
-        # Decimal points stay intact; every selected clause retains its complete original line.
-        for sentence in re.split(r"(?<=[.!?。！？])\s+(?=[A-Z一-鿿])|(?<=[;；])\s*", line):
+        # Keep an introduced logical list intact; its AND/OR must stay in the primary excerpt.
+        if preserve_lists and re.search(r"[:：][^\n]*[;；]", line):
+            yield line, line
+            continue
+        for sentence in re.split(r"(?<=[.!?])\s+(?=[A-Z一-鿿])|(?<=[。！？])|(?<=[;；])\s*", line):
             if sentence.strip():
                 yield sentence, line
+
+
+def _metric_match(patterns, text):
+    return any((not (match.start() and text[match.start()].isalnum() and text[match.start()-1].isalnum())
+                and not (match.end() < len(text) and text[match.end()-1].isalnum() and text[match.end()].isalnum()))
+               for pattern in patterns for match in pattern.finditer(text) if match.start() < match.end())
 
 
 def _matching_lines(topic, patterns, text, field):
@@ -57,17 +66,33 @@ def _matching_lines(topic, patterns, text, field):
         return []
     excludes = [re.compile(p, re.I) for p in topic.exclude]
     # Preserve historical combined lookup topics; typed topics select precise clauses instead of paragraphs.
-    clauses = ((line, line) for line in text.splitlines()) if topic.kind == "lookup" else _clauses(text)
+    clauses = (((line, line) for line in text.splitlines()) if topic.kind == "lookup" else
+               _clauses(text, preserve_lists=topic.kind in {"eligibility_threshold", "endpoint_definition"}))
     selected = []
     for clause, context in clauses:
         if not clause.strip() or not any(p.search(clause) for p in patterns) or any(p.search(clause) for p in excludes):
             continue
-        if topic.kind == "eligibility_threshold" and not threshold_spans(clause):
+        if (topic.kind == "eligibility_threshold" and
+                (not threshold_spans(clause) or not _metric_match(patterns, clause))):
             continue
         if topic.kind == "background_therapy" and re.search(r"rescue|non[- ]?respon|救援|无应答", clause, re.I):
-            continue
+            prefix = re.split(r",\s+and\s+", clause, maxsplit=1, flags=re.I)[0]
+            if (prefix == clause or not any(p.search(prefix) for p in patterns)
+                    or re.search(r"rescue|non[- ]?respon|救援|无应答", prefix, re.I)):
+                continue
+            clause = prefix
         selected.append((clause, context))
     return selected
+
+
+def _criterion_role(text, excerpt):
+    roles = set()
+    pattern = r"inclusion(?: criteria)?|exclusion(?: criteria)?|入选(?:标准)?|排除(?:标准)?"
+    for occurrence in re.finditer(re.escape(excerpt), text):
+        headings = list(re.finditer(pattern, text[:occurrence.end()], re.I))
+        roles.add(("exclusion" if re.search(r"exclusion|排除", headings[-1][0], re.I) else "inclusion")
+                  if headings else "unspecified")
+    return next(iter(roles)) if len(roles) == 1 else "unspecified"
 
 
 def design_excerpts(trial, topics) -> list[dict]:
@@ -82,7 +107,7 @@ def design_excerpts(trial, topics) -> list[dict]:
     passages += [(o.title, o.description, f"outcome:{i}") for i, o in enumerate(trial.outcomes_planned)]
     found = []
     for topic in topics:
-        patterns = [re.compile(p, re.I) for p in topic.patterns]
+        patterns = [re.compile(p, re.I) for p in [*topic.patterns, *topic.metric_patterns]]
         snippets, seen = [], set()
         for section, text, field in passages:
             for line, context in _matching_lines(topic, patterns, text, field):
@@ -97,6 +122,7 @@ def design_excerpts(trial, topics) -> list[dict]:
                         "marks": threshold_spans(line),
                         "source_id": trial.locator.source_id,
                         "field": field,
+                        **({"criterion_role": _criterion_role(text, line)} if field == "eligibility" else {}),
                         **({"context": context, "context_marks": threshold_spans(context)} if context != line else {}),
                     }
                 )

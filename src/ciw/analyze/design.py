@@ -57,6 +57,9 @@ def build_design(cfg: IndicationConfig, trials: list[Trial], products: dict[str,
         row["eligibility_marks"] = threshold_spans(trial.design.eligibility_text)
         row["condition_scope"] = study_scope(cfg, trial)
         row["population_extent"] = "全研究" if row["condition_scope"]["multiple_conditions"] else ""
+        for topic in row["design_excerpts"]:
+            if any(s.get("criterion_role") == "exclusion" for s in topic["snippets"]):
+                topic["label"] = topic["label"].replace("入组阈值", "入排阈值")
         row["search_text"] = " ".join(part for topic in row["design_excerpts"]
                                       for part in [topic["label"], *topic.get("aliases", [])])
     # 设计参考价值：III（含 II/III）> IV > II > I > 未知；同期别按首例入组时间倒序
