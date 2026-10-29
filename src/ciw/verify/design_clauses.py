@@ -19,7 +19,14 @@ from ciw.normalize.design import (
     topic_catalog,
     topic_field_matches,
 )
-from ciw.verify.crosscheck import CrosscheckFailed, ExtractionTask, crosscheck, task_id_for
+from ciw.verify.crosscheck import (
+    CrosscheckFailed,
+    ExtractionTask,
+    _quote_ok,
+    _retained_verifier,
+    crosscheck,
+    task_id_for,
+)
 
 
 class DesignClause(BaseModel):
@@ -61,6 +68,14 @@ def _pending(cfg, row):
     return selected
 
 
+def _parent_offset(condition, parent):
+    """Only an unordered list marker/indent may be absent; every parent word stays literal."""
+    if not condition or not parent.endswith(condition):
+        return None
+    offset = len(parent) - len(condition)
+    return offset if re.fullmatch(r"[ \t]*(?:[*+•-][ \t]+)?", parent[:offset]) else None
+
+
 def _source_context(clause, source):
     condition = clause["condition"]
     scopes = source_sentences(source, clause["text"], clause["quote"])
@@ -77,18 +92,18 @@ def _source_context(clause, source):
             return dict(context=related[0])
         if condition == clause["text"]:
             return dict(context=clause["text"])
-        if same_parent := [p for p in parents if p["condition"] == condition]:
+        if same_parent := [p for p in parents if _parent_offset(condition, p["condition"]) is not None]:
             return dict(context=same_parent[0]["context"])
         return None  # Whole-field quote containment cannot bind a different peer's condition.
     # A list header and its unique child have separate literal anchors. Do not concatenate quotes,
     # infer a relationship across a peer/section, or discard intervening alternative branches.
     if (len(parents) != 1 or source.count(clause["text"]) != 1
-            or parents[0]["condition"] != condition
+            or _parent_offset(condition, parents[0]["condition"]) is None
             or clause["quote"] not in parents[0]["context"]
             or source.count(parents[0]["context"]) != 1):
         return None
     context = parents[0]["context"]
-    start = source.index(context)
+    start = source.index(context) + _parent_offset(condition, parents[0]["condition"])
     return dict(context=context, condition_source=dict(field=clause["field"], start=start,
         end=start+len(clause["condition"]), quote=clause["condition"], binding="introduced-list"))
 
@@ -124,7 +139,8 @@ def _check(item, topics, passages):
                 return False, "入选/排除角色与来源标题不一致"
             for parent in logical_contexts(source, clause["text"]):
                 if (parent["condition"] not in clause["text"]
-                        and parent["condition"] not in clause["condition"]):
+                        and parent["condition"] not in clause["condition"]
+                        and _parent_offset(clause["condition"], parent["condition"]) is None):
                     return False, "简短条款遗漏原文逻辑父条件，请逐字保留：" + parent["condition"]
         elif clause["criterion_role"] != "unspecified":
             return False, "非入排字段不能赋予入选/排除角色"
@@ -166,10 +182,38 @@ def _task(trial, selected):
         item_check=lambda item: _check(item, topics, passages)), passages
 
 
+def _recheck_saved_topics(ws, task, accepted):
+    """Reapply a fixed source guard to the identical recorded B response, without model calls."""
+    records, changed = ws.verifications(), False
+    for key, record in records.items():
+        if (record.get("status") != "needs_review" or record.get("task") != task.task_id
+                or record.get("source_id") != task.source_id
+                or record.get("note") != "核对结果未通过来源校验：条件或队列原文不在该条引文内"):
+            continue
+        try:
+            item = task.item_model.model_validate(record.get("item")).model_dump()
+        except (ValueError, TypeError):
+            continue
+        if (key != f"design:{task.task_id}:{item['topic_id']}" or item["topic_id"] in accepted
+                or not _quote_ok(task, item)[0] or not _retained_verifier(ws, task, record, item)):
+            continue
+        payload = {k: v for k, v in record.items() if k != "status"}
+        payload["deterministic_recheck"] = dict(previous_status=record["status"], previous_note=record["note"],
+                                               rule="literal-unordered-parent-prefix-v1")
+        payload["note"] = "原核对响应经当前来源定位规则复核通过"
+        ws.save_verification(key, "verified", payload)
+        accepted[item["topic_id"]] = item
+        changed = True
+    return changed
+
+
 def _review(ws, task, passages, selected, saved, roles):
     topics = {t["topic_id"]: t for t in selected}
     accepted = {key: item for key, item in saved["tasks"].get(task.task_id, {}).items()
                 if _check(item, topics, passages)[0]}
+    if _recheck_saved_topics(ws, task, accepted):
+        saved["tasks"][task.task_id] = accepted
+        ws.write_stage("research-design-clauses", saved)
     if set(topics) <= set(accepted):
         return accepted
     if not roles:
