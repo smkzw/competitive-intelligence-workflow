@@ -241,7 +241,7 @@
   // 安全
   const S = B.safety;
   const sEl = document.getElementById("sae-chart");
-  const sRows = S.filter((r) => r.sae_pct != null);
+  const sRows = S.filter((r) => r.sae_pct != null && (!r.condition_scope || r.condition_scope.status === "target"));
   sEl.hidden = !sRows.length;
   const sl = (r) => `${r.role === "placebo" ? "安慰剂" : (r.product_label || r.group_title)}${groupSuffix(r.product_label,r.group_title)} · ${r.acronym}`;
   chart("sae-chart", {
@@ -256,7 +256,7 @@
   });
   table(document.getElementById("safety-table"), [
     { label: "药物 / 研究", key: "acronym", html: (r) => `<strong>${esc(r.product_label || r.group_title)}</strong><br>${studyMeta(r)}` },
-    { label: "组别", key: "group_title", html: (r) => `${esc(r.group_title)}<br><span class="hint">${esc(r.role_label)}</span>` },
+    { label: "组别", key: "group_title", html: (r) => `${esc(r.group_title)}<br><span class="hint">${esc(r.role_label)}</span>${r.condition_scope?.multiple_conditions ? '<br>多疾病登记' : ""}` },
     { label: "N", key: "N", num: true, html: (r) => (r.N == null ? "未报告" : r.N) },
     { label: "严重不良事件", key: "sae_pct", num: true, html: (r) => nN(r.sae_n, null, r.sae_pct) },
     { label: "非严重 AE（≥阈值）", key: "other_pct", num: true, html: (r) => nN(r.other_n, null, r.other_pct) + (r.other_threshold != null ? `<br><span class="hint">阈值 ${num(r.other_threshold)}%</span>` : "") },
@@ -287,7 +287,7 @@
       {label:"药物 / 研究",html:r=>`<strong>${r.products.map(esc).join("、")}</strong><br>${esc(r.phase)} · ${esc(r.acronym)}`},
       {label:"类别",html:r=>esc(r.domain_label)},
       {label:"终点原文",html:r=>`${esc(r.title)}<br><span class="hint">${esc(r.class_title)} ${esc(r.category_title)}</span>`},
-      {label:"时间 / 人群",html:r=>`${esc(r.time_label || r.timeframe)}<br>${esc(r.population)}`},
+      {label:"时间 / 人群",html:r=>`${esc(r.time_label || r.timeframe)}<br>${esc(r.population)}${r.condition_scope?.multiple_conditions ? '<br>多疾病登记' : ""}`},
       {label:"数值明细",html:r=>`${r.groups.length} 组 · ${r.analyses.length} 项统计比较`},
       {label:"来源",html:r=>src(r.url,"查看原文")+" "+tag(r.status)},
     ],rows,{onRow:showObservation});

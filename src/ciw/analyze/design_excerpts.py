@@ -34,24 +34,40 @@ _POSTDOSE = re.compile(
 _FOLLOWUP = re.compile(r"follow[- ]?up|\bfollowed\b|monitoring|assessment visits?|随访|观察期", re.I)
 
 
+def _clauses(text):
+    for line in text.splitlines():
+        # Decimal points stay intact; every selected clause retains its complete original line.
+        for sentence in re.split(r"(?<=[.!?。！？])\s+(?=[A-Z一-鿿])|(?<=[;；])\s*", line):
+            if sentence.strip():
+                yield sentence, line
+
+
 def _matching_lines(topic, patterns, text, field):
     if topic.kind == "treatment_duration":
         if field == "eligibility" or field.startswith("outcome:"):
             return []
-        selected = []
-        for sentence in re.split(r"(?<=[.!?])\s+|\n", text):
-            for clause in re.split(r"(?<=;)\s+", sentence):
-                if _DURATION.search(clause) and not (_POSTDOSE.search(clause) or _FOLLOWUP.search(clause)):
-                    selected.append((clause, sentence))
-        return selected
+        return [(clause, context) for clause, context in _clauses(text)
+                if _DURATION.search(clause) and not (_POSTDOSE.search(clause) or _FOLLOWUP.search(clause))]
     if topic.kind == "eligibility_threshold" and field != "eligibility":
         return []
     if topic.kind == "endpoint_definition" and not field.startswith("outcome:"):
         return []
+    if topic.kind in {"dosing_regimen", "background_therapy", "follow_up"} and (
+            field == "eligibility" or field.startswith("outcome:")):
+        return []
     excludes = [re.compile(p, re.I) for p in topic.exclude]
-    return [(line, line) for line in text.splitlines()
-            if line.strip() and any(p.search(line) for p in patterns) and not any(p.search(line) for p in excludes)
-            and (topic.kind != "eligibility_threshold" or threshold_spans(line))]
+    # Preserve historical combined lookup topics; typed topics select precise clauses instead of paragraphs.
+    clauses = ((line, line) for line in text.splitlines()) if topic.kind == "lookup" else _clauses(text)
+    selected = []
+    for clause, context in clauses:
+        if not clause.strip() or not any(p.search(clause) for p in patterns) or any(p.search(clause) for p in excludes):
+            continue
+        if topic.kind == "eligibility_threshold" and not threshold_spans(clause):
+            continue
+        if topic.kind == "background_therapy" and re.search(r"rescue|non[- ]?respon|救援|无应答", clause, re.I):
+            continue
+        selected.append((clause, context))
+    return selected
 
 
 def design_excerpts(trial, topics) -> list[dict]:
@@ -85,5 +101,5 @@ def design_excerpts(trial, topics) -> list[dict]:
                     }
                 )
         if snippets:
-            found.append({"label": topic.label, "snippets": snippets})
+            found.append({"label": topic.label, "aliases": topic.aliases, "snippets": snippets})
     return found

@@ -36,6 +36,7 @@ class Topic(BaseModel):
     label: str = Field(min_length=1, max_length=120)
     terms: list[str] = Field(min_length=1, max_length=12)
     exclude: list[str] = Field(default_factory=list, max_length=12)
+    aliases: list[str] = Field(default_factory=list, max_length=12)
     direction: Literal["lower_better", "higher_better", "none"] = "none"
     kind: DesignTopicKind = "lookup"
 
@@ -59,7 +60,9 @@ def plan_query(indication, question, roles, ws):
               "不同量表和不同数值阈值分别成概念，不用只有PASI等无阈值词混合75/90。"
               "direction只能lower_better/higher_better/none。design_topics为人群入排和方案设计主题，label用中文。"
               "实际给药暴露/治疗时长主题kind=treatment_duration；入排数值阈值kind=eligibility_threshold，"
-              "终点/应答/缓解定义kind=endpoint_definition；避孕、既往治疗和随访另设lookup主题。")
+              "终点/应答/缓解定义kind=endpoint_definition；给药kind=dosing_regimen，背景治疗kind=background_therapy，"
+              "停药随访kind=follow_up；避孕、既往治疗另设lookup。入排主题terms只写指标名称及同义词，"
+              "不限定预猜的数值阈值；aliases写临床人员常用中文检索同义词，不能把不同指标变成同义词。")
     user = json.dumps(dict(indication=indication, question=question), ensure_ascii=False) + "\nSchema:" + schema
     first = parse_json(roles["extractor_a"].chat(system, user))
     second = parse_json(roles["verifier"].chat(
@@ -78,9 +81,16 @@ def plan_query(indication, question, roles, ws):
 
 def _topic_config(topic):
     derived = DesignTopicCfg(label=topic.label, patterns=[re.escape(x) for x in topic.terms],
-                             exclude=[re.escape(x) for x in topic.exclude])
+                             aliases=topic.aliases, exclude=[re.escape(x) for x in topic.exclude])
     if topic.kind != "lookup":
         derived.kind = topic.kind
+    if derived.kind == "eligibility_threshold":
+        # Legacy plans guessed cutoffs. Index the named metric, never only those guessed values.
+        from ciw.analyze.design_excerpts import threshold_spans
+
+        terms = [x[:spans[0]["start"]].strip() if (spans := threshold_spans(x)) else x
+                 for x in topic.terms]
+        derived.patterns = list(dict.fromkeys(re.escape(x) for x in terms if x))
     return derived
 
 
@@ -161,9 +171,12 @@ def _mark_planned_concepts(cfg, ws):
                 concept.origin = "configured"
     for topic, original in zip(cfg.design_topics, record.get("plan", {}).get("design_topics", []), strict=False):
         planned = Topic.model_validate(original)
-        if (topic.label == planned.label and topic.patterns == [re.escape(x) for x in planned.terms]
-                and topic.exclude == [re.escape(x) for x in planned.exclude] and topic.kind == planned.kind):
-            topic.kind = _topic_config(planned).kind
+        derived = _topic_config(planned)
+        if (topic.label == planned.label and topic.patterns in ([re.escape(x) for x in planned.terms], derived.patterns)
+                and topic.exclude == derived.exclude and topic.kind in {planned.kind, derived.kind}):
+            topic.kind, topic.patterns = derived.kind, derived.patterns
+            if not topic.aliases:
+                topic.aliases = derived.aliases
 
 
 

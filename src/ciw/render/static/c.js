@@ -14,7 +14,7 @@
     const fc = document.getElementById("f-concept").value, china = document.getElementById("f-china").checked;
     return rows.filter((r) => (!fp || r.phase === fp) && (!fm || r.masking === fm) && (!fc || primaryCategories(r).includes(fc))
       && (!china || r.china) && (!q || [r.trial_id, r.acronym, r.title, r.sponsor, ...r.products.map((p) => p.label),
-        ...r.primary.flatMap((o) => [o.title,o.description]), r.eligibility, ...(r.conditions || []),
+        ...r.primary.flatMap((o) => [o.title,o.description]), r.eligibility, r.search_text || "", ...(r.conditions || []),
         ...(r.registrations || []).flatMap(g => [g.trial_id, g.title, g.eligibility, ...g.primary.map(o => o.title)])]
         .join(" ").toLowerCase().includes(q)));
   }
@@ -24,9 +24,9 @@
   const regimens = r => `<details><summary>${r.arms.length}组给药方案</summary>${r.arms.map(a=>`<p><strong>${esc(a.label)}</strong><br>${esc(a.interventions.join("；"))}<br>${esc(a.description)}</p>`).join("")}${(r.study_narrative || []).map(n=>`<details><summary>${esc(n.label)}</summary><p>${esc(n.text)}</p></details>`).join("")}</details>`;
   const excerpts = r => (r.design_excerpts || []).map(t=>`<details><summary>${esc(t.label)} · ${t.snippets.length}处原文</summary>${t.snippets.map(s=>`<p><span class="hint">${esc(s.section)}</span><br>${window.U.annotate(s.text,s.marks,document.getElementById("q").value.trim())}</p>${s.context ? `<details><summary>上下文原文</summary><p>${window.U.annotate(s.context,s.context_marks,document.getElementById("q").value.trim())}</p></details>` : ""}`).join("")}</details>`).join("");
   const cols = [
-    { label: "药物 / 研究", key: "acronym", html: (r) => `<strong>${r.products.map(p=>esc(p.label)).join("、")}</strong><br>${r.is_own ? '<span class="own-tag">本品 </span>' : ""}${esc(r.phase)} · ${src(r.url, r.acronym || r.trial_id)} <button class="detail-button" data-design-id="${esc(r.trial_id)}" type="button">查看设计</button>` },
+    { label: "药物 / 研究", key: "acronym", html: (r) => `<strong>${r.products.map(p=>esc(p.label)).join("、")}</strong><br>${r.is_own ? '<span class="own-tag">本品 </span>' : ""}${esc(r.phase)} · ${src(r.url, r.acronym || r.trial_id)}${r.population_extent ? '<br><span class="hint">多疾病登记</span>' : ""} <button class="detail-button" data-design-id="${esc(r.trial_id)}" type="button">查看设计</button>` },
     { label: "设计 / 组别", html: (r) => `${[r.allocation,r.masking,r.model].filter(Boolean).map(esc).join(" · ")}<br>${r.arm_count} 组` },
-    { label: "样本量", key: "enrollment", num: true, html: (r) => r.enrollment == null ? esc(r.enrollment_text || "—") : `${r.enrollment}<br><span class="hint">${esc(r.enrollment_type)}</span>` },
+    { label: "样本量", key: "enrollment", num: true, html: (r) => r.enrollment == null ? esc(r.enrollment_text || "—") : `${r.enrollment}<br><span class="hint">${esc(r.population_extent || "")} ${esc(r.enrollment_type)}</span>` },
     { label: "主要终点 / 时间窗", html: r => ep(r.primary) },
     { label: "给药与背景方案", html: r => `${esc(r.background_therapy.join("；"))}${regimens(r)}` },
     { label: "关键设计条款", html: r => (r.design_excerpts || []).length ? `<details><summary>${r.design_excerpts.length} 个主题</summary>${excerpts(r)}</details>` : "" },
@@ -53,8 +53,8 @@
       <dl><dt>登记号</dt><dd>${src(r.url, r.trial_id)}（${esc(r.registry)}）</dd><dt>申办方</dt><dd>${esc(r.sponsor)}</dd>
       <dt>期别 / 状态</dt><dd>${esc(r.phase)} · ${esc(r.status)}</dd>
       <dt>设计</dt><dd>${[r.allocation, r.masking, r.model].filter(Boolean).map(esc).join(" · ")}</dd>
-      <dt>样本量</dt><dd>${r.enrollment == null ? esc(r.enrollment_text || "—") : r.enrollment + "（" + esc(r.enrollment_type) + "）"}</dd>
-      <dt>年龄 / 性别</dt><dd>${esc(r.min_age || "—")} 至 ${esc(r.max_age || "—")} · ${esc(r.sex || "—")}</dd>
+      <dt>${r.population_extent ? "全研究样本量" : "样本量"}</dt><dd>${r.enrollment == null ? esc(r.enrollment_text || "—") : r.enrollment + "（" + esc(r.enrollment_type) + "）"}</dd>
+      <dt>${r.population_extent ? "全研究年龄 / 性别" : "年龄 / 性别"}</dt><dd>${esc(r.min_age || "—")} 至 ${esc(r.max_age || "—")} · ${esc(r.sex || "—")}</dd>
       <dt>地区</dt><dd>${esc(r.countries.join("、"))}</dd>${r.background_therapy.length ? `<dt>背景治疗</dt><dd>${esc(r.background_therapy.join("；"))}</dd>` : ""}</dl>
       ${(r.conditions || []).length ? `<p><strong>登记疾病/人群：</strong>${r.conditions.map(esc).join("；")}</p>` : ""}
       <h3>组别</h3><table class="grid"><thead><tr><th>组别</th><th>角色</th><th>干预与给药</th></tr></thead><tbody>

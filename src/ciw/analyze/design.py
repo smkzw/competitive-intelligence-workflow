@@ -7,6 +7,7 @@ from collections import Counter
 from typing import Any
 
 from ciw.analyze.common import product_label, role_label
+from ciw.analyze.condition_scope import study_scope
 from ciw.analyze.design_excerpts import design_excerpts, threshold_spans
 from ciw.analyze.landscape import REGISTRY_ZH, STATUS_ZH
 from ciw.config import IndicationConfig
@@ -54,6 +55,10 @@ def build_design(cfg: IndicationConfig, trials: list[Trial], products: dict[str,
     for row, trial in zip(rows, (t for t in trials if t.relevance == "core"), strict=True):
         row["design_excerpts"] = design_excerpts(trial, cfg.design_topics)
         row["eligibility_marks"] = threshold_spans(trial.design.eligibility_text)
+        row["condition_scope"] = study_scope(cfg, trial)
+        row["population_extent"] = "全研究" if row["condition_scope"]["multiple_conditions"] else ""
+        row["search_text"] = " ".join(part for topic in row["design_excerpts"]
+                                      for part in [topic["label"], *topic.get("aliases", [])])
     # 设计参考价值：III（含 II/III）> IV > II > I > 未知；同期别按首例入组时间倒序
     priority = {4: 0, 5: 1, 3: 2, 2: 3, 1: 4, 0: 5}
     rows.sort(key=lambda r: r["start"] or "", reverse=True)

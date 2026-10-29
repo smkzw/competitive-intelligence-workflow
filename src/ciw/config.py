@@ -73,12 +73,14 @@ class ChinaCfg(_Cfg):
     wechat_queries: list[str] = Field(default_factory=list)
 
 
-DesignTopicKind = Literal["lookup", "treatment_duration", "eligibility_threshold", "endpoint_definition"]
+DesignTopicKind = Literal["lookup", "treatment_duration", "eligibility_threshold", "endpoint_definition",
+                          "dosing_regimen", "background_therapy", "follow_up"]
 
 
 class DesignTopicCfg(_Cfg):
     label: str
     patterns: list[str]
+    aliases: list[str] = Field(default_factory=list)
     kind: DesignTopicKind = "lookup"
     exclude: list[str] = Field(default_factory=list)
 
@@ -96,6 +98,12 @@ class DesignTopicCfg(_Cfg):
             r"(?:缓解|应答|终点).*定义|definition.*(?:remission|response|endpoint)", self.label, re.I
         ):
             self.kind = "endpoint_definition"
+        if "kind" not in self.model_fields_set:
+            for pattern, kind in ((r"给药方案|dosing regimen", "dosing_regimen"),
+                                  (r"背景治疗|background therapy", "background_therapy"),
+                                  (r"停药后随访|post-treatment follow-up", "follow_up")):
+                if re.fullmatch(pattern, self.label, re.I):
+                    self.kind = kind
         return self
 
     @field_validator("patterns", "exclude")

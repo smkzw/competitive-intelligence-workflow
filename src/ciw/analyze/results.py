@@ -12,6 +12,7 @@ from collections import defaultdict
 from typing import Any
 
 from ciw.analyze.common import pct, product_label, role_label
+from ciw.analyze.condition_scope import result_scope, target_results, text_scope
 from ciw.analyze.shared_cohort import collapse_shared
 from ciw.config import IndicationConfig, normalize_name
 from ciw.models import OutcomeResult, Product, SafetySummary, Trial
@@ -43,6 +44,8 @@ def build_results(
     results: list[OutcomeResult],
     own_id: str | None,
 ) -> dict[str, Any]:
+    observations = _observations(trials, products, results, cfg)
+    results = target_results(cfg, trials, results)
     concepts = {c.id: c for c in cfg.concepts}
     buckets: dict[tuple, list[OutcomeResult]] = defaultdict(list)
     for r in results:
@@ -108,7 +111,7 @@ def build_results(
         key=lambda q: (bool(q["subgroup"]), not q["has_primary"], -len(q["trial_ids"]), q["label"], q["weeks"] or 999)
     )
     return {"questions": questions, "longitudinal": _longitudinal(cfg, trials, products, results),
-            "observations": _observations(trials, products, results)}
+            "observations": observations}
 
 
 def _context_frames(results, concept, trials, products):
@@ -151,7 +154,7 @@ def _source_statistics(results, trials, comparisons):
     return rows
 
 
-def _observations(trials, products, results):
+def _observations(trials, products, results, cfg):
     domains = {"efficacy": "疗效", "safety": "安全性", "pk": "药代动力学", "pd": "药效学",
                "immunogenicity": "免疫原性", "other": "其他观测"}
     return [
@@ -162,6 +165,7 @@ def _observations(trials, products, results):
             "title": r.title, "timeframe": r.timeframe, "class_title": r.class_title,
             "time_label": r.time.label if r.time else "", "time_key": r.time.key if r.time else "",
             "category_title": r.category_title, "population": r.population,
+            "condition_scope": result_scope(cfg, t, r),
             "unit": r.unit, "param_type": r.param_type, "dispersion_type": r.dispersion_type,
             "status": r.status, "source_kind": r.kind, "url": r.source_url or t.url, "source_id": r.locator.source_id,
             "groups": [{**g.model_dump(), "role_label": role_label(g.role, t, g.arm_id)} for g in r.groups],
@@ -365,7 +369,7 @@ def _longitudinal(
 
 
 def build_safety(
-    trials: dict[str, Trial], products: dict[str, Product], safety: list[SafetySummary]
+    trials: dict[str, Trial], products: dict[str, Product], safety: list[SafetySummary], cfg=None
 ) -> list[dict[str, Any]]:
     rows = []
     for s in safety:
@@ -393,7 +397,8 @@ def build_safety(
                     "group_title": g.title,
                     "role": g.role,
                     "role_label": role_label(g.role, t, g.arm_id),
-                    "N": g.serious.N or g.other.N,
+                    "N": g.serious.N if g.serious.N is not None else g.other.N,
+                    **({"condition_scope": text_scope(cfg, t, g.title)} if cfg is not None else {}),
                     "sae_n": g.serious.n,
                     "sae_pct": pct(g.serious.n, g.serious.N),
                     "other_n": g.other.n,

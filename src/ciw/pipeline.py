@@ -157,8 +157,10 @@ def _run(
 
 def _comparison_views(body, cfg, ws, results, trials, families, roles, report_scope, previous):
     from ciw.analyze.comparison_axes import project_comparison_axes
+    from ciw.analyze.condition_scope import target_results
     from ciw.verify.comparison_axes import enrich_comparison_axes
 
+    results = target_results(cfg, trials, results)
     axes, issues = enrich_comparison_axes(ws, cfg, results, trials, families["groups"],
         roles if report_scope in {None, "B"} else None, previous=previous.get("comparison_axes"))
     body["comparison_axes"] = axes
@@ -349,7 +351,7 @@ def _build_body(cfg, ws, products, trials, results, safety, events, review_queue
     trial_list = sorted(trials.values(), key=lambda t: t.trial_id)
     a = build_landscape(list(products.values()), trial_list, events, list(unclassified.values()), own)
     b = build_results(cfg, trials, products, results, own)
-    b["safety"] = build_safety(trials, products, safety)
+    b["safety"] = build_safety(trials, products, safety, cfg)
     c = build_design(cfg, trial_list, products)
 
     used = (
