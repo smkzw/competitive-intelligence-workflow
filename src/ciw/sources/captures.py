@@ -21,7 +21,7 @@ from ciw.config import IndicationConfig
 from ciw.models import Event, stable_id
 from ciw.normalize.products import ProductResolver
 from ciw.store import Workspace
-from ciw.verify.crosscheck import CrosscheckFailed, ExtractionTask, crosscheck, task_id_for
+from ciw.verify.crosscheck import CrosscheckFailed, ExtractionTask, crosscheck, retained_verified, task_id_for
 from ciw.verify.events import validate_event_item
 from ciw.verify.llm import Backend
 from ciw.verify.schemas import EventItem
@@ -147,25 +147,28 @@ def extract_events(
             published_at=meta.get("published_at"),
             fetched_at=meta.get("fetched_at"),
         )
-        if roles is None:
-            queue.append({"kind": "doc_not_extracted", "ref": src.source_id, "note": "未配置异构模型，未抽取"})
-            continue
         task = _event_task(src, text, cfg, resolver)
         try:
-            checked = crosscheck(task, roles)
+            checked, incomplete = (crosscheck(task, roles), False) if roles is not None else retained_verified(ws, task)
         except CrosscheckFailed as exc:
             stat["failed"] += 1
             queue.append({"kind": "doc_extract_failed", "ref": src.source_id, "note": str(exc)})
             continue
+        if roles is None and not checked:
+            queue.append({"kind": "doc_not_extracted", "ref": src.source_id, "note": "无当前原件与任务对应的已核记录"})
+            continue
+        if incomplete:
+            stat["failed"] += 1
+            queue.append({"kind": "doc_cached_review_incomplete", "ref": src.source_id,
+                          "note": "部分既有条目未通过当前来源或原核对响应校验"})
         stat["extracted"] += 1
         for chk in checked:
             it = chk.item
             ev = _event(chk, src, resolver)
-            ws.save_verification(
-                ev.event_id,
-                chk.status,
-                {"calls": chk.calls, "note": chk.note, "task": task.task_id, "item": it, "source_id": src.source_id},
-            )
+            if roles is not None:
+                ws.save_verification(ev.event_id, chk.status,
+                    {"calls": chk.calls, "note": chk.note, "task": task.task_id,
+                     "item": it, "source_id": src.source_id})
             events.append(ev)
             stat["events"] += 1
             if chk.status == "needs_review":
@@ -173,8 +176,8 @@ def extract_events(
     cov = [
         {
             "source": k,
-            "status": ("partial" if roles is None or v["failed"] else "ok"),
-            "extraction_status": "not_enabled" if roles is None else "attempted",
+            "status": ("partial" if v["extracted"] != v["docs"] or v["failed"] else "ok"),
+            "extraction_status": "cached_only" if roles is None else "attempted",
             **v,
         }
         for k, v in sorted(by_kind.items())

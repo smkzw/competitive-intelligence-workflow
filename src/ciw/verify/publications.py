@@ -9,7 +9,7 @@ from ciw.config import normalize_name
 from ciw.models import Analysis, GroupValue, Locator, OutcomeResult, Trial, stable_id
 from ciw.normalize.products import ProductResolver
 from ciw.normalize.semantics import classify, parse_timepoint
-from ciw.verify.crosscheck import CrosscheckFailed, ExtractionTask, crosscheck, task_id_for
+from ciw.verify.crosscheck import CrosscheckFailed, ExtractionTask, crosscheck, retained_verified, task_id_for
 from ciw.verify.quote import normalize
 from ciw.verify.schemas import PublicationResultItem
 
@@ -47,30 +47,28 @@ def extract_publications(ws, cfg, papers, trials, resolver, roles) -> tuple[list
     for paper in papers:
         if paper["excluded_type"]:
             continue
-        if roles is None:
-            issues.append(dict(kind="publication_not_extracted", ref=paper["paper_id"], note="未启用异构模型核对"))
-            continue
         task = _task(paper)
         try:
-            checked = crosscheck(task, roles)
+            checked, incomplete = (crosscheck(task, roles), False) if roles is not None else retained_verified(ws, task)
         except CrosscheckFailed as exc:
             issues.append(dict(kind="publication_extract_failed", ref=paper["paper_id"], note=str(exc)))
             continue
+        if roles is None and not checked:
+            issues.append(dict(kind="publication_not_extracted", ref=paper["paper_id"],
+                               note="无当前原件与任务对应的已核记录"))
+            continue
+        if incomplete:
+            issues.append(dict(kind="publication_cached_review_incomplete", ref=paper["paper_id"],
+                               note="部分既有条目未通过当前来源或原核对响应校验"))
         for chk in checked:
             item = chk.item
             result, reason = _project(cfg, paper, trials, resolver, item, chk.status)
             key = stable_id("pub", paper["paper_id"], chk.key)
-            ws.save_verification(
-                key,
-                chk.status,
-                dict(
-                    source_id=paper["source_id"],
-                    task=task.task_id,
-                    item=item,
-                    calls=chk.calls,
-                    note=chk.note or reason,
-                ),
-            )
+            if roles is not None:
+                ws.save_verification(
+                    key, chk.status,
+                    dict(source_id=paper["source_id"], task=task.task_id, item=item,
+                         calls=chk.calls, note=chk.note or reason))
             if chk.status == "needs_review" or reason:
                 issues.append(
                     dict(

@@ -124,15 +124,18 @@ def source_sentences(text, excerpt, anchor=""):
 def dependency_contexts(text, excerpt, anchor=""):
     """Keep the complete dependency predicate; retain branch labels in the enclosing source scope."""
     connectors = re.compile(r"\b(?:based on|provided that|subject to|only if|contingent (?:on|upon)|"
-                            r"on condition that)\b|基于|前提|须经|需经", re.I)
+                            r"on condition that|defined (?:as|by)|and|or)\b|基于|前提|须经|需经|定义为|且|或", re.I)
+    def required(value):
+        # 'greater than or equal to' / 'between N and M' are one numeric comparison, not branches.
+        return connectors.search(_THRESHOLD.sub("", value))
     contexts = []
     for sentence in source_sentences(text, excerpt, anchor):
         predicate = sentence
         while True:
             parts = re.split(r"(?<!\d):\s+(?=[A-Za-z\u4e00-\u9fff])", predicate, maxsplit=1)
-            if len(parts) != 2 or connectors.search(parts[0]) or not connectors.search(parts[1]):
+            if len(parts) != 2 or required(parts[0]) or not required(parts[1]):
                 break
             predicate = parts[1]
-        if connectors.search(predicate):
-            contexts.append(predicate)
+        if required(predicate):
+            contexts.append(predicate.rstrip(".。!?！？"))
     return contexts

@@ -284,3 +284,62 @@ def review_candidates(task, verifier, a_items, a_call):
 
 def _clean(item: dict[str, Any] | None) -> dict[str, Any]:
     return {k: v for k, v in (item or {}).items() if not k.startswith("_")}
+
+
+def retained_verified(ws, task: ExtractionTask) -> tuple[list[CheckedItem], bool]:
+    """Read existing source/task-bound decisions with their actual verifier response; make no calls."""
+    by_key, incomplete = {}, False
+    for record in ws.verifications().values():
+        if record.get("task") != task.task_id or record.get("source_id") != task.source_id:
+            continue
+        if record.get("status") != "verified":
+            incomplete = True
+            continue
+        try:
+            item = task.item_model.model_validate(record.get("item")).model_dump()
+        except (ValueError, TypeError):
+            incomplete = True
+            continue
+        if not _quote_ok(task, item)[0] or not _retained_verifier(ws, task, record, item):
+            incomplete = True
+            continue
+        key = _key(task, item)
+        bucket = by_key.setdefault(key, [])
+        if not any(checked.item == item for checked in bucket):
+            bucket.append(CheckedItem(item, "verified", key, record.get("calls", []), record.get("note", "")))
+    out = []
+    for bucket in by_key.values():
+        if len(bucket) != 1:
+            incomplete = True
+        else:
+            out.extend(bucket)
+    return out, incomplete
+
+
+def _retained_verifier(ws, task, record, item):
+    calls = record.get("calls", [])
+    extracts = [c for c in calls if c.get("role") == "extract" and not c.get("error")]
+    reviews = [c for c in calls if c.get("role") in {"verify", "verify_repair", "verify_format_repair"}]
+    if not extracts or len({c.get("family") for c in calls if c.get("family")}) != 2:
+        return False
+    for call in reversed(reviews):
+        if (call.get("error") or not call.get("n_items") or not call.get("response_id")
+                or call.get("family") == extracts[0].get("family")):
+            continue
+        with ws.db() as con:
+            responses = con.execute("SELECT response, metadata FROM llm_cache WHERE family=? AND model=?",
+                                    (call.get("family"), call.get("model"))).fetchall()
+        matches = []
+        for text, metadata in responses:
+            try:
+                if json.loads(metadata or "{}").get("response_id") != call["response_id"]:
+                    continue
+                candidates = [task.item_model.model_validate(raw).model_dump() for raw in parse_json(text)["items"]]
+                same_key = [raw for raw in candidates if _key(task, raw) == _key(task, item)]
+                if same_key:
+                    matches.append(all(raw == item for raw in same_key))
+            except (ValueError, TypeError, KeyError, AttributeError):
+                return False
+        if matches:
+            return matches == [True]  # A later relevant B revision cannot fall back to an earlier item.
+    return False

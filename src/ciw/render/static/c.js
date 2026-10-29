@@ -23,6 +23,12 @@
   const ep = list => list.map(o => `${esc(o.summary || o.concept || o.title)}<span class="hint">${o.timeframe ? (o.timeframe.length > 48 ? `<details><summary>时间窗原文</summary><p>${esc(o.timeframe)}</p></details>` : "（" + esc(o.timeframe) + "）") : ""}</span>${endpointDetails(o)}`).join("<br>");
   const regimens = r => `<details><summary>${r.arms.length}组给药方案</summary>${r.arms.map(a=>`<p><strong>${esc(a.label)}</strong><br>${esc(a.interventions.join("；"))}<br>${esc(a.description)}</p>`).join("")}${(r.study_narrative || []).map(n=>`<details><summary>${esc(n.label)}</summary><p>${esc(n.text)}</p></details>`).join("")}</details>`;
   const annotation = (text, marks) => window.U.annotate(text, marks, document.getElementById("q").value.trim());
+  const originalParagraphs = s => {
+    const parts = [[s.cohort_quote,[]],[s.condition,s.condition_marks],[s.text,s.marks],
+      [s.timeframe,[]],[s.context,s.context_marks]].filter(([text])=>text);
+    return parts.filter(([text],i)=>!parts.some(([other],j)=>i!==j&&other.includes(text)&&
+      (other.length>text.length||j<i))).map(([text,marks])=>`<p>${annotation(text,marks)}</p>`).join("");
+  };
   const clause = s => {
     const reading = s.reading;
     const role = s.criterion_role === "inclusion" ? "入选" : s.criterion_role === "exclusion" ? "排除" : "";
@@ -30,10 +36,7 @@
     const condition = reading ? reading.condition_zh : s.condition;
     const timeframe = reading ? reading.timeframe_zh : s.timeframe;
     const original = reading ? `<details class="clause-original"><summary>原文与上下文</summary>
-      ${s.cohort_quote ? `<p>${esc(s.cohort_quote)}</p>` : ""}
-      ${s.condition ? `<p>${annotation(s.condition,s.condition_marks)}</p>` : ""}
-      <p>${annotation(s.text,s.marks)}</p>${s.timeframe ? `<p>${esc(s.timeframe)}</p>` : ""}
-      ${s.context && s.context !== s.text ? `<p>${annotation(s.context,s.context_marks)}</p>` : ""}</details>` :
+      ${originalParagraphs(s)}</details>` :
       (s.context && s.context !== s.text ? `<details><summary>上下文原文</summary><p>${annotation(s.context,s.context_marks)}</p></details>` : "");
     return `<div class="design-clause">${cohort ? `<p class="clause-condition">${esc(cohort)}</p>` : ""}
       ${condition ? `<p class="clause-condition">${annotation(condition,reading ? reading.condition_marks : s.condition_marks)}</p>` : ""}

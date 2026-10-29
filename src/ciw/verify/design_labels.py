@@ -50,6 +50,9 @@ def _atom(snippet):
     if atom["condition"] and atom["text"] in atom["condition"] and atom["condition"] in atom["context"]:
         # A complete applicability sentence already contains the selected point; translate it once.
         atom["text"], atom["condition"] = atom["context"], ""
+    for field in ("condition", "cohort_quote"):
+        if atom[field] and atom[field] in atom["text"]:
+            atom[field] = ""  # Exact source text already carries the scope; retain original snippet fields.
     if not any(len(re.findall(r"[A-Za-z]{2,}", atom[f])) >= 3
                and not re.search(r"[\u4e00-\u9fff]", atom[f]) for f in _FIELDS):
         return None

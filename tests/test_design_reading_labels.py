@@ -196,3 +196,15 @@ def test_notation_repairs_do_not_erase_changed_values_or_independent_times(sourc
     key=next(iter(atoms))
     item=dict(clause_id=key,text_zh=label,condition_zh='',cohort_zh='',timeframe_zh='',quote=source)
     assert not _check(item,atoms)[0]
+
+
+def test_literal_condition_and_cohort_already_in_complete_point_are_not_repeated_or_lost():
+    from ciw.verify.design_labels import _atoms
+
+    c, s = material()
+    full = "Relapsed disease is defined as CR or PR after IST followed by proteinuria ≥3 g/g."
+    s.update(text=full, condition="Relapsed disease", cohort_quote="Relapsed disease", context=full, timeframe="")
+    before = deepcopy(s)
+    atom = next(iter(_atoms(c).values()))
+    assert atom["text"] == full and atom["condition"] == "" and atom["cohort_quote"] == ""
+    assert s == before
