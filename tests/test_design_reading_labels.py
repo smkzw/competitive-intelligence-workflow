@@ -208,3 +208,29 @@ def test_literal_condition_and_cohort_already_in_complete_point_are_not_repeated
     atom = next(iter(_atoms(c).values()))
     assert atom["text"] == full and atom["condition"] == "" and atom["cohort_quote"] == ""
     assert s == before
+
+
+@pytest.mark.parametrize("number,en,zh", [(5,"years","年"),(3,"months","个月"),(4,"weeks","周"),(10,"days","天")])
+@pytest.mark.parametrize("direction,valid", [("前", True), ("后", False)])
+def test_past_biopsy_history_cannot_be_translated_as_a_post_consent_future_window(number,en,zh,direction,valid):
+    from ciw.verify.design_labels import _atoms, _check
+
+    c, s = material()
+    source = f"Participants have not had a biopsy performed within {number} {en} of signing the ICF."
+    s.update(text=source, condition="", cohort_quote="", timeframe="", context=source)
+    atom = next(iter(_atoms(c).values()))
+    item = dict(clause_id=atom["clause_id"], quote=source, condition_zh="", cohort_zh="", timeframe_zh="",
+                text_zh=f"签署ICF{direction}{number}{zh}内未做过活检。")
+    assert _check(item, {atom["clause_id"]: atom})[0] == valid
+
+
+def test_a_source_explicitly_describing_a_future_window_keeps_its_direction():
+    from ciw.verify.design_labels import _atoms, _check
+
+    c, s = material()
+    source = "Participants will not undergo a biopsy within 5 years after signing the ICF."
+    s.update(text=source, condition="", cohort_quote="", timeframe="", context=source)
+    atom = next(iter(_atoms(c).values()))
+    item = dict(clause_id=atom["clause_id"], quote=source, condition_zh="", cohort_zh="", timeframe_zh="",
+                text_zh="签署ICF后5年内不进行活检。")
+    assert _check(item, {atom["clause_id"]: atom})[0]

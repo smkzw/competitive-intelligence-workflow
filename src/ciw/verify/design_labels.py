@@ -101,9 +101,24 @@ def _check(item, atoms):
             return False, "科学单位须保留原写法，不替换或换算"
         if _times(source) != _times(label):
             return False, "时间单位不能改变或省略"
+        if _history_became_future(source, label):
+            return False, "原文为签署ICF时的既往检查史，不可译为签署ICF后同等时长的未来窗口"
     if not re.search(r"[\u4e00-\u9fff]", item["text_zh"]):
         return False, "主层须提供中文医学要点，指标、缩写和科学单位保留原名"
     return True, ""
+
+
+def _history_became_future(source, label):
+    """A source's negative perfect history is not a prospective post-consent interval."""
+    historical = re.finditer(
+        r"\b(?:have|has|had)\s+not\s+(?:had|received|undergone)\b"
+        r"(?:(?![.;]\s|\n\s*\n).){0,240}?\bwithin\s*(\d+(?:\.\d+)?)\s*"
+        r"(days?|weeks?|months?|years?)\s+of\s+signing\s+(?:the\s+)?ICF\b", source, re.I | re.S)
+    future = list(re.finditer(r"(?:ICF|知情同意书)[^。\n]{0,12}?(?:之后|以后|后)(?:的)?\s*"
+                              r"(\d+(?:\.\d+)?)\s*(年|个?月|周|天|日)", label, re.I))
+    units = {"年": "year", "月": "month", "个月": "month", "周": "week", "天": "day", "日": "day"}
+    return any(Decimal(past[1]) == Decimal(new[1]) and past[2].lower().rstrip("s") == units[new[2]]
+               for past in historical for new in future)
 
 
 def _unit_signature(text):

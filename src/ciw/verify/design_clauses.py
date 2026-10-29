@@ -9,6 +9,7 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 from ciw.normalize.design import (
+    LOGICAL_PARENT,
     _criterion_role,
     dependency_contexts,
     design_passages,
@@ -148,6 +149,13 @@ def _task(trial, selected):
         "不把long follow-up一般描述当访视安排。终点定义须明确，不凭终点标题补临床常识。"
         "每条field原样复制字段ID，text/quote/condition/cohort_quote逐字取自同一字段；顶层quote是原文锚点。"
         "主题：" + json.dumps(selected, ensure_ascii=False, sort_keys=True))
+    if any(LOGICAL_PARENT.search(value) and re.search(r"\bdefined (?:as|by)\b|定义为", value, re.I)
+           for _, value, _ in passages):
+        instruction += (
+            "存在嵌套定义与列表父条件时，text逐字保留所选分支的完整定义、既往治疗→缓解→复发等顺序及AND/OR；"
+            "condition保留真正的上位列表父句，不能用定义替换父句。quote连续覆盖完整text。"
+            "例如选中复发分支：完整复发定义放text，Meets one of the following等真实上位句放condition；"
+            "其他同级分支留在原始上下文，不拼接为本分支定义。无真实父句时不新增condition。")
     text = "\n\n".join(f"FIELD {field} ({section})\n{value}" for section, value, field in passages)
     material = json.dumps(dict(source_id=trial.locator.source_id, passages=passages),
                           sort_keys=True, ensure_ascii=False)
