@@ -61,6 +61,8 @@ def _pending(cfg, row):
 def _check(item, topics, passages):
     topic = topics.get(item["topic_id"])
     if not topic or not any(item["quote"] in text for _, text, _ in passages):
+        if item["quote"].lstrip().startswith("FIELD "):
+            return False, "quote包含提示包装FIELD；删除字段标签，只逐字引用对应字段的实际原文"
         return False, "主题或来源锚点未对应当前原文"
     fields = {field: text for _, text, field in passages}
     for clause in item["clauses"]:
@@ -83,7 +85,7 @@ def _check(item, topics, passages):
             for parent in logical_contexts(source, clause["text"]):
                 if (parent["condition"] not in clause["text"]
                         and parent["condition"] not in clause["condition"]):
-                    return False, "简短条款遗漏原文逻辑父条件"
+                    return False, "简短条款遗漏原文逻辑父条件，请逐字保留：" + parent["condition"]
         elif clause["criterion_role"] != "unspecified":
             return False, "非入排字段不能赋予入选/排除角色"
     return True, ""

@@ -60,20 +60,40 @@ def topic_field_matches(kind, field):
 
 
 LOGICAL_PARENT = re.compile(r"[^.;\n]*(?:\ball\b|\bany\b|\bone\b|\bfollowing\b|全部|任一|以下)[^.;\n]*[:：]", re.I)
-_SECTION = re.compile(r"^\s*(?:inclusion(?: criteria)?|exclusion(?: criteria)?|"
-                      r"入选(?:标准)?|排除(?:标准)?)\s*[:：]", re.I | re.M)
+_SECTION = re.compile(r"^\s*(?:[*+•-]+\s*|\d+[.)]\s*)?(?:(?:key|main|major|general|principal)\s+)?"
+                      r"(?:inclusion(?: criteria)?|exclusion(?: criteria)?|入选(?:标准)?|排除(?:标准)?)\s*[:：]", re.I)
+_BULLET = re.compile(r"^(\s*)([*+•-]|\d+[.)]|[a-zA-Z][.)])\s+")
+
+
+def _marker(line):
+    marker = _BULLET.match(line)
+    if not marker:
+        return None
+    return len(marker[1].expandtabs()), ("bullet" if marker[2] in "*+•-" else
+                                       "number" if marker[2][0].isdigit() else "letter")
 
 
 def logical_contexts(text, excerpt):
-    """Keep a literal preceding list introducer, including when the children occupy new lines."""
-    contexts = []
-    for occurrence in re.finditer(re.escape(excerpt), text):
-        before = text[:occurrence.end()]
-        parents = list(LOGICAL_PARENT.finditer(before))
-        headings = list(_SECTION.finditer(before))
-        if not parents or (headings and parents[-1].start() < headings[-1].end()):
+    """Preserve introduced child lists, ending them at a new section or explicit peer bullet."""
+    contexts, parents, offset = [], [], 0
+    occurrences = list(re.finditer(re.escape(excerpt), text))
+    for line in text.splitlines(keepends=True):
+        marker = _marker(line)
+        if _SECTION.match(line):
+            parents.clear()
+        else:
+            while parents and marker and parents[-1]["marker"] and (
+                    marker[1] == parents[-1]["marker"][1] and marker[0] <= parents[-1]["marker"][0]):
+                parents.pop()
+            if intro := LOGICAL_PARENT.search(line):
+                parents.append(dict(start=offset+intro.start(), end=offset+intro.end(), marker=marker))
+        if not parents:
+            offset += len(line)
             continue
-        parent = parents[-1]
-        end = text.find("\n", occurrence.end())
-        contexts.append(dict(condition=parent[0], context=text[parent.start():end if end >= 0 else len(text)]))
+        for occurrence in occurrences:
+            if offset <= occurrence.start() < offset + len(line):
+                end = text.find("\n", occurrence.end())
+                contexts.append(dict(condition=text[parents[0]["start"]:parents[-1]["end"]],
+                    context=text[parents[0]["start"]:end if end >= 0 else len(text)]))
+        offset += len(line)
     return contexts

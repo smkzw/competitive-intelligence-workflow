@@ -65,6 +65,57 @@ def test_transport_preserves_actual_response_metadata_and_explicit_json_mode(mon
     assert b.receipt["response_model"] == "qwen-served"
 
 
+@pytest.mark.parametrize("status,wait,expected", [(429, "2", 2), (401, "2", 1),
+                                                (503, "2", 1), (429, "9999", 1)])
+def test_only_rejected_429_waits_within_budget_and_reuses_the_exact_request(monkeypatch, status, wait, expected):
+    from io import BytesIO
+    from urllib.error import HTTPError
+    calls, pauses = [], []
+    class Response:
+        def __enter__(self): return self
+        def __exit__(self, *_): pass
+        def read(self):
+            return json.dumps(dict(model="served", choices=[dict(finish_reason="stop",
+                message=dict(content='{"items":[]}'))])).encode()
+    class Opener:
+        def open(self, req, **kwargs):
+            calls.append(req)
+            if len(calls) == 1:
+                raise HTTPError(req.full_url, status, "synthetic rejection", {"Retry-After":wait},
+                                BytesIO(b'{"error":{"message":"synthetic"}}'))
+            return Response()
+    monkeypatch.setattr("urllib.request.build_opener", lambda *_: Opener())
+    monkeypatch.setattr("ciw.verify.transport.sleep", pauses.append)
+    b = OpenAICompatBackend("deepseek", "deepseek", "https://example.com/v1", None, timeout=600)
+    if expected == 2:
+        assert b.chat("s", "source") == '{"items":[]}'
+        assert pauses == [2] and calls[0] is calls[1]
+        assert b.receipt["admission_retries"] == [dict(http_status=429, wait_seconds=2)]
+    else:
+        with pytest.raises(HTTPError):
+            b.chat("s", "source")
+        assert not pauses
+    assert len(calls) == expected
+
+
+def test_repeated_429_has_finite_retries_without_success_or_cache(monkeypatch, ws):
+    from io import BytesIO
+    from urllib.error import HTTPError
+    calls, pauses = [], []
+    class Opener:
+        def open(self, req, **kwargs):
+            calls.append(req)
+            raise HTTPError(req.full_url, 429, "synthetic rejection", {}, BytesIO(b'{}'))
+    monkeypatch.setattr("urllib.request.build_opener", lambda *_: Opener())
+    monkeypatch.setattr("ciw.verify.transport.sleep", pauses.append)
+    backend = CachedBackend(OpenAICompatBackend("deepseek", "deepseek", "https://example.com/v1", None), ws)
+    with pytest.raises(HTTPError):
+        backend.chat("s", "source")
+    assert len(calls) == 4 and pauses == [5, 10, 20]
+    with ws.db() as con:
+        assert con.execute("SELECT count(*) FROM llm_cache").fetchone()[0] == 0
+
+
 def test_content_cache_keeps_original_receipt_without_another_model_call(ws):
     calls = []
     b = FakeBackend("qwen", "qwen", lambda *args: calls.append(args) or '{"items":[]}')

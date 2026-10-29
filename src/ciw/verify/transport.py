@@ -3,10 +3,14 @@
 import http.client
 import ipaddress
 import json
+import math
 import shutil
 import socket
 import subprocess
 import urllib.request
+from email.utils import parsedate_to_datetime
+from time import monotonic, sleep, time
+from urllib.error import HTTPError
 from urllib.parse import urlsplit
 
 
@@ -76,3 +80,32 @@ def model_opener(base_url: str, no_proxy: bool, transport: dict):
     if no_proxy and url.scheme == "https" and url.hostname and url.hostname.endswith(".ts.net"):
         handlers.append(_PrivateHTTPSHandler(url.hostname, transport))
     return urllib.request.build_opener(*handlers)
+
+
+def _retry_delay(header, attempt):
+    try:
+        value = float(header)
+        if math.isfinite(value):
+            return max(1, value)
+    except (ValueError, TypeError):
+        pass
+    try:
+        return max(1, parsedate_to_datetime(header).timestamp() - time())
+    except (ValueError, TypeError, AttributeError, OverflowError):
+        return 5 * 2**attempt
+
+
+def model_json(opener, request, timeout, transport):
+    """Retry only completed 429 rejections, never an in-flight/ambiguous model request."""
+    started = monotonic()
+    for attempt in range(4):
+        try:
+            with opener.open(request, timeout=max(.1, timeout - (monotonic() - started))) as response:
+                return json.load(response)
+        except HTTPError as exc:
+            wait = _retry_delay((exc.headers or {}).get("Retry-After"), attempt)
+            if exc.code != 429 or attempt == 3 or monotonic() - started + wait > min(timeout, 180):
+                raise
+            transport.setdefault("admission_retries", []).append(dict(http_status=429, wait_seconds=wait))
+            exc.close()
+            sleep(wait)

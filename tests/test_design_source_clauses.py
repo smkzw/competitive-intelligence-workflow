@@ -128,6 +128,28 @@ def test_multiline_parent_is_visible_and_cannot_be_removed_by_a_model(cfg, ws):
     assert c["rows"][0]["design_excerpts"] == []
 
 
+def test_key_headings_and_new_peer_bullet_end_the_previous_list():
+    from ciw.normalize.design import logical_contexts
+    text = ("Key Inclusion Criteria:\n* Meets one of the following:\n"
+            "  1. New disease, proteinuria ≥5 g/day.\n  2. Relapsed disease, proteinuria ≥4 g/day.\n"
+            "* UPCR ≥3 g/g.\nKey Exclusion Criteria:\n* eGFR ≤30 mL/min.")
+    assert logical_contexts(text, "proteinuria ≥4 g/day")[0]["condition"] == "* Meets one of the following:"
+    assert logical_contexts(text, "UPCR ≥3 g/g") == []
+    assert logical_contexts(text, "eGFR ≤30 mL/min") == []
+
+
+def test_prompt_field_labels_are_not_quotes_and_repair_names_the_exact_problem(cfg):
+    from ciw.models import Arm
+    from ciw.normalize.design import design_passages
+    from ciw.verify.design_clauses import DesignTopicReview, _check
+    cfg, t, _ = example(cfg)
+    t.arms = [Arm(arm_id="a", label="Combination", description="Drug A 10 mg weekly")]
+    item = DesignTopicReview(topic_id="design-topic-1", quote="FIELD arm:a (Combination)", clauses=[]).model_dump()
+    okay, reason = _check(item, {t["topic_id"]:t for t in build_design(cfg, [], {})["topic_catalog"]},
+                          design_passages(t))
+    assert not okay and "FIELD" in reason and "quote" in reason
+
+
 def test_exact_recommendation_is_not_proof_of_actual_regimen(cfg, ws):
     cfg, t, items = example(cfg)
     items[1]["clauses"] = [dict(field="detailed_description", text=t.design.detailed_description,

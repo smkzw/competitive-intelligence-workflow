@@ -21,7 +21,7 @@ from urllib.error import HTTPError
 import yaml
 
 from ciw.store import Workspace, now_iso
-from ciw.verify.transport import model_opener
+from ciw.verify.transport import model_json, model_opener
 
 
 class Backend(Protocol):
@@ -69,10 +69,9 @@ class OpenAICompatBackend:
         )
         transport = {}
         try:
-            with model_opener(self.base_url, self.no_proxy, transport).open(req, timeout=self.timeout) as resp:
-                data = json.load(resp)
+            data = model_json(model_opener(self.base_url, self.no_proxy, transport), req, self.timeout, transport)
         except HTTPError as exc:
-            self.receipt = {"http_status": exc.code, "requested_reasoning_effort": self.reasoning_effort,
+            self.receipt = {**transport, "http_status": exc.code, "requested_reasoning_effort": self.reasoning_effort,
                             "elapsed_seconds": round(perf_counter() - started, 3)}
             try:
                 error = json.load(exc).get("error", {})
