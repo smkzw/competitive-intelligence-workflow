@@ -1,0 +1,71 @@
+--- /dev/null
++++ b/tests/test_event_claim_evidence.py
+@@ -0,0 +1,68 @@
++"""All filled event claims belong to their selected literal evidence, not just the source page."""
++import pytest
++
++from ciw.verify.events import validate_event_item
++
++
++def event(**changes):
++    quote = "Drug-X已在中国获批用于CRSwNP，作为附加维持治疗。"
++    item = dict(product_mention="Drug-X", event_type="approval", region="中国", date="",
++                indication="CRSwNP", detail="作为附加维持治疗", quote=quote,
++                detail_quote="作为附加维持治疗")
++    return item | changes
++
++
++@pytest.mark.parametrize("changes", [
++    {"quote": "该适应症已在中国获批。"},
++    {"quote": "Drug-X已在中国获批。"},
++    {"detail_quote": ""},
++    {"detail_quote": "作为其他药物未控制患者的附加维持治疗"},
++])
++def test_event_cannot_borrow_names_indications_or_detail_from_outside_its_quote(changes):
++    assert not validate_event_item(event(**changes))[0]
++
++
++def test_target_indication_projection_does_not_assert_other_approved_indications_are_absent():
++    assert validate_event_item(event(
++        quote="Drug-X在欧盟获批用于severe asthma and CRSwNP。", region="欧盟", indication="CRSwNP",
++        detail="获批用于CRSwNP", detail_quote="获批用于severe asthma and CRSwNP"))[0]
++
++
++def test_empty_detail_does_not_require_an_invented_detail_anchor():
++    assert validate_event_item(event(detail="", detail_quote=""))[0]
++
++
++@pytest.mark.parametrize("quote,ok", [
++    ("Drug-X针对CRSwNP的III期临床已启动。", False),
++    ("Drug-X针对CRSwNP的III期临床已完成首例受试者入组。", True),
++    ("Drug-X的CRSwNP试验计划于明年完成首例受试者入组。", False),
++    ("The first patient has been enrolled in the Drug-X CRSwNP trial.", True),
++    ("The first patient is expected to be enrolled in the Drug-X CRSwNP trial next year.", False),
++])
++def test_first_enrolment_event_needs_completed_first_participant_evidence(quote, ok):
++    assert validate_event_item(event(event_type="phase_start", quote=quote, region="", detail="", detail_quote=""))[0] == ok
++
++
++@pytest.mark.parametrize("include_product", [False, True])
++def test_inbox_schema_and_ledger_preserve_selected_detail_evidence(cfg, resolver, ws, include_product):
++    import json
++
++    from ciw.sources.captures import extract_events
++    from ciw.verify.llm import FakeBackend
++
++    text = "MG-K10已在中国获批用于慢性鼻窦炎伴鼻息肉，作为附加维持治疗。"
++    folder = ws.root / "captures/docs"
++    folder.mkdir()
++    (folder / "synthetic.txt").write_text(text)
++    (folder / "synthetic.txt.meta.json").write_text(json.dumps({"kind": "company", "url": "https://example.org/news"}))
++    item = event(product_mention="MG-K10", indication="慢性鼻窦炎伴鼻息肉",
++                 quote=text if include_product else text[len("MG-K10"):])
++    def reply(system, user):
++        return json.dumps({"items": [item]})
++    roles = {name: FakeBackend(family, family, reply) for name,family in
++             (("extractor_a", "deepseek"), ("verifier", "glm"))}
++    rows, issues, _ = extract_events(ws, cfg, resolver, roles)
++    assert (rows[0].status == "verified") == include_product
++    assert bool(issues) != include_product
++    saved = ws.verifications()[rows[0].event_id]
++    assert saved["item"]["detail_quote"] == "作为附加维持治疗"

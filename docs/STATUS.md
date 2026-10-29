@@ -1,73 +1,58 @@
 # STATUS
 
-**2026-10-30｜RUNNING：继续构建与独立用户验收，尚未整体交付。**
-唯一当前状态是本文；历史[暂停与复盘](handoff/PAUSE_20261029.md)保留，不阻止继续。
-权威：PRD、DECISIONS、ARCHITECTURE、PLAN、EXECUTION_PACK及用户最新裁决；旧Skill/v1不是合同。
-显式cwd；旧中文工程零接触；不reset/clean/全量add。Goal上次实查null，不伪造恢复。
-待用户决定：无。原件/CAS/DB/模型答复/凭据/私有路径不入Git；受控恢复资料不清理。
+**2026-10-30｜PAUSED：用户要求无损暂停，未整体交付。**
+唯一当前状态入口为本文；详细[暂停点、进度图、深度复盘和恢复步骤](handoff/PAUSE_20261030.md)。
+不继续研究、模型请求或测试；待用户明确恢复。Goal本次实查null，未伪造Goal状态。
+权威：PRD、DECISIONS、ARCHITECTURE、PLAN、EXECUTION_PACK及用户最新裁决。
+显式cwd；旧中文工程零接触；保留工作树，不reset/checkout/clean/全量add/强推/main合入。
+待用户决定：无。原件/CAS/DB/模型答复/凭据/私有路径不Git；恢复资料不清理。
 
-## 代码与执行范围
-|层级|当前|
+## 冻结代码与检查范围
+|对象|当前|
 |---|---|
-|CI|codex/ciw-clinical-endpoint-index；c0108d3已推；636全测11.07s/Ruff/JS通过；四研究增量源/中文及B词界/导航实屏已验|
-|工作台|codex/ciw-report-reading-focus；6fa6c73已推；iframe接通reader约定，14合同/8前端/构建及实际宿主切换通过|
-|历史基线|CI codex/ciw-v2-trunk/ef7e846；WB feat/ciw-release-adapter/36695f6；非当前接受|
+|CI|codex/ciw-clinical-endpoint-index；暂停前HEAD8c2aa30；产品c0108d3已推|
+|开发门|冻结产品636 passed/11.07s、Ruff/JS通过；不是当前全部交付通过|
+|草稿|未跟踪tests/test_event_claim_evidence.py：13例9RED/4GREEN，生产未修；保留原文件及handoff补丁|
+|工作台|codex/ciw-report-reading-focus；6fa6c73已推；14合同/8前端/构建过；旧title/chunk警告保留|
 
-产品仅DGX/deepseek主抽取＋cms-smk/glm-5.3-flash来源核对（D22），不改模型或effort。
-外部测试：Pi/openai-codex/gpt-6-luna请求max/priority；Pi/cursor/default底层未知时如实记录。
-owner编码整合；实际检索/生成/浏览器由指定测试者执行，不引入第三产品模型。
-v2不沿用事实编辑/分享/移动/24门户/三宿主；本地开发身份与正式宿主认证分别验收。
+产品仅DGX/deepseek主抽取＋cms-smk/glm-5.3-flash核对；实回DeepSeek-V4.1-Flash-1017，effort未设置。
+独立测试Pi/openai-codex/gpt-6-luna请求max/priority；Pi/cursor/default底层未知。现均终态，无新派发。
+v2不沿用事实编辑/分享/移动/24门户/三宿主；正式认证与本地开发身份分开。
 
-## 已有有效切片
-- CAD单写恢复03真实105m55s；1088结果/28来源/129缓存保全，索引31采用/9待核，10共轴/119上下文/99未匹配。
-- Part B第27周CADENZA 2.647/N19、1.125/N20及CARDINAL 2.76/N22；3条195点历时线，源统计语境保留。
-- Luna audit40=0与20轴绑定仅有限范围；attempt02缺terminal继续记执行失败，不拼历史PASS。
-- 工作台结果投影保留原值/单位/N/分析ID；33独立、35相邻、12 API/8前端检查不是整体验收。
-- expected_attempt防重复重建；提交前旧报告可读，提交后阅读器重载；不冒充动态源已重核。
-- MN原网页首次6m02s、attempt2 2m17s；123来源/86 C行；current仍rel_50af6bd904e7a9aa。
-- 原网页SHA 1a36d5442bad801ed1a3ac2f2bbffdb34bf75c211d64196376cceaf315ade18b，原件与旧快照不改。
-- 主题横比/综合设计、默认4主题/全12、86行、同查询ECharts与表、阈值强调及实际回焦已有有限验证。
+## 本次暂停与保全
+- 原MN网页research_e2335e6f00e01098dfdd，attempt7/C；北京时间05:49:40开始，06:22:06安全中断。
+- 精确归属Python子进程SIGINT，双方退出；API interrupted、writer/queue锁释放；未强杀/重启共享模型。
+- 旧current rel_50af6bd904e7a9aa可读；release SHA1a36d5442bad801ed1a3ac2f2bbffdb34bf75c211d64196376cceaf315ade18b未变。
+- 123来源集合相同；阶段reuse、没有新plan/search；34已存缓存、26核对记录保全。
+- attempt7新增13成功缓存（DS3/GLM10）；账本verified16/待核6/失败4含历史，不能称26通过。
+- 前后SQLite备份同339968字节/同SHA5a02696a1fd3189376ef7f1090579c622aeec9b1608a4b44d444e69b8aec02f6、quick_check ok。
+- 82产品/资产hash不变。stage残留running由API按已退出PID识别interrupted；不把defunct启动器算运行。
+- 未落库在途答复不保证保留、不算完成；恢复可能补该请求。私有checkpoint记录精确路径和进程。
 
-## 当前C修复与真实结果
-- 原网页attempts3–6终态失败，已存6来源任务缓存；最近429/concurrency，不是401，不干预其他调用者。
-- a613批：仅明确临时并发/容量/换模429扩展至16次/900秒，服从总timeout；普通429仍6/180，额度/401/503不重发。
-- reading01真实18m58s；reading02已完成4m36s，新rel_b75efb8057b481c7，123源/旧原件与快照不改。
-- reading03真实5m13s，rel_b38ea6cbce5be48a：123源/旧SHA保全，19独立原子/21出现，source待核1，reading待核0。
-- reading04真实9m53s，rel_0c34a126e5b763c0；20独立原子/22出现，源待核1/阅读0；全C94源主题/248阅读未核。
-- 05真实49.5s，rel_5b6e9eb2f19ffd20；22原子/24出现，source0reading0；仅2个新中文调用，无源重发。
-- 原B复检/来源定位已独立通过；中文ICF方向有歧义，“以下之一”少一分支，仍不接受全部阅读。
-- 抗体阈值的完整条件实际已在中文正文，审阅按空condition字段认定丢失属误报；不重复翻译。
-- 06真实3m49s，rel_f061d77ea3cdde56，源0待核/阅读1；两处ICF方向已补，完整备选已返回但行内1/2编号误拒。
-- 07正常重建8.06s，rel_e4b614b3ed979202/SHA8cd914bef06cdc870c64f7cbcfa0b9c40b148db4335fbda188f41a5344697dc0。
-- 四研究22原子/24展示增量独立源与中文通过；源0/阅读0待核，新cache/calls均0；原回答、旧快照与原网页保全。
-- 另有真实语义缺陷：活检豁免条件在based on前截断，漏MM审核及肾功能/肾病综合征等要求；该副本不接受为完整科学通过。
-- 新指引只在确含嵌套定义的原字段启用：完整分支定义放text、上位父句留condition；旧raw/schema不改。
-- 完整条件只呈现一次；中文reading按来源内容键，旧截断译文不复用；原任务schema/指令键不改。
-- 规则修复后只重检有真实B缓存/response_id/原条目/来源/双家族证明的待核项，不手写采纳、不清缓存。
-- 新既往时序守卫已实际拒绝错误“ICF后5年”且保留正确项；9个时序反例及94相关通过，当前590全测/10.92s与Ruff通过。
+## 本阶段已有真实切片
+- 四研究C07 rel_e4b614b3ed979202：22原子/24展示，四研究source0/reading0待核；正常重建8.06s/新调用0。
+- 完整免活检条件、ICF前5年、初诊从未IST或既往缓解后复发分支，独立源/中文增量通过。
+- 1440/1920目标页面、阈值深红粗体下划线、主题/同查询表/来源/Esc通过，仅四研究切片。
+- 副本全C93源主题/248reading未核；其余82研究未全面中文接受；不冒充原网页全量计数。
+- B论文-2.1/CI[-2.9,-1.4]/P<0.0001、默认图绑定、主动换图/表/回焦及两宽刻度通过。
+- 当前CRSwNP rel_b8a0ab93adcd97cf：真实宿主A→B→C→B、单导航/截止、P/NCT/INN词界通过。
+- B截图是滚动横比场景，非默认首屏/全页验收；1440表内横滚、1920行61px，不压字号。
+- CAD第127周3.371/N7真hover两宽tooltip560×94/16px通过；仅局部，不重跑未变案例。
+- CDE三查询59/33/16；奥马珠8详情补1证书版本/复用7，16当前/17版本/采用16。生产地址不是MAH地址。
+- 无模型重建恢复26事件/15论文，新NMPA版本保留、旧1待核不升级；未按数量宣布完整性。
+- 真Studio专用度普利尤项目154候选全集/默认5/详情重开通过；MG-K10未知途径保留；无医学AI验收。
 
-## 桌面与中国来源
-- CAD历史1440错位复现为resize未settle时观察；settle后root/getWidth/canvas一致，1920→1440→1920真实指针有效。
-- CAD新presentation rel_c1b173ef44c7a844两宽同第127周3.371/N7真hover，560px tooltip16px完整换行且在图内。
-- CRSwNP今日CDE三词真实刷新：59/33/16列表完整，与旧CTR集合相同；MG-K10结果无鼻息肉行，仅限本次查询。
-- 奥马珠后续一次真实补采国内4/进口4均ok，新增1证书版本、7内容复用，全部旧capture/旧release字节保留。
-- 奥马珠此前详情45秒/弹窗30秒超时；本次前三详情正常，命名窗口复用/错页未证实，不改现有弹窗或选择器。
-- 新CRSwNP rel_f07153f619a60b45：NMPA16当前/17版本/采用16/coverage ok，S20240043新生产地址已入CAS。
-- 后续真实无模型重建11秒为rel_b99d2f262fefe4f3，26旧verified事件/15论文逐字段全部恢复，新NMPA版本保留。
-
-## 下一条有界任务
-|领域|下一步|
+## 未完成与下一批（恢复后）
+|领域|精确待办|
 |---|---|
-|M7 C|四研究源/中文已接受；实际C页面核验并续原网页同job全量；全C93源主题/248阅读仍未核|
-|M7 B/泛化|tooltip有限实屏已验，B全源未验；随后EGPA A等新适应症/提示/报告，GPP/EoE未完|
-|M3/A来源|26事件/15论文＋新NMPA复用切片已验，cache284/verif81/raw441不变；MG-K10/其他范围未完|
-|M2工作台|真实Studio用已核度普利尤单抗建验收项目，154候选全集/默认5/详情重开通过；MG-K10未知途径保持|
-|M4/M5资料|未核指标/归组、JDA分项与量表、其他CAD论文/总体结果及关键II/III期论文|
+|M4事件|固定20抽查报告13PASS7FAIL；owner确认前4引文/首例证据问题，后3合法适应症子范围争议不盲采；0错门未过|
+|M4修复|选中quote覆盖及首例完成守卫；detail锚点待评估，保护旧schema缓存采用；草稿9RED不删除|
+|M5论文|15条相对3篇EuropePMC摘要数值过；6条CROWNS2 NCS在observations却漏B问题；2亚组方向定位待修|
+|M5根因|优先YAML完整别名，不盲改fullmatch→search；不改正确值/猜臂/借随机化N|
+|M7全量C|用户恢复后同job正常继续一次，预期attempt8；原123源/34缓存复用，不拷副本B/DB/stage|
+|桌面|单研究大卡/重复句/登记开始日期标签待核；删除静态教学文案，不能删真实入排事实|
+|正式交付|正式身份、来源及关键论文覆盖、PNH/其他泛化、原指定双测试者全任务LOOP仍未完|
 
-工作台C长英文仍未视觉通过；新B presentation rel_d49abacb6f068671两宽无误默选/刻度重叠，主动切图表与回焦通过。
-新CRSwNP presentation rel_b8a0ab93adcd97cf实际宿主A→B→C→B同步；单套导航/截止保留/全宽导航正常。
-P值/NCT/INN完整词，1440表内可横滚、1920整行61px；owner已看实际图像，非默认首屏或全页验收。
-1440补验已同连接前后实测且PNG1440×900；旧1728图不冒充1440，正式宿主身份未验。
-长任务只等终态、不轮询/重派/强杀；Ego专用空间失效直接替代，不finish/交还。
-[Studio 1440截图](screenshots/ciw-v2-crswnp-studio-1440-20261030.png) · [B 1920横比场景](screenshots/ciw-v2-crswnp-b-1920-20261030.png)。
-源科学、视觉、运行完整性及工作台分别接受；仍未整体交付。
+恢复只从本文及详细handoff入手；不要重跑未变CAD/NMPA/缓存恢复，不复活旧v1门或重复检索。
+私有唯一checkpoint已转PAUSED；恢复包和原件不随Git提供。API/Vite测试服务保留，无活跃生成。
+[Studio1440](screenshots/ciw-v2-crswnp-studio-1440-20261030.png) · [B1920横比](screenshots/ciw-v2-crswnp-b-1920-20261030.png)。
