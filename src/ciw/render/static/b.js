@@ -157,13 +157,15 @@
     if (ratios.length) drawForest("ratio-chart", ratios, 1, true);
 
     const rows = frame.rows;
+    const questionConcepts = new Set(current.member_concept_ids || [current.concept_id]);
+    const pairedTrend = B.longitudinal.some(c => questionConcepts.has(c.concept_id));
     document.getElementById("arm-values").hidden = !rows.length;
     document.getElementById("arm-details").hidden = !rows.length;
     chart("value-chart", {
-      grid: { left: 300, right: 60, top: 20, bottom: 40 },
+      grid: { left: pairedTrend ? 200 : 300, right: 60, top: 20, bottom: 40 },
       tooltip: { formatter: (p) => { const r = rows[p.dataIndex]; return `<b>${esc(rowLabel(r))}</b><br>${num(r.value)} ${esc(r.unit)}${r.n != null ? `<br>N=${r.n}` : ""}${r.spread != null ? `<br>${esc(r.dispersion_type)} ${num(r.spread)}` : ""}${r.lower != null ? `<br>${esc(r.dispersion_type)} ${num(r.lower)}, ${num(r.upper)}` : ""}`; } },
       xAxis: { type: "value", scale: false },
-      yAxis: { type: "category", data: rows.map(rowLabel), inverse: true, axisLabel: { width: 280, overflow: "break", formatter: (v, i) => compactRowLabel(rows[i]), color: (v, i) => (rows[i] && rows[i].is_own ? OWN : "#0F1115") } },
+      yAxis: { type: "category", data: rows.map(rowLabel), inverse: true, axisLabel: { width: pairedTrend ? 180 : 280, lineHeight:20, overflow: "break", formatter: (v, i) => pairedTrend ? compactRowLabel(rows[i]).replace(" · ", "\n") : compactRowLabel(rows[i]), color: (v, i) => (rows[i] && rows[i].is_own ? OWN : "#0F1115") } },
       series: [{ type: "bar", barWidth: 12, data: rows.map((r) => ({ value: r.value, itemStyle: { color: r.is_own ? OWN : r.role === "placebo" ? "#6E7B8C" : "#008F8A" } })),
         label: { show: true, position: "right", formatter: (p) => num(p.value) } }],
     });
@@ -202,7 +204,8 @@
     const ids = new Set(current.member_concept_ids || [current.concept_id]);
     L = B.longitudinal.filter(c => ids.has(c.concept_id));
     document.getElementById("longitudinal-card").hidden = !L.length;
-    ls.innerHTML = L.map((c, i) => `<option value="${i}">${esc(current.is_family ? current.label : c.label)} · ${esc(c.measure_label)} · ${esc(c.unit)}（${c.lines.length} 条曲线）</option>`).join("");
+    document.getElementById("long-point-details").hidden = !L.length;
+    ls.innerHTML = L.map((c, i) => `<option value="${i}">${esc(current.is_family && !c.axis_id ? current.label : c.label)} · ${esc(c.measure_label)} · ${esc(c.unit)}（${c.lines.length} 条曲线）</option>`).join("");
     ls.value = String(Math.max(0,L.findIndex(c=>c.chart_id === selectedLong.get(current.question_id))));
     drawLong();
   }
@@ -212,11 +215,11 @@
     selectedLong.set(current.question_id,c.chart_id);
     chart("long-chart", {
       tooltip: { trigger: "item", formatter: (p) => { const pt = p.data.pt; return `<b>${esc(p.seriesName)}</b><br>${esc(pt.label)}：${num(pt.value)} ${esc(pointUnit(pt, c))}${pt.n != null ? `（N=${pt.n}）` : ""}`; } },
-      legend: { type: "scroll", top: 0, formatter: name => {
+      legend: { type: c.lines.length <= 4 ? "plain" : "scroll", top: 0, left:0, right:0, formatter: name => {
         const line = c.lines.find(line => rowLabel(line) === name);
-        return line ? compactRowLabel(line) : name;
+        return line ? compactRowLabel(line).replace(" · ", "\n") : name;
       } },
-      grid: { left: 60, right: 30, top: 50, bottom: 50 },
+      grid: { left: 60, right: 30, top: 70, bottom: 50 },
       xAxis: { type: "value", name: "周", nameLocation: "end", min: 0 },
       yAxis: { type: "value", scale: true },
       series: c.lines.map((l, i) => ({ name: rowLabel(l), type: "line", connectNulls: false,

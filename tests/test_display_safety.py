@@ -326,7 +326,7 @@ const q={question_id:'family',is_family:true,label:'临床缓解',time_key:'',ti
  measure_label:'比例',trial_ids:['T1','T16'],frames};
 q.member_concept_ids=['clinical-1'];
 const longitudinal=[{concept_id:'other',label:'Unrelated CGI',measure_label:'人数',lines:[]},
- {concept_id:'clinical-1',label:'Current clinical score',measure_label:'均值',unit:'Points',
+ {concept_id:'clinical-1',axis_id:'axis-1',label:'Part B 临床评分',measure_label:'均值',unit:'Points',
  lines:[{product_label:'Drug16',group_title:'Group16',phase:'III',acronym:'T16',points:[
  {result_id:'r1',weeks:1,value:1,label:'第1周'},{result_id:'r16',weeks:16,value:16,label:'第16周'}]}]}];
 const plots={},tables={},opts={},cols={},window={U:{D:{b:{questions:[q],longitudinal,safety:[],observations:obs}},
@@ -359,10 +359,10 @@ process.stdout.write(JSON.stringify({first,second,live,firstCell,longOptions:els
     assert not result["hidden"] and not result["mismatch"]
     assert result["live"] == [1]
     assert "Unrelated CGI" not in result["longOptions"]
-    assert "临床缓解" in result["longOptions"] and "Points" in result["longOptions"]
+    assert "Part B 临床评分" in result["longOptions"] and "Points" in result["longOptions"]
     assert result["longRows"] == [1, 16] and not result["longHidden"]
     assert result["longUnits"] == ["Percent", "Proportion"]
-    assert result["longLegend"] == "T16 · Group16" and result["shortAxis"] == "T1 · Drug1"
+    assert result["longLegend"] == "T16\nGroup16" and result["shortAxis"] == "T1\nDrug1"
     assert "Percent" in result["longTip"]
     assert result["longSeries"][0].index("Drug16") < result["longSeries"][0].index("III")
     assert result["longSeries"][0].index("III") < result["longSeries"][0].index("T16")

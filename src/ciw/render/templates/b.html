@@ -18,11 +18,15 @@
       <details id="family-overview" hidden><summary id="family-count">全研究对照表</summary>
         <div class="table-wrap"><table id="family-table" class="grid"></table></div>
       </details>
-      <div class="row">
+      <div class="outcome-plots"><div class="row">
         <div class="grow" id="comparison-plots"><div id="diff-wrap"><h3>与对照组的差值（试验组−对照组）</h3><div id="diff-chart" class="chart"></div></div>
           <div id="ratio-wrap" hidden><h3>比值（HR / OR 等，对数轴，参考线为 1）</h3><div id="ratio-chart" class="chart"></div></div></div>
         <div class="grow" id="arm-values"><h3>各组数值</h3><div id="value-chart" class="chart"></div></div>
       </div>
+      <div id="longitudinal-card">
+        <div class="card-h"><h3>历时变化</h3><select id="long-select" aria-label="历时分析口径"></select></div>
+        <div id="long-chart" class="chart tall"></div>
+      </div></div>
       <div id="comparison-details"><h3>组间比较</h3>
         <div class="table-wrap"><table id="comp-table" class="grid"></table></div></div>
       <div id="source-statistics" hidden>
@@ -32,11 +36,7 @@
       </div>
       <div id="arm-details"><h3>各组数值明细</h3>
         <div class="table-wrap"><table id="row-table" class="grid"></table></div></div>
-    </section>
-    <section class="card" id="longitudinal-card">
-      <div class="card-h"><h2>历时变化</h2><select id="long-select"></select></div>
-      <div id="long-chart" class="chart tall"></div>
-      <details><summary>历时数值明细</summary><div class="table-wrap"><table id="long-table" class="grid"></table></div></details>
+      <details id="long-point-details"><summary>历时数值明细</summary><div class="table-wrap"><table id="long-table" class="grid"></table></div></details>
     </section>
     <section class="card">
       <div class="card-h"><h2>安全概况</h2><span class="hint">治疗期各组；比例仅由人数/风险人数计算</span></div>
