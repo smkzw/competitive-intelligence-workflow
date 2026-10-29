@@ -150,6 +150,37 @@ def test_prompt_field_labels_are_not_quotes_and_repair_names_the_exact_problem(c
     assert not okay and "FIELD" in reason and "quote" in reason
 
 
+@pytest.mark.parametrize("mode", ["valid", "duplicate", "peer", "exclusion", "paraphrased"])
+def test_unique_list_parent_has_its_own_source_locator_without_rewriting_child_quote(cfg, ws, mode):
+    cfg, t, _ = example(cfg)
+    parent = "* Meets one of the following:"
+    child = "Relapsed disease, eGFR ≥40 mL/min."
+    prefix = "Key Inclusion Criteria:\n" + parent + "\n  1. Newly diagnosed disease.\n"
+    if mode == "peer":
+        prefix += "* Separate criterion:\n"
+    if mode == "exclusion":
+        prefix += "Key Exclusion Criteria:\n"
+    t.design = Design(eligibility_text=prefix + "  2. " + child + ("\n  3. " + child if mode=="duplicate" else ""))
+    condition = parent if mode != "paraphrased" else "Either new or relapsed disease"
+    role = "exclusion" if mode == "exclusion" else "inclusion"
+    item = dict(topic_id="design-topic-0", quote=child, clauses=[dict(field="eligibility", text=child,
+                quote=child, condition=condition, cohort_quote="", criterion_role=role)])
+    c = build_design(cfg, [t], {})
+    # Peer/exclusion cases need the same source guard even though their baseline short clause is not pending.
+    from ciw.normalize.design import design_passages
+    from ciw.verify.design_clauses import DesignTopicReview, _check
+    valid = _check(DesignTopicReview.model_validate(item).model_dump(),
+                   {x["topic_id"]:x for x in c["topic_catalog"]}, design_passages(t))[0]
+    assert valid == (mode == "valid")
+    if mode == "valid":
+        assert not enrich_design_clauses(ws, cfg, [t], c, models([item]))
+        snippet = c["rows"][0]["design_excerpts"][0]["snippets"][0]
+        locator = snippet["condition_source"]
+        assert t.design.eligibility_text[locator["start"]:locator["end"]] == parent
+        assert snippet["text"] == child and "Newly diagnosed" in snippet["context"]
+        assert snippet["source_quote"] == child  # The verifier's original child quote stays intact.
+
+
 def test_exact_recommendation_is_not_proof_of_actual_regimen(cfg, ws):
     cfg, t, items = example(cfg)
     items[1]["clauses"] = [dict(field="detailed_description", text=t.design.detailed_description,

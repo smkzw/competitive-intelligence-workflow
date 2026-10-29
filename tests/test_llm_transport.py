@@ -89,8 +89,8 @@ def test_only_rejected_429_waits_within_budget_and_reuses_the_exact_request(monk
     b = OpenAICompatBackend("deepseek", "deepseek", "https://example.com/v1", None, timeout=600)
     if expected == 2:
         assert b.chat("s", "source") == '{"items":[]}'
-        assert pauses == [2] and calls[0] is calls[1]
-        assert b.receipt["admission_retries"] == [dict(http_status=429, wait_seconds=2)]
+        assert pauses == [5] and calls[0] is calls[1]
+        assert b.receipt["admission_retries"] == [dict(http_status=429, wait_seconds=5)]
     else:
         with pytest.raises(HTTPError):
             b.chat("s", "source")
@@ -111,9 +111,25 @@ def test_repeated_429_has_finite_retries_without_success_or_cache(monkeypatch, w
     backend = CachedBackend(OpenAICompatBackend("deepseek", "deepseek", "https://example.com/v1", None), ws)
     with pytest.raises(HTTPError):
         backend.chat("s", "source")
-    assert len(calls) == 4 and pauses == [5, 10, 20]
+    assert len(calls) == 6 and pauses == [5, 10, 20, 40, 60]
     with ws.db() as con:
         assert con.execute("SELECT count(*) FROM llm_cache").fetchone()[0] == 0
+
+
+def test_one_second_retry_hint_cannot_create_a_busy_retry_loop(monkeypatch):
+    from io import BytesIO
+    from urllib.error import HTTPError
+    calls, pauses = [], []
+    class Opener:
+        def open(self, req, **kwargs):
+            calls.append(req)
+            raise HTTPError(req.full_url,429,"synthetic rejection",{"Retry-After":"1"},BytesIO(b'{}'))
+    monkeypatch.setattr("urllib.request.build_opener",lambda *_:Opener())
+    monkeypatch.setattr("ciw.verify.transport.sleep",pauses.append)
+    b=OpenAICompatBackend("deepseek","deepseek","https://example.com/v1",None)
+    with pytest.raises(HTTPError):
+        b.chat("s","source")
+    assert pauses == [5,10,20,40,60] and len(calls) == 6
 
 
 def test_content_cache_keeps_original_receipt_without_another_model_call(ws):

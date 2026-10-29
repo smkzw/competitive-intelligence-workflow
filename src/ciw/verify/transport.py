@@ -83,28 +83,29 @@ def model_opener(base_url: str, no_proxy: bool, transport: dict):
 
 
 def _retry_delay(header, attempt):
+    floor = min(60, 5 * 2**attempt)
     try:
         value = float(header)
         if math.isfinite(value):
-            return max(1, value)
+            return max(floor, value)
     except (ValueError, TypeError):
         pass
     try:
-        return max(1, parsedate_to_datetime(header).timestamp() - time())
+        return max(floor, parsedate_to_datetime(header).timestamp() - time())
     except (ValueError, TypeError, AttributeError, OverflowError):
-        return 5 * 2**attempt
+        return floor
 
 
 def model_json(opener, request, timeout, transport):
     """Retry only completed 429 rejections, never an in-flight/ambiguous model request."""
     started = monotonic()
-    for attempt in range(4):
+    for attempt in range(6):
         try:
             with opener.open(request, timeout=max(.1, timeout - (monotonic() - started))) as response:
                 return json.load(response)
         except HTTPError as exc:
             wait = _retry_delay((exc.headers or {}).get("Retry-After"), attempt)
-            if exc.code != 429 or attempt == 3 or monotonic() - started + wait > min(timeout, 180):
+            if exc.code != 429 or attempt == 5 or monotonic() - started + wait > min(timeout, 180):
                 raise
             transport.setdefault("admission_retries", []).append(dict(http_status=429, wait_seconds=wait))
             exc.close()

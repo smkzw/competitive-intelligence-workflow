@@ -58,6 +58,23 @@ def _pending(cfg, row):
     return selected
 
 
+def _source_context(clause, source):
+    if not clause["condition"] or clause["condition"] in clause["quote"]:
+        return dict(context=clause["quote"])
+    # A list header and its unique child have separate literal anchors. Do not concatenate quotes,
+    # infer a relationship across a peer/section, or discard intervening alternative branches.
+    parents = logical_contexts(source, clause["text"])
+    if (len(parents) != 1 or source.count(clause["text"]) != 1
+            or parents[0]["condition"] != clause["condition"]
+            or clause["quote"] not in parents[0]["context"]
+            or source.count(parents[0]["context"]) != 1):
+        return None
+    context = parents[0]["context"]
+    start = source.index(context)
+    return dict(context=context, condition_source=dict(field=clause["field"], start=start,
+        end=start+len(clause["condition"]), quote=clause["condition"], binding="introduced-list"))
+
+
 def _check(item, topics, passages):
     topic = topics.get(item["topic_id"])
     if not topic or not any(item["quote"] in text for _, text, _ in passages):
@@ -70,7 +87,8 @@ def _check(item, topics, passages):
         if (not topic_field_matches(topic["kind"], clause["field"]) or clause["quote"] not in source
                 or clause["text"] not in clause["quote"]):
             return False, "条款必须逐字来自该主题所需的原始字段"
-        if any(clause[key] and clause[key] not in clause["quote"] for key in ("condition", "cohort_quote")):
+        if (clause["cohort_quote"] and clause["cohort_quote"] not in clause["quote"]
+                or _source_context(clause, source) is None):
             return False, "条件或队列原文不在该条引文内"
         if clause["field"] in _NARRATIVE and topic["kind"] in {
                 "dosing_regimen", "background_therapy", "treatment_duration", "follow_up"}:
@@ -150,13 +168,17 @@ def _review(ws, task, passages, selected, saved, roles):
 def _project(item, trial, passages):
     sections = {field: section for section, _, field in passages}
     fields = {field: text for _, text, field in passages}
-    return [dict(text=c["text"], marks=threshold_spans(c["text"]), source_id=trial.locator.source_id,
-        field=c["field"], section=sections[c["field"]], criterion_role=c["criterion_role"],
-        condition=c["condition"], condition_marks=threshold_spans(c["condition"]),
-        cohort_quote=c["cohort_quote"], context=c["quote"], context_marks=threshold_spans(c["quote"]),
-        **(dict(timeframe=fields.get(c["field"]+":timeframe", ""), timeframe_field=c["field"]+":timeframe")
-           if re.fullmatch(r"outcome:\d+", c["field"]) else {}))
-        for c in item["clauses"]]
+    snippets = []
+    for c in item["clauses"]:
+        context = _source_context(c, fields[c["field"]])
+        snippets.append(dict(text=c["text"], marks=threshold_spans(c["text"]),
+            source_id=trial.locator.source_id, source_quote=c["quote"],
+            field=c["field"], section=sections[c["field"]], criterion_role=c["criterion_role"],
+            condition=c["condition"], condition_marks=threshold_spans(c["condition"]),
+            cohort_quote=c["cohort_quote"], **context, context_marks=threshold_spans(context["context"]),
+            **(dict(timeframe=fields.get(c["field"]+":timeframe", ""), timeframe_field=c["field"]+":timeframe")
+               if re.fullmatch(r"outcome:\d+", c["field"]) else {})))
+    return snippets
 
 
 def enrich_design_clauses(ws, cfg, trials, c, roles=None, log=lambda *_: None):
