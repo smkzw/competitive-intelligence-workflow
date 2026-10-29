@@ -1,4 +1,20 @@
-# 当前工作台实屏
+# 真实浏览器截图索引
+
+## 2026-10-29 CAD B：时点与历时图并排
+
+当前截图候选 `rel_1391e1bfe5885e87`，产品代码 `da82b3b`；release SHA-256 `089cfb6ad8fd428f07d09b3e04a733dbe2d9b79624725fd5c11f27f2112f45de`。
+独立测试者使用 Ego，1440×900 / 1920×940 CSS px、DPR=1，字体与图形动画完成后截图；维护者已目视这两图。两图并排均在首屏，字号16px，完整表格在下方；无历时数据时主图恢复全宽。
+CADENZA 第27周2.647/N19、1.125/N20及CARDINAL2.76/N22在同一已核对数值框；三条历时线195点，保留原单位和研究人群。此为限定视图接受；曲线点原生tooltip尚未观察到，未计通过。工作台读模型当前修复不等于该候选已在工作台全流程验收。
+
+| 图片 | SHA-256 |
+|---|---|
+| [cad-paired-target-1440.png](cad-paired-target-1440.png) | `be5a3fa04261b3db5a9073fedb22197171b4d793674612766b9de482fad158ad` |
+| [cad-paired-target-1920.png](cad-paired-target-1920.png) | `c2098f80a3b0d9d9c29e71bbd714a2d94022b011b58656e21127182ca3c2d89c` |
+| [cad-paired-no-trend-1440.png](cad-paired-no-trend-1440.png) | `e348a57fd9e8ba0a7d805293f6f1ef18e06eb9572ccca6d168ab0ed920d834a0` |
+
+以下为旧候选的历史证据，不能与当前版本拼接为产品通过。
+
+# 2026-10-27 工作台历史实屏
 
 2026-10-27，release `rel_af6c6423f665673b`；源码集合 `6f49b2b252bdd8bb8431586500728e96d61009972ff76206eac6e5022743696f`。
 
