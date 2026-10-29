@@ -238,3 +238,93 @@ def test_structured_background_and_titled_endpoint_definition_keep_timeframe(cfg
     assert snippets["design-topic-1"][0]["text"] == "Proteinuria <0.3 g/day"
     assert snippets["design-topic-1"][0]["timeframe"] == "Week 24"
     assert snippets["design-topic-1"][0]["timeframe_field"] == "outcome:0:timeframe"
+
+
+@pytest.mark.parametrize('complete',[False,True])
+def test_dependent_applicability_cannot_stop_before_the_review_and_other_required_conditions(cfg,complete):
+    from ciw.normalize.design import design_passages
+    from ciw.verify.design_clauses import DesignTopicReview, _check
+    cfg,t,_=example(cfg)
+    full=("Patients may enter without Procedure A based on clinician review confirming normal organ function, "
+          "eGFR ≥40 mL/min, and a negative secondary-cause work-up.")
+    t.design=Design(eligibility_text='Inclusion criteria:\n'+full)
+    item=DesignTopicReview(topic_id='design-topic-0',quote=full,clauses=[dict(field='eligibility',
+         text='eGFR ≥40 mL/min',quote=full,condition=full if complete else 'Patients may enter without Procedure A',
+         criterion_role='inclusion')]).model_dump()
+    okay,_=_check(item,{'design-topic-0':dict(kind='eligibility_threshold')},design_passages(t))
+    assert okay==complete
+
+
+def test_a_different_peer_criterion_does_not_inherit_an_unrelated_dependency():
+    from ciw.normalize.design import dependency_contexts
+    first='Patients may enter based on clinician review and eGFR ≥40 mL/min.'
+    second='Other participants require eGFR ≥40 mL/min.'
+    assert dependency_contexts(first+'\n\n'+second,'eGFR ≥40 mL/min',second)==[]
+
+
+def test_cached_incomplete_applicability_is_withheld_after_guard_repair(cfg,ws,monkeypatch):
+    import ciw.verify.design_clauses as clauses
+    cfg,t,_=example(cfg)
+    full=('Patients may enter without Procedure A based on clinician review confirming normal organ function, '
+          'eGFR ≥40 mL/min, a negative secondary-cause work-up, a documented screening assessment, '
+          'and the original laboratory reports being available for review before the planned procedure.')
+    t.design=Design(eligibility_text='Inclusion criteria:\n'+full)
+    item=dict(topic_id='design-topic-0',quote=full,clauses=[dict(field='eligibility',text='eGFR ≥40 mL/min',
+        quote=full,condition='Patients may enter without Procedure A',criterion_role='inclusion')])
+    original=clauses.dependency_contexts
+    monkeypatch.setattr(clauses,'dependency_contexts',lambda *_:[])
+    c=build_design(cfg,[t],{})
+    assert not enrich_design_clauses(ws,cfg,[t],c,models([item]))
+    saved=ws.read_stage('research-design-clauses')
+    monkeypatch.setattr(clauses,'dependency_contexts',original)
+    current=build_design(cfg,[t],{})
+    assert enrich_design_clauses(ws,cfg,[t],current,None)
+    assert not current['rows'][0]['design_excerpts']
+    assert ws.read_stage('research-design-clauses')==saved
+    assert current['rows'][0]['eligibility']==t.design.eligibility_text
+
+
+@pytest.mark.parametrize('mode', ['branch_title','peer_condition','peer_cohort','bullet_cut',
+                                  'multi_sentence_cut','chinese_cut'])
+def test_source_scope_binds_condition_to_its_own_predicate_instead_of_another_peer(cfg,mode):
+    from ciw.normalize.design import design_passages
+    from ciw.verify.design_clauses import DesignTopicReview, _check
+    cfg,t,_=example(cfg)
+    first='Cohort A requires eGFR ≥40 mL/min based on clinician review of normal function.'
+    second='Cohort B requires eGFR ≥40 mL/min based on a different documented assessment.'
+    source=first+'\n\n'+second
+    text,quote,condition,cohort=first,source,second,''
+    if mode=='peer_cohort':
+        condition,cohort='','Cohort B'
+    elif mode=='branch_title':
+        source='Procedure exception: '+first
+        text,quote,condition='eGFR ≥40 mL/min',first,first
+    elif mode=='bullet_cut':
+        source='* '+first
+        text,quote,condition='* Cohort A requires eGFR ≥40 mL/min',source,''
+    elif mode=='multi_sentence_cut':
+        source='Participants have the specified diagnosis. '+first
+        text,quote,condition='Participants have the specified diagnosis. Cohort A requires eGFR ≥40 mL/min',source,''
+    elif mode=='chinese_cut':
+        source='受试者基于医师审核确认肾功能正常、eGFR ≥40 mL/min且其他检查阴性方可入组。'
+        text,quote,condition='eGFR ≥40 mL/min',source,''
+    t.design=Design(eligibility_text='Inclusion criteria:\r\n'+source)
+    item=DesignTopicReview(topic_id='design-topic-0',quote=quote,clauses=[dict(field='eligibility',text=text,
+        quote=quote,condition=condition,cohort_quote=cohort,criterion_role='inclusion')]).model_dump()
+    okay,_=_check(item,{'design-topic-0':dict(kind='eligibility_threshold')},design_passages(t))
+    assert okay==(mode=='branch_title')
+    if okay:
+        from ciw.verify.design_clauses import _source_context
+        scope = _source_context(item['clauses'][0], t.design.eligibility_text)['context']
+        assert scope.startswith('Procedure exception:')
+
+
+def test_next_numbered_criterion_is_not_appended_to_the_dependency_predicate(cfg):
+    from ciw.normalize.design import design_passages
+    from ciw.verify.design_clauses import DesignTopicReview, _check
+    cfg,t,_=example(cfg)
+    full='Patients with eGFR <30 mL/min based on the recorded formula at screening'
+    t.design=Design(eligibility_text='Exclusion criteria:\n2. '+full+'\n3. A separate criterion.')
+    item=DesignTopicReview(topic_id='design-topic-0',quote=full,clauses=[dict(field='eligibility',
+        text=full,quote=full,criterion_role='exclusion')]).model_dump()
+    assert _check(item,{'design-topic-0':dict(kind='eligibility_threshold')},design_passages(t))[0]

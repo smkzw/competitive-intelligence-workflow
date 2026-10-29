@@ -10,8 +10,10 @@ from pydantic import BaseModel, Field
 
 from ciw.normalize.design import (
     _criterion_role,
+    dependency_contexts,
     design_passages,
     logical_contexts,
+    source_sentences,
     threshold_spans,
     topic_catalog,
     topic_field_matches,
@@ -59,13 +61,28 @@ def _pending(cfg, row):
 
 
 def _source_context(clause, source):
-    if not clause["condition"] or clause["condition"] in clause["quote"]:
+    condition = clause["condition"]
+    scopes = source_sentences(source, clause["text"], clause["quote"])
+    parents = logical_contexts(source, clause["text"])
+    cohort = clause["cohort_quote"]
+    if cohort and not (cohort in clause["text"]
+            or any(clause["text"] in s and cohort in s for s in scopes)
+            or any(cohort in p["condition"] for p in parents)):
+        return None
+    if not condition:
         return dict(context=clause["quote"])
+    if condition in clause["quote"]:
+        if related := [s for s in scopes if clause["text"] in s and condition in s]:
+            return dict(context=related[0])
+        if condition == clause["text"]:
+            return dict(context=clause["text"])
+        if same_parent := [p for p in parents if p["condition"] == condition]:
+            return dict(context=same_parent[0]["context"])
+        return None  # Whole-field quote containment cannot bind a different peer's condition.
     # A list header and its unique child have separate literal anchors. Do not concatenate quotes,
     # infer a relationship across a peer/section, or discard intervening alternative branches.
-    parents = logical_contexts(source, clause["text"])
     if (len(parents) != 1 or source.count(clause["text"]) != 1
-            or parents[0]["condition"] != clause["condition"]
+            or parents[0]["condition"] != condition
             or clause["quote"] not in parents[0]["context"]
             or source.count(parents[0]["context"]) != 1):
         return None
@@ -87,6 +104,10 @@ def _check(item, topics, passages):
         if (not topic_field_matches(topic["kind"], clause["field"]) or clause["quote"] not in source
                 or clause["text"] not in clause["quote"]):
             return False, "条款必须逐字来自该主题所需的原始字段"
+        if clause["field"] == "eligibility":
+            for dependency in dependency_contexts(source, clause["text"], clause["quote"]):
+                if dependency not in clause["text"] and dependency not in clause["condition"]:
+                    return False, "适用条件遗漏同句依赖，text或condition及quote须保留完整连续原文：" + dependency
         if (clause["cohort_quote"] and clause["cohort_quote"] not in clause["quote"]
                 or _source_context(clause, source) is None):
             return False, "条件或队列原文不在该条引文内"

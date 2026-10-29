@@ -171,7 +171,10 @@
     }
     if(option.legend) option.legend.textStyle = label;
     option.textStyle = {fontSize:16,color:"#404040",...option.textStyle};
-    option.tooltip = {confine:true,textStyle:label,...option.tooltip};
+    const available = el.clientWidth || window.innerWidth || 560;
+    const tooltipWidth = Math.max(80,Math.min(560,available-24,(window.innerWidth || available)-32));
+    option.tooltip = {confine:true,textStyle:label,...option.tooltip,
+      extraCssText:`max-width:${tooltipWidth}px;white-space:normal;overflow-wrap:anywhere;`};
     option.color = PAL;
     const axis = option.yAxis;
     const visibleRows = window.innerHeight < 640 ? 4 : window.innerHeight < 820 ? 6 : 10;

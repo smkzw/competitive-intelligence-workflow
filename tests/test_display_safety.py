@@ -3,6 +3,32 @@ import subprocess
 from pathlib import Path
 
 
+def test_long_tooltip_text_wraps_inside_actual_chart_width_across_resize():
+    asset = Path(__file__).resolve().parents[1] / "src/ciw/render/static/common.js"
+    script = r"""
+const fs=require('fs'),vm=require('vm'),captured=[];
+const el={clientWidth:862,style:{},getClientRects:()=>[{}]},window={CIW:{},innerWidth:1920,addEventListener(){}};
+const document={getElementById:id=>id==='plot'?el:null,addEventListener(){}};
+const instance={resize(){},setOption:o=>captured.push({css:o.tooltip.extraCssText,
+ size:o.tooltip.textStyle.fontSize,confine:o.tooltip.confine,text:o.tooltip.formatter({name:'full identity'})})};
+const echarts={init:()=>instance,getInstanceByDom:()=>instance};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{window,document,URL,echarts});
+const opt={tooltip:{formatter:p=>p.name+' · original value 3.371 (N=7)'}};
+window.U.chart('plot',opt);
+el.clientWidth=250;window.innerWidth=1440;window.U.chart('plot',opt);
+window.U.chart('plot',opt);el.clientWidth=633;window.U.chart('plot',opt);
+process.stdout.write(JSON.stringify(captured));
+"""
+    out = json.loads(subprocess.run(["node", "-e", script, str(asset)], check=True,
+                                   capture_output=True, text=True).stdout)
+    assert [x["css"].split(";")[0] for x in out] == ["max-width:560px", "max-width:226px",
+                                                    "max-width:226px", "max-width:560px"]
+    assert all(x["size"] == 16 and x["confine"] for x in out)
+    assert all("white-space:normal" in x["css"] and "overflow-wrap:anywhere" in x["css"] for x in out)
+    assert out[1]["css"] == out[2]["css"]  # Reuse replaces the width rule; it cannot accumulate styles.
+    assert all(x["text"] == "full identity · original value 3.371 (N=7)" for x in out)
+
+
 def test_explicit_embedded_reader_deduplicates_navigation_but_preserves_cutoff():
     asset = Path(__file__).resolve().parents[1] / "src/ciw/render/static/common.js"
     script = r"""

@@ -97,3 +97,42 @@ def logical_contexts(text, excerpt):
                     context=text[parents[0]["start"]:end if end >= 0 else len(text)]))
         offset += len(line)
     return contexts
+
+
+def source_sentences(text, excerpt, anchor=""):
+    """Literal sentences overlapping the selected source span, constrained by its unique quote."""
+    separated = "".join(
+        "\n\n" + line[heading.end():] if (heading := _SECTION.match(line) or _BULLET.match(line)) else line
+        for line in text.splitlines(keepends=True))
+    sentences = re.split(r"\n\s*\n|(?<=[.!?])\s+(?=[A-Z])|(?<=[。！？])\s*", separated)
+    start = text.index(anchor) if anchor and text.count(anchor) == 1 else None
+    selections = [m for m in re.finditer(re.escape(excerpt), text)
+                  if start is None or start <= m.start() and m.end() <= start+len(anchor)]
+    contexts = []
+    for sentence in sentences:
+        sentence = _BULLET.sub("", sentence.strip(), count=1)
+        if not sentence:
+            continue
+        if not any(occurrence.start() < selected.end() and selected.start() < occurrence.end()
+                for occurrence in re.finditer(re.escape(sentence), text)
+                for selected in selections):
+            continue
+        contexts.append(sentence)
+    return list(dict.fromkeys(contexts))
+
+
+def dependency_contexts(text, excerpt, anchor=""):
+    """Keep the complete dependency predicate; retain branch labels in the enclosing source scope."""
+    connectors = re.compile(r"\b(?:based on|provided that|subject to|only if|contingent (?:on|upon)|"
+                            r"on condition that)\b|基于|前提|须经|需经", re.I)
+    contexts = []
+    for sentence in source_sentences(text, excerpt, anchor):
+        predicate = sentence
+        while True:
+            parts = re.split(r"(?<!\d):\s+(?=[A-Za-z\u4e00-\u9fff])", predicate, maxsplit=1)
+            if len(parts) != 2 or connectors.search(parts[0]) or not connectors.search(parts[1]):
+                break
+            predicate = parts[1]
+        if connectors.search(predicate):
+            contexts.append(predicate)
+    return contexts

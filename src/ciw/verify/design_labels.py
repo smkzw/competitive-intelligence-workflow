@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field
 
 from ciw.normalize.design import threshold_spans
 from ciw.verify.crosscheck import CrosscheckFailed, ExtractionTask, crosscheck, task_id_for
-from ciw.verify.endpoint_index import _batches, _comparisons
+from ciw.verify.endpoint_index import _batches, _comparisons, _review_binding
 from ciw.verify.quote import _NUMERIC_TOKEN, _UNIT_PARTS, normalize
 
 
@@ -47,6 +47,9 @@ _INSTRUCTION = (
 
 def _atom(snippet):
     atom = {key: snippet.get(key, "") for key in (*_FIELDS, "source_id", "field", "criterion_role", "context")}
+    if atom["condition"] and atom["text"] in atom["condition"] and atom["condition"] in atom["context"]:
+        # A complete applicability sentence already contains the selected point; translate it once.
+        atom["text"], atom["condition"] = atom["context"], ""
     if not any(len(re.findall(r"[A-Za-z]{2,}", atom[f])) >= 3
                and not re.search(r"[\u4e00-\u9fff]", atom[f]) for f in _FIELDS):
         return None
@@ -68,7 +71,7 @@ def _atoms(c):
 
 def _quantities(text):
     text = re.sub(r"^\s*(?:[*+•-]|\d+[.)])\s+", "", text)
-    text = re.sub(r"(?<=\d)\s*(?:[-–—]|to|至)\s*(?=\d)", " ", normalize(text))
+    text = re.sub(r"(?<=\d)\s*(?:[-–—]|to|至)\s*(?=\d)", " ", _measurement_text(text))
     return Counter(Decimal(n.replace(",", "")) for n in re.findall(_NUMERIC_TOKEN, text))
 
 
@@ -76,8 +79,8 @@ def _times(text):
     units = {"天": "day", "日": "day", "周": "week", "月": "month", "年": "year", "岁": "year",
              "小时": "hour", "分钟": "minute"}
     en = r"days?|weeks?|months?|years?|hours?|minutes?"
-    matches = re.finditer(rf"\d+(?:\.\d+)?\s*((?:{en})\b|小时|分钟|[天日周月年岁])"
-                          rf"|\b({en})\s*\d+", text, re.I)
+    matches = re.finditer(rf"\d+(?:\.\d+)?\s*[- ]?\s*个?((?:{en})\b|小时|分钟|[天日周月年岁])"
+                          rf"|\b({en})\s*\d+", _measurement_text(text), re.I)
     return Counter(units.get(unit, unit.lower().rstrip("s")) for m in matches if (unit := m[1] or m[2]))
 
 
@@ -102,7 +105,17 @@ def _check(item, atoms):
 
 def _unit_signature(text):
     text = re.sub(r"\\(?=[<>^/\[\]])", "", normalize(text))
-    return Counter(m[0].replace(" ", "").replace("^", "") for m in _UNITS.finditer(text))
+    return Counter(m[0].replace(" ", "").replace("^", "") for m in _UNITS.finditer(text)
+                   if "/" in m[0] or re.search(r"\d\s*$", text[:m.start()]))
+
+
+def _measurement_text(text):
+    """Fold only source-declared aliases/duplicate unit notation, never independent measurements."""
+    text = re.sub(r"\\(?=[<>^/\[\]])", "", normalize(text))
+    alias = r"\b([a-z][a-z0-9-]*\d[a-z0-9-]*)\s*\(([a-z][a-z0-9-]*\d[a-z0-9-]*)\)"
+    text = re.sub(alias, lambda m: m[2] if m[2].endswith(m[1]) or m[1].endswith(m[2]) else m[0], text)
+    return re.sub(r"\bgrams?\s+per\s+(\d+(?:\.\d+)?)\s+hours?\s*\[\s*(g\s*/\s*\1\s*h)\s*\]",
+                  r"\2", text)
 
 
 def _task(atoms):
@@ -121,6 +134,7 @@ def _readings(ws, atoms, roles, log):
     # 32K is the existing packing target, not a cutoff: a long source context stays whole and alone.
     saved = ws.read_stage("research-design-reading") or {"items": {}}
     accepted = {key:item for key,item in saved["items"].items() if key in atoms and _check(item, atoms)[0]}
+    _recheck_saved(ws, atoms, saved, accepted)
     pending = {key: {**atom, "material": json.dumps(atom, ensure_ascii=False)}
                for key,atom in atoms.items() if key not in accepted}
     if roles:
@@ -147,6 +161,34 @@ def _readings(ws, atoms, roles, log):
                     saved["items"][item["clause_id"]] = item
             ws.write_stage("research-design-reading", saved)
     return accepted
+
+
+def _recheck_saved(ws, atoms, saved, accepted):
+    """Recheck the unchanged final B item after a rule repair, never invent an accepted translation."""
+    for ledger_key, record in ws.verifications().items():
+        item, note = record.get("item"), record.get("note", "")
+        if (not ledger_key.startswith("design-reading:") or record["status"] != "needs_review" or not item
+                or not note.startswith("核对结果未通过来源校验：")):
+            continue
+        key = item.get("clause_id")
+        if key in accepted or key not in atoms or record.get("source_id") != atoms[key]["source_id"]:
+            continue
+        calls = record.get("calls", [])
+        reviews = [call for call in calls if call.get("role") in {"verify", "verify_repair", "verify_format_repair"}]
+        if (not reviews or reviews[-1].get("error") or not reviews[-1].get("n_items")
+                or len({call.get("family") for call in calls if call.get("family")}) != 2
+                or not _check(item, atoms)[0]):
+            continue
+        binding = _review_binding(ws, record, note, item, reviews[-1], item_model=DesignReadingPoint,
+                                  identity_field="clause_id", require_cache=True)
+        if not binding:
+            continue
+        accepted[key] = saved["items"][key] = item
+        payload = {key:value for key,value in record.items() if key != "status"}
+        recheck = dict(rule="design-reading-notation-v2", previous_status=record["status"], previous_note=note,
+                       review_binding=binding)
+        ws.save_verification(ledger_key, "verified", {**payload, "deterministic_recheck": recheck})
+        ws.write_stage("research-design-reading", saved)
 
 
 def enrich_design_labels(ws, c, roles=None, log=lambda *_: None):

@@ -124,3 +124,75 @@ def test_large_source_context_is_retained_whole_not_cut_to_the_packing_target():
     batches=list(_batches({key:{**a,'material':json.dumps(a)} for key,a in atoms.items()}))
     assert len(batches)==1
     assert s['context'] in _task(atoms).source_text
+
+
+@pytest.mark.parametrize("source,label", [
+    ("Investigator's assessment and eGFR ≥40 mL/min.","研究者评估，eGFR ≥40 mL/min。"),
+    ("Hemoglobin A1c (HbA1c) <7.5% within 2 years.","2年内 HbA1c <7.5%。"),
+    ("After at least 3 months, 24-hour urine collection.","至少3个月后，24小时尿液采集。"),
+    ("UPCR ≥3.0 g/g from a 24-hour urine collection or proteinuria ≥3.5 gram per 24 hour [g/24 h].",
+     "24小时尿液采集，UPCR ≥3.0 g/g 或蛋白尿 ≥3.5 g/24 h。")])
+def test_literal_aliases_and_time_spellings_do_not_force_redundant_chinese(source,label):
+    from ciw.verify.design_labels import _atoms, _check
+    c,s=material()
+    s.update(text=source,condition="",cohort_quote="",timeframe="")
+    atoms=_atoms(c)
+    atom=next(iter(atoms.values()))
+    item=dict(clause_id=atom['clause_id'],text_zh=label,condition_zh="",cohort_zh="",timeframe_zh="",quote=source)
+    assert _check(item,atoms)[0]
+    if '24-hour' in source:
+        assert not _check({**item,'text_zh':label.replace('24小时','12小时')},atoms)[0]
+
+
+@pytest.mark.parametrize('prefix',['','Original heading: '])
+def test_complete_applicability_is_one_reading_point_without_dropping_its_source_predicates(prefix):
+    from ciw.verify.design_labels import _atoms
+    c,s=material()
+    full="Patients may enter based on clinician review of normal function, Marker Q ≥20 U/mL, and negative work-up."
+    s.update(text="Marker Q ≥20 U/mL",condition=full,context=prefix+full,cohort_quote="",timeframe="")
+    a=next(iter(_atoms(c).values()))
+    assert a['text']==prefix+full and not a['condition']
+    assert s['text']=="Marker Q ≥20 U/mL" and s['condition']==full
+
+
+@pytest.mark.parametrize('proof', ['valid','a_only','no_cache','wrong_source','changed_source'])
+def test_only_retained_matching_verifier_items_can_be_rechecked_without_more_calls(ws,proof):
+    from ciw.verify.design_labels import _atoms, enrich_design_labels
+    c,s=material()
+    atom=next(iter(_atoms(c).values()))
+    item=answer(atom)
+    calls=[dict(role='extract',family='deepseek',model='a'),
+           dict(role='verify',family='glm',model='b',n_items=1,response_id='synthetic-response')]
+    note='核对结果未通过来源校验：旧时间写法规则误拒'
+    if proof=='a_only':
+        note='主抽取条目未被核对者确认'
+        calls=calls[:1]
+    ws.save_verification('design-reading:old:'+atom['clause_id'],'needs_review',
+        dict(item=item,calls=calls,note=note,source_id='other' if proof=='wrong_source' else atom['source_id']))
+    if proof!='no_cache':
+        with ws.db() as con:
+            con.execute('INSERT INTO llm_cache VALUES (?,?,?,?,?,?,?)',('test-key','b','glm','test-prompt',
+                json.dumps(dict(items=[item])),'2026-01-01',json.dumps(dict(response_id='synthetic-response'))))
+    if proof=='changed_source':
+        s['text']=s['text'].replace('40','45')
+    issues=enrich_design_labels(ws,c,None)
+    assert bool(issues)==(proof!='valid')
+    assert ('reading' in s)==(proof=='valid')
+    if proof=='valid':
+        record=next(iter(ws.verifications().values()))
+        assert record['status']=='verified' and record['item']==item
+        assert record['deterministic_recheck']['review_binding']['method']=='cached_verifier_item'
+
+
+@pytest.mark.parametrize('source,label',[
+    ('At screening, Hemoglobin A1c (HbA1c) <7.5%.','HbA1c <8.5%。'),
+    ('Protein ≥3.5 gram per 12 hour [g/24 h].','蛋白 ≥3.5 g/24 h。'),
+    ('At least 3 months and 24-hour collection.','至少3年，24小时采集。')])
+def test_notation_repairs_do_not_erase_changed_values_or_independent_times(source,label):
+    from ciw.verify.design_labels import _atoms, _check
+    c,s=material()
+    s.update(text=source,condition='',cohort_quote='',timeframe='')
+    atoms=_atoms(c)
+    key=next(iter(atoms))
+    item=dict(clause_id=key,text_zh=label,condition_zh='',cohort_zh='',timeframe_zh='',quote=source)
+    assert not _check(item,atoms)[0]
