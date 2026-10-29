@@ -114,7 +114,7 @@
         {label:"统计量",key:"param_type"}, {label:"原值",num:true,html:r=>esc(r.value_raw || num(r.value))},
         {label:"置信区间",num:true,html:r=>r.ci_lower == null ? "—" :
           `${r.ci_pct == null ? "" : esc(r.ci_pct) + "% "}${num(r.ci_lower)}, ${num(r.ci_upper)}`},
-        {label:"P值",key:"p_value"}, {label:"方法",key:"method"}, {label:"来源",html:r=>src(r.url,"查看原文")}
+        {label:"P值",key:"p_value",num:true}, {label:"方法",key:"method"}, {label:"来源",html:r=>src(r.url,"查看原文")}
       ], selected);
     };
     selector.onchange = draw;
@@ -177,7 +177,7 @@
       { label: "统计量", key: "param_type" },
       { label: "差值", key: "value", num: true, html: (c) => num(c.value) },
       { label: "置信区间", num: true, html: (c) => (c.ci_lower != null ? `${c.ci_pct ? c.ci_pct + "% " : ""}${num(c.ci_lower)}, ${num(c.ci_upper)}` : "—") },
-      { label: "P 值", key: "p_value" },
+      { label: "P 值", key: "p_value", num: true },
       { label: "方法", key: "method" },
       { label: "依据", html: (c) => `${c.source_kind === "publication" ? src(c.url, "论文") + (c.group_basis === "论文分组" ? " · 论文分组 " : " ") : ""}` + tag(c.kind === "computed" ? "computed" : c.status || "registry") + (c.note ? `<br><span class="hint">${esc(c.note)}</span>` : "") },
     ], comps, { rowClass: (c) => (c.is_own ? "own" : ""), onRow:showResult });

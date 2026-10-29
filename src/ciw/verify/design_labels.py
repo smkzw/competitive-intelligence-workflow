@@ -91,6 +91,17 @@ def _times(text):
     return Counter(units.get(unit, unit.lower().rstrip("s")) for m in matches if (unit := m[1] or m[2]))
 
 
+def _inline_list_labels(label, source):
+    """Fold only the same ordered labels explicitly declared by the source's multiline list."""
+    declared = re.findall(r"(?m)^[ \t]*(\d+)[.)][ \t]+(?=[A-Za-z\u4e00-\u9fff])", source)
+    markers = list(re.finditer(r"(?<![\d.])(\d+)[.)][ \t]+(?=[A-Za-z\u4e00-\u9fff])", label))
+    if not declared or [m[1] for m in markers] != declared:
+        return label
+    for marker in reversed(markers):
+        label = label[:marker.start()] + label[marker.end():]
+    return label
+
+
 def _check(item, atoms):
     atom = atoms.get(item["clause_id"])
     if not atom or item["quote"] != atom["text"]:
@@ -99,7 +110,8 @@ def _check(item, atoms):
         source, label = atom[raw], item[translated]
         if bool(source.strip()) != bool(label.strip()):
             return False, "不能删除或新增原条款、适用条件、队列或时点"
-        if _quantities(source) != _quantities(label) or _comparisons(source) != _comparisons(label):
+        if (_quantities(source) != _quantities(_inline_list_labels(label, source))
+                or _comparisons(source) != _comparisons(label)):
             return False, "阅读要点必须保留原字段全部数值、时点和比较符，不换算或省略阈值"
         if _unit_signature(source) != _unit_signature(label):
             return False, "科学单位须保留原写法，不替换或换算"

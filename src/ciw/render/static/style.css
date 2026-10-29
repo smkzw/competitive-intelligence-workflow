@@ -60,7 +60,7 @@ select { max-width:100%; min-width:0; }
 table.grid { border-collapse:separate; border-spacing:0; width:100%; font-size:16px; }
 .grid th,.grid td { border-bottom:1px solid var(--line); padding:6px 8px; text-align:left; vertical-align:top; }
 .grid th { position:sticky; top:0; background:#F4F5F6; z-index:1; white-space:nowrap; cursor:pointer; color:var(--ink); }
-.grid td { overflow-wrap:anywhere; }
+.grid td { overflow-wrap:break-word; }
 .grid td.num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
 .grid tr.own td { background:var(--own-bg); }
 .grid tr:hover td { background:#FFF9F0; }
