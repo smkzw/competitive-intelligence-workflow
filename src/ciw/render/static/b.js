@@ -2,6 +2,7 @@
 (function () {
   const { D, esc, num, nN, tag, src, table, chart, OWN, PAL } = window.U;
   const B = D.b;
+  const observationById = new Map((B.observations || []).map(row => [row.result_id, row]));
   const qs = B.questions;
   let current = null;
   const selectedFrames = new Map();
@@ -28,13 +29,15 @@
   const sameName = (a, b) => (a || "").toLowerCase().replace(/[^a-z0-9一-鿿]/g, "") === (b || "").toLowerCase().replace(/[^a-z0-9一-鿿]/g, "");
   const groupSuffix = (label, group) => (label && group && !sameName(label, group) && !label.toLowerCase().includes(group.toLowerCase()) ? `（${group}）` : "");
   const rowLabel = (r) => `${r.role === "placebo" ? "安慰剂" : (r.product_label || r.group_title)}${r.role !== "placebo" ? groupSuffix(r.product_label, r.group_title) : ""}${r.phase ? " · " + r.phase + "期" : ""} · ${r.acronym}${r.stratum_label ? " · " + r.stratum_label : ""}`;
+  const compactRowLabel = r => [r.acronym, r.group_title || r.product_label].filter(Boolean).join(" · ");
+  const pointUnit = (point, chart) => observationById.get(point.result_id)?.unit ?? point.unit ?? chart.unit;
 
 
   const studyLink = row => row.source_records?.length > 1
     ? row.source_records.map(s => src(s.url, s.acronym)).join(" · ") : src(row.url, row.acronym);
   const studyMeta = row => `${row.phase ? esc(row.phase) + "期 · " : ""}${studyLink(row)}`;
   function showResult(row) {
-    const observation = (B.observations || []).find(r => r.result_id === row.result_id);
+    const observation = observationById.get(row.result_id);
     if(observation) showObservation(observation);
   }
 
@@ -160,7 +163,7 @@
       grid: { left: 300, right: 60, top: 20, bottom: 40 },
       tooltip: { formatter: (p) => { const r = rows[p.dataIndex]; return `<b>${esc(rowLabel(r))}</b><br>${num(r.value)} ${esc(r.unit)}${r.n != null ? `<br>N=${r.n}` : ""}${r.spread != null ? `<br>${esc(r.dispersion_type)} ${num(r.spread)}` : ""}${r.lower != null ? `<br>${esc(r.dispersion_type)} ${num(r.lower)}, ${num(r.upper)}` : ""}`; } },
       xAxis: { type: "value", scale: false },
-      yAxis: { type: "category", data: rows.map(rowLabel), inverse: true, axisLabel: { width: 280, overflow: "truncate", color: (v, i) => (rows[i] && rows[i].is_own ? OWN : "#0F1115") } },
+      yAxis: { type: "category", data: rows.map(rowLabel), inverse: true, axisLabel: { width: 280, overflow: "break", formatter: (v, i) => compactRowLabel(rows[i]), color: (v, i) => (rows[i] && rows[i].is_own ? OWN : "#0F1115") } },
       series: [{ type: "bar", barWidth: 12, data: rows.map((r) => ({ value: r.value, itemStyle: { color: r.is_own ? OWN : r.role === "placebo" ? "#6E7B8C" : "#008F8A" } })),
         label: { show: true, position: "right", formatter: (p) => num(p.value) } }],
     });
@@ -208,8 +211,11 @@
     if (!c) return;
     selectedLong.set(current.question_id,c.chart_id);
     chart("long-chart", {
-      tooltip: { trigger: "item", formatter: (p) => { const pt = p.data.pt; return `<b>${esc(p.seriesName)}</b><br>${esc(pt.label)}：${num(pt.value)}${pt.n != null ? `（N=${pt.n}）` : ""}`; } },
-      legend: { type: "scroll", top: 0 },
+      tooltip: { trigger: "item", formatter: (p) => { const pt = p.data.pt; return `<b>${esc(p.seriesName)}</b><br>${esc(pt.label)}：${num(pt.value)} ${esc(pointUnit(pt, c))}${pt.n != null ? `（N=${pt.n}）` : ""}`; } },
+      legend: { type: "scroll", top: 0, formatter: name => {
+        const line = c.lines.find(line => rowLabel(line) === name);
+        return line ? compactRowLabel(line) : name;
+      } },
       grid: { left: 60, right: 30, top: 50, bottom: 50 },
       xAxis: { type: "value", name: "周", nameLocation: "end", min: 0 },
       yAxis: { type: "value", scale: true },
@@ -225,7 +231,7 @@
       {label:"时间",key:"label"}, {label:"N",key:"n",num:true,html:r=>num(r.n)},
       {label:"数值",num:true,html:r=>num(r.value)}, {label:"单位",key:"unit"},
       {label:"离散度 / 区间",html:r=>r.lower == null ? "—" : `${num(r.lower)}, ${num(r.upper)}`}
-    ], c.lines.flatMap(line=>line.points.map(pt=>({...line,...pt,unit:c.unit}))), {onRow:showResult});
+    ], c.lines.flatMap(line=>line.points.map(pt=>({...line,...pt,unit:pointUnit(pt,c)}))), {onRow:showResult});
   }
   ls.onchange = drawLong;
 

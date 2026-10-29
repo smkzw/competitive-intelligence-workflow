@@ -343,6 +343,10 @@ const live=plots['value-chart'].series[0].data.map(r=>r.value);
 const firstCell=cols['family-table'][0].html(tables['family-table'][0]);
 process.stdout.write(JSON.stringify({first,second,live,firstCell,longOptions:els['long-select'].innerHTML,
  longRows:tables['long-table']?.map(r=>r.value),longSeries:plots['long-chart']?.series.map(s=>s.name),
+ longUnits:tables['long-table']?.map(r=>r.unit),
+ longLegend:plots['long-chart'].legend.formatter(plots['long-chart'].series[0].name),
+ shortAxis:plots['value-chart'].yAxis.axisLabel.formatter('',0),
+ longTip:plots['long-chart'].tooltip.formatter({seriesName:'Series',data:{pt:longitudinal[1].lines[0].points[0]}}),
  longHidden:els['longitudinal-card'].hidden,hidden:els['family-overview'].hidden,
  mismatch:helper.U.matchesQuestion({...q,frames:[frames[0]]},'week 1')}));
 """
@@ -357,6 +361,9 @@ process.stdout.write(JSON.stringify({first,second,live,firstCell,longOptions:els
     assert "Unrelated CGI" not in result["longOptions"]
     assert "临床缓解" in result["longOptions"] and "Points" in result["longOptions"]
     assert result["longRows"] == [1, 16] and not result["longHidden"]
+    assert result["longUnits"] == ["Percent", "Proportion"]
+    assert result["longLegend"] == "T16 · Group16" and result["shortAxis"] == "T1 · Drug1"
+    assert "Percent" in result["longTip"]
     assert result["longSeries"][0].index("Drug16") < result["longSeries"][0].index("III")
     assert result["longSeries"][0].index("III") < result["longSeries"][0].index("T16")
     assert result["firstCell"].index("Drug16") < result["firstCell"].index("III") < result["firstCell"].index("T16")
