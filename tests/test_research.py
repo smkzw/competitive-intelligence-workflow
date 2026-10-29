@@ -105,3 +105,24 @@ def test_generated_and_legacy_design_topics_follow_the_requested_source_section(
     ws.write_stage("research-query-plan", dict(plan=raw))
     _mark_planned_concepts(cfg, ws)
     assert [t.kind for t in cfg.design_topics] == ["eligibility_threshold", "treatment_duration"]
+
+
+def test_legacy_search_aliases_use_two_existing_roles_without_changing_source_patterns(tmp_path):
+    from ciw.research import _search_aliases
+    cfg, _ = registry_config(QueryPlan.model_validate(plan(design_topics=[
+        dict(label="尿蛋白入排阈值", terms=["proteinuria"], kind="eligibility_threshold")])), {})
+    before = cfg.design_topics[0].patterns[:]
+    calls = []
+    def response(*args):
+        calls.append(args)
+        return json.dumps({"0": ["尿蛋白", "蛋白尿"]}, ensure_ascii=False)
+    roles = {"extractor_a": FakeBackend("deepseek", "a", response), "verifier": FakeBackend("glm", "b", response)}
+    ws = Workspace(tmp_path)
+    ws.write_stage("research-query-plan", {"plan": {"design_topics": [
+        dict(label="尿蛋白入排阈值", terms=["proteinuria"], kind="eligibility_threshold")]}})
+    _search_aliases(cfg, roles, ws)
+    assert len(calls) == 2 and cfg.design_topics[0].aliases == ["尿蛋白", "蛋白尿"]
+    assert cfg.design_topics[0].patterns == before
+    assert ws.read_stage("research-search-aliases")["purpose"] == "search only"
+    _search_aliases(cfg, roles, ws)
+    assert len(calls) == 2  # populated aliases are not regenerated
