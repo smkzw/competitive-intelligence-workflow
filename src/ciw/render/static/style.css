@@ -117,15 +117,32 @@ mark { background:#FFE8B7; color:inherit; }
   background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); padding:16px; }
 .dot.c { border-radius:0; transform:rotate(45deg); }
 #matrix { table-layout:fixed; min-width:1240px; }
-#matrix th:nth-child(1) { width:21%; }
-#matrix th:nth-child(2) { width:13%; }
-#matrix th:nth-child(3) { width:7%; }
-#matrix th:nth-child(4) { width:23%; }
-#matrix th:nth-child(5) { width:11%; }
-#matrix th:nth-child(6) { width:11%; }
-#matrix th:nth-child(7) { width:14%; }
+#matrix:not(.topic-matrix) th:nth-child(1) { width:21%; }
+#matrix:not(.topic-matrix) th:nth-child(2) { width:13%; }
+#matrix:not(.topic-matrix) th:nth-child(3) { width:7%; }
+#matrix:not(.topic-matrix) th:nth-child(4) { width:23%; }
+#matrix:not(.topic-matrix) th:nth-child(5) { width:11%; }
+#matrix:not(.topic-matrix) th:nth-child(6) { width:11%; }
+#matrix:not(.topic-matrix) th:nth-child(7) { width:14%; }
 #matrix td { padding-top:8px; padding-bottom:8px; }
 #matrix td.num { white-space:normal; }
+#matrix.topic-matrix { min-width:calc(250px + var(--topic-columns,4)*220px); }
+#matrix.topic-matrix th:first-child { width:250px; }
+#matrix.topic-matrix th { white-space:normal; }
+.design-view-controls { display:flex; align-items:flex-start; gap:12px; margin:0 0 8px; }
+.design-view-controls[hidden],.design-view-controls details[hidden] { display:none; }
+.view-switch { display:flex; flex-shrink:0; gap:4px; }
+.view-switch button,.topic-actions button { border:1px solid var(--line); background:#fff; color:var(--body);
+  border-radius:8px; padding:4px 10px; cursor:pointer; }
+.view-switch button[aria-pressed=true] { background:var(--brand); color:var(--ink); font-weight:650; }
+#topic-controls { flex:1; }
+#topic-controls summary { padding:4px 8px; }
+.topic-actions { display:flex; gap:6px; margin:6px 0; }
+#topic-picker { margin:0; padding:6px 10px; display:flex; flex-wrap:wrap; gap:6px 16px; border:1px solid var(--line); border-radius:10px; }
+#topic-picker label { display:flex; align-items:center; gap:4px; }
+.design-clause + .design-clause { border-top:1px solid var(--line); margin-top:6px; padding-top:6px; }
+.design-clause p,#matrix .hint { margin:3px 0; }
+.clause-condition { color:var(--ink); font-weight:550; }
 #row-table td:nth-child(6) { min-width:9em; overflow-wrap:normal; }
 #row-table td:nth-child(2) { min-width:10em; overflow-wrap:normal; }
 .grid tr[tabindex="0"] { cursor:pointer; }

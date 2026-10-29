@@ -2,21 +2,20 @@
 
 import re
 
-_THRESHOLD = re.compile(
-    r"(?:>=|<=|≥|≤|>|<|至少|不低于|不超过|大于|小于|不少于|不大于|at least|at most|"
-    r"greater than(?: or equal to)?|less than(?: or equal to)?)\s*\d+(?:\.\d+)?"
-    r"(?:\s*(?:%|points?\b|分|岁|years?\b|mg(?:/dL)?\b|g/L\b|mL/min\b))?"
-    r"|\d+(?:\.\d+)?\s*(?:or (?:more|greater|less)|及以上|及以下)"
-    r"|\bbetween\s+\d+(?:\.\d+)?\s+and\s+\d+(?:\.\d+)?"
-    r"|(?<![A-Za-z0-9])\d+(?:\.\d+)?\s*(?:–|—|-|to|至)\s*\d+(?:\.\d+)?\s*"
-    r"(?:years?|months?|weeks?|days?|points?|岁|分|mL/min|mg/dL|g/24\s*h|g/L|g/g|RU/mL|%)(?![A-Za-z])",
-    re.I,
+from ciw.normalize.design import (
+    _criterion_role,
+    logical_contexts,
+    topic_field_matches,
 )
-
-
-def threshold_spans(text: str) -> list[dict]:
-    return [{"start": m.start(), "end": m.end()} for m in _THRESHOLD.finditer(text)]
-
+from ciw.normalize.design import (
+    design_passages as design_passages,
+)
+from ciw.normalize.design import (
+    threshold_spans as threshold_spans,
+)
+from ciw.normalize.design import (
+    topic_catalog as topic_catalog,
+)
 
 _DURATION = re.compile(
     r"\b(?:treatment duration|duration of (?:study )?treatment|treatment period)\b.{0,80}?"
@@ -51,20 +50,15 @@ def _metric_match(patterns, text):
                for pattern in patterns for match in pattern.finditer(text) if match.start() < match.end())
 
 
-def _matching_lines(topic, patterns, text, field):
+def _matching_lines(topic, patterns, text, field, section=""):
+    if not topic_field_matches(topic.kind, field):
+        return []
     if topic.kind == "treatment_duration":
-        if field == "eligibility" or field.startswith("outcome:"):
-            return []
         return [(clause, context) for clause, context in _clauses(text)
                 if _DURATION.search(clause) and not (_POSTDOSE.search(clause) or _FOLLOWUP.search(clause))]
-    if topic.kind == "eligibility_threshold" and field != "eligibility":
-        return []
-    if topic.kind == "endpoint_definition" and not field.startswith("outcome:"):
-        return []
-    if topic.kind in {"dosing_regimen", "background_therapy", "follow_up"} and (
-            field == "eligibility" or field.startswith("outcome:")):
-        return []
     excludes = [re.compile(p, re.I) for p in topic.exclude]
+    if topic.kind == "endpoint_definition" and text and any(p.search(section) for p in patterns):
+        patterns = [*patterns, re.compile(re.escape(text), re.I)]
     # Preserve historical combined lookup topics; typed topics select precise clauses instead of paragraphs.
     clauses = (((line, line) for line in text.splitlines()) if topic.kind == "lookup" else
                _clauses(text, preserve_lists=topic.kind in {"eligibility_threshold", "endpoint_definition"}))
@@ -85,36 +79,37 @@ def _matching_lines(topic, patterns, text, field):
     return selected
 
 
-def _criterion_role(text, excerpt):
-    roles = set()
-    pattern = r"inclusion(?: criteria)?|exclusion(?: criteria)?|入选(?:标准)?|排除(?:标准)?"
-    for occurrence in re.finditer(re.escape(excerpt), text):
-        headings = list(re.finditer(pattern, text[:occurrence.end()], re.I))
-        roles.add(("exclusion" if re.search(r"exclusion|排除", headings[-1][0], re.I) else "inclusion")
-                  if headings else "unspecified")
-    return next(iter(roles)) if len(roles) == 1 else "unspecified"
+def design_search_text(trial, topics):
+    """Search aliases index source mentions, including mentions without a numeric cutoff."""
+    terms = []
+    for topic in topics:
+        patterns = [re.compile(p, re.I) for p in [*topic.patterns, *topic.metric_patterns]]
+        if any(topic_field_matches(topic.kind, field) and any(p.search(text) for p in patterns)
+               for _, text, field in design_passages(trial)):
+            terms.extend([topic.label, *topic.aliases])
+    return " ".join(dict.fromkeys(terms))
 
 
 def design_excerpts(trial, topics) -> list[dict]:
     """Keep the complete matching line, source identity, and its original section."""
-    passages = [("入排标准", trial.design.eligibility_text, "eligibility")]
-    passages += [
-        ("研究摘要", trial.design.brief_summary, "brief_summary"),
-        ("研究描述", trial.design.detailed_description, "detailed_description"),
-        ("设计描述", trial.design.model_description, "model_description"),
-    ]
-    passages += [(a.label, a.description, f"arm:{a.arm_id}") for a in trial.arms]
-    passages += [(o.title, o.description, f"outcome:{i}") for i, o in enumerate(trial.outcomes_planned)]
+    passages = design_passages(trial)
     found = []
-    for topic in topics:
+    for i, topic in enumerate(topics):
         patterns = [re.compile(p, re.I) for p in [*topic.patterns, *topic.metric_patterns]]
         snippets, seen = [], set()
         for section, text, field in passages:
-            for line, context in _matching_lines(topic, patterns, text, field):
+            for line, context in _matching_lines(topic, patterns, text, field, section):
                 identity = (field, line)
                 if identity in seen:
                     continue
                 seen.add(identity)
+                parents = logical_contexts(text, line) if field == "eligibility" else []
+                if parents:
+                    context = parents[0]["context"]
+                timing = {}
+                if re.fullmatch(r"outcome:\d+", field):
+                    timing = dict(timeframe=trial.outcomes_planned[int(field.split(":")[1])].timeframe,
+                                  timeframe_field=field + ":timeframe")
                 snippets.append(
                     {
                         "section": section,
@@ -122,10 +117,14 @@ def design_excerpts(trial, topics) -> list[dict]:
                         "marks": threshold_spans(line),
                         "source_id": trial.locator.source_id,
                         "field": field,
+                        **timing,
+                        **({"condition": parents[0]["condition"],
+                            "condition_marks": threshold_spans(parents[0]["condition"])} if parents else {}),
                         **({"criterion_role": _criterion_role(text, line)} if field == "eligibility" else {}),
                         **({"context": context, "context_marks": threshold_spans(context)} if context != line else {}),
                     }
                 )
         if snippets:
-            found.append({"label": topic.label, "aliases": topic.aliases, "snippets": snippets})
+            found.append({"topic_id": f"design-topic-{i}", "label": topic.label,
+                          "aliases": topic.aliases, "snippets": snippets})
     return found

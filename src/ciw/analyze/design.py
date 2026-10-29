@@ -8,7 +8,7 @@ from typing import Any
 
 from ciw.analyze.common import product_label, role_label
 from ciw.analyze.condition_scope import study_scope
-from ciw.analyze.design_excerpts import design_excerpts, threshold_spans
+from ciw.analyze.design_excerpts import design_excerpts, design_search_text, threshold_spans, topic_catalog
 from ciw.analyze.landscape import REGISTRY_ZH, STATUS_ZH
 from ciw.config import IndicationConfig
 from ciw.models import Product, Trial
@@ -60,8 +60,7 @@ def build_design(cfg: IndicationConfig, trials: list[Trial], products: dict[str,
         for topic in row["design_excerpts"]:
             if any(s.get("criterion_role") == "exclusion" for s in topic["snippets"]):
                 topic["label"] = topic["label"].replace("入组阈值", "入排阈值")
-        row["search_text"] = " ".join(part for topic in row["design_excerpts"]
-                                      for part in [topic["label"], *topic.get("aliases", [])])
+        row["search_text"] = design_search_text(trial, cfg.design_topics)
     # 设计参考价值：III（含 II/III）> IV > II > I > 未知；同期别按首例入组时间倒序
     priority = {4: 0, 5: 1, 3: 2, 2: 3, 1: 4, 0: 5}
     rows.sort(key=lambda r: r["start"] or "", reverse=True)
@@ -71,7 +70,8 @@ def build_design(cfg: IndicationConfig, trials: list[Trial], products: dict[str,
         "masking": Counter(r["masking"] for r in rows),
         "primary_concepts": Counter(c for r in rows for c in r["primary_concepts"]),
     }
-    return {"rows": rows, "facets": {k: dict(v.most_common()) for k, v in facets.items()}}
+    return {"rows": rows, "facets": {k: dict(v.most_common()) for k, v in facets.items()},
+            "topic_catalog": topic_catalog(cfg.design_topics)}
 
 
 def _endpoint_view(outcome, labels):

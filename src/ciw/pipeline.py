@@ -136,6 +136,12 @@ def _run(
         roles if report_scope in {None, "B"} else None, previous=previous.get("clinical_families"))
     review_queue.extend(family_issues)
     body = _build_body(cfg, ws, products, trials, results, safety, events, review_queue, unclassified, stats, coverage)
+    from ciw.verify.design_clauses import enrich_design_clauses
+
+    design_issues = enrich_design_clauses(ws, cfg, list(trials.values()), body["c"],
+                                        roles if report_scope in {None, "C"} else None, log)
+    body["review_queue"].extend(design_issues)
+    body["stats"]["review_queue"] = len(body["review_queue"])
     body["clinical_families"] = families
     body["b"] = project_clinical_families(body["b"], families["groups"])
     body = _comparison_views(body, cfg, ws, results, trials, families, roles, report_scope, previous)

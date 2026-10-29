@@ -11,6 +11,17 @@
       <span id="count" class="hint"></span>
     </div>
   </div>
+  <div id="design-view-controls" class="design-view-controls" hidden>
+    <div class="view-switch" role="group" aria-label="设计对照视图">
+      <button id="view-topics" type="button" aria-pressed="true">主题横比</button>
+      <button id="view-comprehensive" type="button" aria-pressed="false">综合设计</button>
+    </div>
+    <details id="topic-controls">
+      <summary id="topic-selection-label">选择比较主题</summary>
+      <div class="topic-actions"><button id="topics-all" type="button">全选</button><button id="topics-clear" type="button">清除</button></div>
+      <fieldset id="topic-picker"><legend>比较主题</legend></fieldset>
+    </details>
+  </div>
   <div class="table-wrap"><table id="matrix" class="grid sticky"></table></div>
 </section>
 <section class="row">

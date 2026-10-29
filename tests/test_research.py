@@ -126,3 +126,6 @@ def test_legacy_search_aliases_use_two_existing_roles_without_changing_source_pa
     assert ws.read_stage("research-search-aliases")["purpose"] == "search only"
     _search_aliases(cfg, roles, ws)
     assert len(calls) == 2  # populated aliases are not regenerated
+    cfg.design_topics[0].aliases = []  # Legacy YAML read again when generating a different report.
+    _search_aliases(cfg, None, ws)
+    assert len(calls) == 2 and cfg.design_topics[0].aliases == ["尿蛋白", "蛋白尿"]

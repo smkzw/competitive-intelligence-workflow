@@ -22,7 +22,13 @@
   const endpointDetails = o => `${o.description ? `<details><summary>完整终点定义</summary><p>${window.U.annotate(o.description,o.description_marks,document.getElementById("q").value.trim())}</p></details>` : ""}`;
   const ep = list => list.map(o => `${esc(o.summary || o.concept || o.title)}<span class="hint">${o.timeframe ? (o.timeframe.length > 48 ? `<details><summary>时间窗原文</summary><p>${esc(o.timeframe)}</p></details>` : "（" + esc(o.timeframe) + "）") : ""}</span>${endpointDetails(o)}`).join("<br>");
   const regimens = r => `<details><summary>${r.arms.length}组给药方案</summary>${r.arms.map(a=>`<p><strong>${esc(a.label)}</strong><br>${esc(a.interventions.join("；"))}<br>${esc(a.description)}</p>`).join("")}${(r.study_narrative || []).map(n=>`<details><summary>${esc(n.label)}</summary><p>${esc(n.text)}</p></details>`).join("")}</details>`;
-  const excerpts = r => (r.design_excerpts || []).map(t=>`<details><summary>${esc(t.label)} · ${t.snippets.length}处原文</summary>${t.snippets.map(s=>`<p><span class="hint">${esc(s.section)}${s.criterion_role === "inclusion" ? " · 入选" : s.criterion_role === "exclusion" ? " · 排除" : ""}</span><br>${window.U.annotate(s.text,s.marks,document.getElementById("q").value.trim())}</p>${s.context ? `<details><summary>上下文原文</summary><p>${window.U.annotate(s.context,s.context_marks,document.getElementById("q").value.trim())}</p></details>` : ""}`).join("")}</details>`).join("");
+  const annotation = (text, marks) => window.U.annotate(text, marks, document.getElementById("q").value.trim());
+  const clause = s => `<div class="design-clause"><span class="hint">${esc(s.section)}${s.criterion_role === "inclusion" ? " · 入选" : s.criterion_role === "exclusion" ? " · 排除" : ""}</span>
+    ${s.cohort_quote ? `<p class="clause-condition">${esc(s.cohort_quote)}</p>` : ""}
+    ${s.condition ? `<p class="clause-condition">${annotation(s.condition,s.condition_marks)}</p>` : ""}
+    ${s.timeframe ? `<p class="hint">时点：${esc(s.timeframe)}</p>` : ""}
+    <p>${annotation(s.text,s.marks)}</p>${s.context && s.context !== s.text ? `<details><summary>上下文原文</summary><p>${annotation(s.context,s.context_marks)}</p></details>` : ""}</div>`;
+  const excerpts = r => (r.design_excerpts || []).map(t=>`<details><summary>${esc(t.label)} · ${t.snippets.length}处原文</summary>${t.snippets.map(clause).join("")}</details>`).join("");
   const cols = [
     { label: "药物 / 研究", key: "acronym", html: (r) => `<strong>${r.products.map(p=>esc(p.label)).join("、")}</strong><br>${r.is_own ? '<span class="own-tag">本品 </span>' : ""}${esc(r.phase)} · ${src(r.url, r.acronym || r.trial_id)}${r.population_extent ? '<br><span class="hint">多疾病登记</span>' : ""} <button class="detail-button" data-design-id="${esc(r.trial_id)}" type="button">查看设计</button>` },
     { label: "设计 / 组别", html: (r) => `${[r.allocation,r.masking,r.model].filter(Boolean).map(esc).join(" · ")}<br>${r.arm_count} 组` },
@@ -33,6 +39,34 @@
     { label: "研究信息", html: r => `${esc(r.status)}<br><span class="hint">首例 ${esc(r.start || "—")}</span><details><summary>地区 / 申办方</summary><p>${esc(r.country_label || "—")}</p><p>主要完成 ${esc(r.primary_completion || "—")}</p><p>申办方：${esc(r.sponsor)}</p><p>${(r.registration_ids || [r.trial_id]).map(esc).join(" / ")}</p><p>登记疾病/人群：${(r.conditions || []).map(esc).join("；")}</p></details>` },
   ];
   const tEl = document.getElementById("matrix");
+  const catalog = C.topic_catalog || [];
+  let topicView = catalog.length > 0;
+  const initial = catalog.filter(t => t.kind === "eligibility_threshold");
+  const selectedTopics = new Set((initial.length ? initial : catalog).slice(0,4).map(t => t.topic_id));
+  const topicCols = () => [{...cols[0],html:r=>`${cols[0].html(r)}<p class="hint">${r.population_extent ? "全研究 · " : ""}N=${r.enrollment == null ? esc(r.enrollment_text || "—") : esc(r.enrollment)} ${esc(r.enrollment_type)}</p>`},
+    ...catalog.filter(t=>selectedTopics.has(t.topic_id)).map(t=>({label:t.label,html:r=>
+      (r.design_excerpts || []).filter(e=>e.topic_id === t.topic_id).flatMap(e=>e.snippets).map(clause).join("") || "—"}))];
+  if (catalog.length && document.getElementById("design-view-controls")) {
+    document.getElementById("design-view-controls").hidden = false;
+    const picker = document.getElementById("topic-picker");
+    picker.innerHTML = `<legend>比较主题</legend>${catalog.map(t=>`<label><input type="checkbox" data-topic-id="${esc(t.topic_id)}" ${selectedTopics.has(t.topic_id) ? "checked" : ""}>${esc(t.label)}</label>`).join("")}`;
+    picker.addEventListener("change", event => {
+      const id = event.target.dataset.topicId;
+      if (!catalog.some(t=>t.topic_id === id)) return;
+      if (event.target.checked) selectedTopics.add(id); else selectedTopics.delete(id);
+      redraw();
+    });
+    ["topics-all","topics-clear"].forEach(id => document.getElementById(id).addEventListener("click",()=>{
+      selectedTopics.clear();
+      if (id === "topics-all") catalog.forEach(t=>selectedTopics.add(t.topic_id));
+      picker.querySelectorAll("input").forEach(input=>input.checked=selectedTopics.has(input.dataset.topicId));
+      redraw();
+    }));
+    ["view-topics","view-comprehensive"].forEach(id => document.getElementById(id).addEventListener("click",()=>{
+      topicView = id === "view-topics";
+      redraw();
+    }));
+  }
   tEl.addEventListener("click", event => {
     const button = event.target.closest("button[data-design-id]");
     if (button) show(rows.find(r => r.trial_id === button.dataset.designId));
@@ -40,7 +74,15 @@
   function redraw() {
     const data = filtered();
     document.getElementById("count").textContent = `${data.length} / ${rows.length} 项试验`;
-    table(tEl, cols, data, { rowClass: (r) => (r.is_own ? "own" : ""), onRow: show });
+    tEl.classList?.toggle("topic-matrix",topicView);
+    tEl.style?.setProperty?.("--topic-columns",selectedTopics.size);
+    if (catalog.length) {
+      document.getElementById("view-topics").setAttribute("aria-pressed",String(topicView));
+      document.getElementById("view-comprehensive").setAttribute("aria-pressed",String(!topicView));
+      document.getElementById("topic-controls").hidden = !topicView;
+      document.getElementById("topic-selection-label").textContent = `比较主题 · ${selectedTopics.size} / ${catalog.length}`;
+    }
+    table(tEl, topicView ? topicCols() : cols, data, { rowClass: (r) => (r.is_own ? "own" : ""), onRow: show });
     drawSummary(data);
   }
   ["q", "f-phase", "f-mask", "f-concept", "f-china"].forEach((id) => document.getElementById(id).addEventListener("input", redraw));
@@ -54,7 +96,7 @@
       <dt>期别 / 状态</dt><dd>${esc(r.phase)} · ${esc(r.status)}</dd>
       <dt>设计</dt><dd>${[r.allocation, r.masking, r.model].filter(Boolean).map(esc).join(" · ")}</dd>
       <dt>${r.population_extent ? "全研究样本量" : "样本量"}</dt><dd>${r.enrollment == null ? esc(r.enrollment_text || "—") : r.enrollment + "（" + esc(r.enrollment_type) + "）"}</dd>
-      <dt>${r.population_extent ? "全研究年龄 / 性别" : "年龄 / 性别"}</dt><dd>${esc(r.min_age || "—")} 至 ${esc(r.max_age || "—")} · ${esc(r.sex || "—")}</dd>
+      <dt>登记年龄 / 性别</dt><dd>${esc(r.min_age || "—")} 至 ${esc(r.max_age || "—")} · ${esc(r.sex || "—")}</dd>
       <dt>地区</dt><dd>${esc(r.countries.join("、"))}</dd>${r.background_therapy.length ? `<dt>背景治疗</dt><dd>${esc(r.background_therapy.join("；"))}</dd>` : ""}</dl>
       ${(r.conditions || []).length ? `<p><strong>登记疾病/人群：</strong>${r.conditions.map(esc).join("；")}</p>` : ""}
       <h3>组别</h3><table class="grid"><thead><tr><th>组别</th><th>角色</th><th>干预与给药</th></tr></thead><tbody>
