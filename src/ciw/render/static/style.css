@@ -79,9 +79,9 @@ table.grid { border-collapse:separate; border-spacing:0; width:100%; font-size:1
 .outcome-plots { display:grid; gap:12px; }
 .outcome-plots>* { min-width:0; }
 @media (min-width:1280px) {
-  .outcome-plots:has(#longitudinal-card:not([hidden])) { grid-template-columns:minmax(0,5fr) minmax(0,7fr); }
-  .outcome-plots:has(#longitudinal-card:not([hidden]))>.row { display:block; }
-  .outcome-plots:has(#longitudinal-card:not([hidden])) #value-chart { min-height:280px; }
+  .outcome-plots:has(#longitudinal-card:not([hidden]) #long-chart:not([hidden])) { grid-template-columns:minmax(0,5fr) minmax(0,7fr); }
+  .outcome-plots:has(#longitudinal-card:not([hidden]) #long-chart:not([hidden]))>.row { display:block; }
+  .outcome-plots:has(#longitudinal-card:not([hidden]) #long-chart:not([hidden])) #value-chart { min-height:280px; }
 }
 .qnav { position:sticky; top:60px; align-self:start; max-height:calc(100vh - 72px); overflow:auto; }
 .qnav input[type=search] { width:100%; margin-bottom:8px; }

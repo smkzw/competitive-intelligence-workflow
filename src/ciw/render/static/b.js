@@ -158,7 +158,7 @@
 
     const rows = frame.rows;
     const questionConcepts = new Set(current.member_concept_ids || [current.concept_id]);
-    const pairedTrend = B.longitudinal.some(c => questionConcepts.has(c.concept_id));
+    const pairedTrend = B.longitudinal.some(c => questionConcepts.has(c.concept_id) && matchesTrend(c,frame));
     document.getElementById("arm-values").hidden = !rows.length;
     document.getElementById("arm-details").hidden = !rows.length;
     chart("value-chart", {
@@ -193,26 +193,37 @@
       { label: "分析人群", html: (r) => r.population ? `<details><summary>${esc(r.stratum_label || "查看人群")}</summary>${esc(r.population)}</details>` : "—" },
       { label: "依据", html: (r) => `${r.source_kind === "publication" ? src(r.url, "论文") + " " : ""}${tag(r.status || "registry")}` },
     ], rows, { rowClass: (r) => (r.is_own ? "own" : ""), onRow:showResult });
-    selectLongitudinal();
+    selectLongitudinal(frame);
   }
 
   // 历时
   let L = [];
   const selectedLong = new Map();
+  let longFrameKey;
   const ls = document.getElementById("long-select");
-  function selectLongitudinal() {
+  function matchesTrend(chart, frame) {
+    if(chart.axis_id && frame.axis_id) return chart.axis_id === frame.axis_id;
+    const ids = new Set(frame.result_ids || frame.rows.map(row=>row.result_id));
+    return chart.lines.some(line=>line.points.some(point=>ids.has(point.result_id)));
+  }
+  function selectLongitudinal(frame) {
     const ids = new Set(current.member_concept_ids || [current.concept_id]);
     L = B.longitudinal.filter(c => ids.has(c.concept_id));
     document.getElementById("longitudinal-card").hidden = !L.length;
-    document.getElementById("long-point-details").hidden = !L.length;
-    ls.innerHTML = L.map((c, i) => `<option value="${i}">${esc(current.is_family && !c.axis_id ? current.label : c.label)} · ${esc(c.measure_label)} · ${esc(c.unit)}（${c.lines.length} 条曲线）</option>`).join("");
-    ls.value = String(Math.max(0,L.findIndex(c=>c.chart_id === selectedLong.get(current.question_id))));
+    longFrameKey = `${current.question_id}:${frame.frame_id || ""}`;
+    const remembered = L.findIndex(c=>c.chart_id === selectedLong.get(longFrameKey));
+    const selected = remembered >= 0 ? remembered : L.findIndex(c=>matchesTrend(c,frame));
+    ls.innerHTML = '<option value="">选择研究查看历时</option>' + L.map((c, i) => `<option value="${i}">${esc(current.is_family && !c.axis_id ? current.label : c.label)} · ${esc(c.measure_label)} · ${esc(c.unit)} · ${esc([...new Set(c.lines.map(line=>line.acronym))].join("、"))}（${c.lines.length} 条曲线）</option>`).join("");
+    ls.value = selected < 0 ? "" : String(selected);
     drawLong();
   }
   function drawLong() {
-    const c = L[+ls.value || 0];
-    if (!c) return;
-    selectedLong.set(current.question_id,c.chart_id);
+    const c = ls.value === "" ? null : L[Number(ls.value)];
+    document.getElementById("long-chart").hidden = !c;
+    document.getElementById("long-point-details").hidden = !c;
+    document.getElementById("long-title").textContent = c ? "历时变化" : "其他研究历时";
+    if (!c) { table(document.getElementById("long-table"),[],[]); return; }
+    selectedLong.set(longFrameKey,c.chart_id);
     chart("long-chart", {
       tooltip: { trigger: "item", formatter: (p) => { const pt = p.data.pt; return `<b>${esc(p.seriesName)}</b><br>${esc(pt.label)}：${num(pt.value)} ${esc(pointUnit(pt, c))}${pt.n != null ? `（N=${pt.n}）` : ""}`; } },
       legend: { type: c.lines.length <= 4 ? "plain" : "scroll", top: 0, left:0, right:0, formatter: name => {

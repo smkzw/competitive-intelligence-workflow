@@ -47,6 +47,10 @@ _INSTRUCTION = (
 
 def _atom(snippet):
     atom = {key: snippet.get(key, "") for key in (*_FIELDS, "source_id", "field", "criterion_role", "context")}
+    if ((snippet.get("condition_source") or {}).get("binding") == "introduced-list"
+            and atom["text"] in atom["context"] and atom["condition"] in atom["context"]):
+        # The supplied, source-bound group contains alternatives that a lone child cannot express.
+        atom["text"], atom["condition"] = atom["context"], ""
     if atom["condition"] and atom["text"] in atom["condition"] and atom["condition"] in atom["context"]:
         # A complete applicability sentence already contains the selected point; translate it once.
         atom["text"], atom["condition"] = atom["context"], ""
@@ -73,7 +77,7 @@ def _atoms(c):
 
 
 def _quantities(text):
-    text = re.sub(r"^\s*(?:[*+•-]|\d+[.)])\s+", "", text)
+    text = re.sub(r"(?m)^[ \t]*(?:[*+•-]|\d+[.)])[ \t]+", "", text)
     text = re.sub(r"(?<=\d)\s*(?:[-–—]|to|至)\s*(?=\d)", " ", _measurement_text(text))
     return Counter(Decimal(n.replace(",", "")) for n in re.findall(_NUMERIC_TOKEN, text))
 
@@ -102,23 +106,28 @@ def _check(item, atoms):
         if _times(source) != _times(label):
             return False, "时间单位不能改变或省略"
         if _history_became_future(source, label):
-            return False, "原文为签署ICF时的既往检查史，不可译为签署ICF后同等时长的未来窗口"
+            return False, "原文为签署ICF前的既往检查窗口，中文须明确前/既往方向，不能省略或改为之后"
     if not re.search(r"[\u4e00-\u9fff]", item["text_zh"]):
         return False, "主层须提供中文医学要点，指标、缩写和科学单位保留原名"
     return True, ""
 
 
 def _history_became_future(source, label):
-    """A source's negative perfect history is not a prospective post-consent interval."""
-    historical = re.finditer(
-        r"\b(?:have|has|had)\s+not\s+(?:had|received|undergone)\b"
-        r"(?:(?![.;]\s|\n\s*\n).){0,240}?\bwithin\s*(\d+(?:\.\d+)?)\s*"
-        r"(days?|weeks?|months?|years?)\s+of\s+signing\s+(?:the\s+)?ICF\b", source, re.I | re.S)
-    future = list(re.finditer(r"(?:ICF|知情同意书)[^。\n]{0,12}?(?:之后|以后|后)(?:的)?\s*"
+    """Only explicit past history / screening diagnostic confirmation establishes this direction."""
+    windows = re.finditer(r"\bwithin\s*(\d+(?:\.\d+)?)\s*(days?|weeks?|months?|years?)\s+of\s+"
+                         r"signing\s+(?:the\s+)?(?:ICF\b|informed consent form\s*\(ICF\))", source, re.I)
+    historical = []
+    for window in windows:
+        prefix = re.split(r"[.;]\s|\n\s*\n", source[max(0, window.start()-240):window.start()])[-1]
+        if (re.search(r"\b(?:have|has|had)\s+not\s+(?:had|received|undergone)\b", prefix, re.I)
+                or re.search(r"confirmed.{0,40}\bbiopsy\b.{0,60}\bduring Screening or\s*$", prefix, re.I)):
+            historical.append(window)
+    before = list(re.finditer(r"(?:(?:ICF|知情同意书)[^。\n]{0,12}?(?:之前|以前|前)|既往|此前|过去)(?:的)?\s*"
                               r"(\d+(?:\.\d+)?)\s*(年|个?月|周|天|日)", label, re.I))
     units = {"年": "year", "月": "month", "个月": "month", "周": "week", "天": "day", "日": "day"}
-    return any(Decimal(past[1]) == Decimal(new[1]) and past[2].lower().rstrip("s") == units[new[2]]
-               for past in historical for new in future)
+    return any(not any(Decimal(past[1]) == Decimal(translated[1])
+                       and past[2].lower().rstrip("s") == units[translated[2]] for translated in before)
+               for past in historical)
 
 
 def _unit_signature(text):

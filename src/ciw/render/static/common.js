@@ -158,6 +158,8 @@
   }
 
   function present(option, el, zoom) {
+    const copy = value => Array.isArray(value) ? value.map(axis=>({...axis})) : value && {...value};
+    option = {...option,grid:copy(option.grid),xAxis:copy(option.xAxis),yAxis:copy(option.yAxis),legend:copy(option.legend)};
     const label = {fontSize:16,color:"#404040"};
     for(const key of ["xAxis","yAxis"]) {
       if(!option[key]) continue;
@@ -172,6 +174,16 @@
     if(option.legend) option.legend.textStyle = label;
     option.textStyle = {fontSize:16,color:"#404040",...option.textStyle};
     const available = el.clientWidth || window.innerWidth || 560;
+    if(option.yAxis?.type === "category" && option.grid && !Array.isArray(option.grid)) {
+      const grid = option.grid;
+      if(typeof grid.left === "number") grid.left = Math.min(grid.left,Math.floor(available*.42));
+      if(typeof grid.right === "number") grid.right = Math.min(grid.right,Math.floor(available*.08));
+      option.yAxis.axisLabel.width = Math.min(option.yAxis.axisLabel.width || 280,Math.max(40,grid.left-18));
+      if(option.xAxis && ["value","log"].includes(option.xAxis.type)) {
+        option.xAxis.splitNumber = Math.max(2,Math.min(5,Math.floor((available-grid.left-grid.right)/70)));
+        option.xAxis.axisLabel.hideOverlap = true;
+      }
+    }
     const tooltipWidth = Math.max(80,Math.min(560,available-24,(window.innerWidth || available)-32));
     option.tooltip = {confine:true,textStyle:label,...option.tooltip,
       extraCssText:`max-width:${tooltipWidth}px;white-space:normal;overflow-wrap:anywhere;`};
@@ -208,7 +220,7 @@
     if (existing) c.resize();
     c.setOption(prepared, true);
     if(typeof ResizeObserver !== "undefined" && !el._ciwObserver) {
-      el._ciwObserver = new ResizeObserver(() => c.resize());
+      el._ciwObserver = new ResizeObserver(() => { if(el._ciwOption) chart(el.id,el._ciwOption); });
       el._ciwObserver.observe(el);
     }
     return c;
