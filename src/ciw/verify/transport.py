@@ -103,9 +103,9 @@ def rejection_kind(error):
         return "unclassified"
     text = (json.dumps(error, ensure_ascii=False) if isinstance(error, dict) else error)[:4096].lower()
     for category, pattern in (
+        ("quota", r"quota|\bbalance\b|\bcredits?\b|insufficient.{0,24}funds"),
         ("concurrency", r"concurren|in[-_ ]?flight|simultaneous|active requests|parallel"),
         ("context_capacity", r"context|kv.{0,12}(?:cache|pool)|token.{0,12}(?:budget|capacity)"),
-        ("quota", r"quota|balance|credit|insufficient"),
         ("request_rate", r"rate[-_ ]?limit|requests per|too many requests"),
         ("model_transition", r"switch|loading|warming"),
         ("service_busy", r"overload|busy|capacity"),
@@ -115,16 +115,42 @@ def rejection_kind(error):
     return "unclassified"
 
 
+def _error_receipt(exc, transport):
+    """Consume an error once and retain only operational enums, never its private body."""
+    transport["rejection_kind"] = "unclassified"
+    try:
+        failure = json.loads(exc.read(8192))
+        error = failure.get("error", failure.get("detail", failure)) if isinstance(failure, dict) else failure
+        transport["rejection_kind"] = rejection_kind(error)
+        message = str(error.get("message", "")) if isinstance(error, dict) else ""
+        for parameter in ("response_format", "temperature", "max_tokens", "reasoning_effort"):
+            if parameter in message:
+                transport["provider_parameter"] = parameter
+                break
+    except (ValueError, OSError, AttributeError):
+        pass
+    finally:
+        exc.close()
+    return transport["rejection_kind"]
+
+
 def model_json(opener, request, timeout, transport):
     """Retry only completed 429 rejections, never an in-flight/ambiguous model request."""
     started = monotonic()
-    for attempt in range(6):
+    for attempt in range(16):
+        remaining = timeout - (monotonic() - started)
+        if remaining <= 0:
+            raise TimeoutError("模型请求总等待时间已用尽")
         try:
-            with opener.open(request, timeout=max(.1, timeout - (monotonic() - started))) as response:
+            with opener.open(request, timeout=remaining) as response:
                 return json.load(response)
         except HTTPError as exc:
+            kind = _error_receipt(exc, transport)
+            temporary = kind in {"concurrency", "context_capacity", "model_transition", "service_busy"}
+            attempts, budget = (16, 900) if temporary else (6, 180)
             wait = _retry_delay((exc.headers or {}).get("Retry-After"), attempt)
-            if exc.code != 429 or attempt == 5 or monotonic() - started + wait > min(timeout, 180):
+            if (exc.code != 429 or kind == "quota" or attempt >= attempts-1
+                    or monotonic() - started + wait > min(timeout, budget)):
                 raise
             transport.setdefault("admission_retries", []).append(dict(http_status=429, wait_seconds=wait))
             exc.close()

@@ -143,6 +143,9 @@ mark { background:#FFE8B7; color:inherit; }
 .design-clause + .design-clause { border-top:1px solid var(--line); margin-top:6px; padding-top:6px; }
 .design-clause p,#matrix .hint { margin:3px 0; }
 .clause-condition { color:var(--ink); font-weight:550; }
+.clause-role { display:inline-block; margin-right:6px; font-weight:650; color:var(--ink); }
+.clause-point { line-height:1.45; }
+.clause-original { margin-top:3px; }
 #row-table td:nth-child(6) { min-width:9em; overflow-wrap:normal; }
 #row-table td:nth-child(2) { min-width:10em; overflow-wrap:normal; }
 .grid tr[tabindex="0"] { cursor:pointer; }

@@ -137,10 +137,13 @@ def _run(
     review_queue.extend(family_issues)
     body = _build_body(cfg, ws, products, trials, results, safety, events, review_queue, unclassified, stats, coverage)
     from ciw.verify.design_clauses import enrich_design_clauses
+    from ciw.verify.design_labels import enrich_design_labels
 
     design_issues = enrich_design_clauses(ws, cfg, list(trials.values()), body["c"],
                                         roles if report_scope in {None, "C"} else None, log)
     body["review_queue"].extend(design_issues)
+    body["review_queue"].extend(enrich_design_labels(ws, body["c"],
+        roles if report_scope in {None, "C"} else None, log))
     body["stats"]["review_queue"] = len(body["review_queue"])
     body["clinical_families"] = families
     body["b"] = project_clinical_families(body["b"], families["groups"])

@@ -132,6 +132,106 @@ def test_one_second_retry_hint_cannot_create_a_busy_retry_loop(monkeypatch):
     assert pauses == [5,10,20,40,60] and len(calls) == 6
 
 
+@pytest.mark.parametrize("kind,message,limit", [
+    ("concurrency", "maximum concurrent requests", 16),
+    ("model_transition", "model is loading", 16),
+    ("context_capacity", "KV cache pool full", 16),
+    ("context_capacity", "insufficient KV cache capacity", 16),
+    ("request_rate", "rate limit exceeded", 6), ("quota", "insufficient balance", 1)])
+def test_only_confirmed_temporary_admission_limits_get_longer_bounded_wait(monkeypatch, kind, message, limit):
+    from io import BytesIO
+    from urllib.error import HTTPError
+    calls, pauses, clock = [], [], [0.0]
+    class Opener:
+        def open(self, req, **kwargs):
+            calls.append(req)
+            raise HTTPError(req.full_url,429,"rejected",{"Retry-After":"1"},
+                            BytesIO(json.dumps(dict(detail=message)).encode()))
+    monkeypatch.setattr("urllib.request.build_opener",lambda *_:Opener())
+    monkeypatch.setattr("ciw.verify.transport.monotonic",lambda:clock[0])
+    def wait(seconds):
+        pauses.append(seconds)
+        clock[0] += seconds
+    monkeypatch.setattr("ciw.verify.transport.sleep",wait)
+    b=OpenAICompatBackend("deepseek","deepseek","https://example.com/v1",None,timeout=7200)
+    with pytest.raises(HTTPError):
+        b.chat("s","source")
+    assert len(calls) == limit and len(pauses) == limit-1
+    assert sum(pauses) <= (900 if limit == 16 else 180)
+    assert b.receipt["rejection_kind"] == kind
+    assert all(req is calls[0] for req in calls)
+
+
+def test_busy_admission_can_recover_after_old_retry_window_without_retrying_accepted_requests(monkeypatch):
+    from io import BytesIO
+    from urllib.error import HTTPError
+    calls, clock = [], [0.0]
+    class Response:
+        def __enter__(self): return self
+        def __exit__(self, *_): pass
+        def read(self):
+            return json.dumps(dict(model="served", choices=[dict(finish_reason="stop",
+                message=dict(content='{"items":[]}'))])).encode()
+    class Opener:
+        def open(self, req, **kwargs):
+            calls.append(req)
+            if len(calls) <= 7:
+                raise HTTPError(req.full_url,429,"rejected",{},BytesIO(b'{"detail":"maximum concurrent requests"}'))
+            return Response()
+    monkeypatch.setattr("urllib.request.build_opener",lambda *_:Opener())
+    monkeypatch.setattr("ciw.verify.transport.monotonic",lambda:clock[0])
+    monkeypatch.setattr("ciw.verify.transport.sleep",lambda seconds:clock.__setitem__(0,clock[0]+seconds))
+    b=OpenAICompatBackend("deepseek","deepseek","https://example.com/v1",None)
+    assert b.chat("s","source") == '{"items":[]}' and len(calls) == 8
+    assert clock[0] == 255 and b.receipt["response_model"] == "served"
+
+
+def test_quota_vetoes_temporary_signals_and_final_error_stream_is_closed(monkeypatch):
+    from io import BytesIO
+    from urllib.error import HTTPError
+    body = BytesIO(json.dumps(dict(detail="maximum concurrent requests; insufficient quota")).encode())
+    calls = []
+    class Opener:
+        def open(self, req, **kwargs):
+            calls.append(req)
+            raise HTTPError(req.full_url,429,"rejected",{},body)
+    monkeypatch.setattr("urllib.request.build_opener",lambda *_:Opener())
+    monkeypatch.setattr("ciw.verify.transport.sleep",lambda *_:pytest.fail("quota must not retry"))
+    b=OpenAICompatBackend("deepseek","deepseek","https://example.com/v1",None)
+    with pytest.raises(HTTPError):
+        b.chat("s","source")
+    assert b.receipt["rejection_kind"] == "quota" and len(calls) == 1 and body.closed
+
+
+@pytest.mark.parametrize("timeout", [.01, 0])
+def test_exact_total_timeout_is_not_raised_to_one_tenth_of_a_second(monkeypatch, timeout):
+    calls=[]
+    class Opener:
+        def open(self, req, **kwargs):
+            calls.append(kwargs["timeout"])
+            raise TimeoutError("synthetic timeout")
+    monkeypatch.setattr("urllib.request.build_opener",lambda *_:Opener())
+    monkeypatch.setattr("ciw.verify.transport.monotonic",lambda:0)
+    b=OpenAICompatBackend("deepseek","deepseek","https://example.com/v1",None,timeout=timeout)
+    with pytest.raises(TimeoutError):
+        b.chat("s","source")
+    assert calls == ([timeout] if timeout else [])
+
+
+def test_oversize_private_error_body_is_closed_even_if_it_cannot_be_classified(monkeypatch):
+    from io import BytesIO
+    from urllib.error import HTTPError
+    body=BytesIO(json.dumps(dict(detail="private-marker"*1000)).encode())
+    class Opener:
+        def open(self, req, **kwargs):
+            raise HTTPError(req.full_url,401,"rejected",{},body)
+    monkeypatch.setattr("urllib.request.build_opener",lambda *_:Opener())
+    b=OpenAICompatBackend("deepseek","deepseek","https://example.com/v1",None)
+    with pytest.raises(HTTPError):
+        b.chat("s","source")
+    assert body.closed and "private-marker" not in json.dumps(b.receipt)
+
+
 @pytest.mark.parametrize("message,kind", [("maximum concurrent requests", "concurrency"),
     ("rate limit exceeded", "request_rate"), ("insufficient balance", "quota"),
     ("KV cache pool full", "context_capacity"), ("model is loading", "model_transition")])

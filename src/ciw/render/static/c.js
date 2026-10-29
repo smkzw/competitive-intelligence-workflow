@@ -23,11 +23,23 @@
   const ep = list => list.map(o => `${esc(o.summary || o.concept || o.title)}<span class="hint">${o.timeframe ? (o.timeframe.length > 48 ? `<details><summary>时间窗原文</summary><p>${esc(o.timeframe)}</p></details>` : "（" + esc(o.timeframe) + "）") : ""}</span>${endpointDetails(o)}`).join("<br>");
   const regimens = r => `<details><summary>${r.arms.length}组给药方案</summary>${r.arms.map(a=>`<p><strong>${esc(a.label)}</strong><br>${esc(a.interventions.join("；"))}<br>${esc(a.description)}</p>`).join("")}${(r.study_narrative || []).map(n=>`<details><summary>${esc(n.label)}</summary><p>${esc(n.text)}</p></details>`).join("")}</details>`;
   const annotation = (text, marks) => window.U.annotate(text, marks, document.getElementById("q").value.trim());
-  const clause = s => `<div class="design-clause"><span class="hint">${esc(s.section)}${s.criterion_role === "inclusion" ? " · 入选" : s.criterion_role === "exclusion" ? " · 排除" : ""}</span>
-    ${s.cohort_quote ? `<p class="clause-condition">${esc(s.cohort_quote)}</p>` : ""}
-    ${s.condition ? `<p class="clause-condition">${annotation(s.condition,s.condition_marks)}</p>` : ""}
-    ${s.timeframe ? `<p class="hint">时点：${esc(s.timeframe)}</p>` : ""}
-    <p>${annotation(s.text,s.marks)}</p>${s.context && s.context !== s.text ? `<details><summary>上下文原文</summary><p>${annotation(s.context,s.context_marks)}</p></details>` : ""}</div>`;
+  const clause = s => {
+    const reading = s.reading;
+    const role = s.criterion_role === "inclusion" ? "入选" : s.criterion_role === "exclusion" ? "排除" : "";
+    const cohort = reading ? reading.cohort_zh : s.cohort_quote;
+    const condition = reading ? reading.condition_zh : s.condition;
+    const timeframe = reading ? reading.timeframe_zh : s.timeframe;
+    const original = reading ? `<details class="clause-original"><summary>原文与上下文</summary>
+      ${s.cohort_quote ? `<p>${esc(s.cohort_quote)}</p>` : ""}
+      ${s.condition ? `<p>${annotation(s.condition,s.condition_marks)}</p>` : ""}
+      <p>${annotation(s.text,s.marks)}</p>${s.timeframe ? `<p>${esc(s.timeframe)}</p>` : ""}
+      ${s.context && s.context !== s.text ? `<p>${annotation(s.context,s.context_marks)}</p>` : ""}</details>` :
+      (s.context && s.context !== s.text ? `<details><summary>上下文原文</summary><p>${annotation(s.context,s.context_marks)}</p></details>` : "");
+    return `<div class="design-clause">${cohort ? `<p class="clause-condition">${esc(cohort)}</p>` : ""}
+      ${condition ? `<p class="clause-condition">${annotation(condition,reading ? reading.condition_marks : s.condition_marks)}</p>` : ""}
+      <p class="clause-point">${role ? `<span class="clause-role">${role}</span>` : ""}${annotation(reading ? reading.text_zh : s.text,reading ? reading.marks : s.marks)}</p>
+      ${timeframe ? `<p class="hint">${esc(timeframe)}</p>` : ""}${original}</div>`;
+  };
   const excerpts = r => (r.design_excerpts || []).map(t=>`<details><summary>${esc(t.label)} · ${t.snippets.length}处原文</summary>${t.snippets.map(clause).join("")}</details>`).join("");
   const cols = [
     { label: "药物 / 研究", key: "acronym", html: (r) => `<strong>${r.products.map(p=>esc(p.label)).join("、")}</strong><br>${r.is_own ? '<span class="own-tag">本品 </span>' : ""}${esc(r.phase)} · ${src(r.url, r.acronym || r.trial_id)}${r.population_extent ? '<br><span class="hint">多疾病登记</span>' : ""} <button class="detail-button" data-design-id="${esc(r.trial_id)}" type="button">查看设计</button>` },

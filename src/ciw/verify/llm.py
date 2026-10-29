@@ -21,7 +21,7 @@ from urllib.error import HTTPError
 import yaml
 
 from ciw.store import Workspace, now_iso
-from ciw.verify.transport import model_json, model_opener, rejection_kind
+from ciw.verify.transport import model_json, model_opener
 
 
 class Backend(Protocol):
@@ -72,18 +72,7 @@ class OpenAICompatBackend:
             data = model_json(model_opener(self.base_url, self.no_proxy, transport), req, self.timeout, transport)
         except HTTPError as exc:
             self.receipt = {**transport, "http_status": exc.code, "requested_reasoning_effort": self.reasoning_effort,
-                            "elapsed_seconds": round(perf_counter() - started, 3), "rejection_kind": "unclassified"}
-            try:
-                failure = json.load(exc)
-                error = failure.get("error", failure.get("detail", failure)) if isinstance(failure, dict) else failure
-                self.receipt["rejection_kind"] = rejection_kind(error)
-                message = str(error.get("message", "")) if isinstance(error, dict) else ""
-                for parameter in ("response_format", "temperature", "max_tokens", "reasoning_effort"):
-                    if parameter in message:
-                        self.receipt["provider_parameter"] = parameter
-                        break
-            except (ValueError, OSError, AttributeError):
-                pass
+                            "elapsed_seconds": round(perf_counter() - started, 3)}
             raise
         choices = data.get("choices") or []
         if not choices:

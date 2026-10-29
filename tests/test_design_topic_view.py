@@ -16,6 +16,8 @@ addEventListener:(event,fn)=>callbacks[id+event]=fn});
 const topics=Array.from({length:6},(_,i)=>({topic_id:'design-topic-'+i,label:'主题'+i,kind:'eligibility_threshold'}));
 const snippet={text:'eGFR ≥40 <script>bad()</script>',marks:[],section:'入排标准',criterion_role:'exclusion',
 condition:'Only if all apply:',cohort_quote:'Named cohort',context:'Source full context',context_marks:[]};
+snippet.reading={text_zh:'肾功能 eGFR ≥40 <script>unsafe()</script>',marks:[],condition_zh:'全部条件满足时：',
+condition_marks:[],cohort_zh:'指定队列',timeframe_zh:''};
 const rows=['one','two'].map((trial_id,i)=>({trial_id,title:'',eligibility:'',search_text:i?'其他':'肾功能',
 products:[{label:'Drug '+i}],primary:[],primary_concepts:[],phase:'III',masking:'',enrollment:i?20:0,
 background_therapy:[],arms:[],
@@ -50,4 +52,8 @@ process.stdout.write(JSON.stringify(out));
         assert not fragment.xpath(".//script")
         assert "Only if all apply:" in fragment.text_content() and "排除" in fragment.text_content()
         assert "Named cohort" in fragment.text_content() and "eGFR ≥40" in fragment.text_content()
+        primary = "".join(fragment.xpath('.//p[@class="clause-point"]//text()'))
+        assert "肾功能" in primary and "Only if all" not in primary
+        assert fragment.xpath('.//details[@class="clause-original"]')
+        assert "指定队列" in fragment.text_content() and "全部条件满足时" in fragment.text_content()
     assert "N=0" in initial["cells"][0][0]
