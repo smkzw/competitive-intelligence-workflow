@@ -47,6 +47,9 @@ def context_catalog(results, trials, families, concepts=()):
 
 
 def material_text(catalog):
-    return "\n\n".join("Context:" + key + "\n" + json.dumps(value, ensure_ascii=False, sort_keys=True)
-                         for key, value in sorted(catalog.items()))
+    return "\n\n".join("Context:" + key + "\n" + json.dumps(dict(
+        study_title=value["fields"][0], endpoint_title=value["fields"][1],
+        definition=value["fields"][2], population=value["fields"][3],
+        numeric_conditions=value["guard"], direction=value["direction"]), ensure_ascii=False, sort_keys=True)
+        for key, value in sorted(catalog.items()))
 

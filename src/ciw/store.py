@@ -2,15 +2,23 @@
 
 from __future__ import annotations
 
+import fcntl
 import hashlib
 import json
+import os
 import sqlite3
+import threading
 from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from ciw.models import Source, SourceKind, stable_id
+
+
+class WorkspaceBusyError(RuntimeError):
+    pass
+
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS sources (
@@ -41,6 +49,25 @@ class Workspace:
             con.executescript(SCHEMA)
             if "metadata" not in {r[1] for r in con.execute("PRAGMA table_info(llm_cache)")}:
                 con.execute("ALTER TABLE llm_cache ADD COLUMN metadata TEXT")
+
+    @contextmanager
+    def writer(self):
+        """One process/thread publishes a workspace; a lost wait must not create a second writer."""
+        owner = (os.getpid(), threading.get_ident())
+        if getattr(self, "_writer_owner", None) == owner:
+            yield
+            return
+        with (self.root / ".writer.lock").open("a") as handle:
+            try:
+                fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except BlockingIOError:
+                raise WorkspaceBusyError("此工作区正在生成报告，请等待当前任务结束") from None
+            self._writer_owner = owner
+            try:
+                yield
+            finally:
+                self._writer_owner = None
+                fcntl.flock(handle, fcntl.LOCK_UN)
 
     # ---------- SQLite ----------
     @contextmanager

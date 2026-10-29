@@ -31,9 +31,9 @@ def _analysis_tokens(text):
 
 
 class ComparisonAxisItem(BaseModel):
-    axis_anchor: str
+    axis_anchor: str = Field(description="复制允许Context ID中字典序最小的成员，不得使用source_id或研究号")
     axis_label: str = Field(min_length=1, max_length=40)
-    member_ids: list[str] = Field(min_length=2)
+    member_ids: list[str] = Field(min_length=2, description="逐字复制Context:后的context_标识，不是来源ID或研究ID")
     member_quotes: dict[str, str]
     analysis_set: str = Field(min_length=1, max_length=80)
     analysis_quotes: dict[str, str]
@@ -123,19 +123,42 @@ def _checked_groups(items, subset):
     return groups, issues
 
 
+def _record_checked(ws, task_id, checked, subset, roles):
+    verified = [c.item for c in checked if c.status == "verified"]
+    adopted, issues = _checked_groups(verified, subset)
+    calls = {}
+    for c in checked:
+        ws.save_verification("comparison:" + task_id + ":" + c.item["axis_anchor"], c.status,
+                             dict(item=c.item, calls=c.calls, review_note=c.note))
+        for call in c.calls:
+            calls[json.dumps(call, sort_keys=True)] = call
+    if not calls:
+        for role, backend in roles.items():
+            receipt = getattr(backend, "receipt", {})
+            if receipt:
+                calls[role] = dict(role="extract" if role == "extractor_a" else "verify", **receipt)
+    pending = [c.item["axis_anchor"] for c in checked if c.status != "verified"]
+    if pending:
+        issues.append(dict(kind="comparison_axis_needs_review", ref=pending))
+    record = dict(status="reviewed" if issues else "verified", items=verified, issues=issues,
+                  calls=list(calls.values()))
+    return adopted, issues, record
+
+
 def enrich_comparison_axes(ws, cfg, results, trials, families, roles=None, *, previous=None):
     catalog = context_catalog(results, trials, families, cfg.concepts)
     saved = ws.read_stage("research-comparison-axes") or previous or {}
     saved = saved if saved.get("schema") == SCHEMA else {}
-    tasks, groups, issues = dict(saved.get("tasks", {})), [], []
-    instruction = _instruction(cfg)
+    tasks, groups, issues, active = dict(saved.get("tasks", {})), [], [], []
     for subset in _work(catalog):
         text = material_text(subset)
         digest = hashlib.sha256(text.encode()).hexdigest()
         schema = json.dumps(ComparisonAxisItem.model_json_schema(), sort_keys=True)
+        instruction = _instruction(cfg) + "允许的Context ID：" + json.dumps(sorted(subset))
         task_id = task_id_for(digest, schema, instruction)
+        active.append(task_id)
         record = tasks.get(task_id, {})
-        if record.get("status") == "verified":
+        if record.get("status") in {"verified", "reviewed"}:
             adopted, conflicts = _checked_groups(record.get("items", []), subset)
             groups.extend(adopted)
             issues.extend(conflicts)
@@ -156,23 +179,15 @@ def enrich_comparison_axes(ws, cfg, results, trials, families, roles=None, *, pr
             ws.write_stage("research-comparison-axes", dict(schema=SCHEMA, tasks=tasks, groups=groups,
                                                            status="partial"))
             continue
-        verified = [c.item for c in checked if c.status == "verified"]
-        adopted, conflicts = _checked_groups(verified, subset)
+        adopted, task_issues, record = _record_checked(ws, task_id, checked, subset, roles)
         groups.extend(adopted)
-        task_issues = list(conflicts)
-        for c in checked:
-            ws.save_verification("comparison:" + task_id + ":" + c.item["axis_anchor"], c.status,
-                                 dict(item=c.item, calls=c.calls, review_note=c.note))
-        pending = [c.item["axis_anchor"] for c in checked if c.status != "verified"]
-        if pending:
-            task_issues.append(dict(kind="comparison_axis_needs_review", ref=pending))
         issues.extend(task_issues)
-        tasks[task_id] = dict(status="verified", items=verified, issues=task_issues)
+        tasks[task_id] = record
         ws.write_stage("research-comparison-axes", dict(schema=SCHEMA, tasks=tasks, groups=groups))
     matched = {cid for g in groups for cid in g["member_ids"]}
     contexts = {cid: {k: s[k] for k in ("trial_id", "source_id", "path", "outcome_index")}
                 for cid, s in catalog.items()}
-    snapshot = dict(schema=SCHEMA, tasks=tasks, groups=groups, contexts=contexts,
+    snapshot = dict(schema=SCHEMA, tasks=tasks, active_task_ids=active, groups=groups, contexts=contexts,
                     unmatched_ids=sorted(set(catalog) - matched),
                     status="partial" if issues else "verified")
     ws.write_stage("research-comparison-axes", snapshot)

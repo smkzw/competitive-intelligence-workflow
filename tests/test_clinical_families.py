@@ -147,6 +147,36 @@ def test_report_supplement_can_reuse_release_membership_after_stage_loss(cfg, ws
     assert not issues and recovered["groups"] == previous["groups"] and len(calls) == 2
 
 
+def test_added_source_only_classifies_new_members_without_rearranging_verified_family(cfg, ws):
+    cfg, rows, trials = inputs(cfg)
+    roles, _ = models([group_for(rows)])
+    original, _ = enrich_endpoint_families(ws, cfg, rows, roles)
+    new = rows[0].model_copy(deep=True, update={"result_id": "new", "trial_id": "T2", "concept_id": "source-2"})
+    new.title = "Proportion of Individuals Achieving Clinical Remission at Week 24"
+    cfg.concepts.append(ConceptCfg(id=new.concept_id, label="临床缓解", patterns=[re.escape(new.title)],
+        source_definition=new.description, origin="source_index", direction="higher_better"))
+    additions, calls = models([group_for([new])])
+    current, issues = enrich_endpoint_families(ws, cfg, [*rows, new], additions)
+    assert not issues and len(calls) == 2
+    group, = current["groups"]
+    assert set(group["member_ids"]) == {"source-0", "source-1", "source-2"}
+    assert {cid:group["member_quotes"][cid] for cid in original["groups"][0]["member_ids"]} == (
+        original["groups"][0]["member_quotes"])
+    assert "Concept:source-2" in calls[0][1] and "Concept:source-0" not in calls[0][1].split("<<<", 1)[1]
+
+
+def test_new_model_cannot_reassign_or_split_retained_members_when_new_sources_arrive(cfg, ws):
+    cfg, rows, _ = inputs(cfg)
+    roles, _ = models([group_for(rows)])
+    original, _ = enrich_endpoint_families(ws, cfg, rows, roles)
+    new = rows[0].model_copy(deep=True, update={"result_id": "new", "concept_id": "source-2"})
+    cfg.concepts.append(ConceptCfg(id=new.concept_id, label="临床缓解", patterns=[re.escape(new.title)],
+        source_definition=new.description, origin="source_index"))
+    reassign, _ = models([group_for([rows[0]])])
+    current, issues = enrich_endpoint_families(ws, cfg, [*rows, new], reassign)
+    assert issues and current["groups"] == original["groups"]
+
+
 @pytest.mark.parametrize("left,right", [
     ("Assessment (GPPGA) Total Score of 0 or 1", "Assessment (GPPGA) Pustulation Subscore of 0"),
     ("Assessment (GPPGA) Pustulation Subscore", "Assessment (GPPGA) Erythema Subscore"),

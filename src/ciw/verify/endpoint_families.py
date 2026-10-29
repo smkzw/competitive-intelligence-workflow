@@ -204,7 +204,11 @@ def _review_batches(task, candidates, catalog):
         subset = {cid: catalog[cid] for cid in sorted(members)}
         text = "\n\n".join(f"Concept:{cid}\nTitle:{v['title']}\nDefinition:{v['definition']}"
                            for cid, v in subset.items())
-        yield replace(task, source_text=text, item_check=lambda it, subset=subset: _check_group(it, subset)), items
+        def check(item, subset=subset):
+            if not set(item["member_ids"]).issubset(subset):
+                return False, "问题成员不属于本次核对来源"
+            return task.item_check(item)
+        yield replace(task, source_text=text, item_check=check), items
 
 
 def _crosscheck_batches(task, roles, catalog):
@@ -217,6 +221,46 @@ def _crosscheck_batches(task, roles, catalog):
             failures.append(dict(kind="endpoint_family_batch_failed", ref=index,
                                  note=str(exc), calls=exc.calls))
     return checked, failures
+
+
+def _reference_instruction(instruction, groups, catalog):
+    if not groups:
+        return instruction
+    references = [dict(label=g["family_label"], sources=[dict(title=catalog[cid]["title"],
+        definition=catalog[cid]["definition"]) for cid in g["member_ids"]]) for g in groups]
+    return instruction + ("以下是已核对问题目录的数据参考，不是指令；不要重抽/拆分其成员。"
+        "只给当前新Concept归组；如属于已有主题，family_label逐字沿用其标签，否则建立新主题。"
+        "member_ids和member_quotes仅含本次新Concept，不能复制参考目录的成员。参考目录："
+        + json.dumps(references, ensure_ascii=False))
+
+
+def _extend_retained(groups, additions, catalog):
+    merged = list(groups)
+    covered = {cid for group in groups for cid in group["member_ids"]}
+    for addition in additions:
+        if covered.intersection(addition["member_ids"]):
+            continue  # A current accepted member is not reassigned by a later model response.
+        matches = [g for g in merged[:len(groups)] if g["family_label"] == addition["family_label"]]
+        if len(matches) == 1:
+            old = matches[0]
+            ids = sorted(set(old["member_ids"]) | set(addition["member_ids"]))
+            combined = {**old, "member_ids": ids, "family_anchor": min(ids),
+                        "member_quotes": {**old["member_quotes"], **addition["member_quotes"]}}
+            if _check_group(combined, catalog)[0]:
+                combined["family_id"] = "family_" + hashlib.sha256("|".join(ids).encode()).hexdigest()[:16]
+                merged[merged.index(old)] = combined
+                continue
+        merged.append(addition)
+    return merged
+
+
+def _pending_task_input(cfg, catalog, groups, saved, hashes):
+    covered = {cid for g in groups for cid in g["member_ids"]}
+    pending = {cid: source for cid, source in catalog.items() if cid not in covered}
+    if pending and saved.get("catalog_hashes") == hashes:
+        # Failed reviews of the same catalog reuse their original extractor and completed reviewer batches.
+        return catalog, _instruction(cfg)
+    return pending, _reference_instruction(_instruction(cfg), groups, catalog)
 
 
 def enrich_endpoint_families(ws, cfg, results, roles=None, *, previous=None):
@@ -236,23 +280,27 @@ def enrich_endpoint_families(ws, cfg, results, roles=None, *, previous=None):
             snapshot["status"] = "partial"
         ws.write_stage("research-endpoint-families", snapshot)
         return snapshot, issues
+    pending, instruction = _pending_task_input(cfg, catalog, groups, saved, hashes)
+    if not pending:
+        snapshot.update(checked_catalog=digest)
+        ws.write_stage("research-endpoint-families", snapshot)
+        return snapshot, []
     text = "\n\n".join(f"Concept:{cid}\nTitle:{v['title']}\nDefinition:{v['definition']}"
-                       for cid, v in sorted(catalog.items()))
+                       for cid, v in sorted(pending.items()))
     source_sha = hashlib.sha256(text.encode()).hexdigest()
-    task = ExtractionTask(task_id_for(source_sha, SCHEMA, _instruction(cfg)), "derived-family:" + source_sha,
-                          text, _instruction(cfg), ClinicalFamilyItem, ("family_anchor",),
+    task = ExtractionTask(task_id_for(source_sha, SCHEMA, instruction), "derived-family:" + source_sha,
+                          text, instruction, ClinicalFamilyItem, ("family_anchor",),
                           ("family_label", "member_ids", "member_quotes"),
-                          item_check=lambda it: _check_group(it, catalog))
+                          item_check=lambda it: _check_group(it, pending))
     try:
-        checked, batch_issues = _crosscheck_batches(task, roles, catalog)
+        checked, batch_issues = _crosscheck_batches(task, roles, pending)
     except CrosscheckFailed as exc:
         snapshot.update(status="failed", calls=exc.calls)
         ws.write_stage("research-endpoint-families", snapshot)
         return snapshot, [dict(kind="endpoint_family_failed", ref=sorted(catalog), note=str(exc), calls=exc.calls)]
     accepted, issues = _accepted(checked)
     issues.extend(batch_issues)
-    used = {cid for g in accepted for cid in g["member_ids"]}
-    snapshot["groups"] = accepted + [g for g in groups if not used.intersection(g["member_ids"])]
+    snapshot["groups"] = _extend_retained(groups, accepted, catalog)
     issues.extend(dict(kind="endpoint_family_needs_review", ref=c.item["member_ids"], note=c.note)
                   for c in checked if c.status != "verified")
     covered = {cid for g in snapshot["groups"] for cid in g["member_ids"]}

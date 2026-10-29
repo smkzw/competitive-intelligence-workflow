@@ -117,6 +117,11 @@ def _render_attempt(base, site, rel, selected):
 
 
 def rerender_current(ws):
+    with ws.writer():
+        return _rerender_current(ws)
+
+
+def _rerender_current(ws):
     from ciw.release import write_release
     doc = load_release(ws.current_release_dir())
     body = {k: v for k, v in doc.items()

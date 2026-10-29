@@ -62,6 +62,18 @@ def build_products(cfg: IndicationConfig) -> dict[str, Product]:
 
 
 def run(
+    cfg: IndicationConfig, ws: Workspace, *, offline: bool = False,
+    roles: dict[str, Backend] | None = None, render: bool = True, log=print,
+    preloaded_studies=None, report_scope: str | None = None,
+    render_reports: list[str] | None = None, reuse_sources: bool = False,
+) -> RunResult:
+    with ws.writer():
+        return _run(cfg, ws, offline=offline, roles=roles, render=render, log=log,
+            preloaded_studies=preloaded_studies, report_scope=report_scope,
+            render_reports=render_reports, reuse_sources=reuse_sources)
+
+
+def _run(
     cfg: IndicationConfig,
     ws: Workspace,
     *,

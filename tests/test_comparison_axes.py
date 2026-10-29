@@ -67,6 +67,8 @@ def test_two_role_axis_joins_same_time_rows_and_longitudinal_preserving_strata_a
     roles, calls = roles_for([item_for(results, trials)])
     snapshot, issues = enrich_comparison_axes(ws, cfg, results, trials, families, roles)
     assert not issues and len(calls) == 2 and len(snapshot["groups"]) == 1
+    assert len(snapshot["active_task_ids"]) == 1
+    assert len(snapshot["tasks"][snapshot["active_task_ids"][0]]["calls"]) == 2
     body = project_clinical_families(build_results(cfg, trials, {}, results, None), families)
     previous = deepcopy(body)
     projected = project_comparison_axes(body, snapshot["groups"], results)
@@ -215,4 +217,17 @@ def test_modified_analysis_grammar_keeps_separator_variants_distinct_from_plain_
     item = item_for([results[0], results[2]], trials)
     item["analysis_set"] = "mITT"
     assert check_axis(item, context_catalog(results, trials, families, cfg.concepts))[0]
+
+
+def test_historical_auth_failures_remain_history_and_are_not_current_task_failures(cfg, ws):
+    cfg, results, trials, families = inputs(cfg)
+    roles, _ = roles_for([item_for(results, trials)])
+    snapshot, _ = enrich_comparison_axes(ws, cfg, results, trials, families, roles)
+    snapshot["tasks"]["historical"] = dict(status="failed", calls=[dict(http_status=401)])
+    ws.write_stage("research-comparison-axes", snapshot)
+    current, issues = enrich_comparison_axes(ws, cfg, results, trials, families)
+    assert not issues and current["status"] == "verified" and len(current["groups"]) == 1
+    assert current["tasks"]["historical"]["status"] == "failed"
+    assert "historical" not in current["active_task_ids"]
+    assert all(current["tasks"][tid]["status"] == "verified" for tid in current["active_task_ids"])
 

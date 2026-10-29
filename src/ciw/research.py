@@ -217,9 +217,16 @@ def _queue(ws, lock_path):
 
 def run_research(indication, workspace, *, question="", llm_config=None, log=print, queue_lock=None,
                  report="A", reuse_research=False):
+    ws = Workspace(workspace)
+    with ws.writer():
+        return _run_research(indication, ws, question=question, llm_config=llm_config, log=log,
+            queue_lock=queue_lock, report=report, reuse_research=reuse_research)
+
+
+def _run_research(indication, ws, *, question="", llm_config=None, log=print, queue_lock=None,
+                  report="A", reuse_research=False):
     if report not in {"A", "B", "C"}:
         raise ResearchInputError("未知报告类型")
-    ws = Workspace(workspace)
     state = dict(state="queued", pid=os.getpid(), started_at=now_iso(), updated_at=now_iso(), message="等待开始",
                  execution_token=os.environ.get("CIW_RESEARCH_EXECUTION_TOKEN"), report=report)
 
