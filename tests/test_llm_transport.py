@@ -132,6 +132,42 @@ def test_one_second_retry_hint_cannot_create_a_busy_retry_loop(monkeypatch):
     assert pauses == [5,10,20,40,60] and len(calls) == 6
 
 
+@pytest.mark.parametrize("message,kind", [("maximum concurrent requests", "concurrency"),
+    ("rate limit exceeded", "request_rate"), ("insufficient balance", "quota"),
+    ("KV cache pool full", "context_capacity"), ("model is loading", "model_transition")])
+def test_error_receipts_classify_rejections_without_retaining_upstream_private_text(monkeypatch, message, kind):
+    from io import BytesIO
+    from urllib.error import HTTPError
+    secret = "synthetic-private-marker-do-not-retain"
+    class Opener:
+        def open(self, req, **kwargs):
+            raise HTTPError(req.full_url,429,"rejected",{"Retry-After":"9999"},
+                BytesIO(json.dumps(dict(error=dict(message=message + " " + secret))).encode()))
+    monkeypatch.setattr("urllib.request.build_opener",lambda *_:Opener())
+    b=OpenAICompatBackend("deepseek","deepseek","https://example.com/v1",None)
+    with pytest.raises(HTTPError):
+        b.chat("s","source")
+    assert b.receipt["rejection_kind"] == kind
+    assert secret not in json.dumps(b.receipt)
+
+
+@pytest.mark.parametrize("detail", ["maximum concurrent requests: synthetic-private-marker",
+                                    {"reason":"maximum concurrent requests: synthetic-private-marker"}])
+def test_gateway_detail_error_shapes_preserve_only_the_operational_category(monkeypatch, detail):
+    from io import BytesIO
+    from urllib.error import HTTPError
+    class Opener:
+        def open(self, req, **kwargs):
+            raise HTTPError(req.full_url,429,"rejected",{"Retry-After":"9999"},
+                            BytesIO(json.dumps(dict(detail=detail)).encode()))
+    monkeypatch.setattr("urllib.request.build_opener",lambda *_:Opener())
+    b=OpenAICompatBackend("deepseek","deepseek","https://example.com/v1",None)
+    with pytest.raises(HTTPError):
+        b.chat("s","source")
+    assert b.receipt["rejection_kind"] == "concurrency"
+    assert "synthetic-private-marker" not in json.dumps(b.receipt)
+
+
 def test_content_cache_keeps_original_receipt_without_another_model_call(ws):
     calls = []
     b = FakeBackend("qwen", "qwen", lambda *args: calls.append(args) or '{"items":[]}')

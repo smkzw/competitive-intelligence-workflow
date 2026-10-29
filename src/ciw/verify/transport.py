@@ -4,6 +4,7 @@ import http.client
 import ipaddress
 import json
 import math
+import re
 import shutil
 import socket
 import subprocess
@@ -94,6 +95,24 @@ def _retry_delay(header, attempt):
         return max(floor, parsedate_to_datetime(header).timestamp() - time())
     except (ValueError, TypeError, AttributeError, OverflowError):
         return floor
+
+
+def rejection_kind(error):
+    """Keep an operational category only; upstream text may contain private data."""
+    if not isinstance(error, (dict, str)):
+        return "unclassified"
+    text = (json.dumps(error, ensure_ascii=False) if isinstance(error, dict) else error)[:4096].lower()
+    for category, pattern in (
+        ("concurrency", r"concurren|in[-_ ]?flight|simultaneous|active requests|parallel"),
+        ("context_capacity", r"context|kv.{0,12}(?:cache|pool)|token.{0,12}(?:budget|capacity)"),
+        ("quota", r"quota|balance|credit|insufficient"),
+        ("request_rate", r"rate[-_ ]?limit|requests per|too many requests"),
+        ("model_transition", r"switch|loading|warming"),
+        ("service_busy", r"overload|busy|capacity"),
+    ):
+        if re.search(pattern, text):
+            return category
+    return "unclassified"
 
 
 def model_json(opener, request, timeout, transport):
