@@ -8,20 +8,17 @@ from typing import Any
 
 from ciw.models import Event, stable_id
 from ciw.normalize.products import ProductResolver
-from ciw.sources.nmpa.parser import parse_detail
+from ciw.sources.nmpa.parser import content_key, parse_detail
 from ciw.store import Workspace
 
 
 def ingest(ws: Workspace, resolver: ProductResolver) -> tuple[list[Event], list[dict], dict[str, Any]]:
     paths = sorted((ws.root / "captures/nmpa").glob("certificate-*.json"))
-    events, issues, adopted = [], [], set()
-    for path in paths:
+    selected, issues = _latest_versions(paths)
+    events, adopted = [], set()
+    for path, raw, parsed in selected:
         try:
-            raw = json.loads(path.read_text())
-            parsed = parse_detail(raw, registration_number=raw["registration_number"], category=raw["category"])
             fetched_at = raw["observed_at"]
-            if datetime.fromisoformat(fetched_at).tzinfo is None:
-                raise ValueError("NMPA capture lacks a timezone")
             source = ws.record_source(
                 kind="nmpa",
                 url=parsed["url"],
@@ -82,7 +79,8 @@ def ingest(ws: Workspace, resolver: ProductResolver) -> tuple[list[Event], list[
         else "partial"
         if issues or missing or failed_queries
         else "ok",
-        "records": len(paths),
+        "records": len(selected),
+        "capture_versions": len(paths),
         "adopted": len(events),
         "failed": len(issues),
         "discovered": len(expected),
@@ -90,3 +88,27 @@ def ingest(ws: Workspace, resolver: ProductResolver) -> tuple[list[Event], list[
         "failed_queries": failed_queries,
     }
     return events, issues, coverage
+
+
+def _latest_versions(paths):
+    versions, issues = {}, []
+    for path in paths:
+        try:
+            raw = json.loads(path.read_text())
+            parsed = parse_detail(raw, registration_number=raw["registration_number"], category=raw["category"])
+            observed = datetime.fromisoformat(raw["observed_at"])
+            if observed.tzinfo is None:
+                raise ValueError("NMPA capture lacks a timezone")
+            key = (raw["category"], raw["registration_number"])
+            versions.setdefault(key, []).append((observed, content_key(raw), path, raw, parsed))
+        except (ValueError, KeyError, TypeError) as exc:
+            issues.append(dict(kind="nmpa_capture_invalid", ref=path.name, note=str(exc)))
+    selected = []
+    for (_category, number), candidates in versions.items():
+        latest_time = max(c[0] for c in candidates)
+        latest = [c for c in candidates if c[0] == latest_time]
+        if len({c[1] for c in latest}) != 1:
+            issues.append(dict(kind="nmpa_capture_conflict", ref=number, note="同一观察时点存在不同许可原件"))
+            continue
+        selected.append(latest[0][2:])
+    return selected, issues

@@ -172,6 +172,9 @@ def _capture_command(a, ap) -> int:
     else:
         result = capture(ws, cfg, a.space, max_details=a.max_details)
     print(json.dumps(result, ensure_ascii=False, indent=1))
+    if a.source == "nmpa" and (result.get("blocked") or result.get("failures") or any(
+            q.get("status") not in {"ok", "reused"} for q in result.get("queries", []))):
+        return 1
     return 0
 
 

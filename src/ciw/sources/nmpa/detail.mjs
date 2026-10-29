@@ -11,5 +11,6 @@ try {
   const code=String(e?.message||'').includes('certificate_user_verification_required')?
     'certificate_user_verification_required':network||'unexpected';
   console.log('CIW_CHINA_END:'+JSON.stringify({status:control(e)?'user_control':
-    code==='certificate_user_verification_required'?'verification_required':network?'network_error':'failed',error_type:e?.name||'Error',error_code:code}));
+    code==='certificate_user_verification_required'?'verification_required':network?'network_error':'failed',error_type:e?.name||'Error',error_code:code,
+    certificate_state:e?.certificate_state}));
 }

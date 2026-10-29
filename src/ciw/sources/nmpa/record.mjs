@@ -8,7 +8,8 @@ async function readCertificate(page, category, number) {
   const wanted=(category+'——“'+number+'”基本信息').replace(/\s+/g,'');
   // The page loads before its record table is populated: wait for this exact
   // heading, this certificate column, and a non-empty required product value.
-  await page.waitForFunction(({wanted, label, product}) => {
+  try {
+   await page.waitForFunction(({wanted, label, product}) => {
     const body = (document.body?.innerText || '').replace(/\s+/g, '');
     const network=body.match(/ERR_CONNECTION_CLOSED|ERR_CONNECTION_RESET|ERR_INTERNET_DISCONNECTED|ERR_NAME_NOT_RESOLVED|ERR_TIMED_OUT/)?.[0];
     if(network)throw Error(network);
@@ -20,7 +21,21 @@ async function readCertificate(page, category, number) {
       .filter(row => row.cells.length === 2 && row.cells[0].innerText.trim() === product &&
         row.cells[1].innerText.trim());
     return rows.length >= 1 && named.length === 1;
-  }, {wanted, label: fields.certificate, product: fields.product}, {timeout: 45000});
+   }, {wanted, label: fields.certificate, product: fields.product}, {timeout: 45000});
+  } catch(error) {
+    if(/EGO_.*(?:CONTROL|OWNERSHIP|INACTIVE|UNASSIGNED|NOT_FOUND)|user control|certificate_user_verification_required|ERR_/.test(String(error?.message||'')))throw error;
+    error.certificate_state=await page.evaluate(({wanted,label,product})=>{
+      const body=(document.body?.innerText||'').replace(/\s+/g,'');
+      const rows=[...document.querySelectorAll('table tr')].filter(r=>r.cells.length===2);
+      return {heading_matches:body.includes(wanted),
+        certificate_rows:rows.filter(r=>r.cells[0].innerText.trim()===label).length,
+        product_rows:rows.filter(r=>r.cells[0].innerText.trim()===product&&r.cells[1].innerText.trim()).length,
+        verification:body.includes('请完成安全验证')&&body.includes('向右滑动'),
+        network_code:body.match(/ERR_CONNECTION_CLOSED|ERR_CONNECTION_RESET|ERR_INTERNET_DISCONNECTED|ERR_NAME_NOT_RESOLVED|ERR_TIMED_OUT/)?.[0]||null,
+        visible_loading_masks:[...document.querySelectorAll('.el-loading-mask')].filter(e=>e.checkVisibility()).length};
+    },{wanted,label:fields.certificate,product:fields.product}).catch(()=>null);
+    throw error;
+  }
   const captured = await page.evaluate(({category, number, wanted, label, product}) => {
     const visible = el => el.checkVisibility
       ? el.checkVisibility({checkOpacity: true, checkVisibilityCSS: true})

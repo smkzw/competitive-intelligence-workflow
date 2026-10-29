@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import base64
 import binascii
+import hashlib
+import json
 import re
 from typing import Any
 from urllib.parse import parse_qs, urlsplit
@@ -40,6 +42,12 @@ FIELDS = {
         "approval_date": "批准日期",
     },
 }
+
+
+def content_key(raw: dict) -> str:
+    """Record content only; a fresh observation is retained in its separate catalogue capture."""
+    material = {key: raw[key] for key in ("url", "category", "registration_number", "heading", "rows")}
+    return hashlib.sha256(json.dumps(material, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
 
 
 def _url(value: Any) -> str:
