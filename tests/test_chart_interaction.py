@@ -122,3 +122,36 @@ process.stdout.write(JSON.stringify({afterInner,afterOuter,cancelPrevented,dialo
     assert out["afterOuter"]["outer"] is False and out["afterOuter"]["dialog"] is False
     assert out["afterOuter"]["focus"] is True
     assert out["cancelPrevented"] is True and out["dialog"] is True
+
+
+def test_real_engine_scatter_zoom_does_not_draw_excluded_rows_over_the_axes():
+    script = r"""
+const fs=require('fs'),vm=require('vm'),ec=require(process.argv[2]);
+const browser={CIW:{},innerWidth:1440,innerHeight:900,addEventListener(){}};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{window:browser,URL,
+ document:{getElementById:()=>null,addEventListener(){}}});
+const results=[];
+for(const category of [true,false]){
+ const el={clientWidth:600,style:{}};
+ const raw={animation:false,grid:{left:80,right:30,top:30,bottom:50},
+  xAxis:{type:'value'},yAxis:category?{type:'category',inverse:true,
+   data:Array.from({length:20},(_,i)=>'Study'+i)}:{type:'value',min:0},
+  series:[{type:'scatter',symbolSize:12,encode:{x:0,y:1},
+   data:Array.from({length:20},(_,i)=>[1,i])}]};
+ const option=browser.U.present(raw,el);
+ const chart=ec.init(null,null,{renderer:'svg',ssr:true,width:600,height:340});
+ chart.setOption(option);
+ const view=chart.getViewOfSeriesModel(chart.getModel().getSeriesByIndex(0));
+ const points=[];view.group.traverse(e=>{if(e.shape?.symbolType)points.push(e.getComputedTransform()[5]);});
+ const rect=chart.getModel().getComponent('grid').coordinateSystem.getRect();
+ results.push({category,points,clip:option.series[0].clip,minY:rect.y,maxY:rect.y+rect.height,
+  values:chart.getModel().getSeriesByIndex(0).getData().mapArray('y',v=>v)});
+ chart.dispose();
+}
+process.stdout.write(JSON.stringify(results));
+"""
+    category, numeric = _node(script, str(ASSETS / "common.js"), str(ASSETS / "echarts.min.js"))
+    assert len(category["points"]) == 10
+    assert all(category["minY"] <= y <= category["maxY"] for y in category["points"])
+    assert len(numeric["points"]) == 20 and 0 in numeric["values"]
+    assert not numeric["clip"]  # The C chart's real zero stays visible at the numeric plot edge.

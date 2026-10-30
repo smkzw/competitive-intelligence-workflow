@@ -217,7 +217,8 @@
     } else if(axis?.type === "category") {
       delete option.dataZoom;
     }
-    option.series = (option.series || []).map(s=>({...s,clip:s.type==="scatter"?false:true,label:{fontSize:16,...s.label}}));
+    option.series = (option.series || []).map(s=>({...s,
+      clip:s.type!=="scatter" || option.yAxis?.type==="category",label:{fontSize:16,...s.label}}));
     return option;
   }
 
