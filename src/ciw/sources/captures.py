@@ -12,6 +12,7 @@ import json
 import re
 import shutil
 import subprocess
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
@@ -109,6 +110,27 @@ def _event_task(src, text, cfg, resolver) -> ExtractionTask:
     )
 
 
+def _retained_events(ws, task, source_sha):
+    current, incomplete = retained_verified(ws, task)
+    current_ids = {key for key, r in ws.verifications().items()
+                   if r.get("task") == task.task_id and r.get("source_id") == task.source_id}
+    # Only the exact pre-detail-anchor schema is compatible, never arbitrary historical task IDs.
+    schema = task.item_model.model_json_schema()
+    schema["properties"].pop("detail_quote", None)
+    old_id = task_id_for(source_sha, json.dumps(schema, sort_keys=True), task.instruction)
+    legacy = replace(task, task_id=old_id, item_check=None)
+    checked, old_incomplete = retained_verified(ws, legacy)
+    for item in checked:
+        if stable_id("ev", task.source_id, item.key) in current_ids:
+            continue  # A later current-task decision, including needs_review, owns this identity.
+        ok, reason = validate_event_item(item.item)
+        if not ok:
+            item.status, item.note = "needs_review", "既有核对项未通过当前证据校验：" + reason
+            incomplete = True
+        current.append(item)
+    return current, incomplete or old_incomplete
+
+
 def extract_events(
     ws: Workspace, cfg: IndicationConfig, resolver: ProductResolver, roles: dict[str, Backend] | None
 ) -> tuple[list[Event], list[dict[str, Any]], list[dict[str, Any]]]:
@@ -149,7 +171,8 @@ def extract_events(
         )
         task = _event_task(src, text, cfg, resolver)
         try:
-            checked, incomplete = (crosscheck(task, roles), False) if roles is not None else retained_verified(ws, task)
+            checked, incomplete = ((crosscheck(task, roles), False) if roles is not None
+                                   else _retained_events(ws, task, src.sha256))
         except CrosscheckFailed as exc:
             stat["failed"] += 1
             queue.append({"kind": "doc_extract_failed", "ref": src.source_id, "note": str(exc)})

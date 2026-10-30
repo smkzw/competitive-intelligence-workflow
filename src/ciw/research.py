@@ -25,6 +25,7 @@ from ciw.config import (
 from ciw.pipeline import run
 from ciw.sources import ctgov
 from ciw.store import Workspace, now_iso
+from ciw.verify.crosscheck import CrosscheckFailed
 from ciw.verify.llm import CachedBackend, load_roles, parse_json, require_model_credentials
 
 
@@ -283,6 +284,22 @@ def run_research(indication, workspace, *, question="", llm_config=None, log=pri
             queue_lock=queue_lock, report=report, reuse_research=reuse_research)
 
 
+def _failure_message(exc):
+    if isinstance(exc, ResearchInputError):
+        return str(exc)
+    saved = "已保存的资料可在重试时复用"
+    if isinstance(exc, CrosscheckFailed):
+        for call in reversed(exc.calls):
+            status = call.get("http_status")
+            if status == 401:
+                return f"模型接入鉴权失败，{saved}"
+            if status == 429:
+                if call.get("rejection_kind") == "quota":
+                    return f"模型服务额度不足，{saved}"
+                return f"模型服务繁忙，请稍后继续，{saved}"
+    return f"调研未完成，{saved}"
+
+
 def _run_research(indication, ws, *, question="", llm_config=None, log=print, queue_lock=None,
                   report="A", reuse_research=False):
     if report not in {"A", "B", "C"}:
@@ -303,8 +320,7 @@ def _run_research(indication, ws, *, question="", llm_config=None, log=print, qu
         state.update(state="done", release_id=result.release_id, stats=result.stats, message="报告已生成")
         return result
     except Exception as exc:
-        state.update(state="failed", error_type=type(exc).__name__, message=str(exc) if isinstance(
-            exc, ResearchInputError) else "调研未完成，已保存的资料可在重试时复用")
+        state.update(state="failed", error_type=type(exc).__name__, message=_failure_message(exc))
         raise
     finally:
         state["updated_at"] = now_iso()

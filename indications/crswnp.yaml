@@ -13,6 +13,7 @@ ctgov:
   conditions:
     - nasal polyps
     - chronic rhinosinusitis with nasal polyps
+    - chronic rhinosinusitis with nasal polyposis
   relevance_patterns:
     - nasal polyp
     - polyposis
