@@ -156,6 +156,17 @@
       else if(!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
     });
   }
+  document.addEventListener("keydown", event => {
+    if (event.key !== "Escape") return;
+    const start = event.target?.closest ? event.target : document.activeElement;
+    const details = start?.closest?.("details[open]") || document.activeElement?.closest?.("details[open]");
+    if (!details) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const summary = details.querySelector("summary");
+    details.open = false;
+    summary?.focus();
+  }, true);
 
   function present(option, el, zoom) {
     const copy = value => Array.isArray(value) ? value.map(axis=>({...axis})) : value && {...value};
@@ -185,8 +196,8 @@
       }
     }
     const tooltipWidth = Math.max(80,Math.min(560,available-24,(window.innerWidth || available)-32));
-    option.tooltip = {confine:true,textStyle:label,...option.tooltip,
-      extraCssText:`max-width:${tooltipWidth}px;white-space:normal;overflow-wrap:anywhere;`};
+    option.tooltip = {confine:true,appendTo:"body",transitionDuration:0,displayTransition:false,textStyle:label,
+      ...option.tooltip,extraCssText:`max-width:${tooltipWidth}px;white-space:normal;overflow-wrap:anywhere;`};
     option.color = PAL;
     const axis = option.yAxis;
     const visibleRows = window.innerHeight < 640 ? 4 : window.innerHeight < 820 ? 6 : 10;
@@ -206,7 +217,8 @@
     } else if(axis?.type === "category") {
       delete option.dataZoom;
     }
-    option.series = (option.series || []).map(s=>({...s,clip:true,label:{fontSize:16,...s.label}}));
+    option.series = (option.series || []).map(s=>({...s,
+      clip:s.type!=="scatter" || option.yAxis?.type==="category",label:{fontSize:16,...s.label}}));
     return option;
   }
 
@@ -219,18 +231,23 @@
     const c = existing || echarts.init(el);
     if (existing) c.resize();
     c.setOption(prepared, true);
+    el._ciwSize = [el.clientWidth, el.clientHeight, window.innerHeight];
     if(typeof ResizeObserver !== "undefined" && !el._ciwObserver) {
-      el._ciwObserver = new ResizeObserver(() => { if(el._ciwOption) chart(el.id,el._ciwOption); });
+      el._ciwObserver = new ResizeObserver(() => resizeChart(el));
       el._ciwObserver.observe(el);
     }
     return c;
   }
+  function resizeChart(el) {
+    if (!el._ciwOption) return;
+    const size = [el.clientWidth, el.clientHeight, window.innerHeight];
+    if (el._ciwSize?.every((value, i) => value === size[i])) return;
+    chart(el.id, el._ciwOption);
+  }
   let resizeFrame;
   const resizeCharts = () => {
     cancelAnimationFrame(resizeFrame);
-    resizeFrame = requestAnimationFrame(() => document.querySelectorAll(".chart").forEach(el => {
-      if(el._ciwOption) chart(el.id, el._ciwOption);
-    }));
+    resizeFrame = requestAnimationFrame(() => document.querySelectorAll(".chart").forEach(resizeChart));
   };
   window.addEventListener("resize", resizeCharts);
   window.visualViewport?.addEventListener("resize", resizeCharts);

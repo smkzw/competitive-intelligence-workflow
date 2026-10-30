@@ -28,8 +28,19 @@
   // 组标题与产品名相同（只差大小写）时不重复显示
   const sameName = (a, b) => (a || "").toLowerCase().replace(/[^a-z0-9一-鿿]/g, "") === (b || "").toLowerCase().replace(/[^a-z0-9一-鿿]/g, "");
   const groupSuffix = (label, group) => (label && group && !sameName(label, group) && !label.toLowerCase().includes(group.toLowerCase()) ? `（${group}）` : "");
-  const rowLabel = (r) => `${r.role === "placebo" ? "安慰剂" : (r.product_label || r.group_title)}${r.role !== "placebo" ? groupSuffix(r.product_label, r.group_title) : ""}${r.phase ? " · " + r.phase + "期" : ""} · ${r.acronym}${r.stratum_label ? " · " + r.stratum_label : ""}`;
-  const compactRowLabel = r => [r.acronym, r.group_title || r.product_label].filter(Boolean).join(" · ");
+  const registryId = value => /^NCT\d+$/i.test(String(value || "").trim());
+  const studyAcronym = r => (r.acronym && !registryId(r.acronym) ? r.acronym : "");
+  const registryFallback = r => registryId(r.acronym) ? r.acronym : (registryId(r.trial_id) && r.trial_id !== r.acronym ? r.trial_id : "");
+  const rowLabel = (r) => {
+    const base = `${r.role === "placebo" ? "安慰剂" : (r.product_label || r.group_title)}${r.role !== "placebo" ? groupSuffix(r.product_label, r.group_title) : ""}${r.phase ? " · " + r.phase + "期" : ""} · ${r.acronym}${r.stratum_label ? " · " + r.stratum_label : ""}`;
+    const nct = registryFallback(r);
+    return nct && !String(base).includes(nct) ? `${base} · ${nct}` : base;
+  };
+  const compactRowLabel = r => {
+    const drug = r.role === "placebo" ? "安慰剂" : (r.product_label || r.group_title || "");
+    const suffix = r.role === "placebo" ? "" : groupSuffix(r.product_label || drug, r.group_title);
+    return [drug + suffix, r.phase ? r.phase + "期" : "", studyAcronym(r), registryFallback(r)].filter(Boolean).join(" · ");
+  };
   const pointUnit = (point, chart) => observationById.get(point.result_id)?.unit ?? point.unit ?? chart.unit;
 
 
@@ -72,7 +83,12 @@
   });
 
   function drawForest(id, list, ref, log, sourceOnly = false) {
-    const cl = list.map((c) => sourceOnly ? `${c.group_labels.join("、")} · ${c.acronym}` : `${c.product_label}${groupSuffix(c.product_label, c.exp_group)}${c.h2h ? " vs " + c.ctrl_group : ""} · ${c.acronym}`);
+    const cl = list.map((c) => {
+      const lead = sourceOnly ? (c.group_labels || []).join("、")
+        : `${c.product_label || ""}${groupSuffix(c.product_label, c.exp_group)}${c.h2h ? " vs " + c.ctrl_group : ""}`;
+      const acronym = studyAcronym(c);
+      return [lead, c.phase ? c.phase + "期" : "", acronym, registryFallback(c) || (!acronym ? c.acronym : "")].filter(Boolean).join(" · ");
+    });
     if (!list.length) {
       chart(id, { title: { text: "该问题没有可入图的组间比较（见下表）", left: "center", top: "middle", textStyle: { color: "#64676B", fontSize: 16, fontWeight: 400 } } });
       return;
@@ -84,14 +100,20 @@
       yAxis: { type: "category", data: cl, inverse: true, axisLabel: { width: 280, overflow: "truncate", color: (v, i) => (list[i] && list[i].is_own ? OWN : "#0F1115") } },
       series: [
         { type: "custom", renderItem: (params, api) => {
-          const lo = api.value(1), hi = api.value(2); if (lo == null || hi == null || Number.isNaN(lo) || (log && lo <= 0)) return null;
-          const a = api.coord([lo, api.value(0)]), b = api.coord([hi, api.value(0)]);
+          const y = api.value(0), lo = api.value(1), hi = api.value(2);
+          if (lo == null || hi == null || !Number.isFinite(lo) || !Number.isFinite(hi)
+              || (log && (lo <= 0 || hi <= 0))) return null;
+          const a = api.coord([lo, y]), b = api.coord([hi, y]);
           return { type: "group", children: [
             { type: "line", shape: { x1: a[0], y1: a[1], x2: b[0], y2: b[1] }, style: { stroke: "#64676B", lineWidth: 1.5 } },
             { type: "line", shape: { x1: a[0], y1: a[1] - 5, x2: a[0], y2: a[1] + 5 }, style: { stroke: "#64676B" } },
             { type: "line", shape: { x1: b[0], y1: b[1] - 5, x2: b[0], y2: b[1] + 5 }, style: { stroke: "#64676B" } }] };
         }, encode: { x: [1, 2], y: 0 }, data: list.map((c, i) => [i, c.plot_lower, c.plot_upper]), z: 1 },
-        { type: "scatter", symbolSize: 11, data: list.map((c) => ({ value: c.plot_value, symbol: c.h2h ? "diamond" : c.kind === "computed" ? "emptyCircle" : "circle", itemStyle: { color: c.is_own ? OWN : "#008F8A" } })),
+        { type: "scatter", symbolSize: 11, animationDuration: 0,
+          encode: { x: 0, y: 1 }, dimensions: ["estimate", "row"],
+          data: list.map((c, i) => ({ value: [c.plot_value, i],
+            symbol: c.h2h ? "diamond" : c.kind === "computed" ? "emptyCircle" : "circle",
+            itemStyle: { color: c.is_own ? OWN : "#008F8A", opacity: 1 } })),
           markLine: { silent: true, symbol: "none", lineStyle: { color: "#999" }, data: ref == null ? [] : [{ xAxis: ref }] }, z: 2 },
       ],
     });

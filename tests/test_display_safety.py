@@ -172,14 +172,15 @@ def test_unconfirmed_events_are_retained_in_release_but_not_presented_as_adopted
     assert len(rel['events']) == 6 and rel['events'][4]['status'] == 'needs_review'
 
 
-def test_design_filter_updates_both_charts_and_omits_empty_plot_frames():
+def test_design_filter_updates_comparisons_or_compact_facts_without_empty_plot_frames():
     asset = Path(__file__).resolve().parents[1] / "src/ciw/render/static/c.js"
     script = r"""
 const fs=require('fs'),vm=require('vm');
 const inputs={q:{value:''},'f-phase':{value:''},'f-mask':{value:''},'f-concept':{value:''},'f-china':{checked:false}};
 for(const e of Object.values(inputs))e.addEventListener=(name,fn)=>e.change=fn;
 const els={...inputs,matrix:{id:'matrix',addEventListener(){}},count:{},'concept-chart':{parentElement:{},style:{}},
- 'size-chart':{parentElement:{},style:{}},'concept-data':{id:'concept'},'size-data':{id:'size'},'size-data-label':{}};
+ 'size-chart':{parentElement:{},style:{}},'concept-single':{},'size-single':{},
+ 'concept-data':{id:'concept'},'size-data':{id:'size'},'size-data-label':{}};
 const rows=[{trial_id:'zero',phase:'II',primary_concepts:['NPS'],start:'2026-01-01',enrollment:0,
  products:[],primary:[],title:'',eligibility:''},
  {trial_id:'unknown',phase:'III',primary_concepts:['NCS'],start:'2026-01-02',enrollment:null,products:[],primary:[],title:'',eligibility:''},
@@ -193,8 +194,9 @@ const window={U:{D:{c:{rows}},esc:s=>s,OWN:'orange',PAL:['teal'],options(){},
  table(el,cols,rows){tables[el.id]=rows;columns[el.id]=cols;},
  chart(id,opt){plots[id]=opt;}}};
 vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{window,document:{getElementById:id=>els[id]}});
-function read(){return {count:els.count.textContent,concepts:plots['concept-chart'].yAxis.data,
- points:plots['size-chart'].series.flatMap(s=>s.data).map(p=>p.value),
+function read(){return {count:els.count.textContent,concepts:tables.concept.map(r=>r.label),
+ points:els['size-chart'].hidden?[]:plots['size-chart']?.series.flatMap(s=>s.data).map(p=>p.value),
+ sizeFacts:els['size-single'].innerHTML,
  conceptHidden:!!els['concept-chart'].parentElement.hidden,sizeHidden:!!els['size-chart'].hidden,
  endpointHTML:columns.matrix?.[3].html(rows[2]),categoryCounts:tables.concept,
  tableCount:tables.size.length,tableEnrollment:tables.size.map(r=>r.enrollment)};}
@@ -205,7 +207,8 @@ process.stdout.write(JSON.stringify(out));
     result = subprocess.run(["node", "-e", script, str(asset)], capture_output=True, text=True, check=True)
     initial, zero, unknown, absent, restored, unmapped = json.loads(result.stdout)
     assert set(initial["concepts"]) == {"NPS", "NCS", "其他原文终点", "未登记主要终点"}
-    assert zero["concepts"] == ["NPS"] and zero["points"] == [["2026-01-01", 0]]
+    assert zero["concepts"] == ["NPS"] and zero["points"] == [] and zero["sizeHidden"]
+    assert "2026-01-01" in zero["sizeFacts"] and ">0</dd>" in zero["sizeFacts"]
     assert zero["tableCount"] == 1 and zero["tableEnrollment"] == [0]
     assert unknown["concepts"] == ["NCS"] and unknown["sizeHidden"]
     assert absent["conceptHidden"] and absent["sizeHidden"] and absent["count"].startswith("0 /")
@@ -246,7 +249,7 @@ const window={U:{D:{b:{questions:[q],longitudinal:[],safety:[],observations},sta
 vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{window,document:{getElementById:id=>elements[id]}});
 const read=()=>({values:plots['value-chart'].series[0].data.map(d=>d.value),
  table:tables['row-table'].map(d=>d.value),context:elements['frame-context-text'].textContent,
- rawValues:plots['source-stat-chart']?.series[1].data.map(d=>d.value),rawHidden:elements['source-statistics'].hidden});
+ rawValues:plots['source-stat-chart']?.series[1].data.map(d=>d.value[0]),rawHidden:elements['source-statistics'].hidden});
 const first=read();tableOptions['row-table'].onRow(tables['row-table'][0]);
 elements['frame-select'].value='second';elements['frame-select'].onchange();
 tableOptions['row-table'].onRow(tables['row-table'][0]);
@@ -391,7 +394,8 @@ process.stdout.write(JSON.stringify({first,second,live,firstCell,longOptions:els
     assert "Part B 临床评分" in result["longOptions"] and "Points" in result["longOptions"]
     assert result["longRows"] == [1, 16] and not result["longHidden"]
     assert result["longUnits"] == ["Percent", "Proportion"]
-    assert result["longLegend"] == "T16\nGroup16" and result["shortAxis"] == "T1\nDrug1"
+    assert result["longLegend"] == "Drug16（Group16）\nIII期 · T16"
+    assert result["shortAxis"] == "Drug1\nT1"
     assert "Percent" in result["longTip"]
     assert result["longSeries"][0].index("Drug16") < result["longSeries"][0].index("III")
     assert result["longSeries"][0].index("III") < result["longSeries"][0].index("T16")
