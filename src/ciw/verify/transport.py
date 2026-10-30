@@ -137,7 +137,8 @@ def _error_receipt(exc, transport):
 def model_json(opener, request, timeout, transport):
     """Retry only completed 429 rejections, never an in-flight/ambiguous model request."""
     started = monotonic()
-    for attempt in range(16):
+    attempt = 0
+    while True:
         remaining = timeout - (monotonic() - started)
         if remaining <= 0:
             raise TimeoutError("模型请求总等待时间已用尽")
@@ -147,11 +148,12 @@ def model_json(opener, request, timeout, transport):
         except HTTPError as exc:
             kind = _error_receipt(exc, transport)
             temporary = kind in {"concurrency", "context_capacity", "model_transition", "service_busy"}
-            attempts, budget = (16, 900) if temporary else (6, 180)
+            budget = timeout if temporary else min(timeout, 180)
             wait = _retry_delay((exc.headers or {}).get("Retry-After"), attempt)
-            if (exc.code != 429 or kind == "quota" or attempt >= attempts-1
-                    or monotonic() - started + wait > min(timeout, budget)):
+            if (exc.code != 429 or kind == "quota" or (not temporary and attempt >= 5)
+                    or monotonic() - started + wait >= budget):
                 raise
             transport.setdefault("admission_retries", []).append(dict(http_status=429, wait_seconds=wait))
             exc.close()
             sleep(wait)
+            attempt += 1

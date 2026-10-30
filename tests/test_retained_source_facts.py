@@ -80,7 +80,11 @@ def test_retained_source_items_need_current_task_and_original_verifier_proof(cfg
                     con.execute("UPDATE verifications SET status=?,payload=? WHERE fact_key=?",
                         ("needs_review" if fault == "status" else "verified", json.dumps(record), key))
     after, issues, coverage = extract_events(ws, cfg, resolver, None)
-    assert not after and any(i["kind"] == "doc_not_extracted" for i in issues)
+    if fault == "status":
+        assert len(after) == 2 and {e.status for e in after} == {"needs_review"}
+        assert any(i["kind"] == "event_needs_review" for i in issues)
+    else:
+        assert not after and any(i["kind"] == "doc_not_extracted" for i in issues)
     assert coverage[0]["status"] == "partial"
 
 

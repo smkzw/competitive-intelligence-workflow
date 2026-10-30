@@ -133,10 +133,10 @@ def test_one_second_retry_hint_cannot_create_a_busy_retry_loop(monkeypatch):
 
 
 @pytest.mark.parametrize("kind,message,limit", [
-    ("concurrency", "maximum concurrent requests", 16),
-    ("model_transition", "model is loading", 16),
-    ("context_capacity", "KV cache pool full", 16),
-    ("context_capacity", "insufficient KV cache capacity", 16),
+    ("concurrency", "maximum concurrent requests", None),
+    ("model_transition", "model is loading", None),
+    ("context_capacity", "KV cache pool full", None),
+    ("context_capacity", "insufficient KV cache capacity", None),
     ("request_rate", "rate limit exceeded", 6), ("quota", "insufficient balance", 1)])
 def test_only_confirmed_temporary_admission_limits_get_longer_bounded_wait(monkeypatch, kind, message, limit):
     from io import BytesIO
@@ -156,8 +156,11 @@ def test_only_confirmed_temporary_admission_limits_get_longer_bounded_wait(monke
     b=OpenAICompatBackend("deepseek","deepseek","https://example.com/v1",None,timeout=7200)
     with pytest.raises(HTTPError):
         b.chat("s","source")
-    assert len(calls) == limit and len(pauses) == limit-1
-    assert sum(pauses) <= (900 if limit == 16 else 180)
+    assert len(calls) == len(pauses)+1
+    if limit is None:
+        assert 900 < sum(pauses) < 7200 <= sum(pauses)+60
+    else:
+        assert len(calls) == limit and sum(pauses) <= 180
     assert b.receipt["rejection_kind"] == kind
     assert all(req is calls[0] for req in calls)
 
@@ -358,3 +361,64 @@ def test_explicit_missing_or_empty_key_file_fails_before_any_request(monkeypatch
     with pytest.raises(ValueError, match="CIW_DGX_KEY_FILE") as error:
         load_roles()
     assert str(path) not in str(error.value)
+
+
+@pytest.mark.parametrize('rejections,retry_after', [(20, '1'), (1, '3600')])
+def test_confirmed_busy_uses_existing_whole_request_deadline_not_a_hidden_shorter_window(
+        monkeypatch, rejections, retry_after):
+    from io import BytesIO
+    from urllib.error import HTTPError
+    calls, remaining, clock = [], [], [0.0]
+    class Response:
+        def __enter__(self):
+            return self
+        def __exit__(self, *_):
+            pass
+        def read(self):
+            return json.dumps(dict(model='served', choices=[dict(finish_reason='stop',
+                message=dict(content='{"items":[]}'))])).encode()
+    class Opener:
+        def open(self, req, **kwargs):
+            calls.append(req)
+            remaining.append(kwargs['timeout'])
+            if len(calls) <= rejections:
+                raise HTTPError(req.full_url,429,'rejected',{'Retry-After':retry_after},
+                                BytesIO(b'{"detail":"maximum concurrent requests"}'))
+            return Response()
+    monkeypatch.setattr('urllib.request.build_opener',lambda *_:Opener())
+    monkeypatch.setattr('ciw.verify.transport.monotonic',lambda:clock[0])
+    monkeypatch.setattr('ciw.verify.transport.sleep',lambda seconds:clock.__setitem__(0,clock[0]+seconds))
+    b=OpenAICompatBackend('deepseek','deepseek','https://example.com/v1',None,timeout=7200)
+    assert b.chat('s','source') == '{"items":[]}'
+    assert len(calls) == rejections+1 and clock[0] > 900
+    assert remaining[-1] == 7200-clock[0]
+    assert all(req is calls[0] for req in calls)
+
+
+def test_admission_latency_consumes_original_timeout_without_restarting_accepted_inference(monkeypatch):
+    from io import BytesIO
+    from urllib.error import HTTPError
+    calls, remaining, clock = [], [], [0.0]
+    class Response:
+        def __enter__(self):
+            return self
+        def __exit__(self, *_):
+            pass
+        def read(self):
+            raise TimeoutError('accepted model response did not complete')
+    class Opener:
+        def open(self, req, **kwargs):
+            calls.append(req)
+            remaining.append(kwargs['timeout'])
+            if len(calls) == 1:
+                clock[0] += 20
+                raise HTTPError(req.full_url,429,'rejected',{},BytesIO(b'{"detail":"model is loading"}'))
+            return Response()
+    monkeypatch.setattr('urllib.request.build_opener',lambda *_:Opener())
+    monkeypatch.setattr('ciw.verify.transport.monotonic',lambda:clock[0])
+    monkeypatch.setattr('ciw.verify.transport.sleep',lambda seconds:clock.__setitem__(0,clock[0]+seconds))
+    b=OpenAICompatBackend('deepseek','deepseek','https://example.com/v1',None,timeout=100)
+    with pytest.raises(TimeoutError):
+        b.chat('s','source')
+    assert len(calls) == 2 and remaining == [100, 75]
+    assert calls[0] is calls[1] and clock[0] == 25

@@ -61,8 +61,9 @@ def test_old_schema_decisions_revalidate_and_keep_unresolved_claims_visible(cfg,
     with ws.db() as con:
         assert cache == con.execute("SELECT * FROM llm_cache ORDER BY cache_key").fetchall()
     if proof == "valid":
-        assert {e.region: e.status for e in after} == {"中国": "verified", "美国": "needs_review"}
-        assert {e.event_id for e in before} == {e.event_id for e in after}
+        assert {e.region: e.status for e in after} == {"中国": "verified"}
+        assert {e.event_id for e in before} == {e.event_id for e in after} | {
+            i["ref"] for i in issues if i["kind"] == "event_needs_review"}
         assert any(i["kind"] == "event_needs_review" for i in issues)
     else:
         assert not after and issues
@@ -97,7 +98,7 @@ def test_partial_schema_upgrade_keeps_other_old_regions_but_not_a_newly_rejected
     assert len(before) == 2
     pending = dict(items[0], quote="该适应症在中国获批。")
     now, _, _ = extract_events(ws, cfg, resolver, cached_roles(ws, [pending]))
-    assert len(now) == 1 and now[0].status == "needs_review"
+    assert not now and any(r["status"] == "needs_review" for r in ws.verifications().values())
     ledger = ws.verifications()
     later, issues, coverage = extract_events(ws, cfg, resolver, None)
     assert [(e.region, e.status) for e in later] == [("美国", "verified")]

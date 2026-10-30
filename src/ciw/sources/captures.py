@@ -22,9 +22,19 @@ from ciw.config import IndicationConfig
 from ciw.models import Event, stable_id
 from ciw.normalize.products import ProductResolver
 from ciw.store import Workspace
-from ciw.verify.crosscheck import CrosscheckFailed, ExtractionTask, crosscheck, retained_verified, task_id_for
+from ciw.verify.crosscheck import (
+    CheckedItem,
+    CrosscheckFailed,
+    ExtractionTask,
+    _key,
+    crosscheck,
+    retained_candidate,
+    retained_verified,
+    task_id_for,
+)
 from ciw.verify.events import validate_event_item
 from ciw.verify.llm import Backend
+from ciw.verify.quote import check_quote
 from ciw.verify.schemas import EventItem
 
 KINDS = {"company", "wechat", "nmpa", "europepmc"}
@@ -34,6 +44,7 @@ _REGION = [
     (r"美国|\bus\b|usa|united states|fda", "美国"),
     (r"欧盟|欧洲|\beu\b|europe|ema|chmp", "欧盟"),
     (r"日本|japan|pmda", "日本"),
+    (r"英国|\buk\b|united kingdom", "英国"),
     (r"加拿大|canada", "加拿大"),
     (r"全球|global|worldwide", "全球"),
 ]
@@ -100,6 +111,7 @@ def _event_task(src, text, cfg, resolver) -> ExtractionTask:
         value_fields=("date", "indication"),
         date_fields=("date",),
         item_check=validate_event_item,
+        distinct_quotes_conflict=True,
         key_fn=lambda it, r=resolver: (
             r.find_in_text(it.get("product_mention", ""))
             or r.resolve_intervention(it.get("product_mention", ""))
@@ -112,8 +124,22 @@ def _event_task(src, text, cfg, resolver) -> ExtractionTask:
 
 def _retained_events(ws, task, source_sha):
     current, incomplete = retained_verified(ws, task)
-    current_ids = {key for key, r in ws.verifications().items()
-                   if r.get("task") == task.task_id and r.get("source_id") == task.source_id}
+    current_ids = set()
+    for record_id, record in ws.verifications().items():
+        if record.get("task") != task.task_id or record.get("source_id") != task.source_id:
+            continue
+        try:
+            item = task.item_model.model_validate(record.get("item")).model_dump()
+        except (ValueError, TypeError):
+            incomplete = True
+            continue
+        key = _key(task, item)
+        current_ids.add(stable_id("ev", task.source_id, key))
+        if record.get("status") == "needs_review":
+            incomplete = True
+            if (record_id == stable_id("ev", task.source_id, key)
+                    and check_quote(task.source_text, item["quote"]).ok and retained_candidate(ws, task, record, item)):
+                current.append(CheckedItem(item, "needs_review", key, record.get("calls", []), record.get("note", "")))
     # Only the exact pre-detail-anchor schema is compatible, never arbitrary historical task IDs.
     schema = task.item_model.model_json_schema()
     schema["properties"].pop("detail_quote", None)
@@ -192,10 +218,13 @@ def extract_events(
                 ws.save_verification(ev.event_id, chk.status,
                     {"calls": chk.calls, "note": chk.note, "task": task.task_id,
                      "item": it, "source_id": src.source_id})
-            events.append(ev)
-            stat["events"] += 1
             if chk.status == "needs_review":
                 queue.append({"kind": "event_needs_review", "ref": ev.event_id, "note": chk.note})
+                basic = dict(it, detail="", detail_quote="")
+                if not check_quote(text, it["quote"]).ok or not validate_event_item(basic)[0]:
+                    continue  # Retain the candidate/issue, not an unsupported milestone in the report.
+            events.append(ev)
+            stat["events"] += 1
     cov = [
         {
             "source": k,

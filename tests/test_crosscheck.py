@@ -123,3 +123,47 @@ def test_malformed_verifier_json_has_one_format_repair_without_chaining_retries(
     out = crosscheck(task(), roles(backend("deepseek", [item()]), FakeBackend("glm", "glm", review)))
     assert len(seen) == 2 and out[0].status == "needs_review"
     assert [c["role"] for c in out[0].calls] == ["extract", "verify", "verify_format_repair"]
+
+
+@pytest.mark.parametrize('bad', ['', '{"items":[broken}', '{"items":"invalid"}'])
+def test_primary_format_failure_has_one_content_cached_recovery_and_real_source_review(ws, bad):
+    from ciw.verify.crosscheck import retained_verified
+    from ciw.verify.llm import CachedBackend
+    seen = []
+    def extract(system, user):
+        seen.append(user)
+        a.receipt = {'response_id': 'a-'+str(len(seen))}
+        return bad if len(seen) == 1 else json.dumps({'items': [item()]})
+    a = FakeBackend('deepseek', 'deepseek', extract)
+    b = backend('glm', [item()])
+    b.receipt = {'response_id': 'b-response'}
+    models = roles(CachedBackend(a,ws), CachedBackend(b,ws))
+    out = crosscheck(task(), models)
+    assert out[0].status == 'verified' and len(seen) == 2
+    assert TEXT in seen[1] and seen[1] != seen[0]
+    assert len(out[0].calls) == 3 and out[0].calls[0]['error']
+    assert out[0].calls[1]['format_repair'] and not out[0].calls[1].get('error')
+    assert {c['family'] for c in out[0].calls} == {'deepseek','glm'}
+    ws.save_verification('event-test', 'verified', dict(task='t', source_id='s',
+        item=out[0].item, calls=out[0].calls))
+    retained, incomplete = retained_verified(ws, task())
+    assert len(retained) == 1 and not incomplete
+    assert crosscheck(task(), models)[0].status == 'verified' and len(seen) == 2
+    with ws.db() as con:
+        assert any(row[0] == bad for row in con.execute('SELECT response FROM llm_cache'))
+
+
+@pytest.mark.parametrize('malformed', [True, False])
+def test_primary_format_recovery_is_bounded_and_network_failure_is_not_retried(malformed):
+    seen = []
+    def extract(*_):
+        seen.append('call')
+        if not malformed:
+            raise OSError('synthetic transport failure')
+        return ''
+    def review(*_):
+        pytest.fail('No primary candidate, so verification must not run')
+    with pytest.raises(CrosscheckFailed) as exc:
+        crosscheck(task(), roles(FakeBackend('deepseek','deepseek',extract), FakeBackend('glm','glm',review)))
+    assert len(seen) == (2 if malformed else 1)
+    assert len(exc.value.calls) == len(seen)

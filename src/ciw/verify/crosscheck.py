@@ -20,6 +20,7 @@ from ciw.verify.llm import Backend, check_heterogeneous, parse_json
 from ciw.verify.quote import check_quote
 
 PROMPT_VERSION = "source-review-v3.1"
+_FORMAT_ERRORS = {"JSONDecodeError", "ValueError", "KeyError"}
 
 SYSTEM_EXTRACT = (
     "你是临床试验与药物研发信息的抽取器。只依据用户给出的原文，按要求的 JSON 结构输出。"
@@ -51,6 +52,7 @@ class ExtractionTask:
     quote_field: str = "quote"
     key_fn: Callable[[dict[str, Any]], tuple[str, ...]] | None = None  # 跨模型配对键（例如解析后的产品 ID）
     item_check: Callable[[dict[str, Any]], tuple[bool, str]] | None = None
+    distinct_quotes_conflict: bool = False
 
 
 class CrosscheckFailed(RuntimeError):
@@ -113,6 +115,9 @@ def _extract(
             if errors:
                 user += ("\n确定性校验错误：" + json.dumps(errors, ensure_ascii=False)
                          + "\n本次仅修复所列候选，逐字复制真实连续原文；无法支持的日期留空。不要新增其他身份。")
+        if candidates is None and errors:
+            user += ("\n上次主抽取答复为空或JSON结构无效：" + json.dumps(errors, ensure_ascii=False)
+                     + "\n仅依据上述原文重新输出合法items对象，正确转义引号；不返回分析过程或Schema。")
         payload = parse_json(backend.chat(system, user))
         call.update(getattr(backend, "receipt", {}))
         if not isinstance(payload, dict) or not isinstance(payload.get("items"), list):
@@ -208,7 +213,9 @@ def _checked_items(task, items):
         it["_quote_ok"], it["_quote_reason"] = ok, reason
         key = _key(task, it)
         previous = out.get(key)
-        if previous is not None and not _same(task, previous, it):
+        if previous is not None and (not _same(task, previous, it) or (
+                task.distinct_quotes_conflict and previous["_quote_ok"] and ok
+                and _norm_text(previous[task.quote_field]) != _norm_text(it[task.quote_field]))):
             previous["_duplicate_conflict"] = True
         elif previous is None or (not previous["_quote_ok"] and ok):
             out[key] = it
@@ -222,6 +229,7 @@ def _repair_review(task, backend, b_by):
     errors = [{"key": key, "error": it["_quote_reason"] or "相同身份存在冲突值"} for key, it in invalid.items()]
     repaired, call = _extract(backend, task, [_clean(it) for it in invalid.values()], errors)
     call["role"] = "verify_repair"
+    call["requested_keys"] = [list(key) for key in sorted(invalid)]
     if not call.get("error"):
         fixed = _checked_items(task, repaired)
         call["unrequested_items"] = len(set(fixed) - set(invalid))
@@ -234,7 +242,14 @@ def _repair_review(task, backend, b_by):
 def extract_candidates(task: ExtractionTask, roles: dict[str, Backend]):
     check_heterogeneous(roles)
     items, call = _extract(roles["extractor_a"], task)
-    if call.get("error"):
+    if call.get("error") in _FORMAT_ERRORS:
+        items, correction = _extract(roles["extractor_a"], task, errors=[{"error": call["error"]}])
+        correction["format_repair"] = True
+        if correction.get("error"):
+            raise CrosscheckFailed("主抽取格式纠正失败：" + correction["error"], calls=[call, correction])
+        correction["previous_format_call"] = call
+        call = correction
+    elif call.get("error"):
         raise CrosscheckFailed("主抽取失败：" + call["error"], calls=[call])
     return items, call
 
@@ -248,21 +263,23 @@ def review_candidates(task, verifier, a_items, a_call):
     """Review retained candidates with the same source guards and bounded repairs."""
     if verifier.family == a_call["family"]:
         raise ValueError("主抽取和来源核对必须来自两个不同模型家族")
+    extract_calls = [a_call["previous_format_call"]] if a_call.get("previous_format_call") else []
+    extract_calls.append({k: v for k, v in a_call.items() if k != "previous_format_call"})
     b_items, b_call = _extract(verifier, task, a_items)
     format_calls = []
-    if b_call.get("error") in {"JSONDecodeError", "ValueError", "KeyError"}:
+    if b_call.get("error") in _FORMAT_ERRORS:
         b_items, correction = _extract(verifier, task, a_items,
                                       [{"error": "上次核对输出JSON格式或items结构无效，请返回合法JSON，正确转义引号"}])
         correction["role"] = "verify_format_repair"
         format_calls.append(correction)
         if correction.get("error"):
             raise CrosscheckFailed("来源核对格式纠正失败：" + correction["error"],
-                                   calls=[a_call, b_call, correction])
+                                   calls=[*extract_calls, b_call, correction])
     elif b_call.get("error"):
-        raise CrosscheckFailed("来源核对失败：" + b_call["error"], calls=[a_call, b_call])
+        raise CrosscheckFailed("来源核对失败：" + b_call["error"], calls=[*extract_calls, b_call])
     a_by, b_by = _checked_items(task, a_items), _checked_items(task, b_items)
     repairs = [] if format_calls else _repair_review(task, verifier, b_by)
-    calls = [a_call, b_call, *format_calls, *repairs]
+    calls = [*extract_calls, b_call, *format_calls, *repairs]
     results = []
     for key in sorted(set(a_by) | set(b_by)):
         a, b = a_by.get(key), b_by.get(key)
@@ -323,6 +340,9 @@ def _retained_verifier(ws, task, record, item):
     if not extracts or len({c.get("family") for c in calls if c.get("family")}) != 2:
         return False
     for call in reversed(reviews):
+        if (call.get("role") == "verify_repair" and "requested_keys" in call
+                and list(_key(task, item)) not in call["requested_keys"]):
+            continue  # An unsolicited repair item was never an accepted replacement.
         if (call.get("error") or not call.get("n_items") or not call.get("response_id")
                 or call.get("family") == extracts[0].get("family")):
             continue
@@ -335,11 +355,32 @@ def _retained_verifier(ws, task, record, item):
                 if json.loads(metadata or "{}").get("response_id") != call["response_id"]:
                     continue
                 candidates = [task.item_model.model_validate(raw).model_dump() for raw in parse_json(text)["items"]]
-                same_key = [raw for raw in candidates if _key(task, raw) == _key(task, item)]
-                if same_key:
-                    matches.append(all(raw == item for raw in same_key))
+                chosen = _checked_items(task, candidates).get(_key(task, item))
+                if chosen is not None:
+                    matches.append(not chosen.get("_duplicate_conflict") and _clean(chosen) == item)
             except (ValueError, TypeError, KeyError, AttributeError):
                 return False
         if matches:
             return matches == [True]  # A later relevant B revision cannot fall back to an earlier item.
+    return False
+
+
+def retained_candidate(ws, task, record, item):
+    """Provenance for a pending candidate, never approval or scientific equivalence."""
+    if record.get("task") != task.task_id or record.get("source_id") != task.source_id:
+        return False
+    for call in reversed(record.get("calls", [])):
+        if call.get("error") or not call.get("response_id") or not call.get("n_items"):
+            continue
+        with ws.db() as con:
+            responses = con.execute("SELECT response, metadata FROM llm_cache WHERE family=? AND model=?",
+                                    (call.get("family"), call.get("model"))).fetchall()
+        for text, metadata in responses:
+            try:
+                if json.loads(metadata or "{}").get("response_id") != call["response_id"]:
+                    continue
+                if any(task.item_model.model_validate(raw).model_dump() == item for raw in parse_json(text)["items"]):
+                    return True
+            except (ValueError, TypeError, KeyError, AttributeError):
+                continue
     return False

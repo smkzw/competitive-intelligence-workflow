@@ -69,9 +69,10 @@ def test_production_inbox_keeps_announcement_date_unaccepted(cfg, resolver, ws):
         for role, family in [("extractor_a", "deepseek"), ("verifier", "glm")]
     }
     events, queue, _ = extract_events(ws, cfg, resolver, roles)
-    assert events[0].status == "needs_review" and queue[0]["kind"] == "event_needs_review"
-    saved = ws.verifications()[events[0].event_id]
-    assert saved["item"]["event_date_quote"] == text and saved["source_id"] == events[0].source_id
+    assert not events and queue[0]["kind"] == "event_needs_review"
+    saved = ws.verifications()[queue[0]["ref"]]
+    assert saved["status"] == "needs_review" and saved["item"]["event_date_quote"] == text
+    assert saved["source_id"] == ws.sources()[0].source_id
 
 
 def test_original_contract_year_does_not_date_amended_terms():

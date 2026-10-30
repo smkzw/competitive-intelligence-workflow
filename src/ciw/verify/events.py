@@ -47,6 +47,28 @@ def _first_enrolment(quote: str) -> bool:
     return False
 
 
+def _filing_only_planned(quote):
+    found = False
+    for clause in re.split(r"[。；;!?\n]|\.(?!\d)", quote):
+        for action in re.finditer(r"递交|提交|受理|\b(?:submit|submitted|accept|accepted|file|filed)\b", clause, re.I):
+            found = True
+            before = clause[:action.start()]
+            planned = re.search(r"(?:计划|预计|预期|拟|将)[^，,。；;]{0,100}$|"
+                                r"\b(?:will|expected|plans?|planned|aims?|intends?)\b[^,;]{0,100}$", before, re.I)
+            negated = re.search(r"(?:尚未|未|没有|无法)\s*$|"
+                                r"\b(?:not|never|cannot)(?:\s+(?:yet|been|be|have)){0,3}\s*$", before, re.I)
+            if not planned and not negated:
+                return False
+    return found
+
+
+def _patient_scopes(quote):
+    part = r"(?:[^.!?。;；\n]|\.(?=\d))"
+    pattern = (r"\b(?:patients?|adults?|children|adolescents?)\b" + part + r"{0,200}?"
+               r"\b((?:for whom|whose|in whom)\b" + part + r"*)")
+    return [m[1].strip() for m in re.finditer(pattern, quote, re.I)]
+
+
 def validate_event_item(item: dict) -> tuple[bool, str]:
     kind, quote = item["event_type"], item["quote"]
     for field in ("product_mention", "indication"):
@@ -57,6 +79,11 @@ def validate_event_item(item: dict) -> tuple[bool, str]:
         anchor = item.get("detail_quote") or detail
         if not check_quote(quote, anchor, detail).ok:
             return False, "detail缺少所选引文内支持其信息与数值的连续原文"
+        for scope in _patient_scopes(quote):
+            if normalize(scope) not in normalize(anchor):
+                return False, "detail与detail_quote须保留本条适用人群的完整条件，可用中文概括但不能扩大范围：" + scope
+    if kind == "filing" and _filing_only_planned(quote):
+        return False, "引语仅为计划或否定，未支持实际递交或受理"
     if kind == "phase_start" and not _first_enrolment(quote):
         return False, "引语未明确首例已经入组，计划或仅试验启动不能代替首例入组"
     if kind == "topline" and not _TOPLINE.search(quote):

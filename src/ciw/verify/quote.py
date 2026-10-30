@@ -125,7 +125,20 @@ def _numbers(value: object, quote: str | None = None) -> list[str]:
         for v in value:
             out += _numbers(v, quote)
         return out
-    return re.findall(_NUMERIC_TOKEN, normalize(str(value)))
+    text = normalize(str(value))
+    if quote is not None:
+        text = _mask_proven_tokens(text, quote)
+    return re.findall(_NUMERIC_TOKEN, text)
+
+
+def _mask_proven_tokens(text, quote):
+    """Only whole source-proven tokens may carry non-measurement digits in prose."""
+    boundary = r"[A-Za-z0-9_α-ωΑ-Ω.+/-]"
+    def mask(match):
+        token = match[0]
+        proven = re.search(r"(?<!" + boundary + ")" + re.escape(token) + r"(?!" + boundary + ")", quote)
+        return " " if _identifier(token) and proven else token
+    return re.sub(r"[A-Za-z0-9_α-ωΑ-Ω]+(?:[-_/+.][A-Za-z0-9_α-ωΑ-Ω]+)*", mask, text)
 
 
 def _identifier(value: object) -> bool:
@@ -133,7 +146,7 @@ def _identifier(value: object) -> bool:
         return False
     text = normalize(value)
     return (
-        re.fullmatch(r"[\w/-]+", text) is not None
+        re.fullmatch(r"[A-Za-z0-9_α-ωΑ-Ω/-]+", text) is not None
         and any(c.isalpha() for c in text)
         and any(c.isdigit() for c in text)
         and re.fullmatch(_NUMERIC_TOKEN, text) is None
@@ -147,7 +160,8 @@ def _missing_labels(value: object, quote: str) -> bool:
         return any(_missing_labels(item, quote) for item in value)
     return (
         _identifier(value)
-        and re.search(r"(?<![A-Za-z0-9_α-ωΑ-Ω/-])" + re.escape(normalize(value)) + r"(?![A-Za-z0-9_α-ωΑ-Ω/-])", quote)
+        and re.search(r"(?<![A-Za-z0-9_α-ωΑ-Ω.+/-])" + re.escape(normalize(value))
+                      + r"(?![A-Za-z0-9_α-ωΑ-Ω.+/-])", quote)
         is None
     )
 

@@ -91,10 +91,13 @@ def test_inbox_schema_and_ledger_preserve_selected_detail_evidence(cfg, resolver
         name: FakeBackend(family, family, reply) for name, family in (("extractor_a", "deepseek"), ("verifier", "glm"))
     }
     rows, issues, _ = extract_events(ws, cfg, resolver, roles)
-    assert (rows[0].status == "verified") == include_product
-    assert bool(issues) != include_product
-    saved = ws.verifications()[rows[0].event_id]
-    assert saved["item"]["detail_quote"] == "作为附加维持治疗"
+    ledger = ws.verifications()
+    if include_product:
+        assert len(rows) == 1 and rows[0].status == "verified" and not issues
+    else:
+        assert not rows and any(issue["kind"] == "event_needs_review" for issue in issues)
+        assert {record["status"] for record in ledger.values()} == {"needs_review"}
+    assert next(iter(ledger.values()))["item"]["detail_quote"] == "作为附加维持治疗"
 
 
 def test_verbatim_detail_is_already_its_own_anchor():
