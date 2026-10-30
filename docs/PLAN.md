@@ -11,6 +11,7 @@
 5. **STATUS 只保留当前块，整块替换。** 不新建 packets/、prompts/、reviews/、receipts/ 这类过程目录。
 6. **运行产物不入库。** 包括 workspace、captures、sqlite、第三方原文，`.gitignore` 已经排除。执行包T1明确要求的小型实屏截图存入`docs/screenshots/`，仅此例外。
 7. **函数不超过 80 行，文件不超过 600 行**，超出就拆。渲染层、流水线里不得写适应症或药物专用逻辑，这些只放在 `indications/*.yaml`。
+8. **浏览器探针跟随实际组件。** 外置到body的提示应读取对应ECharts实例的真实tooltip元素；不以图卡内找不到提示判断FAIL。矩阵/同查询表分别计行，不数全页tbody；序列化浏览器函数显式传参，不捕获Node局部变量。脚本错误、未执行与产品失败分开保留，先校准方法再修改产品。
 
 ## 里程碑
 
