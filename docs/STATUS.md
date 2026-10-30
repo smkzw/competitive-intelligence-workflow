@@ -1,18 +1,18 @@
 # STATUS
 
-**2026-10-30｜PAUSED：用户要求无损暂停，尚未整体交付。**
+**2026-10-30｜RUNNING：用户解除暂停，继续构建；尚未整体交付。**
 本文是唯一当前状态；[最新详细交接与复盘](handoff/PAUSE_20261030_AFTER_SSE.md)。
 [上次暂停历史](handoff/PAUSE_20261030.md)原样保留，不作为当前执行现场。
 权威为PRD/DECISIONS/ARCHITECTURE/PLAN/执行包及最新用户裁决；Goal实查null。
 旧中文工程零接触；不reset/checkout/clean/全量add/强推/main合入。待用户决定：无。
 
-## 暂停现场
+## 本次恢复基线与运行状态
 - CI产品5124d97c59a9e54bc91f4bf5f81a7bc0a8b59fc3、工作台bc1caad6580774f6231547b1def39f2fab4c2103均已push。
 - 本次暂停文档为后续docs-only提交，不改变上述产品字节；147源码资产/5宿主文件SHA在私有恢复清单。
-- 原网页MN任务research_e2335e6f00e01098dfdd最后attempt11已failed，Python1302已退出，uv1301仅zombie非写者。
-- workspace写锁/全局排队锁已核实空闲；没有新执行节点或模型请求，第12次未启动。
+- 原网页MN任务research_e2335e6f00e01098dfdd旧attempt11 failed；attempt12于15:59:42 UTC实际启动。
+- 恢复核对147源码/5宿主资产及资料SHA一致；Luna已从原job网页一次Continue启动attempt12，同端点SSE真实验证在途。
 - API3877/18938、Vite60323/15190保留阅读；API仍boot WB2ceeaf2，新增504文案未部署。
-- Ego最后观察Task77/Profile2总览、Agent控制；暂停未再次开浏览器，不finish/交还。
+- Ego专用Task79/Profile2替代消失77，已离开进度详情到总览，保持Agent控制，无finish/交还。
 - 8个网页任务为7done/1failed；旧报告均保留。上游504后是否继续计算无证据，不干预共享服务。
 - 原件/CAS/DB/答复/失败记录/旧快照/原生Agent会话完整保留，不入公共Git。
 
@@ -44,11 +44,11 @@
 - 旧current rel_50af6bd904e7a9aa不变，release SHA1a36d5442bad801ed1a3ac2f2bbffdb34bf75c211d64196376cceaf315ade18b。
 - 5124d97为同一cms-smk端点加SSE；DeepSeek主抽取不变，effort/65536/7200/提示/缓存键不变。
 - 完整终态才缓存，流中断/错误/504不自动重发；只保留content和安全元数据，不存reasoning。
-- 当前764全测12.67s、Ruff/实际JS/diff通过；真实SSE网关调用NOT_RUN，不能称504已解决。
+- 当前764全测12.67s、Ruff/实际JS/diff通过；SSE真实验证已启动，结果未到，不能称504已解决。
 - 工作台43相关测试通过，固定公开504文案不外露上游内容；正式宿主身份及新API部署未验。
 
-## 仅在用户解除暂停后继续
-1. 核对实际HEAD及147/5资产和保全清单；无需重跑未改代码764全测、计划/检索或四研究页面。
+## 当前实施顺序
+1. 已完成保全清单核对；无需重跑未改代码764全测、计划/检索或四研究页面。
 2. 指定Luna从原job网页一次续接验证SSE；记录真实PID，离开详情，只等OS终态，不轮询或重复点击。
 3. 若仍失败按真实新证据诊断上游，不改模型/预算或盲重试；成功后审新current/audit/完整C中文与真实宿主。
 4. 受控M4候选正常发布到宿主并保留回滚，验证新API文案；再换适应症/问题/报告做指定双测试者LOOP。
