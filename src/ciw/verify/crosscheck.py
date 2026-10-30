@@ -101,6 +101,20 @@ def _user_prompt(task: ExtractionTask) -> str:
     return f"任务：{task.instruction}\n\n每条 item 的 JSON Schema：{schema}\n\n原文：\n<<<\n{task.source_text}\n>>>"
 
 
+def _payload_items(payload, item_model):
+    """Unwrap only a complete typed singleton; raw replies and scientific guards stay unchanged."""
+    if isinstance(payload, dict) and isinstance(payload.get("items"), list):
+        return payload["items"]
+    if (not isinstance(payload, dict) or not payload or "items" in payload
+            or set(payload) - set(item_model.model_fields)):
+        raise ValueError("模型输出缺少items数组")
+    try:
+        item_model.model_validate(payload)
+    except ValidationError:
+        raise ValueError("模型输出既无items数组，也不是完整的单条数据") from None
+    return [payload]
+
+
 def _extract(
     backend: Backend, task: ExtractionTask, candidates=None, errors=None
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
@@ -120,9 +134,9 @@ def _extract(
                      + "\n仅依据上述原文重新输出合法items对象，正确转义引号；不返回分析过程或Schema。")
         payload = parse_json(backend.chat(system, user))
         call.update(getattr(backend, "receipt", {}))
-        if not isinstance(payload, dict) or not isinstance(payload.get("items"), list):
-            raise ValueError("模型输出缺少items数组")
-        raw_items = payload["items"]
+        raw_items = _payload_items(payload, task.item_model)
+        if "items" not in payload:
+            call["response_envelope"] = "single_item"
         items = []
         for raw in raw_items:
             try:
@@ -354,7 +368,8 @@ def _retained_verifier(ws, task, record, item):
             try:
                 if json.loads(metadata or "{}").get("response_id") != call["response_id"]:
                     continue
-                candidates = [task.item_model.model_validate(raw).model_dump() for raw in parse_json(text)["items"]]
+                candidates = [task.item_model.model_validate(raw).model_dump()
+                              for raw in _payload_items(parse_json(text), task.item_model)]
                 chosen = _checked_items(task, candidates).get(_key(task, item))
                 if chosen is not None:
                     matches.append(not chosen.get("_duplicate_conflict") and _clean(chosen) == item)
@@ -379,7 +394,8 @@ def retained_candidate(ws, task, record, item):
             try:
                 if json.loads(metadata or "{}").get("response_id") != call["response_id"]:
                     continue
-                if any(task.item_model.model_validate(raw).model_dump() == item for raw in parse_json(text)["items"]):
+                if any(task.item_model.model_validate(raw).model_dump() == item
+                       for raw in _payload_items(parse_json(text), task.item_model)):
                     return True
             except (ValueError, TypeError, KeyError, AttributeError):
                 continue

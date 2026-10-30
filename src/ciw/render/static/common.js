@@ -231,18 +231,23 @@
     const c = existing || echarts.init(el);
     if (existing) c.resize();
     c.setOption(prepared, true);
+    el._ciwSize = [el.clientWidth, el.clientHeight, window.innerHeight];
     if(typeof ResizeObserver !== "undefined" && !el._ciwObserver) {
-      el._ciwObserver = new ResizeObserver(() => { if(el._ciwOption) chart(el.id,el._ciwOption); });
+      el._ciwObserver = new ResizeObserver(() => resizeChart(el));
       el._ciwObserver.observe(el);
     }
     return c;
   }
+  function resizeChart(el) {
+    if (!el._ciwOption) return;
+    const size = [el.clientWidth, el.clientHeight, window.innerHeight];
+    if (el._ciwSize?.every((value, i) => value === size[i])) return;
+    chart(el.id, el._ciwOption);
+  }
   let resizeFrame;
   const resizeCharts = () => {
     cancelAnimationFrame(resizeFrame);
-    resizeFrame = requestAnimationFrame(() => document.querySelectorAll(".chart").forEach(el => {
-      if(el._ciwOption) chart(el.id, el._ciwOption);
-    }));
+    resizeFrame = requestAnimationFrame(() => document.querySelectorAll(".chart").forEach(resizeChart));
   };
   window.addEventListener("resize", resizeCharts);
   window.visualViewport?.addEventListener("resize", resizeCharts);

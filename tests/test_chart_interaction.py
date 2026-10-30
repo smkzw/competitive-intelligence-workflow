@@ -155,3 +155,36 @@ process.stdout.write(JSON.stringify(results));
     assert all(category["minY"] <= y <= category["maxY"] for y in category["points"])
     assert len(numeric["points"]) == 20 and 0 in numeric["values"]
     assert not numeric["clip"]  # The C chart's real zero stays visible at the numeric plot edge.
+
+
+def test_unchanged_resize_keeps_the_real_tooltip_view_but_data_changes_still_render():
+    script = r"""
+const fs=require('fs'),vm=require('vm'),ec=require(process.argv[2]);
+const browser={CIW:{},innerWidth:1440,innerHeight:900,addEventListener(){}};
+const el={id:'plot',clientWidth:600,clientHeight:280,style:{},getClientRects:()=>[{}]};
+const real=ec.init(null,null,{renderer:'svg',ssr:true,width:600,height:280});
+let observer,sets=0;
+const instance={getOption:()=>real.getOption() || {},
+ resize:()=>real.resize({width:el.clientWidth,height:el.clientHeight}),
+ setOption(option,replace){sets++;real.setOption(option,replace);}};
+vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8'),{window:browser,URL,
+ document:{getElementById:id=>id==='plot'?el:null,addEventListener(){}},
+ echarts:{getInstanceByDom:()=>instance},ResizeObserver:class{constructor(fn){observer=fn}observe(){}}});
+const option={animation:false,tooltip:{trigger:'item'},grid:{left:80,right:30,top:30,bottom:50},
+ xAxis:{type:'value'},yAxis:{type:'value'},series:[{type:'scatter',data:[[1,2]]}]};
+browser.U.chart('plot',option);
+const initial=real.getViewOfComponentModel(real.getModel().getComponent('tooltip'));
+observer();observer();
+const stable={sets,sameView:initial===real.getViewOfComponentModel(real.getModel().getComponent('tooltip'))};
+el.clientWidth=500;observer();
+const changedSize={sets,width:real.getWidth()};
+browser.U.chart('plot',{...option,series:[{type:'scatter',data:[[1,3]]}]});
+const changedData={sets,y:real.getModel().getSeriesByIndex(0).getData().get('y',0)};
+observer();
+process.stdout.write(JSON.stringify({stable,changedSize,changedData,finalSets:sets}));real.dispose();
+"""
+    out = _node(script, str(ASSETS / "common.js"), str(ASSETS / "echarts.min.js"))
+    assert out["stable"] == {"sets": 1, "sameView": True}
+    assert out["changedSize"] == {"sets": 2, "width": 500}
+    assert out["changedData"] == {"sets": 3, "y": 3}
+    assert out["finalSets"] == 3

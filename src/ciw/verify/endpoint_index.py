@@ -13,7 +13,7 @@ from pydantic import BaseModel
 
 from ciw.config import ConceptCfg
 from ciw.normalize.semantics import classify, is_biomarker_title
-from ciw.verify.crosscheck import CrosscheckFailed, ExtractionTask, crosscheck, task_id_for
+from ciw.verify.crosscheck import CrosscheckFailed, ExtractionTask, _payload_items, crosscheck, task_id_for
 from ciw.verify.llm import parse_json
 from ciw.verify.quote import check_quote
 
@@ -188,7 +188,7 @@ def _review_binding(ws, record, note, item, call, *, item_model=EndpointIndexIte
             if json.loads(metadata or "{}").get("response_id") != response_id:
                 continue
             payload = parse_json(text)
-            candidates = [item_model.model_validate(x).model_dump() for x in payload.get("items", [])]
+            candidates = [item_model.model_validate(x).model_dump() for x in _payload_items(payload, item_model)]
             same_key = [x for x in candidates if x[identity_field] == item[identity_field]]
             matches.append(bool(same_key) and all(x == item for x in same_key))
         except (ValueError, AttributeError, TypeError):
