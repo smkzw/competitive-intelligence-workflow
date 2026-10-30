@@ -175,7 +175,8 @@ class Analysis(Model):
     path: str = ""
     minuend_group_id: str | None = None  # 来源明确差值方向，不从舍入后的均值反推
     subtrahend_group_id: str | None = None
-    direction_evidence: str = ""  # 同段原文的有序组别与均值差表达，不由舍入均值相减推断
+    direction_evidence: str = ""  # 本估计值及分析人群的连续原文，不借另一分析的数值
+    direction_order_evidence: str = ""  # 同句明确组序；后续分支可沿用，完整Locator.quote保留
 
 
 class OutcomeResult(Model):

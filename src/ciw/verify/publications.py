@@ -10,7 +10,7 @@ from ciw.models import Analysis, GroupValue, Locator, OutcomeResult, Trial, stab
 from ciw.normalize.products import ProductResolver
 from ciw.normalize.semantics import classify, parse_timepoint
 from ciw.verify.crosscheck import CrosscheckFailed, ExtractionTask, crosscheck, retained_verified, task_id_for
-from ciw.verify.quote import normalize
+from ciw.verify.quote import check_quote, normalize
 from ciw.verify.schemas import PublicationResultItem
 
 INSTRUCTION = (
@@ -267,7 +267,7 @@ def _registry_conflict(trial, resolver):
 
 def _analysis(item, arm, ctrl, path):
     direction = item["stat_type"] == "difference" and item["contrast_direction"] == "arm_minus_comparator"
-    ordered, evidence = _reported_order(item) if not direction else (1, "")
+    ordered, evidence, order_evidence = _reported_support(item) if not direction else (1, "", "")
     return Analysis(
         group_ids=[arm, ctrl],
         param_type=item["stat_type"],
@@ -281,14 +281,19 @@ def _analysis(item, arm, ctrl, path):
         minuend_group_id=arm if ordered == 1 else ctrl if ordered == -1 else None,
         subtrahend_group_id=ctrl if ordered == 1 else arm if ordered == -1 else None,
         direction_evidence=evidence,
+        direction_order_evidence=order_evidence,
     )
 
 
 def _reported_order(item):
-    if item["stat_type"] != "difference" or item["base_stat_type"] not in {"ls_mean", "mean"}:
-        return 0, ""
+    return _reported_support(item)[:2]
 
-    def match(a, b):
+
+def _reported_support(item):
+    if item["stat_type"] != "difference" or item["base_stat_type"] not in {"ls_mean", "mean"}:
+        return 0, "", ""
+
+    def matches(a, b):
         a, b = re.escape(a), re.escape(b)
         gap = r"(?:[^.;]|\.(?=\d)){0,160}?"
         metric = r"(?:LS mean difference|least[- ]squares mean difference|mean difference)"
@@ -297,10 +302,53 @@ def _reported_order(item):
             a + gap + r"compared\s+(?:with|to)\s+" + b + gap + metric,
             a + gap + metric + r"\s+(?:vs\.?|versus)\s+" + b,
         ]
-        return next((m for p in patterns if (m := re.search(r"(?<!\w)" + p + r"(?!\w)", item["quote"], re.I))), None)
+        return [m for p in patterns for m in re.finditer(r"(?<!\w)" + p + r"(?!\w)", item["quote"], re.I)]
 
-    forward = match(item["arm_label"], item["comparator_label"])
-    reverse = match(item["comparator_label"], item["arm_label"])
-    if bool(forward) == bool(reverse):
-        return 0, ""
-    return (1, forward[0]) if forward else (-1, reverse[0])
+    candidates = []
+    for direction, orders in [(1, matches(item["arm_label"], item["comparator_label"])),
+                              (-1, matches(item["comparator_label"], item["arm_label"]))]:
+        for order in orders:
+            evidence = _contrast_evidence(item, order)
+            if evidence:
+                candidates.append((order.start(), direction, evidence, order[0]))
+    if not candidates:
+        return 0, "", ""
+    latest = max(row[0] for row in candidates)
+    chosen = {row[1:] for row in candidates if row[0] == latest}
+    return next(iter(chosen)) if len(chosen) == 1 else (0, "", "")
+
+
+def _contrast_evidence(item, order):
+    quote = item["quote"]
+    metric = r"(?:LS mean difference|least[- ]squares mean difference|mean difference)"
+    number = r"[+−-]?(?:\d+(?:\.\d+)?|\.\d+)"
+    labels = "(?:" + re.escape(item["arm_label"]) + "|" + re.escape(item["comparator_label"]) + ")"
+    comparator = r"(?:\s+(?:vs\.?|versus)\s+" + labels + r")?"
+    confidence = r"(?:\s*[\[(]\s*\d+(?:\.\d+)?\s*%\s*CI\s*[\])])?"
+    estimates = list(re.finditer(metric + comparator + confidence + r"\s*[:,=]?\s*" + number, quote, re.I))
+    population = item.get("population", "")
+    populations = list(re.finditer(re.escape(population), quote, re.I)) if population else [None]
+    markers = list(re.finditer(metric, quote, re.I))
+    found = []
+    for estimate in estimates:
+        if order.start() > estimate.start() or not check_quote(estimate[0], estimate[0], item.get("value")).ok:
+            continue
+        # A later independent sentence cannot inherit the preceding arm order.
+        if re.search(r"(?<!\d)\.(?!\d)|[!?。]", quote[order.end():estimate.start()]):
+            continue
+        for population in populations:
+            pop_start, pop_end = (population.start(), population.end()) if population else estimate.span()
+            if pop_start > estimate.start():
+                continue  # The next population cannot relabel a preceding estimate.
+            start, end = sorted((estimate.start(), pop_start))
+            if any(start <= m.start() <= end and m.start() != estimate.start() for m in markers):
+                continue
+            prior = [m for m in markers if m.start() < pop_start]
+            lo = quote.find(")", prior[-1].end()) + 1 if prior else 0
+            if prior and (lo == 0 or lo > pop_start):
+                continue
+            hi = max(pop_end, estimate.end())
+            evidence = quote[lo:hi]
+            if evidence not in found:
+                found.append(evidence)
+    return found[0] if len(found) == 1 else ""

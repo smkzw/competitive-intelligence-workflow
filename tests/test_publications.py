@@ -233,7 +233,7 @@ def test_publication_groups_survive_cohort_registration_without_guessing_arms(cf
 def test_source_ordered_contrast_phrases_keep_direction_without_means(quote):
     from ciw.verify.publications import _reported_order
     item = dict(stat_type="difference", base_stat_type="mean", arm_label="stapokibart",
-                comparator_label="placebo", quote=quote)
+                comparator_label="placebo", quote=quote, value=-2.5, population="")
     assert _reported_order(item)[0] == 1
     item.update(arm_label="placebo", comparator_label="stapokibart")
     assert _reported_order(item)[0] == -1

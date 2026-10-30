@@ -3,7 +3,7 @@
 import re
 
 from ciw.verify.crosscheck import _date_in_quote
-from ciw.verify.quote import check_quote
+from ciw.verify.quote import check_quote, normalize
 
 _ACTION = {
     "approval": r"获批|批准|approv|authori[sz]",
@@ -18,10 +18,47 @@ _TOPLINE = re.compile(
     r"(?:announc|release).{0,100}(?:results|primary endpoint)",
     re.I | re.S,
 )
+_FIRST_ENROLLED = re.compile(
+    r"(?:已(?:经)?|完成|成功).{0,30}首(?:例|位|名).{0,20}入组|"
+    r"首(?:例|位|名).{0,15}(?:已(?:经)?|完成|成功).{0,20}入组|"
+    r"\bfirst\s+(?:patient|participant|subject)\s+(?:has\s+been|was|is)\s+"
+    r"(?:successfully\s+)?(?:enrolled|recruited)\b|"
+    r"\b(?:enrolled|recruited)\s+(?:(?:its|the)\s+)?first\s+(?:patient|participant|subject)\b",
+    re.I,
+)
+
+
+def _literal(quote: str, value: str) -> bool:
+    value = normalize(value)
+    if not value:
+        return True
+    left = r"(?<![a-z0-9])" if value[0].isascii() and value[0].isalnum() else ""
+    right = r"(?![a-z0-9])" if value[-1].isascii() and value[-1].isalnum() else ""
+    return re.search(left + re.escape(value) + right, normalize(quote)) is not None
+
+
+def _first_enrolment(quote: str) -> bool:
+    for sentence in re.split(r"[。；;.!?\n]", quote):
+        for match in _FIRST_ENROLLED.finditer(sentence):
+            before = sentence[:match.start()]
+            if not re.search(r"计划|预计|预期|拟|将|尚未|未|没有|没|不能|无法|"
+                             r"\b(?:will|expected|plans?|aims?|no|not|never|cannot)\b", before, re.I):
+                return True
+    return False
 
 
 def validate_event_item(item: dict) -> tuple[bool, str]:
     kind, quote = item["event_type"], item["quote"]
+    for field in ("product_mention", "indication"):
+        if not _literal(quote, item.get(field, "")):
+            return False, f"{field}未在所选引文中保留完整原文，不能借用片段外先行词"
+    detail = item.get("detail", "")
+    if detail:
+        anchor = item.get("detail_quote") or detail
+        if not check_quote(quote, anchor, detail).ok:
+            return False, "detail缺少所选引文内支持其信息与数值的连续原文"
+    if kind == "phase_start" and not _first_enrolment(quote):
+        return False, "引语未明确首例已经入组，计划或仅试验启动不能代替首例入组"
     if kind == "topline" and not _TOPLINE.search(quote):
         return False, "引语未支持顶线结果披露，不能把结果回顾当作新顶线事件"
     if not item.get("date"):

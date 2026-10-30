@@ -27,6 +27,10 @@ class EventItem(_Item):
     )
     indication: str = Field("", description="原文写明的适应症，逐字照抄，不翻译、不扩展")
     detail: str = Field("", description="一句话概括，不加原文没有的信息")
+    detail_quote: str = Field(
+        "", description=("在quote内逐字复制支持detail全部信息的连续原文；"
+                         "detail只写事件事实，不附缺失说明或抽取者解释；detail为空时留空")
+    )
 
 
 class ProductAttrItem(_Item):
