@@ -10,7 +10,7 @@ from decimal import Decimal
 from pydantic import BaseModel, Field
 
 from ciw.normalize.design import threshold_spans
-from ciw.verify.crosscheck import CrosscheckFailed, ExtractionTask, crosscheck, task_id_for
+from ciw.verify.crosscheck import _FORMAT_ERRORS, CrosscheckFailed, ExtractionTask, crosscheck, task_id_for
 from ciw.verify.endpoint_index import _batches, _comparisons, _review_binding
 from ciw.verify.quote import _NUMERIC_TOKEN, _UNIT_PARTS, normalize
 
@@ -169,36 +169,64 @@ def _task(atoms):
                           ("clause_id",), tuple(_FIELDS.values()), item_check=lambda item: _check(item, atoms))
 
 
+def _reading_batches(ws, initial, roles, saved, accepted, log):
+    pending = [(initial, True)]
+    while pending:
+        batch, may_split = pending.pop(0)
+        if set(batch) <= set(accepted):
+            continue
+        task = _task(batch)
+        pairs = sorted(batch.items())
+        middle = len(pairs) // 2
+        children = [dict(pairs[:middle]), dict(pairs[middle:])] if len(batch) > 1 else []
+        plan = [dict(task_id=_task(child).task_id, clause_ids=sorted(child)) for child in children]
+        recovery = saved.get("recoveries", {}).get(task.task_id) if may_split else None
+        if recovery:
+            if recovery.get("parent_clause_ids") != sorted(batch) or recovery.get("children") != plan:
+                raise ValueError("中文阅读恢复计划与当前完整原子不匹配")
+            pending[:0] = [(child, False) for child in children]
+            continue
+        log(f"[design-reading] {task.task_id} · {len(batch)}")
+        try:
+            yield batch, crosscheck(task, roles)
+        except CrosscheckFailed as exc:
+            ws.save_verification("design-reading:"+task.task_id, "failed", dict(calls=exc.calls,
+                                 clause_ids=sorted(batch),
+                                 source_ids=sorted({atom["source_id"] for atom in batch.values()})))
+            last = exc.calls[-1] if exc.calls else {}
+            if (not may_split or not children or last.get("finish_reason") != "length"
+                    or last.get("error") not in _FORMAT_ERRORS):
+                raise
+            saved.setdefault("recoveries", {})[task.task_id] = dict(parent_task_id=task.task_id,
+                parent_clause_ids=sorted(batch), children=plan, calls=exc.calls)
+            ws.write_stage("research-design-reading", saved)
+            pending[:0] = [(child, False) for child in children]
+
+
 def _readings(ws, atoms, roles, log):
-    # 32K is the existing packing target, not a cutoff: a long source context stays whole and alone.
+    # Keep nominal content batches stable across resumes, including their accepted siblings.
     saved = ws.read_stage("research-design-reading") or {"items": {}}
     accepted = {key:item for key,item in saved["items"].items() if key in atoms and _check(item, atoms)[0]}
     _recheck_saved(ws, atoms, saved, accepted)
-    pending = {key: {**atom, "material": json.dumps(atom, ensure_ascii=False)}
-               for key,atom in atoms.items() if key not in accepted}
+    packed = {key: {**atom, "material": json.dumps(atom, ensure_ascii=False)} for key,atom in atoms.items()}
     if roles:
-        for part in _batches(pending):
-            batch = {key:atoms[key] for key in part}
-            task = _task(batch)
-            sources = sorted({atom["source_id"] for atom in batch.values()})
-            log(f"[design-reading] {task.task_id} · {len(batch)}")
-            try:
-                checked = crosscheck(task, roles)
-            except CrosscheckFailed as exc:
-                ws.save_verification("design-reading:"+task.task_id, "failed",
-                                     dict(calls=exc.calls, source_ids=sources))
-                raise
-            for result in checked:
-                item = result.item
-                valid = result.status == "verified" and _check(item, batch)[0]
-                ws.save_verification(f"design-reading:{task.task_id}:{item['clause_id']}",
-                    "verified" if valid else "needs_review", dict(item=item, calls=result.calls,
-                    task=task.task_id, source_id=batch[item["clause_id"]]["source_id"]
-                    if item["clause_id"] in batch else None, note=result.note))
-                if valid:
-                    accepted[item["clause_id"]] = item
-                    saved["items"][item["clause_id"]] = item
-            ws.write_stage("research-design-reading", saved)
+        for part in _batches(packed):
+            initial = {key:atoms[key] for key in part}
+            for batch, checked in _reading_batches(ws, initial, roles, saved, accepted, log):
+                task = _task(batch)
+                for result in checked:
+                    item = result.item
+                    if item["clause_id"] in accepted:
+                        continue
+                    valid = result.status == "verified" and _check(item, batch)[0]
+                    ws.save_verification(f"design-reading:{task.task_id}:{item['clause_id']}",
+                        "verified" if valid else "needs_review", dict(item=item, calls=result.calls,
+                        task=task.task_id, source_id=batch[item["clause_id"]]["source_id"]
+                        if item["clause_id"] in batch else None, note=result.note))
+                    if valid:
+                        accepted[item["clause_id"]] = item
+                        saved["items"][item["clause_id"]] = item
+                ws.write_stage("research-design-reading", saved)
     return accepted
 
 
