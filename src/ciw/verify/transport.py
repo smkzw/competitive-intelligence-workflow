@@ -1,5 +1,6 @@
 """Private DNS fallback without changing system DNS, TLS identity, or model routes."""
 
+import codecs
 import http.client
 import ipaddress
 import json
@@ -13,6 +14,8 @@ from email.utils import parsedate_to_datetime
 from time import monotonic, sleep, time
 from urllib.error import HTTPError
 from urllib.parse import urlsplit
+
+from ciw.verify.stream import assemble_sse, completion_from_json
 
 
 def _tailscale_address(host: str) -> str:
@@ -134,7 +137,7 @@ def _error_receipt(exc, transport):
     return transport["rejection_kind"]
 
 
-def model_json(opener, request, timeout, transport):
+def model_json(opener, request, timeout, transport, stream=False):
     """Retry only completed 429 rejections, never an in-flight/ambiguous model request."""
     started = monotonic()
     attempt = 0
@@ -144,6 +147,8 @@ def model_json(opener, request, timeout, transport):
             raise TimeoutError("模型请求总等待时间已用尽")
         try:
             with opener.open(request, timeout=remaining) as response:
+                if stream:
+                    return _stream_completion(response, started, timeout, transport)
                 return json.load(response)
         except HTTPError as exc:
             kind = _error_receipt(exc, transport)
@@ -157,3 +162,87 @@ def model_json(opener, request, timeout, transport):
             exc.close()
             sleep(wait)
             attempt += 1
+
+
+def _media_type(response):
+    headers = getattr(response, "headers", None)
+    if headers is None:
+        return ""
+    if hasattr(headers, "get_content_type"):
+        return (headers.get_content_type() or "").lower()
+    raw = headers.get("Content-Type", "") if hasattr(headers, "get") else ""
+    return str(raw).split(";", 1)[0].strip().lower()
+
+
+def _arm_timeout(response, remaining):
+    if hasattr(response, "settimeout"):
+        response.settimeout(remaining)
+    fp = getattr(response, "fp", None)
+    raw = getattr(fp, "raw", None)
+    sock = getattr(raw, "_sock", None) or getattr(response, "_sock", None)
+    if sock is not None and sock is not response and hasattr(sock, "settimeout"):
+        sock.settimeout(remaining)
+
+
+def _bounded_read(response, started, timeout):
+    """Read one response until EOF without extending the original deadline."""
+    while True:
+        remaining = timeout - (monotonic() - started)
+        if remaining <= 0:
+            raise TimeoutError("模型请求总等待时间已用尽")
+        _arm_timeout(response, remaining)
+        try:
+            read = getattr(response, "read1", None) or response.read
+            chunk = read(8192)
+        except TimeoutError:
+            raise TimeoutError("模型请求总等待时间已用尽") from None
+        except http.client.HTTPException:
+            raise OSError("模型流式响应失败") from None
+        if not chunk:
+            return
+        if not isinstance(chunk, (bytes, bytearray)):
+            raise OSError("模型流式响应失败")
+        yield bytes(chunk)
+
+
+def _event_text(response, started, timeout):
+    decoder = codecs.getincrementaldecoder("utf-8")()
+    parts = []
+    for chunk in _bounded_read(response, started, timeout):
+        try:
+            parts.append(decoder.decode(chunk, False))
+        except UnicodeDecodeError:
+            raise OSError("模型流式响应失败") from None
+    try:
+        tail = decoder.decode(b"", True)
+    except UnicodeDecodeError:
+        raise OSError("模型流式响应失败") from None
+    if tail:
+        parts.append(tail)
+    return "".join(parts)
+
+
+def _json_document(response, started, timeout):
+    raw = b"".join(_bounded_read(response, started, timeout))
+    try:
+        return json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        raise OSError("模型流式响应失败") from None
+
+
+def _stream_completion(response, started, timeout, transport):
+    """Consume SSE, or one explicit JSON completion. Do not open another request."""
+    media = _media_type(response)
+    try:
+        if media == "application/json":
+            result = completion_from_json(_json_document(response, started, timeout))
+        elif media == "text/event-stream":
+            result = assemble_sse(_event_text(response, started, timeout))
+        else:
+            raise OSError("模型流式响应失败")
+    except OSError as exc:
+        kind = getattr(exc, "rejection_kind", None)
+        if kind:
+            transport["rejection_kind"] = kind
+        raise
+    return result

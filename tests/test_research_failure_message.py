@@ -11,6 +11,7 @@ from ciw.verify.crosscheck import CrosscheckFailed
     (429,'quota','额度'),
     (401,'unclassified','鉴权'),
     (400,'unclassified','未完成'),
+    (504,'unclassified','响应超时'),
 ])
 def test_source_failure_is_actionable_without_exposing_provider_details(ws,monkeypatch,status,kind,expected):
     private='private_key_and_source_body_should_never_be_shown'

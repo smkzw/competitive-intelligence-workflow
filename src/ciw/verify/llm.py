@@ -43,6 +43,7 @@ class OpenAICompatBackend:
     response_format: str | None = "json_object"
     reasoning_effort: str | None = None
     attribute_reasoning_effort: str | None = None
+    stream: bool = False
     receipt: dict[str, Any] = field(default_factory=dict, init=False)
 
     def chat(self, system: str, user: str) -> str:
@@ -58,6 +59,9 @@ class OpenAICompatBackend:
             body["reasoning_effort"] = self.reasoning_effort
         if self.response_format:
             body["response_format"] = {"type": self.response_format}
+        if self.stream:
+            body["stream"] = True
+            body["stream_options"] = {"include_usage": True}
         req = urllib.request.Request(
             self.base_url.rstrip("/") + "/chat/completions",
             data=json.dumps(body).encode(),
@@ -69,10 +73,16 @@ class OpenAICompatBackend:
         )
         transport = {}
         try:
-            data = model_json(model_opener(self.base_url, self.no_proxy, transport), req, self.timeout, transport)
+            data = model_json(model_opener(self.base_url, self.no_proxy, transport), req, self.timeout, transport,
+                              stream=self.stream)
         except HTTPError as exc:
             self.receipt = {**transport, "http_status": exc.code, "requested_reasoning_effort": self.reasoning_effort,
                             "elapsed_seconds": round(perf_counter() - started, 3)}
+            raise
+        except OSError:
+            if self.stream:
+                self.receipt = {**transport, "requested_reasoning_effort": self.reasoning_effort,
+                                "elapsed_seconds": round(perf_counter() - started, 3)}
             raise
         choices = data.get("choices") or []
         if not choices:
@@ -88,6 +98,8 @@ class OpenAICompatBackend:
             "observed_reasoning_effort": data.get("reasoning_effort"),
             "elapsed_seconds": round(perf_counter() - started, 3),
         }
+        if data.get("response_transport"):
+            self.receipt["response_transport"] = data["response_transport"]
         return choices[0].get("message", {}).get("content") or ""
 
 
@@ -189,6 +201,7 @@ def load_roles(config_path: str | Path | None = None) -> dict[str, Backend]:
             response_format=spec.get("response_format", "json_object"),
             reasoning_effort=spec.get("reasoning_effort"),
             attribute_reasoning_effort=spec.get("attribute_reasoning_effort"),
+            stream=bool(spec.get("stream", False)),
         )
     check_heterogeneous(roles)
     return roles

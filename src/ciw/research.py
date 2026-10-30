@@ -293,6 +293,8 @@ def _failure_message(exc):
             status = call.get("http_status")
             if status == 401:
                 return f"模型接入鉴权失败，{saved}"
+            if status == 504:
+                return f"模型服务响应超时，{saved}"
             if status == 429:
                 if call.get("rejection_kind") == "quota":
                     return f"模型服务额度不足，{saved}"

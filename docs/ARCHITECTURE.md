@@ -70,6 +70,7 @@ indications/<slug>.yaml ──► ciw pipeline ──► workspace/releases/<id>
 - 每个数字都必须带原文引语，并且这个数字字面出现在引语中。做不到就判失败，不靠模型自报置信度。
 - 调用记录（模型、prompt 哈希、响应哈希）写进 `ciw.sqlite`，按 (prompt 哈希, 模型) 缓存，重跑不重复计费。
 - 后端走 OpenAI 兼容接口；key 只从环境变量或 key 文件路径读取，不进日志、不进 release。测试使用 `FakeBackend`。
+- GLM核对使用同一端点的SSE接收，DeepSeek默认非流式；传输方式不参与语义缓存键，不改变提示词、模型或预算。只组装content，保留实际结束原因和usage，不保存推理文本；完整结束才缓存，断流/错误/504不自动重发。429准入等待与流读取共用原总时限。仅同一次响应明确返回完整JSON时接受非流式响应，不再发一次请求。协议参照[GLM官方接口](https://docs.z.ai/api-reference/llm/chat-completion)；真实网关是否避免600秒504须另行验证。
 - 核对者在同一身份下返回冲突值时进入待核，不采用数组首条；A的冲突可由B依据原文修正。
 - 私有DGX的系统DNS失败时，仅对已配置的HTTPS Tailscale主机使用本机`tailscale dns query`的唯一私网答案建立连接；保留原主机TLS/SNI验证，不改系统DNS、端点、模型或服务。调用元数据记录解析方式，不记录私网IP或凭据。
 - EventItem的事件日期须有连续原文支持实际动作；发布日期、宣布已批准和历史数据回顾不能补作事件日期或新顶线事件。

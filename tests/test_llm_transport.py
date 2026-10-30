@@ -62,7 +62,9 @@ def test_transport_preserves_actual_response_metadata_and_explicit_json_mode(mon
     b = OpenAICompatBackend("qwen", "qwen", "https://example.com/v1", None, response_format=None)
     assert b.chat("system", "input") == '{"items":[]}'
     assert "response_format" not in requests[0]
+    assert "stream" not in requests[0]
     assert b.receipt["response_model"] == "qwen-served"
+    assert "response_transport" not in b.receipt
 
 
 @pytest.mark.parametrize("status,wait,expected", [(429, "2", 2), (401, "2", 1),
