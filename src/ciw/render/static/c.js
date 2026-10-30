@@ -2,6 +2,8 @@
 (function () {
   const { D, esc, src, table, drawer, chart, options, OWN, PAL } = window.U;
   const C = D.c, rows = C.rows;
+  const studyLabel = r => [(r.products || []).map(p => p.label).join("、"),r.phase,r.acronym || r.trial_id]
+    .filter(Boolean).join(" · ");
   options("#f-phase", rows.map((r) => r.phase));
   options("#f-mask", rows.map((r) => r.masking));
   const primaryCategories = r => r.primary_concepts.length ? r.primary_concepts :
@@ -51,7 +53,7 @@
     { label: "主要终点 / 时间窗", html: r => ep(r.primary) },
     { label: "给药与背景方案", html: r => `${esc(r.background_therapy.join("；"))}${regimens(r)}` },
     { label: "关键设计条款", html: r => (r.design_excerpts || []).length ? `<details><summary>${r.design_excerpts.length} 个主题</summary>${excerpts(r)}</details>` : "" },
-    { label: "研究信息", html: r => `${esc(r.status)}<br><span class="hint">首例 ${esc(r.start || "—")}</span><details><summary>地区 / 申办方</summary><p>${esc(r.country_label || "—")}</p><p>主要完成 ${esc(r.primary_completion || "—")}</p><p>申办方：${esc(r.sponsor)}</p><p>${(r.registration_ids || [r.trial_id]).map(esc).join(" / ")}</p><p>登记疾病/人群：${(r.conditions || []).map(esc).join("；")}</p></details>` },
+    { label: "研究信息", html: r => `${esc(r.status)}<br><span class="hint">登记开始 ${esc(r.start || "—")}</span><details><summary>地区 / 申办方</summary><p>${esc(r.country_label || "—")}</p><p>主要完成 ${esc(r.primary_completion || "—")}</p><p>申办方：${esc(r.sponsor)}</p><p>${(r.registration_ids || [r.trial_id]).map(esc).join(" / ")}</p><p>登记疾病/人群：${(r.conditions || []).map(esc).join("；")}</p></details>` },
   ];
   const tEl = document.getElementById("matrix");
   const catalog = C.topic_catalog || [];
@@ -136,33 +138,46 @@
   const ck = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
   const conceptEl = document.getElementById("concept-chart");
   conceptEl.parentElement.hidden = !ck.length;
-  if (ck.length) chart("concept-chart", { grid: { left: 200, right: 40, top: 20, bottom: 30 }, tooltip: {},
+  conceptEl.hidden = ck.length < 2;
+  const conceptSingle = document.getElementById("concept-single");
+  conceptSingle.hidden = ck.length !== 1;
+  conceptSingle.innerHTML = ck.length === 1 ? `<dl class="summary-facts"><div><dt>${esc(ck[0])}</dt><dd>${counts[ck[0]]} 项研究</dd></div></dl>` : "";
+  if (ck.length > 1) chart("concept-chart", { grid: { left: 200, right: 40, top: 20, bottom: 30 }, tooltip: {},
     xAxis: { type: "value", minInterval: 1 }, yAxis: { type: "category", data: ck, inverse: true },
     series: [{ type: "bar", data: ck.map((k) => counts[k]), itemStyle: { color: "#008F8A" }, label: { show: true, position: "right" } }] });
 
   table(document.getElementById("concept-data"), [{label:"主要终点",key:"label"},
     {label:"研究数",key:"count",num:true}], ck.map(k=>({label:k,count:counts[k]})));
 
-  // 样本量 × 首例入组
+  // 样本量 × 登记开始日期（来源可能为计划日期，不宣称首例已经入组）。
   const drawable = data.filter(r => r.start && r.enrollment != null);
   const sizeEl = document.getElementById("size-chart");
   sizeEl.parentElement.hidden = !data.length;
-  sizeEl.hidden = !drawable.length;
-  document.getElementById("size-data-label").textContent = `完整数据表 · ${drawable.length}/${data.length}项已绘制`;
+  sizeEl.hidden = drawable.length < 2;
+  const lone = drawable.length === 1 ? drawable[0] : data.length === 1 ? data[0] : null;
+  const sizeSingle = document.getElementById("size-single");
+  sizeSingle.hidden = !lone;
+  sizeSingle.innerHTML = lone ? `<strong class="summary-identity">${esc(studyLabel(lone))}</strong>
+    <dl class="summary-facts"><div><dt>登记开始日期</dt><dd>${esc(lone.start || "—")}</dd></div>
+    <div><dt>样本量 ${esc(lone.enrollment_type || "")}</dt><dd>${lone.enrollment == null ? esc(lone.enrollment_text || "—") : esc(lone.enrollment)}</dd></div></dl>` : "";
+  document.getElementById("size-data-label").textContent = `完整数据表 · ${data.length}项`;
   table(document.getElementById("size-data"), [
     {label:"药物 / 研究",html:r=>`${(r.products || []).map(p=>esc(p.label)).join("、")} · ${src(r.url,r.acronym || r.trial_id)}`},
-    {label:"期别",key:"phase"},{label:"首例入组",key:"start"},{label:"样本量",key:"enrollment",num:true},
-    {label:"样本量类型",key:"enrollment_type"},
-    {label:"绘图状态",html:r=>[!r.start ? "未记录首例日期" : "",r.enrollment == null ? "未记录样本量" : ""].filter(Boolean).join("；") || "已绘制"}
+    {label:"期别",key:"phase"},{label:"登记开始日期",key:"start"},{label:"样本量",key:"enrollment",num:true},
+    {label:"样本量类型",key:"enrollment_type"}
   ],data);
-  sizeEl.style.height = (drawable.length < 5 ? 240 : 300) + "px";
+  sizeEl.style.height = (drawable.length < 5 ? 200 : drawable.length <= 12 ? 240 : 280) + "px";
   const phases = [...new Set(drawable.map((r) => r.phase))];
-  if (drawable.length) chart("size-chart", { grid: { left: 60, right: 30, top: 40, bottom: 40 }, legend: { top: 0 },
-    tooltip: { formatter: (p) => `${esc(p.data.r.acronym || p.data.r.trial_id)}<br>${esc(p.data.r.phase)} · N=${p.data.r.enrollment}<br>${esc(p.data.r.start)}` },
-    xAxis: { type: "time", ...(drawable.length === 1 ? { splitNumber: 2, minInterval: 86400000,
-      axisLabel: { formatter: "{yyyy}-{MM}-{dd}", hideOverlap: true } } : {}) }, yAxis: { type: "value", name: "样本量" },
-    series: phases.map((ph, i) => ({ name: ph || "未知", type: "scatter",
+  if (drawable.length > 1) chart("size-chart", { grid: { left: 60, right: 30, top: 40, bottom: 40 }, legend: { top: 0 },
+    tooltip: { trigger: "item", formatter: (p) => {
+      const r = p && p.data && p.data.r;
+      if (!r) return "";
+      return `${esc(studyLabel(r))}<br>N=${esc(r.enrollment)} ${esc(r.enrollment_type || "")}<br>登记开始 ${esc(r.start)}`;
+    } },
+    xAxis: { type: "time", splitNumber: Math.min(5,drawable.length), axisLabel: { hideOverlap: true } }, yAxis: { type: "value", name: "样本量" },
+    series: phases.map((ph, i) => ({ name: ph || "未知", type: "scatter", dimensions: ["start", "enrollment"],
+      encode: { x: 0, y: 1, tooltip: [0, 1] }, animationDuration: 0,
       data: drawable.filter((r) => r.phase === ph).map((r) => ({ value: [r.start, r.enrollment], r,
-        itemStyle: { color: r.is_own ? OWN : PAL[i % PAL.length] }, symbolSize: r.is_own ? 14 : 9 })) })) });
+        itemStyle: { color: r.is_own ? OWN : PAL[i % PAL.length] }, symbolSize: r.is_own ? 14 : 12 })) })) });
   }
 })();

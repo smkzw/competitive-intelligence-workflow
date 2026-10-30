@@ -156,6 +156,17 @@
       else if(!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
     });
   }
+  document.addEventListener("keydown", event => {
+    if (event.key !== "Escape") return;
+    const start = event.target?.closest ? event.target : document.activeElement;
+    const details = start?.closest?.("details[open]") || document.activeElement?.closest?.("details[open]");
+    if (!details) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const summary = details.querySelector("summary");
+    details.open = false;
+    summary?.focus();
+  }, true);
 
   function present(option, el, zoom) {
     const copy = value => Array.isArray(value) ? value.map(axis=>({...axis})) : value && {...value};
@@ -185,8 +196,8 @@
       }
     }
     const tooltipWidth = Math.max(80,Math.min(560,available-24,(window.innerWidth || available)-32));
-    option.tooltip = {confine:true,textStyle:label,...option.tooltip,
-      extraCssText:`max-width:${tooltipWidth}px;white-space:normal;overflow-wrap:anywhere;`};
+    option.tooltip = {confine:true,appendTo:"body",transitionDuration:0,displayTransition:false,textStyle:label,
+      ...option.tooltip,extraCssText:`max-width:${tooltipWidth}px;white-space:normal;overflow-wrap:anywhere;`};
     option.color = PAL;
     const axis = option.yAxis;
     const visibleRows = window.innerHeight < 640 ? 4 : window.innerHeight < 820 ? 6 : 10;
@@ -206,7 +217,7 @@
     } else if(axis?.type === "category") {
       delete option.dataZoom;
     }
-    option.series = (option.series || []).map(s=>({...s,clip:true,label:{fontSize:16,...s.label}}));
+    option.series = (option.series || []).map(s=>({...s,clip:s.type==="scatter"?false:true,label:{fontSize:16,...s.label}}));
     return option;
   }
 

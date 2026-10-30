@@ -45,6 +45,10 @@ h2 { font-size:22px; line-height:1.3; margin:0; color:var(--ink); }
 h3 { font-size:18px; line-height:1.4; margin:10px 0 6px; color:var(--ink); font-weight:650; }
 .hint,.small,.legend { color:var(--muted); font-size:16px; }
 .row { display:flex; gap:12px; } .grow { flex:1 1 0; min-width:0; }
+.summary-facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:6px 12px; margin:6px 0; }
+.summary-facts dt { color:var(--muted); font-size:16px; }
+.summary-facts dd { margin:0; font-size:20px; font-weight:650; color:var(--ink); font-variant-numeric:tabular-nums; }
+.summary-identity { display:block; font-size:16px; color:var(--ink); }
 .chart { height:300px; width:100%; min-width:0; } .chart.tall { height:320px; }
 .filters { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
 input[type=search],select { border:1px solid #CED3D8; border-radius:8px; padding:5px 10px; background:#fff; color:var(--body); }
