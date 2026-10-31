@@ -1,6 +1,6 @@
 # 构建 Agent 执行包（v2 · 2026-10-27）
 
-**先读 [STATUS](../STATUS.md) 和 [最近暂停交接](PAUSE_20261028_D22.md)，核对实际HEAD及用户最新恢复授权。下面是任务合同，不要求把已完成的环境、采集和模型调用从头重跑；发布分支以D15为准。**
+**当前已暂停。先读 [STATUS](../STATUS.md)、[最新详细交接](PAUSE_20261031_AFTER_REBUILD15.md)和[远程审阅入口](REVIEW_INDEX_20261031.md)。当前完整分支为CI `codex/ciw-clinical-endpoint-index` / 工作台 `codex/ciw-report-reading-focus`。下文获取代码表和初始命令保留为2026-10-27原包背景；不得据此重跑已完成步骤或等待旧PID，未发现的archive标签不当作存在。用户恢复授权后才实施。**
 
 本执行包面向**在另一台机器上从零开始**的构建 Agent。所需的一切都来自 Git 仓库或随包附件，不依赖任何其他机器上的目录、数据、浏览器会话或代理。
 

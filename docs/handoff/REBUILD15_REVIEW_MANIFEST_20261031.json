@@ -1,0 +1,2146 @@
+{
+  "record": "pause-after-rebuild-15",
+  "state": "PAUSED",
+  "generated_at": "2026-10-31T13:20:57.505105+00:00",
+  "scope": "ciw v2 since 2026-10-27 execution pack; preservation record, not final product acceptance",
+  "repositories": {
+    "ci": {
+      "url": "https://github.com/smkzw/competitive-intelligence-workflow",
+      "branch": "codex/ciw-clinical-endpoint-index",
+      "product_commit": "786bf8ecabdac7cae352a1004c6e0b878aafc853",
+      "launch_head": "0e00486d44fcd1207fb94276d4e74d42eb1f8514",
+      "source_files": {
+        "indications/crswnp.yaml": "fa3a9eaaf3aba323c74fee495e8fe336dfc1390577d2bd88aa52b3ccc95a6b7e",
+        "indications/pnh.yaml": "4b121918fdb83bc5c616d042b23c16b1114d53a9632c1cccda4380eff21b1ebc",
+        "pyproject.toml": "cffc2f732168ab12cb3fcebaffc9db79790bbc4451633de79506cb44985d1d07",
+        "src/ciw/__init__.py": "d0c2f206b2b7a1d713a746d34344d654c08a0ad12566a8a89a4fc8fe09f9b95e",
+        "src/ciw/analyze/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "src/ciw/analyze/clinical_families.py": "b949fcc6d9f925317fd468cc9e66c45cf69d462cef5964382c4bed7d4c66bcee",
+        "src/ciw/analyze/common.py": "7358dcf8f84214d406f17279fd8bcf267b017d0cfa5e0bc749c1431ad765346a",
+        "src/ciw/analyze/comparison_axes.py": "acfa30377af93e483ae01b72f1866f80451ed971b75dc699963f0b4af6a5770c",
+        "src/ciw/analyze/condition_scope.py": "3b18b94965f839c3a869d25c735ec246087b5485586e5c15a3a3cd5903e53338",
+        "src/ciw/analyze/design.py": "266a0cd10ce7f13e849b6d5b40d51247d126c9c4b30cec3e3ccd3b138c96d5e0",
+        "src/ciw/analyze/design_excerpts.py": "ffc15182336143ca04b8c6d804c13923b5c8eecca9247777abd653ac8f5e7a31",
+        "src/ciw/analyze/landscape.py": "efe72cd91edab4538105b0933307a167061d59f58c5c35a304ac8ec519891def",
+        "src/ciw/analyze/results.py": "aeb789aff66c71f72d623cb648efcbf207385effce1cb7cde5014f0d85d457fb",
+        "src/ciw/analyze/shared_cohort.py": "47355f52876539fa2430b5fee84464948e0e15bb02907c3bd15dc9935d3f5752",
+        "src/ciw/api.py": "31802aa14408f2b6fe6436ee72da1c36931750248a939651f22bde6cb2fd1053",
+        "src/ciw/audit.py": "bfa054e7dc22bdc5f26d32374db72eae882912d96d1d6037fb7e37f12dde20e1",
+        "src/ciw/cli.py": "c9c842b244500c283be15a9980068aa1069530c09717837231e62380045fe73c",
+        "src/ciw/config.py": "5df8934ea61de073fce827ed3c984afa165b05a776fd6d6446f426dccb458893",
+        "src/ciw/data/llm.yaml": "1b61f0f34d88522b7ce82f28efba9151e41017ac78a95d29c5d6d5cc1e03ef80",
+        "src/ciw/data/release.schema.json": "febca0994bfc813b83857dfe614a3bb864bc7f263a44867a1b8c1bcfaed2cf04",
+        "src/ciw/extract/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "src/ciw/extract/ctgov.py": "9191c6a4afcb5daf0365386bc5dd6a637657ea695cc1c77b2c5deee7a35aaa60",
+        "src/ciw/http.py": "031fa76b0f084aad5e4b9658843ee3f51f9b0c5a44af34db355bddbdd62a0e3c",
+        "src/ciw/models.py": "d947be14c7bed6688429ff5b2f4804c0d978e8ff1d02a64109bc3b0c400bb650",
+        "src/ciw/normalize/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "src/ciw/normalize/arms.py": "78f6e287b7da969d56f922f65e0a24321a36a8d28c0596b7f2a51a19be773e14",
+        "src/ciw/normalize/comparison_axes.py": "4f9f14bb6e2b8a6c11482a6567d23455a2639a3592ab158bd4cb1fe65c962260",
+        "src/ciw/normalize/comparison_context.py": "181e1bebae94b4d023c3cf5b1db63ab86964cfb8b36fee6deb43f2a5f09b801b",
+        "src/ciw/normalize/design.py": "a8ef26639ce121624843a549625bdea7ba1cdfa825a46fed825d7f489b3d58f3",
+        "src/ciw/normalize/products.py": "a96ca54bbd699e431a10a99957e9b60185b2feadde91580d29044dfbb5d11e27",
+        "src/ciw/normalize/semantics.py": "c74864176006265aeddef7dc42bb5c7ee7f24b3ce011aca75c17b663adb64655",
+        "src/ciw/normalize/trials.py": "66657684ff5d4124477cc9fbdc3e04b826e651801f8fe9d9e5b2847c5aca6e3b",
+        "src/ciw/pipeline.py": "7d2f8d985c7e3924e5587ae970f759231b44ce8ba7f105efa13006126937b196",
+        "src/ciw/release.py": "c1c1a48299f58cc4501806ead4e8d5293e4bb796d7ad53b56e617bb1951670db",
+        "src/ciw/render/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "src/ciw/render/site.py": "c4cef024ad1bf7f16046778f096a2c6b74d3a76c6e5fe6f388925871e97ae241",
+        "src/ciw/render/static/LICENSE": "634293835b43a6dd2094fa39182a3d9a6b9ca43b7fdb9ac354e8037af2a3093a",
+        "src/ciw/render/static/a.js": "8e53fa9a650570c661b0c28631829c6bc61b6ae4adcaada8e468cf9505243880",
+        "src/ciw/render/static/b.js": "e3636c14e497d935345c3f08608f55baaeb269e23c76c418c88b665eba31fcb2",
+        "src/ciw/render/static/c.js": "4115f1d01e94a382cc3da50f81f47664036a8821fa4b3b3ea89c07dbe6c5539a",
+        "src/ciw/render/static/common.js": "a646c11af1ea5d8094ffeada9f89d81dc55a871bb68d0633530cfd4edd22f0d5",
+        "src/ciw/render/static/echarts.min.js": "b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0",
+        "src/ciw/render/static/style.css": "7ce5a93dad0adabf12241cc848af2168093ecc974ef493f26b38ad647d511c38",
+        "src/ciw/render/templates/a.html": "63e42f7972677275015548b4f33af6b638401ebc65b0e2a0002ece55d6cc22c6",
+        "src/ciw/render/templates/b.html": "3b4fbeed60b02f4f40c56b6e2d51c4c19aa24730acd31cd9bed854a41b1c0834",
+        "src/ciw/render/templates/base.html": "7f726cc007547ee808752f39e3c580ca10ad75b6e3b89116197147464a08f4f9",
+        "src/ciw/render/templates/c.html": "6f35e0486404326ecbee340a67b5d67efb1464e66e8fb2d9716889aac39a0e17",
+        "src/ciw/research.py": "b290c24b678d877fb4982cc8d0cb16fedef6a844c59d5cb8aa09a6e8e7fb317a",
+        "src/ciw/sources/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "src/ciw/sources/browser.py": "ba1dd335f4383cd2dc8854cf230e6fa2ab0c9563ced4689730e0da2a7f1da910",
+        "src/ciw/sources/captures.py": "bc9e30e5c991234c6e5687dd14581e79ae1b0c71ef72abf5042677f5c91b1da7",
+        "src/ciw/sources/cde/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "src/ciw/sources/cde/browser.mjs": "37fa8a6d21c28b8d4d21b2849a1c0de6b89aecf989944b3866c6863ae7072a55",
+        "src/ciw/sources/cde/detail.mjs": "780afa7d65f4e5017e29dd1de04f9d8a8aa31a99305bfc0f9a251d7157f31d61",
+        "src/ciw/sources/cde/detail.py": "c703ee471ad4e8cc8236dcac4ca05cae38b92b1df3c472aca38fc691d0fdbd44",
+        "src/ciw/sources/cde/listing.py": "b799b78aa58fccfdea4ac163b9856574c2bd5fd090060920a7788498e5f58682",
+        "src/ciw/sources/cde_registry.py": "7de681f6f38ef1fab9db20302a48d01b0897fdd28cfbe69b72f28b49f96a701c",
+        "src/ciw/sources/ctgov.py": "75329b7680a365fa8529750c2d6c6970f5f38f02c0f4759e09146e971bb21673",
+        "src/ciw/sources/document.mjs": "b5c58b832cb48b1c0b1644266f7f79f422b9a4b2d727c77178941d8353f5969d",
+        "src/ciw/sources/document.py": "51252211a4e87b3f1c09653b56891b64f7f96b399b0aa9c9e9084bf6c5d34fbc",
+        "src/ciw/sources/europepmc.py": "dfef0d14f644736e904a0e419ab6e99f6b968fb434f00c8940e65f8cef69a508",
+        "src/ciw/sources/nmpa/__init__.py": "baf4517da646d2c19059ad6826a3b3994767392b6c38ada14b387b3ff28fc4e5",
+        "src/ciw/sources/nmpa/browser.mjs": "542746414e25861ddad0072a544faf8f606fd6b675c3ccbdc4734c1a3e2f9050",
+        "src/ciw/sources/nmpa/capture.py": "353c55c1cc25ccded143c1297db2a1e94ef1af25cf8c0c302ac7e1a66c63c01f",
+        "src/ciw/sources/nmpa/detail.mjs": "44beae933615b08141eee0c1d12d595c378814e3d5166760a2c09b19908f3ecf",
+        "src/ciw/sources/nmpa/parser.py": "6e72e4472625e140adeb0d657dc45431d8e69621f19146664912a2015eebd210",
+        "src/ciw/sources/nmpa/record.mjs": "993613383ec71116fd886307844a015f70965579e6f047dc08481396bb3f00dc",
+        "src/ciw/sources/nmpa/registry.py": "33d76bf8899f883bcb7b39269ff04b5521f692ebd17e4db6a1ec41f7d2dbcca7",
+        "src/ciw/sources/pubmed.py": "3776334238d3d8fdee5f5d12cd975f7926845fa6f4395d9a9e1681e2137d565e",
+        "src/ciw/store.py": "8f251fac928f7838c179cb63eb0333e5d1ac5b6e0a91846d4ab1b2d1df3c5a5f",
+        "src/ciw/verify/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "src/ciw/verify/attributes.py": "0711034cc3da69566150b46cff14b4b1fb697ed9a21bbd99a0497a98cb292d12",
+        "src/ciw/verify/comparison_axes.py": "e4773e1ae6e33f4329cf05b3af38d1f6dc5b79371a3bf01a163274e0533ee8f2",
+        "src/ciw/verify/crosscheck.py": "90bfd0bc06d0d489b60058762b87ed690c9c1d20dae8051f8cac9bbf4d5cbec0",
+        "src/ciw/verify/design_clauses.py": "3bc32723e98a3b09fc9a13a739726ad4f651f590458979c994dde3d395ec33f8",
+        "src/ciw/verify/design_labels.py": "1599c17a3278feaa70c6e732852effcfd2f334938352abef085fbe8d3ef65f2a",
+        "src/ciw/verify/endpoint_families.py": "966f8e1e1cbf4f7e78f21e10d6527fa1915d014623ce0dcd0489adaf4395d980",
+        "src/ciw/verify/endpoint_index.py": "130f5b0577b3492e42877ba7867d25403d9f5df157e3ba9f4821a7ed09a27a28",
+        "src/ciw/verify/events.py": "8b9bda66a9117acf336723a3e7b2de32eb31976b9c93f1c5884e1515e5739cd3",
+        "src/ciw/verify/llm.py": "ff4f4d18568da7338cc0b6d32d3d61d1c1a839e1dcface496be5c7104434516c",
+        "src/ciw/verify/publications.py": "cd6f1ed0dc6f3bdd9436facfe18f927fcb7374b9040733c112c5bad383f1c1fe",
+        "src/ciw/verify/quote.py": "ac7a156c0f23fe9600fc97705840316cf648691abb085cfd45607a102f212377",
+        "src/ciw/verify/schemas.py": "f6a9510138f8ce6b958d9e7e5a491eae7861bf1563e9d3fc7713f7b2fd381b8b",
+        "src/ciw/verify/stream.py": "5ade744c606b714b9f21efc96eea764ed90c28ea997e4d28491036b193f6be80",
+        "src/ciw/verify/transport.py": "3905d8f94dc64858c71067bd8e3a387f7e34d158057285dcec1e6102ec27d6be",
+        "tests/conftest.py": "057a878e55bd958eed1cbefb2544db00920837570f80441b2a6efec20d5c950d",
+        "tests/fixtures/cde/detail-CTR20221480.json": "d4ffd1d487b21e6b36293ece29aea1fe363ff43078e83d452e84d1142d59cc89",
+        "tests/fixtures/cde/detail-CTR20221879.json": "59f90cbf0172df4d5cf6b4b631db064151e68a4772ce39b7dd470586a029dd0e",
+        "tests/fixtures/cde/list-crswnp.json": "404710d95cb3bed473cb58e3b61f7deb35f3e769e8e9be1373a31c43ddf70e3f",
+        "tests/fixtures/ctgov/NCT02898454.json": "0692af7b99e9f1b7925ff180c9e5a2d9798c0ca09478ad25fa8e0aaddc11a77a",
+        "tests/fixtures/ctgov/NCT03085797.json": "17283a030010040b3faf2c5060c51415d6ee765e8da157c19a9b55300477d011",
+        "tests/fixtures/ctgov/NCT03280550.json": "22e2479ca13823d266bb9e494fb2e905bbc2eda4625f1be3ab7acd16890befe3",
+        "tests/fixtures/ctgov/NCT04851964.json": "89ef2b7b2d0955bd409949f76730c04cbb5afc202d3dcb95da8dc15e6a1b0bd8",
+        "tests/fixtures/ctgov/NCT04998604.json": "a803c50cedf20e1ba18295bd33d73296bbb7fb0e5180dc92eae46fcf6da6cb35",
+        "tests/test_arm_product_identity.py": "b3cbb33abc1a75b9806f04aa2ce9950c074f70dcd240fbe5afdb4facc1566ae3",
+        "tests/test_cde.py": "27ca1eb2adf89fa937ad2d3a6bd140e4f23a496d351baca55219e43666dc3041",
+        "tests/test_chart_interaction.py": "6a13c332cef12e2b21b3575572da295a05014e888caa68efe12df52215db44d3",
+        "tests/test_clinical_families.py": "3e1139802639566e1e1121fe2922c1c44c39b1bdceaa47769ba4f9cce42594eb",
+        "tests/test_cohort_scope_boundaries.py": "d5a546472a4d251e8850f79a6e0ef25c25ffae7ff50faf894563956adca03eba",
+        "tests/test_comparison_axes.py": "3574c1e433073580c27092488aab1a0373a14db37c62947d717940b2ac4aac6a",
+        "tests/test_comparison_context.py": "228b5d60635a90c7a91378544127c799b609aa58c45ee819592219712d2cafbd",
+        "tests/test_crosscheck.py": "66301a020f56645880463e8630ef1bf5e690b6db7176d66dc402e9f91b5b6deb",
+        "tests/test_design_cohort_heading.py": "2743784bb417b3026ce0a2c530ded4bd95e3d329b046d5de4d9c957a39140023",
+        "tests/test_design_compact_summary.py": "eb54da0f0ce3137ec55d377a7c8203671e0f182c35c7a21f702226011c4c379f",
+        "tests/test_design_excerpts.py": "8b47ee8a175a0c4bbb99f69f88d9305604663b07074a84fb2284c3e0f5c0252c",
+        "tests/test_design_lookup_context.py": "7c7a456de27e64047217f723fd66e342946c8706dc0d0b96eb4e2126a03cde00",
+        "tests/test_design_original_projection.py": "4e5f4c0711399cff62830208816cb8f47ce32f2834e3413ad0c5513807c1eafc",
+        "tests/test_design_parent_prefix.py": "4083032140aaa0ec2754388ff38c1f6cfa4b8b37fca2c07ed77f1fc6dcdad763",
+        "tests/test_design_predicate_scope.py": "c84b4ef33b42e2c0a876cdb6501b1a41d1747ebd2cbe27c8bc62c0c2c8f5ff0d",
+        "tests/test_design_reading_labels.py": "93638c3d5c12a90602d4f7cbba3ba5e3e7a05c27d9524d0928c36efa14563df1",
+        "tests/test_design_reading_recovery.py": "a1fa61e6e74b861689c078fe490a0244b1b416b2da14483eccf4d95cf2e90ecc",
+        "tests/test_design_reading_scope.py": "b0bf507a19dec48bfc2c82c08357fbc482ce8c8116fc3246964883e515bf13c4",
+        "tests/test_design_scope_regressions.py": "3e89a7bae2d4f8f7516af7741f43db951e223af133f036931bb96502901bc7aa",
+        "tests/test_design_source_clauses.py": "fd2887d12dcd3b082fba49583961178ba2b5539a6cc72ca323d08678fff5da61",
+        "tests/test_design_source_forms.py": "188805bd1a2cc6444814ec1b38c6e04852a42566ce6cd13cbef12fb11c4da13f",
+        "tests/test_design_topic_view.py": "64067498cee7faa8068c4e1d54c91b09f87c11d5610bbe9c35d40da23d796d83",
+        "tests/test_display_safety.py": "79b3253e156617873f0d973a20ae9c8b360b80c104e5c020c5227e516cb08356",
+        "tests/test_document_capture.py": "f09501fab470d9f76d58d0dc2358a32fb7a29d69344360cfacdd25a8d9357b59",
+        "tests/test_endpoint_index.py": "39946760736afa092e47fcac03b4137b6a8510f2ff21ad5f05dd09719206a8c3",
+        "tests/test_europepmc.py": "93b25a3b6fe4e7ff0f58821c11d02265bff8f0be21afd0f7cda4050b68fa0b3e",
+        "tests/test_event_claim_evidence.py": "58d064d1b84d2d5a141ccaac81dffc027f178cf83b21a3ed9984a3dfb8e1e11e",
+        "tests/test_event_dates.py": "ce6cbc492cc7d8632c8bf051194bb98fca9b14b74317b40dd7fdf384ca82c0ee",
+        "tests/test_event_legacy_evidence.py": "b710337b671d9360344a9d9581df3965cd4fcc823328eeeb667574773df02884",
+        "tests/test_event_replay.py": "7beb9f6d1dc3c5ca54cce6a9dff2021ad08b5fc3e08fdff2ce3f401df7ba1c28",
+        "tests/test_extract_ctgov.py": "28ce42fa8f01d5c033ad519e98a0f487168eee5e43fa9f7ffcde8b3b87ac0538",
+        "tests/test_intervention_source_passages.py": "1ad1968109dc7a6435b3227e74065fd86e3f810f0bba38536c4cf6a73fb6f30f",
+        "tests/test_layering.py": "da57aac76f6cada0aa797e3047e6e2ca43fe766c3d33c94a42733ca64860ee83",
+        "tests/test_llm_stream.py": "1a7b38970536f047185153221c12ee1a012b8e617c5710990b2b31462df2176e",
+        "tests/test_llm_transport.py": "9ba9f0b3e5cd049fa7b6163afc2dd347526976d52bcf096e027d2de0b7b65174",
+        "tests/test_nmpa.py": "610b281db5e112edf8aacf3d916206031d72a67d28d7f99844a398d1f0c5d039",
+        "tests/test_nmpa_capture_failures.py": "73b32104c145bed1f654e946d0a8aefa2e9bdd2e224f27216684001f2d178537",
+        "tests/test_nmpa_versions.py": "7524f82d14f8b732ef5ea3bafc76643f10c21489f67dd85880795db2c4bc46ae",
+        "tests/test_notation_reading.py": "63cb444a36e40b448c0cba825a0483664630e1ad50590c6bf3ae7c29f11a96a4",
+        "tests/test_observations.py": "c925031af0ff360bb6b67c806a1fb39b2ff3b87d4a1ed35ddeaec3fc98c4387c",
+        "tests/test_pipeline.py": "79e5a5b3a7d3cc46592cdeba180e265de14f63fcd4fe6d2d749b13b1c824c04b",
+        "tests/test_pnh_concepts.py": "9e322a14b004a6f2213a648418a7ad9eb17724a8ffa9732c971474bf23158e99",
+        "tests/test_private_dns.py": "40e595847377d425b8b95a4561052af19c5de59e1b8cc9d30b49b0322699c12d",
+        "tests/test_product_attributes.py": "6ff24fa5634e43d0ff4738c9f6a2d203316480d79903af4491f77f1804786e0f",
+        "tests/test_publication_scope_evidence.py": "71596f2a497b327e646e86e538038e41fc1704cdeb15f442124c3103e034347f",
+        "tests/test_publications.py": "c844f651a89c2bb3ecc77f88331ae19346972046ba5bd50026e812493a3e4e5f",
+        "tests/test_pubmed.py": "9596c290723a3f9dbd2b89d32b4e62a970141532ba0245ac453c62734a17726f",
+        "tests/test_reading_list_numbers.py": "28af99a02b4e502f92048c69c44a5a82bfeb578779392e660c95d126581d9bff",
+        "tests/test_reading_representation.py": "baf229c61ca877edb98afdcce9568a0a977b1390e8fc8b8195116fab29d835dd",
+        "tests/test_reading_semantic_notation.py": "a5de1ff5f7cf842e6cf0cda0b4b030ba701dc63c7321e8eb1054a40e5087f624",
+        "tests/test_registry_identity.py": "80e15cd3b0d5e25f0312cec63667619543341a0ecc91c4e83e348778af056c21",
+        "tests/test_relevance.py": "68867a0a6dd16266bf72ae162f68e983fbb9650df1634856cb1e1f6ef3325100",
+        "tests/test_report_priority.py": "ac9badc8c4dabc4b66989800726fcc9697a8cdaa5bce7a4e4b19aa68622ddfe1",
+        "tests/test_research.py": "5e3f7acf559d72231228710170c05f48afcd3b5145c5de67a595a65cd6fdb802",
+        "tests/test_research_failure_message.py": "d5b75ae17e5c2fe2c41c0d6c986b0f876e142d0d56c23459bd05a889f1dc745d",
+        "tests/test_result_frame_presentation.py": "6b0a5e16957f11667655ae6b3577322b7785c09ff0e08446166862b5e422b56c",
+        "tests/test_retained_source_facts.py": "368d0c07d2391f851c70c5d2fb4ad141e322d741ab2739f2af063f1435146450",
+        "tests/test_review_regressions.py": "a9ac6a67f2632124edcad62205969f99f53c268afe6f817e9ffa5917c0161228",
+        "tests/test_semantics.py": "e97d5df01fa378686e9eb069ed5fd593c56a14e0e8c500713ddc58c45a41b979",
+        "tests/test_single_item_envelope.py": "ac66989b5aceab322ef240a8eaa278beda9360876a70bdd6678e4c412acb8465",
+        "tests/test_workspace_writer.py": "b1100a7f46ec1c0ef6ce03e9d99945bad75374f3525f7cf6c36942ab3cc50bd2",
+        "uv.lock": "e3b3640b5044eb20caf228e2ab73f37800afece6382c9f4339c9de3a95803a8d"
+      }
+    },
+    "workbench": {
+      "url": "https://github.com/smkzw/protocol-v3-workbench",
+      "branch": "codex/ciw-report-reading-focus",
+      "product_commit": "389fdea3b310b541366ea17de714e5fccf4d6758",
+      "pause_document_commit": "5a2cdb85610b78104b5c5e7cc08f76102887651b",
+      "source_files": {
+        "frontend/src/features/evidence-design/EvidenceDesignWorkspace.jsx": "3e6095bae7c41f59a3142ae6e437eea3d595125d3b336366c06d7bcb8ae0cd21",
+        "services/api/app/ciw_local_identity.py": "cacca478cb43db446ee787dec90e70c2dfd24c349eb6a399d2ad32eaeb8ed692",
+        "services/api/app/ciw_release_adapter.py": "d44487538ef0884ae709e85ddde0c2659c144763a52c38d6ff38ae4708ffa756",
+        "services/api/app/ciw_research.py": "52430a70f0fa0bf10f16a723d83a74ff97f4f81300c0c31f3a2c02f261a63f71",
+        "services/api/app/ciw_research_router.py": "c38c4197179e14eec7810df947f0c79efdfb6afa07909ddef06f281c76c7597f"
+      }
+    }
+  },
+  "run": {
+    "attempt": 15,
+    "report": "C",
+    "indication": "原发性膜性肾病",
+    "status": {
+      "state": "done",
+      "started_at": "2026-10-31T04:07:54+00:00",
+      "updated_at": "2026-10-31T13:15:13+00:00",
+      "report": "C",
+      "release_id": "rel_fa2407ca44d9c4a2",
+      "message": "报告已生成"
+    },
+    "duration_seconds": 32839.0,
+    "current_release_id": "rel_fa2407ca44d9c4a2",
+    "current_sha256": "94b0d4915e6f92e5bb59c0d885c25211941e61023dfe6f3a4e752a9700bd6b29",
+    "release_sha256": "161bf82667ceda056aab898c239471cdc652e16671fccace0ff979503162fa60",
+    "rendered_reports": [
+      "C"
+    ],
+    "site_manifest": {
+      "site/C/index.html": {
+        "sha256": "3e266cf6aab5ae7d5b44d6a8afefac07c8b59308eb8b322fa06979a0e44dcee1",
+        "bytes": 3178
+      },
+      "site/C/LICENSE": {
+        "sha256": "634293835b43a6dd2094fa39182a3d9a6b9ca43b7fdb9ac354e8037af2a3093a",
+        "bytes": 11990
+      },
+      "site/C/data.js": {
+        "sha256": "47e96b23ce84afe8c9bf2b3c22fe2ac564d462922de212aa7fad0d4dee53c997",
+        "bytes": 1211190
+      },
+      "site/C/style.css": {
+        "sha256": "7ce5a93dad0adabf12241cc848af2168093ecc974ef493f26b38ad647d511c38",
+        "bytes": 12385
+      },
+      "site/C/c.js": {
+        "sha256": "4115f1d01e94a382cc3da50f81f47664036a8821fa4b3b3ea89c07dbe6c5539a",
+        "bytes": 16017
+      },
+      "site/C/common.js": {
+        "sha256": "a646c11af1ea5d8094ffeada9f89d81dc55a871bb68d0633530cfd4edd22f0d5",
+        "bytes": 14387
+      },
+      "site/C/echarts.min.js": {
+        "sha256": "b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0",
+        "bytes": 1121883
+      }
+    },
+    "stage_file_hashes": {
+      "stages/research-design-reading.json": {
+        "sha256": "bff4b1b709673752a81330bf77eeb310028a798cb6544b314a1513ce43789b72",
+        "bytes": 175678
+      },
+      "stages/research-product-membership.json": {
+        "sha256": "d62b8ea11ae6292113cd0333c8e7828efb11178fab8caafb561e7bfe557a1c38",
+        "bytes": 31902
+      },
+      "stages/research-query-plan.json": {
+        "sha256": "ecf834cab74cb83d97ba170e25e29295fd8f0f7c6e8c2a538149458b6e142f6e",
+        "bytes": 11456
+      },
+      "stages/research-run.json": {
+        "sha256": "be1fa1535aff95d0418375c58cae91717955068466b58c5277813f0f5186c90f",
+        "bytes": 561
+      },
+      "stages/research-search-aliases.json": {
+        "sha256": "9d69e73b8eafdbbfa4a9c0d93bdb913d6885812d8e26c5b1c701debaf651ad1c",
+        "bytes": 6641
+      },
+      "stages/research-comparison-axes.json": {
+        "sha256": "7567fdf2919d4ece3d93efb6d0abd115709a35f0ba0e584f36514525e6f5c17a",
+        "bytes": 157
+      },
+      "stages/research-design-clauses.json": {
+        "sha256": "675f641a9dedbaf5d7fd2c1fd1fec490da2888def6c9b9da03045227281827dd",
+        "bytes": 131497
+      },
+      "stages/research-endpoint-families.json": {
+        "sha256": "4d5d770055156e72e3eef22c0d172f5521ffe06203ce1bbcd11e9c542131694d",
+        "bytes": 132
+      },
+      "stages/research-context.json": {
+        "sha256": "1f6820b9453549eeefeddae16771a889752d4e237e95f8a62956cdd8e2df5621",
+        "bytes": 3273
+      }
+    },
+    "release_code_version_label": "2.0.0a1"
+  },
+  "preservation": {
+    "before_counts": {
+      "sources": 123,
+      "llm_cache": 255,
+      "verifications": 427
+    },
+    "after_counts": {
+      "sources": 123,
+      "llm_cache": 438,
+      "verifications": 596
+    },
+    "source_rows_preserved": true,
+    "cache_rows_preserved": true,
+    "old_snapshot_preserved": true,
+    "old_release_preserved": true,
+    "snapshot_sha256": "12b6495b000efa095c78f2218b83feddeb09c0fdb5c7f980135accb51d761902",
+    "snapshot_bytes": 5206016,
+    "quick_check": "ok",
+    "workspace_writer_lock_free": true,
+    "code_files_changed": [],
+    "wb_files_changed": [],
+    "scientific_base_fields": {
+      "results": {
+        "before": 71,
+        "after": 71,
+        "canonical_sha_equal": true
+      },
+      "safety": {
+        "before": 7,
+        "after": 7,
+        "canonical_sha_equal": true
+      },
+      "products": {
+        "before": 120,
+        "after": 120,
+        "canonical_sha_equal": true
+      },
+      "trials": {
+        "before": 123,
+        "after": 123,
+        "canonical_sha_equal": true
+      }
+    }
+  },
+  "source_catalog_metadata": [
+    {
+      "source_id": "src_0003368216b1a03f",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07038382",
+      "sha256": "19c6f4fffcdc58129ee35459c13aaa28d43606376e9691b7bf0c1ee1eae3cc70"
+    },
+    {
+      "source_id": "src_01f2386a5e95e337",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT02610595",
+      "sha256": "caee01ad6549fede3217d8e1dc04898da335d42015cba9f4c585f3fefceac2a1"
+    },
+    {
+      "source_id": "src_02ded7bb045cd448",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT06285279",
+      "sha256": "9791c22ed591ea7413fac3c360b7ef246343321c420dc982c8d06b0c12c53e31"
+    },
+    {
+      "source_id": "src_0417e2f8277225d6",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05050214",
+      "sha256": "52073f0d3af0a5b38916e3cab1bb4f85536f0ca0e201cd632c077e73eab7f0ca"
+    },
+    {
+      "source_id": "src_04e086807d2a21e1",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT04652570",
+      "sha256": "0fb8bd580f59b8a7fbfc4636d27f71fcdc3852be59d4f9faf41cceb8958d50f3"
+    },
+    {
+      "source_id": "src_0a131d196d2a94f3",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT06466135",
+      "sha256": "4d4aea14913510f7b1c16c8c0954e9f96df166d01b903ff9f0b1e15e1ef6ef29"
+    },
+    {
+      "source_id": "src_0e4c9071bd977d3d",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT00843856",
+      "sha256": "8b32064ee6740704d11b2b1ec9417edea9a4168c0460f3f6cc776949ef3d9dbc"
+    },
+    {
+      "source_id": "src_10178760d28d74fa",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05514015",
+      "sha256": "7efa20368fce694c58eb09d362e3423776491d026c201ebe6cc3350acd26839c"
+    },
+    {
+      "source_id": "src_10d2f28e89fcffee",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT00404833",
+      "sha256": "862947285a58f8b2d44c751183a3504ab97774ab3cda21a2827509a96fd5b2b6"
+    },
+    {
+      "source_id": "src_13f9187534d9fad8",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05810961",
+      "sha256": "f2821289b2c0ca047433d21bef64219384bb45fbcbda20d2dbb901ee23ef2458"
+    },
+    {
+      "source_id": "src_19f018fb5a7a1e71",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07163611",
+      "sha256": "19d9a71f3ad0d52b006d14f7969907b31ec72351d970fd14b0e6019a3fcbc067"
+    },
+    {
+      "source_id": "src_1bcf79489b15a9d4",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05136456",
+      "sha256": "dfca2a1c9fedb7b9bbaa61d47ddb681f0fd6aa7e8a161720823277e7ec20d2e7"
+    },
+    {
+      "source_id": "src_20771c4da74c5bf4",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT03804359",
+      "sha256": "1e3c21bfc1f96b8986fdd41ece8097a52796915f3b278065b2d17dab4cc4dbff"
+    },
+    {
+      "source_id": "src_21ffd1e78a041e40",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT06341205",
+      "sha256": "94a6835ae73a552498a677f268f9a1c6db60469a45bf743c5d49c38b2aded8d3"
+    },
+    {
+      "source_id": "src_274883a5c1c553f7",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT00135967",
+      "sha256": "c66781ad3d6c2c8439722e523d64b0c8612a194f4910e1db36297907741f8aba"
+    },
+    {
+      "source_id": "src_289aca7a1f1855eb",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05696613",
+      "sha256": "7af4709f38de3c5b8be946dd305f6ea7b1f7eb87d818ae2415fa2f46428d0f60"
+    },
+    {
+      "source_id": "src_2958678161b3d2dc",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT04424862",
+      "sha256": "b40886c2f6f8398c24be84071065316ca469b0ec93306bbec19627c5113a76a7"
+    },
+    {
+      "source_id": "src_2a0bc070dbd28aa3",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT00518219",
+      "sha256": "9247d99a709ef7e3abfb9a2b17876b73bd8b7b3d9bfdfca1d1698c34abfbd866"
+    },
+    {
+      "source_id": "src_2b538b2dbd35b264",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07571746",
+      "sha256": "9a13e375da48a595dc6516ea25e2f48342267124dfd188ce3ff3014f34ab4d32"
+    },
+    {
+      "source_id": "src_2ef98ba5ab6332c9",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07901764",
+      "sha256": "aa835a6ae537d16c35cf3b398b07e6b50a1fa277c86668e57a4ee26220bbde73"
+    },
+    {
+      "source_id": "src_302d273dcae654c4",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07765537",
+      "sha256": "0ff6cb927c8488cc19a0bdde9158d29a1bb4b0a477e64fa355988a56b4993082"
+    },
+    {
+      "source_id": "src_351a3f02200b4b53",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT06120673",
+      "sha256": "88d2fafd26bfc41181e210e89020fc0305ffcab30145405ff5ab737f8b67dd0b"
+    },
+    {
+      "source_id": "src_39f46b978a2cd12c",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT00425217",
+      "sha256": "0854ae9385e1092f6bc9aba64dab7659d399e5fa6e8d9d674c5bfd8a1c366043"
+    },
+    {
+      "source_id": "src_3a3e660105c5dce2",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07721363",
+      "sha256": "476599236478e87d4bb26a9ef7629b8266bcb79fb3465f3b2c21f2dd884038d6"
+    },
+    {
+      "source_id": "src_3cd187178c48309a",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07830433",
+      "sha256": "587091d8f274164e10c63c821023774c5105abb43e131d40886bc1eb0a4f8a17"
+    },
+    {
+      "source_id": "src_408e94a010101e32",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT04154787",
+      "sha256": "0d49e1eefc1cbec9adcfc5e34501362e9a19561f31e2891c0746fa93f0884918"
+    },
+    {
+      "source_id": "src_409354ab871a2436",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT00302523",
+      "sha256": "70f70e2253c4c7c473b3377f678e6645866bcbe88d24a0cad607cb54302f703d"
+    },
+    {
+      "source_id": "src_4414d05a191fdcf7",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT06983028",
+      "sha256": "3d932fd66d9c1f8dded642fa3bc5d2a4d78802382fd1d25404ad814e21e7d2ea"
+    },
+    {
+      "source_id": "src_444f1fa810aae0ca",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT02199145",
+      "sha256": "39a60e66c804502e7516c13aa5b9f758d28e9dc1b55239d48b215d3e39676843"
+    },
+    {
+      "source_id": "src_46d99a38fd5a839e",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT06573411",
+      "sha256": "9c325a7c574539bf1c91d8d8bbaecea49c8f75e3b6bf9b6a8f0c7a9797dd896e"
+    },
+    {
+      "source_id": "src_482e27a0d0b2d3c1",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07861113",
+      "sha256": "8c41b7a8b1f702155ee683b7371c941420228ab1842541ebeffe5562023fda93"
+    },
+    {
+      "source_id": "src_486bc39ec174f59a",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05707377",
+      "sha256": "1c140192c3b431dee70e61e422d041f98724a7c4a93c5721e891229bea792644"
+    },
+    {
+      "source_id": "src_4913741ed3f3bcdb",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05914155",
+      "sha256": "7f8bc8b4637d2e5499a8321db48b7f70989ca700dd8fbbfc28cdfd4908c9a20c"
+    },
+    {
+      "source_id": "src_4b0c49b8b22a333e",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT01161459",
+      "sha256": "b3bac517288c5305d92c0decafc83d14b6c878b75c54a29d50a8f196373e606e"
+    },
+    {
+      "source_id": "src_4bf30dac5c52c795",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT06664814",
+      "sha256": "d6c8802d902cceaca83a7bcbb76a1f7485b7874615d009092e858629d46ed39f"
+    },
+    {
+      "source_id": "src_4c742d6e018de2f6",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07234474",
+      "sha256": "2eea029d3234fa4076c2b7ff1b0332c2738b31da27c83837f130466c81139d9e"
+    },
+    {
+      "source_id": "src_4db709b70a4a9714",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05162066",
+      "sha256": "77bda6a68c5cb6eeb52a4ceb703a9f3533a2861be8cd724605703b0d1326776f"
+    },
+    {
+      "source_id": "src_4e9424dd4e34c512",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT06245707",
+      "sha256": "1165d371900ce8a001b69ddc685fa3b2938c2054550e47e1333d7d381503ad38"
+    },
+    {
+      "source_id": "src_507282f3e13d4107",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT00694863",
+      "sha256": "aef539b7eaaf1d2a2a37929cb38f47a9fe1f5b5a3b1c9dfa07e29932311bfe26"
+    },
+    {
+      "source_id": "src_5307d887d45c5210",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT03864250",
+      "sha256": "96b4382d3c3b72e27e79cd4e2d335f1c6d6ba680b924e2b349b8e9fcc935759f"
+    },
+    {
+      "source_id": "src_5412a5213e7c698a",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT06994468",
+      "sha256": "dc244f33f2227b57dac0820708ddc7b3d6461c62f25cf6f36cbe72d63f3dc88c"
+    },
+    {
+      "source_id": "src_55d111a5aaaf7d89",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07204275",
+      "sha256": "1cca10dc0403452d63d3b0018f382c2507c090d7ba72e24db3844738f8ab657e"
+    },
+    {
+      "source_id": "src_57510bdffd71b41a",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT01386554",
+      "sha256": "a144b969261b5bee30a2f375329ddfb9a9f32098b0024737ce80b52cc15151bd"
+    },
+    {
+      "source_id": "src_5d789ac1ca84de94",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT03949855",
+      "sha256": "648114632a645b6fc3bf9849caddf3e9d0aca732c7d3a1400a14913f70d436db"
+    },
+    {
+      "source_id": "src_5e1c35bd7a913ac0",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT04850378",
+      "sha256": "fbb714517d0052c79ef9e15278c6cceff8509766a85c6bb78cfb45bf56971530"
+    },
+    {
+      "source_id": "src_5e57cac8baf2f416",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT04571658",
+      "sha256": "900863158a43f02e6854bdf360c98157e513e22ddfdb8e155927a6bb333d0076"
+    },
+    {
+      "source_id": "src_5ff96cfe65220686",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT04743739",
+      "sha256": "e9e8aab08365e2762b569f596517c7067564fb21ec13a4bb48894a015a88ae7c"
+    },
+    {
+      "source_id": "src_60ea02814ab931e9",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07029139",
+      "sha256": "f8418a86666fbe6c5581fe270354413858218c715998c69588f68fa806e649a4"
+    },
+    {
+      "source_id": "src_664968b41bd305ba",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT03018535",
+      "sha256": "91d82b665236428ba8e92ff433632b3a51e0ac0b1884eefa719857ddc0368aa2"
+    },
+    {
+      "source_id": "src_6a361579398d9c50",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT01955187",
+      "sha256": "2677318ba95f4d5745cd57e409e8c0e41c33fa8feff83b8dd853a85134e43662"
+    },
+    {
+      "source_id": "src_6b37695570d1ad11",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07404436",
+      "sha256": "9ce34488a2e837ce4ccb22ddae191699947d44e23e32f5aae21b4f21225f3ba4"
+    },
+    {
+      "source_id": "src_6c82b2f55e672423",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT03170323",
+      "sha256": "0d9228d88679880f851c7abaa434d921a95744bad7a768b16ca22d920a417221"
+    },
+    {
+      "source_id": "src_6d7ec2f06062de3a",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT03285711",
+      "sha256": "2a6eafa36ad138687e3dee2f93d6531f9d9e03684f21e3d95a30467e4d97bcf2"
+    },
+    {
+      "source_id": "src_7108a051d452b035",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT01093781",
+      "sha256": "773115680b0cad13fa40a54a6d87ca439fea34a70428e3d987e2470389963e90"
+    },
+    {
+      "source_id": "src_7110e28b5d675cc6",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT01835639",
+      "sha256": "32f8566c35b9fb72a9c42f254f6066b44c18f1684ba9b8544c924034f9a9cc93"
+    },
+    {
+      "source_id": "src_73b09817469e29be",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07516964",
+      "sha256": "98b48ab99cdca9768a7d40deebc6de9d52a47e9c7f62cfcf066ef57208ca1db6"
+    },
+    {
+      "source_id": "src_75410a379f895159",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05732402",
+      "sha256": "43d104ac5c835aeadb9ff3d8a827c070c4dc19a56f5dbcf33db665271f74ded4"
+    },
+    {
+      "source_id": "src_7dc69f8bae2b1bac",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05862233",
+      "sha256": "18f572391560e1b6e0a8053948112dcdfe264a80c793af104b6b90d73c5147af"
+    },
+    {
+      "source_id": "src_7fa3711a69b1fb72",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT01508468",
+      "sha256": "61451964ff21298d50ebdcf2da1769bcc61e22411f7bdc3eee757fe80b7cbec8"
+    },
+    {
+      "source_id": "src_827d4ca5725cda47",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT00479622",
+      "sha256": "11e97e8945e25f39b6e2df321bb9fb59b0e38898d2f9d5a596fe2bd47df43310"
+    },
+    {
+      "source_id": "src_84c10028ad100e86",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT06781944",
+      "sha256": "eeceb521702c85461a9fac84a6496bd7e1a3ca8abc3067f269cab5329696593c"
+    },
+    {
+      "source_id": "src_860a5741a875319d",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT04893096",
+      "sha256": "43e908ccf3605a56cd8dac1d56458309fa3b71bb061541adcc10135a094fb091"
+    },
+    {
+      "source_id": "src_877ba6003f2e9a50",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05679336",
+      "sha256": "ee726c3ec69aac9d01173b4dcd2d6d980244d4ad5a52491c3ba02918c883d014"
+    },
+    {
+      "source_id": "src_87e33ff0620b731c",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT01610492",
+      "sha256": "38bac47efd6e7b28e8e48e47afbab01ce0081230980c73e467b5da7fafff2300"
+    },
+    {
+      "source_id": "src_87ff0358650bd350",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT03549663",
+      "sha256": "6f1970d170f4e0caeaa0cd508d15d19d8dbb5185aaa37bd0355a35013ce4c301"
+    },
+    {
+      "source_id": "src_88f91838edb6b7ee",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT04733040",
+      "sha256": "82eca8c657d16f236c1b80c6b1be791ac242e608061082436b9c0e91b0a98c20"
+    },
+    {
+      "source_id": "src_8f7c1db17ea1d15a",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT04326218",
+      "sha256": "fc881f64e0721ef59bbebea44e45cb78f12f5982962449f40588285dc31a0251"
+    },
+    {
+      "source_id": "src_9399c832fcd341c7",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT01762852",
+      "sha256": "d82b76319aa98d43e937fe2d03147e51b5621ae65a4e55aaf544793d04d018c4"
+    },
+    {
+      "source_id": "src_948c25a25dff8c30",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07535138",
+      "sha256": "1bef96f4e5e129e842cc431aeca142ef23a7089a111fa83cb66a862ecfed3a06"
+    },
+    {
+      "source_id": "src_99bfebff3acea565",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05398653",
+      "sha256": "9ddd6502953821b2a37d213418e7f5044b26eb733a7f01b5038799c760b43617"
+    },
+    {
+      "source_id": "src_99ce237dc728af5e",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07746453",
+      "sha256": "b1e49f901f0a6b5e70420e5abbbcf5c0728b6cf1df602bd1cf69bb22ec27c44d"
+    },
+    {
+      "source_id": "src_9b8ce9f6d94a188b",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07861204",
+      "sha256": "4ce65767f65a51982134d29206c1822f4b9adc266b8f7cf367188060b38e7bfd"
+    },
+    {
+      "source_id": "src_9bd7ae20707cc9fa",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT02173106",
+      "sha256": "ad9fe6a108a4a78f54ae67f18f3407e05cc8ee645fcb29e25b26bb7881493bdb"
+    },
+    {
+      "source_id": "src_9c3597079d2b1af3",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07096843",
+      "sha256": "6c0da6cdb74ad3eef1f0c4046fee6ef6d2448b789a29fa81d45e95b7842b7401"
+    },
+    {
+      "source_id": "src_9e82ddbbd0cf3fbb",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT06614985",
+      "sha256": "2478ea8822bea3bd31866e62a728e500d417bbd76c9f1c6d1de5f8a71696af21"
+    },
+    {
+      "source_id": "src_a3e0b713093e62ab",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT03025828",
+      "sha256": "9dd119794063a4a4b45610d978705410c1cc577af878822f5cf1e0dcf0306507"
+    },
+    {
+      "source_id": "src_a7837ac3c2b66f26",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT04278729",
+      "sha256": "69d246307ae578d4b67ec791fee900be7aa93fe831f90e8f497b489915018e45"
+    },
+    {
+      "source_id": "src_a7a7ba943d9bcd0d",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT03466801",
+      "sha256": "35095f1d394cc38360ace2398bdf78330db7c66e94987a4a4c0f35ebcbdbd30f"
+    },
+    {
+      "source_id": "src_a9424f18cb52d9a0",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT01845688",
+      "sha256": "a9249b22d403493689f57f21fe09550b2cd973beb8b640433c3f883d507dda14"
+    },
+    {
+      "source_id": "src_abe8443cdb78efc2",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT04498962",
+      "sha256": "f85c82d699360365185aaccccb6e64d9d132d387abe4d5ab4e64b2722f640e97"
+    },
+    {
+      "source_id": "src_ac8dc5b722faca45",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT00050713",
+      "sha256": "d25ded675e28e64ed210de71b14b4619c03cc2f24f42111c05699f35f5ad764f"
+    },
+    {
+      "source_id": "src_adb65a8b9da622f1",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07157787",
+      "sha256": "496b454a029db4be4c134abecabd783d1bae49bf8975a2d6997e918d349e3776"
+    },
+    {
+      "source_id": "src_adf777f951e7c31f",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05800873",
+      "sha256": "e318207e9d749441e4dac76f161df2aacf5a38c091103d76c9dcdbab17eaa2c8"
+    },
+    {
+      "source_id": "src_b06df8a4fde42b66",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07389499",
+      "sha256": "9b6f71359dcd3a21b992660c02e4ba2eac948995a06fa4a98d3038e2f1e9febb"
+    },
+    {
+      "source_id": "src_b0ba0e097d2a9fb3",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT06470191",
+      "sha256": "0e4e6a216e279e1d085ad0c5c1ec5bda853760d6d72dd95ee8665f023bec30d9"
+    },
+    {
+      "source_id": "src_b37f39fd29dd1685",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT06982729",
+      "sha256": "0457da414d015a7db73db5a83f48dae67b2cd72839918221e11a72f8cd099f54"
+    },
+    {
+      "source_id": "src_b5ff4d8b9ebad3ba",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT06690359",
+      "sha256": "bbd1b1d7a0b27a3c279c28e787a485a3acb0940f7a11d761688907cb191cafdd"
+    },
+    {
+      "source_id": "src_b80ac294d8dec914",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07289763",
+      "sha256": "3e015c12de9686474d57fe03e97ba2e22ee3fa29e9a82e96dc5f6cb5fe72d9a8"
+    },
+    {
+      "source_id": "src_ba27aef397ce389a",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07851220",
+      "sha256": "5c967b3630ebd8a1fcbeb777e1849811a7a2f7f1df150e8e37a281dde4ee39cd"
+    },
+    {
+      "source_id": "src_bbb93531b1e245d0",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT06557265",
+      "sha256": "c3f02ac20bd76ace890a76ad51f1047040058b01f947522845cbe5af6d2bdb2d"
+    },
+    {
+      "source_id": "src_bec10e2fe94ed060",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT06962800",
+      "sha256": "715b3ffa1f79474cca7af426c97b40e3b73f585e1d946399e98e93cd6b8708c4"
+    },
+    {
+      "source_id": "src_c32a49c3982465f9",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT01282073",
+      "sha256": "7f6ec4580e9ce80a99aca7c724781252e04f546aa059e027ca322a699c502910"
+    },
+    {
+      "source_id": "src_c6cdfe7c068d1f24",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07096986",
+      "sha256": "6287b2d74abb120d7dd57fde5adcbcbd25e25572ae7c85eec41dced7ee6bbe31"
+    },
+    {
+      "source_id": "src_c7e278f73a2c12db",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05668403",
+      "sha256": "592fccd8cbf2aa65dc1073cba72f24e03cee9b97ef69409e23b2147e654b782f"
+    },
+    {
+      "source_id": "src_c975022afbf85c4c",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05782933",
+      "sha256": "019f9300696d13dc62ff04fc1f4bda181c795cba6fc8fbeb3eba9a981232c777"
+    },
+    {
+      "source_id": "src_cb8d87895b371592",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT00805753",
+      "sha256": "b43a8e3919d5808ab3a204fd568066acfa90d8e2d5d824a56745a699a8039e44"
+    },
+    {
+      "source_id": "src_cc253eb5780f0aae",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07811557",
+      "sha256": "65ec285e80fd89c5b98cba7a50a362b96b671d06428c6080dc0cd0694c99450e"
+    },
+    {
+      "source_id": "src_cea6bece223262d1",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT03255447",
+      "sha256": "06473730ad2d48b7276efeb3e70099b8c9392b3575a687531b623a98e3d1c32d"
+    },
+    {
+      "source_id": "src_d09ad748fe06ea61",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT02682407",
+      "sha256": "7c2ee5af9bfd30d625d07bd55e9d3778aac190a5e33cc35078af49fada7e7b66"
+    },
+    {
+      "source_id": "src_d38da630b876e073",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT01129284",
+      "sha256": "5c7e2c4a7c1e6db0c56a144345d42d93cb48fa59e576b0570a779683968d7f6d"
+    },
+    {
+      "source_id": "src_d64cd7f4f153666d",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT03062813",
+      "sha256": "7df31a5072ed621605b3fb25c51cd79b3db85d6faea47d83e83d6d8099444ca9"
+    },
+    {
+      "source_id": "src_d767d889a9fcbcc6",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT00405340",
+      "sha256": "f989027d841fbb8e5e58eee2a51a070831730a22098602d5008c7a3e528e4bed"
+    },
+    {
+      "source_id": "src_d798c5b1bf723343",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05314231",
+      "sha256": "ae48e1d53dfb98c312759ec00f4e3515ef0659dbddea0a24e072da3443a43223"
+    },
+    {
+      "source_id": "src_dd3a1401aea6ce02",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07730632",
+      "sha256": "086f2b8c1ad020cc9b939d2fc2ae1b7db3bdd1b6005082c33f5a2c55de024e24"
+    },
+    {
+      "source_id": "src_e3bef3091dfbd3b4",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT04145440",
+      "sha256": "0f35fa049d7f1f21f26e3d311d5c2cf09aa5ceb93658538171600cd01e16adf9"
+    },
+    {
+      "source_id": "src_e3cf98d12c177d9e",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT04745728",
+      "sha256": "4e0dde729b8a2296d8ef1fd1618e1d44e02f6404cebdb4503cafed42a68d29bb"
+    },
+    {
+      "source_id": "src_e4b863660e516e1e",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07423572",
+      "sha256": "94ba8cd72de9630e341c6d0e8f3078019ec849c8b636fece2f8e7916067f88b7"
+    },
+    {
+      "source_id": "src_e53ae6da83e57c88",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT00977977",
+      "sha256": "70e71ed4187ee7c6038be3bff55585c95f5cc643a25bf10aeb7f12f120271a80"
+    },
+    {
+      "source_id": "src_e592c47f8e3cc4bb",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT06642909",
+      "sha256": "7faba090f94e5fc5b80426b7fc538ac0f3527cbc1eaf7ef83e7e9d5e34312fe7"
+    },
+    {
+      "source_id": "src_e7e12c574e6e03ae",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT01093157",
+      "sha256": "cf10f32581e0af52ec17736e9829379ee040d350b994289cb6d170d3e84b3d4e"
+    },
+    {
+      "source_id": "src_ea50e09825f70d95",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT00362531",
+      "sha256": "fe519fc76979be0ced4168388ce8b771fb259ff6592342a6e7d2b4e7fe2d3539"
+    },
+    {
+      "source_id": "src_ec2d4104cf0a9295",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT01897961",
+      "sha256": "42b0e7b2dc762e1c6a8af75ef79eba50255e67ad78b9ad0fca46df2295007207"
+    },
+    {
+      "source_id": "src_edd77f7375ef8018",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT03453619",
+      "sha256": "78a94f89bfc9e15553c4aac9dc4cc26afc76f807f43c6f30239d9c8c0938be55"
+    },
+    {
+      "source_id": "src_ee4a23bc5256a359",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT04629248",
+      "sha256": "0a097d80138e1b8c464370e1840a665a8696c999fa0d561830aea3a843eb54a7"
+    },
+    {
+      "source_id": "src_f4cd9571595ae338",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT00135954",
+      "sha256": "51a9eefe705750b5392b490e4fa5717537c83eb09f77a3b6798fa4e129eed7db"
+    },
+    {
+      "source_id": "src_f5303823879b5743",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05941845",
+      "sha256": "69b2cf83956cbe5e29b262b2a328d70f1870bb52e4bae764b798664cab545f42"
+    },
+    {
+      "source_id": "src_f9630776927b118f",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT01180036",
+      "sha256": "943b3c5f3669ec5cee9850e87c50f83fa1ad77748f96452e1928f06cf0a3277e"
+    },
+    {
+      "source_id": "src_fad39556ac70446f",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05532111",
+      "sha256": "9c41f2ca3710bdb022e4a4771946cb183179102391d3e938d2807ac366bd58dc"
+    },
+    {
+      "source_id": "src_fb2cd9c936c98570",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT00983034",
+      "sha256": "3f4c2da969d5c64248c6694a1e0b0a43c140d5217fbe0a229d4ba2a4259f732c"
+    },
+    {
+      "source_id": "src_fb2fb2a6e87fff43",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT04456816",
+      "sha256": "0be7822f4e5746578e9fa4914de6e9e498fe1b48d43a34c2f0acf5f2c61dd934"
+    },
+    {
+      "source_id": "src_fbcadec08c41b0c0",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05839314",
+      "sha256": "9bdaf02999e9ce33b0da4725a30cd0883c02fd2700e5061a2fffd4e5c82416a5"
+    },
+    {
+      "source_id": "src_fdc885e0a842e505",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT07266181",
+      "sha256": "1bb821741167c3fc1cf477d3f6281dab04ffcfa82f4b3dbc71b3d479c1a2bb7e"
+    },
+    {
+      "source_id": "src_ff480de03d922b58",
+      "kind": "ctgov",
+      "url": "https://clinicaltrials.gov/study/NCT05428605",
+      "sha256": "8f0638378a059edbba67d2d6e1cab249a7a867dd6ba34affb75de1ba28619c7f"
+    }
+  ],
+  "cas_files_verified": 123,
+  "all_cas_sha_match": true,
+  "projection_counts": {
+    "old_c": {
+      "rows": 86,
+      "snippets": 489,
+      "reading_display": 304,
+      "source_heading_display": 6,
+      "unique_adopted_reading_ids": 294
+    },
+    "current_c": {
+      "rows": 86,
+      "snippets": 351,
+      "reading_display": 334,
+      "source_heading_display": 4,
+      "unique_adopted_reading_ids": 322
+    },
+    "old_reading_ids_still_adopted": 230,
+    "newly_adopted_ids": 92
+  },
+  "projection_identity_delta": {
+    "old_unique_atoms": 315,
+    "unique_atoms": 332,
+    "new_atom_ids": [
+      "xt_0bfc635564e93bb9",
+      "xt_0caec22b0b1f114b",
+      "xt_0cf817c87d503a0f",
+      "xt_0fc455c02a88dd11",
+      "xt_1145fbd76d5ff65e",
+      "xt_12b62853cd56eb22",
+      "xt_1690e44320cc4420",
+      "xt_173e2f6cb4ea17b0",
+      "xt_1786de29ce0ea845",
+      "xt_18d8bc119fb6199a",
+      "xt_20cb9b23ad11993d",
+      "xt_21cb69d989174f1f",
+      "xt_22fdd9267dac6c5b",
+      "xt_2399f36f22d3ed8b",
+      "xt_25cc18d6c799b064",
+      "xt_25fea564a96e2816",
+      "xt_26f34441cc69e702",
+      "xt_2736c83443af3a8a",
+      "xt_28de76f40a9287d0",
+      "xt_34900c5f8c8e5ec6",
+      "xt_3684e4c28f3a8260",
+      "xt_36bd0539b40aff70",
+      "xt_3983be9196da6d64",
+      "xt_3b34f70f5098da0f",
+      "xt_3ec8d49741f3d1c1",
+      "xt_402ae7ef5d8fca93",
+      "xt_424b8f83a05cfa2f",
+      "xt_46465fbb85b3088b",
+      "xt_480b41810e23760d",
+      "xt_48f0862d157e21b7",
+      "xt_4a945d3484caa329",
+      "xt_4bc0fdd099acb01b",
+      "xt_509fc61fe17ebcd4",
+      "xt_56581e3cacb0c083",
+      "xt_592ce15b47c048e7",
+      "xt_5a79d1f480bfd6bd",
+      "xt_5d6c8ec99df340a1",
+      "xt_6183706d73372170",
+      "xt_62cc7feca4a212ce",
+      "xt_64304c20fe663c42",
+      "xt_66551c4bb4d445de",
+      "xt_6855dbe14115b137",
+      "xt_6936beea13b5c930",
+      "xt_6b67d0637b6567a6",
+      "xt_72ced7c082b88b48",
+      "xt_7da13abfccbb4135",
+      "xt_7e49cbd3a6ab8862",
+      "xt_80586d624d9d9582",
+      "xt_8388ce9070ed875b",
+      "xt_840786efd1693bfe",
+      "xt_8674d73bfd8263a9",
+      "xt_86df4267056019e3",
+      "xt_8b86943dec57945b",
+      "xt_8c10877bd2051aee",
+      "xt_90f366a0a1368128",
+      "xt_934e32095774084a",
+      "xt_95b54ac7f1174a43",
+      "xt_9665f42de46dc5c9",
+      "xt_9903d6947c30e1ea",
+      "xt_9a5fff092ad2a2a0",
+      "xt_9e1e25913af6986e",
+      "xt_9fbeb58d67780f7a",
+      "xt_a4d77a6c72792f7b",
+      "xt_a5f3cb1e9f5dd9f4",
+      "xt_a65487c4e4d7d83d",
+      "xt_aa8802bc373c7dfe",
+      "xt_b52a320e78350620",
+      "xt_b5b1c4f5ed3897e6",
+      "xt_bb7252684e0ec345",
+      "xt_be8897423421a744",
+      "xt_be8d9627aecf1ccc",
+      "xt_bf0ae69d642054bb",
+      "xt_bf1406b0a64fbd1b",
+      "xt_c01d35acd2575fa4",
+      "xt_c202b4bc0f4aade8",
+      "xt_c46e4259652292d8",
+      "xt_d45fbc075527a40f",
+      "xt_dd51178ae72c952a",
+      "xt_e1d40dff25d8c4b9",
+      "xt_e71f955a19bc974c",
+      "xt_e8ff30755957619e",
+      "xt_ec4f3ac6ba2942bc",
+      "xt_ef5b43de9f66dd9f",
+      "xt_f0c6e8f88159e0eb",
+      "xt_f58edc9899f87ab8",
+      "xt_fa7fe010a8258f49",
+      "xt_fb9221d674705120",
+      "xt_ff3d92e1903d8c5a"
+    ],
+    "removed_atom_ids": [
+      "xt_0034838210d1fe74",
+      "xt_0172794ddc8ed70e",
+      "xt_04b247ab43429885",
+      "xt_11acea553664a978",
+      "xt_1265554c9180e15d",
+      "xt_12f13754befc66ac",
+      "xt_148a97eb224a6ad5",
+      "xt_177b982a576efeeb",
+      "xt_23de496e3fa86fce",
+      "xt_2b0a2ddff0efd27d",
+      "xt_3432fab911674865",
+      "xt_3837fd59c2426645",
+      "xt_3fbc7facfcf86307",
+      "xt_4de2781594dce736",
+      "xt_508a72e3aaef60a5",
+      "xt_554f1482c9fcadb8",
+      "xt_56334dcf6b78b00a",
+      "xt_583ee1b8abc5dbdb",
+      "xt_68da498d63c7c664",
+      "xt_692e1dfa1606528f",
+      "xt_69ff703172810136",
+      "xt_71c858350877d6e0",
+      "xt_72c69ccad6f3bca9",
+      "xt_87769b740c553320",
+      "xt_8b9482488f362d0a",
+      "xt_8f112ccf3141fef8",
+      "xt_8f74989cf1841e7e",
+      "xt_92c616210ef0d2da",
+      "xt_98a75930689b7047",
+      "xt_9a182e83262b214c",
+      "xt_a1f9994334db41dd",
+      "xt_a654184aebd16394",
+      "xt_a770775e3470297c",
+      "xt_a983faece7a2ff64",
+      "xt_a9f4ffcafd59c432",
+      "xt_aac40134dff05c3a",
+      "xt_ac11794ce850b703",
+      "xt_aed90a7106534d1c",
+      "xt_af065c7be32dea3f",
+      "xt_b0d17e070fc19625",
+      "xt_b8efdbbd53126e52",
+      "xt_b99c0c7595714d1c",
+      "xt_ba15b4ee434f5794",
+      "xt_bb13113181f42f4a",
+      "xt_bd832806e8752c3d",
+      "xt_beefc77ae14228b3",
+      "xt_c2d3b981c32818e4",
+      "xt_c40a0bcfcaf6b8ef",
+      "xt_c6eb9ca7427e68f1",
+      "xt_c867671ea763b113",
+      "xt_cba5abc7f3f03aef",
+      "xt_cd6ab4faadd73767",
+      "xt_ce9a65514f2efb1a",
+      "xt_d0c4475d31ac7cb9",
+      "xt_d1128f08fea6ed72",
+      "xt_d1a267e994a41f84",
+      "xt_d7d1b213252a81b2",
+      "xt_d7d257ae413dea33",
+      "xt_dda6969abfb50947",
+      "xt_ddf6d229f98241b4",
+      "xt_e162ebcbba5c9c62",
+      "xt_e343336f886b8fa0",
+      "xt_e3d3d0fc967b482b",
+      "xt_e9d379c6f01191eb",
+      "xt_eaa31cb981b84104",
+      "xt_ebb4e4c3a31316cb",
+      "xt_f1fd681932346df5",
+      "xt_f64bfd8a589c5075",
+      "xt_fd5ee8390409a97a",
+      "xt_fec70bf600355857",
+      "xt_fed364a19c4c34bb"
+    ],
+    "removed_old_adopted_ids": [
+      "xt_0034838210d1fe74",
+      "xt_0172794ddc8ed70e",
+      "xt_04b247ab43429885",
+      "xt_11acea553664a978",
+      "xt_1265554c9180e15d",
+      "xt_12f13754befc66ac",
+      "xt_148a97eb224a6ad5",
+      "xt_177b982a576efeeb",
+      "xt_23de496e3fa86fce",
+      "xt_2b0a2ddff0efd27d",
+      "xt_3432fab911674865",
+      "xt_3837fd59c2426645",
+      "xt_3fbc7facfcf86307",
+      "xt_4de2781594dce736",
+      "xt_508a72e3aaef60a5",
+      "xt_554f1482c9fcadb8",
+      "xt_56334dcf6b78b00a",
+      "xt_583ee1b8abc5dbdb",
+      "xt_68da498d63c7c664",
+      "xt_692e1dfa1606528f",
+      "xt_69ff703172810136",
+      "xt_71c858350877d6e0",
+      "xt_87769b740c553320",
+      "xt_8b9482488f362d0a",
+      "xt_8f112ccf3141fef8",
+      "xt_8f74989cf1841e7e",
+      "xt_92c616210ef0d2da",
+      "xt_9a182e83262b214c",
+      "xt_a1f9994334db41dd",
+      "xt_a654184aebd16394",
+      "xt_a770775e3470297c",
+      "xt_a9f4ffcafd59c432",
+      "xt_aac40134dff05c3a",
+      "xt_ac11794ce850b703",
+      "xt_b0d17e070fc19625",
+      "xt_b8efdbbd53126e52",
+      "xt_b99c0c7595714d1c",
+      "xt_ba15b4ee434f5794",
+      "xt_bb13113181f42f4a",
+      "xt_bd832806e8752c3d",
+      "xt_beefc77ae14228b3",
+      "xt_c2d3b981c32818e4",
+      "xt_c6eb9ca7427e68f1",
+      "xt_c867671ea763b113",
+      "xt_cba5abc7f3f03aef",
+      "xt_cd6ab4faadd73767",
+      "xt_ce9a65514f2efb1a",
+      "xt_d0c4475d31ac7cb9",
+      "xt_d1128f08fea6ed72",
+      "xt_d1a267e994a41f84",
+      "xt_d7d1b213252a81b2",
+      "xt_d7d257ae413dea33",
+      "xt_dda6969abfb50947",
+      "xt_ddf6d229f98241b4",
+      "xt_e162ebcbba5c9c62",
+      "xt_e343336f886b8fa0",
+      "xt_e3d3d0fc967b482b",
+      "xt_eaa31cb981b84104",
+      "xt_ebb4e4c3a31316cb",
+      "xt_f1fd681932346df5",
+      "xt_f64bfd8a589c5075",
+      "xt_fd5ee8390409a97a",
+      "xt_fec70bf600355857",
+      "xt_fed364a19c4c34bb"
+    ]
+  },
+  "current_review_queue": {
+    "endpoint_index_not_run": 25,
+    "arm_role_conflict": 3,
+    "design_clause_not_checked": 47,
+    "design_reading_not_checked": 11
+  },
+  "historical_ledger_statuses": {
+    "failed": 8,
+    "needs_review": 101,
+    "verified": 487
+  },
+  "actual_new_saved_model_responses": {
+    "deepseek": {
+      "responses": 63,
+      "elapsed_seconds_sum": 16005.184,
+      "maximum_seconds": 1446.107,
+      "median_seconds": 190.188,
+      "completion_tokens": 653603,
+      "reported_reasoning_tokens": 578617,
+      "responses_with_429_admission": 9,
+      "admission_wait_seconds_in_elapsed": 2005,
+      "response_models": [
+        "DeepSeek-V4.1-Flash-1017"
+      ],
+      "requested_efforts": [
+        "None"
+      ]
+    },
+    "glm": {
+      "responses": 120,
+      "elapsed_seconds_sum": 16821.862,
+      "maximum_seconds": 816.125,
+      "median_seconds": 104.31,
+      "completion_tokens": 1009428,
+      "reported_reasoning_tokens": 0,
+      "responses_with_429_admission": 0,
+      "admission_wait_seconds_in_elapsed": 0,
+      "response_models": [
+        "glm-5.3-flash"
+      ],
+      "requested_efforts": [
+        "None"
+      ]
+    }
+  },
+  "checks": {
+    "development": {
+      "status": "PASS",
+      "scope": "903 offline tests plus Ruff/diff on code identical to product786bf8e; tests not rerun for docs-only pause",
+      "isolated_test_seconds": 13.99
+    },
+    "fresh_github_clone": {
+      "status": "PASS",
+      "commit": "0e00486d44fcd1207fb94276d4e74d42eb1f8514",
+      "test_count": 903,
+      "test_seconds": 15.97,
+      "same_machine": true,
+      "model_credentials_removed_from_environment": true,
+      "commands": [
+        "uv sync --frozen --offline",
+        "uv run pytest",
+        "uv run ruff check src tests",
+        "git diff --check"
+      ]
+    },
+    "after15_preservation": {
+      "status": "PASS",
+      "scope": "OS exit, lock, SQLite quick_check, original-source/cache/CAS/old snapshot hashes, source freeze"
+    },
+    "after15_independent_science": "NOT_RUN",
+    "after15_audit": "NOT_RUN",
+    "after15_browser": "NOT_RUN",
+    "formal_host_authentication": "NOT_ACCEPTED",
+    "studio_actual_medical_ai": "NOT_RUN",
+    "overall_product_delivery": "NOT_COMPLETE"
+  },
+  "known_issue": {
+    "path": "src/ciw/verify/design_labels.py",
+    "functions": [
+      "_reading_batches",
+      "_readings"
+    ],
+    "description": "A partially accepted batch is sent whole to the models; accepted siblings are then skipped when adopting returned items. No fix or new run was started after15."
+  },
+  "history_commit_index": {
+    "ci": [
+      {
+        "commit": "254feae62f5d82c5d9b781e612f1319839e94ecb",
+        "author_date": "2026-10-27T14:09:21+08:00",
+        "subject": "feat(ciw): ingest China registry sources with explicit identity and scoped counts"
+      },
+      {
+        "commit": "e33c7e9f25982b266ab2c05bb7ba28d0437f4ccf",
+        "author_date": "2026-10-27T14:56:01+08:00",
+        "subject": "feat(ciw): add resumable China capture and real-model verification"
+      },
+      {
+        "commit": "9e96a3e190582fbb25cbecfaf95a39b52d7fb197",
+        "author_date": "2026-10-27T15:51:08+08:00",
+        "subject": "feat(ciw): connect publication results and validate configuration-only PNH run"
+      },
+      {
+        "commit": "427c006b135c4e2208f01b64a13d27c448cafb17",
+        "author_date": "2026-10-27T17:05:05+08:00",
+        "subject": "fix(ciw): preserve paper arm identity and validate sourced milestone dates"
+      },
+      {
+        "commit": "5522bdaebf40435d676750aa5fc1a51c313c7f33",
+        "author_date": "2026-10-27T17:15:58+08:00",
+        "subject": "docs(ciw): preserve lossless pause, progress and detailed recovery handoff"
+      },
+      {
+        "commit": "0e93942c1daf67da79e7c7c0a9795e29d78233f4",
+        "author_date": "2026-10-27T20:17:10+08:00",
+        "subject": "refactor(ciw): split source and report projections without changing facts"
+      },
+      {
+        "commit": "fb966c890637305bedd3d777fb0ee714c628617a",
+        "author_date": "2026-10-27T20:32:36+08:00",
+        "subject": "feat(ciw): expose sourced clinical design clauses and highlighted thresholds"
+      },
+      {
+        "commit": "085efc0a17429e8b8bca03c28591d293e4a7c415",
+        "author_date": "2026-10-27T20:38:00+08:00",
+        "subject": "fix(ciw): retain explicit arm product identities with generic ingredient records"
+      },
+      {
+        "commit": "bc2b75acc40be0b3666f3fd3c3ffe749215b582c",
+        "author_date": "2026-10-27T21:15:49+08:00",
+        "subject": "feat(ciw): use DeepSeek extraction with cms-smk GLM source review"
+      },
+      {
+        "commit": "ffd262fd3f4780fc934fe1ff545667f85994a396",
+        "author_date": "2026-10-27T21:16:23+08:00",
+        "subject": "feat(ciw): apply shared Kangzhe reading layout and wide accessible details"
+      },
+      {
+        "commit": "3cd8b604073b57dfad843d4350bc9eed60b3e417",
+        "author_date": "2026-10-27T21:16:23+08:00",
+        "subject": "fix(ciw): distinguish transfusion conditions from PNH response endpoints"
+      },
+      {
+        "commit": "40e4bf63001ade6b8c233d13b9f41bff4e7fb21b",
+        "author_date": "2026-10-27T21:28:11+08:00",
+        "subject": "feat(ciw): expose all observation domains and audit their original values"
+      },
+      {
+        "commit": "835b3e3051237d7988aabbb8e69daa0d6f29c9ff",
+        "author_date": "2026-10-27T21:52:24+08:00",
+        "subject": "fix(ciw): bound source-review correction to failed items and preserve canonical titles"
+      },
+      {
+        "commit": "cdc1bcc12d2d6634219a3c1b5fe8e6aa2948a7b0",
+        "author_date": "2026-10-27T23:19:28+08:00",
+        "subject": "fix(ciw): preserve publication groups and verify current source-backed release"
+      },
+      {
+        "commit": "edd336d62f4155cb2a512171e30719ca8036acc3",
+        "author_date": "2026-10-27T23:27:44+08:00",
+        "subject": "fix(ciw): synchronize design summaries with filtered studies"
+      },
+      {
+        "commit": "8ef9b634011daddf5596f1d9aefabef33198d99d",
+        "author_date": "2026-10-27T23:29:35+08:00",
+        "subject": "docs(ciw): record real release and clean-clone delivery checks"
+      },
+      {
+        "commit": "ef7e846ac669b7bd785b84f805f1c975343c25f8",
+        "author_date": "2026-10-28T00:20:36+08:00",
+        "subject": "fix(ciw): expose explicit design drilldown and clarify research entry"
+      },
+      {
+        "commit": "d316b99ffebc74fc588e4cbd324b2d585d1763fd",
+        "author_date": "2026-10-28T01:07:24+08:00",
+        "subject": "feat: add source-backed natural-language research entry"
+      },
+      {
+        "commit": "5d6e6e523735ea4ccc6de80009375c0fbe7c3c57",
+        "author_date": "2026-10-28T02:17:36+08:00",
+        "subject": "fix: preserve clinical comparison contexts and real research progress"
+      },
+      {
+        "commit": "de8fc83313f74f28736438d1601ec754b06d0e19",
+        "author_date": "2026-10-28T05:15:52+08:00",
+        "subject": "fix: retain source statistics and deduplicate explicit shared cohorts"
+      },
+      {
+        "commit": "aa8d4c72134e4a9f9b0df9cb55d7ee75a373efa6",
+        "author_date": "2026-10-28T06:02:01+08:00",
+        "subject": "fix: expose complete design evidence and scope attribute effort"
+      },
+      {
+        "commit": "c7ad60dce124c028c06a0b9820e3bc1762554751",
+        "author_date": "2026-10-28T07:34:11+08:00",
+        "subject": "Generate selected report first and reuse committed research safely"
+      },
+      {
+        "commit": "e8707ae50fe8569f36afb89286ed75389cdcca7f",
+        "author_date": "2026-10-28T07:58:02+08:00",
+        "subject": "Recover unfinished rendering without altering completed snapshots"
+      },
+      {
+        "commit": "f3565f124c8395ad13839d16f06e3c824887ee7f",
+        "author_date": "2026-10-28T08:36:14+08:00",
+        "subject": "Index clinical endpoints from checked source titles and definitions"
+      },
+      {
+        "commit": "cd346afa24e8f4d11dbbcf68be8e964166307db9",
+        "author_date": "2026-10-28T09:02:23+08:00",
+        "subject": "Bind clinical labels to source meaning and refine provisional indexes"
+      },
+      {
+        "commit": "e570d8ba280689da698db236fb2c23b610fb9b45",
+        "author_date": "2026-10-28T09:37:41+08:00",
+        "subject": "Respect current configuration and bind remission labels to their endpoint"
+      },
+      {
+        "commit": "eeb8847e4ed324222cfb2dd83dd6b218354a2047",
+        "author_date": "2026-10-28T09:57:34+08:00",
+        "subject": "Separate design clause roles and retain conditional treatment context"
+      },
+      {
+        "commit": "292c7731c1ac75ee671be3b35133626e0a374007",
+        "author_date": "2026-10-28T10:10:57+08:00",
+        "subject": "Increase report vertical density with data-aware chart sizing"
+      },
+      {
+        "commit": "e290f4fb49dec3635c41ffd11c787b930b4a622d",
+        "author_date": "2026-10-28T10:35:37+08:00",
+        "subject": "Keep dense chart windows readable and recover short viewport space"
+      },
+      {
+        "commit": "a163856a74cb3e038109e84a8ddc78a299507bf7",
+        "author_date": "2026-10-28T10:50:24+08:00",
+        "subject": "Deduplicate embedded reading chrome and record real density checks"
+      },
+      {
+        "commit": "9f1f2b0f3afd7a132e48b7cd8659245481917ec7",
+        "author_date": "2026-10-28T11:14:02+08:00",
+        "subject": "Restore CMS-SMK GLM verifier after confirmed service recovery"
+      },
+      {
+        "commit": "d7ecdeab96e7759577ff4afa59f2a7c8b2cec66d",
+        "author_date": "2026-10-28T11:14:06+08:00",
+        "subject": "Reflow chart windows after viewport layout and expose pan thumb"
+      },
+      {
+        "commit": "d20c34082bbc98e2f39bfae3cd52f445fa96fd2c",
+        "author_date": "2026-10-28T11:27:42+08:00",
+        "subject": "Record scoped real-browser density acceptance and CMS recovery"
+      },
+      {
+        "commit": "b2482b639dceca9b604e98319e492d47e3df78fd",
+        "author_date": "2026-10-28T11:48:00+08:00",
+        "subject": "Respect numeric search boundaries and retain conflicting registry arm roles"
+      },
+      {
+        "commit": "fe85d129d4fa0ab69584037fcfc8e4e6db195441",
+        "author_date": "2026-10-28T12:00:21+08:00",
+        "subject": "Bind bilingual response labels and preserve source proportion units"
+      },
+      {
+        "commit": "600feecedcb6eba51e40dfba7b56f9ef64d72689",
+        "author_date": "2026-10-28T13:27:01+08:00",
+        "subject": "Pause losslessly with current acceptance state and detailed resume handoff"
+      },
+      {
+        "commit": "8ee7125a730fbade7b1b95a100168a05123e0d2d",
+        "author_date": "2026-10-28T18:29:52+08:00",
+        "subject": "Fix source index quantity checks and bound exhausted-batch recovery"
+      },
+      {
+        "commit": "bf747dabff372bc2cfd022a6d4ca4ae66c10147e",
+        "author_date": "2026-10-28T19:26:29+08:00",
+        "subject": "Restore report detail actions and slice-aware clinical question search"
+      },
+      {
+        "commit": "437693a0f132ce3736fe8e75102e8e48de257e1c",
+        "author_date": "2026-10-28T19:35:55+08:00",
+        "subject": "Keep interval and multi-visit searches reachable"
+      },
+      {
+        "commit": "e8e76e63496eb500a1b619f22e5ed8679bdc536f",
+        "author_date": "2026-10-28T20:05:51+08:00",
+        "subject": "Retain baseline observations and recheck source-backed review candidates"
+      },
+      {
+        "commit": "ee5cd31230487ae1cbca18d3b05c7548449f78e5",
+        "author_date": "2026-10-28T20:18:49+08:00",
+        "subject": "Bind legacy rechecks to verifier output and cover at-baseline classes"
+      },
+      {
+        "commit": "cacef354c4edb716e01e99b43288659dd5e05f60",
+        "author_date": "2026-10-28T20:31:12+08:00",
+        "subject": "Record accepted baseline recovery and next clinical-question work"
+      },
+      {
+        "commit": "2543906f42d6f4ceb0cec1d24991016e4e1515c5",
+        "author_date": "2026-10-28T20:59:11+08:00",
+        "subject": "Group source-indexed outcomes into clinical questions with guarded numeric facets"
+      },
+      {
+        "commit": "db3b033980e347f6f6a0342a5cccdf620d29e677",
+        "author_date": "2026-10-28T21:40:18+08:00",
+        "subject": "fix: preserve family semantics and canonical frame interactions"
+      },
+      {
+        "commit": "80e91c36d7c239771e57e433b7fd6bc6772f4161",
+        "author_date": "2026-10-28T21:47:48+08:00",
+        "subject": "fix: distinguish complete component names and instrument versions"
+      },
+      {
+        "commit": "b321116a4eb19d46bb0b46a75cf127d7fcd03de4",
+        "author_date": "2026-10-28T22:14:27+08:00",
+        "subject": "fix: keep continued research within acquired sources and validate key files"
+      },
+      {
+        "commit": "b536c4b8bf3a638e2d5da270dc9847ab6dce876e",
+        "author_date": "2026-10-28T22:46:55+08:00",
+        "subject": "fix: review clinical families in resumable source-bound batches"
+      },
+      {
+        "commit": "89d714f831c935c6bfc51c63c4b1b8c93e633d9f",
+        "author_date": "2026-10-29T00:18:10+08:00",
+        "subject": "fix: align longitudinal reading with selected clinical question"
+      },
+      {
+        "commit": "28a2f3098ef2e5ca38477740776a66d703c29c99",
+        "author_date": "2026-10-29T00:18:38+08:00",
+        "subject": "fix: retain drug identity in longitudinal detail table"
+      },
+      {
+        "commit": "3ef10e56298714cc1a91e2291c396981aee636ae",
+        "author_date": "2026-10-29T00:29:47+08:00",
+        "subject": "fix: keep longitudinal selector labels concise and clinical"
+      },
+      {
+        "commit": "a3a203e85de5ae22a84374b5d817aaa7aedbf4a5",
+        "author_date": "2026-10-29T00:30:00+08:00",
+        "subject": "style: wrap longitudinal label assertion"
+      },
+      {
+        "commit": "ed42ca39dc85159890cf1f154af09e6b20acf678",
+        "author_date": "2026-10-29T00:34:16+08:00",
+        "subject": "docs: record actual family portal acceptance and remaining gaps"
+      },
+      {
+        "commit": "4305920cca9a63963c8714a83ba5815a23cd4435",
+        "author_date": "2026-10-29T01:27:04+08:00",
+        "subject": "fix: include all design endpoints and preserve contradictory arm roles"
+      },
+      {
+        "commit": "ef0b54dc62f6b3659bcf9e4d8d17bef5869f86e1",
+        "author_date": "2026-10-29T01:42:14+08:00",
+        "subject": "fix: distinguish current arm title from parenthesized history"
+      },
+      {
+        "commit": "8cff49c3cd2ab9d4a176dea34e661ca50fc654af",
+        "author_date": "2026-10-29T02:06:50+08:00",
+        "subject": "fix: supplement unsearched papers without replaying completed acquisition"
+      },
+      {
+        "commit": "21a8f29cf7ec458e94f50b4d4f16c9c539e83d02",
+        "author_date": "2026-10-29T02:09:36+08:00",
+        "subject": "docs: record CAD live design test and source supplement recovery"
+      },
+      {
+        "commit": "1f2cf1c7be570afa604f29fa422ba0b3f8a932de",
+        "author_date": "2026-10-29T04:30:18+08:00",
+        "subject": "Recover failed publication lookups through auditable PubMed XML"
+      },
+      {
+        "commit": "75aea485caa0843a1b04adbb02288eba958af9d8",
+        "author_date": "2026-10-29T05:51:57+08:00",
+        "subject": "Isolate incomplete PubMed acquisitions and preserve source group search"
+      },
+      {
+        "commit": "58eb74ba537ee74143a530182921c233253d4a5d",
+        "author_date": "2026-10-29T06:10:32+08:00",
+        "subject": "Record actual CAD publication recovery and remaining delivery gaps"
+      },
+      {
+        "commit": "00ad99e58da1967582a27423a416c1f28a54ee83",
+        "author_date": "2026-10-29T06:35:23+08:00",
+        "subject": "Connect source-verified measurement axes to shared comparison charts"
+      },
+      {
+        "commit": "8e90ff75616cf36d7584246dcd13c5e6f04e709c",
+        "author_date": "2026-10-29T06:43:55+08:00",
+        "subject": "Require explicit matching analysis sets for shared measurement axes"
+      },
+      {
+        "commit": "d5af24c3e77a57dd23a10b2a56ea0c76b21218c6",
+        "author_date": "2026-10-29T06:45:33+08:00",
+        "subject": "Preserve explicit modified ITT shorthand in analysis-set matching"
+      },
+      {
+        "commit": "167d04701fda2be0b9c0b764b9e2e4e5168fca3c",
+        "author_date": "2026-10-29T06:58:13+08:00",
+        "subject": "Normalize modified analysis-set syntax without losing qualifiers"
+      },
+      {
+        "commit": "a7c2672430b7bb7b65c1090e5e69065bee1ab3f1",
+        "author_date": "2026-10-29T06:59:33+08:00",
+        "subject": "Track shared-axis candidate without claiming live comparison acceptance"
+      },
+      {
+        "commit": "910df293fdbf00032f6c3b4d58c28f067059883b",
+        "author_date": "2026-10-29T07:08:41+08:00",
+        "subject": "Fail live model runs before requests when credentials are missing"
+      },
+      {
+        "commit": "669eb94b2918ae97eef4a6ce07ef0662d604dda9",
+        "author_date": "2026-10-29T08:42:28+08:00",
+        "subject": "Serialize workspace writers and preserve verified clinical families on source additions"
+      },
+      {
+        "commit": "308c942c41b7882ee1f55418c335a6e2983bad60",
+        "author_date": "2026-10-29T08:55:27+08:00",
+        "subject": "Record concurrent test deviation and verified lossless recovery preparation"
+      },
+      {
+        "commit": "6b147451b3b3c757a8526abaee6fef219113f305",
+        "author_date": "2026-10-29T09:52:57+08:00",
+        "subject": "docs: preserve paused CIW state and recovery handoff"
+      },
+      {
+        "commit": "a7ca0ba1ac26ced4a8acf96d229f714d156c839f",
+        "author_date": "2026-10-29T17:36:05+08:00",
+        "subject": "fix: preserve source point units and compact study legends"
+      },
+      {
+        "commit": "da82b3b77ad3aee19c3a81f792d249fc11a9024b",
+        "author_date": "2026-10-29T18:04:33+08:00",
+        "subject": "feat: show point comparisons and longitudinal trends side by side"
+      },
+      {
+        "commit": "da621fc174277e250dbeab6a48c1a21603d651f2",
+        "author_date": "2026-10-29T18:26:20+08:00",
+        "subject": "docs: record resumed CAD comparison acceptance and current gaps"
+      },
+      {
+        "commit": "37347b2b6896eb8286624f718ad6855d170b171c",
+        "author_date": "2026-10-29T19:04:31+08:00",
+        "subject": "fix: scope mixed registrations and index precise design clauses"
+      },
+      {
+        "commit": "165259391655163f65200c044bf6ff944de8c714",
+        "author_date": "2026-10-29T19:07:35+08:00",
+        "subject": "docs: record MN user test failures and bounded repair candidate"
+      },
+      {
+        "commit": "d4fede7c98992a65d2fbf95a686fcab3e6dc3f2c",
+        "author_date": "2026-10-29T19:40:33+08:00",
+        "subject": "fix: preserve per-group scope and source charts after independent review"
+      },
+      {
+        "commit": "91c8e19f7f1de2869272a5d35db42b893aa1c5ab",
+        "author_date": "2026-10-29T19:53:40+08:00",
+        "subject": "feat: backfill legacy Chinese search vocabulary with existing roles"
+      },
+      {
+        "commit": "afb3cd4cb3d3d8831a1432dd16f41212a4e2e98b",
+        "author_date": "2026-10-29T19:56:17+08:00",
+        "subject": "docs: distinguish repaired code from pending rebuilt report acceptance"
+      },
+      {
+        "commit": "fb81ebbe86c34b43201f7c980c680cb5171bbda4",
+        "author_date": "2026-10-29T21:01:10+08:00",
+        "subject": "feat: compare source-bound design clauses by selected clinical topics"
+      },
+      {
+        "commit": "712dd8985d06450be2d2483853ce241d96a79b4b",
+        "author_date": "2026-10-29T21:34:51+08:00",
+        "subject": "fix: bound model admission retries and preserve real criterion list scope"
+      },
+      {
+        "commit": "4ab426745d096f902d2a777adb9a94a167c4886a",
+        "author_date": "2026-10-29T21:59:02+08:00",
+        "subject": "fix: retain separate literal list anchors and space busy admission retries"
+      },
+      {
+        "commit": "f7ca292f4c2d896f84f3c12bc00725b0b850b0e7",
+        "author_date": "2026-10-29T22:25:48+08:00",
+        "subject": "fix: classify model rejections without retaining private upstream errors"
+      },
+      {
+        "commit": "a613f4dd355bfc690a4a559252cb2243b7e5c1e3",
+        "author_date": "2026-10-30T00:15:29+08:00",
+        "subject": "feat: add source-bound Chinese design reading and paced admission recovery"
+      },
+      {
+        "commit": "c7c1e8434c876000799228a957378cae1428df52",
+        "author_date": "2026-10-30T02:09:00+08:00",
+        "subject": "fix: preserve complete design conditions and recheck source-bound readings"
+      },
+      {
+        "commit": "3916f747c09a83b720d4acaf6bb94c32e211f447",
+        "author_date": "2026-10-30T02:43:44+08:00",
+        "subject": "fix: version NMPA observations and expose incomplete capture failures"
+      },
+      {
+        "commit": "aef94fc3c4f986ab9ffc6a9c6282669626ec091a",
+        "author_date": "2026-10-30T03:04:08+08:00",
+        "subject": "fix: retain complete clinical predicates and reuse verified source facts offline"
+      },
+      {
+        "commit": "dc647d2070535daf5a6c7cc76b476fb34dfb247b",
+        "author_date": "2026-10-30T03:46:15+08:00",
+        "subject": "fix: separate nested source definitions and protect historical time direction"
+      },
+      {
+        "commit": "191a3a0e9908969832843317a6702ea8927000b6",
+        "author_date": "2026-10-30T04:19:20+08:00",
+        "subject": "fix: bind literal list parents and recheck retained verifier proof"
+      },
+      {
+        "commit": "e6d5d68e82fb0f874ccf0eff8e2a81b858d68321",
+        "author_date": "2026-10-30T04:53:56+08:00",
+        "subject": "fix: preserve reading scope and bind result charts to selected frames"
+      },
+      {
+        "commit": "c0108d387538cbbb03af06cee833abd541542c09",
+        "author_date": "2026-10-30T05:12:06+08:00",
+        "subject": "fix: retain clinical tokens while folding declared reading ordinals"
+      },
+      {
+        "commit": "8c2aa301f30792ee39da6ebb28854b6c8c3ad5c4",
+        "author_date": "2026-10-30T05:34:11+08:00",
+        "subject": "docs: record bounded reading and live studio acceptance"
+      },
+      {
+        "commit": "24f3ea0d00b5bc686d032e99401f0a22a39d1682",
+        "author_date": "2026-10-30T06:42:51+08:00",
+        "subject": "docs: preserve Oct 30 pause, progress and recovery handoff"
+      },
+      {
+        "commit": "905861a5625da5a75da2c57a139a50aef1c37bec",
+        "author_date": "2026-10-30T09:54:20+08:00",
+        "subject": "fix: preserve event evidence and restore clinical contrasts"
+      },
+      {
+        "commit": "6ed41b39392e1a3544c98a48c632fe36c6cc05b5",
+        "author_date": "2026-10-30T11:17:05+08:00",
+        "subject": "fix: bind event replay to source claims and actual review scope"
+      },
+      {
+        "commit": "d67a5dc193d12561936459576dc62f5837199a0e",
+        "author_date": "2026-10-30T11:32:43+08:00",
+        "subject": "docs: record active source recovery and bounded UI work"
+      },
+      {
+        "commit": "12a5b0b364bb0a67442eb7bb660c43d3eab94430",
+        "author_date": "2026-10-30T12:12:49+08:00",
+        "subject": "fix: compact desktop design summaries and bind chart interactions"
+      },
+      {
+        "commit": "156dc50a68aae90683486a0aa0aafd80794f8d1d",
+        "author_date": "2026-10-30T13:11:33+08:00",
+        "subject": "fix: clip scatter symbols to the selected study rows"
+      },
+      {
+        "commit": "5b63bf8fd5de816d247f2af1ca0cc6f51a859cbe",
+        "author_date": "2026-10-30T14:04:11+08:00",
+        "subject": "docs: record research continuation and tooltip probe requirements"
+      },
+      {
+        "commit": "cd36a82b9bc6e585abe6133e18cff6cf773d7ed5",
+        "author_date": "2026-10-30T14:15:38+08:00",
+        "subject": "docs: retain corrected desktop tooltip evidence"
+      },
+      {
+        "commit": "32f0077a81dcb9640b5d476dd9dcef066f648cdb",
+        "author_date": "2026-10-30T15:33:06+08:00",
+        "subject": "fix: normalize complete typed singleton replies without weakening source checks"
+      },
+      {
+        "commit": "4b2648be30a1d6bcff0ce088f92d143b3f4a742a",
+        "author_date": "2026-10-30T16:11:30+08:00",
+        "subject": "docs: record real C continuation and verified cache recovery"
+      },
+      {
+        "commit": "c63fc64add66ac6ff37b766dd6f1f94e594fa3b0",
+        "author_date": "2026-10-30T17:06:06+08:00",
+        "subject": "docs: record verifier gateway failure and bounded resume"
+      },
+      {
+        "commit": "5124d97c59a9e54bc91f4bf5f81a7bc0a8b59fc3",
+        "author_date": "2026-10-30T17:44:38+08:00",
+        "subject": "fix: receive verifier completions over bounded SSE transport"
+      },
+      {
+        "commit": "6577295197ea4141a4ebf4bd4ddc49b7bd471bbc",
+        "author_date": "2026-10-30T17:55:31+08:00",
+        "subject": "docs: preserve lossless pause, progress and SSE recovery handoff"
+      },
+      {
+        "commit": "4b6978116bb67cb37582baeef480c189d3ba3842",
+        "author_date": "2026-10-31T00:03:38+08:00",
+        "subject": "docs: resume bounded real verifier streaming validation"
+      },
+      {
+        "commit": "f7f260afc3f7c2d531364750cfa074a5de637c3c",
+        "author_date": "2026-10-31T04:03:59+08:00",
+        "subject": "fix: bound and resume token-exhausted Chinese reading batches"
+      },
+      {
+        "commit": "8ff165630e43b5120dac11ff2b8362c5d209a823",
+        "author_date": "2026-10-31T04:23:50+08:00",
+        "subject": "docs: record accepted streaming evidence and real reading recovery launch"
+      },
+      {
+        "commit": "b41bbd0cce39eca72dbc0433564dcdb3651798d5",
+        "author_date": "2026-10-31T07:02:36+08:00",
+        "subject": "docs: record the real current C release and pending independent acceptance"
+      },
+      {
+        "commit": "20b912bf000fb886b8704fa55a5859459135b1be",
+        "author_date": "2026-10-31T08:14:56+08:00",
+        "subject": "fix: preserve source semantics across reading notation changes"
+      },
+      {
+        "commit": "a346ee99a00b14b4ff4bd1d9575d5c2c4d4dd1d3",
+        "author_date": "2026-10-31T09:01:05+08:00",
+        "subject": "fix: bind design headings and retain biopsy prerequisites"
+      },
+      {
+        "commit": "4df5b3c46bf8a54508b6e651a882df3b2cbf9499",
+        "author_date": "2026-10-31T09:19:35+08:00",
+        "subject": "docs: record independent MN rebuild launch"
+      },
+      {
+        "commit": "806b856663768388d64b52636c0fd2a092516638",
+        "author_date": "2026-10-31T10:27:28+08:00",
+        "subject": "docs: record completed MN report and isolated source recovery"
+      },
+      {
+        "commit": "492fddf96d02fe1237b5a978fe7ada3664efb086",
+        "author_date": "2026-10-31T11:09:14+08:00",
+        "subject": "docs: record real C chart verification and bounded source recovery work"
+      },
+      {
+        "commit": "93b8d090aee0213254a9ace9b56a71b4b3dcdf22",
+        "author_date": "2026-10-31T10:13:53+08:00",
+        "subject": "fix: recover literal source clauses and locate repair feedback"
+      },
+      {
+        "commit": "21caf9e2bf3939c18c3fce3e9e741faf3ae072ac",
+        "author_date": "2026-10-31T11:01:00+08:00",
+        "subject": "fix: retain exact scientific threshold notation without filler Chinese"
+      },
+      {
+        "commit": "c31bf6d8a21b831dc3d00f119aad1134b0374158",
+        "author_date": "2026-10-31T11:08:43+08:00",
+        "subject": "fix: expose verbatim registry intervention descriptions with source locators"
+      },
+      {
+        "commit": "9b1cff0a8241491b48f30e1818cac7899c975dbe",
+        "author_date": "2026-10-31T11:30:36+08:00",
+        "subject": "fix: normalize explicit clinical counts schedules and equivalent source notation"
+      },
+      {
+        "commit": "786bf8ecabdac7cae352a1004c6e0b878aafc853",
+        "author_date": "2026-10-31T11:53:30+08:00",
+        "subject": "fix: constrain lookup design context and preserve equivalent count forms"
+      },
+      {
+        "commit": "0e00486d44fcd1207fb94276d4e74d42eb1f8514",
+        "author_date": "2026-10-31T11:54:56+08:00",
+        "subject": "docs: record integrated clinical source recovery and real rebuild scope"
+      }
+    ],
+    "workbench": [
+      {
+        "commit": "f4b6536ee176a2e00628d9241cb9f315376c259d",
+        "author_date": "2026-10-27T16:09:28+08:00",
+        "subject": "feat(studio): consume current ciw design candidates with source identity"
+      },
+      {
+        "commit": "1945b82357958086e69393ebbf4d9f988da2ee66",
+        "author_date": "2026-10-27T17:05:06+08:00",
+        "subject": "fix(studio): distinguish China registration from study site geography"
+      },
+      {
+        "commit": "1493779e6682b4dbe6d036458299e772b34fbb09",
+        "author_date": "2026-10-27T21:32:02+08:00",
+        "subject": "fix(ciw): recognize source-reviewed publication status in workbench"
+      },
+      {
+        "commit": "c71a6975621511868eb4c5faf0f9ca1b46a86fb2",
+        "author_date": "2026-10-27T23:19:27+08:00",
+        "subject": "feat(ciw): open hosted reports at full browser width"
+      },
+      {
+        "commit": "36695f6cc81edc0249cb615ddd7da9df5bd3f344",
+        "author_date": "2026-10-28T00:20:37+08:00",
+        "subject": "fix(ciw): distinguish unread project counts and sanitize unavailable packages"
+      },
+      {
+        "commit": "c8fd11c12f63c2f45db2b57eabdb0dda6183bf4d",
+        "author_date": "2026-10-28T01:08:07+08:00",
+        "subject": "feat: provide authenticated self-service CI research workspace"
+      },
+      {
+        "commit": "a13bb9874a9d60fcfab63bb7066a5436e3afa5af",
+        "author_date": "2026-10-28T02:17:37+08:00",
+        "subject": "fix: bind research progress to execution identity instead of launcher pid"
+      },
+      {
+        "commit": "a0e5eb77861b0cb4760ccddfdfe8db73a8cfe30e",
+        "author_date": "2026-10-28T06:00:38+08:00",
+        "subject": "fix: isolate tenant research and preserve report navigation state"
+      },
+      {
+        "commit": "25f8b24091ec49fbe19cbebcc969c793f67f3221",
+        "author_date": "2026-10-28T07:34:13+08:00",
+        "subject": "Add on-demand report generation while keeping committed views readable"
+      },
+      {
+        "commit": "eb981956fc3485d637c46973253bd5eed10f8ebb",
+        "author_date": "2026-10-28T07:58:03+08:00",
+        "subject": "Keep completed report mounted across supplement and retry requests"
+      },
+      {
+        "commit": "a12c50fc5e30d123c9fed695a1c83146c149cfa4",
+        "author_date": "2026-10-28T09:57:34+08:00",
+        "subject": "Prioritize report reading while preserving unsubmitted research drafts"
+      },
+      {
+        "commit": "87f7fc8f1d27425162910190936e7237b9ef9a20",
+        "author_date": "2026-10-28T10:10:51+08:00",
+        "subject": "Make research reading headers and report viewport compact"
+      },
+      {
+        "commit": "d64f86e40e9be9555f676c9c1c4bf2e57dc9e902",
+        "author_date": "2026-10-28T10:50:28+08:00",
+        "subject": "Keep question access inline and opt into embedded report chrome"
+      },
+      {
+        "commit": "1c072b1ef9a21b7c1910993bd49cc634f17a31d4",
+        "author_date": "2026-10-28T11:31:11+08:00",
+        "subject": "Record scoped embedded reader verification and restored verifier"
+      },
+      {
+        "commit": "a837aa16d782428ea8689daa4150d54294936fa1",
+        "author_date": "2026-10-28T13:27:05+08:00",
+        "subject": "Point workbench continuation to current lossless pause handoff"
+      },
+      {
+        "commit": "dc25e46754fc62d1ca97665bca29eb89985d499e",
+        "author_date": "2026-10-28T21:40:18+08:00",
+        "subject": "fix(ciw): read family comparisons from their numeric frame"
+      },
+      {
+        "commit": "1039d0de36cbe85b78d3ebe7c50a6c1b856c85ea",
+        "author_date": "2026-10-29T00:34:22+08:00",
+        "subject": "docs(ciw): resume delivery and distinguish current adapter coverage"
+      },
+      {
+        "commit": "0df7263e3f65be5b850ee2d808b63a5247ca1b55",
+        "author_date": "2026-10-29T17:38:30+08:00",
+        "subject": "fix: retain group observations and source statistics in CIW read model"
+      },
+      {
+        "commit": "e6086998c0547804f9cf454b4565ea43a567cdce",
+        "author_date": "2026-10-29T19:04:55+08:00",
+        "subject": "fix: retain whole-study population scope in CIW candidates"
+      },
+      {
+        "commit": "7c4f6e3d16d28acfb9de67fbba3213448f1ea9ca",
+        "author_date": "2026-10-29T19:40:33+08:00",
+        "subject": "fix: label source scope and registration metadata for readers"
+      },
+      {
+        "commit": "74640befb416f528d671be84e4c83a7753f4e011",
+        "author_date": "2026-10-29T19:52:50+08:00",
+        "subject": "feat: rebuild committed reports from retained research safely"
+      },
+      {
+        "commit": "6fa6c7322ba1b5722efedd909a053c944b7054ee",
+        "author_date": "2026-10-30T05:12:07+08:00",
+        "subject": "fix: use the shared reading contract for packaged ciw reports"
+      },
+      {
+        "commit": "2ceeaf250a1be3c6e9992d2354ddb04cd856b586",
+        "author_date": "2026-10-30T10:01:25+08:00",
+        "subject": "fix: retain actionable CIW failure guidance in research API"
+      },
+      {
+        "commit": "bc1caad6580774f6231547b1def39f2fab4c2103",
+        "author_date": "2026-10-30T17:44:39+08:00",
+        "subject": "fix: show safe verifier gateway timeout guidance"
+      },
+      {
+        "commit": "8652b80ab32f26e90950d96d903e5695d9de3a07",
+        "author_date": "2026-10-30T17:55:32+08:00",
+        "subject": "docs: point CIW integration to the current pause handoff"
+      },
+      {
+        "commit": "277026510271f7c35c6730e9cfc86ac183f6dd25",
+        "author_date": "2026-10-31T00:03:39+08:00",
+        "subject": "docs: resume CIW work under the current status"
+      },
+      {
+        "commit": "389fdea3b310b541366ea17de714e5fccf4d6758",
+        "author_date": "2026-10-31T08:03:29+08:00",
+        "subject": "fix: pin research report documents and assets to the current release"
+      },
+      {
+        "commit": "b102f7e0c15866115f2c7358bd42b665de355b7c",
+        "author_date": "2026-10-31T08:35:06+08:00",
+        "subject": "docs: record version-bound report browser verification"
+      }
+    ]
+  },
+  "excluded_materials": [
+    "raw third-party originals",
+    "full model replies",
+    "SQLite and stage contents",
+    "runtime logs",
+    "credentials and cookies",
+    "machine absolute paths",
+    "internal design originals"
+  ],
+  "next_safe_action": "Read this candidate and identity deltas; only after user resumes, perform bounded independent source and browser review. Do not rebuild or refetch the whole workspace.",
+  "historical_screenshots_added": [
+    {
+      "path": "docs/screenshots/ciw-mn-c-rebuild14-count-1920-20261031.png",
+      "release_id": "rel_ec1b5ff8c4ada9d8",
+      "attempt": 14,
+      "css_width": 1920,
+      "sha256": "dd0ad280b89edae5d51eb2f99f9d13c94ad9476c97bfc8bb6cce88be47640184",
+      "scope": "actual Cursor/Ego count view, owner visually inspected; NOT after15 acceptance"
+    }
+  ]
+}

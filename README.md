@@ -1,6 +1,6 @@
 # ciw · 竞品调研子系统（v2）
 
-用户已解除暂停，继续验证同端点流式传输及完整报告。先读 [STATUS](docs/STATUS.md)；[最近交接](docs/handoff/PAUSE_20261030_AFTER_SSE.md)保留历史现场，恢复复用已保存资料，不重跑首次安装和已验步骤。
+**2026-10-31 已无损暂停：第15次重建正常结束，尚未整体交付。** 先读 [当前状态](docs/STATUS.md) → [远程审阅入口](docs/handoff/REVIEW_INDEX_20261031.md) → [详细交接与复盘](docs/handoff/PAUSE_20261031_AFTER_REBUILD15.md)。未经用户解除暂停，不启动第16次或新的实际测试。
 
 医学经理工作台“证据调研与方案设计”的竞品事实底座。
 
@@ -46,7 +46,7 @@ DGX 凭据仅通过 `CIW_DGX_API_KEY` 或 `CIW_DGX_KEY_FILE` 显式提供；cms-
 | [docs/REVIEW_2026-10-27.md](docs/REVIEW_2026-10-27.md) | v1 与 ciw2 的审查结论及处置 |
 | [docs/handoff/](docs/handoff/) | 构建 Agent 执行包与启动提示 |
 
-当前v2发布分支为 `codex/ciw-v2-trunk`，GitHub `main` 仍保留旧工程。执行包提及的 `archive/v1` 与 `archive/ciw2` 标签在本轮远端核查中不存在，不据此宣称历史清理完成。
+当前完整v2审阅分支为 `codex/ciw-clinical-endpoint-index`（较早 `codex/ciw-v2-trunk` 不含全部修复），GitHub `main` 仍保留旧工程。执行包提及的 `archive/v1` 与 `archive/ciw2` 标签在本轮远端核查中不存在，不据此宣称历史清理完成。
 
 ## 从新适应症开始
 

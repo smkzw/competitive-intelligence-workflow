@@ -48,12 +48,12 @@ indications/<slug>.yaml ──► ciw pipeline ──► workspace/releases/<id>
 | `Trial` | `trial_id`(NCT 或 CTR)；`ids`；`acronym`、`title`、`phase`、`status`；`dates`(start / primary_completion / completion / results_first_posted)；`sponsor`、`collaborators`、`countries`、`china`；`enrollment`；`design`；`arms[]`；`eligibility`；`outcomes_planned[]`；`product_ids[]`；`relevance` |
 | `Arm` | `arm_id`、`label`、`type`(CT.gov armGroups.type)、`role`(experimental/active/placebo/none/other)、`interventions[]`、`description` |
 | `Product` | `product_id`；`name_en`、`name_zh`、`codes[]`；`target`、`mechanism`、`modality`、`route`；`company`、`china_partner`；`innovative`、`inclusion_reason`；`is_own` |
-| `OutcomeResult` | `trial_id`、`outcome_key`；`type`(PRIMARY/SECONDARY/…)；`title`、`description`、`timeframe`、`time{value,unit,weeks}`；`concept_id`、`domain`；`param_type`、`dispersion_type`、`unit`、`population`；`groups[{group_id,title,arm_id,role,n,value,spread,lower,upper}]`；`analyses[{group_ids,param_type,value,ci_pct,ci_lower,ci_upper,p_value,method}]`；`locator` |
+| `OutcomeResult` | `result_id`、`trial_id`、`outcome_index`；`type`(PRIMARY/SECONDARY/…)；`title`、`description`、`timeframe`、`time{raw,label,key,weeks}`；`concept_id`、`domain`；`param_type`、`dispersion_type`、`unit`、`population`；`groups[{group_id,title,arm_id,role,n,value,spread,lower,upper}]`；`analyses[{group_ids,param_type,value,ci_pct,ci_lower,ci_upper,p_value,method}]`；`locator` |
 | `SafetySummary` | `trial_id`、`timeframe`、`other_threshold`；`groups[{group_id,title,arm_id,role,serious{n,N},other{n,N},deaths{n,N}}]`；`terms[{term,organ_system,serious,stats[{group_id,n,N,events}]}]` |
 | `Event` | 非结构化来源抽出的里程碑：`product_id`、`event_type`(approval/filing/topline/phase_start/licensing)、`region`、`date`、`detail`、`numbers[]`、`quote`、`status` |
-| `Verification` | `fact_key`、`status`(registry/verified/needs_review/rejected；兼容历史dual_agreed/arbitrated)、`calls[{family,model,value,quote_ok}]` |
+| `Verification` | `fact_key`、`status`(registry/verified/needs_review/rejected；兼容历史dual_agreed/arbitrated)、`calls`（真实family/model/role/cache等元数据）、`note`；SQLite行另以payload保存item/task/source_id/calls等 |
 
-事实 ID 一律由自然键加内容哈希生成，同一原件重跑时 ID 不变。
+来源ID绑定kind/URL/内容SHA；结果与组等科学身份按各模型自然键/源路径生成，来源版本通过Locator.source_id及不可变release关联，不是一律把数值内容写入事实ID。抽取任务键绑定实际材料、Schema与指令；不按代码hash失效。
 
 ## 5. 核对（`ciw.verify`）
 
@@ -67,12 +67,12 @@ indications/<slug>.yaml ──► ciw pipeline ──► workspace/releases/<id>
 
 - 两个模型家族必须不同，角色仅extractor_a/verifier；不再分派Qwen或第三模型。核对者可见候选，不宣称盲审。确定性校验失败时仅向同一GLM回送错误条目纠正一次；正常条目不重跑，超次或仍失败保留待核，修复阶段不接受新增身份。
 - 主抽取或核对调用失败记任务失败，不当作无数据。核对者未确认的A条目保留待核；B补漏和修正也须通过原文校验。
-- 中文阅读只有失败终态调用明确finish_reason=length且存在多个完整原子时，才按原子ID一次二分；子批不递归，单个长原子不裁切。既有打包边界在恢复时稳定，先保存父批和子任务身份，再调用子批，已核兄弟不重复请求。网络/鉴权/无length的格式失败不拆分；全部子批仍用相同Schema、来源与两家族核对，原失败答复不删除。
+- 中文阅读只有失败终态调用明确finish_reason=length且存在多个完整原子时，才按原子ID一次二分；子批不递归，单个长原子不裁切。既有打包边界在恢复时稳定，先保存父批和子任务身份，再调用子批，整子批全部已核时跳过；普通批次部分已核仍整批请求是现有未修缺陷，详见最新交接，不宣称所有已核兄弟零重复。网络/鉴权/无length的格式失败不拆分；全部子批仍用相同Schema、来源与两家族核对，原失败答复不删除。
 - C的source_heading是当前原字段的字面分节投影，带source_id/field/start/end/quote；不成为医学队列身份或独立事实。与条款源ID一致才附加，跨疾病或未知章节不强绑单标题。同一原件内的投影变化不进入阅读任务键；原件字节变化按内容源ID形成新任务，旧核对不得跨源复用。
 - 每个数字都必须带原文引语，并且这个数字字面出现在引语中。做不到就判失败，不靠模型自报置信度。
-- 调用记录（模型、prompt 哈希、响应哈希）写进 `ciw.sqlite`，按 (prompt 哈希, 模型) 缓存，重跑不重复计费。
+- 调用记录（模型、prompt 哈希、响应哈希）写进 `ciw.sqlite`，按 (prompt 哈希, 模型) 缓存，相同完整请求可复用缓存；材料或批次组成变化可能新增真实调用，不保证增量重建零重复。
 - 后端走 OpenAI 兼容接口；key 只从环境变量或 key 文件路径读取，不进日志、不进 release。测试使用 `FakeBackend`。
-- GLM核对使用同一端点的SSE接收，DeepSeek默认非流式；传输方式不参与语义缓存键，不改变提示词、模型或预算。只组装content，保留实际结束原因和usage，不保存推理文本；完整结束才缓存，断流/错误/504不自动重发。429准入等待与流读取共用原总时限。仅同一次响应明确返回完整JSON时接受非流式响应，不再发一次请求。协议参照[GLM官方接口](https://docs.z.ai/api-reference/llm/chat-completion)；真实网关是否避免600秒504须另行验证。
+- GLM核对使用同一端点的SSE接收，DeepSeek默认非流式；传输方式不参与语义缓存键，不改变提示词、模型或预算。只组装content，保留实际结束原因和usage，不保存推理文本；完整结束才缓存，断流/错误/504不自动重发。429准入等待与流读取共用原总时限。仅同一次响应明确返回完整JSON时接受非流式响应，不再发一次请求。协议参照[GLM官方接口](https://docs.z.ai/api-reference/llm/chat-completion)；真实网关已在第14次及后续运行保存超过600秒的成功SSE答复；具体候选及未验范围见最新交接。
 - 核对者在同一身份下返回冲突值时进入待核，不采用数组首条；A的冲突可由B依据原文修正。
 - 私有DGX的系统DNS失败时，仅对已配置的HTTPS Tailscale主机使用本机`tailscale dns query`的唯一私网答案建立连接；保留原主机TLS/SNI验证，不改系统DNS、端点、模型或服务。调用元数据记录解析方式，不记录私网IP或凭据。
 - EventItem的事件日期须有连续原文支持实际动作；发布日期、宣布已批准和历史数据回顾不能补作事件日期或新顶线事件。
