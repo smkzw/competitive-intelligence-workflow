@@ -136,9 +136,21 @@ def _check(item, atoms):
             return False, f"{raw}：原文明确的活检条件不能省略或擅自改为可免活检"
         if _history_became_future(source, label):
             return False, f"{raw}：原文为签署ICF前的既往检查窗口，中文须明确前/既往方向，不能省略或改为之后"
-    if not re.search(r"[\u4e00-\u9fff]", item["text_zh"]):
+    if (not re.search(r"[\u4e00-\u9fff]", item["text_zh"])
+            and not _same_notation(atom["text"], item["text_zh"])):
         return False, "主层须提供中文医学要点，指标、缩写和科学单位保留原名"
     return True, ""
+
+
+def _same_notation(source, label):
+    """A whole single-metric expression has no prose to translate; keep its exact identifier."""
+    comparison = (r"(?:[<>]=?|[≥≤]|(?:greater|higher|less|lower) than(?: or equal to)?|"
+                  r"more than|at least|at most)")
+    expression = (r"([A-Za-z][A-Za-z0-9]*)\s*" + comparison + r"\s*" + _NUMERIC_TOKEN +
+                  r"\s*(?:" + _UNITS.pattern + r")?[.。]?")
+    original, translated = (re.fullmatch(expression, text.strip(), re.I) for text in (source, label))
+    return bool(original and translated and original[1] == translated[1]
+                and sum(char.isupper() for char in original[1]) >= 2)
 
 
 def _biopsy_changed(source, label):
