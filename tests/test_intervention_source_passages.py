@@ -60,3 +60,19 @@ def test_legacy_trial_without_intervention_records_remains_readable_and_has_no_f
     legacy = Trial.model_validate(raw)
     assert legacy.interventions == []
     assert not any("armsInterventionsModule.interventions[" in key for _, _, key in design_passages(legacy))
+
+
+def test_new_intervention_context_is_not_added_to_an_eligibility_only_task(cfg, resolver):
+    from ciw.verify.design_clauses import _task
+    trial = source_trial(cfg, resolver)
+    legacy = trial.model_copy(deep=True)
+    legacy.interventions = []
+    criteria = [dict(topic_id="criteria", label="入排阈值", kind="eligibility_threshold")]
+    dose = [dict(topic_id="dose", label="给药", kind="dosing_regimen")]
+    old, _ = _task(legacy, criteria)
+    current, _ = _task(trial, criteria)
+    assert old.task_id == current.task_id and old.source_text == current.source_text
+    old_dose, _ = _task(legacy, dose)
+    new_dose, _ = _task(trial, dose)
+    assert old_dose.task_id != new_dose.task_id
+    assert trial.interventions[0].description in new_dose.source_text
