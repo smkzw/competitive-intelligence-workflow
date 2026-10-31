@@ -51,6 +51,14 @@ class Arm(Model):
     product_ids: list[str] = Field(default_factory=list)
 
 
+class Intervention(Model):
+    name: str
+    type: str = ""
+    description: str = ""
+    arm_group_labels: list[str] = Field(default_factory=list)
+    locator: Locator
+
+
 class PlannedOutcome(Model):
     kind: Literal["primary", "secondary", "other"]
     title: str
@@ -108,6 +116,7 @@ class Trial(Model):
     conditions: list[str] = Field(default_factory=list)
     design: Design = Field(default_factory=Design)
     arms: list[Arm] = Field(default_factory=list)
+    interventions: list[Intervention] = Field(default_factory=list)
     outcomes_planned: list[PlannedOutcome] = Field(default_factory=list)
     product_ids: list[str] = Field(default_factory=list)
     has_results: bool = False

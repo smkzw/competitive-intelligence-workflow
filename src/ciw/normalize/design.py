@@ -41,6 +41,7 @@ def design_passages(trial):
         ("设计描述", trial.design.model_description, "model_description"),
     ]
     passages += [(a.label, a.description, f"arm:{a.arm_id}") for a in trial.arms]
+    passages += [(iv.name, iv.description, iv.locator.path) for iv in trial.interventions]
     passages += [("背景治疗", value, f"background:{i}") for i, value in enumerate(trial.design.background_therapy)]
     passages += [(o.title, o.description, f"outcome:{i}") for i, o in enumerate(trial.outcomes_planned)]
     passages += [("终点名称", o.title, f"outcome:{i}:title") for i, o in enumerate(trial.outcomes_planned)]

@@ -19,6 +19,7 @@ from ciw.models import (
     Design,
     Discontinuation,
     GroupValue,
+    Intervention,
     Locator,
     OutcomeResult,
     PlannedOutcome,
@@ -135,6 +136,7 @@ def extract_trial(study: dict[str, Any], source: Source, cfg: IndicationConfig, 
         conditions=cond_mod.get("conditions", []),
         design=_trial_design(design, elig, arms, background, p.get("descriptionModule", {})),
         arms=arms,
+        interventions=_trial_interventions(interventions, source),
         outcomes_planned=outcomes,
         product_ids=product_ids,
         has_results=bool(study.get("hasResults")),
@@ -368,6 +370,13 @@ def extract_safety(
         discontinuations=_discontinuations(study, trial, resolver),
         locator=Locator(source_id=source.source_id, path="resultsSection.adverseEventsModule"),
     )
+
+
+def _trial_interventions(interventions, source):
+    return [Intervention(name=iv["name"], type=iv.get("type", ""), description=iv.get("description", ""),
+        arm_group_labels=iv.get("armGroupLabels", []), locator=Locator(source_id=source.source_id,
+            path=f"protocolSection.armsInterventionsModule.interventions[{i}].description",
+            quote=iv.get("description", ""))) for i, iv in enumerate(interventions)]
 
 
 def _trial_arms(arms_mod, iv_product, resolver) -> list[Arm]:
