@@ -143,7 +143,7 @@ def _run(
                                         roles if report_scope in {None, "C"} else None, log)
     body["review_queue"].extend(design_issues)
     body["review_queue"].extend(enrich_design_labels(ws, body["c"],
-        roles if report_scope in {None, "C"} else None, log))
+        roles if report_scope in {None, "C"} else None, log, trials=trials.values(), cfg=cfg))
     body["stats"]["review_queue"] = len(body["review_queue"])
     body["clinical_families"] = families
     body["b"] = project_clinical_families(body["b"], families["groups"])

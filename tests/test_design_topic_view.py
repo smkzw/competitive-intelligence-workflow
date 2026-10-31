@@ -21,7 +21,9 @@ condition_marks:[],cohort_zh:'指定队列',timeframe_zh:''};
 const rows=['one','two'].map((trial_id,i)=>({trial_id,title:'',eligibility:'',search_text:i?'其他':'肾功能',
 products:[{label:'Drug '+i}],primary:[],primary_concepts:[],phase:'III',masking:'',enrollment:i?20:0,
 background_therapy:[],arms:[],
-start:'2026-01-01',enrollment_type:'实际',design_excerpts:[{topic_id:'design-topic-0',label:'主题0',snippets:[snippet]}]}));
+start:'2026-01-01',enrollment_type:'实际',design_excerpts:[{topic_id:'design-topic-0',label:'主题0',snippets:[i ?
+ {...snippet,cohort_quote:'',source_heading:{label:'队列 AAA <script>unsafe()</script>',quote:'Condition A (AAA)'},
+ reading:{...snippet.reading,cohort_zh:''}} : snippet]}]}));
 const escape=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;')
 .replaceAll('>','&gt;').replaceAll('"','&quot;');
 const window={U:{D:{c:{rows,topic_catalog:topics},indication:{}},esc:escape,src:()=>'',options(){},drawer(){},
@@ -47,13 +49,15 @@ process.stdout.write(JSON.stringify(out));
     assert restored["ids"] == ["one", "two"] and comprehensive["labels"][1] == "设计 / 组别"
     assert len(cleared["labels"]) == 1 and len(all_topics["labels"]) == 7
     assert all_topics["ids"] == initial["ids"]
-    for row in initial["cells"]:
+    for i, row in enumerate(initial["cells"]):
         fragment = html.fragment_fromstring(row[1], create_parent="div")
         assert not fragment.xpath(".//script")
         assert "Only if all apply:" in fragment.text_content() and "排除" in fragment.text_content()
-        assert "Named cohort" in fragment.text_content() and "eGFR ≥40" in fragment.text_content()
+        assert ("Named cohort" if i == 0 else "Condition A (AAA)") in fragment.text_content()
+        assert "eGFR ≥40" in fragment.text_content()
         primary = "".join(fragment.xpath('.//p[@class="clause-point"]//text()'))
         assert "肾功能" in primary and "Only if all" not in primary
         assert fragment.xpath('.//details[@class="clause-original"]')
-        assert "指定队列" in fragment.text_content() and "全部条件满足时" in fragment.text_content()
+        assert ("指定队列" if i == 0 else "队列 AAA <script>unsafe()</script>") in fragment.text_content()
+        assert "全部条件满足时" in fragment.text_content()
     assert "N=0" in initial["cells"][0][0]

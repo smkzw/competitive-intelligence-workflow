@@ -43,6 +43,45 @@ def design_passages(trial):
     return passages
 
 
+def source_cohort_heading(trial, field, excerpt):
+    """Bind a whole literal excerpt to one explicitly named source section, never allocate N."""
+    if len(set(trial.conditions)) < 2 or not excerpt:
+        return None
+    source = dict((key, text) for _, text, key in design_passages(trial)).get(field, "")
+    names = set(trial.conditions)
+    for condition in trial.conditions:
+        names.add(re.sub(r"\s*\([^()]+\)", "", condition).strip())
+        names.update(re.findall(r"\(([A-Za-z][A-Za-z0-9-]{2,})\)", condition))
+    pattern = r"(?:for\s+)?(?:(?:patients?|participants?|subjects?)\s+with\s+)?" + \
+        r"(?:(?:primary|idiopathic|secondary)\s+)?(?:" + "|".join(re.escape(n) for n in names if n) + \
+        r")(?:\s*\([A-Za-z][A-Za-z0-9-]{1,}\))?(?:\s+(?:cohort|group|patients?))?"
+    regions, active, offset = [], None, 0
+    for line in source.splitlines(keepends=True):
+        content = _BULLET.sub("", line).strip()
+        heading = re.split(r"[:：]", content, maxsplit=1)[0].strip()
+        named = bool(re.fullmatch(pattern, heading, re.I))
+        if named or _SECTION.match(line) or content.endswith((":", "：")):
+            if active:
+                regions.append((active, offset))
+            active = dict(quote=heading, start=offset+line.index(heading),
+                          end=offset+line.index(heading)+len(heading), section_start=offset) if named else None
+        offset += len(line)
+    if active:
+        regions.append((active, len(source)))
+    occurrences = list(re.finditer(re.escape(excerpt), source))
+    bindings = [heading for occurrence in occurrences for heading, end in regions
+                if heading["section_start"] < occurrence.end() and occurrence.start() < end]
+    if len(bindings) != len(occurrences) or not bindings or any(h != bindings[0] for h in bindings):
+        return None
+    end = next(end for heading, end in regions if heading == bindings[0])
+    start = bindings[0]["section_start"]
+    if any(occurrence.end() > end or (occurrence.start() < start and not
+            LOGICAL_PARENT.search(source[occurrence.start():start])) for occurrence in occurrences):
+        return None
+    return {key: value for key, value in bindings[0].items() if key != "section_start"} | dict(
+        source_id=trial.locator.source_id, field=field, label=bindings[0]["quote"])
+
+
 def topic_catalog(topics):
     return [dict(topic_id=f"design-topic-{i}", label=t.label.replace("入组阈值", "入排阈值"),
                  kind=t.kind, aliases=t.aliases)

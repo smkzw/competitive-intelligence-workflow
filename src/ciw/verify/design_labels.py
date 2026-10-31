@@ -9,7 +9,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel, Field
 
-from ciw.normalize.design import threshold_spans
+from ciw.normalize.design import source_cohort_heading, threshold_spans
 from ciw.verify.crosscheck import _FORMAT_ERRORS, CrosscheckFailed, ExtractionTask, crosscheck, task_id_for
 from ciw.verify.endpoint_index import _batches, _comparisons, _review_binding
 from ciw.verify.quote import _NUMERIC_TOKEN, _UNIT_PARTS, normalize
@@ -78,7 +78,7 @@ def _atoms(c):
 
 def _quantities(text):
     text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
-    text = re.sub(r"(?m)^[ \t]*(?:[*+•-]|\d+[.)])[ \t]+", "", text)
+    text = re.sub(r"(?m)^[ \t]*(?:[*+•-][ \t]+|\d+(?:[.)．][ \t]+|[）、][ \t]*))", "", text)
     text = re.sub(r"(?<=\d)\s*(?:[-–—]|to|至)\s*(?=\d)", " ", _measurement_text(text))
     counts = {word: str(n) for n, word in enumerate(
         ("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"), 1)}
@@ -98,8 +98,9 @@ def _times(text):
 
 def _inline_list_labels(label, source):
     """Fold only the same ordered labels explicitly declared by the source's multiline list."""
-    declared = re.findall(r"(?m)^[ \t]*(\d+)[.)][ \t]+(?=\S)", source)
-    markers = list(re.finditer(r"(?<![\d.])(\d+)[.)][ \t]+(?=\S)", label))
+    marker = r"(\d+)(?:[.)．][ \t]+|[）、][ \t]*)(?=\S)"
+    declared = re.findall(r"(?m)^[ \t]*" + marker, source)
+    markers = list(re.finditer(r"(?<![\d.])" + marker, label))
     if not declared or [m[1] for m in markers] != declared:
         return label
     for marker in reversed(markers):
@@ -123,11 +124,30 @@ def _check(item, atoms):
             return False, f"{raw}：科学单位须保留原写法，不替换或换算"
         if _times(source) != _times(label):
             return False, f"{raw}：时间单位不能改变或省略"
+        if _biopsy_changed(source, label):
+            return False, f"{raw}：原文明确的活检条件不能省略或擅自改为可免活检"
         if _history_became_future(source, label):
             return False, f"{raw}：原文为签署ICF前的既往检查窗口，中文须明确前/既往方向，不能省略或改为之后"
     if not re.search(r"[\u4e00-\u9fff]", item["text_zh"]):
         return False, "主层须提供中文医学要点，指标、缩写和科学单位保留原名"
     return True, ""
+
+
+def _biopsy_changed(source, label):
+    biopsy = r"(?<![A-Za-z])biops(?:y|ies)(?![A-Za-z])"
+    if not re.search(biopsy, source, re.I):
+        return False
+    if not re.search(r"活检|穿刺|" + biopsy, label, re.I):
+        return True
+    permission = (biopsy + r"[^.;\n]{0,35}(?:(?:can|may)\s+(?:be\s+)?(?:omitt?\w*|waiv\w*)|"
+                  r"not\s+(?:be\s+)?(?:required|necessary|mandatory))|"
+                  r"(?:may omit|can omit|do not require|does not require|need not undergo)"
+                  r"[^.;\n]{0,35}" + biopsy + r"|(?<!no )" + biopsy + r"\s+exemption|"
+                  r"(?:can be included|may be eligible|can be enrolled|may be enrolled)"
+                  r"(?:(?!\bnot\b)[^.;\n]){0,55}\bwithout[^.;\n]{0,35}" + biopsy)
+    waived = re.search(r"(?:无需|不需要?|不必|不用|可?免(?:于|除)?|可不(?:行|做|接受))"
+                       r"[^。;；]{0,12}(?:活检|穿刺)", label) or re.search(permission, label, re.I)
+    return bool(waived and not re.search(permission, source, re.I))
 
 
 def _history_became_future(source, label):
@@ -264,9 +284,10 @@ def _recheck_saved(ws, atoms, saved, accepted):
         ws.write_stage("research-design-reading", saved)
 
 
-def enrich_design_labels(ws, c, roles=None, log=lambda *_: None):
+def enrich_design_labels(ws, c, roles=None, log=lambda *_: None, *, trials=(), cfg=None):
     atoms = _atoms(c)
     accepted = _readings(ws, atoms, roles, log)
+    by_trial = {trial.trial_id: trial for trial in trials}
     issues = []
     for row in c["rows"]:
         for excerpt in row.get("design_excerpts", []):
@@ -274,6 +295,13 @@ def enrich_design_labels(ws, c, roles=None, log=lambda *_: None):
                 atom = _atom(snippet)
                 if not atom:
                     continue
+                snippet.pop("source_heading", None)
+                trial = by_trial.get(row["trial_id"])
+                if (trial and trial.locator.source_id == atom["source_id"]
+                        and (heading := source_cohort_heading(trial, atom["field"], atom["text"]))):
+                    if cfg and cfg.is_relevant_text(heading["quote"]):
+                        heading["label"] = cfg.name_zh
+                    snippet["source_heading"] = heading
                 key = atom["clause_id"]
                 if key not in accepted:
                     issues.append(dict(kind="design_reading_not_checked", trial_id=row["trial_id"],
