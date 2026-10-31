@@ -77,6 +77,8 @@ indications/<slug>.yaml ──► ciw pipeline ──► workspace/releases/<id>
 - 私有DGX的系统DNS失败时，仅对已配置的HTTPS Tailscale主机使用本机`tailscale dns query`的唯一私网答案建立连接；保留原主机TLS/SNI验证，不改系统DNS、端点、模型或服务。调用元数据记录解析方式，不记录私网IP或凭据。
 - EventItem的事件日期须有连续原文支持实际动作；发布日期、宣布已批准和历史数据回顾不能补作事件日期或新顶线事件。
 
+设计来源窄规则修复可重检已保存的完整B回答：入排标题、带真实数字编号的父句、同句明确给药操作。须原source/task/topic一致、当前完整守卫通过且最终B缓存逐项绑定；保持原item/calls，仅记录当前确定性重检。错误反馈包含具体clauses索引、字段及可用原字段列表，修复提示按实际错误内容缓存，不按代码hash清缓存。
+
 ### 论文补充
 
 `sources.europepmc` 按未公布结果的核心 II/III 期登记号分页查询，保存 API 原件；只有摘要正文中的明确登记号可绑定研究。综述、方案、事后或亚组分析不自动作为主要结果。网络失败与尚未检索的编号保留在 coverage，离线重跑不会将其变成零结果。
