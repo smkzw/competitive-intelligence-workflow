@@ -29,7 +29,7 @@ _FIELDS = {"text": "text_zh", "condition": "condition_zh", "cohort_quote": "coho
 _TIME_WORDS = {"day", "days", "week", "weeks", "year", "years"}
 _UNIT = "(?:" + "|".join(re.escape(u) for u in sorted(_UNIT_PARTS - _TIME_WORDS - {
     "point", "points", "score", "fold", "category", "categories"} | {"%", "ru", "miu"}, key=len, reverse=True)) + ")"
-_DENOM = "(?:" + _UNIT + "|" + "|".join(sorted(_TIME_WORDS, key=len, reverse=True)) + ")"
+_DENOM = "(?:" + _UNIT + "|" + "|".join(sorted(_TIME_WORDS | {"d"}, key=len, reverse=True)) + ")"
 _UNITS = re.compile(r"(?<![A-Za-zµμ])" + _UNIT + r"(?:\s*/\s*(?:\d+(?:\.\d+)?\s*)?" +
                     _DENOM + r")*(?![A-Za-zµμ])", re.I)
 _INSTRUCTION = (
@@ -78,6 +78,7 @@ def _atoms(c):
 
 def _quantities(text):
     text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
+    text = re.sub(r"(?m)^[ \t]*[*+•-][ \t]+\d+[.)][ \t]*(?=[A-Z])", "", text)
     text = re.sub(r"(?m)^[ \t]*(?:[*+•-][ \t]+|\d+(?:[.)．][ \t]+|[）、][ \t]*))", "", text)
     text = re.sub(r"(?<=\d)\s*(?:[-–—]|to|至)\s*(?=\d)", " ", _measurement_text(text))
     text = _count_words(text)
@@ -87,8 +88,24 @@ def _quantities(text):
 def _count_words(text):
     counts = {word: str(n) for n, word in enumerate(
         ("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"), 1)}
-    text = re.sub(r"\b(" + "|".join(counts) + r")(?=\s+(?:participants?|patients?|subjects?|"
-                  r"cohorts?|groups?|dose levels?)\b)", lambda m: counts[m[0].lower()], text, flags=re.I)
+    counts.update(forty="40", **{"a hundred": "100"})
+    units = r"days?|weeks?|months?|years?|hours?|minutes?"
+    counted = (r"participants?|patients?|subjects?|cohorts?|groups?|dose levels?|times?|" + units +
+               r"|(?:successive )?examinations?|(?:proteinuria )?measurements?|tests?|testing|"
+               r"\d+[- ]hour (?:urine )?(?:collections?|samples?)|"
+               r"complete(?: and valid)? \d+[- ]hour(?: urine)? collections?")
+    text = re.sub(r"\b(" + "|".join(counts) + r")(?=\s+(?:" + counted + r")\b)",
+                  lambda m: counts[m[0].lower()], text, flags=re.I)
+    text = re.sub(r"\bdecade\b", "10 years", text, flags=re.I)
+    text = re.sub(r"\b(once|twice)(?=\s+(?:(?:a|per)\s+(?:" + units + r")\b|"
+                  r"(?:daily|weekly|monthly)\b|(?:in|every)\s+\d+))",
+                  lambda m: ("1" if m[1].lower() == "once" else "2") + " time", text, flags=re.I)
+    text = re.sub(r"(?<!time )(?<!times )\bevery\s+(\d+)\s+(" + units + r")\b",
+                  r"1 time every \1 \2", text, flags=re.I)
+    text = re.sub(r"(?<!第)[二两](?=次)", "2", text)
+    text = re.sub(r"(至少|每(?:\d+)?(?:天|日|周|月|年))一次", r"\g<1>1次", text)
+    text = re.sub(r"一次(?=完整)", "1次", text)
+    text = re.sub(r"每(\d+)\s*(天|日|周|个?月|年)(?!\s*\d+\s*次)", r"每\1\2 1次", text)
     # A numbered threshold over criteria differs from the grammatical 'one of the following'.
     return re.sub(r"\b((?:more than|greater than|at least|at most|less than|fewer than)\s+)(" +
                   "|".join(list(counts)[1:]) + r")(?=\s+of\s+(?:the\s+)?following\s+(?:items|criteria)\b)",
@@ -99,9 +116,21 @@ def _times(text):
     units = {"天": "day", "日": "day", "周": "week", "月": "month", "年": "year", "岁": "year",
              "小时": "hour", "分钟": "minute"}
     en = r"days?|weeks?|months?|years?|hours?|minutes?"
-    matches = re.finditer(rf"\d+(?:\.\d+)?\s*[- ]?\s*个?((?:{en})\b|小时|分钟|[天日周月年岁])"
-                          rf"|\b({en})\s*\d+", _measurement_text(text), re.I)
-    return Counter(units.get(unit, unit.lower().rstrip("s")) for m in matches if (unit := m[1] or m[2]))
+    text = _count_words(_measurement_text(text))
+    text = re.sub(r"((?:19|20)\d{2}\s*[-–—]\s*(?:19|20)\d{2})年", r"\1", text)
+    text = re.sub(r"\b(" + en + r")\s+(\d+(?:\s*(?:,|and)\s*\d+)+)",
+                  lambda m: " ".join(m[1]+" "+n for n in re.findall(r"\d+", m[2])), text, flags=re.I)
+    text = re.sub(r"(\d+(?:\s*[、，,和及]\s*\d+)+)(个?月|天|日|周|年)",
+                  lambda m: " ".join(n+m[2] for n in re.findall(r"\d+", m[1])), text)
+    matches = re.finditer(rf"\d+(?:\.\d+)?\s*[- ]?\s*(?:consecutive\s+)?个?((?:{en})\b|小时|分钟|[天日周月年岁])"
+                          rf"|\b({en})\s*\d+", text, re.I)
+    result = Counter(units.get(unit, unit.lower().rstrip("s")) for m in matches if (unit := m[1] or m[2]))
+    frequency = re.finditer(r"\b(?:every|\d+ times? (?:a|per))\s+(days?|weeks?|months?|years?)\b"
+                            r"|\b(daily|weekly|monthly)\b|每([天日周月年])", text, re.I)
+    for match in frequency:
+        result[units.get(match[3], "") or {"daily": "day", "weekly": "week", "monthly": "month"}.get(
+            (match[2] or "").lower(), (match[1] or "").lower().rstrip("s"))] += 1
+    return result
 
 
 def _inline_list_labels(label, source):

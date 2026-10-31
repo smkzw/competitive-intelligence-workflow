@@ -86,16 +86,18 @@ def _comparisons(text):
     # Equivalent source spellings only; preserve strict versus inclusive thresholds.
     words = {"greater than or equal to": ">=", "higher than or equal to": ">=", "at least": ">=",
              "less than or equal to": "<=", "lower than or equal to": "<=", "at most": "<=",
-             "greater than": ">", "higher than": ">", "more than": ">", "less than": "<", "lower than": "<"}
+             "greater than": ">", "higher than": ">", "more than": ">", "less than": "<", "lower than": "<",
+             "exceeding": ">"}
     cleaned = re.sub(r"\([\\<>=]+\)", " ", text)
-    pattern = r"\b(" + "|".join(words) + r")\s+(?:an?\s+)?(\d+(?:\.\d+)?)"
+    pattern = r"\b(" + "|".join(words) + r")\s*(?:an?\s+)?(\d+(?:\.\d+)?)"
     pairs.update((words[m[1].casefold()], m[2]) for m in re.finditer(pattern, cleaned, re.I))
     suffixes = {"higher": ">=", "greater": ">=", "more": ">=", "lower": "<=", "less": "<="}
     for m in re.finditer(r"(\d+(?:\.\d+)?)\s*(?:%|percent)?\s+or\s+(higher|greater|more|lower|less)\b", text, re.I):
         pairs.add((suffixes[m[2].casefold()], m[1]))
     prefixes = {"至少": ">=", "不低于": ">=", "不小于": ">=", "至多": "<=", "不高于": "<=",
-                "不大于": "<=", "超过": ">", "大于": ">", "小于": "<", "低于": "<"}
-    prefix_pattern = "(" + "|".join(prefixes) + r")\s*(?:改善|增加|降低|升高|减少|达到)?\s*(\d+(?:\.\d+)?)"
+                "不大于": "<=", "超过": ">", "大于": ">", "小于": "<", "低于": "<", "少于": "<"}
+    prefix_pattern = ("(" + "|".join(prefixes) +
+                      r")\s*(?:改善|增加|降低|升高|减少|达到|连续|测量|检测|测试)?\s*(\d+(?:\.\d+)?)")
     pairs.update((prefixes[m[1]], m[2]) for m in re.finditer(prefix_pattern, text))
     for m in re.finditer(r"(\d+(?:\.\d+)?)\s*%?\s*(或更高|或以上|及以上|或更低|或以下|及以下)", text):
         pairs.add((">=" if m[2] in {"或更高", "或以上", "及以上"} else "<=", m[1]))
