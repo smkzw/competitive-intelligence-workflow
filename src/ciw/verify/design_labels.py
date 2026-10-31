@@ -80,11 +80,19 @@ def _quantities(text):
     text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
     text = re.sub(r"(?m)^[ \t]*(?:[*+•-][ \t]+|\d+(?:[.)．][ \t]+|[）、][ \t]*))", "", text)
     text = re.sub(r"(?<=\d)\s*(?:[-–—]|to|至)\s*(?=\d)", " ", _measurement_text(text))
+    text = _count_words(text)
+    return Counter(Decimal(n.replace(",", "")) for n in re.findall(_NUMERIC_TOKEN, text))
+
+
+def _count_words(text):
     counts = {word: str(n) for n, word in enumerate(
         ("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"), 1)}
     text = re.sub(r"\b(" + "|".join(counts) + r")(?=\s+(?:participants?|patients?|subjects?|"
-                  r"cohorts?|groups?|dose levels?)\b)", lambda m: counts[m[0]], text)
-    return Counter(Decimal(n.replace(",", "")) for n in re.findall(_NUMERIC_TOKEN, text))
+                  r"cohorts?|groups?|dose levels?)\b)", lambda m: counts[m[0].lower()], text, flags=re.I)
+    # A numbered threshold over criteria differs from the grammatical 'one of the following'.
+    return re.sub(r"\b((?:more than|greater than|at least|at most|less than|fewer than)\s+)(" +
+                  "|".join(list(counts)[1:]) + r")(?=\s+of\s+(?:the\s+)?following\s+(?:items|criteria)\b)",
+                  lambda m: m[1]+counts[m[2].lower()], text, flags=re.I)
 
 
 def _times(text):
@@ -118,7 +126,7 @@ def _check(item, atoms):
         if bool(source.strip()) != bool(label.strip()):
             return False, f"{raw}：不能删除或新增原条款、适用条件、队列或时点"
         if (_quantities(source) != _quantities(_inline_list_labels(label, source))
-                or _comparisons(source) != _comparisons(label)):
+                or _comparisons(_count_words(source)) != _comparisons(_count_words(label))):
             return False, f"{raw}：阅读要点必须保留原字段全部数值、时点和比较符，不换算或省略阈值"
         if _unit_signature(source) != _unit_signature(label):
             return False, f"{raw}：科学单位须保留原写法，不替换或换算"

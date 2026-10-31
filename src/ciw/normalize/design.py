@@ -17,13 +17,18 @@ def threshold_spans(text: str) -> list[dict]:
     return [{"start": m.start(), "end": m.end()} for m in _THRESHOLD.finditer(text)]
 
 
-def _criterion_role(text, excerpt):
+def _criterion_role(text, excerpt, anchor=""):
     roles = set()
-    pattern = r"inclusion(?: criteria)?|exclusion(?: criteria)?|入选(?:标准)?|排除(?:标准)?"
+    headings = list(_SECTION.finditer(text))
+    anchors = list(re.finditer(re.escape(anchor), text)) if anchor else []
     for occurrence in re.finditer(re.escape(excerpt), text):
-        headings = list(re.finditer(pattern, text[:occurrence.end()], re.I))
-        roles.add(("exclusion" if re.search(r"exclusion|排除", headings[-1][0], re.I) else "inclusion")
-                  if headings else "unspecified")
+        if anchor and not any(a.start() <= occurrence.start() and occurrence.end() <= a.end() for a in anchors):
+            continue
+        preceding = [h for h in headings if h.start() <= occurrence.start()]
+        selected = preceding[-1:] + [h for h in headings if occurrence.start() < h.start() < occurrence.end()]
+        roles.update("exclusion" if re.search(r"exclusion|排除", h[0], re.I) else "inclusion" for h in selected)
+        if not selected:
+            roles.add("unspecified")
     return next(iter(roles)) if len(roles) == 1 else "unspecified"
 
 
@@ -100,7 +105,8 @@ def topic_field_matches(kind, field):
 
 LOGICAL_PARENT = re.compile(r"[^.;\n]*(?:\ball\b|\bany\b|\bone\b|\bfollowing\b|全部|任一|以下)[^.;\n]*[:：]", re.I)
 _SECTION = re.compile(r"^\s*(?:[*+•-]+\s*|\d+[.)]\s*)?(?:(?:key|main|major|general|principal)\s+)?"
-                      r"(?:inclusion(?: criteria)?|exclusion(?: criteria)?|入选(?:标准)?|排除(?:标准)?)\s*[:：]", re.I)
+                      r"(?:inclusion(?: criteria)?|exclusion(?: criteria)?|入选(?:标准)?|排除(?:标准)?)"
+                      r"\s*(?:[:：]|$)", re.I | re.M)
 _BULLET = re.compile(r"^(\s*)([*+•-]|\d+[.)]|[a-zA-Z][.)])\s+")
 
 

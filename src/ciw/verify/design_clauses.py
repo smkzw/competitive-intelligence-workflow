@@ -76,6 +76,19 @@ def _parent_offset(condition, parent):
     return offset if re.fullmatch(r"[ \t]*(?:[*+•-][ \t]+)?", parent[:offset]) else None
 
 
+def _numeric_parent_context(condition, parent, source):
+    """Restore only the actual numbered prefix preceding this unique source parent, not a guessed marker."""
+    context = parent["context"]
+    if source.count(context) != 1:
+        return None
+    start = source.index(context)
+    prefix = source[source.rfind("\n", 0, start)+1:start]
+    if (not re.fullmatch(r"[ \t]*(?:[*+•-][ \t]+)?\d+[.)][ \t]*", prefix)
+            or _parent_offset(condition, prefix+parent["condition"]) is None):
+        return None
+    return prefix+context
+
+
 def _source_context(clause, source):
     condition = clause["condition"]
     scopes = source_sentences(source, clause["text"], clause["quote"])
@@ -94,6 +107,9 @@ def _source_context(clause, source):
             return dict(context=clause["text"])
         if same_parent := [p for p in parents if _parent_offset(condition, p["condition"]) is not None]:
             return dict(context=same_parent[0]["context"])
+        numeric = [context for p in parents if (context := _numeric_parent_context(condition, p, source))]
+        if clause["quote"].count(clause["text"]) == 1 and len(numeric) == 1:
+            return dict(context=numeric[0])
         return None  # Whole-field quote containment cannot bind a different peer's condition.
     # A list header and its unique child have separate literal anchors. Do not concatenate quotes,
     # infer a relationship across a peer/section, or discard intervening alternative branches.
@@ -108,42 +124,57 @@ def _source_context(clause, source):
         end=start+len(clause["condition"]), quote=clause["condition"], binding="introduced-list"))
 
 
+def _protocol_sentence(text):
+    if _PROTOCOL.search(text):
+        return True
+    subject = re.search(r"\b(?:participants?|subjects?|patients?)\b", text, re.I)
+    action = re.search(r"\bwill receive\b", text, re.I)
+    if subject and action and subject.start() < action.start():
+        return True
+    cohort = re.search(r"\b(?:cohorts?|groups?)\b", text, re.I)
+    action = re.search(r"\beach receiving\b", text, re.I)
+    return bool(cohort and action and cohort.start() < action.start())
+
+
 def _check(item, topics, passages):
     topic = topics.get(item["topic_id"])
     if not topic or not any(item["quote"] in text for _, text, _ in passages):
         if item["quote"].lstrip().startswith("FIELD "):
             return False, "quote包含提示包装FIELD；删除字段标签，只逐字引用对应字段的实际原文"
-        return False, "主题或来源锚点未对应当前原文"
+        return False, f"topic_id={item['topic_id']}：quote必须逐字连续取自原始字段，不得改写或拼接"
     fields = {field: text for _, text, field in passages}
-    for clause in item["clauses"]:
+    for index, clause in enumerate(item["clauses"]):
+        error = f"clauses[{index}] field={clause['field']}："
         source = fields.get(clause["field"], "")
         if (not topic_field_matches(topic["kind"], clause["field"]) or clause["quote"] not in source
                 or clause["text"] not in clause["quote"]):
-            return False, "条款必须逐字来自该主题所需的原始字段"
+            allowed = ", ".join(field for field in fields if topic_field_matches(topic["kind"], field))
+            return False, error + "条款必须逐字来自该主题所需的原始字段；可用字段：" + allowed
         if clause["field"] == "eligibility":
             for dependency in dependency_contexts(source, clause["text"], clause["quote"]):
                 if dependency not in clause["text"] and dependency not in clause["condition"]:
-                    return False, "适用条件遗漏同句依赖，text或condition及quote须保留完整连续原文：" + dependency
+                    return False, error + (
+                        "适用条件遗漏同句依赖，text或condition及quote须保留完整连续原文：" + dependency)
         if (clause["cohort_quote"] and clause["cohort_quote"] not in clause["quote"]
                 or _source_context(clause, source) is None):
-            return False, "条件或队列原文不在该条引文内"
+            return False, error + "条件或队列原文不在该条引文内"
         if clause["field"] in _NARRATIVE and topic["kind"] in {
                 "dosing_regimen", "background_therapy", "treatment_duration", "follow_up"}:
             anchor = clause.get("protocol_quote", "")
-            operational = any(clause["text"] in part and _PROTOCOL.search(part)
+            operational = any(clause["text"] in part and _protocol_sentence(part)
                               for part in re.split(r"[.!?]\s+|[。！？]", anchor))
             if not anchor or anchor not in clause["quote"] or not operational:
-                return False, "研究叙述未提供实际方案安排的原文依据"
+                return False, error + "研究叙述未提供实际方案安排的原文依据"
         if clause["field"] == "eligibility":
-            if clause["criterion_role"] != _criterion_role(source, clause["text"]):
-                return False, "入选/排除角色与来源标题不一致"
+            if clause["criterion_role"] != _criterion_role(source, clause["text"], clause["quote"]):
+                return False, error + "入选/排除角色与来源标题不一致"
             for parent in logical_contexts(source, clause["text"]):
                 if (parent["condition"] not in clause["text"]
                         and parent["condition"] not in clause["condition"]
                         and _parent_offset(clause["condition"], parent["condition"]) is None):
-                    return False, "简短条款遗漏原文逻辑父条件，请逐字保留：" + parent["condition"]
+                    return False, error + "简短条款遗漏原文逻辑父条件，请逐字保留：" + parent["condition"]
         elif clause["criterion_role"] != "unspecified":
-            return False, "非入排字段不能赋予入选/排除角色"
+            return False, error + "非入排字段不能赋予入选/排除角色"
     return True, ""
 
 
@@ -186,9 +217,13 @@ def _recheck_saved_topics(ws, task, accepted):
     """Reapply a fixed source guard to the identical recorded B response, without model calls."""
     records, changed = ws.verifications(), False
     for key, record in records.items():
+        note = re.sub(r"^clauses\[\d+\] field=[^：]+：", "",
+                      record.get("note", "").removeprefix("核对结果未通过来源校验："))
         if (record.get("status") != "needs_review" or record.get("task") != task.task_id
                 or record.get("source_id") != task.source_id
-                or record.get("note") != "核对结果未通过来源校验：条件或队列原文不在该条引文内"):
+                or not record.get("note", "").startswith("核对结果未通过来源校验：")
+                or note not in {"条件或队列原文不在该条引文内", "入选/排除角色与来源标题不一致",
+                                "研究叙述未提供实际方案安排的原文依据"}):
             continue
         try:
             item = task.item_model.model_validate(record.get("item")).model_dump()
@@ -199,7 +234,7 @@ def _recheck_saved_topics(ws, task, accepted):
             continue
         payload = {k: v for k, v in record.items() if k != "status"}
         payload["deterministic_recheck"] = dict(previous_status=record["status"], previous_note=record["note"],
-                                               rule="literal-unordered-parent-prefix-v1")
+                                               rule="literal-source-forms-v2")
         payload["note"] = "原核对响应经当前来源定位规则复核通过"
         ws.save_verification(key, "verified", payload)
         accepted[item["topic_id"]] = item

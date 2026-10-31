@@ -149,3 +149,13 @@ def test_full_width_parenthesis_without_whitespace_preserves_identical_source_or
     _,atoms,item=atom_case('1. Age ≥21 years.\n2. Daily dose 7 mg.','1）年龄≥21岁；2）每日剂量7 mg。')
     assert _check(item,atoms)[0]
     assert not _check({**item,'text_zh':item['text_zh'].replace('2）','3）')},atoms)[0]
+
+
+@pytest.mark.parametrize('label,valid',[
+    ('须满足以下条目中的超过3项。',True),
+    ('须满足以下条目中的超过4项。',False),
+    ('须满足以下条目中的至少3项。',False),
+])
+def test_explicit_written_threshold_over_a_criteria_list_retains_its_count_and_operator(label,valid):
+    _,atoms,item=atom_case('Patients must satisfy more than three of following items:',label)
+    assert _check(item,atoms)[0] == valid
