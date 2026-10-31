@@ -77,3 +77,53 @@ def test_true_quantity_schedule_threshold_or_unit_changes_stay_rejected(source, 
 ])
 def test_explicit_counts_and_shared_time_labels_do_not_turn_ordinals_into_quantities(source, label):
     assert checked(source, label)
+
+
+@pytest.mark.parametrize("source,label", [
+    ("The first complete 24-hour collection.", "第一次完整24小时尿液采集。"),
+    ("The second complete 24-hour collection.", "第二次完整24小时尿液采集。"),
+    ("The most recent complete 24-hour collection.", "最近一次完整24小时尿液采集。"),
+    ("At least one of the following criteria must be met.", "以下标准须至少符合1项。"),
+    ("Once every week.", "每周1次。"),
+    ("Every week.", "每周1次。"),
+    ("Twice every week.", "每周2次。"),
+])
+def test_reviewed_ordinal_explicit_choice_and_unnumbered_frequency_forms(source, label):
+    assert checked(source, label)
+
+
+@pytest.mark.parametrize("source,label", [
+    ("At least one of the following criteria must be met.", "必须超过以下标准中的1项。"),
+    ("Every week.", "每月1次。"),
+    ("Once every week.", "每周2次。"),
+])
+def test_reviewed_choice_operator_and_unnumbered_frequency_changes_stay_rejected(source, label):
+    assert not checked(source, label)
+
+
+@pytest.mark.parametrize("field", ["text_zh", "condition_zh"])
+def test_existing_verifier_repair_uses_field_scope_feedback_without_replacing_the_source(field):
+    import json
+
+    from ciw.verify.crosscheck import crosscheck
+    from ciw.verify.design_labels import _atoms, _task
+    from ciw.verify.llm import FakeBackend
+    snippet = dict(text="The daily dose is 7 mg.", condition="Only if age ≥21 years.",
+                   source_id="synthetic", field="eligibility",
+                   context="The daily dose is 7 mg. Only if age ≥21 years and weight ≥50 kg.")
+    atoms = _atoms(dict(rows=[dict(design_excerpts=[dict(snippets=[snippet])])]))
+    atom = next(iter(atoms.values()))
+    correct = dict(clause_id=atom["clause_id"], quote=atom["text"], text_zh="每日剂量7 mg。",
+                   condition_zh="仅年龄≥21岁。", cohort_zh="", timeframe_zh="")
+    wrong = {**correct, field: correct[field]+"体重≥50 kg。"}
+    prompts = []
+    def response(system, user):
+        prompts.append(user)
+        errors = user.split("确定性校验错误：", 1)
+        guidance = json.loads(errors[1].split("\n", 1)[0])[0]["error"] if len(errors) == 2 else ""
+        return json.dumps(dict(items=[correct if "context" in guidance else wrong]))
+    result = crosscheck(_task(atoms), dict(extractor_a=FakeBackend("deepseek", "a", response),
+                                          verifier=FakeBackend("glm", "b", response)))[0]
+    assert result.status == "verified" and result.item == correct
+    assert [call["role"] for call in result.calls] == ["extract", "verify", "verify_repair"]
+    assert len(prompts) == 3 and snippet["context"].endswith("weight ≥50 kg.")

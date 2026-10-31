@@ -3,6 +3,7 @@
 import re
 
 from ciw.normalize.design import (
+    _SECTION,
     _criterion_role,
     logical_contexts,
     topic_field_matches,
@@ -64,7 +65,8 @@ def _matching_lines(topic, patterns, text, field, section=""):
                _clauses(text, preserve_lists=topic.kind in {"eligibility_threshold", "endpoint_definition"}))
     selected = []
     for clause, context in clauses:
-        if not clause.strip() or not any(p.search(clause) for p in patterns) or any(p.search(clause) for p in excludes):
+        if (not clause.strip() or _SECTION.fullmatch(clause.strip())
+                or not any(p.search(clause) for p in patterns) or any(p.search(clause) for p in excludes)):
             continue
         if (topic.kind == "eligibility_threshold" and
                 (not threshold_spans(clause) or not _metric_match(patterns, clause))):

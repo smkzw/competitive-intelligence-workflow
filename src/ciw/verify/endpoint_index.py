@@ -97,7 +97,7 @@ def _comparisons(text):
     prefixes = {"至少": ">=", "不低于": ">=", "不小于": ">=", "至多": "<=", "不高于": "<=",
                 "不大于": "<=", "超过": ">", "大于": ">", "小于": "<", "低于": "<", "少于": "<"}
     prefix_pattern = ("(" + "|".join(prefixes) +
-                      r")\s*(?:改善|增加|降低|升高|减少|达到|连续|测量|检测|测试)?\s*(\d+(?:\.\d+)?)")
+                      r")\s*(?:改善|增加|降低|升高|减少|达到|连续|测量|检测|测试|符合)?\s*(\d+(?:\.\d+)?)")
     pairs.update((prefixes[m[1]], m[2]) for m in re.finditer(prefix_pattern, text))
     for m in re.finditer(r"(\d+(?:\.\d+)?)\s*%?\s*(或更高|或以上|及以上|或更低|或以下|及以下)", text):
         pairs.add((">=" if m[2] in {"或更高", "或以上", "及以上"} else "<=", m[1]))

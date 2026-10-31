@@ -98,17 +98,19 @@ def _count_words(text):
                   lambda m: counts[m[0].lower()], text, flags=re.I)
     text = re.sub(r"\bdecade\b", "10 years", text, flags=re.I)
     text = re.sub(r"\b(once|twice)(?=\s+(?:(?:a|per)\s+(?:" + units + r")\b|"
-                  r"(?:daily|weekly|monthly)\b|(?:in|every)\s+\d+))",
+                  r"(?:daily|weekly|monthly)\b|(?:in|every)\s+(?:\d+\s+)?(?:" + units + r")\b))",
                   lambda m: ("1" if m[1].lower() == "once" else "2") + " time", text, flags=re.I)
     text = re.sub(r"(?<!time )(?<!times )\bevery\s+(\d+)\s+(" + units + r")\b",
                   r"1 time every \1 \2", text, flags=re.I)
+    text = re.sub(r"(?<!time )(?<!times )\bevery\s+(" + units + r")\b",
+                  r"1 time every \1", text, flags=re.I)
     text = re.sub(r"(?<!第)[二两](?=次)", "2", text)
     text = re.sub(r"(至少|每(?:\d+)?(?:天|日|周|月|年))一次", r"\g<1>1次", text)
-    text = re.sub(r"一次(?=完整)", "1次", text)
+    text = re.sub(r"(?<![第上前])(?<!最近)(?<!最后)一次(?=完整)", "1次", text)
     text = re.sub(r"每(\d+)\s*(天|日|周|个?月|年)(?!\s*\d+\s*次)", r"每\1\2 1次", text)
     # A numbered threshold over criteria differs from the grammatical 'one of the following'.
     return re.sub(r"\b((?:more than|greater than|at least|at most|less than|fewer than)\s+)(" +
-                  "|".join(list(counts)[1:]) + r")(?=\s+of\s+(?:the\s+)?following\s+(?:items|criteria)\b)",
+                  "|".join(counts) + r")(?=\s+of\s+(?:the\s+)?following\s+(?:items|criteria)\b)",
                   lambda m: m[1]+counts[m[2].lower()], text, flags=re.I)
 
 
@@ -156,7 +158,8 @@ def _check(item, atoms):
             return False, f"{raw}：不能删除或新增原条款、适用条件、队列或时点"
         if (_quantities(source) != _quantities(_inline_list_labels(label, source))
                 or _comparisons(_count_words(source)) != _comparisons(_count_words(label))):
-            return False, f"{raw}：阅读要点必须保留原字段全部数值、时点和比较符，不换算或省略阈值"
+            return False, (f"{raw}：阅读要点必须保留原字段全部数值、时点和比较符，不换算或省略阈值；"
+                           f"仅翻译{raw}原字段，context只帮助理解，不得借入其余条件或数值")
         if _unit_signature(source) != _unit_signature(label):
             return False, f"{raw}：科学单位须保留原写法，不替换或换算"
         if _times(source) != _times(label):
